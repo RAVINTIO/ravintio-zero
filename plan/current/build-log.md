@@ -82,3 +82,20 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Deviation: REQ-001 guard cases sit in `test-0000042-req-006` section (d), not in a new file. Plan updated.
 - RED then GREEN for REQ-001 (3 failures, then 17 of 17) and REQ-002 (7 failures, then 14 of 14). REQ-003 passed on first run because it guards a behaviour that holds.
 - Full suite: 228 feature suites passed and 1 failed (`test-0000164-req-007`, stale generated `CLAUDE.md`, fixed by step 3). Regression 19 of 19.
+
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-10-31T20:30:00Z` |
+| End | `2026-10-31T20:45:00Z` |
+| Wall clock | `15` |
+| Model tier | primary |
+| Skills loaded | ravintio-validate-and-accept |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 1 |
+| Notes | Full suite ran in the background while verification and the security review ran inline. |
+
+- CI: 228 feature suites passed, 1 failed (`test-0000164-req-007`, known, fixed by step 3). Regression 19 of 19. No self-correction cycles.
+- Gate: autonomous, evidence written to `plan/current/acceptance-evidence.md`.
