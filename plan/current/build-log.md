@@ -69,8 +69,8 @@ Gate: P1 autonomous, no stop (2026-10-31T19:12:00Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-10-31T19:13:00Z` |
-| End | |
-| Wall clock | |
+| End | `2026-10-31T19:30:00Z` |
+| Wall clock | `17` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 3 |
@@ -79,5 +79,9 @@ Gate: P1 autonomous, no stop (2026-10-31T19:12:00Z)
 | Notes | Fast batch 1: U1, U2, U3 dispatched in one message to sonnet subagents. The units write disjoint files. The parent commits each unit by explicit path. |
 
 - In progress: U1 driver setup stop (2026-10-31T19:13:00Z)
+- Done: U1 driver setup stop (2026-10-31T19:25:00Z)
 - In progress: U2 initiative skill setup stop (2026-10-31T19:13:00Z)
+- Done: U2 initiative skill setup stop (2026-10-31T19:20:00Z)
 - In progress: U3 standards and manifest (2026-10-31T19:13:00Z)
+- Done: U3 standards and manifest (2026-10-31T19:22:00Z)
+Gate: P2 autonomous, no stop (2026-10-31T19:30:00Z)
