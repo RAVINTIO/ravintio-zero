@@ -54,7 +54,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 
 | Field | Value |
 |-------|-------|
-| Start | `2026-10-31T21:28:47Z` |
+| Start | `2026-10-31T21:27:41Z` |
 | End | `2026-10-31T21:28:52Z` |
 | Wall clock | `1` |
 | Model tier | primary |
@@ -62,7 +62,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Agents spawned | 0 |
 | MCP calls | 0 |
 | Parallel task batches | 0 |
-| Notes | Artifacts are small and share one context, so the plan phase wrote them inline. |
+| Notes | Phase times come from commit timestamps. Artifacts are small and share one context, so the plan phase wrote them inline. |
 
 - Gate: autonomous, no stop.
 
@@ -71,8 +71,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-10-31T21:28:59Z` |
-| End | `2026-10-31T22:06:57Z` |
-| Wall clock | `33` |
+| End | `2026-10-31T21:57:38Z` |
+| Wall clock | `29` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 0 |
@@ -89,9 +89,9 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 
 | Field | Value |
 |-------|-------|
-| Start | `2026-10-31T22:06:57Z` |
+| Start | `2026-10-31T21:57:38Z` |
 | End | `2026-10-31T22:06:57Z` |
-| Wall clock | `3` |
+| Wall clock | `9` |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | 0 |
@@ -101,6 +101,20 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 
 - CI: 234 feature suites passed, 0 failed. Regression 19 of 19. Three self-correction cycles (see P2 rework markers).
 - Gate: autonomous, evidence written to `plan/current/acceptance-evidence.md`.
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-10-31T22:06:57Z` |
+| End | `2026-10-31T22:12:00Z` |
+| Wall clock | `5` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship, ravintio-retrospective |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Steps 5 and 6 ran inline because both are short. |
 
 <!-- Copy and fill in this block at each phase boundary. Headings use the form
      "### P<n>: {Phase Name}" with n from 1 to 4 and the phase names
@@ -143,12 +157,12 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 
 | Metric | Value |
 |--------|-------|
-| Total phases completed | `{{count}}` |
-| Total wall clock | `{{minutes from pipeline start to the P4 End}}` |
-| Total agents spawned | `{{count}}` |
-| Total MCP calls | `{{count}}` |
-| Phases using parallelism | `{{count}}` |
-| Primary tier agent calls | `{{count}}` |
-| Cheaper tier agent calls | `{{count}}` |
-| Self-corrections | `{{count}}` |
-| Phases skipped | `{{list or "none"}}` |
+| Total phases completed | `5` |
+| Total wall clock | `45` minutes |
+| Total agents spawned | `0` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `1` |
+| Primary tier agent calls | `0` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `3` |
+| Phases skipped | none |
