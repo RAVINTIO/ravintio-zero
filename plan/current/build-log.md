@@ -70,8 +70,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-10-31T20:12:00Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-10-31T20:30:00Z` |
+| Wall clock | `18` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 0 |
@@ -81,3 +81,4 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 
 - Deviation: REQ-001 guard cases sit in `test-0000042-req-006` section (d), not in a new file. Plan updated.
 - RED then GREEN for REQ-001 (3 failures, then 17 of 17) and REQ-002 (7 failures, then 14 of 14). REQ-003 passed on first run because it guards a behaviour that holds.
+- Full suite: 228 feature suites passed and 1 failed (`test-0000164-req-007`, stale generated `CLAUDE.md`, fixed by step 3). Regression 19 of 19.
