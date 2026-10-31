@@ -26,8 +26,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-10-31T20:44:10Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-10-31T20:46:00Z` |
+| Wall clock | `2` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -48,3 +48,19 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Scope Lock (cross-session continuity): Later steps run on the same runner, so they start from a clean environment and leave a clean tree [source: draft-accepted (initiative)]
 - Scope Lock complete. All four scenario paths captured.
 - Design confirmed: draft-accepted (initiative), 2026-10-31T20:44:10Z
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-10-31T20:46:00Z` |
+| End | `2026-10-31T20:52:00Z` |
+| Wall clock | `6` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Artifacts are small and share one context, so the plan phase wrote them inline. Consistency check clean. |
+
+- Gate: autonomous, no stop.
