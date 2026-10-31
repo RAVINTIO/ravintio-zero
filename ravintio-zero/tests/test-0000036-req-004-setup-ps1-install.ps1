@@ -11,7 +11,7 @@
 try {
 
 Write-Host ""
-Write-Host "=== req-004 (a): a fresh install wires the ten setup.sh entries ==="
+Write-Host "=== req-004 (a): a fresh install wires the eleven setup.sh entries ==="
 
 $ws = New-SetupWorkspace
 $tmp = Join-Path $ws '.claude\settings.json.ravintio-tmp'
@@ -20,7 +20,7 @@ $run = Invoke-Setup $ws @('claude-code')
 Assert-Equal 0 $run.Code "req-004 (a): setup.ps1 claude-code exits 0"
 if ($run.Code -ne 0) { Write-Host $run.Output }
 $settings = Read-Settings $ws
-Assert-Equal $global:ExpectedEntries (Get-HookEntries $settings) "req-004 (a): settings.json holds the ten entries in the setup.sh order"
+Assert-Equal $global:ExpectedEntries (Get-HookEntries $settings) "req-004 (a): settings.json holds the eleven entries in the setup.sh order"
 $gate = @($settings.hooks.PreToolUse)[0].hooks[0].command
 Assert-Equal 'node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard gate-write.mjs' $gate "req-004 (a): the command quotes the launcher path"
 Assert-Equal 1 (@($settings.allowedTools | Where-Object { $_ -ceq 'Agent' }).Count) "req-004 (a): allowedTools holds Agent once"

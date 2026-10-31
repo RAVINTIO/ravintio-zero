@@ -64,12 +64,12 @@ SH_LIST="$(sh_entries "$WS/.claude/settings.json")"
 PS1_LIST="$(ps1_entries)"
 rm -rf "$WS"
 
-assert_equals "10" "$(printf '%s\n' "$SH_LIST" | grep -c .)" \
-  "req-001 (a): a setup.sh run writes ten RAVINTIO hook entries"
+assert_equals "11" "$(printf '%s\n' "$SH_LIST" | grep -c .)" \
+  "req-001 (a): a setup.sh run writes eleven RAVINTIO hook entries"
 assert_equals "$SH_LIST" "$PS1_LIST" \
   "req-001 (a): setup.ps1 declares the same event, matcher, and module list in the same order"
 
-for module in gate-write ratchet-check em-dash-guard merge-guard auto-trigger-orchestrator \
+for module in gate-write ratchet-check em-dash-guard merge-guard block-forced-add auto-trigger-orchestrator \
               check-orchestrator-presence check-design; do
   assert_contains " $module" "$PS1_LIST" "req-001 (a): setup.ps1 wires $module"
 done

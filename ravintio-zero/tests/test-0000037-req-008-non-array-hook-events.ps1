@@ -13,7 +13,7 @@
 $expected = @{
     PreToolUse       = @('Write gate-write', 'Edit gate-write', 'Write ratchet-check',
                          'Edit ratchet-check', 'Write em-dash-guard', 'Edit em-dash-guard',
-                         'Bash merge-guard') -join "`n"
+                         'Bash merge-guard', 'Bash block-forced-add') -join "`n"
     UserPromptSubmit = @('.* auto-trigger-orchestrator', '.* check-orchestrator-presence',
                          '.* check-design') -join "`n"
 }
