@@ -63,3 +63,19 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Notes | The artifacts are small and share one context, so the plan phase wrote them inline. |
 
 - Gate: autonomous, no stop.
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-10-31T22:35:50Z` |
+| End | `2026-10-31T23:01:15Z` |
+| Wall clock | `60` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | The two batch-1 units were small and shared test helpers, so the phase ran them in sequence inline. No dependency forced it, only the cost of a subagent context for about 150 lines of change. |
+
+- Rework: hook-count suites: the first full run found 7 suites that count the hook entries. Updated each and its regression copy.
