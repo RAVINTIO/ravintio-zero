@@ -36,7 +36,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Notes | I-C Run: step 1 of initiative 0000312. Branch `feat/0000313-driver-setup-stop` cut from `initiative/0000312-guards-history-and-test-noise`. |
 
 - Migration 0004 skipped: `Applies when` is false (no old-name pack or overrides folder in the repo root).
-- Migration 0005 skipped: `Applies when` is false (no `plan/roadmap/*/roadmap.md`, no `roadmap/**` in the workflow).
+- Migration 0005 skipped: `Applies when` is false (no old-name draft file and no old branch pattern in the workflow).
 - Run mode: autonomous (2026-10-31T19:04:36Z, initiative step)
 - Run speed: fast (2026-10-31T19:04:36Z, from the initiative `**Speed:**` field)
 - Adoption mode: standard-iterative (signal: source beside `plan/_archive/`)
