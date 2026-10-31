@@ -50,7 +50,7 @@ echo "=== req-002: hook commands use the project root ==="
 CMDS="$(hook_commands "$WS/.claude/settings.json")"
 assert_equals "0" "$(printf '%s\n' "$CMDS" | grep -c -F 'node ".claude/')" "req-002: no command is relative to the working directory"
 assert_equals "0" "$(printf '%s\n' "$CMDS" | grep -v -c -F 'CLAUDE_PROJECT_DIR')" "req-002: every command reads CLAUDE_PROJECT_DIR"
-assert_equals "7" "$(printf '%s\n' "$CMDS" | grep -c -F ' guard ')" "req-002: seven PreToolUse commands run in guard mode"
+assert_equals "8" "$(printf '%s\n' "$CMDS" | grep -c -F ' guard ')" "req-002: eight PreToolUse commands run in guard mode"
 assert_equals "4" "$(printf '%s\n' "$CMDS" | grep -c -F ' advisory ')" "req-002: four commands run in advisory mode"
 
 # AC-1: every command runs from a subfolder and exits like its script.
