@@ -25,7 +25,8 @@ description: Coordinates an initiative from chart to delivery in the human's ses
 2. Never edit the working tree while the driver lock `plan/.initiative-runner.lock` is held.
 3. Never merge into `main` and never commit to `main`. The human merges the initiative PR.
 4. Write `plan/.initiative-ack` with your session id. Never write `plan/.orchestrator-ack`.
-5. The hard limits of the orchestrator apply here too.
+5. A step session never moves, renames, or deletes `plan/.initiative-logs/`, `plan/.initiative-runner.lock`, or `plan/.initiative-queue/`. The driver and the watcher own them.
+6. The hard limits of the orchestrator apply here too.
 
 ## Session start
 
