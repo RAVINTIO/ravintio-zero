@@ -48,3 +48,19 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Scope Lock (cross-session continuity): Later steps read the rule from installed skills after the planned `Setup:` stop [source: draft-accepted (initiative)]
 - Scope Lock complete. All four scenario paths captured.
 - Design confirmed: draft-accepted (initiative), 2026-10-31T20:03:00Z
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-10-31T20:04:00Z` |
+| End | `2026-10-31T20:12:00Z` |
+| Wall clock | `8` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Artifacts are small and share one context, so the plan phase wrote them inline. Consistency check clean. |
+
+- Gate: autonomous, no stop.
