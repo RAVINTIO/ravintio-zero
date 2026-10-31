@@ -84,6 +84,7 @@ An initiative runs in this sequence:
 - A step session has `RAVINTIO_INITIATIVE_STEP=1` in its environment. The auto-trigger hook and the strict-mode hook both name the orchestrator for it, and the initiative skill for any other session while `plan/current-initiative/initiative.md` has `status: active`. The driver lock and the contents of `plan/current/` play no part.
 - `plan/.initiative-ack` is git-ignored, so a step session never commits the human's ack. `plan/.orchestrator-ack` stays tracked.
 - While the driver lock `plan/.initiative-runner.lock` is held, the initiative skill holds new backlog entries in `plan/.initiative-queue/`. It commits them to the initiative branch after the step merges.
+- A step session never moves, renames, or deletes the driver files `plan/.initiative-logs/`, `plan/.initiative-runner.lock`, or `plan/.initiative-queue/`. The driver and the watcher own them, and the coordinator reads the step logs as stop evidence. The phase guard skips `plan/.initiative-logs/`, so a step has no reason to move it.
 
 ### I-A Chart
 
