@@ -83,7 +83,7 @@ An initiative runs in this sequence:
 - The orchestrator never resumes an initiative. The initiative skill never resumes a step.
 - A step session has `RAVINTIO_INITIATIVE_STEP=1` in its environment. The auto-trigger hook and the strict-mode hook both name the orchestrator for it, and the initiative skill for any other session while `plan/current-initiative/initiative.md` has `status: active`. The driver lock and the contents of `plan/current/` play no part.
 - `plan/.initiative-ack` is git-ignored, so a step session never commits the human's ack. `plan/.orchestrator-ack` stays tracked.
-- While the driver lock `plan/.initiative-runner.lock` is held, the initiative skill holds new backlog entries in `plan/.initiative-queue/`. It commits them to the initiative branch after the step merges.
+- While the driver lock `plan/.initiative-runner.lock` is held, the initiative skill holds new backlog entries in `plan/.initiative-queue/`. After the step merges, it lands them through a coordinator PR (see `## Coordinator PRs`).
 - A step session never moves, renames, or deletes the driver files `plan/.initiative-logs/`, `plan/.initiative-runner.lock`, or `plan/.initiative-queue/`. The driver and the watcher own them, and the coordinator reads the step logs as stop evidence. The phase guard skips `plan/.initiative-logs/`, so a step has no reason to move it.
 
 ### I-A Chart
@@ -227,9 +227,9 @@ If a check fails, stop with a `Blocked:` message, as in `I-B Activate: Blocked: 
 When the checks pass:
 
 1. Cut `initiative/{id}-{slug}` from `main`.
-2. In one commit, write `plan/current-initiative/initiative.md` with `status: active` and delete the draft folder `plan/roadmap/{id}-{slug}/`.
-3. Push the initiative branch to `origin`.
-4. Start the driver `ravintio-zero/scripts/initiative-run.mjs` and the watch script `ravintio-zero/scripts/initiative-watch.mjs` as background tasks, because a foreground Bash call times out after 10 minutes.
+2. Push the unchanged initiative branch to `origin`. Nothing commits directly on it.
+3. On a `feat/` branch cut from the initiative branch, write `plan/current-initiative/initiative.md` with `status: active` and delete the draft folder `plan/roadmap/{id}-{slug}/`. Land the change as a coordinator PR, titled `{id}-{slug}: activate initiative (#{n})`.
+4. After the PR merges, start the driver `ravintio-zero/scripts/initiative-run.mjs` and the watch script `ravintio-zero/scripts/initiative-watch.mjs` as background tasks, because a foreground Bash call times out after 10 minutes.
 
 The initiative skill's session must not edit the working tree while the driver runs. It queues new backlog entries instead.
 
@@ -329,9 +329,22 @@ The agent may run `gh pr merge --squash` only when all of these hold:
 
 - The PR base matches `initiative/*`.
 - The PR is for the agent's own feature branch.
-- The step had a clean P3 and has green CI.
+- A step PR had a clean P3 and has green CI. A coordinator PR meets the bar in `## Coordinator PRs` instead, with a passing local suite and green CI.
 
 The initiative PR to `main` stays human-only. The agent never merges it. The `merge-guard` hook enforces this rule. Other skills and instructions point here for the full wording.
+
+## Coordinator PRs
+
+Nothing commits directly on `initiative/*`. Every change arrives as a squashed PR, so the first-parent history is one titled squash per change.
+
+Coordinator work covers activation, queued backlog entries, scope edits, and the I-E Delivery archive and retrospective. The coordinator lands it on a `feat/` branch cut from the initiative branch, through a PR whose base is the initiative branch.
+
+- **Title.** Use the form `{id}-{slug}: {summary} (#{n})`. The id is the 7-digit initiative id.
+- **Local suite.** The full local suite passes before the PR opens.
+- **CI.** CI is green before the agent squash-merges the PR with `gh pr merge --squash`.
+- **Timing.** Raise a coordinator PR only while the driver is stopped. While a step runs, queue the work in `plan/.initiative-queue/`.
+
+The `merge-guard` hook is unchanged. It already allows a squash into `initiative/*` because it checks only the PR base.
 
 ## Ship stages
 
@@ -350,7 +363,8 @@ Every message in this stage begins with `I-D Advance:` after the `P4 Ship:` pref
    gh pr create --base initiative/{id}-{slug}
    ```
 
-3. Wait for CI in two parts.
+3. Set the changelog `**PR:**` field to the PR number from the `gh pr create` output. Commit the change and push the branch. Never commit after the squash, because the squash carries the number onto the initiative branch.
+4. Wait for CI in two parts.
    1. Poll `gh pr checks {n}` until at least one check is listed, for up to 2 minutes. Checks are always pending straight after `gh pr create`, so pending is not a stop. If none appears, push the branch, print the line below, and exit:
 
       ```
@@ -363,13 +377,13 @@ Every message in this stage begins with `I-D Advance:` after the `P4 Ship:` pref
       I-D Advance: Blocked: CI failed on PR #{n}. Fix the failing check, then tell me to retry.
       ```
 
-4. If every check is green, squash-merge the PR. The `--delete-branch` flag removes the feature branch from `origin`. Write `{n}` as the literal PR number from the `gh pr create` output. Use no command substitution, variables, or pipes on this line, or `merge-guard` blocks it.
+5. If every check is green, squash-merge the PR. The `--delete-branch` flag removes the feature branch from `origin`. Write `{n}` as the literal PR number from the `gh pr create` output. Use no command substitution, variables, or pipes on this line, or `merge-guard` blocks it.
 
    ```bash
    gh pr merge --squash --delete-branch {n}
    ```
 
-5. Read the PR's merge commit, fetch the initiative branch, then tag that commit with the step's version and push the tag.
+6. Read the PR's merge commit, fetch the initiative branch, then tag that commit with the step's version and push the tag.
 
    ```bash
    sha=$(gh pr view {n} --json mergeCommit -q .mergeCommit.oid)
@@ -382,7 +396,7 @@ Step 8 runs before the PR because the squash would otherwise carry `plan/.orches
 
 Consumer CI must trigger on pull requests to `initiative/**`. The pack's workflow template `ravintio-zero/hooks/ravintio.yml` includes that branch pattern. A project with its own workflow adds it.
 
-6. Hand off to the next session.
+7. Hand off to the next session.
    1. Check out the initiative branch and run `git pull --ff-only origin initiative/{id}-{slug}`.
    2. If the local feature branch still exists, delete it with `git branch -D`. It is redundant once squash-merged, and `gh` may already have removed it.
    3. If a step with Status `pending` remains, end the session with the line below. The driver starts the next session.
@@ -399,10 +413,10 @@ The tag comes after the merge because a squash creates a new commit. A tag on th
 
 ### I-E Delivery
 
-The initiative skill runs this stage after the last step merges. Every message begins with `I-E Delivery:` after the `P4 Ship:` prefix. Work on the initiative branch.
+The initiative skill runs this stage after the last step merges. Every message begins with `I-E Delivery:` after the `P4 Ship:` prefix. Nothing commits directly on the initiative branch. Land steps 1 and 2 as coordinator PRs into it, as in `## Coordinator PRs`.
 
-1. Move `plan/current-initiative/` to `plan/_archive/{id}-{slug}-initiative-{date}/` and set the initiative `status: delivered`. Update links that point at the old path. Commit the move on the initiative branch.
-2. Run `ravintio-retrospective` in initiative mode. It writes `plan/retrospectives/{id}-{slug}-initiative-{date}.md`. Commit the record on the initiative branch, so the PR carries it. A missing retrospective never blocks delivery.
+1. Move `plan/current-initiative/` to `plan/_archive/{id}-{slug}-initiative-{date}/` and set the initiative `status: delivered`. Update links that point at the old path. Land the move as a coordinator PR.
+2. Run `ravintio-retrospective` in initiative mode. It writes `plan/retrospectives/{id}-{slug}-initiative-{date}.md`. Land the record as a coordinator PR, so the initiative PR carries it. A missing retrospective never blocks delivery.
 3. Raise one PR from the initiative branch to `main`.
 
    ```bash
