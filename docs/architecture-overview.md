@@ -1,6 +1,6 @@
 # Architecture Overview
 
-Last updated: 0000316-hooks-fail-closed
+Last updated: 0000317-block-forced-adds
 
 ## What this repo is
 
@@ -195,7 +195,9 @@ Setup checks the tool straight after argument parsing, ahead of the old-folder c
 
 **Hooks run from the project root.** Both scripts set `CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR` to `1` under `env` in `.claude/settings.json` and keep every other `env` entry. They wire each Claude Code hook as `node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" {guard|advisory} {hook}.mjs`. Codex gets the absolute project path, because it sets no project-dir variable. The launcher finds the hook beside itself. In guard mode it turns a missing or crashing script into exit 2 and names the script. In advisory mode it reports a missing script once and exits 0 (0000316).
 
-**Two scripts, one result.** `setup.sh` and `setup.ps1` wire the same eight hooks, in the same events, matchers, and order. A parity suite fails if they drift. `setup.ps1` runs on Windows PowerShell 5.1 and PowerShell 7. It reads and writes `settings.json` as UTF-8 with no BOM. Flags and the tool name match case in both scripts.
+**Forced adds are blocked.** The `block-forced-add` guard runs on Bash calls and exits 2 on `git add -f`, `--force` and its abbreviations, and any short flag group that contains `f`. The tracked `.gitignore` lists `plan/.initiative-logs/`, `plan/.initiative-queue/`, and `plan/.initiative-runner.lock`. Ship and CI run `git ls-files -ci --exclude-standard` and fail on a listed file (0000317).
+
+**Two scripts, one result.** `setup.sh` and `setup.ps1` wire the same nine hooks, in the same events, matchers, and order. A parity suite fails if they drift. `setup.ps1` runs on Windows PowerShell 5.1 and PowerShell 7. It reads and writes `settings.json` as UTF-8 with no BOM. Flags and the tool name match case in both scripts.
 
 **Hook entry repair.** Both scripts find a RAVINTIO `PreToolUse` entry by its module name, on any matcher. So an older `Write|Edit` entry gives way to one `Write` entry and one `Edit` entry, and `gate-write` runs once per tool. If `PreToolUse`, `UserPromptSubmit`, or `Stop` holds a value that isn't an array, setup prints a warning that names the event and the file. The warning never prints the old value, because a hook command can hold a secret. It then replaces the value with the RAVINTIO entries and exits 0. An absent or null value gets the entries with no warning.
 
