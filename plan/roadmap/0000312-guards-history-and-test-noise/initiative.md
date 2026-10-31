@@ -1,13 +1,13 @@
 ---
 title: "Initiative: 0000312 - guards, history, and test noise"
 summary: "Clears 17 backlog entries in 10 feature steps, with a setup rerun after each step that changes installed pack files."
-status: "proposed"
+status: "charted"
 ---
 # Initiative: 0000312 - guards, history, and test noise
 
 **Goal:** Make the guards fail closed, keep every initiative history titled one commit per change, and stop step logs and session state breaking the suite. Step 1 teaches the driver to stop for a setup rerun, so each later step runs on installed copies that match the pack.
 **Branch:** initiative/0000312-guards-history-and-test-noise
-**Status:** proposed
+**Status:** charted
 **Position:** 1
 **Speed:** standard
 
