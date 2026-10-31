@@ -62,12 +62,12 @@ JSON
 run_setup "$WS"
 assert_exit_zero "$?" "req-007 (a): setup.sh claude-code exits 0"
 LINES="$(pre_tool_lines "$WS/.claude/settings.json")"
-GATE='node ".claude/hooks/enforcement/gate-write.mjs"'
+GATE='node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard gate-write.mjs'
 assert_equals "1" "$(count_lines "$LINES" "Write $GATE")" \
   "req-007 (a): gate-write appears once for Write"
 assert_equals "1" "$(count_lines "$LINES" "Edit $GATE")" \
   "req-007 (a): gate-write appears once for Edit"
-assert_equals "2" "$(printf '%s\n' "$LINES" | grep -c 'enforcement/gate-write.mjs' || true)" \
+assert_equals "2" "$(printf '%s\n' "$LINES" | grep -c 'guard gate-write.mjs' || true)" \
   "req-007 (a): gate-write appears twice in all"
 assert_equals "0" "$(count_lines "$LINES" "Write|Edit node .claude/hooks/enforcement/gate-write.mjs")" \
   "req-007 (a): no Write|Edit gate-write entry remains"

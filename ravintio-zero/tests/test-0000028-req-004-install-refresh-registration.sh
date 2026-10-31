@@ -46,10 +46,17 @@ echo "=== req-004 / SEC-001: enforcement hooks are invoked through node ==="
 # `node` directly, never through the command string setup.sh actually writes.
 # These assertions check the wiring itself, which is where the defect lived.
 # The list is the six enforcement hooks that survive 0000033.
-for hook in gate-write ratchet-check em-dash-guard auto-trigger-orchestrator \
-            check-orchestrator-presence check-design; do
-  assert_contains "node \\\"\$hooks_dir_rel/$hook.mjs\\\"" "$setup_content" \
-    "req-004: setup.sh invokes $hook.mjs through node, not as a bare path"
+# 0000316: every hook runs through the launcher, which node starts. The launcher
+# command is a quoted node path, and each hook follows it with a mode.
+assert_contains 'local launcher="node \"\${CLAUDE_PROJECT_DIR}/$hooks_dir_rel/guard-run.mjs\""' "$setup_content" \
+  "req-004: setup.sh starts the launcher through node, not as a bare path"
+for hook in gate-write ratchet-check em-dash-guard; do
+  assert_contains "\$launcher guard $hook.mjs" "$setup_content" \
+    "req-004: setup.sh runs $hook.mjs through the launcher in guard mode"
+done
+for hook in auto-trigger-orchestrator check-orchestrator-presence check-design; do
+  assert_contains "\$launcher advisory $hook.mjs" "$setup_content" \
+    "req-004: setup.sh runs $hook.mjs through the launcher in advisory mode"
 done
 
 # Guard against a regression that reintroduces a bare-path wiring for any
