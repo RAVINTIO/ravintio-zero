@@ -26,8 +26,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-10-31T20:44:10Z` |
-| End | `2026-10-31T20:46:00Z` |
-| Wall clock | `2` |
+| End | `2026-10-31T20:44:37Z` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -53,15 +53,15 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 
 | Field | Value |
 |-------|-------|
-| Start | `2026-10-31T20:46:00Z` |
-| End | `2026-10-31T20:52:00Z` |
-| Wall clock | `6` |
+| Start | `2026-10-31T20:44:37Z` |
+| End | `2026-10-31T20:45:47Z` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-plan |
 | Agents spawned | 0 |
 | MCP calls | 0 |
 | Parallel task batches | 0 |
-| Notes | Artifacts are small and share one context, so the plan phase wrote them inline. Consistency check clean. |
+| Notes | Phase times come from commit timestamps. Artifacts are small and share one context, so the plan phase wrote them inline. Consistency check clean. |
 
 - Gate: autonomous, no stop.
 
@@ -69,9 +69,9 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 
 | Field | Value |
 |-------|-------|
-| Start | `2026-10-31T20:52:00Z` |
-| End | `2026-10-31T21:20:00Z` |
-| Wall clock | `28` |
+| Start | `2026-10-31T20:45:47Z` |
+| End | `2026-10-31T21:05:31Z` |
+| Wall clock | `20` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 0 |
@@ -89,9 +89,9 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 
 | Field | Value |
 |-------|-------|
-| Start | `2026-10-31T21:20:00Z` |
-| End | `2026-10-31T21:27:00Z` |
-| Wall clock | `7` |
+| Start | `2026-10-31T21:05:31Z` |
+| End | `2026-10-31T21:06:30Z` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | 0 |
