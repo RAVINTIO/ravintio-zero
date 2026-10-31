@@ -64,3 +64,23 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Notes | Artifacts are small and share one context, so the plan phase wrote them inline. Consistency check clean. |
 
 - Gate: autonomous, no stop.
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-10-31T20:52:00Z` |
+| End | `2026-10-31T21:20:00Z` |
+| Wall clock | `28` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Inline TDD. U1 and U3 share no file but are small, and U2 builds on U1, so subagent overhead outweighs the gain. |
+
+- Deviation: `RAVINTIO_TEST_QUIET` passes through to suites. `assert.sh` reads it, and clearing it broke `test-0000151-req-008`. Brief, scope, REQ-001, ADR-001, and glossary updated.
+- Deviation: process substitution in the runner failed `test-0000164-req-008`. The runner now feeds its loop with a herestring.
+- RED then GREEN for REQ-001 (5 failures, then 11 of 11) and REQ-002/003 (6 failures, then 10 of 10). REQ-004 passes at once because the existing checks already catch removed phrases.
+- REQ-002: no suite writes the real repo state. The full run under the tree check reports no changed path.
+- Full suite with `RAVINTIO_INITIATIVE_STEP=1` set: 231 feature suites passed, regression 19 of 19.

@@ -17,24 +17,23 @@ As a developer in any session, I run the suite with `RAVINTIO_*` variables set, 
 
 ## Functional Requirements
 
-- `run-tests.sh` and `run-tests.ps1` remove every `RAVINTIO_*` variable before each suite, except `RAVINTIO_PWSH` and `RAVINTIO_TIMING_FILE`.
-- A runner reads its own settings before it clears them.
+- `run-tests.sh` and `run-tests.ps1` remove every `RAVINTIO_*` variable before each suite, except `RAVINTIO_PWSH`, `RAVINTIO_TIMING_FILE`, and `RAVINTIO_TEST_QUIET`. The last one changes only how much a suite prints.
 - Each runner header lists the variables it keeps.
 
 ## Acceptance Criteria
 
 - [ ] AC-1: variables are cleared
-  - Given `RAVINTIO_INITIATIVE_STEP=1` and `RAVINTIO_TEST_QUIET=1` are set
+  - Given `RAVINTIO_INITIATIVE_STEP=1` and an unlisted `RAVINTIO_` variable are set
   - When the runner starts a probe suite
   - Then the probe sees both variables unset
 - [ ] AC-2: kept variables pass through
   - Given `RAVINTIO_PWSH` is set
   - When the runner starts a probe suite
   - Then the probe sees its value
-- [ ] AC-3: runner settings still work
+- [ ] AC-3: quiet mode still works
   - Given `RAVINTIO_TEST_QUIET=1` is set
   - When the runner runs a passing suite
-  - Then the output omits the PASS lines
+  - Then the output omits the PASS lines and the suite sees the variable
 
 ## Dependencies
 

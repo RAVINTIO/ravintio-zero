@@ -36,9 +36,17 @@ the runner names it. If you add a helper or data file, add it to
 `KNOWN_NON_SUITES` in `run-tests.sh`. To run only this check, set
 `RAVINTIO_PREFLIGHT_ONLY=1`.
 
-Both runners clear `RAVINTIO_INITIATIVE_STEP` before they start a suite. The
-initiative driver sets it in every step session, and the hooks read it. A suite
-that needs the variable sets it for its own hook call.
+Both runners remove every `RAVINTIO_` variable from the environment of each
+suite, so a suite gives the same result in any session. The initiative driver
+sets `RAVINTIO_INITIATIVE_STEP` in every step session, and the hooks read it. A
+suite that needs a variable sets it for its own call. Three variables pass
+through: `RAVINTIO_PWSH`, `RAVINTIO_TIMING_FILE`, and `RAVINTIO_TEST_QUIET`. A
+suite that starts a nested runner unsets `RAVINTIO_TEST_QUIET` first.
+
+Both runners also compare tracked and untracked files before the first suite and
+after the last. If a suite changes one, the run fails and names the path with
+`Tree changed during the run`. The check skips ignored files and skips itself
+outside a git repository.
 
 You can also run a single suite directly:
 

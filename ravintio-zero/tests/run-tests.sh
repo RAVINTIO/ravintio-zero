@@ -8,9 +8,15 @@
 #   RAVINTIO_PREFLIGHT_ONLY=1   check for stray files, run no suite, and exit
 #   RAVINTIO_TEST_QUIET=1       hide PASS lines and banners, keep every failure and the summary
 #
-# The runner clears RAVINTIO_INITIATIVE_STEP before it starts any suite (0000251). The initiative
-# driver sets it in every step session, and the hooks read it, so an inherited value fails hook
-# tests. A suite that needs the variable sets it for its own hook call.
+# The runner removes every RAVINTIO_ variable from the environment of each suite (0000315), so a
+# suite gives the same result in any session. The initiative driver sets RAVINTIO_INITIATIVE_STEP
+# in every step session, and the hooks read it. A suite that needs a variable sets it for its own
+# call. Three variables pass through: RAVINTIO_PWSH, RAVINTIO_TIMING_FILE, and RAVINTIO_TEST_QUIET. The
+# last one only changes how much a suite prints, and assert.sh reads it. A suite that starts a
+# nested runner unsets it first.
+#
+# The runner also compares tracked and untracked files before the first suite and after the last.
+# If a suite changes one, the run fails and names the path. Ignored files are not compared.
 
 set -uo pipefail
 unset RAVINTIO_INITIATIVE_STEP
@@ -18,6 +24,33 @@ unset RAVINTIO_INITIATIVE_STEP
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REGRESSION_DIR="$SCRIPT_DIR/regression"
 PWSH="${RAVINTIO_PWSH:-pwsh}"
+
+# Every exported RAVINTIO_ variable except the three that pass through is removed for each suite.
+CLEAR_ARGS=()
+while IFS= read -r name; do
+  [ -n "$name" ] || continue
+  case "$name" in
+    RAVINTIO_PWSH|RAVINTIO_TIMING_FILE|RAVINTIO_TEST_QUIET) ;;
+    *) CLEAR_ARGS+=(-u "$name") ;;
+  esac
+done <<< "$(compgen -e | grep '^RAVINTIO_' || true)"
+
+# Prints one "path<TAB>hash" line per modified, deleted, or untracked file. Fails outside a git repository.
+snapshot_tree() {
+  local top f
+  top="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel 2>/dev/null)" || return 1
+  git -C "$top" ls-files -z -m -o --exclude-standard | while IFS= read -r -d '' f; do
+    if [ -e "$top/$f" ] || [ -L "$top/$f" ]; then
+      printf '%s\t%s\n' "$f" "$(git -C "$top" hash-object -- "$f" 2>/dev/null || echo unreadable)"
+    else
+      printf '%s\tdeleted\n' "$f"
+    fi
+  done | LC_ALL=C sort
+}
+
+TREE_BEFORE=""
+TREE_CHECK=0
+if TREE_BEFORE="$(snapshot_tree)"; then TREE_CHECK=1; fi
 
 TOTAL_PASS=0
 TOTAL_FAIL=0
@@ -126,8 +159,8 @@ run_one() {
 
 run_suite_body() {
   case "$1" in
-    *.ps1) "$PWSH" -NoProfile -File "$1" ;;
-    *) bash "$1" ;;
+    *.ps1) env ${CLEAR_ARGS[@]+"${CLEAR_ARGS[@]}"} "$PWSH" -NoProfile -File "$1" ;;
+    *) env ${CLEAR_ARGS[@]+"${CLEAR_ARGS[@]}"} bash "$1" ;;
   esac
 }
 
@@ -174,6 +207,21 @@ else
   done
 fi
 
+# ── Tree check ────────────────────────────────────────────────────────────────
+
+TREE_CHANGED=0
+if [ "$TREE_CHECK" -eq 1 ]; then
+  TREE_AFTER="$(snapshot_tree)"
+  if [ "$TREE_BEFORE" != "$TREE_AFTER" ]; then
+    echo ""
+    while IFS= read -r path; do
+      [ -n "$path" ] || continue
+      echo "Tree changed during the run: $path"
+      TREE_CHANGED=$((TREE_CHANGED + 1))
+    done <<< "$(comm -3 <(printf '%s\n' "$TREE_BEFORE") <(printf '%s\n' "$TREE_AFTER") | sed 's/^[[:space:]]*//' | cut -f1 | LC_ALL=C sort -u)"
+  fi
+fi
+
 # ── Summary ───────────────────────────────────────────────────────────────────
 
 echo ""
@@ -182,6 +230,9 @@ echo "Feature suites:    $TOTAL_PASS passed, $TOTAL_FAIL failed."
 echo "Regression suite:  $REGRESSION_PASS passed, $REGRESSION_FAIL failed."
 if [ "$PS_SKIPPED" -gt 0 ]; then
   echo "Skipped $PS_SKIPPED PowerShell suites: pwsh not found"
+fi
+if [ "$TREE_CHANGED" -gt 0 ]; then
+  echo "Changed paths:     $TREE_CHANGED (named above)"
 fi
 if [ "$UNDISCOVERED" -gt 0 ]; then
   echo "Undiscovered files: $UNDISCOVERED (named above)"
@@ -194,7 +245,7 @@ if [ "$PS_SKIPPED" -gt 0 ] && [ "${RAVINTIO_REQUIRE_PWSH:-0}" = "1" ]; then
   PS_REQUIRED_FAIL=1
 fi
 
-if [ "$TOTAL_FAIL" -eq 0 ] && [ "$REGRESSION_FAIL" -eq 0 ] && [ "$UNDISCOVERED" -eq 0 ] && [ "$PS_REQUIRED_FAIL" -eq 0 ]; then
+if [ "$TOTAL_FAIL" -eq 0 ] && [ "$REGRESSION_FAIL" -eq 0 ] && [ "$UNDISCOVERED" -eq 0 ] && [ "$TREE_CHANGED" -eq 0 ] && [ "$PS_REQUIRED_FAIL" -eq 0 ]; then
   echo "All tests passed."
   exit 0
 else

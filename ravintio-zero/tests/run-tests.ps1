@@ -8,14 +8,41 @@
 #   RAVINTIO_TIMING_FILE    set by this script (0000171 req-003). Invoke-Setup appends
 #                           one setup.ps1 time per run, and the total prints before the summary.
 #
-# The runner clears RAVINTIO_INITIATIVE_STEP before it starts any suite (0000251). The initiative
-# driver sets it in every step session, and the hooks read it, so an inherited value fails hook
-# tests. A suite that needs the variable sets it for its own hook call.
+# The runner removes every RAVINTIO_ variable from the environment of each suite (0000315), so a
+# suite gives the same result in any session. The initiative driver sets RAVINTIO_INITIATIVE_STEP
+# in every step session, and the hooks read it. A suite that needs a variable sets it for its own
+# call. Three variables pass through: RAVINTIO_PWSH, RAVINTIO_TIMING_FILE, and RAVINTIO_TEST_QUIET. The
+# last one only changes how much a suite prints, and assert.ps1 reads it. A suite that starts a
+# nested runner unsets it first.
+#
+# The runner also compares tracked and untracked files before the first suite and after the last.
+# If a suite changes one, the run fails and names the path. Ignored files are not compared.
 
 $ErrorActionPreference = 'Stop'
-Remove-Item Env:RAVINTIO_INITIATIVE_STEP -ErrorAction SilentlyContinue
+$quiet = ($env:RAVINTIO_TEST_QUIET -eq '1')
+foreach ($item in @(Get-ChildItem Env: | Where-Object { $_.Name -like 'RAVINTIO_*' })) {
+    if ($item.Name -notin @('RAVINTIO_PWSH', 'RAVINTIO_TEST_QUIET')) { Remove-Item "Env:$($item.Name)" -ErrorAction SilentlyContinue }
+}
+
+# Returns "path<TAB>hash" lines for modified, deleted, and untracked files, or $null outside a git repository.
+function Get-TreeSnapshot {
+    $top = & git -C $here rev-parse --show-toplevel 2>$null
+    if ($LASTEXITCODE -ne 0 -or -not $top) { return $null }
+    $lines = @()
+    foreach ($f in @(& git -C $top -c core.quotepath=false ls-files -m -o --exclude-standard)) {
+        if (-not $f) { continue }
+        if (Test-Path -LiteralPath (Join-Path $top $f)) {
+            $h = (& git -C $top hash-object -- $f 2>$null)
+            $lines += "$f`t$h"
+        } else {
+            $lines += "$f`tdeleted"
+        }
+    }
+    return ,@($lines | Sort-Object -Unique)
+}
 
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
+$treeBefore = Get-TreeSnapshot
 $hostExe = (Get-Process -Id $PID).Path
 Write-Host "Host: PowerShell $($PSVersionTable.PSVersion) ($($PSVersionTable.PSEdition)), $hostExe"
 
@@ -38,7 +65,7 @@ $env:RAVINTIO_TIMING_FILE = $timingFile
 $failed = @()
 try {
     foreach ($suite in $suites) {
-        if ($env:RAVINTIO_TEST_QUIET -eq '1') {
+        if ($quiet) {
             $suiteOut = & $hostExe -NoProfile -ExecutionPolicy Bypass -File $suite.FullName 2>&1 | Out-String
             if ($LASTEXITCODE -ne 0) {
                 $failed += $suite.Name
@@ -69,10 +96,18 @@ finally {
     Remove-Item -LiteralPath $timingFile -Force -ErrorAction SilentlyContinue
 }
 
+$treeChanged = @()
+if ($null -ne $treeBefore) {
+    $treeAfter = Get-TreeSnapshot
+    $diff = @(Compare-Object -ReferenceObject @($treeBefore) -DifferenceObject @($treeAfter))
+    $treeChanged = @($diff | ForEach-Object { ($_.InputObject -split "`t")[0] } | Sort-Object -Unique)
+    foreach ($path in $treeChanged) { Write-Host "Tree changed during the run: $path" }
+}
+
 Write-Host ""
 Write-Host "================================"
 Write-Host "PowerShell suites: $($suites.Count - $failed.Count) passed, $($failed.Count) failed."
 foreach ($name in $failed) { Write-Host "  failed: $name" }
 Write-Host "================================"
-if ($failed.Count -gt 0) { exit 1 }
+if ($failed.Count -gt 0 -or $treeChanged.Count -gt 0) { exit 1 }
 exit 0

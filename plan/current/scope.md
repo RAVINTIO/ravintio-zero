@@ -12,7 +12,7 @@ version: "0.41.2"
 
 ## In Scope
 
-- Both runners clear every `RAVINTIO_*` variable before each suite, except `RAVINTIO_PWSH` and `RAVINTIO_TIMING_FILE`.
+- Both runners clear every `RAVINTIO_*` variable before each suite, except `RAVINTIO_PWSH`, `RAVINTIO_TIMING_FILE`, and `RAVINTIO_TEST_QUIET`.
 - A check that no suite writes the real `.next-id`, `plan/`, or `.claude/`.
 - A final runner check on tracked and untracked files.
 - `test-0000164-req-007` reads `hook-enforcement.md` and no longer reads `CLAUDE.md`.

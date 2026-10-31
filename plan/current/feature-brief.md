@@ -64,7 +64,7 @@ None.
 ## Scope Boundaries
 
 ### In Scope
-- `run-tests.sh` and `run-tests.ps1` clear every `RAVINTIO_*` variable before each suite, except the runner's own settings. A suite that needs a variable sets it.
+- `run-tests.sh` and `run-tests.ps1` clear every `RAVINTIO_*` variable before each suite, except `RAVINTIO_PWSH`, `RAVINTIO_TIMING_FILE`, and `RAVINTIO_TEST_QUIET`. A suite that needs a variable sets it.
 - A test that writes repo state (`.next-id`, `plan/`, `.claude/`) works on a temporary copy.
 - A final runner check fails when tracked and untracked files differ before and after the run. Ignored files are out of the check.
 - `test-0000164-req-007` checks the file that holds the rules and fails when the phrases leave it.

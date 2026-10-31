@@ -17,7 +17,7 @@ A step session sets `RAVINTIO_INITIATIVE_STEP=1`. A nested runner inherits `RAVI
 
 ## Decision
 
-The runner starts every suite with all `RAVINTIO_*` variables removed, except `RAVINTIO_PWSH` and `RAVINTIO_TIMING_FILE`. It reads its own settings before it clears them. A suite that needs a variable sets it. After the last suite, the runner compares a snapshot of tracked and untracked files with one taken before the first suite.
+The runner starts every suite with all `RAVINTIO_*` variables removed, except `RAVINTIO_PWSH`, `RAVINTIO_TIMING_FILE`, and `RAVINTIO_TEST_QUIET`. The last one changes only how much `assert.sh` prints, and a suite that starts a nested runner unsets it first. A suite that needs a variable sets it. After the last suite, the runner compares a snapshot of tracked and untracked files with one taken before the first suite.
 
 ## Alternatives Considered
 
