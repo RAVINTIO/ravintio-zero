@@ -417,13 +417,17 @@ install_codex_hooks() {
 
   mkdir -p "$dest"
   local script_name
-  for script_name in merge-guard.mjs read-stdin.mjs; do
+  for script_name in merge-guard.mjs read-stdin.mjs guard-run.mjs; do
     cp "$src/$script_name" "$dest/$script_name"
     echo "  + $hooks_dir_rel/$script_name"
   done
 
-  local command_line="node \"\$(git rev-parse --show-toplevel)/$hooks_dir_rel/merge-guard.mjs\""
+  # 0000316 req-002: Codex sets no project-dir variable, so the command holds
+  # the absolute project path. Single quotes keep the shell from expanding it.
+  local quoted_root="${PROJECT_ROOT//\'/\'\\\'\'}"
+  local command_line="node '$quoted_root/$hooks_dir_rel/guard-run.mjs' guard merge-guard.mjs"
   RAVINTIO_HOOK_CMD="$command_line" RAVINTIO_HOOK_MARK="$hooks_dir_rel/merge-guard.mjs" \
+    RAVINTIO_HOOK_MARK2="$hooks_dir_rel/guard-run.mjs" \
     RAVINTIO_SETTINGS="$hooks_file" RAVINTIO_SETTINGS_REL="$hooks_file_rel" \
     node -e "$RAVINTIO_WRITE_SETTINGS_JS"'
       const fs = require("fs");
@@ -447,7 +451,8 @@ install_codex_hooks() {
       const kept = [];
       for (const g of s.hooks.PreToolUse || []) {
         if (!isObj(g) || !Array.isArray(g.hooks)) { kept.push(g); continue; }
-        const rest = g.hooks.filter(h => !(isObj(h) && typeof h.command === "string" && h.command.includes(mark)));
+        const mark2 = process.env.RAVINTIO_HOOK_MARK2;
+        const rest = g.hooks.filter(h => !(isObj(h) && typeof h.command === "string" && (h.command.includes(mark) || (mark2 && h.command.includes(mark2)))));
         if (rest.length === g.hooks.length) kept.push(g);
         else if (rest.length > 0) kept.push({ ...g, hooks: rest });
       }
@@ -518,14 +523,20 @@ install_enforcement_hooks() {
   # Invoking through `node` removes the dependency on file mode entirely. This
   # matches what setup.ps1 already did, which is why the PowerShell install
   # kept working throughout.
-  local gate_cmd="node \"$hooks_dir_rel/gate-write.mjs\""
-  local ratchet_cmd="node \"$hooks_dir_rel/ratchet-check.mjs\""
-  local em_dash_cmd="node \"$hooks_dir_rel/em-dash-guard.mjs\""
-  local trigger_cmd="node \"$hooks_dir_rel/auto-trigger-orchestrator.mjs\""
-  local presence_cmd="node \"$hooks_dir_rel/check-orchestrator-presence.mjs\""
-  local design_cmd="node \"$hooks_dir_rel/check-design.mjs\""
-  local merge_guard_cmd="node \"$hooks_dir_rel/merge-guard.mjs\""
-  local reply_prefix_cmd="node \"$hooks_dir_rel/check-reply-prefix.mjs\""
+  # 0000316 ADR-001: every hook runs through guard-run.mjs from the project
+  # root. ${CLAUDE_PROJECT_DIR} is the placeholder Claude Code substitutes, so a
+  # changed working directory can't break the path. The four guards run in
+  # guard mode, where a missing or crashing script exits 2. The rest run in
+  # advisory mode and never block.
+  local launcher="node \"\${CLAUDE_PROJECT_DIR}/$hooks_dir_rel/guard-run.mjs\""
+  local gate_cmd="$launcher guard gate-write.mjs"
+  local ratchet_cmd="$launcher guard ratchet-check.mjs"
+  local em_dash_cmd="$launcher guard em-dash-guard.mjs"
+  local trigger_cmd="$launcher advisory auto-trigger-orchestrator.mjs"
+  local presence_cmd="$launcher advisory check-orchestrator-presence.mjs"
+  local design_cmd="$launcher advisory check-design.mjs"
+  local merge_guard_cmd="$launcher guard merge-guard.mjs"
+  local reply_prefix_cmd="$launcher advisory check-reply-prefix.mjs"
 
   if command -v node >/dev/null 2>&1; then
     RAVINTIO_GATE="$gate_cmd" RAVINTIO_RATCHET="$ratchet_cmd" RAVINTIO_EM_DASH="$em_dash_cmd" RAVINTIO_TRIGGER="$trigger_cmd" RAVINTIO_PRESENCE="$presence_cmd" RAVINTIO_DESIGN="$design_cmd" RAVINTIO_MERGE_GUARD="$merge_guard_cmd" RAVINTIO_REPLY_PREFIX="$reply_prefix_cmd" RAVINTIO_RETIRED="$RETIRED_HOOK_NAMES" RAVINTIO_SETTINGS="$settings" RAVINTIO_SETTINGS_REL="$settings_rel" node -e "$RAVINTIO_WRITE_SETTINGS_JS$RAVINTIO_SETTINGS_SHAPE_JS"'
@@ -561,6 +572,17 @@ install_enforcement_hooks() {
         process.exit(1);
       }
       s.hooks = s.hooks || {};
+      // 0000316 req-001: keep Bash in the project root, so a cd lasts only for
+      // its own command and later hooks still resolve. Other env entries stay.
+      // A present env value that is not an object is replaced, with a warning
+      // that names the key and never the value.
+      if (s.env === undefined || s.env === null) s.env = {};
+      else if (typeof s.env !== "object" || Array.isArray(s.env)) {
+        process.stderr.write("  ! Warning: env in " + process.env.RAVINTIO_SETTINGS_REL +
+          " is not an object. Setup replaced it with the RAVINTIO setting.\n");
+        s.env = {};
+      }
+      s.env.CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR = "1";
       // A present value that is not an array is non-array (0000037 ADR-003).
       // Warn and replace it with the RAVINTIO entries. The warning names the
       // event and the file, never the old value, which can hold a secret
@@ -647,10 +669,10 @@ install_enforcement_hooks() {
       fs.mkdirSync(path.dirname(sf),{recursive:true});
       writeSettings(sf, JSON.stringify(s,null,2)+"\n");
     ' || exit 1
-    echo "  ~ $settings_rel (enforcement hooks wired)"
+    echo "  ~ $settings_rel (enforcement hooks wired, Bash kept in the project root)"
   else
     echo "  ! Warning: node not found — skipping settings.json enforcement hook wiring"
-    echo "  ! Manually add gate-write, ratchet-check, em-dash-guard (Write/Edit PreToolUse), merge-guard (Bash PreToolUse), auto-trigger-orchestrator, check-orchestrator-presence and check-design (UserPromptSubmit), and check-reply-prefix (Stop) to $settings_rel"
+    echo "  ! Manually set env.CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR to 1, and add gate-write, ratchet-check, em-dash-guard (Write/Edit PreToolUse), merge-guard (Bash PreToolUse), auto-trigger-orchestrator, check-orchestrator-presence and check-design (UserPromptSubmit), and check-reply-prefix (Stop) to $settings_rel"
   fi
 }
 
