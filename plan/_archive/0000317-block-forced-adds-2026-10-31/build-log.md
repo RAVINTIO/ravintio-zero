@@ -25,9 +25,9 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 
 | Field | Value |
 |-------|-------|
-| Start | `2026-10-31T22:34:22Z` |
-| End | `2026-10-31T22:34:49Z` |
-| Wall clock | `6` |
+| Start | `2026-10-31T22:34:03Z` |
+| End | `2026-10-31T22:34:50Z` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -52,7 +52,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 
 | Field | Value |
 |-------|-------|
-| Start | `2026-10-31T22:35:50Z` |
+| Start | `2026-10-31T22:34:50Z` |
 | End | `2026-10-31T22:35:50Z` |
 | Wall clock | `1` |
 | Model tier | primary |
@@ -70,7 +70,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 |-------|-------|
 | Start | `2026-10-31T22:35:50Z` |
 | End | `2026-10-31T23:01:15Z` |
-| Wall clock | `60` |
+| Wall clock | `25` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 0 |
@@ -84,9 +84,9 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 
 | Field | Value |
 |-------|-------|
-| Start | `2026-10-31T23:10:46Z` |
+| Start | `2026-10-31T23:01:16Z` |
 | End | `2026-10-31T23:10:46Z` |
-| Wall clock | `10` |
+| Wall clock | `9` |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | 0 |
@@ -95,3 +95,33 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Notes | Full suite passed after two self-correction cycles in P2. Execution checks and the security review are small, so they ran inline. |
 
 - Gate: autonomous, no stop. Evidence in `acceptance-evidence.md`.
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-10-31T23:10:56Z` |
+| End | `2026-10-31T23:11:03Z` |
+| Wall clock | `0` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship, ravintio-retrospective |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Steps 5 and 6 ran inline because both are short. |
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `38` minutes |
+| Total agents spawned | `0` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `0` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `2` |
+| Phases skipped | none |
