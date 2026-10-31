@@ -3,7 +3,7 @@
 > Change record. Index of all ADRs across all features. Updated after every pipeline run.
 > Do not archive this file. Update it in place.
 
-Last updated: 0000315-isolated-test-state
+Last updated: 0000316-hooks-fail-closed
 
 ---
 
@@ -352,3 +352,9 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 | ADR | Title | Status | Summary |
 |-----|-------|--------|---------|
 | ADR-001 | clear the environment in the runner | accepted | The runners remove every `RAVINTIO_` variable from each suite except `RAVINTIO_PWSH`, `RAVINTIO_TIMING_FILE`, and `RAVINTIO_TEST_QUIET`. They compare tracked and untracked files before and after the run and fail on a change. |
+
+### Feature 0000316: hooks-fail-closed
+
+| ADR | Title | Status | Summary |
+|-----|-------|--------|---------|
+| ADR-001 | run every hook through a launcher from the project root | accepted | Setup wires each hook as `guard-run.mjs {guard\|advisory} {hook}.mjs` under `${CLAUDE_PROJECT_DIR}` and sets `CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR=1`. In guard mode a missing or crashing script exits 2 and names the script. |
