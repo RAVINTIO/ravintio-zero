@@ -39,7 +39,7 @@ event_entries() {
     if (!Array.isArray(v)) { console.log("not-array"); process.exit(0); }
     for (const e of v) {
       const cmds = (e.hooks || []).map(h => h.command || "").join(" ");
-      const m = /([A-Za-z0-9-]+)\.mjs/.exec(cmds);
+      const m = /([A-Za-z0-9-]+)\.mjs\s*$/.exec(cmds);
       console.log(e.matcher + " " + (m ? m[1] : cmds));
     }
   ' "$1" "$2"

@@ -45,7 +45,7 @@ sh_entries() {
     for (const ev of ["PreToolUse", "UserPromptSubmit"]) {
       for (const e of s.hooks[ev] || []) {
         for (const h of e.hooks || []) {
-          const m = /([a-z-]+)\.mjs/.exec(h.command || "");
+          const m = /([a-z-]+)\.mjs\s*$/.exec(h.command || "");
           if (m) console.log(ev + " " + e.matcher + " " + m[1]);
         }
       }

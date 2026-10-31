@@ -27,7 +27,7 @@ function Get-EventEntries {
     $lines = @()
     foreach ($entry in $value) {
         $cmds = (@($entry.hooks) | ForEach-Object { "$($_.command)" }) -join ' '
-        if ($cmds -match '([A-Za-z0-9-]+)\.mjs') { $lines += "$($entry.matcher) $($Matches[1])" }
+        if ($cmds -match '([A-Za-z0-9-]+)\.mjs\s*$') { $lines += "$($entry.matcher) $($Matches[1])" }
         else { $lines += "$($entry.matcher) $cmds" }
     }
     return ($lines -join "`n")
