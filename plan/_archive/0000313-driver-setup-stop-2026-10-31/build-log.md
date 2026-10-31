@@ -26,8 +26,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-10-31T19:04:36Z` |
-| End | |
-| Wall clock | |
+| End | `2026-10-31T19:08:00Z` |
+| Wall clock | `4` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -102,3 +102,33 @@ Gate: P2 autonomous, no stop (2026-10-31T19:30:00Z)
 
 - Self-correct cycle 1: old-name guard failed on build log lines 38 and 39. Cause: the notes named the old product and draft file names. Fix: reworded. Result: pass.
 - Gate: P3 autonomous, no stop. Evidence in `plan/current/acceptance-evidence.md` (2026-10-31T19:42:00Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-10-31T19:43:00Z` |
+| End | `2026-10-31T19:55:00Z` |
+| Wall clock | `12` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship, ravintio-retrospective |
+| Agents spawned | 1 |
+| MCP calls | 0 |
+| Parallel task batches | 1 |
+| Notes | Fast batch: Step 5 in a cheaper-tier subagent, Step 6 inline. |
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `51` minutes |
+| Total agents spawned | `4` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `2` |
+| Primary tier agent calls | `3` |
+| Cheaper tier agent calls | `1` |
+| Self-corrections | `1` |
+| Phases skipped | none |
