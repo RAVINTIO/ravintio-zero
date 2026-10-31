@@ -65,7 +65,7 @@ flowchart LR
 
 | Unit | Depends on | Writes | Batch | Sequential reason |
 |------|-----------|--------|-------|-------------------|
-| U1 | none | `ravintio-zero/tests/test-0000042-req-006-phase-guard-and-stale-cites.sh`, `ravintio-zero/tests/test-0000314-req-001-guard-skips-step-logs.sh` | 1 | none |
+| U1 | none | `ravintio-zero/tests/test-0000042-req-006-phase-guard-and-stale-cites.sh`, (REQ-001 cases live in section (d) of that file) | 1 | none |
 | U2 | none | `ravintio-zero/skills/ravintio-orchestrator/SKILL.md`, `ravintio-zero/skills/ravintio-initiative/SKILL.md`, `ravintio-zero/standards/roadmap-standards.md`, `ravintio-zero/tests/test-0000314-req-002-driver-files-stay.sh` | 1 | none |
 | U3 | U1 | `ravintio-zero/tests/test-0000314-req-003-suite-keeps-step-logs.sh` | 2 | It runs the guard suite that U1 changes. |
 

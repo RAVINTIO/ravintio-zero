@@ -64,3 +64,20 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Notes | Artifacts are small and share one context, so the plan phase wrote them inline. Consistency check clean. |
 
 - Gate: autonomous, no stop.
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-10-31T20:12:00Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Inline TDD. Three units share two test files and a few lines of skill text, so subagent overhead outweighs the gain. |
+
+- Deviation: REQ-001 guard cases sit in `test-0000042-req-006` section (d), not in a new file. Plan updated.
+- RED then GREEN for REQ-001 (3 failures, then 17 of 17) and REQ-002 (7 failures, then 14 of 14). REQ-003 passed on first run because it guards a behaviour that holds.

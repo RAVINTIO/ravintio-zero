@@ -3,7 +3,7 @@
 > Change record. Index of all ADRs across all features. Updated after every pipeline run.
 > Do not archive this file. Update it in place.
 
-Last updated: 0000313-driver-setup-stop
+Last updated: 0000314-step-logs-stay-in-place
 
 ---
 
@@ -340,3 +340,9 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 | ADR | Title | Status | Summary |
 |-----|-------|--------|---------|
 | ADR-001 | one stop line for both stops | accepted | A step that changes a restart file and a setup path gets one `I-D Advance: Restart: Setup:` line. A restart-only or setup-only step keeps its own line. |
+
+### Feature 0000314: step-logs-stay-in-place
+
+| ADR | Title | Status | Summary |
+|-----|-------|--------|---------|
+| ADR-001 | skip the step log folder in the phase guard | accepted | The phase guard skips `plan/.initiative-logs` only. It keeps scanning every other path, so a new untracked skill file is still checked. |
