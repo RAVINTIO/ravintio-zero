@@ -71,14 +71,36 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-10-31T21:28:59Z` |
-| End | `PENDING` |
-| Wall clock | `PENDING` |
+| End | `2026-10-31T22:06:57Z` |
+| Wall clock | `33` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 0 |
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | Inline TDD. U2 and U3 both depend on U1, and U2 and U3 share the hook command format, so subagent overhead outweighs the gain. |
+
+- Rework: REQ-002: older suites and fixtures checked the old relative command form (2026-10-31T22:06:57Z)
+- Rework: REQ-002: the S-005 test left `${CLAUDE_PROJECT_DIR}` unescaped under `set -u` (2026-10-31T22:06:57Z)
+- Deviation: the improvement loop and the refactor pass did not run as subagents. The launcher is 60 lines and the setup edits are mechanical, so a fresh-context review adds little.
+- Deviation: the plan listed 4 test files. The step added 3 and updated 9 older suites, 4 regression copies, and 1 fixture.
+
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-10-31T22:06:57Z` |
+| End | `2026-10-31T22:06:57Z` |
+| Wall clock | `3` |
+| Model tier | primary |
+| Skills loaded | ravintio-validate-and-accept |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 1 |
+| Notes | The full suite ran in the background while verification and the security review ran inline. |
+
+- CI: 234 feature suites passed, 0 failed. Regression 19 of 19. Three self-correction cycles (see P2 rework markers).
+- Gate: autonomous, evidence written to `plan/current/acceptance-evidence.md`.
 
 <!-- Copy and fill in this block at each phase boundary. Headings use the form
      "### P<n>: {Phase Name}" with n from 1 to 4 and the phase names
