@@ -2,7 +2,7 @@
 
 **Feature:** Isolated test state
 **Version:** 0.41.2
-**PR:** pending, updated at Step 9
+**PR:** #84
 
 ## What changed
 
