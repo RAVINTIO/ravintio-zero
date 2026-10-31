@@ -10,8 +10,8 @@
 
 id: "ravintio-zero"
 name: "RAVINTIO Zero"
-version: "0.40.1"
-feature: "0000252-chart-rules"
+version: "0.41.0"
+feature: "0000313-driver-setup-stop"
 
 versionPolicy: "max-component-version"
 

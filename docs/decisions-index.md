@@ -3,7 +3,7 @@
 > Change record. Index of all ADRs across all features. Updated after every pipeline run.
 > Do not archive this file. Update it in place.
 
-Last updated: 0000241-watcher-false-events
+Last updated: 0000313-driver-setup-stop
 
 ---
 
@@ -334,3 +334,9 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 | ADR | Title | Status | Summary |
 |-----|-------|--------|---------|
 | ADR-001 | the build log check is its own script | accepted | `build-log-check.mjs` checks the build log at ship Step 3, before Archive. `consistency-check.mjs` runs at P1, before the phase blocks exist, so it stays apart. |
+
+### Feature 0000313: driver-setup-stop
+
+| ADR | Title | Status | Summary |
+|-----|-------|--------|---------|
+| ADR-001 | one stop line for both stops | accepted | A step that changes a restart file and a setup path gets one `I-D Advance: Restart: Setup:` line. A restart-only or setup-only step keeps its own line. |
