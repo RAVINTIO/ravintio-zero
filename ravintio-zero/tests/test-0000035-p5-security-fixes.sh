@@ -61,7 +61,7 @@ assert_equals "0" "$(printf '%s\n' "$MERGE$FILTER_FN" | grep -c -- ' -match ' ||
 echo ""
 echo "=== S-005: hook commands quote the path, as setup.sh does ==="
 
-assert_contains "'node \"${CLAUDE_PROJECT_DIR}/' + \$HooksDir + '/guard-run.mjs\" '" "$(extract_function_body 'New-HookEntry')" \
+assert_contains "'node \"\${CLAUDE_PROJECT_DIR}/' + \$HooksDir + '/guard-run.mjs\" '" "$(extract_function_body 'New-HookEntry')" \
   "S-005: New-HookEntry quotes the launcher path"
 assert_contains 'node \"\${CLAUDE_PROJECT_DIR}/$hooks_dir_rel/guard-run.mjs\"' "$(cat "$ZERO_DIR/setup.sh")" \
   "S-005: setup.sh quotes the same path"
