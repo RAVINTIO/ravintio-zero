@@ -56,3 +56,21 @@ Pulled in: backlog entry 0000274, folder deleted in the discovery commit
 | Notes | Artifacts written inline: they share one vocabulary and are small, so subagent overhead outweighed the split. Consistency check clean. Gate self-accepted (autonomous, initiative step). |
 
 Gate accepted: P1 plan (autonomous, draft-accepted (initiative)) 2026-10-31T23:41:10Z
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-10-31T23:41:25Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | 3 |
+| MCP calls | 0 |
+| Parallel task batches | 1 |
+| Notes | Batch 1: U1, U2, U3 in parallel. U4 follows. Departure: U1 also edits the I-D Advance text in the standards for REQ-003 AC-2, because U1 owns that file and two units must not write it. |
+
+- In progress: U1 (2026-10-31T23:41:25Z)
+- In progress: U2 (2026-10-31T23:41:25Z)
+- In progress: U3 (2026-10-31T23:41:25Z)
