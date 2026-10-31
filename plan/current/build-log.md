@@ -41,3 +41,10 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Run speed: fast (2026-10-31T19:04:36Z, from the initiative `**Speed:**` field)
 - Adoption mode: standard-iterative (signal: source beside `plan/_archive/`)
 - Version: 0.40.1 -> 0.41.0 (step 1 Bump: minor)
+- Backlog entry 0000311 pulled in and deleted in the same commit as the brief.
+- Scope Lock (happy path): A merged step changes a skill file, the driver prints the `Setup:` line and exits 1, and the initiative skill reruns the approved setup and starts a new driver [source: draft-accepted (initiative)]
+- Scope Lock (first-run path): With no earlier merged step, no stop fires until a step changes a watched file [source: draft-accepted (initiative)]
+- Scope Lock (error path): Unreadable git skips the check, a missing or different setup command stops for the human, and a failing hook stops and reports [source: draft-accepted (initiative)]
+- Scope Lock (cross-session continuity): The driver holds no state across the stop, the new driver reads `position` from the branch ref, and a repeated setup rerun is safe [source: draft-accepted (initiative)]
+- Scope Lock complete. All four scenario paths captured.
+- Design confirmed: draft-accepted (initiative), 2026-10-31T19:06:00Z
