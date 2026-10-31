@@ -74,7 +74,8 @@ if git -C "$REPO_ROOT" rev-parse -q --verify "refs/tags/v0.4.0" >/dev/null 2>&1;
   OLD_SETTINGS="$(cat .claude/settings.json)"
   cd /; rm -rf "$WS" "$OLD_DIR"
   # merge-guard (0000043 req-006) attribution (0000169 req-004), and the Stop hook (0000200 req-004) postdate v0.4.0, so drop them first.
-  NEW_SETTINGS="$(printf '%s' "$NEW_SETTINGS" | node -e 'let d="";process.stdin.on("data",c=>d+=c).on("end",()=>{const s=JSON.parse(d);s.hooks.PreToolUse=s.hooks.PreToolUse.filter(e=>!JSON.stringify(e).includes("merge-guard"));delete s.attribution;delete s.hooks.Stop;process.stdout.write(JSON.stringify(s,null,2))})')"
+  # The env setting and the launcher commands (0000316) postdate it too, so drop the setting and map each command back to the old form.
+  NEW_SETTINGS="$(printf '%s' "$NEW_SETTINGS" | node -e 'let d="";process.stdin.on("data",c=>d+=c).on("end",()=>{const s=JSON.parse(d);s.hooks.PreToolUse=s.hooks.PreToolUse.filter(e=>!JSON.stringify(e).includes("merge-guard"));delete s.attribution;delete s.hooks.Stop;delete s.env;for(const ev of Object.keys(s.hooks))for(const e of s.hooks[ev])for(const h of e.hooks)h.command=h.command.replace(/^node \"\$\{CLAUDE_PROJECT_DIR\}\/(.+)\/guard-run\.mjs\" (?:guard|advisory) (.+)\.mjs$/,"node \"$1/$2.mjs\"");process.stdout.write(JSON.stringify(s,null,2))})')"
   assert_equals "$OLD_SETTINGS" "$NEW_SETTINGS" \
     "req-003 (b): settings.json matches the v0.4.0 script byte for byte"
 else

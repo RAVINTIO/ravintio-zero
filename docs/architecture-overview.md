@@ -1,6 +1,6 @@
 # Architecture Overview
 
-Last updated: 0000315-isolated-test-state
+Last updated: 0000316-hooks-fail-closed
 
 ## What this repo is
 
@@ -192,6 +192,8 @@ Setup checks the tool straight after argument parsing, ahead of the old-folder c
 **Atomic settings writes.** Every `settings.json` write goes to `settings.json.ravintio-tmp` in the same folder first, then replaces the target. So `settings.json` is always the old file or the new one. Setup removes a leftover temporary file before it writes, and creates the new one exclusively, so it never follows a planted link. The new file keeps the original's mode, or its ACL on Windows. Setup leaves a read-only `settings.json` unchanged. `setup.sh` writes a symlinked `settings.json` through to its real file. Other files setup writes, such as the boot file, are rewritten whole on each run.
 
 **Leftover temporary file.** Each run removes a leftover `settings.json.ravintio-tmp` before its first settings write, even when `node` is missing. It removes a file or a link, never a folder, and never follows a link.
+
+**Hooks run from the project root.** Both scripts set `CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR` to `1` under `env` in `.claude/settings.json` and keep every other `env` entry. They wire each Claude Code hook as `node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" {guard|advisory} {hook}.mjs`. Codex gets the absolute project path, because it sets no project-dir variable. The launcher finds the hook beside itself. In guard mode it turns a missing or crashing script into exit 2 and names the script. In advisory mode it reports a missing script once and exits 0 (0000316).
 
 **Two scripts, one result.** `setup.sh` and `setup.ps1` wire the same eight hooks, in the same events, matchers, and order. A parity suite fails if they drift. `setup.ps1` runs on Windows PowerShell 5.1 and PowerShell 7. It reads and writes `settings.json` as UTF-8 with no BOM. Flags and the tool name match case in both scripts.
 

@@ -1,6 +1,6 @@
 ---
-version: "0.41.2"
-feature: "0000315-isolated-test-state"
+version: "0.42.0"
+feature: "0000316-hooks-fail-closed"
 updated: "31 Oct 2026"
 ---
 # About
@@ -10,8 +10,8 @@ updated: "31 Oct 2026"
 
 | Field | Value |
 |-------|-------|
-| Version | `0.41.2` |
-| Last feature | `0000315-isolated-test-state` |
+| Version | `0.42.0` |
+| Last feature | `0000316-hooks-fail-closed` |
 | Updated | `31 Oct 2026` |
 
 ## What this is

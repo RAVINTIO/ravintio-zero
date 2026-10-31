@@ -19,7 +19,14 @@ RAVINTIO installs these deterministic enforcement hooks via `setup.sh`:
 - **commit-msg** (git hook): Blocks commits that break `commit-standards.md`. Exit 1 on violation; use `git commit --no-verify` to bypass intentionally.
 - **ratchet-check** (PreToolUse: Write, Edit): While a loop is active (a `plan/current/loop-state-*.md` with `status: active`), blocks writes that remove acceptance-criteria or in-scope lines from `plan/current/` artifacts. Strengthening passes; intentional weakening needs a human-written `plan/current/.ratchet-approve` line (single-use). Agents must never write that marker.
 
-Enforcement failures exit 2 and surface a human-readable message. All unexpected errors exit 0; hooks never block your session unexpectedly.
+Enforcement failures exit 2 and surface a human-readable message. An unexpected error in an advisory hook exits 0, so it never blocks your session.
+
+**Launcher.** Setup wires every Claude Code hook through `.claude/hooks/enforcement/guard-run.mjs`. The command reads `${CLAUDE_PROJECT_DIR}`, so a changed working directory can't break it. Setup also sets `CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR` to `1` under `env`, so a `cd` lasts only for its own Bash command.
+
+- **Guard mode** runs `gate-write`, `ratchet-check`, `em-dash-guard`, and `merge-guard`. A missing script, a crash, a signal, or any exit other than 0 and 2 becomes exit 2. The message names the script. Claude Code treats exit 1 as non-blocking, so this keeps a broken guard from allowing a call.
+- **Advisory mode** runs the other four hooks. A missing script exits 0 and prints one line that names the script, once for each script.
+
+If a block message reads `guard-run: the hook script {name} is missing`, rerun setup.
 
 ## Codex
 

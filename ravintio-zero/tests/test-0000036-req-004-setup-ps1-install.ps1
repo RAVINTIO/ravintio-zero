@@ -22,7 +22,7 @@ if ($run.Code -ne 0) { Write-Host $run.Output }
 $settings = Read-Settings $ws
 Assert-Equal $global:ExpectedEntries (Get-HookEntries $settings) "req-004 (a): settings.json holds the ten entries in the setup.sh order"
 $gate = @($settings.hooks.PreToolUse)[0].hooks[0].command
-Assert-Equal 'node ".claude/hooks/enforcement/gate-write.mjs"' $gate "req-004 (a): the command quotes the module path"
+Assert-Equal 'node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard gate-write.mjs' $gate "req-004 (a): the command quotes the launcher path"
 Assert-Equal 1 (@($settings.allowedTools | Where-Object { $_ -ceq 'Agent' }).Count) "req-004 (a): allowedTools holds Agent once"
 $bytes = [System.IO.File]::ReadAllBytes((Get-SettingsPath $ws))
 Assert-True (-not ($bytes[0] -eq 0xEF -and $bytes[1] -eq 0xBB -and $bytes[2] -eq 0xBF)) "req-004 (a): settings.json has no BOM"
