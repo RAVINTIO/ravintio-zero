@@ -1,8 +1,8 @@
 # RAVINTIO Component Manifest
 id: "ravintio-zero"
 name: "RAVINTIO Zero"
-feature: "0000252-chart-rules"
-version: "0.40.1"
+feature: "0000313-driver-setup-stop"
+version: "0.41.0"
 status: "active"
 type: "component-pack"
 domain: "developer-tooling"
