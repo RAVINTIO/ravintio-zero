@@ -5,7 +5,8 @@
 # A grep guard fails when skills, docs, templates, hooks, or standards cite a
 # phase number outside P0 to P4, say "Phase 0", or use a retired letter prefix.
 # History paths are out of scope: plan/_archive/, plan/changelog/,
-# plan/current/, plan/backlog/, and ravintio-zero/migrations/_done/.
+# plan/current/, plan/backlog/, ravintio-zero/migrations/_done/, and the
+# git-ignored step logs in plan/.initiative-logs/.
 # The push-and-PR override is renamed from custom-004-p9-... to
 # custom-004-ship-..., and no live file names the old file.
 
@@ -25,10 +26,12 @@ SCOPE=(
   ravintio-zero/project-operations.md
   docs ravintio-overrides plan README.md
 )
-# History paths the guard skips.
+# History paths the guard skips. plan/.initiative-logs holds the git-ignored
+# step logs, which echo the step's own test output (0000314). Only that folder
+# is skipped, so a new untracked skill file is still scanned.
 EXCLUDE=(
   plan/_archive plan/changelog plan/current plan/backlog
-  ravintio-zero/migrations/_done
+  ravintio-zero/migrations/_done plan/.initiative-logs
 )
 # P5 to P9, "Phase <n>", or a retired letter prefix (D:, PL:, IM:, VA:, SH:).
 PATTERN='\bP[5-9]\b|\bPhase [0-9]\b|(^|[^A-Za-z0-9_])(D|PL|IM|VA|SH):'
@@ -96,6 +99,28 @@ assert_equals "1" "$RC" "req-006 (b): a planted Phase 0 in a skill fails the gua
 printf 'Latency stays under the P95 target.\n' > "$SKILL"
 OUT="$(phase_guard "$WS")"; RC=$?
 assert_equals "0" "$RC" "req-006 (b): a P95 latency figure is not a phase cite"
+
+echo ""
+echo "=== req-006 (d): a populated step log is skipped (0000314 REQ-001) ==="
+
+mkdir -p "$WS/plan/.initiative-logs"
+printf 'Planted in a step log: P7 and PL: Starting. Phase 0.\n' > "$WS/plan/.initiative-logs/step-2.log"
+printf '# Fake\n\nThe P2 Implement phase follows P1 Plan.\n' > "$SKILL"
+OUT="$(phase_guard "$WS")"; RC=$?
+assert_equals "0" "$RC" "req-006 (d): stale cites in a step log do not fail the guard"
+
+printf 'Run P6 before shipping.\n' >> "$SKILL"
+OUT="$(phase_guard "$WS")"; RC=$?
+assert_equals "1" "$RC" "req-006 (d): a stale cite in a tracked skill still fails beside a step log"
+assert_contains "skills/ravintio-fake/SKILL.md:4:" "$OUT" \
+  "req-006 (d): the guard names the skill file and line, not the step log"
+assert_not_contains ".initiative-logs" "$OUT" \
+  "req-006 (d): the guard output never names the step log"
+
+printf 'Planted in a lookalike folder: P7.\n' > "$WS/plan/.initiative-logs-copy.txt"
+printf '# Fake\n\nClean.\n' > "$SKILL"
+OUT="$(phase_guard "$WS")"; RC=$?
+assert_equals "1" "$RC" "req-006 (d): only plan/.initiative-logs is skipped, a lookalike path is scanned"
 
 echo ""
 echo "=== req-006 (c): custom-004 override renamed ==="
