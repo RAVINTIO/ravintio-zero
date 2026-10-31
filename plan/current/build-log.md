@@ -48,3 +48,18 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Scope Lock (cross-session continuity): The driver holds no state across the stop, the new driver reads `position` from the branch ref, and a repeated setup rerun is safe [source: draft-accepted (initiative)]
 - Scope Lock complete. All four scenario paths captured.
 - Design confirmed: draft-accepted (initiative), 2026-10-31T19:06:00Z
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-10-31T19:08:00Z` |
+| End | `2026-10-31T19:12:00Z` |
+| Wall clock | `4` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Artifacts are short and cross-reference each other, so the plan writes them inline, with no subagent. Fast batch skipped for that reason. |
+Gate: P1 autonomous, no stop (2026-10-31T19:12:00Z)
