@@ -1,6 +1,6 @@
 ---
-version: "0.41.1"
-feature: "0000314-step-logs-stay-in-place"
+version: "0.41.2"
+feature: "0000315-isolated-test-state"
 updated: "31 Oct 2026"
 ---
 # About
@@ -10,8 +10,8 @@ updated: "31 Oct 2026"
 
 | Field | Value |
 |-------|-------|
-| Version | `0.41.1` |
-| Last feature | `0000314-step-logs-stay-in-place` |
+| Version | `0.41.2` |
+| Last feature | `0000315-isolated-test-state` |
 | Updated | `31 Oct 2026` |
 
 ## What this is

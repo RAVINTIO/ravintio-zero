@@ -1,6 +1,6 @@
 # Architecture Overview
 
-Last updated: 0000314-step-logs-stay-in-place
+Last updated: 0000315-isolated-test-state
 
 ## What this repo is
 
@@ -215,7 +215,7 @@ Setup checks the tool straight after argument parsing, ahead of the old-folder c
 
 A wording test greps every tracked file outside history for the retired word that once described RAVINTIO Zero. It passes only lines that match an allowlist of generic uses. A phase guard test fails on a phase number outside P0 to P4 or on a retired letter prefix. A brand guard test fails on any tracked path or line outside history that holds the earlier product name, unless an allowlist entry matches. It also fails on a stale allowlist entry.
 
-`ravintio-zero/tests/run-tests.sh` runs every Bash and PowerShell suite. Before any suite runs, it checks every file under `tests/`. A file that is neither a suite nor on its known list fails the run, and the runner names it. Without `pwsh`, it prints how many PowerShell suites it skipped.
+`ravintio-zero/tests/run-tests.sh` runs every Bash and PowerShell suite. Before any suite runs, it checks every file under `tests/`. A file that is neither a suite nor on its known list fails the run, and the runner names it. Without `pwsh`, it prints how many PowerShell suites it skipped. Each suite starts without any `RAVINTIO_` variable except `RAVINTIO_PWSH`, `RAVINTIO_TIMING_FILE`, and `RAVINTIO_TEST_QUIET`. The runner compares tracked and untracked files before the first suite and after the last, and it fails the run and names each path that changed (0000315).
 
 Set `RAVINTIO_TEST_QUIET=1` to hide PASS lines and banners. The runner then keeps every FAIL line with its detail, the failing suite name, the summary, and the exit codes. A quiet full run prints about 3 KB. Skills that run the full suite set it.
 
