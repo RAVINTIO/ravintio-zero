@@ -70,6 +70,13 @@
 //      "I-D Advance: Restart: step {n} changed {files}. Start a new driver so step {next}
 //      runs the new code.", releases the lock, and exits 1. The initiative skill starts a new
 //      driver and watcher at once. If git or the ref is unreadable, the check is skipped.
+//      The same comparison covers ravintio-zero/skills/, hooks/, setup.sh, and setup/. If the
+//      step changed any of them, the installed copies are stale. The driver prints
+//      "I-D Advance: Setup: step {n} changed {files}. Rerun setup, then start a new driver.",
+//      releases the lock, and exits 1. If the step also changed a restart file, it prints one
+//      line, "I-D Advance: Restart: Setup: step {n} changed {files}. Rerun setup, then start a
+//      new driver so step {next} runs the new code." The files list restart files first, names
+//      each once, and shows at most 5, then "and {k} more".
 //   7. It repeats until delivery: initiative.md is gone and
 //      plan/_archive/{id}-{slug}-initiative-*/ exists. It then exits 0.
 //      If every step in the "## Steps" table has merged but the archive is not there yet,
@@ -119,6 +126,14 @@ const WATCHED = [
   'ravintio-zero/scripts/initiative-watch.mjs',
   'ravintio-zero/skills/ravintio-initiative/SKILL.md',
 ];
+// Paths whose change leaves the installed copies of the pack stale until setup reruns.
+const SETUP_WATCHED = [
+  'ravintio-zero/skills/',
+  'ravintio-zero/hooks/',
+  'ravintio-zero/setup.sh',
+  'ravintio-zero/setup/',
+];
+const MAX_NAMES = 5;
 const STATUS = /^(proposed|charted|draft|active|blocked|delivered|done)$/;
 const POSITION = /^[1-9][0-9]{0,2}$/;
 const BRANCH = /^initiative\/([0-9]{7})-([a-z0-9]+(-[a-z0-9]+)*)$/;
@@ -377,6 +392,21 @@ function changedWatched(root, before, after) {
   return WATCHED.filter((f) => names.has(f));
 }
 
+// Returns the files changed between two commits under the setup paths, in git order. Returns []
+// if either commit is missing, the two are equal, or git cannot compare them.
+function changedSetup(root, before, after) {
+  if (!before || !after || before === after) return [];
+  const r = spawnSync('git', ['diff', '--name-only', before, after, '--', ...SETUP_WATCHED], { cwd: root, encoding: 'utf8' });
+  if (r.error || r.status !== 0) return [];
+  return r.stdout.split(/\r?\n/).filter(Boolean);
+}
+
+// Names at most MAX_NAMES files, then "and {k} more".
+function nameFiles(files) {
+  const shown = files.slice(0, MAX_NAMES).join(', ');
+  return files.length > MAX_NAMES ? `${shown} and ${files.length - MAX_NAMES} more` : shown;
+}
+
 function delivered(root, id, slug) {
   if (existsSync(join(root, INITIATIVE))) return false;
   const dir = join(root, ARCHIVE);
@@ -502,9 +532,18 @@ async function main() {
       return;
     }
     out(`I-D Advance: Complete: step ${position} done, position now ${rm.position}`);
-    const changed = changedWatched(root, headBefore, branchHead(root, rm.branch));
-    if (changed.length > 0) {
-      throw new Stop(`I-D Advance: Restart: step ${position} changed ${changed.join(', ')}. Start a new driver so step ${rm.position} runs the new code.`);
+    const headAfter = branchHead(root, rm.branch);
+    const restart = changedWatched(root, headBefore, headAfter);
+    const setup = changedSetup(root, headBefore, headAfter);
+    if (setup.length > 0) {
+      const files = nameFiles([...restart, ...setup.filter((f) => !restart.includes(f))]);
+      if (restart.length > 0) {
+        throw new Stop(`I-D Advance: Restart: Setup: step ${position} changed ${files}. Rerun setup, then start a new driver so step ${rm.position} runs the new code.`);
+      }
+      throw new Stop(`I-D Advance: Setup: step ${position} changed ${files}. Rerun setup, then start a new driver.`);
+    }
+    if (restart.length > 0) {
+      throw new Stop(`I-D Advance: Restart: step ${position} changed ${restart.join(', ')}. Start a new driver so step ${rm.position} runs the new code.`);
     }
   }
 }
