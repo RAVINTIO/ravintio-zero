@@ -62,8 +62,8 @@ Gate accepted: P1 plan (autonomous, draft-accepted (initiative)) 2026-10-31T23:4
 | Field | Value |
 |-------|-------|
 | Start | `2026-10-31T23:41:25Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-10-31T23:53:20Z` |
+| Wall clock | `22` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 3 |
@@ -74,3 +74,10 @@ Gate accepted: P1 plan (autonomous, draft-accepted (initiative)) 2026-10-31T23:4
 - In progress: U1 (2026-10-31T23:41:25Z)
 - In progress: U2 (2026-10-31T23:41:25Z)
 - In progress: U3 (2026-10-31T23:41:25Z)
+
+- Done: U1 (2026-10-31T23:53:20Z)
+- Done: U2 (2026-10-31T23:53:20Z)
+- Done: U3 (2026-10-31T23:53:20Z)
+- Done: U4 (2026-10-31T23:53:20Z)
+Deviation: U4 changes no chart or template text, because the chart format did not change. Full suite run found 2 failures, fixed: activate text keeps 'one commit', discovery.md avoids old names.
+Deviation: commit subjects shortened to 72 characters by the commit-msg hook.

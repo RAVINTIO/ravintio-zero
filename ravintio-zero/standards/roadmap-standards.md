@@ -228,7 +228,7 @@ When the checks pass:
 
 1. Cut `initiative/{id}-{slug}` from `main`.
 2. Push the unchanged initiative branch to `origin`. Nothing commits directly on it.
-3. On a `feat/` branch cut from the initiative branch, write `plan/current-initiative/initiative.md` with `status: active` and delete the draft folder `plan/roadmap/{id}-{slug}/`. Land the change as a coordinator PR, titled `{id}-{slug}: activate initiative (#{n})`.
+3. On a `feat/` branch cut from the initiative branch, write `plan/current-initiative/initiative.md` with `status: active` and delete the draft folder `plan/roadmap/{id}-{slug}/`. Land the change as one commit in a coordinator PR, titled `{id}-{slug}: activate initiative (#{n})`.
 4. After the PR merges, start the driver `ravintio-zero/scripts/initiative-run.mjs` and the watch script `ravintio-zero/scripts/initiative-watch.mjs` as background tasks, because a foreground Bash call times out after 10 minutes.
 
 The initiative skill's session must not edit the working tree while the driver runs. It queues new backlog entries instead.
