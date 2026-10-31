@@ -66,6 +66,20 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 
 - Gate: autonomous, no stop.
 
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-10-31T21:28:59Z` |
+| End | `PENDING` |
+| Wall clock | `PENDING` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Inline TDD. U2 and U3 both depend on U1, and U2 and U3 share the hook command format, so subagent overhead outweighs the gain. |
+
 <!-- Copy and fill in this block at each phase boundary. Headings use the form
      "### P<n>: {Phase Name}" with n from 1 to 4 and the phase names
      P1: Plan, P2: Implement, P3: Validate and Accept, P4: Ship.
