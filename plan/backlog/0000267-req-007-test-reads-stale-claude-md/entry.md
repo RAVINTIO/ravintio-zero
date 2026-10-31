@@ -23,3 +23,14 @@ The failure stayed hidden until the step 15 refresh regenerated `CLAUDE.md` at 4
 
 - Drop `CLAUDE.md` from the file list in the test, or check the skill that now holds the rules.
 - Keep the other three files in the list.
+
+## Wanted outcome
+
+The test checks the file that holds the rules, not `CLAUDE.md`. Tests check these conditions:
+
+- The test passes with a freshly generated `CLAUDE.md`.
+- The test fails when the rule phrases leave `hook-enforcement.md`.
+
+## Why Deferred
+
+Found in P3 of 0000253. The fix is outside that feature.
