@@ -42,3 +42,9 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Adoption mode: standard-iterative (signal: source beside `plan/_archive/`)
 - Version: 0.41.0 -> 0.41.1 (step 2 Bump: patch)
 - Backlog entries 0000264 and 0000265 pulled in and deleted in the same commit as the brief.
+- Scope Lock (happy path): A step session runs the suite with a populated step log, the guard skips it, both suites pass, and the folder keeps every log [source: draft-accepted (initiative)]
+- Scope Lock (first-run path): With no step log folder there is nothing to skip and the guard passes as before [source: draft-accepted (initiative)]
+- Scope Lock (error path): A stale cite planted in a tracked skill still fails the guard, and one inside a step log does not [source: draft-accepted (initiative)]
+- Scope Lock (cross-session continuity): Later steps read the rule from installed skills after the planned `Setup:` stop [source: draft-accepted (initiative)]
+- Scope Lock complete. All four scenario paths captured.
+- Design confirmed: draft-accepted (initiative), 2026-10-31T20:03:00Z
