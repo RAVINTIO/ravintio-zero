@@ -43,4 +43,19 @@ check "a flag after --" 0 "git add -- -f.txt"
 check "a non-Bash tool" 0 "git add -f plan" "Write"
 OUT=$(printf 'not json' | node "$GUARD" 2>&1); assert_equals "0" "$?" "req-002: malformed stdin exits 0"
 
+echo ""
+echo "=== req-002 AC-3: setup wires one copy ==="
+WS=$(mktemp -d -t ravintio_0000317_req002_XXXXXX)
+trap 'rm -rf "$WS"' EXIT
+cp -r "$ZERO_DIR" "$WS/ravintio-zero"
+git init "$WS" >/dev/null 2>&1
+(cd "$WS" && bash ravintio-zero/setup.sh claude-code >/dev/null 2>&1 && bash ravintio-zero/setup.sh claude-code >/dev/null 2>&1)
+COUNT=$(grep -c 'guard block-forced-add.mjs' "$WS/.claude/settings.json")
+assert_equals "1" "$COUNT" "req-002 AC-3: settings hold one guard entry after a rerun"
+assert_equals "yes" "$([ -f "$WS/.claude/hooks/enforcement/block-forced-add.mjs" ] && echo yes || echo no)" "req-002 AC-3: setup installs the hook"
+BASHM=$(node -e 'const s=require(process.argv[1]);console.log(s.hooks.PreToolUse.filter(e=>e.matcher==="Bash"&&JSON.stringify(e).includes("block-forced-add")).length)' "$WS/.claude/settings.json")
+assert_equals "1" "$BASHM" "req-002 AC-3: the entry matches Bash"
+SETUP_PS1="$ZERO_DIR/setup.ps1"
+assert_contains "'block-forced-add'" "$(cat "$SETUP_PS1")" "req-002 AC-3: setup.ps1 wires the guard"
+
 print_summary
