@@ -20,7 +20,10 @@ In a step session the git-ignored step log tripped the phase guard, and a past s
 
 ## Validation results
 
-See the build report.
+- 228 feature suites passed and 1 failed. The regression suite passed 19 of 19.
+- The failing suite is `test-0000164-req-007`, which reads a stale generated `CLAUDE.md`. Step 3 of initiative 0000312 fixes it. No file in this diff touches it.
+- No critical or high security finding.
+- No self-correction.
 
 ## Skipped phases
 
