@@ -92,7 +92,7 @@ Create no tag. After the human merges the PR, the CI `release-tag` job tags the 
 
 ### Step 8: Clear sentinels
 
-Read `plan/.run-mode` first and keep the value for Step 10. Delete `plan/.orchestrator-active`, `plan/.orchestrator-ack`, and `plan/.run-mode` if present. Also delete `plan/.run-speed` if present. Stage the deletions and commit. Confirm with `git ls-files` that none remain tracked.
+Read `plan/.run-mode` first and keep the value for Step 10. Delete `plan/.orchestrator-active`, `plan/.orchestrator-ack`, and `plan/.run-mode` if present. Also delete `plan/.run-speed` if present. Stage the deletions and commit. Confirm with `git ls-files` that none remain tracked. Then run `git ls-files -ci --exclude-standard`. If it lists a file, stop with `P4 Ship: Blocked: a committed file matches an ignore rule: {files}`, unstage it, and never force-add.
 
 Do this before any push, in every run mode and for both PR options, so no PR carries the sentinels.
 
