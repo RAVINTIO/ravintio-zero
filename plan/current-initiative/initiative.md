@@ -9,9 +9,20 @@ status: "active"
 **Branch:** initiative/0000312-guards-history-and-test-noise
 **Status:** active
 **Position:** 1
-**Speed:** standard
+**Speed:** fast
 
 The human asked for this draft on 2026-10-31 and confirmed the scope and order the same day. Chart ran on 2026-10-31 on branch `feat/0000312-chart`, cut from `main` after PR #77 landed.
+
+## Parallel work in each step
+
+The human chose `fast` on 2026-10-31 and asked for independent work to run in parallel. Each step follows these rules:
+
+- Dispatch independent units, such as requirements, files, reviews, and searches, as parallel subagents in one message.
+- Run units in sequence only when one unit needs another's output, or when two units write the same file.
+- If a step runs a unit in sequence, the build log names the dependency that forced it.
+- Each subagent stages only the paths it wrote, by explicit path.
+
+The steps themselves run one at a time. The driver supports one step per working tree, and the setup stops and the guard work before step 6 depend on that order.
 
 ## Notes for chart
 
