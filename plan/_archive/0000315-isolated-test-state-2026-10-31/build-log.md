@@ -101,6 +101,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 
 - CI: 231 feature suites passed, 0 failed. Regression 19 of 19. Two self-correction cycles in P2 (see P2 deviations).
 - Gate: autonomous, evidence written to `plan/current/acceptance-evidence.md`.
+- Rework: REQ-003: Windows PowerShell 5.1 turned git stderr into a terminating error outside a git repository, so CI failed `test-0000171-req-003-timing-total.ps1`. `Get-TreeSnapshot` now relaxes `$ErrorActionPreference` locally (2026-10-31T21:15:00Z, after PR #84 CI).
 
 ### P4: Ship
 

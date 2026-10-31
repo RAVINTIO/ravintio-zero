@@ -26,19 +26,27 @@ foreach ($item in @(Get-ChildItem Env: | Where-Object { $_.Name -like 'RAVINTIO_
 
 # Returns "path<TAB>hash" lines for modified, deleted, and untracked files, or $null outside a git repository.
 function Get-TreeSnapshot {
-    $top = & git -C $here rev-parse --show-toplevel 2>$null
-    if ($LASTEXITCODE -ne 0 -or -not $top) { return $null }
-    $lines = @()
-    foreach ($f in @(& git -C $top -c core.quotepath=false ls-files -m -o --exclude-standard)) {
-        if (-not $f) { continue }
-        if (Test-Path -LiteralPath (Join-Path $top $f)) {
-            $h = (& git -C $top hash-object -- $f 2>$null)
-            $lines += "$f`t$h"
-        } else {
-            $lines += "$f`tdeleted"
+    # Windows PowerShell 5.1 turns native stderr into a terminating error under 'Stop', so relax it here.
+    $savedPreference = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
+    try {
+        $top = & git -C $here rev-parse --show-toplevel 2>$null
+        if ($LASTEXITCODE -ne 0 -or -not $top) { return $null }
+        $lines = @()
+        foreach ($f in @(& git -C $top -c core.quotepath=false ls-files -m -o --exclude-standard 2>$null)) {
+            if (-not $f) { continue }
+            if (Test-Path -LiteralPath (Join-Path $top $f)) {
+                $h = (& git -C $top hash-object -- $f 2>$null)
+                $lines += "$f`t$h"
+            } else {
+                $lines += "$f`tdeleted"
+            }
         }
+        return ,@($lines | Sort-Object -Unique)
     }
-    return ,@($lines | Sort-Object -Unique)
+    finally {
+        $ErrorActionPreference = $savedPreference
+    }
 }
 
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path

@@ -19,6 +19,7 @@ Test results depended on the session. A step session set `RAVINTIO_INITIATIVE_ST
 
 - `RAVINTIO_TEST_QUIET` passes through to suites. `assert.sh` reads it to hide PASS lines, and clearing it broke `test-0000151-req-008`. The brief, scope, REQ-001, and ADR-001 say so.
 - The runner feeds its variable loop with a herestring, because `test-0000164-req-008` bans process substitution in loops.
+- `run-tests.ps1` relaxes `$ErrorActionPreference` while it calls `git`. Windows PowerShell 5.1 turns git's stderr outside a repository into a terminating error, and CI caught it after the first push.
 - REQ-002 needed no per-suite change. No current suite writes the real repo state, and the tree check now proves it on every run.
 
 ## Validation results
