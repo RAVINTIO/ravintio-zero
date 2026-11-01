@@ -2,6 +2,8 @@
 title: "Backlog Entry: 0000308 - tests check rule anchors instead of skill wording"
 summary: "A discovered-but-out-of-scope item deferred for pickup at a future discovery run."
 status: "open"
+priority: "medium"
+theme: "unsorted"
 ---
 # Backlog Entry: 0000308 - tests check rule anchors instead of skill wording
 

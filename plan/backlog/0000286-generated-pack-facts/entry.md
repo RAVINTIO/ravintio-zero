@@ -2,6 +2,8 @@
 title: "Backlog Entry: 0000286 - generate a pack facts file from the pack"
 summary: "A discovered-but-out-of-scope item deferred for pickup at a future discovery run."
 status: "open"
+priority: "medium"
+theme: "unsorted"
 ---
 # Backlog Entry: 0000286 - generate a pack facts file from the pack
 

@@ -2,6 +2,8 @@
 title: "Backlog Entry: 0000297 - test impact scan covers the repo's own tests"
 summary: "A discovered-but-out-of-scope item deferred for pickup at a future discovery run."
 status: "open"
+priority: "medium"
+theme: "unsorted"
 ---
 # Backlog Entry: 0000297 - test impact scan covers the repo's own tests
 

@@ -2,6 +2,8 @@
 title: "Backlog Entry: 0000333 - dispatch template omits the commit subject limit and the living docs unit"
 summary: "Subagents hit the 72-character commit subject limit by trial, and ship wrote the living docs that P2 should have written."
 status: "open"
+priority: "medium"
+theme: "unsorted"
 ---
 # Backlog Entry: 0000333 - dispatch template omits the commit subject limit and the living docs unit
 

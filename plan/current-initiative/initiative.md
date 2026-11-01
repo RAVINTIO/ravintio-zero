@@ -8,7 +8,7 @@ status: "active"
 **Goal:** Make the guards fail closed, keep every initiative history titled one commit per change, and stop step logs and session state breaking the suite. Step 1 teaches the driver to stop for a setup rerun, so each later step runs on installed copies that match the pack.
 **Branch:** initiative/0000312-guards-history-and-test-noise
 **Status:** active
-**Position:** 9
+**Position:** 10
 **Speed:** fast
 
 The human asked for this draft on 2026-10-31 and confirmed the scope and order the same day. Chart ran on 2026-10-31 on branch `feat/0000312-chart`, cut from `main` after PR #77 landed.
@@ -182,7 +182,7 @@ If the script still finds one, it fails. The script has no exception list. Neith
 | 6 | 0000318-titled-coordinator-prs | 0000274 | minor | 0.44.0 | merged |
 | 7 | 0000319-initiative-history-checks | 0000275, 0000277, 0000278 | minor | 0.45.0 | merged |
 | 8 | 0000320-quiet-session-start | 0000307, 0000282, 0000322 | minor | 0.46.0 | merged |
-| 9 | 0000321-backlog-triage | 0000310 | minor | 0.47.0 | pending |
+| 9 | 0000321-backlog-triage | 0000310 | minor | 0.47.0 | merged |
 | 10 | 0000327-squash-before-main | 0000326 | minor | 0.48.0 | pending |
 
 ### Step grouping

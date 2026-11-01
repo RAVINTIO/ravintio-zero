@@ -2,6 +2,8 @@
 title: "Backlog Entry: 0000295 - record failing tests on the base commit at P0"
 summary: "A discovered-but-out-of-scope item deferred for pickup at a future discovery run."
 status: "open"
+priority: "medium"
+theme: "unsorted"
 ---
 # Backlog Entry: 0000295 - record failing tests on the base commit at P0
 

@@ -2,6 +2,8 @@
 title: "Backlog Entry: 0000291 - teammates who clone get set up, and strict mode can be turned off"
 summary: "A discovered-but-out-of-scope item deferred for pickup at a future discovery run."
 status: "open"
+priority: "medium"
+theme: "unsorted"
 ---
 # Backlog Entry: 0000291 - teammates who clone get set up, and strict mode can be turned off
 

@@ -33,6 +33,9 @@ versionPolicy: "max-component-version"
 # Discovery sizes each candidate S (1 point), M (2), or L (4) by files touched.
 # releaseSize: "medium"
 
+# Optional. Days after `Date filed` when a backlog entry counts as stale (default 5).
+# backlogReviewDays: 5
+
 components:
   - id: "{{component-id}}"
     path: "{{relative/path/to/component.yml, e.g. src/my-component/component.yml}}"

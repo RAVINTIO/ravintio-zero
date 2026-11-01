@@ -2,6 +2,8 @@
 title: "Backlog Entry: 0000332 - id reservation commit lands directly on the initiative branch"
 summary: "reserve-id.mjs --commit commits the counter file on the current branch, which is a direct commit when the coordinator sits on the initiative branch."
 status: "open"
+priority: "medium"
+theme: "unsorted"
 ---
 # Backlog Entry: 0000332 - id reservation commit lands directly on the initiative branch
 

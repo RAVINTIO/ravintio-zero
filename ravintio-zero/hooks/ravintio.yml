@@ -41,6 +41,9 @@ jobs:
           printf '%s' "$PR_BODY" > "$RUNNER_TEMP/pr-body.txt"
           node ravintio-zero/scripts/check-attribution.mjs "$RUNNER_TEMP/pr-body.txt"
 
+      - name: Check the backlog index
+        run: node ravintio-zero/scripts/backlog-index.mjs --check
+
       - name: Fail on a committed ignored file
         run: |
           IGNORED=$(git ls-files -ci --exclude-standard)

@@ -2,6 +2,8 @@
 title: "Backlog Entry: 0000335 - P3 block timestamps from the clock"
 summary: "The P3 and P4 build-log blocks take their times from the clock, so the build-log check no longer fails at ship."
 status: "open"
+priority: "medium"
+theme: "unsorted"
 ---
 # Backlog Entry: 0000335 - P3 block timestamps from the clock
 

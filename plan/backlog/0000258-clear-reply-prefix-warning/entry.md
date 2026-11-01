@@ -2,6 +2,8 @@
 title: "Backlog Entry: 0000258 - make the reply prefix warning clear in the human's session"
 summary: "A human-requested change, filed for pickup at a future discovery run."
 status: "open"
+priority: "medium"
+theme: "unsorted"
 ---
 # Backlog Entry: 0000258 - make the reply prefix warning clear in the human's session
 

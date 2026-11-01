@@ -2,6 +2,8 @@
 title: "Backlog Entry: 0000261 - tests locate orchestrator text through one helper"
 summary: "Ten tests hard-coded where Resume Detection text lives, so moving the section broke them. A shared helper stops that."
 status: "open"
+priority: "medium"
+theme: "unsorted"
 ---
 # Backlog Entry: 0000261 - tests locate orchestrator text through one helper
 
