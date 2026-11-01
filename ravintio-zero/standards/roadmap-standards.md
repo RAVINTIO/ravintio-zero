@@ -417,13 +417,16 @@ The initiative skill runs this stage after the last step merges. Every message b
 
 1. Move `plan/current-initiative/` to `plan/_archive/{id}-{slug}-initiative-{date}/` and set the initiative `status: delivered`. Update links that point at the old path. Land the move as a coordinator PR.
 2. Run `ravintio-retrospective` in initiative mode. It writes `plan/retrospectives/{id}-{slug}-initiative-{date}.md`. Land the record as a coordinator PR, so the initiative PR carries it. A missing retrospective never blocks delivery.
-3. Raise one PR from the initiative branch to `main`.
+3. Run `node ravintio-zero/scripts/check-initiative-history.mjs` before you raise the initiative PR. If it reports a failing commit, list each failing commit in the PR body and stop. Do not merge or force-push to fix the history.
+4. Raise one PR from the initiative branch to `main`. The PR title says to merge with a merge commit, as in `{id}-{slug}: deliver initiative (merge with a merge commit)`.
 
    ```bash
    gh pr create --base main --head initiative/{id}-{slug}
    ```
 
-4. In the body, ask the human to merge with a merge commit, not a squash, so each step tag stays reachable from `main`. List each step with its version and tag, and name the retrospective record. Scan the body for credential patterns before you raise the PR, as in Step 9.
-5. Report the PR URL and end the run.
+5. Make the first line of the body say to merge with a merge commit, not a squash, so each step tag stays reachable from `main`. Then list each step with its version and tag, and name the retrospective record. Scan the body for credential patterns before you raise the PR, as in Step 9.
+6. Report the PR URL and end the run.
+
+The `main` ruleset allows only the merge commit method. See `ravintio-zero/docs/main-ruleset.md`.
 
 The agent never merges the initiative PR and never commits to `main`. The human reviews and merges it.
