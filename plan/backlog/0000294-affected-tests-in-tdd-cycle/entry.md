@@ -2,6 +2,8 @@
 title: "Backlog Entry: 0000294 - run only affected tests in each TDD cycle"
 summary: "A discovered-but-out-of-scope item deferred for pickup at a future discovery run."
 status: "open"
+priority: "medium"
+theme: "unsorted"
 ---
 # Backlog Entry: 0000294 - run only affected tests in each TDD cycle
 

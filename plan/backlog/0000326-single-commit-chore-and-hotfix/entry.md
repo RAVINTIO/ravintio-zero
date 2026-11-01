@@ -2,6 +2,8 @@
 title: "Backlog Entry: 0000326 - chore and hotfix branches reach main as one commit"
 summary: "A discovered-but-out-of-scope item deferred for pickup at a future discovery run."
 status: "open"
+priority: "medium"
+theme: "unsorted"
 ---
 # Backlog Entry: 0000326 - chore and hotfix branches reach main as one commit
 

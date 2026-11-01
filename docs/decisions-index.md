@@ -3,7 +3,7 @@
 > Change record. Index of all ADRs across all features. Updated after every pipeline run.
 > Do not archive this file. Update it in place.
 
-Last updated: 0000320-quiet-session-start
+Last updated: 0000321-backlog-triage
 
 ---
 
@@ -382,3 +382,9 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 | ADR | Title | Status | Summary |
 |-----|-------|--------|---------|
 | ADR-001 | migration ledger outside the pack | accepted | Migration state lives in `plan/state/migrations.md`. `resume-detect.mjs` reads it, the migrator appends to it, and a `**Detect:**` line lets the script see a condition turn true. Migration 0006 copies the `_done/` records. |
+
+### Feature 0000321: backlog-triage
+
+| ADR | Title | Status | Summary |
+|-----|-------|--------|---------|
+| ADR-001 | generated backlog index checked in CI | accepted | `backlog-index.mjs` writes `plan/backlog/index.md` from the entries. CI fails when the committed file differs from a fresh run. The review age is `backlogReviewDays` in `product.yml`. |

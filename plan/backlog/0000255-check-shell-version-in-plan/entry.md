@@ -2,6 +2,8 @@
 title: "Backlog Entry: 0000255 - plan checks the target shell version"
 summary: "A plan chose a Bash 4 feature that macOS Bash 3.2 lacks, and the plan skill has no check for it."
 status: "open"
+priority: "medium"
+theme: "unsorted"
 ---
 # Backlog Entry: 0000255 - plan checks the target shell version
 

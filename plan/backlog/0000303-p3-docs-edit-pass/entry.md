@@ -2,6 +2,8 @@
 title: "Backlog Entry: 0000303 - add an edit pass for user-facing docs at P3"
 summary: "A discovered-but-out-of-scope item deferred for pickup at a future discovery run."
 status: "open"
+priority: "medium"
+theme: "unsorted"
 ---
 # Backlog Entry: 0000303 - add an edit pass for user-facing docs at P3
 

@@ -2,6 +2,8 @@
 title: "Backlog Entry: 0000268 - a new chart rule migrates the active initiative"
 summary: "A retrospective finding, filed for pickup at a future discovery run."
 status: "open"
+priority: "medium"
+theme: "unsorted"
 ---
 # Backlog Entry: 0000268 - a new chart rule migrates the active initiative
 

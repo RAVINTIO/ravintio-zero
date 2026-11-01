@@ -2,6 +2,8 @@
 title: "Backlog Entry: 0000302 - bring the pack's prose up to the writing standard"
 summary: "A discovered-but-out-of-scope item deferred for pickup at a future discovery run."
 status: "open"
+priority: "medium"
+theme: "unsorted"
 ---
 # Backlog Entry: 0000302 - bring the pack's prose up to the writing standard
 
