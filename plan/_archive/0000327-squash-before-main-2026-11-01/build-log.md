@@ -105,3 +105,31 @@ Self-correction: the security review found no critical or high finding. Cycle 1 
 | Notes | The full suite ran in the background while one subagent ran the security review and execution verification ran inline. One self-correction cycle. |
 
 Gate accepted: P3 validate (autonomous, draft-accepted (initiative)) 2026-11-01T05:54:32Z
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-01T05:54:32Z` |
+| End | `2026-11-01T05:54:48Z` |
+| Wall clock | `1` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship, ravintio-retrospective |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Ran inline. The version bump, initiative update, and changelog were small and touched shared files. |
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `24` |
+| Total agents spawned | `4` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `2` |
+| Primary tier agent calls | `4` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `2` |
+| Phases skipped | none |
