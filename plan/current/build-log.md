@@ -79,3 +79,8 @@ Scope Lock (cross-session continuity): The index is a tracked file that CI compa
 - In progress: U-001 (2026-11-01T04:35:03Z)
 - In progress: U-002 (2026-11-01T04:35:03Z)
 - In progress: U-005 (2026-11-01T04:35:03Z)
+- Done: U-001 (2026-11-01T04:39:40Z)
+- Done: U-002 (2026-11-01T04:39:40Z)
+- Done: U-005 (2026-11-01T04:39:40Z)
+- In progress: U-003 (2026-11-01T04:39:40Z)
+- In progress: U-004 (2026-11-01T04:39:40Z)
