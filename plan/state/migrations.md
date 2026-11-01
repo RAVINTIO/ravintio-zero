@@ -12,7 +12,7 @@ The pack version is the version when the row was written.
 | migrate-adoption-mode-and-about-md | done | 0.46.0 |
 | migrate-product-yml-component-paths | done | 0.46.0 |
 | retroactive-release-tags | done | 0.46.0 |
-| 0004 | not applicable | 0.46.0 |
-| 0005 | not applicable | 0.46.0 |
+| 0004 | not applicable | 0.47.0 |
+| 0005 | not applicable | 0.47.0 |
 | 0006 | done | 0.46.0 |
-| 0007 | done | 0.46.0 |
+| 0007 | done | 0.47.0 |
