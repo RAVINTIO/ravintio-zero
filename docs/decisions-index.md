@@ -3,7 +3,7 @@
 > Change record. Index of all ADRs across all features. Updated after every pipeline run.
 > Do not archive this file. Update it in place.
 
-Last updated: 0000318-titled-coordinator-prs
+Last updated: 0000319-initiative-history-checks
 
 ---
 
@@ -370,3 +370,9 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 | ADR | Title | Status | Summary |
 |-----|-------|--------|---------|
 | ADR-001 | coordinator PRs ride the existing merge-guard | accepted | Coordinator work reaches `initiative/*` as titled PRs that the agent squashes after a passing local suite and green CI. The written carve-out names them. `merge-guard.mjs` is unchanged, and a test pins its behaviour. |
+
+### Feature 0000319: initiative-history-checks
+
+| ADR | Title | Status | Summary |
+|-----|-------|--------|---------|
+| ADR-001 | check history with two stateless git scripts | accepted | `check-initiative-history.mjs` fails on an untitled first-parent commit and has no exception list. `check-main-merge.mjs` fails a one-parent commit from an initiative PR. CI runs both, I-E Delivery runs the first, and the human applies the ruleset. |
