@@ -4,7 +4,7 @@ on:
   pull_request:
     branches: [ main, master, 'initiative/**' ]
   push:
-    branches: [ main, master ]
+    branches: [ main, master, 'initiative/**' ]
 
 # Every job reads the repo and nothing more, except release-tag.
 permissions:
@@ -50,11 +50,46 @@ jobs:
             exit 1
           fi
 
+  # Fails a PR from initiative/* to main whose first-parent history holds an
+  # untitled commit (0000319 req-002). It reads the branch head, not the PR
+  # merge ref, so the merge commit is not counted.
+  initiative-history:
+    if: github.event_name == 'pull_request' && github.base_ref == 'main' && startsWith(github.head_ref, 'initiative/')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Check first-parent titles
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+        run: node ravintio-zero/scripts/check-initiative-history.mjs --base origin/main --head "origin/$HEAD_REF"
+
+  # Fails a push to main whose newest commit squashed an initiative PR
+  # (0000319 req-004).
+  main-merge-check:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+
+      - name: Check the merge method
+        run: node ravintio-zero/scripts/check-main-merge.mjs
+
   # Tags the merge commit on the default branch after the human merges
   # (0000169 ADR-002). Only this job holds write access, and it never runs
   # PR code.
   release-tag:
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
     runs-on: ubuntu-latest
     permissions:
       contents: write

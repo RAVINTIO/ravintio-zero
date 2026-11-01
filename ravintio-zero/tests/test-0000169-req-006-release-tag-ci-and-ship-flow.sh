@@ -32,11 +32,11 @@ if command -v ruby >/dev/null 2>&1; then
       d = YAML.load_file(ARGV[0])
       on = d["on"] || d[true] || {}
       r = []
-      r << "push" unless on.is_a?(Hash) && on["push"] && on["push"]["branches"] == ["main", "master"]
+      r << "push" unless on.is_a?(Hash) && on["push"] && on["push"]["branches"] == ["main", "master", "initiative/**"]
       jobs = d["jobs"]
       rt = jobs["release-tag"]
       if rt.nil? then r << "nojob" else
-        r << "ifpush" unless rt["if"] == "github.event_name == \x27push\x27"
+        r << "ifpush" unless rt["if"] == "github.event_name == \x27push\x27 && (github.ref == \x27refs/heads/main\x27 || github.ref == \x27refs/heads/master\x27)"
         r << "write" unless rt.dig("permissions", "contents") == "write"
         s = rt["steps"]
         r << "depth" unless s.any? { |x| x.dig("with", "fetch-depth") == 0 }
@@ -44,7 +44,7 @@ if command -v ruby >/dev/null 2>&1; then
         r << "cmd" unless s.any? { |x| x["run"].to_s.include?("node ravintio-zero/scripts/release-tag.mjs") }
       end
       jobs.each do |k, j|
-        next if k == "release-tag"
+        next if k == "release-tag" || k == "main-merge-check" || k == "initiative-history"
         r << "guard-#{k}" unless j["if"] == "github.event_name == \x27pull_request\x27"
         r << "write-#{k}" if j.dig("permissions", "contents") == "write"
       end
