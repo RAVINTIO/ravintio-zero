@@ -84,8 +84,8 @@ Gate accepted: P2 implement (autonomous, draft-accepted (initiative)) 2026-11-01
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-01T02:59:18Z` |
-| End | `2026-11-01T03:10:00Z` |
-| Wall clock | `11` |
+| End | `2026-11-01T03:01:30Z` |
+| Wall clock | `2` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator, ravintio-validate-and-accept |
 | Agents spawned | 0 |
@@ -93,4 +93,32 @@ Gate accepted: P2 implement (autonomous, draft-accepted (initiative)) 2026-11-01
 | Parallel task batches | 0 |
 | Notes | Run inline. Execution verification used a throwaway repo. No self-correction cycles. No critical or high findings. Two criteria are unverified (docs only). |
 
-Gate accepted: P3 validate (autonomous, draft-accepted (initiative)) 2026-11-01T03:10:00Z
+Gate accepted: P3 validate (autonomous, draft-accepted (initiative)) 2026-11-01T03:01:30Z
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-01T03:01:30Z` |
+| End | `2026-11-01T03:02:34Z` |
+| Wall clock | `1` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship, ravintio-retrospective |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Ran inline: the build report and version bump were small and shared the changelog. |
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `150` |
+| Total agents spawned | `3` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `1` |
+| Primary tier agent calls | `3` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `0` |
+| Phases skipped | none |
