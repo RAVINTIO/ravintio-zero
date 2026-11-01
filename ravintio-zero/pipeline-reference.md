@@ -192,8 +192,8 @@ Setup wires the enforcement hooks into `.claude/settings.json` on every install.
 | `em-dash-guard` | PreToolUse (Write, Edit) | Rejects U+2014 in scoped prose paths |
 | `check-design` | UserPromptSubmit | Injects active component scope from `design.md`, or a hard STOP when no brief or sentinel exists |
 | `check-orchestrator-presence` | UserPromptSubmit | Injects a reminder banner while a pipeline is active. Hard-blocks under strict mode |
-| `auto-trigger-orchestrator` | UserPromptSubmit | Loads the orchestrator skill at session start when no pipeline is active yet |
-| `check-reply-prefix` | Stop | Warns when a reply in an active run lacks a valid prefix, and logs each miss. Never blocks |
+| `auto-trigger-orchestrator` | UserPromptSubmit | Loads the orchestrator skill once per session when no pipeline is active yet |
+| `check-reply-prefix` | Stop | Warns when the final reply in an active run lacks a valid prefix, and logs each miss. Never blocks |
 
 A blocking hook exits 2 with a human-readable message. Every hook fails open on an unexpected error, so a broken hook never stops a session.
 
@@ -365,14 +365,14 @@ Pass the same flags you used during initial setup. Re-running is idempotent. It 
 After pulling a new version of `ravintio-zero/`, check for pending migrations before starting a new pipeline run:
 
 ```bash
-ls ravintio-zero/migrations/*.md 2>/dev/null | grep -v _done
+ls ravintio-zero/migrations/*.md 2>/dev/null
 ```
 
 ```powershell
-Get-ChildItem ravintio-zero/migrations/*.md | Where-Object { $_.FullName -notmatch '_done' }
+Get-ChildItem ravintio-zero/migrations/*.md
 ```
 
-If any `.md` files appear outside `_done/`, the orchestrator detects them at session start and invokes `ravintio-migrator` before any pipeline work. You do not need to run migrations manually.
+The orchestrator compares that list with the ledger `plan/state/migrations.md`. It invokes `ravintio-migrator` for a migration that has no `done` row and whose condition holds. A migration that does not apply is reported once per pack version. You do not need to run migrations manually.
 
 ---
 

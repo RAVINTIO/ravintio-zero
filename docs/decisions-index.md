@@ -3,7 +3,7 @@
 > Change record. Index of all ADRs across all features. Updated after every pipeline run.
 > Do not archive this file. Update it in place.
 
-Last updated: 0000319-initiative-history-checks
+Last updated: 0000320-quiet-session-start
 
 ---
 
@@ -376,3 +376,9 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 | ADR | Title | Status | Summary |
 |-----|-------|--------|---------|
 | ADR-001 | check history with two stateless git scripts | accepted | `check-initiative-history.mjs` fails on an untitled first-parent commit and has no exception list. `check-main-merge.mjs` fails a one-parent commit from an initiative PR. CI runs both, I-E Delivery runs the first, and the human applies the ruleset. |
+
+### Feature 0000320: quiet-session-start
+
+| ADR | Title | Status | Summary |
+|-----|-------|--------|---------|
+| ADR-001 | migration ledger outside the pack | accepted | Migration state lives in `plan/state/migrations.md`. `resume-detect.mjs` reads it, the migrator appends to it, and a `**Detect:**` line lets the script see a condition turn true. Migration 0006 copies the `_done/` records. |
