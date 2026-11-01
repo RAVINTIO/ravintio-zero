@@ -2,7 +2,7 @@
 
 **Feature:** Initiative history checks
 **Version:** 0.45.0
-**PR:**
+**PR:** #92
 
 ## What changed
 
