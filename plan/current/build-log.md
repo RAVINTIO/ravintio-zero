@@ -87,3 +87,21 @@ Scope Lock (cross-session continuity): The check runs in CI on every PR into mai
 - Done: U-002 (2026-11-01T05:34:21Z)
 - Done: U-005 (2026-11-01T05:34:21Z)
 Deviation: U-004 added one sed rule to test-0000151-req-011-orchestrator-references-split.sh, because the step 2 change from feat/ to hotfix/ broke its comparison with the frozen fixture. The fixture is unchanged.
+Rework: REQ-001: reject a --base or --head that starts with a dash, from security finding S-004 (2026-11-01T05:54:32Z)
+Self-correction: the security review found no critical or high finding. Cycle 1 fixed S-004 and S-007 and added the required-check note for S-005, with a test for S-004.
+
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-01T05:44:30Z` |
+| End | `2026-11-01T05:54:32Z` |
+| Wall clock | `10` |
+| Model tier | primary |
+| Skills loaded | ravintio-validate-and-accept |
+| Agents spawned | 1 |
+| MCP calls | 0 |
+| Parallel task batches | 1 |
+| Notes | The full suite ran in the background while one subagent ran the security review and execution verification ran inline. One self-correction cycle. |
+
+Gate accepted: P3 validate (autonomous, draft-accepted (initiative)) 2026-11-01T05:54:32Z
