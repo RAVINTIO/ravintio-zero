@@ -1,6 +1,6 @@
 ---
-version: "0.41.0"
-feature: "0000313-driver-setup-stop"
+version: "0.41.1"
+feature: "0000314-step-logs-stay-in-place"
 updated: "31 Oct 2026"
 ---
 # About
@@ -10,8 +10,8 @@ updated: "31 Oct 2026"
 
 | Field | Value |
 |-------|-------|
-| Version | `0.41.0` |
-| Last feature | `0000313-driver-setup-stop` |
+| Version | `0.41.1` |
+| Last feature | `0000314-step-logs-stay-in-place` |
 | Updated | `31 Oct 2026` |
 
 ## What this is
