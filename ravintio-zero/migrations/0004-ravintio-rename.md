@@ -3,6 +3,8 @@
 **Target standard:** `ravintio-zero/`, `ravintio-overrides/`, `.github/workflows/ravintio.yml`, and `.ravintio-*` markers
 **Scope:** consumer repo root
 **Applies when:** `planifest-zero/` or `planifest-overrides/` exists in the repo root. In any other repo, including the pack source, the migration stays pending and nothing runs.
+**Detect:** exists planifest-zero | exists planifest-overrides
+**Detect note:** `resume-detect.mjs` reads the `Detect:` line. Keep it on one line, with items joined by ` | `.
 **Safe to skip:** No. Setup stops while `planifest-zero/` or `planifest-overrides/` remains. Re-running is safe.
 
 ---

@@ -7,9 +7,19 @@
  * Prints one fixed line per finding, in check order. It never prints file
  * text. Ids appear only after they pass a strict pattern. Writes nothing and
  * always exits 0.
+ *
+ * Migrations: plan/state/migrations.md is a ledger table with rows
+ * `| {id} | {done or not applicable} | {pack version} |`. A `done` row means no
+ * finding. A `not applicable` row at the current pack version (the `version:`
+ * line of ravintio-zero/component.yml) means no finding unless the migration's
+ * `**Detect:**` line holds a true item. Any other migration reports as pending.
+ * A missing or unreadable ledger reports every migration. Detect items are
+ * joined by ` | `: `exists {path}`, `contains {path} {text}`, and
+ * `child-exists {dir} {name}`. Paths are relative to the project root. An
+ * absolute path or a `..` segment makes an item false.
  */
-import { existsSync, readFileSync, readdirSync } from "node:fs";
-import { join } from "node:path";
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
+import { isAbsolute, join } from "node:path";
 
 const root = process.argv[2] || process.cwd();
 const p = (...parts) => join(root, ...parts);
@@ -31,11 +41,66 @@ function list(dir) {
   }
 }
 
+// A Detect path is safe when it is relative and holds no `..` segment.
+function safe(rel) {
+  return rel !== "" && !isAbsolute(rel) && !/^[A-Za-z]:/.test(rel) && !rel.split(/[\\/]/).includes("..");
+}
+
+function isDir(path) {
+  try {
+    return statSync(path).isDirectory();
+  } catch {
+    return false;
+  }
+}
+
+// One Detect item. Anything unknown or unsafe is false.
+function itemTrue(item) {
+  const m = /^(exists|contains|child-exists)\s+(\S+)(?:\s+(.+))?$/.exec(item.trim());
+  if (!m) return false;
+  const [, kind, rel, arg] = m;
+  if (!safe(rel)) return false;
+  if (kind === "exists") return existsSync(p(rel));
+  if (arg === undefined) return false;
+  if (kind === "contains") {
+    const t = read(p(rel));
+    return t !== null && t.includes(arg.trim());
+  }
+  if (!safe(arg.trim()) || /[\\/]/.test(arg.trim())) return false;
+  return list(p(rel)).some((c) => isDir(p(rel, c)) && existsSync(p(rel, c, arg.trim())));
+}
+
+function detectTrue(text) {
+  const m = /^\*\*Detect:\*\*[ \t]*(.*)$/m.exec(text || "");
+  return m !== null && m[1].split(" | ").some(itemTrue);
+}
+
+function packVersion() {
+  const t = read(p("ravintio-zero", "component.yml"));
+  const m = t === null ? null : /^version:\s*["']?([^"'\s]*)["']?\s*$/m.exec(t);
+  return m && /^\d+\.\d+\.\d+$/.test(m[1]) ? m[1] : null;
+}
+
+// Ledger rows by id. Later rows win. A row with a bad id is ignored.
+function ledger() {
+  const rows = new Map();
+  for (const line of (read(p("plan", "state", "migrations.md")) || "").split(/\r?\n/)) {
+    const m = /^\|\s*(\d{4})\s*\|\s*(done|not applicable)\s*\|\s*(\d+\.\d+\.\d+)\s*\|\s*$/.exec(line);
+    if (m) rows.set(m[1], { result: m[2], version: m[3] });
+  }
+  return rows;
+}
+
 try {
   // 1. Pending migrations.
+  const rows = ledger();
+  const current = packVersion();
   for (const name of list(p("ravintio-zero", "migrations")).sort()) {
     if (name === "_done" || !name.endsWith(".md")) continue;
     const m = /^(\d{4})-[a-z0-9-]+\.md$/.exec(name);
+    const row = m ? rows.get(m[1]) : undefined;
+    if (row && row.result === "done") continue;
+    if (row && current !== null && row.version === current && !detectTrue(read(p("ravintio-zero", "migrations", name)))) continue;
     out.push(`pending migration: ${m ? m[1] : "unreadable"}`);
   }
 

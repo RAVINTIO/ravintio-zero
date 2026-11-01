@@ -27,6 +27,8 @@ new_ws() {
 run_hook() {
   local ws="$1"
   shift
+  # Each call stands for a first prompt (0000320 records the session id).
+  rm -f "$ws/plan/.orchestrator-loaded"
   printf '{"cwd":"%s","session_id":"sess-1"}' "$ws" | env -u RAVINTIO_INITIATIVE_STEP "$@" node "$HOOK" 2>/dev/null
 }
 

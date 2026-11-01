@@ -1,6 +1,6 @@
 # Architecture Overview
 
-Last updated: 0000319-initiative-history-checks
+Last updated: 0000320-quiet-session-start
 
 ## What this repo is
 
@@ -40,6 +40,12 @@ Each acceptance criterion is one checkbox line, `- [ ] AC-{n}: {name}`, with ind
 ### Resume findings
 
 `hooks/enforcement/auto-trigger-orchestrator.mjs` runs `scripts/resume-detect.mjs` with a 2 second timeout on the prompt where it injects the load instruction. The script prints one fixed line per signal for the 12 Resume Detection checks, in check order, and `no resume signals` when it finds none. It prints no repo text. An id that fails its pattern prints as `unreadable`. If the script is missing, exits non-zero, or passes the timeout, the hook injects `resume detection did not run` and the skill runs every check. A step session and an initiative session get the same findings, and each names its own skill. `skills/ravintio-orchestrator/references/orchestrator-resume-detection.md` holds the 12 checks in full, and the Resume Detection rule in the orchestrator `SKILL.md` points there.
+
+The load instruction fires once per session. The hook writes the `session_id` to the ignored file `plan/.orchestrator-loaded` when it injects the instruction, and stays silent while the file holds the current id. Without a `session_id` it injects every time. The advisory banner of `check-orchestrator-presence.mjs` follows the same rule.
+
+Migration findings come from the ledger `plan/state/migrations.md`, which sits outside the pack. Each row holds a migration id, a result (`done` or `not applicable`), and the pack version. A `done` row gives no finding. A `not applicable` row gives none at the same pack version, unless a `**Detect:**` line in the migration file shows its condition is now true. The migrator appends rows and edits nothing inside `ravintio-zero/`. Migration 0006 copies the pack's `_done/` records into the ledger.
+
+`check-reply-prefix.mjs` checks `last_assistant_message` from the Stop payload. If the field is absent, it reads the last assistant message that follows the last user prompt and holds no `tool_use` block, and rereads the transcript up to 4 times. If it finds no final reply, it stays silent.
 
 ### Run modes
 
