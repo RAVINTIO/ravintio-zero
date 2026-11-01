@@ -1,11 +1,11 @@
 ---
-title: "Backlog Entry: 0000345 - the coordinator lands nothing between steps"
+title: "Backlog Entry: 0000345 - fold coordinator admin into the next step PR"
 summary: "A human-requested change, filed for pickup at a future discovery run."
 status: "open"
 priority: "high"
 theme: "initiative-history"
 ---
-# Backlog Entry: 0000345 - the coordinator lands nothing between steps
+# Backlog Entry: 0000345 - fold coordinator admin into the next step PR
 
 **Source feature:** none (human request)
 **Source phase:** none (human request)
@@ -36,11 +36,13 @@ Source retrospective: `plan/retrospectives/0000312-guards-history-and-test-noise
 
 ## Suggested Action
 
-1. Keep queued entries in `plan/.initiative-queue/` until I-E Delivery, and land them in the closing PR.
-2. Keep supervision notes in an ignored path until I-E Delivery.
-3. Land the archive, the retrospective, and the queued entries in one closing PR.
+Fold coordinator admin and fixes into the PR of the next feature step. The human asked for this approach on 2026-11-01.
+
+1. Between steps, the coordinator writes admin work to `plan/.initiative-queue/` and never raises a PR. Admin work covers backlog entries, setup records, supervision notes, and fixes such as an id renumber.
+2. The next step session moves each queued item into its feature branch and commits it before P4 raises the step PR. The step squash then carries the admin with the feature.
+3. Work queued after the last step lands in one closing PR with the archive and the retrospective.
 4. Make `check-initiative-history.mjs` check the shape: one activation commit, then one commit per charted step in chart order, then one closing commit. Any other commit fails CI. This tightens the check and widens nothing.
 
 ## Why Deferred
 
-The change edits the initiative skill, the roadmap standards, and the history script. It needs its own design and tests.
+The change edits the initiative skill, the orchestrator P4 steps, the roadmap standards, and the history script. It needs its own design and tests.
