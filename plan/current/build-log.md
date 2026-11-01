@@ -28,8 +28,8 @@ Run mode: autonomous (2026-11-01T00:32:46Z, initiative step 7)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-01T00:32:46Z` |
-| End | `{{end}}` |
-| Wall clock | `{{minutes}}` |
+| End | `2026-11-01T00:34:27Z` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -46,3 +46,19 @@ Scope Lock (happy path): A titled-squash history passes the script locally, in C
 Scope Lock (first-run path): An initiative branch with no commits since its base passes with a note, and a missing base ref fails with a clear message. [source: draft-accepted (initiative)]
 Scope Lock (error path): One untitled first-parent commit fails the script and names the commit, and a one-parent commit from an initiative PR fails the main check. [source: draft-accepted (initiative)]
 Scope Lock (cross-session continuity): The script keeps no state and reads git only, so an interrupted run reruns it from scratch. [source: draft-accepted (initiative)]
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-01T00:34:27Z` |
+| End | `2026-11-01T00:34:27Z` |
+| Wall clock | `1` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Artifacts written inline: they share one vocabulary and are small, so subagent overhead outweighed the split. Consistency check clean. Gate self-accepted (autonomous, initiative step). |
+
+Gate accepted: P1 plan (autonomous, draft-accepted (initiative)) 2026-11-01T00:34:27Z
