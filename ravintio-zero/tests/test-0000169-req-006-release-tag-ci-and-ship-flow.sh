@@ -44,7 +44,7 @@ if command -v ruby >/dev/null 2>&1; then
         r << "cmd" unless s.any? { |x| x["run"].to_s.include?("node ravintio-zero/scripts/release-tag.mjs") }
       end
       jobs.each do |k, j|
-        next if k == "release-tag" || k == "main-merge-check" || k == "initiative-history"
+        next if k == "release-tag" || k == "main-merge-check" || k == "initiative-history" || k == "squash-before-main"
         r << "guard-#{k}" unless j["if"] == "github.event_name == \x27pull_request\x27"
         r << "write-#{k}" if j.dig("permissions", "contents") == "write"
       end
