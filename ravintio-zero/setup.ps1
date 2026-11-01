@@ -285,7 +285,7 @@ function New-HookEntry {
     # Claude Code to substitute. The four guards run in guard mode, where a
     # missing or crashing script exits 2. The rest run in advisory mode.
     param([string]$Matcher, [string]$Module, [string]$HooksDir)
-    $mode = if (@('gate-write', 'ratchet-check', 'em-dash-guard', 'merge-guard') -contains $Module) { 'guard' } else { 'advisory' }
+    $mode = if (@('gate-write', 'ratchet-check', 'em-dash-guard', 'merge-guard', 'block-forced-add') -contains $Module) { 'guard' } else { 'advisory' }
     $command = 'node "${CLAUDE_PROJECT_DIR}/' + $HooksDir + '/guard-run.mjs" ' + $mode + ' ' + $Module + '.mjs'
     [ordered]@{
         matcher = $Matcher
@@ -470,7 +470,8 @@ function Merge-EnforcementHookSettings {
         (New-HookEntry 'Edit' 'ratchet-check' $HooksDir),
         (New-HookEntry 'Write' 'em-dash-guard' $HooksDir),
         (New-HookEntry 'Edit' 'em-dash-guard' $HooksDir),
-        (New-HookEntry 'Bash' 'merge-guard' $HooksDir)
+        (New-HookEntry 'Bash' 'merge-guard' $HooksDir),
+        (New-HookEntry 'Bash' 'block-forced-add' $HooksDir)
     )
     $userPromptEntries = @(
         (New-HookEntry '.*' 'auto-trigger-orchestrator' $HooksDir),
@@ -547,7 +548,7 @@ function Merge-EnforcementHookSettings {
         }
         # Case-sensitive, and only <module>.mjs at a path boundary (0000035 S-004).
         $filtered = @(Remove-RavintioHookCommands -Entries $existing.hooks.PreToolUse `
-            -Pattern '(^|[\s"''/\\])(gate-write|ratchet-check|em-dash-guard|merge-guard)\.mjs\b')
+            -Pattern '(^|[\s"''/\\])(gate-write|ratchet-check|em-dash-guard|merge-guard|block-forced-add)\.mjs\b')
         $existing.hooks.PreToolUse = $filtered + $preToolEntries
 
         # Merge UserPromptSubmit. Remove stale commands one at a time, then

@@ -1,6 +1,6 @@
 ---
-version: "0.42.0"
-feature: "0000316-hooks-fail-closed"
+version: "0.43.0"
+feature: "0000317-block-forced-adds"
 updated: "31 Oct 2026"
 ---
 # About
@@ -10,8 +10,8 @@ updated: "31 Oct 2026"
 
 | Field | Value |
 |-------|-------|
-| Version | `0.42.0` |
-| Last feature | `0000316-hooks-fail-closed` |
+| Version | `0.43.0` |
+| Last feature | `0000317-block-forced-adds` |
 | Updated | `31 Oct 2026` |
 
 ## What this is

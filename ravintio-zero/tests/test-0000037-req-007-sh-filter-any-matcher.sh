@@ -79,8 +79,8 @@ assert_equals "1" "$(count_lines "$LINES" "Write|Edit node tools/my-gate-write.m
   "req-007 (a): a module name not at a path boundary stays"
 assert_equals "1" "$(count_lines "$LINES" "Edit node tools/Gate-Write.mjs")" \
   "req-007 (a): the match is case-sensitive"
-assert_equals "10" "$(printf '%s\n' "$LINES" | grep -c .)" \
-  "req-007 (a): PreToolUse holds the seven RAVINTIO entries and three user entries"
+assert_equals "11" "$(printf '%s\n' "$LINES" | grep -c .)" \
+  "req-007 (a): PreToolUse holds the eight RAVINTIO entries and three user entries"
 
 echo ""
 echo "=== req-007 (b): a second run leaves settings.json unchanged ==="

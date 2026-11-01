@@ -3,7 +3,7 @@
 > Change record. Index of all ADRs across all features. Updated after every pipeline run.
 > Do not archive this file. Update it in place.
 
-Last updated: 0000316-hooks-fail-closed
+Last updated: 0000317-block-forced-adds
 
 ---
 
@@ -358,3 +358,9 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 | ADR | Title | Status | Summary |
 |-----|-------|--------|---------|
 | ADR-001 | run every hook through a launcher from the project root | accepted | Setup wires each hook as `guard-run.mjs {guard\|advisory} {hook}.mjs` under `${CLAUDE_PROJECT_DIR}` and sets `CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR=1`. In guard mode a missing or crashing script exits 2 and names the script. |
+
+### Feature 0000317: block-forced-adds
+
+| ADR | Title | Status | Summary |
+|-----|-------|--------|---------|
+| ADR-001 | block forced adds with a guard and a CI check | accepted | The `block-forced-add` Bash guard blocks `git add -f` and its forms. The tracked `.gitignore` lists the driver paths. Ship and CI fail when `git ls-files -ci --exclude-standard` lists a file. |

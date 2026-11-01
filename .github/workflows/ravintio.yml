@@ -41,6 +41,15 @@ jobs:
           printf '%s' "$PR_BODY" > "$RUNNER_TEMP/pr-body.txt"
           node ravintio-zero/scripts/check-attribution.mjs "$RUNNER_TEMP/pr-body.txt"
 
+      - name: Fail on a committed ignored file
+        run: |
+          IGNORED=$(git ls-files -ci --exclude-standard)
+          if [ -n "$IGNORED" ]; then
+            echo "::error title=RAVINTIO Strict Violation::A committed file matches an ignore rule. Remove it from the index, or add a negation rule to .gitignore if it must be tracked."
+            echo "$IGNORED"
+            exit 1
+          fi
+
   # This job is specific to this repository's own self-description and is
   # deliberately NOT mirrored into ravintio-zero/hooks/ravintio.yml
   # (the copy setup.sh ships to consumer repos) — a consuming repo's README

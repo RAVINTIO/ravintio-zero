@@ -35,6 +35,7 @@ When discovery starts, the orchestrator writes `plan/.orchestrator-active` conta
 | **auto-trigger-orchestrator** (UserPromptSubmit) | Loads the orchestrator skill at the start of a session when no pipeline is active yet |
 | **check-reply-prefix** (Stop) | Warns when a reply in an active run lacks a valid phase prefix, and logs each miss to `plan/.prefix-misses.log`. It never blocks |
 | **merge-guard** (PreToolUse, Bash) | Blocks `gh pr merge` unless it is a squash into an `initiative/*` branch. Merging into `main` stays human-only |
+| **block-forced-add** (PreToolUse, Bash) | Blocks `git add -f` and `git add --force`. Leave an ignored file out, or add a negation rule to `.gitignore` |
 
 The sentinel is deleted last during ship, after the archive is confirmed complete. You never create or delete it manually.
 

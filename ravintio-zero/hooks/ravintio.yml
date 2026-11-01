@@ -41,6 +41,15 @@ jobs:
           printf '%s' "$PR_BODY" > "$RUNNER_TEMP/pr-body.txt"
           node ravintio-zero/scripts/check-attribution.mjs "$RUNNER_TEMP/pr-body.txt"
 
+      - name: Fail on a committed ignored file
+        run: |
+          IGNORED=$(git ls-files -ci --exclude-standard)
+          if [ -n "$IGNORED" ]; then
+            echo "::error title=RAVINTIO Strict Violation::A committed file matches an ignore rule. Remove it from the index, or add a negation rule to .gitignore if it must be tracked."
+            echo "$IGNORED"
+            exit 1
+          fi
+
   # Tags the merge commit on the default branch after the human merges
   # (0000169 ADR-002). Only this job holds write access, and it never runs
   # PR code.

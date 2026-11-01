@@ -536,10 +536,11 @@ install_enforcement_hooks() {
   local presence_cmd="$launcher advisory check-orchestrator-presence.mjs"
   local design_cmd="$launcher advisory check-design.mjs"
   local merge_guard_cmd="$launcher guard merge-guard.mjs"
+  local forced_add_cmd="$launcher guard block-forced-add.mjs"
   local reply_prefix_cmd="$launcher advisory check-reply-prefix.mjs"
 
   if command -v node >/dev/null 2>&1; then
-    RAVINTIO_GATE="$gate_cmd" RAVINTIO_RATCHET="$ratchet_cmd" RAVINTIO_EM_DASH="$em_dash_cmd" RAVINTIO_TRIGGER="$trigger_cmd" RAVINTIO_PRESENCE="$presence_cmd" RAVINTIO_DESIGN="$design_cmd" RAVINTIO_MERGE_GUARD="$merge_guard_cmd" RAVINTIO_REPLY_PREFIX="$reply_prefix_cmd" RAVINTIO_RETIRED="$RETIRED_HOOK_NAMES" RAVINTIO_SETTINGS="$settings" RAVINTIO_SETTINGS_REL="$settings_rel" node -e "$RAVINTIO_WRITE_SETTINGS_JS$RAVINTIO_SETTINGS_SHAPE_JS"'
+    RAVINTIO_GATE="$gate_cmd" RAVINTIO_RATCHET="$ratchet_cmd" RAVINTIO_EM_DASH="$em_dash_cmd" RAVINTIO_TRIGGER="$trigger_cmd" RAVINTIO_PRESENCE="$presence_cmd" RAVINTIO_DESIGN="$design_cmd" RAVINTIO_MERGE_GUARD="$merge_guard_cmd" RAVINTIO_FORCED_ADD="$forced_add_cmd" RAVINTIO_REPLY_PREFIX="$reply_prefix_cmd" RAVINTIO_RETIRED="$RETIRED_HOOK_NAMES" RAVINTIO_SETTINGS="$settings" RAVINTIO_SETTINGS_REL="$settings_rel" node -e "$RAVINTIO_WRITE_SETTINGS_JS$RAVINTIO_SETTINGS_SHAPE_JS"'
       const fs = require("fs"), path = require("path");
       const gate     = process.env.RAVINTIO_GATE;
       const ratchet  = process.env.RAVINTIO_RATCHET;
@@ -548,6 +549,7 @@ install_enforcement_hooks() {
       const presence = process.env.RAVINTIO_PRESENCE;
       const design   = process.env.RAVINTIO_DESIGN;
       const mergeGuard = process.env.RAVINTIO_MERGE_GUARD;
+      const forcedAdd = process.env.RAVINTIO_FORCED_ADD;
       const replyPrefix = process.env.RAVINTIO_REPLY_PREFIX;
       const sf       = process.env.RAVINTIO_SETTINGS;
       let s = {};
@@ -635,10 +637,10 @@ install_enforcement_hooks() {
         }
       }
       // PreToolUse: gate-write + ratchet-check + em-dash-guard for Write and Edit,
-      // then merge-guard for Bash (0000043 req-006)
+      // then merge-guard and block-forced-add for Bash (0000043 req-006, 0000317 req-002)
       // (idempotent: remove then re-add). Remove the three modules on any
       // matcher, so an old Write|Edit entry goes too (0000037 ADR-003).
-      const preToolModule = /(^|[\s"\x27\/\\])(gate-write|ratchet-check|em-dash-guard|merge-guard)\.mjs\b/;
+      const preToolModule = /(^|[\s"\x27\/\\])(gate-write|ratchet-check|em-dash-guard|merge-guard|block-forced-add)\.mjs\b/;
       s.hooks.PreToolUse = keepUserCommands(s.hooks.PreToolUse || [], preToolModule);
       s.hooks.PreToolUse.push(
         {matcher:"Write", hooks:[{type:"command",command:gate}]},
@@ -647,7 +649,8 @@ install_enforcement_hooks() {
         {matcher:"Edit",  hooks:[{type:"command",command:ratchet}]},
         {matcher:"Write", hooks:[{type:"command",command:emDash}]},
         {matcher:"Edit",  hooks:[{type:"command",command:emDash}]},
-        {matcher:"Bash",  hooks:[{type:"command",command:mergeGuard}]}
+        {matcher:"Bash",  hooks:[{type:"command",command:mergeGuard}]},
+        {matcher:"Bash",  hooks:[{type:"command",command:forcedAdd}]}
       );
       // UserPromptSubmit: auto-trigger first, then presence check, then check-design
       // (REQ-002, REQ-008, idempotent). The same path-boundary match as
@@ -672,7 +675,7 @@ install_enforcement_hooks() {
     echo "  ~ $settings_rel (enforcement hooks wired, Bash kept in the project root)"
   else
     echo "  ! Warning: node not found — skipping settings.json enforcement hook wiring"
-    echo "  ! Manually set env.CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR to 1, and add gate-write, ratchet-check, em-dash-guard (Write/Edit PreToolUse), merge-guard (Bash PreToolUse), auto-trigger-orchestrator, check-orchestrator-presence and check-design (UserPromptSubmit), and check-reply-prefix (Stop) to $settings_rel"
+    echo "  ! Manually set env.CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR to 1, and add gate-write, ratchet-check, em-dash-guard (Write/Edit PreToolUse), merge-guard and block-forced-add (Bash PreToolUse), auto-trigger-orchestrator, check-orchestrator-presence and check-design (UserPromptSubmit), and check-reply-prefix (Stop) to $settings_rel"
   fi
 }
 

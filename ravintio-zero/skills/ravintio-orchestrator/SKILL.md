@@ -26,7 +26,7 @@ Non-negotiable. They apply in every session, every phase.
 11. **Every run archives `plan/current/`.** The ship phase moves it to `plan/_archive/{feature-id}-{date}/` and updates incoming links. Never leave a permanent working folder behind.
 12. **`discovery.md` exists and is complete before the first coaching question.** A missing or incomplete `plan/current/discovery.md` at that point is a pipeline error: stop and write it.
 
-In an active initiative, stage by explicit path and never stage a `plan/backlog/` entry the step did not write. A step session never moves, renames, or deletes `plan/.initiative-logs/`, `plan/.initiative-runner.lock`, or `plan/.initiative-queue/`. The driver and the watcher own them.
+In an active initiative, stage by explicit path and never stage a `plan/backlog/` entry the step did not write. Never run `git add -f` or `git add --force`. If a file is ignored on purpose, leave it out. If it must be tracked, add a negation rule to `.gitignore`. A step session never moves, renames, or deletes `plan/.initiative-logs/`, `plan/.initiative-runner.lock`, or `plan/.initiative-queue/`. The driver and the watcher own them.
 
 ---
 
