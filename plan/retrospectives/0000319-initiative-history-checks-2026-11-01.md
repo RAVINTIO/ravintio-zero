@@ -37,4 +37,4 @@ The step added a first-parent title check for initiative branches and a squash c
 
 | Change | Owner | Lives in | Verified by | Filed as |
 |--------|-------|----------|-------------|----------|
-| Phase timestamps from `date -u` | pack maintainers | `ravintio-zero/skills/` | `build-log-check.mjs` passes at ship | `plan/backlog/0000334-p3-block-timestamps-from-clock/entry.md` |
+| Phase timestamps from `date -u` | pack maintainers | `ravintio-zero/skills/` | `build-log-check.mjs` passes at ship | `plan/backlog/0000335-p3-block-timestamps-from-clock/entry.md` |
