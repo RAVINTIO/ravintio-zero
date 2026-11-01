@@ -30,11 +30,11 @@ Run speed: fast (2026-11-01T03:32:02Z, initiative step 8)
 |-------|-------|
 | Start | `2026-11-01T03:32:02Z` |
 | End | `2026-11-01T03:32:37Z` |
-| Wall clock | `3` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
-| MCP calls | 1 |
+| MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | Step 8 of initiative 0000312. Pending migrations 0004 and 0005 do not apply to this repo and stay pending. |
 
@@ -55,7 +55,7 @@ Scope Lock (cross-session continuity): The record sits in git-tracked or ignored
 |-------|-------|
 | Start | `2026-11-01T03:33:38Z` |
 | End | `2026-11-01T03:33:52Z` |
-| Wall clock | `4` |
+| Wall clock | `0` |
 | Model tier | primary |
 | Skills loaded | ravintio-plan |
 | Agents spawned | 0 |
@@ -70,7 +70,7 @@ Scope Lock (cross-session continuity): The record sits in git-tracked or ignored
 |-------|-------|
 | Start | `2026-11-01T03:33:58Z` |
 | End | `2026-11-01T03:47:01Z` |
-| Wall clock | `8` |
+| Wall clock | `13` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 4 |
@@ -97,7 +97,7 @@ One amend by a parallel track folded a one-line test fix into the ack commit. No
 |-------|-------|
 | Start | `2026-11-01T03:47:01Z` |
 | End | `2026-11-01T03:56:53Z` |
-| Wall clock | `4` |
+| Wall clock | `10` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator, ravintio-validate-and-accept |
 | Agents spawned | 0 |
@@ -106,3 +106,31 @@ One amend by a parallel track folded a one-line test fix into the ack commit. No
 | Notes | The full suite ran in the background while verification and the security review ran inline. No self-correction cycles. No critical or high findings. |
 
 Gate accepted: P3 validate (autonomous, draft-accepted (initiative)) 2026-11-01T03:56:53Z
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-01T03:56:53Z` |
+| End | `2026-11-01T03:57:43Z` |
+| Wall clock | `1` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship, ravintio-retrospective |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Ran inline. The build report and version bump were small and shared the changelog. |
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `27` |
+| Total agents spawned | `4` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `2` |
+| Primary tier agent calls | `4` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `0` |
+| Phases skipped | none |
