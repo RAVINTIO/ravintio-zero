@@ -13,8 +13,11 @@ The coordinator wrote these notes at the step 5 `Setup:` stop on 2026-10-31. Rea
 - **Step 3 fixed its own CI failure instead of stopping.** The chart lists "CI fails on a step PR" as a stop condition. Step 3 pushed `cc98715` to PR #84 to fix a Windows PowerShell 5.1 failure in `run-tests.ps1`. The fix is correct and stays inside the step's scope. The human did not ask for a hold. Propose that future charts say whether a step may fix its own CI failure.
 - **Step 5 ran independent units inline on cost alone.** Its P2 note says no dependency forced the sequence. The human's rule in `## Parallel work in each step` allows a sequence only for a dependency or a shared file.
 
+- **Step 6 recorded no scope lock lines.** Its build log holds one line, "Self-confirmed: design and scope lock, draft-accepted (initiative)". Steps 1 to 5 each recorded four path lines with `[source: draft-accepted (initiative)]`.
+
 ## Candidate backlog entries
 
+- **The coordinator title rule covers the PR title only.** Step 6's `## Coordinator PRs` sets the title form for the PR. A one-commit squash takes its title from the commit subject, which is how `8c01e3d` broke the rule. Add one sentence: in a one-commit PR, the commit subject uses the same form.
 - **Missing launcher allows.** If `guard-run.mjs` is missing, its command exits 1 and Claude Code allows the call. Step 4's security report rates it medium and leaves it unmitigated in code. The setup-stop hook check catches it at the next stop.
 - **Forced-add guard misses three forms.** `git stage -f {path}` (a built-in synonym for `git add`), a subshell such as `(git add -f {path})` or `$(git add -f {path})`, and a flag held in a variable. Step 5's security report rates these medium. The CI ignored-file check is the backstop.
 - **Codex has no forced-add guard.** Step 5 left Codex out of scope. Only the CI check covers it.
