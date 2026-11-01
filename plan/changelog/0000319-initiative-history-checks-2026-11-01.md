@@ -19,11 +19,14 @@ A direct commit on an initiative branch skips CI and breaks the titled history. 
 
 ## Deviations
 
-None so far.
+`README.md` gained a row for `ravintio-zero/docs/` because the self-description check requires it.
 
 ## Validation results
 
-Pending P3.
+- The full suite passes and the consistency and self-description checks are clean.
+- Execution checks of both scripts passed: titled, empty, untitled, and missing-ref cases for the history script, and squash and ordinary commits for the main check.
+- The security review found no critical or high findings.
+- Two criteria rest on documentation alone: the delivery step and the ruleset doc. The two new CI jobs run for the first time on this PR.
 
 ## Skipped phases
 
