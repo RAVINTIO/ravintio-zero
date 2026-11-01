@@ -72,6 +72,25 @@ jobs:
           HEAD_REF: ${{ github.head_ref }}
         run: node ravintio-zero/scripts/check-initiative-history.mjs --base origin/main --head "origin/$HEAD_REF"
 
+  # Fails a PR into main from outside an initiative whose branch name or
+  # commit count breaks the rule (0000327 req-002). It reads the branch head,
+  # not the PR merge ref, so the merge commit is not counted.
+  squash-before-main:
+    if: github.event_name == 'pull_request' && github.base_ref == 'main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Check the branch and commit count
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+        run: node ravintio-zero/scripts/check-pr-into-main.mjs --head-ref "$HEAD_REF" --base origin/main --head "origin/$HEAD_REF"
+
   # Fails a push to main whose newest commit squashed an initiative PR
   # (0000319 req-004).
   main-merge-check:
