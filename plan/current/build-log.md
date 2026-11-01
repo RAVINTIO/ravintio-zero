@@ -47,3 +47,18 @@ Scope Lock (happy path): Each entry has a priority and theme, and the script wri
 Scope Lock (first-run path): Entries with no fields read as medium and unsorted, and the migration writes those defaults. [source: draft-accepted (initiative)]
 Scope Lock (error path): An entry with unreadable frontmatter or an unknown priority is listed as malformed, the script exits 1, and it writes no index. [source: draft-accepted (initiative)]
 Scope Lock (cross-session continuity): The index is a tracked file that CI compares with a fresh run, so a stale index never lands. [source: draft-accepted (initiative)]
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-01T04:33:50Z` |
+| End | `2026-11-01T04:34:52Z` |
+| Wall clock | `2` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Five short requirement files, one ADR, and four small records share one format, so they are written inline in one context. Consistency check clean. |
+

@@ -72,7 +72,7 @@ flowchart LR
 | U-005 | none | migration 0007 and helpers, test-0000321-req-005 | 1 | none |
 | U-003 | U-002 | .github/workflows/ravintio.yml, ravintio-zero/hooks/ravintio.yml, test-0000321-req-003 | 2 | The step names the script flag from U-002 |
 | U-004 | U-002 | orchestrator-p0-start-actions.md, product.template.yml, product.yml, test-0000321-req-004 | 2 | The pickup text names the review mode from U-002 |
-| U-006 | U-001, U-002, U-003, U-004, U-005 | plan/backlog entries, plan/backlog/index.md, plan/state/migrations.md, docs, component.yml, product.yml, changelog | 3 | The migration run and shared docs need the code first |
+| U-006 | U-001, U-002, U-003, U-004, U-005 | test-0000321-req-005-applied (AC-3), plan/backlog entries, plan/backlog/index.md, plan/state/migrations.md, docs, component.yml, product.yml, changelog | 3 | The migration run and shared docs need the code first |
 
 ## Assumptions
 
