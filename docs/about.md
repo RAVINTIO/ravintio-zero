@@ -1,7 +1,7 @@
 ---
-version: "0.43.0"
-feature: "0000317-block-forced-adds"
-updated: "31 Oct 2026"
+version: "0.44.0"
+feature: "0000318-titled-coordinator-prs"
+updated: "1 Nov 2026"
 ---
 # About
 
@@ -10,9 +10,9 @@ updated: "31 Oct 2026"
 
 | Field | Value |
 |-------|-------|
-| Version | `0.43.0` |
-| Last feature | `0000317-block-forced-adds` |
-| Updated | `31 Oct 2026` |
+| Version | `0.44.0` |
+| Last feature | `0000318-titled-coordinator-prs` |
+| Updated | `1 Nov 2026` |
 
 ## What this is
 

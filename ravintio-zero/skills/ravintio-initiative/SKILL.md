@@ -39,7 +39,7 @@ description: Coordinates an initiative from chart to delivery in the human's ses
 
 ## I-A Chart and I-B Activate
 
-Follow the I-A Chart and I-B Activate sections of the roadmap standards. Take the human's confirmation per item. Chart builds the `## Decisions`, `## Baselines`, `## Criteria`, and `## P1 skips` tables. Chart also does these:
+Follow the I-A Chart and I-B Activate sections of the roadmap standards. Activation lands as a coordinator PR. Take the human's confirmation per item. Chart builds the `## Decisions`, `## Baselines`, `## Criteria`, and `## P1 skips` tables. Chart also does these:
 
 - **Guard.** Run a guard check on each entry. Check whether it widens a guard, such as `merge-guard`, `gate-write`, `ratchet-check`, or another fail-closed hook. Name the guard and the new forms it would allow. Ask for a separate approval for each widening, apart from the chart confirmation.
 - **Confirmation.** Plan each step confirmation. List each confirmation that a step's skills ask for. Record the exact command as a `Confirmation:` row in `## Decisions`, or plan a human stop for that step.
@@ -89,14 +89,16 @@ A line that starts `Restart: Setup:` names both. Rerun setup first. Read this sk
 
 ## Backlog queue
 
-While the lock is held, write each new backlog entry to `plan/.initiative-queue/{id}-{slug}/entry.md`. Reserve its id with `node ravintio-zero/scripts/reserve-id.mjs --commit`, which commits `plan/backlog/.next-id` alone at once. When a step merges and the driver is between steps or has exited, move the queued entries to `plan/backlog/` on the initiative branch. Commit each entry on its own. Never touch the queue while a step runs.
+While the lock is held, write each new backlog entry to `plan/.initiative-queue/{id}-{slug}/entry.md`. Reserve its id with `node ravintio-zero/scripts/reserve-id.mjs --commit`, which commits `plan/backlog/.next-id` alone at once. When a step merges and the driver is between steps or has exited, move the queued entries to `plan/backlog/` on a `feat/` branch and land them as a coordinator PR. Never touch the queue while a step runs.
+
+Nothing commits directly on the initiative branch. Activation, queued entries, scope edits, and the I-E Delivery archive and retrospective all follow `## Coordinator PRs` in the roadmap standards. Raise one only while the driver is stopped.
 
 ## Repo instructions during a run
 
 If the human asks for a repo instruction while a step runs, add it to the scope of the current or next pending step in `plan/current-initiative/initiative.md`. The skill never writes the override from the initiative session, because `gate-write` blocks that write. The step writes the file.
 
 - If the driver lock is held, queue the instruction in `plan/.initiative-queue/{slug}/instruction.md`. The step that runs has already read its scope, so the instruction goes to the next pending step.
-- When the driver is between steps or has exited, add the instruction to that step's scope in `initiative.md`. Commit the edit on the initiative branch.
+- When the driver is between steps or has exited, add the instruction to that step's scope in `initiative.md`. Land the edit as a coordinator PR.
 - Tell the human which step took the instruction.
 
 ## I-E Delivery
