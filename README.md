@@ -123,6 +123,7 @@ One optional flag:
 | [templates/](ravintio-zero/templates/) | File format templates for every pipeline artifact, each with a guide where applicable |
 | [schemas/](ravintio-zero/schemas/) | Shared type definitions and the domain document envelope |
 | [standards/](ravintio-zero/standards/) | Code quality, API design, database, deployment, infrastructure, monorepo, observability, and testing standards |
+| [docs/](ravintio-zero/docs/) | Setup docs for settings the human applies outside the repository, such as the `main` ruleset |
 | [setup/](ravintio-zero/setup/) | The Claude Code tool config, as a `.sh` and `.ps1` pair |
 | [hooks/](ravintio-zero/hooks/) | Enforcement hooks, git hooks, and the CI workflow |
 | [workflows/](ravintio-zero/workflows/) | The feature pipeline route definition |
