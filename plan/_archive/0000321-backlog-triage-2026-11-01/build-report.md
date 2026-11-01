@@ -10,7 +10,7 @@
 | P1 Plan | 2 | 0 | primary | 0 |
 | P2 Implement | 16 | 5 | primary | 2 |
 | P3 Validate | 12 | 1 | primary | 1 |
-| P4 Ship | see build log | 0 | primary | 0 |
+| P4 Ship | 1 | 0 | primary | 0 |
 
 ## Parallelism
 
