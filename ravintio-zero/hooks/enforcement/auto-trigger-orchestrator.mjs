@@ -2,7 +2,7 @@
 /**
  * UserPromptSubmit hook: auto-trigger the ravintio-orchestrator skill.
  *
- * Fires on every user prompt. Performs two fast file-existence checks:
+ * Fires on every user prompt but emits once per session. Performs fast checks:
  *   1. ravintio-zero/ exists → this is a ravintio project
  *   2. plan/.orchestrator-active does NOT exist → orchestrator not yet loaded
  *
@@ -11,6 +11,12 @@
  * model's context before it processes the user prompt.
  *
  * If either condition fails, exits 0 silently (no output, no effect).
+ *
+ * Once per session (0000320): when it emits, the hook writes the payload's
+ * session_id to plan/.orchestrator-loaded and adds that path to .git/info/exclude
+ * once. If the recorded id equals the current session_id, the hook emits nothing.
+ * If the payload has no session_id, the hook emits every time and writes nothing.
+ * The advisory banner in check-orchestrator-presence.mjs follows the same rule.
  *
  * Initiative case: if plan/current-initiative/initiative.md holds status active
  * and plan/.orchestrator-active is absent, the instruction names the
@@ -35,7 +41,7 @@
  */
 
 import { spawnSync } from "node:child_process";
-import { existsSync, readFileSync } from "node:fs";
+import { appendFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 import { readStdin } from "./read-stdin.mjs";
@@ -50,6 +56,33 @@ function initiativeActive(cwd) {
   } catch {
     return false;
   }
+}
+
+// Once-per-session record (0000320): plan/.orchestrator-loaded holds the session id
+// of the last prompt that got the load instruction. With no session id, both
+// functions do nothing, so the hook emits every time as before.
+// Keep in step with the same two functions in the other hook
+function loadedThisSession(cwd, sessionId) {
+  if (!sessionId) return false;
+  try {
+    return readFileSync(join(cwd, "plan", ".orchestrator-loaded"), "utf-8").trim() === sessionId;
+  } catch {
+    return false;
+  }
+}
+
+function recordLoaded(cwd, sessionId) {
+  if (!sessionId) return;
+  try {
+    writeFileSync(join(cwd, "plan", ".orchestrator-loaded"), sessionId + "\n");
+    const gitInfo = join(cwd, ".git", "info");
+    if (!existsSync(join(cwd, ".git"))) return;
+    mkdirSync(gitInfo, { recursive: true });
+    const exclude = join(gitInfo, "exclude");
+    const text = existsSync(exclude) ? readFileSync(exclude, "utf-8") : "";
+    if (text.split("\n").includes("plan/.orchestrator-loaded")) return;
+    appendFileSync(exclude, (text === "" || text.endsWith("\n") ? "" : "\n") + "plan/.orchestrator-loaded\n");
+  } catch { /* a failed record only means the next prompt emits again */ }
 }
 
 // Resume findings: fixed lines from resume-detect.mjs, run with a 2 second timeout.
@@ -86,10 +119,15 @@ try {
   const sentinelPath = join(cwd, "plan", ".orchestrator-active");
   if (existsSync(sentinelPath)) process.exit(0);
 
+  // Once per session: the record holds the id of the session that already got the instruction.
+  const sessionId = String(input?.session_id ?? "").trim();
+  if (loadedThisSession(cwd, sessionId)) process.exit(0);
+
   // Initiative check: an active initiative means the session drives it. A step
   // session sets RAVINTIO_INITIATIVE_STEP=1 and keeps the orchestrator. Neither
   // the driver lock nor plan/current/ is read.
   if (process.env.RAVINTIO_INITIATIVE_STEP !== "1" && initiativeActive(cwd)) {
+    recordLoaded(cwd, sessionId);
     process.stdout.write(
       "SYSTEM INSTRUCTION: This is a RAVINTIO project (ravintio-zero/ detected) " +
       "with an active initiative (plan/current-initiative/initiative.md). " +
@@ -102,6 +140,7 @@ try {
 
   // Both conditions met: emit the instruction to load the orchestrator.
   // Claude Code injects this output into the model's context before the prompt.
+  recordLoaded(cwd, sessionId);
   process.stdout.write(
     "SYSTEM INSTRUCTION: This is a RAVINTIO project (ravintio-zero/ detected) " +
     "and the orchestrator has not been loaded yet for this session. " +
