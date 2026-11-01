@@ -3,7 +3,7 @@
 > Change record. Index of all ADRs across all features. Updated after every pipeline run.
 > Do not archive this file. Update it in place.
 
-Last updated: 0000314-step-logs-stay-in-place
+Last updated: 0000315-isolated-test-state
 
 ---
 
@@ -346,3 +346,9 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 | ADR | Title | Status | Summary |
 |-----|-------|--------|---------|
 | ADR-001 | skip the step log folder in the phase guard | accepted | The phase guard skips `plan/.initiative-logs` only. It keeps scanning every other path, so a new untracked skill file is still checked. |
+
+### Feature 0000315: isolated-test-state
+
+| ADR | Title | Status | Summary |
+|-----|-------|--------|---------|
+| ADR-001 | clear the environment in the runner | accepted | The runners remove every `RAVINTIO_` variable from each suite except `RAVINTIO_PWSH`, `RAVINTIO_TIMING_FILE`, and `RAVINTIO_TEST_QUIET`. They compare tracked and untracked files before and after the run and fail on a change. |
