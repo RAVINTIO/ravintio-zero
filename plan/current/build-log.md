@@ -87,3 +87,6 @@ Scope Lock (cross-session continuity): The index is a tracked file that CI compa
 - Done: U-003 (2026-11-01T04:40:00Z)
 - Done: U-004 (2026-11-01T04:40:00Z)
 - Done: U-006 (2026-11-01T04:41:12Z)
+Rework: REQ-002: refuse a symlinked index path, from security finding S-002 (2026-11-01T04:54:24Z)
+Rework: REQ-005: replace a backtracking regex in the PowerShell helper, from security finding S-001 (2026-11-01T04:54:24Z)
+Self-correction: security review found one medium and four low findings. Cycle 1 fixed S-001 and S-002 in commit 27a6366c and added tests for both.
