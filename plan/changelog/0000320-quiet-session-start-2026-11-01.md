@@ -2,7 +2,7 @@
 
 **Feature:** Quiet session start
 **Version:** 0.46.0
-**PR:** pending
+**PR:** #94
 
 ## What changed
 
