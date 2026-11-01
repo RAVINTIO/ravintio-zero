@@ -2,7 +2,7 @@
 
 **Feature:** Titled coordinator PRs
 **Version:** 0.44.0
-**PR:** {pending, updated at Step 9}
+**PR:** [#89](https://github.com/RAVINTIO/ravintio-zero/pull/89)
 
 ## What changed
 
