@@ -62,6 +62,7 @@ Admin work aligns with step N when step N caused it or it serves step N. Example
    6. Move each step tag to its new step commit, keeping the tag message.
    7. After the human merges the initiative PR, delete the old branch.
 4. Make `check-initiative-history.mjs` check the shape: one commit per charted step in chart order, then at most one chore commit. Any other commit fails CI. This tightens the check and widens nothing.
+5. In `## Coordinator PRs`, change the squash command to `gh pr merge --squash --delete-branch {n}`, the form ship uses. Initiative 0000312 left six coordinator branches on `origin` because the rule names no `--delete-branch`. `merge-guard` already allows the form, so this widens nothing. A test could check that the standard names the flag.
 
 ### Widening: move step tags
 
