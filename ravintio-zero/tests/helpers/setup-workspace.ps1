@@ -112,7 +112,7 @@ function Get-HookEntries {
         foreach ($entry in @($Settings.hooks.$event)) {
             if ($null -eq $entry) { continue }
             foreach ($hook in @($entry.hooks)) {
-                if ("$($hook.command)" -match '([A-Za-z0-9-]+)\.mjs') {
+                if ("$($hook.command)" -match '([A-Za-z0-9-]+)\.mjs\s*$') {
                     $module = $Matches[1]
                     if ($RavintioOnly -and $global:RavintioModules -cnotcontains $module) { continue }
                     $lines += "$event $($entry.matcher) $module"

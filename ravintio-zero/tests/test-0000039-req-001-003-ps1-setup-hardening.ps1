@@ -120,7 +120,7 @@ Assert-True ($renderLines -ccontains 'PreToolUse|Write|node tools/my-lint.mjs (o
 Assert-True ($renderLines -ccontains 'UserPromptSubmit|.*|node ./tools/notify.sh (object)') "req-002 (b): the single-object user UserPromptSubmit entry stays as it was"
 
 foreach ($module in $global:RavintioModules) {
-    $count = @($renderLines | Where-Object { $_.Contains("/$module.mjs") }).Count
+    $count = @($renderLines | Where-Object { $_.Contains(" $module.mjs") }).Count
     $expectedCount = 1
     if (@('gate-write', 'ratchet-check', 'em-dash-guard') -ccontains $module) { $expectedCount = 2 }
     Assert-Equal $expectedCount $count "req-002 (a): $module appears once per matcher"
@@ -129,17 +129,17 @@ foreach ($module in $global:RavintioModules) {
 # The exact result, which setup.sh gives on the same fixture too.
 $expected = @(
     'PreToolUse|Write|node tools/my-lint.mjs (object)',
-    'PreToolUse|Write|node ".claude/hooks/enforcement/gate-write.mjs"',
-    'PreToolUse|Edit|node ".claude/hooks/enforcement/gate-write.mjs"',
-    'PreToolUse|Write|node ".claude/hooks/enforcement/ratchet-check.mjs"',
-    'PreToolUse|Edit|node ".claude/hooks/enforcement/ratchet-check.mjs"',
-    'PreToolUse|Write|node ".claude/hooks/enforcement/em-dash-guard.mjs"',
-    'PreToolUse|Edit|node ".claude/hooks/enforcement/em-dash-guard.mjs"',
-    'PreToolUse|Bash|node ".claude/hooks/enforcement/merge-guard.mjs"',
+    'PreToolUse|Write|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard gate-write.mjs',
+    'PreToolUse|Edit|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard gate-write.mjs',
+    'PreToolUse|Write|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard ratchet-check.mjs',
+    'PreToolUse|Edit|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard ratchet-check.mjs',
+    'PreToolUse|Write|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard em-dash-guard.mjs',
+    'PreToolUse|Edit|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard em-dash-guard.mjs',
+    'PreToolUse|Bash|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard merge-guard.mjs',
     'UserPromptSubmit|.*|node ./tools/notify.sh (object)',
-    'UserPromptSubmit|.*|node ".claude/hooks/enforcement/auto-trigger-orchestrator.mjs"',
-    'UserPromptSubmit|.*|node ".claude/hooks/enforcement/check-orchestrator-presence.mjs"',
-    'UserPromptSubmit|.*|node ".claude/hooks/enforcement/check-design.mjs"'
+    'UserPromptSubmit|.*|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" advisory auto-trigger-orchestrator.mjs',
+    'UserPromptSubmit|.*|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" advisory check-orchestrator-presence.mjs',
+    'UserPromptSubmit|.*|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" advisory check-design.mjs'
 ) -join "`n"
 Assert-Equal $expected $render "req-002: setup.ps1 gives exactly the expected entries"
 

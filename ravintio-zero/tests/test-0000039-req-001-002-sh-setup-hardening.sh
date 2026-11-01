@@ -92,21 +92,21 @@ SETUP_EXIT=$?
 RENDER="$(render_hooks "$WS/.claude/settings.json")"
 
 assert_exit_zero "$SETUP_EXIT" "req-002 (a): setup.sh exits 0 with single-object hooks values"
-assert_equals "0" "$(count_lines "$RENDER" 'PreToolUse|Write|Edit|node ".claude/hooks/enforcement/gate-write.mjs"')" \
+assert_equals "0" "$(count_lines "$RENDER" 'PreToolUse|Write|Edit|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard gate-write.mjs')" \
   "req-002 (a): the single-object PreToolUse RAVINTIO entry is gone"
 assert_equals "0" "$(count_lines "$RENDER" 'UserPromptSubmit|.*|node .claude/hooks/enforcement/check-design.mjs')" \
   "req-002 (a): the single-object UserPromptSubmit RAVINTIO entry is gone"
 for line in \
-  'PreToolUse|Write|node ".claude/hooks/enforcement/gate-write.mjs"' \
-  'PreToolUse|Edit|node ".claude/hooks/enforcement/gate-write.mjs"' \
-  'PreToolUse|Write|node ".claude/hooks/enforcement/ratchet-check.mjs"' \
-  'PreToolUse|Edit|node ".claude/hooks/enforcement/ratchet-check.mjs"' \
-  'PreToolUse|Write|node ".claude/hooks/enforcement/em-dash-guard.mjs"' \
-  'PreToolUse|Edit|node ".claude/hooks/enforcement/em-dash-guard.mjs"' \
-  'PreToolUse|Bash|node ".claude/hooks/enforcement/merge-guard.mjs"' \
-  'UserPromptSubmit|.*|node ".claude/hooks/enforcement/auto-trigger-orchestrator.mjs"' \
-  'UserPromptSubmit|.*|node ".claude/hooks/enforcement/check-orchestrator-presence.mjs"' \
-  'UserPromptSubmit|.*|node ".claude/hooks/enforcement/check-design.mjs"'; do
+  'PreToolUse|Write|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard gate-write.mjs' \
+  'PreToolUse|Edit|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard gate-write.mjs' \
+  'PreToolUse|Write|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard ratchet-check.mjs' \
+  'PreToolUse|Edit|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard ratchet-check.mjs' \
+  'PreToolUse|Write|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard em-dash-guard.mjs' \
+  'PreToolUse|Edit|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard em-dash-guard.mjs' \
+  'PreToolUse|Bash|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard merge-guard.mjs' \
+  'UserPromptSubmit|.*|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" advisory auto-trigger-orchestrator.mjs' \
+  'UserPromptSubmit|.*|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" advisory check-orchestrator-presence.mjs' \
+  'UserPromptSubmit|.*|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" advisory check-design.mjs'; do
   assert_equals "1" "$(count_lines "$RENDER" "$line")" \
     "req-002 (a): fresh RAVINTIO command appears once: $line"
 done

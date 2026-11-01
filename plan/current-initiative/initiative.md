@@ -8,7 +8,7 @@ status: "active"
 **Goal:** Make the guards fail closed, keep every initiative history titled one commit per change, and stop step logs and session state breaking the suite. Step 1 teaches the driver to stop for a setup rerun, so each later step runs on installed copies that match the pack.
 **Branch:** initiative/0000312-guards-history-and-test-noise
 **Status:** active
-**Position:** 4
+**Position:** 5
 **Speed:** fast
 
 The human asked for this draft on 2026-10-31 and confirmed the scope and order the same day. Chart ran on 2026-10-31 on branch `feat/0000312-chart`, cut from `main` after PR #77 landed.
@@ -177,7 +177,7 @@ If the script still finds one, it fails. The script has no exception list. Neith
 | 1 | 0000313-driver-setup-stop | 0000311 | minor | 0.41.0 | merged |
 | 2 | 0000314-step-logs-stay-in-place | 0000264, 0000265 | patch | 0.41.1 | merged |
 | 3 | 0000315-isolated-test-state | 0000309, 0000267 | patch | 0.41.2 | merged |
-| 4 | 0000316-hooks-fail-closed | 0000287, 0000288 | minor | 0.42.0 | pending |
+| 4 | 0000316-hooks-fail-closed | 0000287, 0000288 | minor | 0.42.0 | merged |
 | 5 | 0000317-block-forced-adds | 0000276 | minor | 0.43.0 | pending |
 | 6 | 0000318-titled-coordinator-prs | 0000274 | minor | 0.44.0 | pending |
 | 7 | 0000319-initiative-history-checks | 0000275, 0000277, 0000278 | minor | 0.45.0 | pending |
