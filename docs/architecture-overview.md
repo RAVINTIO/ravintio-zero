@@ -1,6 +1,6 @@
 # Architecture Overview
 
-Last updated: 0000320-quiet-session-start
+Last updated: 0000321-backlog-triage
 
 ## What this repo is
 
@@ -44,6 +44,8 @@ Each acceptance criterion is one checkbox line, `- [ ] AC-{n}: {name}`, with ind
 The load instruction fires once per session. The hook writes the `session_id` to the ignored file `plan/.orchestrator-loaded` when it injects the instruction, and stays silent while the file holds the current id. Without a `session_id` it injects every time. The advisory banner of `check-orchestrator-presence.mjs` follows the same rule.
 
 Migration findings come from the ledger `plan/state/migrations.md`, which sits outside the pack. Each row holds a migration id, a result (`done` or `not applicable`), and the pack version. A `done` row gives no finding. A `not applicable` row gives none at the same pack version, unless a `**Detect:**` line in the migration file shows its condition is now true. The migrator appends rows and edits nothing inside `ravintio-zero/`. Migration 0006 copies the pack's `_done/` records into the ledger.
+
+Each backlog entry carries `priority` (`high`, `medium`, or `low`) and `theme` in its frontmatter. A missing field reads as `medium` and `unsorted`. `scripts/backlog-index.mjs` writes `plan/backlog/index.md`, grouped by theme and ordered by priority. With `--check` it exits 1 when the committed index differs from a fresh run, and CI runs that check. With `--review` it lists entries older than `backlogReviewDays` in `product.yml` (default 5), counted from **Date filed**. Discovery Start Actions step 10 runs the review and offers entries in index order. Migration 0007 sets the defaults on existing entries.
 
 `check-reply-prefix.mjs` checks `last_assistant_message` from the Stop payload. If the field is absent, it reads the last assistant message that follows the last user prompt and holds no `tool_use` block, and rereads the transcript up to 4 times. If it finds no final reply, it stays silent.
 

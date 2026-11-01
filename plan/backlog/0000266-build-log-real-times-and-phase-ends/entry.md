@@ -2,6 +2,8 @@
 title: "Backlog Entry: 0000266 - build logs use clock times and close every phase"
 summary: "A coordinator-observed defect, filed for pickup at a future discovery run."
 status: "open"
+priority: "medium"
+theme: "unsorted"
 ---
 # Backlog Entry: 0000266 - build logs use clock times and close every phase
 

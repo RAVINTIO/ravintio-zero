@@ -2,6 +2,8 @@
 title: "Backlog Entry: 0000290 - setup keeps a developer's own CLAUDE.md content"
 summary: "A discovered-but-out-of-scope item deferred for pickup at a future discovery run."
 status: "open"
+priority: "medium"
+theme: "unsorted"
 ---
 # Backlog Entry: 0000290 - setup keeps a developer's own CLAUDE.md content
 

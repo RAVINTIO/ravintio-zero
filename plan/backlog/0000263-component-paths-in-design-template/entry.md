@@ -2,6 +2,8 @@
 title: "Backlog Entry: 0000263 - write component paths at design time"
 summary: "The design template has no Component Paths section, so gate-write blocks a subagent that writes a planned path."
 status: "open"
+priority: "medium"
+theme: "unsorted"
 ---
 # Backlog Entry: 0000263 - write component paths at design time
 

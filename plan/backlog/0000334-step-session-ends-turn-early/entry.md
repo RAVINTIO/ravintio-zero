@@ -2,6 +2,8 @@
 title: "Backlog Entry: 0000334 - a step session that ends its turn early stops the driver"
 summary: "A coordinator-observed defect, filed for pickup at a future discovery run."
 status: "open"
+priority: "medium"
+theme: "unsorted"
 ---
 # Backlog Entry: 0000334 - a step session that ends its turn early stops the driver
 

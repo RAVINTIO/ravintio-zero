@@ -2,6 +2,8 @@
 title: "Backlog Entry: 0000331 - no stash while subagents share the working tree"
 summary: "A coordinator-observed risk, filed for pickup at a future discovery run."
 status: "open"
+priority: "medium"
+theme: "unsorted"
 ---
 # Backlog Entry: 0000331 - no stash while subagents share the working tree
 

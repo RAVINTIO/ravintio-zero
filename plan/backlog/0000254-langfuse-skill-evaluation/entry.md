@@ -2,6 +2,8 @@
 title: "Backlog Entry: 0000254 - evaluate skill changes and model needs with Langfuse"
 summary: "A human-requested change, filed for pickup at a future discovery run."
 status: "open"
+priority: "medium"
+theme: "unsorted"
 ---
 # Backlog Entry: 0000254 - evaluate skill changes and model needs with Langfuse
 

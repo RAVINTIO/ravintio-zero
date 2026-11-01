@@ -2,6 +2,8 @@
 title: "Backlog Entry: 0000324 - the brand guard runs before a push, not only in CI"
 summary: "A discovered-but-out-of-scope item deferred for pickup at a future discovery run."
 status: "open"
+priority: "medium"
+theme: "unsorted"
 ---
 # Backlog Entry: 0000324 - the brand guard runs before a push, not only in CI
 
