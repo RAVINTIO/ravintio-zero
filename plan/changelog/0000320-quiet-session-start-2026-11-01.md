@@ -22,7 +22,10 @@ The hook adds `plan/.orchestrator-loaded` to `.git/info/exclude`, as `check-repl
 
 ## Validation results
 
-Filled at validate.
+- The full suite passes: 248 feature suites and 19 regression suites. The consistency and self-description checks are clean.
+- Execution checks of the hooks, the script, and the Stop hook verified 13 criteria. None are `not-verifiable` or docs only.
+- The security review found no critical or high findings.
+- After the version bump, `resume-detect.mjs` lists no migration 0004 and no migration 0005 in this repo.
 
 ## Skipped phases
 
