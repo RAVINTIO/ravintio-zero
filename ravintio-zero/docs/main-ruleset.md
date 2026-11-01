@@ -23,6 +23,8 @@ Coordinator and feature PRs land on `initiative/**` branches by squash. Do not a
 
 Only `initiative/*`, `chore/*`, and `hotfix/*` branches may target `main`. A `feat/*` branch never targets `main` and lands on an initiative branch instead. The CI job `squash-before-main` fails any other PR into `main`. It also fails a `chore/*` or `hotfix/*` PR with more than one commit. The agent never merges a PR into `main`.
 
+The human also sets `squash-before-main` as a required status check on `main`. An optional check only advises.
+
 ## Who applies it
 
 The human applies the ruleset in the repository settings under **Rules**. The agent never changes repository settings.

@@ -27,6 +27,12 @@ if (!opts.headRef || !opts.base || !opts.head) {
   process.exit(2);
 }
 
+// A value that starts with a dash would reach git as an option.
+if (opts.base.startsWith('-') || opts.head.startsWith('-')) {
+  console.error(USAGE);
+  process.exit(2);
+}
+
 if (opts.headRef.startsWith('initiative/')) {
   console.log(`check-pr-into-main: ${opts.headRef} is an initiative branch. Pass.`);
   process.exit(0);

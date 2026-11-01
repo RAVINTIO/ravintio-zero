@@ -68,6 +68,11 @@ assert_equals "2" "$?" "AC-3: missing --head-ref exits 2"
 node "$CHECK" --root "$R" --head-ref chore/one --base nope --head chore/one >/dev/null 2>&1
 assert_equals "2" "$?" "AC-3: unknown base exits 2"
 
+node "$CHECK" --root "$R" --head-ref chore/one --base "--max-count=1" --head chore/one >/dev/null 2>&1
+assert_equals "2" "$?" "AC-3: a --base that starts with a dash exits 2"
+node "$CHECK" --root "$R" --head-ref chore/one --base main --head "--output=x" >/dev/null 2>&1
+assert_equals "2" "$?" "AC-3: a --head that starts with a dash exits 2"
+
 echo ""
 echo "=== req-001: output names the ref and count, never bodies ==="
 run_check chore/two chore/two >/dev/null
