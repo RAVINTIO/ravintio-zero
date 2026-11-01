@@ -45,9 +45,9 @@ Pulled in: backlog entry 0000274, folder deleted in the discovery commit
 
 | Field | Value |
 |-------|-------|
-| Start | `2026-10-31T23:41:00Z` |
+| Start | `2026-10-31T23:39:58Z` |
 | End | `2026-10-31T23:41:10Z` |
-| Wall clock | `3` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-plan |
 | Agents spawned | 0 |
@@ -63,7 +63,7 @@ Gate accepted: P1 plan (autonomous, draft-accepted (initiative)) 2026-10-31T23:4
 |-------|-------|
 | Start | `2026-10-31T23:41:25Z` |
 | End | `2026-10-31T23:53:20Z` |
-| Wall clock | `22` |
+| Wall clock | `12` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 3 |
@@ -86,9 +86,9 @@ Deviation: commit subjects shortened to 72 characters by the commit-msg hook.
 
 | Field | Value |
 |-------|-------|
-| Start | `2026-10-31T23:58:00Z` |
+| Start | `2026-10-31T23:53:30Z` |
 | End | `2026-11-01T00:03:54Z` |
-| Wall clock | `15` |
+| Wall clock | `10` |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | 1 |
@@ -97,3 +97,33 @@ Deviation: commit subjects shortened to 72 characters by the commit-msg hook.
 | Notes | Full suite ran in the background beside one read-only review agent. Reports written after the suite finished, so no tracked edit broke its tree check. Clean P3: no critical or high finding. |
 
 Gate accepted: P3 acceptance (autonomous, evidence in plan/current/acceptance-evidence.md) 2026-11-01T00:03:54Z
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-01T00:04:39Z` |
+| End | `2026-11-01T00:04:39Z` |
+| Wall clock | `0` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship, ravintio-retrospective |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Living docs updated at ship, after P3, because P2 missed them. The fast batch for Steps 5 and 6 ran in order here, because the version bump follows the archive link check. |
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `26` |
+| Total agents spawned | `4` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `2` |
+| Primary tier agent calls | `0` |
+| Cheaper tier agent calls | `4` |
+| Self-corrections | `1` |
+| Phases skipped | none |
