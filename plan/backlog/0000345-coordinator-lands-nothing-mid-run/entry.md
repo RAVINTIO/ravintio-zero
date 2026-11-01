@@ -40,17 +40,26 @@ The human set this rule on 2026-11-01. A delivered initiative branch holds at mo
 
 | Position | Commit | Holds |
 |----------|--------|-------|
-| First to Nth | One squash per step | The feature, plus admin work that aligns with that step |
-| Last | One chore commit | All admin work that fits no step: the chart, deferred entries, setup records, notes, fixes, the archive, and the retrospective |
+| First to Nth | One squash per step | The feature, plus every admin change that aligns with that step |
+| Last | One chore commit | Admin work that aligns with no step, such as the activation chart, the archive, and the retrospective |
+
+Admin work aligns with step N when step N caused it or it serves step N. Examples:
+
+- the setup record after step N's `Setup:` stop
+- an id that step N reserves, and its `plan/backlog/.next-id` change
+- a backlog entry filed from step N's work
+- a fix to step N's code or CI
+- step N's edits to entries the coordinator filed
 
 1. Admin work that aligns with a step goes in that step's PR. If the step is already running, the coordinator queues the work in `plan/.initiative-queue/` with the step named. The step session commits it on its feature branch before P4 raises the PR.
 2. Admin work that fits no step lands on the initiative branch as it happens, through a `chore/` PR. Steps then run on current admin, such as the chart and the id counter.
 3. At I-E Delivery, with the driver stopped, the coordinator reshapes the branch:
-   1. Replay each step's own diff, in chart order, onto the base the branch was cut from.
-   2. Add one chore commit whose tree equals the branch head before the reshape. The final tree stays unchanged.
-   3. Run `check-initiative-history.mjs` and the full suite on the reshaped branch.
-   4. Push with `git push --force-with-lease={branch}:{old head}`.
-   5. Move each step tag to its new step commit, keeping the tag message.
+   1. Tag each admin commit with the step it aligns with, or with none.
+   2. Replay each step's diff, in chart order, onto the base the branch was cut from. Fold in every admin commit tagged with that step.
+   3. Add one chore commit whose tree equals the branch head before the reshape. It holds only the admin work tagged with no step. The final tree stays unchanged.
+   4. Run `check-initiative-history.mjs` and the full suite on the reshaped branch.
+   5. Push with `git push --force-with-lease={branch}:{old head}`.
+   6. Move each step tag to its new step commit, keeping the tag message.
 4. Make `check-initiative-history.mjs` check the shape: one commit per charted step in chart order, then at most one chore commit. Any other commit fails CI. This tightens the check and widens nothing.
 
 ### Widening: force push to initiative branches
@@ -70,14 +79,9 @@ Suggested bounds:
 
 ### Trade-off
 
-A replayed step commit lacks the admin work that sat below it during the run, such as the chart. Its tree, and the tree its tag points at, then differ from the tree the step tested. The final tree is identical, and CI runs on it.
+A replayed step commit lacks only the admin work that aligns with no step and sat below it during the run, such as the activation chart. Its tree, and its tag, then differ from the tree the step tested by those files alone. The final tree is identical, and CI runs on it.
 
-Step diffs can also conflict with admin files during the replay. Initiative 0000312 hit two cases:
-
-- `plan/backlog/.next-id`, which every reservation changes
-- step 9 adding fields to entries the coordinator filed
-
-When a conflict touches only admin files, the replay drops those hunks from the step commit. The chore commit restores them. Any other conflict stops for the human.
+Folding aligned admin into its step removes the conflicts initiative 0000312 hit on `plan/backlog/.next-id` and step 9's entry edits. If a replay still conflicts, the coordinator stops for the human.
 
 ## Why Deferred
 
