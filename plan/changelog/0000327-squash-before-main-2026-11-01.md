@@ -2,7 +2,7 @@
 
 **Feature:** Squash before main
 **Version:** 0.48.0
-**PR:** pending
+**PR:** #98
 
 ## What changed
 
