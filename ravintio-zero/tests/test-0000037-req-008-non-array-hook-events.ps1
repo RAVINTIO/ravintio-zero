@@ -13,7 +13,7 @@
 $expected = @{
     PreToolUse       = @('Write gate-write', 'Edit gate-write', 'Write ratchet-check',
                          'Edit ratchet-check', 'Write em-dash-guard', 'Edit em-dash-guard',
-                         'Bash merge-guard') -join "`n"
+                         'Bash merge-guard', 'Bash block-forced-add') -join "`n"
     UserPromptSubmit = @('.* auto-trigger-orchestrator', '.* check-orchestrator-presence',
                          '.* check-design') -join "`n"
 }
@@ -27,7 +27,7 @@ function Get-EventEntries {
     $lines = @()
     foreach ($entry in $value) {
         $cmds = (@($entry.hooks) | ForEach-Object { "$($_.command)" }) -join ' '
-        if ($cmds -match '([A-Za-z0-9-]+)\.mjs') { $lines += "$($entry.matcher) $($Matches[1])" }
+        if ($cmds -match '([A-Za-z0-9-]+)\.mjs\s*$') { $lines += "$($entry.matcher) $($Matches[1])" }
         else { $lines += "$($entry.matcher) $cmds" }
     }
     return ($lines -join "`n")

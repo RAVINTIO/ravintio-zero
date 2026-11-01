@@ -2,6 +2,8 @@
 title: "Backlog Entry: 0000270 - the watcher waits when no build log exists yet"
 summary: "A retrospective finding, filed for pickup at a future discovery run."
 status: "open"
+priority: "medium"
+theme: "unsorted"
 ---
 # Backlog Entry: 0000270 - the watcher waits when no build log exists yet
 

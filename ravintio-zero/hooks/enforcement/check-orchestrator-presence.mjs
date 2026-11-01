@@ -5,10 +5,13 @@
  * Two modes controlled by plan/.orchestrator-strict:
  *
  * Advisory (default):
- *   Injects a one-line banner on every prompt when a pipeline is active.
+ *   Injects a one-line banner once per session when a pipeline is active (0000320).
+ *   It shares plan/.orchestrator-loaded with auto-trigger-orchestrator.mjs. If the
+ *   recorded id equals the session_id, it is silent. With no session_id, it
+ *   injects on every prompt and writes nothing.
  *   Exit 0 always — never blocks.
  *
- * Strict (plan/.orchestrator-strict exists):
+ * Strict (plan/.orchestrator-strict exists, the record plays no part):
  *   On first prompt of a session (or after session change), injects a hard-block
  *   banner that instructs the model to load the orchestrator skill and write the
  *   session_id to plan/.orchestrator-ack before processing anything else.
@@ -28,7 +31,7 @@
  * Exit codes: 0 always — this hook informs but never blocks via exit 2.
  */
 
-import { existsSync, readFileSync } from "node:fs";
+import { appendFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 import { readStdin } from "./read-stdin.mjs";
@@ -43,6 +46,33 @@ function initiativeActive(cwd) {
   } catch {
     return false;
   }
+}
+
+// Once-per-session record (0000320): plan/.orchestrator-loaded holds the session id
+// of the last prompt that got the load instruction. With no session id, both
+// functions do nothing, so the hook emits every time as before.
+// Keep in step with the same two functions in the other hook
+function loadedThisSession(cwd, sessionId) {
+  if (!sessionId) return false;
+  try {
+    return readFileSync(join(cwd, "plan", ".orchestrator-loaded"), "utf-8").trim() === sessionId;
+  } catch {
+    return false;
+  }
+}
+
+function recordLoaded(cwd, sessionId) {
+  if (!sessionId) return;
+  try {
+    writeFileSync(join(cwd, "plan", ".orchestrator-loaded"), sessionId + "\n");
+    const gitInfo = join(cwd, ".git", "info");
+    if (!existsSync(join(cwd, ".git"))) return;
+    mkdirSync(gitInfo, { recursive: true });
+    const exclude = join(gitInfo, "exclude");
+    const text = existsSync(exclude) ? readFileSync(exclude, "utf-8") : "";
+    if (text.split("\n").includes("plan/.orchestrator-loaded")) return;
+    appendFileSync(exclude, (text === "" || text.endsWith("\n") ? "" : "\n") + "plan/.orchestrator-loaded\n");
+  } catch { /* a failed record only means the next prompt emits again */ }
 }
 
 try {
@@ -70,6 +100,9 @@ try {
     process.env.RAVINTIO_INITIATIVE_STEP !== "1" && initiativeActive(cwd);
 
   if (!isStrict) {
+    const advisoryId = String(input?.session_id ?? "").trim();
+    if (loadedThisSession(cwd, advisoryId)) process.exit(0);
+    recordLoaded(cwd, advisoryId);
     // Advisory mode: brief banner, always passes.
     if (initiativeDriver) {
       process.stdout.write(

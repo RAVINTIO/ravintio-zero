@@ -1,7 +1,7 @@
 ---
-version: "0.40.1"
-feature: "0000253-refresh-setup"
-updated: "29 Oct 2026"
+version: "0.48.1"
+feature: "0000327-squash-before-main"
+updated: "1 Nov 2026"
 ---
 # About
 
@@ -10,9 +10,9 @@ updated: "29 Oct 2026"
 
 | Field | Value |
 |-------|-------|
-| Version | `0.40.1` |
-| Last feature | `0000253-refresh-setup` |
-| Updated | `29 Oct 2026` |
+| Version | `0.48.1` |
+| Last feature | `0000327-squash-before-main` |
+| Updated | `1 Nov 2026` |
 
 ## What this is
 

@@ -25,7 +25,8 @@ description: Coordinates an initiative from chart to delivery in the human's ses
 2. Never edit the working tree while the driver lock `plan/.initiative-runner.lock` is held.
 3. Never merge into `main` and never commit to `main`. The human merges the initiative PR.
 4. Write `plan/.initiative-ack` with your session id. Never write `plan/.orchestrator-ack`.
-5. The hard limits of the orchestrator apply here too.
+5. A step session never moves, renames, or deletes `plan/.initiative-logs/`, `plan/.initiative-runner.lock`, or `plan/.initiative-queue/`. The driver and the watcher own them.
+6. The hard limits of the orchestrator apply here too.
 
 ## Session start
 
@@ -38,7 +39,7 @@ description: Coordinates an initiative from chart to delivery in the human's ses
 
 ## I-A Chart and I-B Activate
 
-Follow the I-A Chart and I-B Activate sections of the roadmap standards. Take the human's confirmation per item. Chart builds the `## Decisions`, `## Baselines`, `## Criteria`, and `## P1 skips` tables. Chart also does these:
+Follow the I-A Chart and I-B Activate sections of the roadmap standards. Activation lands as a coordinator PR. Take the human's confirmation per item. Chart builds the `## Decisions`, `## Baselines`, `## Criteria`, and `## P1 skips` tables. Chart also does these:
 
 - **Guard.** Run a guard check on each entry. Check whether it widens a guard, such as `merge-guard`, `gate-write`, `ratchet-check`, or another fail-closed hook. Name the guard and the new forms it would allow. Ask for a separate approval for each widening, apart from the chart confirmation.
 - **Confirmation.** Plan each step confirmation. List each confirmation that a step's skills ask for. Record the exact command as a `Confirmation:` row in `## Decisions`, or plan a human stop for that step.
@@ -77,21 +78,32 @@ If the driver prints `Blocked:` or exits non-zero, report the stop line and the 
 
 A `Restart:` line is not a failure. It means a merged step changed the driver, the watcher, or this skill, and the running code is old. Report the line. Then start a new driver and a new watcher without asking. Read this skill again first if the line names it.
 
+A `Setup:` line (`I-D Advance: Setup: step {n} changed {files}. Rerun setup, then start a new driver.`) is a planned stop, not a failure. Report the line, then:
+
+1. Read the setup command from the `Confirmation:` row in `## Decisions` of `plan/current-initiative/initiative.md`.
+2. Run that exact command. If no row names it, or the command differs in any way, stop and ask the human.
+3. Check that every hook in `.claude/settings.json` resolves and runs. If one fails, stop and report the hook.
+4. Start a new driver and a new watcher.
+
+A line that starts `Restart: Setup:` names both. Rerun setup first. Read this skill again if the line names it. Then start one new driver.
+
 ## Backlog queue
 
-While the lock is held, write each new backlog entry to `plan/.initiative-queue/{id}-{slug}/entry.md`. Reserve its id with `node ravintio-zero/scripts/reserve-id.mjs --commit`, which commits `plan/backlog/.next-id` alone at once. When a step merges and the driver is between steps or has exited, move the queued entries to `plan/backlog/` on the initiative branch. Commit each entry on its own. Never touch the queue while a step runs.
+While the lock is held, write each new backlog entry to `plan/.initiative-queue/{id}-{slug}/entry.md`. Reserve its id with `node ravintio-zero/scripts/reserve-id.mjs --commit`, which commits `plan/backlog/.next-id` alone at once. When a step merges and the driver is between steps or has exited, move the queued entries to `plan/backlog/` on a `feat/` branch and land them as a coordinator PR. Never touch the queue while a step runs.
+
+Nothing commits directly on the initiative branch. Activation, queued entries, scope edits, and the I-E Delivery archive and retrospective all follow `## Coordinator PRs` in the roadmap standards. Raise one only while the driver is stopped.
 
 ## Repo instructions during a run
 
 If the human asks for a repo instruction while a step runs, add it to the scope of the current or next pending step in `plan/current-initiative/initiative.md`. The skill never writes the override from the initiative session, because `gate-write` blocks that write. The step writes the file.
 
 - If the driver lock is held, queue the instruction in `plan/.initiative-queue/{slug}/instruction.md`. The step that runs has already read its scope, so the instruction goes to the next pending step.
-- When the driver is between steps or has exited, add the instruction to that step's scope in `initiative.md`. Commit the edit on the initiative branch.
+- When the driver is between steps or has exited, add the instruction to that step's scope in `initiative.md`. Land the edit as a coordinator PR.
 - Tell the human which step took the instruction.
 
 ## I-E Delivery
 
-After the driver exits, follow the I-E Delivery section of the roadmap standards. Then give the final report:
+After the driver exits, follow the I-E Delivery section of the roadmap standards. It runs the history check and sets the merge commit title. Then give the final report:
 
 1. The initiative PR URL.
 2. Each step with its version and tag.

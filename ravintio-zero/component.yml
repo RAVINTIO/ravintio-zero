@@ -1,8 +1,8 @@
 # RAVINTIO Component Manifest
 id: "ravintio-zero"
 name: "RAVINTIO Zero"
-feature: "0000252-chart-rules"
-version: "0.40.1"
+feature: "0000327-squash-before-main"
+version: "0.48.1"
 status: "active"
 type: "component-pack"
 domain: "developer-tooling"
@@ -58,6 +58,7 @@ responsibilities:
   - "Report the Resume Detection signals as fixed lines from scripts/resume-detect.mjs, injected by the session start hook"
   - "Give the ship skill a plain squash-merge line with a literal PR number, and fail the build log at ship Step 3 when a phase has a blank or wrong wall clock, with scripts/build-log-check.mjs"
   - "Require a PATH search before a P3 report says a program is missing, and give a claim that only documentation backs the outcome unverified (docs only), which never counts as verified"
+  - "Stop the initiative driver with an I-D Advance: Setup: line after a merged step that changes installed pack files, so the initiative skill reruns setup before the next step"
 
 exceptions:
   - "Does not generate application code. That is the implement phase's job in consumer projects."
@@ -102,7 +103,7 @@ scope:
   inScope:
     - "Library standards docs for TypeScript, Python, Go, Java, databases"
     - "Formatting standards: date format, locale, verbosity"
-    - "Enforcement hooks: gate-write, check-design, ratchet-check, em-dash-guard, merge-guard, auto-trigger-orchestrator, check-orchestrator-presence, check-reply-prefix"
+    - "Enforcement hooks: gate-write, check-design, ratchet-check, em-dash-guard, merge-guard, block-forced-add, auto-trigger-orchestrator, check-orchestrator-presence, check-reply-prefix"
     - "Git hook: commit-msg"
     - "Roadmap standard and initiative template: standards/roadmap-standards.md, templates/initiative.template.md"
     - "Workflow governance standard and thresholds: standards/workflow-governance-standards.md"
@@ -165,7 +166,7 @@ pipeline:
 
 metadata:
   createdAt: "2026-05-02"
-  updatedAt: "2026-10-28"
+  updatedAt: "2026-11-01"
   createdBy: "agent"
   lastModifiedBy: "agent"
   skill: "ravintio-implement"

@@ -39,7 +39,7 @@ event_entries() {
     if (!Array.isArray(v)) { console.log("not-array"); process.exit(0); }
     for (const e of v) {
       const cmds = (e.hooks || []).map(h => h.command || "").join(" ");
-      const m = /([A-Za-z0-9-]+)\.mjs/.exec(cmds);
+      const m = /([A-Za-z0-9-]+)\.mjs\s*$/.exec(cmds);
       console.log(e.matcher + " " + (m ? m[1] : cmds));
     }
   ' "$1" "$2"
@@ -48,7 +48,7 @@ event_entries() {
 expected_entries() {
   if [ "$1" = "PreToolUse" ]; then
     printf '%s\n' "Write gate-write" "Edit gate-write" "Write ratchet-check" \
-      "Edit ratchet-check" "Write em-dash-guard" "Edit em-dash-guard" "Bash merge-guard"
+      "Edit ratchet-check" "Write em-dash-guard" "Edit em-dash-guard" "Bash merge-guard" "Bash block-forced-add"
   else
     printf '%s\n' ".* auto-trigger-orchestrator" ".* check-orchestrator-presence" ".* check-design"
   fi

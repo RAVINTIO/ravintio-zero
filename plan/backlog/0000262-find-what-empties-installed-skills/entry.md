@@ -2,6 +2,8 @@
 title: "Backlog Entry: 0000262 - find what empties installed skills"
 summary: "Something removed every skill folder under .claude/skills during step 7 of initiative 0000238."
 status: "open"
+priority: "medium"
+theme: "unsorted"
 ---
 # Backlog Entry: 0000262 - find what empties installed skills
 

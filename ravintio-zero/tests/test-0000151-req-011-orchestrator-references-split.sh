@@ -42,12 +42,14 @@ sed -e '/^   - If an initiative is `active` and `plan\/current\/` holds artifact
   -e '/^   - If an initiative is `active` and `plan\/current\/` is empty, start the step/d' \
   -e 's|^3\. \*\*Check the initiative, then scan `plan/current/`\.\*\* Check `plan/current-initiative/` first\.$|3. **Check the initiative, then scan `plan/current/`.** Check `plan/current-initiative/` first. The orchestrator never resumes an initiative.\n   - A step session has `RAVINTIO_INITIATIVE_STEP=1` or the prompt `Run initiative step {n}`. With `plan/current/` artifacts, resume that step through the rest of this list.\n   - A step session with `plan/current/` empty starts the step at `position` and opens with `I-C Run: Starting: {step}`.\n   - If an initiative is `active` and this is not a step session, load `ravintio-initiative` and stop. It owns I-A, I-B, and I-E.|' \
   "$BASE_RENAMED.tmp3" > "$BASE_RENAMED.tmp4"
+# 0000327 offers a hotfix branch in Start Actions step 2 for a run outside an initiative.
 # 0000244 replaced the Pack Index template rows with one rule that names {artifact}.template.md.
 sed -e '/^| Discovery findings | `ravintio-zero\/templates\//d' -e '/^| A feature brief request |/d' \
   -e '/^| The build log | `ravintio-zero\/templates\//d' -e '/^| `plan\/current\/design.md` | `ravintio-zero\/templates\//d' \
   -e '/^| A backlog entry | `ravintio-zero\/templates\//d' -e '/^| An initiative draft or plan | `ravintio-zero\/templates\//d' \
   -e '/^| A pause record |/d' -e '/^| A park record |/d' \
   -e "/^Never assume you know a template's format\\./d" \
+  -e 's|then `git checkout -b feat/{feature-id}` (use|then `git checkout -b hotfix/{feature-id}` (use|' \
   "$BASE_RENAMED.tmp4" > "$BASE_RENAMED"
 
 # Print every non-blank, non-heading line of $1 that no later file holds as a

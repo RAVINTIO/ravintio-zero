@@ -2,6 +2,8 @@
 title: "Backlog Entry: 0000269 - the test runner lists the failing suites by name"
 summary: "A retrospective finding, filed for pickup at a future discovery run."
 status: "open"
+priority: "medium"
+theme: "unsorted"
 ---
 # Backlog Entry: 0000269 - the test runner lists the failing suites by name
 

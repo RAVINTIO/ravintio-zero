@@ -2,6 +2,8 @@
 title: "Backlog Entry: 0000174 - skill evaluation suite against fixed briefs"
 summary: "A deliberate scope split from 0000100, filed for pickup at a future discovery run."
 status: "open"
+priority: "medium"
+theme: "unsorted"
 ---
 # Backlog Entry: 0000174 - skill evaluation suite against fixed briefs
 

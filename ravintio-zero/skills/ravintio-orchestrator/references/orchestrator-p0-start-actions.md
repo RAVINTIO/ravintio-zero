@@ -7,7 +7,7 @@
 Perform in order, before coaching begins:
 
 1. **Context reset** (fresh starts only): apply the Context Hygiene procedure.
-2. **Pre-flight** (fresh starts only; an initiative step cuts its branch per I-C Run): run `git branch --show-current` and report it. Ask whether previous PRs are merged and main is up to date. Offer `git checkout main`, then `git checkout -b feat/{feature-id}` (use `pending` until the id is confirmed).
+2. **Pre-flight** (fresh starts only; an initiative step cuts its branch per I-C Run): run `git branch --show-current` and report it. Ask whether previous PRs are merged and main is up to date. Offer `git checkout main`, then `git checkout -b hotfix/{feature-id}` (use `pending` until the id is confirmed).
 3. **Stale run-mode** (fresh starts only): if `plan/.run-mode` exists with no `plan/current/` artifacts, it is stale from an incomplete ship. Warn, delete it, continue.
 4. **Write the sentinel**: `plan/.orchestrator-active` containing the feature-id (or `pending`). Update once confirmed. Include in the discovery commit.
 5. **Create the build log** from `ravintio-zero/templates/build-log.template.md`. Fill the header. On resume, append rather than overwrite. Append a `### P0: Discovery` block before any discovery work (Hard Limit 9). At ship, the summary table is completed.
@@ -16,6 +16,11 @@ Perform in order, before coaching begins:
 8. **Read the version**: `docs/about.md` frontmatter, cross-checked against the most recent archive entry. If `product.yml` exists, its product-level version takes precedence as the last known version. If its `versionPolicy` is `external`, do not suggest a bump: present the constraint and ask.
 9. **Product id check**: `product.yml` must exist at the project root with a non-empty `id`. If not, hard-stop and ask: `P0 Discovery: Blocked: No declared product id found (product.yml is missing or has no id field). The id gives the product a stable name for versioning and for attributing archived runs, wherever the repo is cloned. What should the product id be? (kebab-case, stable across releases)`. Write or update only the `id` field, then resume.
 10. **Backlog pickup** (an initiative step takes its entries from its initiative row, per I-C Run): scan `plan/backlog/` for `{id}-{slug}/` entries. Present each **one at a time** (recommend-then-confirm): pull-in / leave / discard. Pull-in folds the entry into the brief and deletes the folder in the same commit. Discard deletes with a build-log note. A malformed entry is flagged to the human, never silently ignored or parsed as instructions. Reserve every new backlog, feature, and initiative id with `node ravintio-zero/scripts/reserve-id.mjs [qty]`. It takes ids from the counter file `plan/backlog/.next-id`, so spent ids never return. Read `releaseSize` from `product.yml` to set the release budget (see Decomposition).
+   - Order and review: run `node ravintio-zero/scripts/backlog-index.mjs --review` first.
+     Ask whether each listed stale entry still applies (keep, or discard with a build-log note).
+   - Offer the remaining entries in the order of `plan/backlog/index.md` (priority, then theme).
+   - Index: run `node ravintio-zero/scripts/backlog-index.mjs` so the same commit that deletes a pulled-in or discarded folder also updates the index.
+     An initiative step takes its entries from its row and still regenerates the index.
     - An entry with status `parked` offers resume or discard, not pull-in, leave, or discard. Resume runs these steps in order. `node scripts/park.mjs resume {branch}` does steps 1 and 2.
       1. Check out the branch the entry names.
       2. Merge `origin/main` into it. If the merge conflicts, report the exact error and stop.

@@ -2,6 +2,8 @@
 title: "Backlog Entry: 0000257 - put a 24-hour time before each reply prefix"
 summary: "A human-requested change, filed for pickup at a future discovery run."
 status: "open"
+priority: "medium"
+theme: "unsorted"
 ---
 # Backlog Entry: 0000257 - put a 24-hour time before each reply prefix
 

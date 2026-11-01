@@ -110,7 +110,11 @@ assert_contains "changed ravintio-zero/scripts/initiative-run.mjs, ravintio-zero
 echo ""
 echo "=== req-002 AC-3: no change gives no restart ==="
 R="$(make_fixture ac3)"
-run_driver "$R" "ravintio-zero/skills/ravintio-ship/SKILL.md"
+mkdir -p "$R/ravintio-zero/tests"
+printf 'original\n' > "$R/ravintio-zero/tests/t.sh"
+git -C "$R" add -A
+git -C "$R" commit -qm "add test file"
+run_driver "$R" "ravintio-zero/tests/t.sh"
 assert_equals "0" "$CODE" "req-002 AC-3: driver finishes"
 assert_not_contains "Restart:" "$OUT" "req-002 AC-3: no restart line"
 assert_equals "2" "$(wc -l < "$R/env.log" | tr -d ' ')" "req-002 AC-3: both steps ran"

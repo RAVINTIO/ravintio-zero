@@ -2,6 +2,8 @@
 title: "Backlog Entry: 0000260 - test backlog prose at filing"
 summary: "A backlog entry that breaks a wording test is only found when a step runs the suite."
 status: "open"
+priority: "medium"
+theme: "unsorted"
 ---
 # Backlog Entry: 0000260 - test backlog prose at filing
 

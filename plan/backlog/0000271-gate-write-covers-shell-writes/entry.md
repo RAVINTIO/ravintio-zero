@@ -2,6 +2,8 @@
 title: "Backlog Entry: 0000271 - gate-write checks file writes made from the shell"
 summary: "A retrospective finding, filed for pickup at a future discovery run."
 status: "open"
+priority: "medium"
+theme: "unsorted"
 ---
 # Backlog Entry: 0000271 - gate-write checks file writes made from the shell
 

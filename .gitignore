@@ -32,3 +32,11 @@ plan/.telemetry-receipts/
 # Human session ack (0000218) - local to the human's session, never committed.
 # plan/.orchestrator-ack stays tracked, because a step session owns it.
 plan/.initiative-ack
+
+# Initiative driver state (0000317). Setup also writes these to
+# .git/info/exclude, which a fresh clone lacks, so CI sees them only here.
+plan/.initiative-logs/
+plan/.initiative-queue/
+plan/.initiative-runner.lock
+# Once-per-session record for the orchestrator load instruction (0000320).
+plan/.orchestrator-loaded

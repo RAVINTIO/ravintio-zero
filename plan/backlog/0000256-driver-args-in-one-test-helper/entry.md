@@ -2,6 +2,8 @@
 title: "Backlog Entry: 0000256 - hold the expected claude arguments in one test helper"
 summary: "Four driver suites repeat the expected claude argument string, so each driver flag change edits all four."
 status: "open"
+priority: "medium"
+theme: "unsorted"
 ---
 # Backlog Entry: 0000256 - hold the expected claude arguments in one test helper
 

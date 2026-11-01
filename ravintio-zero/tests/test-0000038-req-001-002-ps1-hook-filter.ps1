@@ -118,7 +118,7 @@ $odd = @($settings.hooks.PreToolUse)[0]
 Assert-Equal 'Write' "$($odd.matcher)" "req-001: the non-array entry stays first"
 Assert-True ($odd.hooks -is [string]) "req-001: the non-array hooks value stays a string"
 Assert-Equal 'node .claude/hooks/enforcement/gate-write.mjs' "$($odd.hooks)" "req-001: the non-array hooks value keeps its text"
-Assert-Equal 8 (@($settings.hooks.PreToolUse).Count) "req-001: the seven fresh PreToolUse entries follow it"
+Assert-Equal 9 (@($settings.hooks.PreToolUse).Count) "req-001: the eight fresh PreToolUse entries follow it"
 Remove-SetupWorkspace $ws
 
 }

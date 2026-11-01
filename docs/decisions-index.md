@@ -3,7 +3,7 @@
 > Change record. Index of all ADRs across all features. Updated after every pipeline run.
 > Do not archive this file. Update it in place.
 
-Last updated: 0000241-watcher-false-events
+Last updated: 0000327-squash-before-main
 
 ---
 
@@ -334,3 +334,63 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 | ADR | Title | Status | Summary |
 |-----|-------|--------|---------|
 | ADR-001 | the build log check is its own script | accepted | `build-log-check.mjs` checks the build log at ship Step 3, before Archive. `consistency-check.mjs` runs at P1, before the phase blocks exist, so it stays apart. |
+
+### Feature 0000313: driver-setup-stop
+
+| ADR | Title | Status | Summary |
+|-----|-------|--------|---------|
+| ADR-001 | one stop line for both stops | accepted | A step that changes a restart file and a setup path gets one `I-D Advance: Restart: Setup:` line. A restart-only or setup-only step keeps its own line. |
+
+### Feature 0000314: step-logs-stay-in-place
+
+| ADR | Title | Status | Summary |
+|-----|-------|--------|---------|
+| ADR-001 | skip the step log folder in the phase guard | accepted | The phase guard skips `plan/.initiative-logs` only. It keeps scanning every other path, so a new untracked skill file is still checked. |
+
+### Feature 0000315: isolated-test-state
+
+| ADR | Title | Status | Summary |
+|-----|-------|--------|---------|
+| ADR-001 | clear the environment in the runner | accepted | The runners remove every `RAVINTIO_` variable from each suite except `RAVINTIO_PWSH`, `RAVINTIO_TIMING_FILE`, and `RAVINTIO_TEST_QUIET`. They compare tracked and untracked files before and after the run and fail on a change. |
+
+### Feature 0000316: hooks-fail-closed
+
+| ADR | Title | Status | Summary |
+|-----|-------|--------|---------|
+| ADR-001 | run every hook through a launcher from the project root | accepted | Setup wires each hook as `guard-run.mjs {guard\|advisory} {hook}.mjs` under `${CLAUDE_PROJECT_DIR}` and sets `CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR=1`. In guard mode a missing or crashing script exits 2 and names the script. |
+
+### Feature 0000317: block-forced-adds
+
+| ADR | Title | Status | Summary |
+|-----|-------|--------|---------|
+| ADR-001 | block forced adds with a guard and a CI check | accepted | The `block-forced-add` Bash guard blocks `git add -f` and its forms. The tracked `.gitignore` lists the driver paths. Ship and CI fail when `git ls-files -ci --exclude-standard` lists a file. |
+
+### Feature 0000318: titled-coordinator-prs
+
+| ADR | Title | Status | Summary |
+|-----|-------|--------|---------|
+| ADR-001 | coordinator PRs ride the existing merge-guard | accepted | Coordinator work reaches `initiative/*` as titled PRs that the agent squashes after a passing local suite and green CI. The written carve-out names them. `merge-guard.mjs` is unchanged, and a test pins its behaviour. |
+
+### Feature 0000319: initiative-history-checks
+
+| ADR | Title | Status | Summary |
+|-----|-------|--------|---------|
+| ADR-001 | check history with two stateless git scripts | accepted | `check-initiative-history.mjs` fails on an untitled first-parent commit and has no exception list. `check-main-merge.mjs` fails a one-parent commit from an initiative PR. CI runs both, I-E Delivery runs the first, and the human applies the ruleset. |
+
+### Feature 0000320: quiet-session-start
+
+| ADR | Title | Status | Summary |
+|-----|-------|--------|---------|
+| ADR-001 | migration ledger outside the pack | accepted | Migration state lives in `plan/state/migrations.md`. `resume-detect.mjs` reads it, the migrator appends to it, and a `**Detect:**` line lets the script see a condition turn true. Migration 0006 copies the `_done/` records. |
+
+### Feature 0000321: backlog-triage
+
+| ADR | Title | Status | Summary |
+|-----|-------|--------|---------|
+| ADR-001 | generated backlog index checked in CI | accepted | `backlog-index.mjs` writes `plan/backlog/index.md` from the entries. CI fails when the committed file differs from a fresh run. The review age is `backlogReviewDays` in `product.yml`. |
+
+### Feature 0000327: squash-before-main
+
+| ADR | Title | Status | Summary |
+|-----|-------|--------|---------|
+| ADR-001 | CI checks the branch and commit count of a PR into main | accepted | `check-pr-into-main.mjs` runs in the CI job `squash-before-main`. It passes a `chore/*` or `hotfix/*` PR with one commit, ignores `initiative/*`, and fails everything else. No hook changes. |

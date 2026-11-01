@@ -3,6 +3,8 @@
 **Target standard:** `plan/roadmap/{id}-{slug}/initiative.md`, `.github/workflows/ravintio.yml`, and `plan/.initiative-logs/`
 **Scope:** consumer repo root
 **Applies when:** a `plan/roadmap/*/roadmap.md` file exists, or `.github/workflows/ravintio.yml` holds a `roadmap/**` pattern. In any other repo, including the pack source, the migration stays pending and nothing runs.
+**Detect:** child-exists plan/roadmap roadmap.md | contains .github/workflows/ravintio.yml roadmap/**
+**Detect note:** `resume-detect.mjs` reads the `Detect:` line. Keep it on one line, with items joined by ` | `.
 **Safe to skip:** No. The pack reads `initiative.md` and the `initiative/**` branch pattern, so a draft or pattern left under the old name goes unseen. Re-running is safe.
 
 ---

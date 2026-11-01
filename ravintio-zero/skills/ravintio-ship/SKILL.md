@@ -15,7 +15,7 @@ description: Archive, build assessment, changelog, version, and PR, behind the f
 2. Do not modify application code or pack files during this phase.
 3. Never skip the archive step. A populated `plan/current/` breaks resume detection for the next feature.
 4. Read `plan/.run-mode` before Step 8. In `gated`, the final gate stops before the PR. In `autonomous`, raise the PR without a stop. The PR is where the human reviews the run.
-5. Merging into `main` stays human-only in every run mode, and the agent never commits to `main`. The one exception is `gh pr merge --squash` for the agent's own feature PR into `initiative/*`, after a clean P3 and green CI. The `merge-guard` hook enforces it. See `ravintio-zero/standards/roadmap-standards.md`.
+5. Merging into `main` stays human-only in every run mode, and the agent never commits to `main`. The one exception is `gh pr merge --squash` for the agent's own feature PR into `initiative/*`, after a clean P3 and green CI. The `merge-guard` hook enforces it. See `ravintio-zero/standards/roadmap-standards.md` and `## PRs into main`.
 6. Credentials are never in your context.
 7. One question at a time.
 
@@ -92,7 +92,7 @@ Create no tag. After the human merges the PR, the CI `release-tag` job tags the 
 
 ### Step 8: Clear sentinels
 
-Read `plan/.run-mode` first and keep the value for Step 10. Delete `plan/.orchestrator-active`, `plan/.orchestrator-ack`, and `plan/.run-mode` if present. Also delete `plan/.run-speed` if present. Stage the deletions and commit. Confirm with `git ls-files` that none remain tracked.
+Read `plan/.run-mode` first and keep the value for Step 10. Delete `plan/.orchestrator-active`, `plan/.orchestrator-ack`, and `plan/.run-mode` if present. Also delete `plan/.run-speed` if present. Stage the deletions and commit. Confirm with `git ls-files` that none remain tracked. Then run `git ls-files -ci --exclude-standard`. If it lists a file, stop with `P4 Ship: Blocked: a committed file matches an ignore rule: {files}`, unstage it, and never force-add.
 
 Do this before any push, in every run mode and for both PR options, so no PR carries the sentinels.
 
@@ -171,6 +171,17 @@ P4 Ship: Complete: PR #{n} ready for your review
 
 Use the run mode read in Step 8, because Step 8 deletes `plan/.run-mode`. Merging the PR is human-only in every mode, no exception.
 
+## PRs into main
+
+A PR into `main` comes from a `chore/*`, `hotfix/*`, or `initiative/*` branch. Any other head fails the `squash-before-main` CI job.
+
+- Before you ask the human to merge, the branch holds one commit on `origin/main`. Skip this for `initiative/*`.
+- Title the commit per `ravintio-zero/standards/commit-standards.md` and name the PR number. List the squashed commit titles in the body.
+- For `chore/*`, squash in place and push with `git push --force-with-lease origin {branch}`. Only `chore/*` may use `--force-with-lease`. Never use plain `--force`.
+- For `hotfix/*` with more than one commit, cut a new branch from `origin/main` and build one squashed commit there. Raise a replacement PR. Close the old PR with a link to the new one.
+- You never force-push `main`, `initiative/*`, `feat/*`, or `hotfix/*`.
+- Wait for green CI on the single-commit head before you ask the human to merge.
+
 ## Parallelism
 
 Ship steps run in order, because most steps read the one before.
@@ -187,6 +198,8 @@ Each unit commits its own files by path, one commit at a time, per `## Fast batc
 ## Initiative steps
 
 When `plan/current-initiative/initiative.md` has `status: active`, read `ravintio-zero/standards/roadmap-standards.md` first. Step 9 gives way to its I-D Advance stage, and I-E Delivery follows the last step. Outside an initiative, ignore this section.
+
+After `gh pr create`, the agent sets `**PR:**` to the PR number, commits, and pushes it before it waits on CI and before the squash. It never commits after the squash.
 
 To merge the step PR, copy this plain line. Replace `{n}` with the literal PR number from the `gh pr create` output. Use no command substitution, variables, or pipes on the line, or `merge-guard` cannot confirm the squash and blocks it.
 

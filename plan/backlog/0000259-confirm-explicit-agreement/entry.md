@@ -2,6 +2,8 @@
 title: "Backlog Entry: 0000259 - ask for explicit agreement and one permission at a time"
 summary: "A human-requested change, filed for pickup at a future discovery run."
 status: "open"
+priority: "medium"
+theme: "unsorted"
 ---
 # Backlog Entry: 0000259 - ask for explicit agreement and one permission at a time
 

@@ -279,12 +279,35 @@ function Write-SettingsOrExit {
 }
 
 function New-HookEntry {
-    # One settings.json hook entry: a matcher and one node command.
+    # One settings.json hook entry: a matcher and one node command. The command
+    # runs the module through guard-run.mjs from the project root (0000316
+    # ADR-001). The placeholder is single-quoted so PowerShell leaves it for
+    # Claude Code to substitute. The four guards run in guard mode, where a
+    # missing or crashing script exits 2. The rest run in advisory mode.
     param([string]$Matcher, [string]$Module, [string]$HooksDir)
+    $mode = if (@('gate-write', 'ratchet-check', 'em-dash-guard', 'merge-guard', 'block-forced-add') -contains $Module) { 'guard' } else { 'advisory' }
+    $command = 'node "${CLAUDE_PROJECT_DIR}/' + $HooksDir + '/guard-run.mjs" ' + $mode + ' ' + $Module + '.mjs'
     [ordered]@{
         matcher = $Matcher
-        hooks   = @([ordered]@{ type = 'command'; command = "node `"$HooksDir/$Module.mjs`"" })
+        hooks   = @([ordered]@{ type = 'command'; command = $command })
     }
+}
+
+function Set-BashProjectRootEnv {
+    # 0000316 req-001: keep Bash in the project root. Sets
+    # CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR to 1 under env and keeps every
+    # other env entry. A present env value that is not an object is replaced,
+    # with a warning that names the key and never the value. setup.sh matches.
+    param($Settings, [string]$SettingsRel)
+    $envProp = $Settings.PSObject.Properties['env']
+    if ($null -eq $envProp -or $null -eq $envProp.Value) {
+        $Settings | Add-Member -NotePropertyName 'env' -NotePropertyValue ([PSCustomObject]@{}) -Force
+    }
+    elseif ($envProp.Value -isnot [System.Management.Automation.PSCustomObject]) {
+        [Console]::Error.WriteLine("  ! Warning: env in $SettingsRel is not an object. Setup replaced it with the RAVINTIO setting.")
+        $Settings | Add-Member -NotePropertyName 'env' -NotePropertyValue ([PSCustomObject]@{}) -Force
+    }
+    $Settings.env | Add-Member -NotePropertyName 'CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR' -NotePropertyValue '1' -Force
 }
 
 function Remove-RavintioHookCommands {
@@ -447,7 +470,8 @@ function Merge-EnforcementHookSettings {
         (New-HookEntry 'Edit' 'ratchet-check' $HooksDir),
         (New-HookEntry 'Write' 'em-dash-guard' $HooksDir),
         (New-HookEntry 'Edit' 'em-dash-guard' $HooksDir),
-        (New-HookEntry 'Bash' 'merge-guard' $HooksDir)
+        (New-HookEntry 'Bash' 'merge-guard' $HooksDir),
+        (New-HookEntry 'Bash' 'block-forced-add' $HooksDir)
     )
     $userPromptEntries = @(
         (New-HookEntry '.*' 'auto-trigger-orchestrator' $HooksDir),
@@ -479,6 +503,7 @@ function Merge-EnforcementHookSettings {
         if (-not $existing.hooks) {
             $existing | Add-Member -NotePropertyName 'hooks' -NotePropertyValue ([PSCustomObject]@{}) -Force
         }
+        Set-BashProjectRootEnv -Settings $existing -SettingsRel $SettingsRel
 
         # A present value that is not an array is non-array (0000037 ADR-003).
         # Warn and replace it with the RAVINTIO entries. The warning never
@@ -523,7 +548,7 @@ function Merge-EnforcementHookSettings {
         }
         # Case-sensitive, and only <module>.mjs at a path boundary (0000035 S-004).
         $filtered = @(Remove-RavintioHookCommands -Entries $existing.hooks.PreToolUse `
-            -Pattern '(^|[\s"''/\\])(gate-write|ratchet-check|em-dash-guard|merge-guard)\.mjs\b')
+            -Pattern '(^|[\s"''/\\])(gate-write|ratchet-check|em-dash-guard|merge-guard|block-forced-add)\.mjs\b')
         $existing.hooks.PreToolUse = $filtered + $preToolEntries
 
         # Merge UserPromptSubmit. Remove stale commands one at a time, then
@@ -552,6 +577,7 @@ function Merge-EnforcementHookSettings {
         if (-not (Test-Path $dir)) { New-Item -ItemType Directory -Path $dir -Force | Out-Null }
 
         $settings = [PSCustomObject]@{
+            env   = [PSCustomObject]@{ CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR = '1' }
             hooks = [PSCustomObject]@{
                 PreToolUse       = @($preToolEntries)
                 UserPromptSubmit = @($userPromptEntries)
@@ -736,13 +762,16 @@ function Install-CodexHooks {
     Write-Host "  Installing RAVINTIO Codex hooks"
 
     [System.IO.Directory]::CreateDirectory($dest) | Out-Null
-    foreach ($name in @('merge-guard.mjs', 'read-stdin.mjs')) {
+    foreach ($name in @('merge-guard.mjs', 'read-stdin.mjs', 'guard-run.mjs')) {
         Copy-RavintioItem (Join-Path $src $name) $dest
         Write-Host "  + $HooksDirRel/$name"
     }
 
     $mark = "$HooksDirRel/merge-guard.mjs"
-    $commandLine = 'node "$(git rev-parse --show-toplevel)/' + $mark + '"'
+    # 0000316 req-002: Codex sets no project-dir variable, so the command holds
+    # the absolute project path.
+    $rootPath = ($ProjectRoot -replace '\\', '/').TrimEnd('/')
+    $commandLine = 'node "' + $rootPath + '/' + $HooksDirRel + '/guard-run.mjs" guard merge-guard.mjs'
     $entry = [ordered]@{
         matcher = 'Bash'
         hooks   = @([ordered]@{ type = 'command'; command = $commandLine; statusMessage = 'Checking merge command' })
@@ -766,7 +795,7 @@ function Install-CodexHooks {
         if (-not $existing.hooks.PreToolUse) {
             $existing.hooks | Add-Member -NotePropertyName 'PreToolUse' -NotePropertyValue @() -Force
         }
-        $pattern = '(^|[\s"''/\\])' + [regex]::Escape($mark)
+        $pattern = '(^|[\s"''/\\])(' + [regex]::Escape($mark) + '|' + [regex]::Escape("$HooksDirRel/guard-run.mjs") + ')'
         $filtered = @(Remove-RavintioHookCommands -Entries $existing.hooks.PreToolUse -Pattern $pattern)
         $existing.hooks.PreToolUse = $filtered + @($entry)
         Write-SettingsOrExit -Path $hooksFile -Json ($existing | ConvertTo-Json -Depth 100) -SettingsRel $HooksFileRel
