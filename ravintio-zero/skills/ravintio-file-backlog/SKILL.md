@@ -55,6 +55,8 @@ A copied entry gets a local id. If the entry comes from another repo, reserve a 
 
 Write `plan/backlog/{id}-{slug}/entry.md` in the target repo, in that repo's template format. Drop the template's guidance blockquote. Fill or remove every `{{...}}` placeholder. Fill every field from the entry content. Omit the `**Parked branch:**` line for an open entry. When no run is active, write `none (human request)` for the source feature and source phase, and `human request` for the deferral source.
 
+Set `priority` (`high`, `medium`, or `low`) and `theme` (kebab-case) in the frontmatter. If the human gives neither, keep the template defaults. When the target repo has `ravintio-zero/scripts/backlog-index.mjs`, run `node ravintio-zero/scripts/backlog-index.mjs` there afterwards.
+
 ## Step 7 - Report
 
 Report the path written. Tell the human the entry is uncommitted and that they stage and commit it when they choose.

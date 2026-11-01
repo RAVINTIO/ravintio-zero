@@ -2,6 +2,8 @@
 title: "Backlog Entry: {{id}} - {{short-title}}"
 summary: "A discovered-but-out-of-scope item deferred for pickup at a future discovery run."
 status: "open"  # open | parked
+priority: "medium"  # high | medium | low
+theme: "unsorted"  # kebab-case group name
 ---
 # Backlog Entry: {{id}} - {{short-title}}
 
@@ -35,6 +37,11 @@ status: "open"  # open | parked
 > status is `parked`, and its `**Parked branch:**` field names the feature branch
 > that holds the shelved work. Other entries keep status `open` and leave the
 > field out.
+>
+> **Priority and theme** sort the backlog. `priority` is `high`, `medium`, or `low`.
+> `theme` is a kebab-case group name. A missing field reads as `medium` and
+> `unsorted`. Generate the index with `node ravintio-zero/scripts/backlog-index.mjs`.
+> Regenerate it in the same commit as any entry change.
 
 **Source feature:** {{feature-id that discovered this | none (human request)}}
 **Source phase:** {{P0–P4 phase active when discovered | none (human request)}}
