@@ -68,7 +68,7 @@ Scope Lock (cross-session continuity): The index is a tracked file that CI compa
 |-------|-------|
 | Start | `2026-11-01T04:35:03Z` |
 | End | `2026-11-01T04:50:38Z` |
-| Wall clock | `17` |
+| Wall clock | `16` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 5 |
@@ -105,3 +105,32 @@ Self-correction: security review found one medium and four low findings. Cycle 1
 | Parallel task batches | 1 |
 | Notes | Execution verification ran inline while the security review ran as one subagent. One self-correction cycle. Full suite passes. The acceptance evidence is in autonomous mode. |
 
+Gate accepted: P3 validate (autonomous, draft-accepted (initiative)) 2026-11-01T05:03:59Z
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-01T05:03:59Z` |
+| End | `2026-11-01T05:04:39Z` |
+| Wall clock | `1` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship, ravintio-retrospective |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Ran inline. The version bump, ledger update, and changelog were small and touched shared files. |
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `32` |
+| Total agents spawned | `6` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `2` |
+| Primary tier agent calls | `6` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `1` |
+| Phases skipped | none |
