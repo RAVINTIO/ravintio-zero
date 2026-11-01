@@ -10,8 +10,8 @@
 
 id: "ravintio-zero"
 name: "RAVINTIO Zero"
-version: "0.47.0"
-feature: "0000321-backlog-triage"
+version: "0.48.0"
+feature: "0000327-squash-before-main"
 
 versionPolicy: "max-component-version"
 
