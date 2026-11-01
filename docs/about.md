@@ -1,6 +1,6 @@
 ---
-version: "0.44.0"
-feature: "0000318-titled-coordinator-prs"
+version: "0.45.0"
+feature: "0000319-initiative-history-checks"
 updated: "1 Nov 2026"
 ---
 # About
@@ -10,8 +10,8 @@ updated: "1 Nov 2026"
 
 | Field | Value |
 |-------|-------|
-| Version | `0.44.0` |
-| Last feature | `0000318-titled-coordinator-prs` |
+| Version | `0.45.0` |
+| Last feature | `0000319-initiative-history-checks` |
 | Updated | `1 Nov 2026` |
 
 ## What this is
