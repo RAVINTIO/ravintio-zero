@@ -103,7 +103,7 @@ If the human asks for a repo instruction while a step runs, add it to the scope 
 
 ## I-E Delivery
 
-After the driver exits, follow the I-E Delivery section of the roadmap standards. Then give the final report:
+After the driver exits, follow the I-E Delivery section of the roadmap standards. It runs the history check and sets the merge commit title. Then give the final report:
 
 1. The initiative PR URL.
 2. Each step with its version and tag.
