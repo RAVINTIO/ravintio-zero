@@ -28,7 +28,7 @@
 - Stack: Node.js scripts (built-in modules only), Markdown skills and migrations, Bash tests
 - Components: `ravintio-zero`
 - Data ownership: `plan/state/migrations.md` (tracked ledger) and `plan/.orchestrator-loaded` (ignored session record), both owned by `ravintio-zero`
-- Deployment: pack files copied by setup. Setup adds the ignore rule for `plan/.orchestrator-loaded`.
+- Deployment: pack files copied by setup. The hook adds `plan/.orchestrator-loaded` to `.git/info/exclude`, as `check-reply-prefix.mjs` does for its log. This repo also lists it in `.gitignore`. Setup needs no change.
 - API versioning: not applicable
 - Design choices:
   - The auto-trigger hook writes the session id to `plan/.orchestrator-loaded` when it emits the instruction. The instruction then fires only when the id differs. With no `session_id`, it fires as today.
@@ -40,7 +40,7 @@
   - `check-reply-prefix.mjs` checks `last_assistant_message`. If the field is absent, it checks only an assistant message with no `tool_use` after the last user prompt, rereads the transcript for about one second, then exits silently.
 
 ## Scope
-- In: the three hooks and script above, the migrator skill, migration 0006 and its helpers, ledger, setup ignore rule, tests, docs.
+- In: the three hooks and script above, the migrator skill, migration 0006 and its helper, the ledger, the `.gitignore` line, tests, docs.
 - Out: the pack-version check (entry 0000272), any blocking hook.
 - Deferred: none.
 

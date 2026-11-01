@@ -48,3 +48,18 @@ Scope Lock (happy path): A session gets the load instruction once, a migration f
 Scope Lock (first-run path): A repo with no ledger or no loaded-session file reports as today, and the first report writes the record. [source: draft-accepted (initiative)]
 Scope Lock (error path): An unreadable ledger or state file makes the hooks and script report as today, and the prefix hook exits silently when it finds no final reply. [source: draft-accepted (initiative)]
 Scope Lock (cross-session continuity): The record sits in git-tracked or ignored files outside the pack, so a pack update or a new session reads the same state. [source: draft-accepted (initiative)]
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-01T03:33:38Z` |
+| End | `2026-11-01T03:33:52Z` |
+| Wall clock | `4` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Artifacts are small and share one ledger format, so they are written inline in one context. |
+
