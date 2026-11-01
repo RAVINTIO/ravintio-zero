@@ -52,6 +52,7 @@ add_entry "$R" 0000010-low-alpha "Backlog Entry: 0000010 - low alpha" 'status: "
 add_entry "$R" 0000011-high-alpha "Backlog Entry: 0000011 - high alpha" 'status: "open"' 'priority: high' 'theme: tooling'
 add_entry "$R" 0000012-med-zed "Backlog Entry: 0000012 - med | zed" 'status: "parked"' 'priority: medium' 'theme: docs'
 add_entry "$R" 0000013-none "Backlog Entry: 0000013 - none" 'status: "open"'
+add_entry "$R" 0000014-back-slash 'Backlog Entry: 0000014 - back \| slash' 'status: "open"'
 OUT=$(run "$R"); CODE=$?
 IDX="$R/plan/backlog/index.md"
 assert_equals "0" "$CODE" "generator exits 0"
@@ -63,6 +64,7 @@ assert_contains '| Id | Entry | Priority | Status | Filed |' "$T" "table header"
 assert_contains '| 0000011 | high alpha | high | open | 2026-10-25 |' "$T" "high row, prefix stripped"
 assert_contains '| 0000012 | med \| zed | medium | parked | 2026-10-25 |' "$T" "parked listed, pipe escaped"
 assert_contains '| 0000013 | none | medium | open | 2026-10-25 |' "$T" "defaults to medium"
+assert_contains '| 0000014 | back \\\| slash | medium | open | 2026-10-25 |' "$T" "backslash escaped before a pipe"
 DOCS=$(grep -n '^## docs$' "$IDX" | cut -d: -f1)
 TOOL=$(grep -n '^## tooling$' "$IDX" | cut -d: -f1)
 UNS=$(grep -n '^## unsorted$' "$IDX" | cut -d: -f1)
@@ -70,7 +72,7 @@ assert_equals "yes" "$([ -n "$DOCS" ] && [ "$DOCS" -lt "$TOOL" ] && [ "$TOOL" -l
 H=$(grep -n '0000011 |' "$IDX" | cut -d: -f1)
 L=$(grep -n '0000010 |' "$IDX" | cut -d: -f1)
 assert_equals "yes" "$([ "$H" -lt "$L" ] && echo yes || echo no)" "high before low inside a theme"
-assert_equals "4" "$(grep -c '^| 00000' "$IDX")" "one row per entry"
+assert_equals "5" "$(grep -c '^| 00000' "$IDX")" "one row per entry"
 assert_equals "yes" "$([ -z "$(tail -c 1 "$IDX")" ] && [ -n "$(tail -c 2 "$IDX" | head -c 1)" ] && echo yes || echo no)" "ends with a single newline"
 assert_equals "" "$(ls "$R/plan" | grep -v '^backlog$')" "creates nothing outside plan/backlog"
 assert_equals "" "$(ls "$R/plan/backlog" | grep -v -e '^index.md$' -e '^0000')" "creates only index.md"

@@ -2,7 +2,7 @@
 id: "ravintio-zero"
 name: "RAVINTIO Zero"
 feature: "0000327-squash-before-main"
-version: "0.48.0"
+version: "0.48.1"
 status: "active"
 type: "component-pack"
 domain: "developer-tooling"
@@ -166,7 +166,7 @@ pipeline:
 
 metadata:
   createdAt: "2026-05-02"
-  updatedAt: "2026-10-28"
+  updatedAt: "2026-11-01"
   createdBy: "agent"
   lastModifiedBy: "agent"
   skill: "ravintio-implement"

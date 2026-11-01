@@ -154,7 +154,7 @@ function render(entries) {
       .filter((e) => e.theme === theme)
       .sort((a, b) => PRIORITIES.indexOf(a.priority) - PRIORITIES.indexOf(b.priority) || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
     for (const e of rows) {
-      const title = e.title.replace(/\|/g, '\\|');
+      const title = e.title.replace(/[\\|]/g, '\\$&');
       out.push(`| ${e.id} | ${title} | ${e.priority} | ${e.status} | ${e.filed || 'undated'} |`);
     }
   }
