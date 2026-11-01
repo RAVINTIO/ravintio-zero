@@ -80,3 +80,10 @@ Scope Lock (cross-session continuity): The check runs in CI on every PR into mai
 - In progress: U-001 (2026-11-01T05:32:29Z)
 - In progress: U-003 (2026-11-01T05:32:29Z)
 - In progress: U-004 (2026-11-01T05:32:29Z)
+- Done: U-001 (2026-11-01T05:34:21Z)
+- Done: U-003 (2026-11-01T05:34:21Z)
+- Done: U-004 (2026-11-01T05:34:21Z)
+- In progress: U-002 (2026-11-01T05:34:21Z)
+- Done: U-002 (2026-11-01T05:34:21Z)
+- Done: U-005 (2026-11-01T05:34:21Z)
+Deviation: U-004 added one sed rule to test-0000151-req-011-orchestrator-references-split.sh, because the step 2 change from feat/ to hotfix/ broke its comparison with the frozen fixture. The fixture is unchanged.
