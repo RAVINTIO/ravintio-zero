@@ -188,6 +188,8 @@ Each unit commits its own files by path, one commit at a time, per `## Fast batc
 
 When `plan/current-initiative/initiative.md` has `status: active`, read `ravintio-zero/standards/roadmap-standards.md` first. Step 9 gives way to its I-D Advance stage, and I-E Delivery follows the last step. Outside an initiative, ignore this section.
 
+After `gh pr create`, the agent sets `**PR:**` to the PR number, commits, and pushes it before it waits on CI and before the squash. It never commits after the squash.
+
 To merge the step PR, copy this plain line. Replace `{n}` with the literal PR number from the `gh pr create` output. Use no command substitution, variables, or pipes on the line, or `merge-guard` cannot confirm the squash and blocks it.
 
 ```bash

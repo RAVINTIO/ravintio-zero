@@ -3,7 +3,7 @@
 > Change record. Index of all ADRs across all features. Updated after every pipeline run.
 > Do not archive this file. Update it in place.
 
-Last updated: 0000317-block-forced-adds
+Last updated: 0000318-titled-coordinator-prs
 
 ---
 
@@ -364,3 +364,9 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 | ADR | Title | Status | Summary |
 |-----|-------|--------|---------|
 | ADR-001 | block forced adds with a guard and a CI check | accepted | The `block-forced-add` Bash guard blocks `git add -f` and its forms. The tracked `.gitignore` lists the driver paths. Ship and CI fail when `git ls-files -ci --exclude-standard` lists a file. |
+
+### Feature 0000318: titled-coordinator-prs
+
+| ADR | Title | Status | Summary |
+|-----|-------|--------|---------|
+| ADR-001 | coordinator PRs ride the existing merge-guard | accepted | Coordinator work reaches `initiative/*` as titled PRs that the agent squashes after a passing local suite and green CI. The written carve-out names them. `merge-guard.mjs` is unchanged, and a test pins its behaviour. |
