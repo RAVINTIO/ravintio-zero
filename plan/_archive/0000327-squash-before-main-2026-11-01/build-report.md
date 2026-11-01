@@ -56,3 +56,4 @@ Postmortems: none
 | Human corrections at gates | 0 | 2 | ok |
 
 Breaches: 0. The gate reports and does not block. Counts come from marker lines only.
+Retrospective: plan/retrospectives/0000327-squash-before-main-2026-11-01.md
