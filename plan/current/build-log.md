@@ -67,14 +67,14 @@ Scope Lock (cross-session continuity): The index is a tracked file that CI compa
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-01T04:35:03Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-01T04:50:38Z` |
+| Wall clock | `17` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
-| Agents spawned | 0 |
+| Agents spawned | 5 |
 | MCP calls | 0 |
-| Parallel task batches | 0 |
-| Notes | Batches follow the concurrency plan: batch 1 U-001, U-002, U-005. Batch 2 U-003, U-004. U-006 inline. |
+| Parallel task batches | 2 |
+| Notes | Batches follow the concurrency plan: batch 1 U-001, U-002, U-005. Batch 2 U-003, U-004. U-006 inline. Full suite: 255 feature suites and 19 regression suites pass. |
 
 - In progress: U-001 (2026-11-01T04:35:03Z)
 - In progress: U-002 (2026-11-01T04:35:03Z)
@@ -84,3 +84,6 @@ Scope Lock (cross-session continuity): The index is a tracked file that CI compa
 - Done: U-005 (2026-11-01T04:39:40Z)
 - In progress: U-003 (2026-11-01T04:39:40Z)
 - In progress: U-004 (2026-11-01T04:39:40Z)
+- Done: U-003 (2026-11-01T04:40:00Z)
+- Done: U-004 (2026-11-01T04:40:00Z)
+- Done: U-006 (2026-11-01T04:41:12Z)
