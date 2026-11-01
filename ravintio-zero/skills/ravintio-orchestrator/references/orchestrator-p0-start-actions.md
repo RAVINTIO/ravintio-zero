@@ -7,7 +7,7 @@
 Perform in order, before coaching begins:
 
 1. **Context reset** (fresh starts only): apply the Context Hygiene procedure.
-2. **Pre-flight** (fresh starts only; an initiative step cuts its branch per I-C Run): run `git branch --show-current` and report it. Ask whether previous PRs are merged and main is up to date. Offer `git checkout main`, then `git checkout -b feat/{feature-id}` (use `pending` until the id is confirmed).
+2. **Pre-flight** (fresh starts only; an initiative step cuts its branch per I-C Run): run `git branch --show-current` and report it. Ask whether previous PRs are merged and main is up to date. Offer `git checkout main`, then `git checkout -b hotfix/{feature-id}` (use `pending` until the id is confirmed).
 3. **Stale run-mode** (fresh starts only): if `plan/.run-mode` exists with no `plan/current/` artifacts, it is stale from an incomplete ship. Warn, delete it, continue.
 4. **Write the sentinel**: `plan/.orchestrator-active` containing the feature-id (or `pending`). Update once confirmed. Include in the discovery commit.
 5. **Create the build log** from `ravintio-zero/templates/build-log.template.md`. Fill the header. On resume, append rather than overwrite. Append a `### P0: Discovery` block before any discovery work (Hard Limit 9). At ship, the summary table is completed.

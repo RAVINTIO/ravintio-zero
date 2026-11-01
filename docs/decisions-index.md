@@ -3,7 +3,7 @@
 > Change record. Index of all ADRs across all features. Updated after every pipeline run.
 > Do not archive this file. Update it in place.
 
-Last updated: 0000321-backlog-triage
+Last updated: 0000327-squash-before-main
 
 ---
 
@@ -388,3 +388,9 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 | ADR | Title | Status | Summary |
 |-----|-------|--------|---------|
 | ADR-001 | generated backlog index checked in CI | accepted | `backlog-index.mjs` writes `plan/backlog/index.md` from the entries. CI fails when the committed file differs from a fresh run. The review age is `backlogReviewDays` in `product.yml`. |
+
+### Feature 0000327: squash-before-main
+
+| ADR | Title | Status | Summary |
+|-----|-------|--------|---------|
+| ADR-001 | CI checks the branch and commit count of a PR into main | accepted | `check-pr-into-main.mjs` runs in the CI job `squash-before-main`. It passes a `chore/*` or `hotfix/*` PR with one commit, ignores `initiative/*`, and fails everything else. No hook changes. |

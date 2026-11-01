@@ -333,6 +333,14 @@ The agent may run `gh pr merge --squash` only when all of these hold:
 
 The initiative PR to `main` stays human-only. The agent never merges it. The `merge-guard` hook enforces this rule. Other skills and instructions point here for the full wording.
 
+Only three branch prefixes may target `main`:
+
+- `initiative/*`
+- `chore/*`
+- `hotfix/*`
+
+Every `feat/*` branch targets an initiative branch and never targets `main`. The agent never merges a PR into `main`. The ship skill section `## PRs into main` sets the squash rules for `chore/*` and `hotfix/*`.
+
 ## Coordinator PRs
 
 Nothing commits directly on `initiative/*`. Every change arrives as a squashed PR, so the first-parent history is one titled squash per change.

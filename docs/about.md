@@ -1,6 +1,6 @@
 ---
-version: "0.47.0"
-feature: "0000321-backlog-triage"
+version: "0.48.0"
+feature: "0000327-squash-before-main"
 updated: "1 Nov 2026"
 ---
 # About
@@ -10,8 +10,8 @@ updated: "1 Nov 2026"
 
 | Field | Value |
 |-------|-------|
-| Version | `0.47.0` |
-| Last feature | `0000321-backlog-triage` |
+| Version | `0.48.0` |
+| Last feature | `0000327-squash-before-main` |
 | Updated | `1 Nov 2026` |
 
 ## What this is
