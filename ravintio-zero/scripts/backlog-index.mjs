@@ -219,6 +219,11 @@ if (opts.check) {
 }
 
 try {
+  for (const link of [path.join(root, 'plan'), path.dirname(indexFile), indexFile]) {
+    if (fs.lstatSync(link, { throwIfNoEntry: false })?.isSymbolicLink()) {
+      fail(`${path.relative(root, link)} is a symlink. Replace it with a real file or folder.`);
+    }
+  }
   fs.mkdirSync(path.dirname(indexFile), { recursive: true });
   fs.writeFileSync(indexFile, text);
 } catch (err) {

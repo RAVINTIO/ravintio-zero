@@ -64,7 +64,7 @@ foreach ($d in $dirs) {
     $full = Get-FullPath $rel
     $text = [System.IO.File]::ReadAllText($full, $utf8)
     # Match the first frontmatter block: an opening rule on line 1 and the next closing rule.
-    $m = [regex]::Match($text, '\A---(\r?\n)((?:.*?\r?\n)*?)---(?=\r?\n|\z)')
+    $m = [regex]::Match($text, '\A---(\r?\n)((?:[^\r\n]*\r?\n)*?)---(?=\r?\n|\z)')
     if (-not $m.Success) { continue }
     $eol = $m.Groups[1].Value
     $body = $m.Groups[2].Value

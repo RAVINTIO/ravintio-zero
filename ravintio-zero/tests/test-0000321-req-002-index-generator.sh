@@ -135,6 +135,16 @@ run "$R" >/dev/null; CODE=$?
 assert_equals "1" "$CODE" "symlinked entry exits 1"
 assert_equals "no" "$([ -e "$R/plan/backlog/index.md" ] && echo yes || echo no)" "symlinked entry writes no index"
 
+echo "=== Symlinked output path ==="
+R=$(make_repo outlink); add_entry "$R" 0000041-ok "t"; echo "keep" > "$WS/outside.md"; ln -s "$WS/outside.md" "$R/plan/backlog/index.md"
+run "$R" >/dev/null; CODE=$?
+assert_equals "1" "$CODE" "symlinked index.md exits 1"
+assert_equals "keep" "$(cat "$WS/outside.md")" "symlinked index.md leaves the target unchanged"
+R=$(make_repo dirlink); add_entry "$R" 0000041-ok "t"; mkdir "$WS/elsewhere"; mv "$R/plan/backlog" "$WS/elsewhere/backlog"; ln -s "$WS/elsewhere/backlog" "$R/plan/backlog"
+run "$R" >/dev/null; CODE=$?
+assert_equals "1" "$CODE" "symlinked plan/backlog exits 1"
+assert_equals "no" "$([ -e "$WS/elsewhere/backlog/index.md" ] && echo yes || echo no)" "symlinked plan/backlog gets no index"
+
 echo "=== Options ==="
 run "$WS/ac2" --bogus >/dev/null; CODE=$?
 assert_equals "1" "$CODE" "unknown option exits 1"

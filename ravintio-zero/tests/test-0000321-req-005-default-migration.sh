@@ -107,4 +107,18 @@ if [ -f "$HELPER" ]; then
   assert_equals "1" "$CODE" "exits non-zero when the index script fails"
 fi
 
+echo "=== PowerShell helper skips an unclosed CRLF block quickly ==="
+if command -v pwsh >/dev/null 2>&1 && [ -f "${HELPER_PS1:-$ZERO_DIR/migrations/migrate-backlog-priority-and-theme.ps1}" ]; then
+  R=$(make_repo ps1crlf)
+  mkdir -p "$R/plan/backlog/0000001-open"
+  { printf -- '---\r\n'; for i in $(seq 1 60); do printf 'k%s: v\r\n' "$i"; done; } > "$R/plan/backlog/0000001-open/entry.md"
+  cp "$R/plan/backlog/0000001-open/entry.md" "$WS/before.md"
+  START=$(date +%s)
+  ( cd "$R" && perl -e 'alarm 20; exec @ARGV' pwsh -NoProfile -File "$ZERO_DIR/migrations/migrate-backlog-priority-and-theme.ps1" >/dev/null 2>&1 ); CODE=$?
+  ELAPSED=$(( $(date +%s) - START ))
+  assert_equals "0" "$CODE" "ps1 helper finishes on an unclosed CRLF block"
+  assert_equals "yes" "$([ "$ELAPSED" -lt 10 ] && echo yes || echo no)" "ps1 helper finishes inside 10 seconds ($ELAPSED)"
+  assert_equals "yes" "$(cmp -s "$WS/before.md" "$R/plan/backlog/0000001-open/entry.md" && echo yes || echo no)" "ps1 helper leaves the unclosed entry unchanged"
+fi
+
 print_summary
