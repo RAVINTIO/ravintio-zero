@@ -69,8 +69,8 @@ Scope Lock (cross-session continuity): The record sits in git-tracked or ignored
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-01T03:33:58Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-01T03:47:01Z` |
+| Wall clock | `8` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 4 |
@@ -82,3 +82,11 @@ Scope Lock (cross-session continuity): The record sits in git-tracked or ignored
 - In progress: U-002 (2026-11-01T03:33:58Z)
 - In progress: U-003 (2026-11-01T03:33:58Z)
 - In progress: U-004 (2026-11-01T03:33:58Z)
+- Done: U-001 (2026-11-01T03:47:01Z)
+- Done: U-002 (2026-11-01T03:47:01Z)
+- Done: U-003 (2026-11-01T03:47:01Z)
+- Done: U-004 (2026-11-01T03:47:01Z)
+- In progress: U-005 (2026-11-01T03:47:01Z)
+- Done: U-005 (2026-11-01T03:47:01Z)
+Departure from the batches: none. U-005 (living docs, changelog) ran inline after batch 1. Version files move at P4.
+One amend by a parallel track folded a one-line test fix into the ack commit. No history was pushed.
