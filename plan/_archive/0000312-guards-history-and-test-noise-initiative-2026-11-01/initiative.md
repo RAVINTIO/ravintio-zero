@@ -1,13 +1,13 @@
 ---
 title: "Initiative: 0000312 - guards, history, and test noise"
 summary: "Clears 17 backlog entries in 10 feature steps, with a setup rerun after each step that changes installed pack files."
-status: "active"
+status: "delivered"
 ---
 # Initiative: 0000312 - guards, history, and test noise
 
 **Goal:** Make the guards fail closed, keep every initiative history titled one commit per change, and stop step logs and session state breaking the suite. Step 1 teaches the driver to stop for a setup rerun, so each later step runs on installed copies that match the pack.
 **Branch:** initiative/0000312-guards-history-and-test-noise
-**Status:** active
+**Status:** delivered
 **Position:** 11
 **Speed:** fast
 
@@ -110,7 +110,7 @@ If the script still finds one, it fails. The script has no exception list. Neith
 | 5 | Other forms of a forced add | Also block combined short flags, such as `-fA`, and the `git -C {dir} add -f` form. | none |
 | 5 | A tracked file matches an ignore rule on purpose | Add a negation rule to `.gitignore`. Never drop the CI check. | none |
 | 6 | Widening: the written merge carve-out in `roadmap-standards.md` | Add coordinator PRs that meet the bar in `## Coordinator PRs`. The human approved this on its own on 2026-10-31. `merge-guard` stays unchanged. | none |
-| 6 | The step changes the chart format | Update `plan/current-initiative/initiative.md` in the same step, as entry 0000268 asks. | none |
+| 6 | The step changes the chart format | Update `plan/_archive/0000312-guards-history-and-test-noise-initiative-2026-11-01/initiative.md` in the same step, as entry 0000268 asks. | none |
 | 7 | The step changes the pack's `ravintio.yml` | Change `.github/workflows/ravintio.yml` in the same step, because setup won't overwrite it. | none |
 | 7 | How CI knows a `main` commit came from an `initiative/*` PR | Parse the merge commit message. Add no new token scope. | none |
 | 7 | The history check finds an untitled commit on this branch | Follow `## History check`. Add no exception list. | none |
