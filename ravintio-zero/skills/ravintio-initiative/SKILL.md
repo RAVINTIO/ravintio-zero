@@ -77,6 +77,15 @@ If the driver prints `Blocked:` or exits non-zero, report the stop line and the 
 
 A `Restart:` line is not a failure. It means a merged step changed the driver, the watcher, or this skill, and the running code is old. Report the line. Then start a new driver and a new watcher without asking. Read this skill again first if the line names it.
 
+A `Setup:` line (`I-D Advance: Setup: step {n} changed {files}. Rerun setup, then start a new driver.`) is a planned stop, not a failure. Report the line, then:
+
+1. Read the setup command from the `Confirmation:` row in `## Decisions` of `plan/current-initiative/initiative.md`.
+2. Run that exact command. If no row names it, or the command differs in any way, stop and ask the human.
+3. Check that every hook in `.claude/settings.json` resolves and runs. If one fails, stop and report the hook.
+4. Start a new driver and a new watcher.
+
+A line that starts `Restart: Setup:` names both. Rerun setup first. Read this skill again if the line names it. Then start one new driver.
+
 ## Backlog queue
 
 While the lock is held, write each new backlog entry to `plan/.initiative-queue/{id}-{slug}/entry.md`. Reserve its id with `node ravintio-zero/scripts/reserve-id.mjs --commit`, which commits `plan/backlog/.next-id` alone at once. When a step merges and the driver is between steps or has exited, move the queued entries to `plan/backlog/` on the initiative branch. Commit each entry on its own. Never touch the queue while a step runs.

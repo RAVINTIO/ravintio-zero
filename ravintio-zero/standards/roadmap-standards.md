@@ -285,8 +285,23 @@ The driver loads its code once. After a merged step, it compares the initiative 
 - The stop line is `I-D Advance: Restart: step {n} changed {files}. Start a new driver so step {next} runs the new code.` The driver releases the lock and exits 1.
 - The check runs after the delivery, block, and not-merged checks, so a delivered initiative never restarts.
 - If git or the branch ref is unreadable, the driver skips the check.
-- The initiative skill treats the line as a restart and not a failure. It starts a new driver and a new watcher without asking.
+- The initiative skill treats the line as a restart and not a failure. If the line also holds `Setup:`, it follows the setup stop first. It then starts a new driver and a new watcher without asking.
 - The new driver reads the position from the branch ref and carries no other state. Its final report lists only the steps it ran.
+
+#### Setup stop
+
+The installed pack files live outside the repo copy the driver reads. After a merged step, the driver checks whether the step changed `ravintio-zero/skills/`, `ravintio-zero/hooks/`, `ravintio-zero/setup.sh`, or `ravintio-zero/setup/`. If it did, the driver stops.
+
+- The stop line is `I-D Advance: Setup: step {n} changed {files}. Rerun setup, then start a new driver.`
+- If the same step also triggers the restart stop, the driver prints one combined line: `I-D Advance: Restart: Setup: step {n} changed {files}. Rerun setup, then start a new driver so step {next} runs the new code.` The list holds the restart files first, then the setup-only files, with no repeats.
+- The driver releases the lock and exits 1.
+- The list shows at most 5 names, then `and {k} more`.
+- The check runs after the delivery, block, and not-merged checks, so a delivered initiative never stops here. If git is unreadable, the driver skips the check.
+- The initiative skill treats the line as a setup step and not a failure. It reruns setup in this order:
+  1. Read the setup command from the `Confirmation:` row.
+  2. Run only that exact command. If the row is missing or differs, stop for the human.
+  3. Check that every hook in `.claude/settings.json` resolves and runs.
+  4. Start a new driver and a new watcher.
 
 #### Step logs
 

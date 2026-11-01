@@ -1,8 +1,8 @@
 # RAVINTIO Component Manifest
 id: "ravintio-zero"
 name: "RAVINTIO Zero"
-feature: "0000252-chart-rules"
-version: "0.40.1"
+feature: "0000313-driver-setup-stop"
+version: "0.41.0"
 status: "active"
 type: "component-pack"
 domain: "developer-tooling"
@@ -58,6 +58,7 @@ responsibilities:
   - "Report the Resume Detection signals as fixed lines from scripts/resume-detect.mjs, injected by the session start hook"
   - "Give the ship skill a plain squash-merge line with a literal PR number, and fail the build log at ship Step 3 when a phase has a blank or wrong wall clock, with scripts/build-log-check.mjs"
   - "Require a PATH search before a P3 report says a program is missing, and give a claim that only documentation backs the outcome unverified (docs only), which never counts as verified"
+  - "Stop the initiative driver with an I-D Advance: Setup: line after a merged step that changes installed pack files, so the initiative skill reruns setup before the next step"
 
 exceptions:
   - "Does not generate application code. That is the implement phase's job in consumer projects."
