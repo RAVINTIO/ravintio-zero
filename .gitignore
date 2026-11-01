@@ -38,3 +38,5 @@ plan/.initiative-ack
 plan/.initiative-logs/
 plan/.initiative-queue/
 plan/.initiative-runner.lock
+# Once-per-session record for the orchestrator load instruction (0000320).
+plan/.orchestrator-loaded

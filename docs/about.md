@@ -1,6 +1,6 @@
 ---
-version: "0.45.0"
-feature: "0000319-initiative-history-checks"
+version: "0.46.0"
+feature: "0000320-quiet-session-start"
 updated: "1 Nov 2026"
 ---
 # About
@@ -10,8 +10,8 @@ updated: "1 Nov 2026"
 
 | Field | Value |
 |-------|-------|
-| Version | `0.45.0` |
-| Last feature | `0000319-initiative-history-checks` |
+| Version | `0.46.0` |
+| Last feature | `0000320-quiet-session-start` |
 | Updated | `1 Nov 2026` |
 
 ## What this is

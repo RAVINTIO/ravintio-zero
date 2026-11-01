@@ -168,7 +168,7 @@ assert_file_exists "$MIGRATIONS/_done/.gitkeep"              "req-014: _done/ ar
 assert_file_exists "$SKILLS/ravintio-migrator/SKILL.md"     "req-014: ravintio-migrator skill"
 MIGRATOR=$(cat "$SKILLS/ravintio-migrator/SKILL.md")
 assert_contains "batch"                         "$MIGRATOR" "req-014: migrator uses batched presentation"
-assert_contains "_done"                         "$MIGRATOR" "req-014: migrator archives to _done/"
+assert_contains "plan/state/migrations.md"        "$MIGRATOR" "req-014: migrator records in the ledger"
 
 # -----------------------------------------------------------------------
 

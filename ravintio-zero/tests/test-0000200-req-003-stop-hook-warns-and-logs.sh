@@ -32,7 +32,7 @@ write_transcript() {
     const fs = require("node:fs");
     const lines = [JSON.stringify({ type: "user", message: { role: "user", content: "hi" } })];
     for (const t of texts) {
-      const content = mode === "string" ? t : [{ type: "tool_use", name: "x" }, { type: "text", text: t }];
+      const content = mode === "string" ? t : [{ type: "text", text: t }];
       lines.push(JSON.stringify({ type: "assistant", message: { role: "assistant", content } }));
     }
     fs.writeFileSync(file, lines.join("\n") + "\n");
