@@ -15,7 +15,7 @@ description: Archive, build assessment, changelog, version, and PR, behind the f
 2. Do not modify application code or pack files during this phase.
 3. Never skip the archive step. A populated `plan/current/` breaks resume detection for the next feature.
 4. Read `plan/.run-mode` before Step 8. In `gated`, the final gate stops before the PR. In `autonomous`, raise the PR without a stop. The PR is where the human reviews the run.
-5. Merging into `main` stays human-only in every run mode, and the agent never commits to `main`. The one exception is `gh pr merge --squash` for the agent's own feature PR into `initiative/*`, after a clean P3 and green CI. The `merge-guard` hook enforces it. See `ravintio-zero/standards/roadmap-standards.md`.
+5. Merging into `main` stays human-only in every run mode, and the agent never commits to `main`. The one exception is `gh pr merge --squash` for the agent's own feature PR into `initiative/*`, after a clean P3 and green CI. The `merge-guard` hook enforces it. See `ravintio-zero/standards/roadmap-standards.md` and `## PRs into main`.
 6. Credentials are never in your context.
 7. One question at a time.
 
@@ -170,6 +170,17 @@ P4 Ship: Complete: PR #{n} ready for your review
 ```
 
 Use the run mode read in Step 8, because Step 8 deletes `plan/.run-mode`. Merging the PR is human-only in every mode, no exception.
+
+## PRs into main
+
+A PR into `main` comes from a `chore/*`, `hotfix/*`, or `initiative/*` branch. Any other head fails the `squash-before-main` CI job.
+
+- Before you ask the human to merge, the branch holds one commit on `origin/main`. Skip this for `initiative/*`.
+- Title the commit per `ravintio-zero/standards/commit-standards.md` and name the PR number. List the squashed commit titles in the body.
+- For `chore/*`, squash in place and push with `git push --force-with-lease origin {branch}`. Only `chore/*` may use `--force-with-lease`.
+- For `hotfix/*` with more than one commit, cut a new branch from `origin/main` and build one squashed commit there. Raise a replacement PR. Close the old PR with a link to the new one.
+- You never force-push `main`, `initiative/*`, `feat/*`, or `hotfix/*`.
+- Wait for green CI on the single-commit head before you ask the human to merge.
 
 ## Parallelism
 
