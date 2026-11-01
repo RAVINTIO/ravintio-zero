@@ -68,14 +68,14 @@ Scope Lock (cross-session continuity): The check runs in CI on every PR into mai
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-01T05:32:29Z` |
-| End | `PENDING_P2_END` |
-| Wall clock | `PENDING_P2_WALL` |
+| End | `2026-11-01T05:44:30Z` |
+| Wall clock | `12` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 3 |
 | MCP calls | 0 |
-| Parallel task batches | 3 |
-| Notes | Batches follow the concurrency plan: batch 1 U-001, U-003, U-004. Batch 2 U-002. U-005 inline. |
+| Parallel task batches | 1 |
+| Notes | Batch 1 (U-001, U-003, U-004) ran as three parallel subagents. U-002 and U-005 ran inline, because they were small and U-002 needed U-001. The full suite found one failure in the release-tag test, fixed in a separate commit. |
 
 - In progress: U-001 (2026-11-01T05:32:29Z)
 - In progress: U-003 (2026-11-01T05:32:29Z)
