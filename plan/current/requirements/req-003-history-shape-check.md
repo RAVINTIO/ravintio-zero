@@ -16,7 +16,7 @@ version: "0.1.0"
 As a reviewer, I run `check-initiative-history.mjs` and it fails any commit that is not a charted step in order or the one chore commit, so that stray commits fail CI.
 
 ## Functional Requirements
-- The script reads the `## Steps` table of the chart: the `--chart` path, else `plan/current-initiative/initiative.md`, else the archived `plan/_archive/{id}-*-initiative-*/initiative.md`, where `{id}` is the 7 digits after `initiative/` in `--head`.
+- The script reads the `## Steps` table of the chart: the `--chart` path, else `plan/current-initiative/initiative.md`, else the first `plan/_archive/{id}-*/initiative.md`, where `{id}` is the 7 digits after `initiative/` in `--head`.
 - The first-parent commits from the merge base, oldest first, must be the N step titles in chart order. Each title is `{7-digit feature id}: {Title} (#{n})`, compared exactly.
 - After the steps, at most one commit is allowed. Its subject is `{initiative id}: Initiative admin (#{n})`.
 - The script exits 1 and prints the short hash and subject of each failing commit, and names a missing `Title` column or chart.

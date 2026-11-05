@@ -17,7 +17,7 @@ The check matched a title pattern only. It couldn't tell a step commit from a co
 
 ## Decision
 
-The script reads the `## Steps` table from the chart. It takes the chart from `--chart`, else `plan/current-initiative/initiative.md`, else the archived chart whose folder starts with the 7-digit id in the `--head` branch name. It compares each commit subject to the expected string and builds no regular expression from a title.
+The script reads the `## Steps` table from the chart. It takes the chart from `--chart`, else `plan/current-initiative/initiative.md`, else the first archived chart under `plan/_archive/` whose folder starts with the 7-digit id in the `--head` branch name. It compares each commit subject to the expected string and builds no regular expression from a title.
 
 ## Alternatives Considered
 
