@@ -44,3 +44,19 @@ Scope Lock (first-run path): a chart without a Title column fails the check with
 Scope Lock (error path): a mistitled step or extra commit exits 1 and prints it [source: draft-accepted (initiative)]
 Scope Lock (cross-session continuity): the check keeps no state [source: draft-accepted (initiative)]
 Scope Lock complete. All four scenario paths captured.
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-05T23:53:50Z` |
+| End | `2026-11-05T23:53:55Z` |
+| Wall clock | `6` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Artifacts written inline. The units are small and share `roadmap-standards.md`, so a subagent split adds overhead. |
+
+Complete: P1 (autonomous, no gate stop)
