@@ -59,24 +59,21 @@ Admin work aligns with step N when step N caused it or it serves step N. Example
    3. Add one chore commit whose tree equals the branch head before the reshape. It holds only the admin work assigned to no step. The final tree stays unchanged.
    4. Run `check-initiative-history.mjs` and the full suite on the new branch.
    5. Push the new branch and raise the initiative PR from it. Close any PR from the old branch.
-   6. Move each step tag to its new step commit, keeping the tag message.
+   6. Move each step tag to its new step commit. Delete the old tag on `origin`, then push a new tag with the same name and message. Never force-push a tag.
    7. After the human merges the initiative PR, delete the old branch.
 4. Make `check-initiative-history.mjs` check the shape: one commit per charted step in chart order, then at most one chore commit. Any other commit fails CI. This tightens the check and widens nothing.
 5. In `## Coordinator PRs`, change the squash command to `gh pr merge --squash --delete-branch {n}`, the form ship uses. Initiative 0000312 left six coordinator branches on `origin` because the rule names no `--delete-branch`. `merge-guard` already allows the form, so this widens nothing. A test could check that the standard names the flag.
 
-### Widening: move step tags
+### No force pushes
 
 The human set two rules on 2026-11-01:
 
 - Reshape on a new branch rather than force-push. Branch history is never rewritten in place, so the rules in `ravintio-ship/SKILL.md` and the I-E Delivery rules in `roadmap-standards.md` stay as they are.
-- Tags can and should move to the reshaped step commits.
+- Tags move to the reshaped step commits the same way. The coordinator deletes the old tag and pushes a new one. It never force-pushes a tag.
 
-Moving a pushed tag needs `git push --force origin {tag}`. That is the one forced update this entry allows. Suggested bounds:
+This entry widens no guard. `merge-guard` and the other fail-closed hooks stay unchanged.
 
-- Only step tags of the initiative being delivered.
-- Only the coordinator, only at I-E Delivery, and only while the driver is stopped.
-
-`merge-guard` and the other fail-closed hooks stay unchanged.
+Entry 0000350 sets the title of each step commit and of the chore commit.
 
 ### Trade-off
 
