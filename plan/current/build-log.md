@@ -60,3 +60,17 @@ Scope Lock complete. All four scenario paths captured.
 | Notes | Artifacts written inline. The units are small and share `roadmap-standards.md`, so a subagent split adds overhead. |
 
 Complete: P1 (autonomous, no gate stop)
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-05T23:54:02Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary (orchestration), sonnet (units) |
+| Skills loaded | ravintio-implement |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Batches follow the Concurrency plan: batch 1 holds U1 and U2 in parallel, batch 2 holds U3. |
