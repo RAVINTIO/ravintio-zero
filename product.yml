@@ -10,8 +10,8 @@
 
 id: "ravintio-zero"
 name: "RAVINTIO Zero"
-version: "0.49.0"
-feature: "0000351-step-titles-and-history-shape"
+version: "0.50.0"
+feature: "0000352-coordinator-admin-in-step-prs"
 
 versionPolicy: "max-component-version"
 

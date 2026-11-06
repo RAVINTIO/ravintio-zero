@@ -3,7 +3,7 @@
 > Change record. Index of all ADRs across all features. Updated after every pipeline run.
 > Do not archive this file. Update it in place.
 
-Last updated: 0000351-step-titles-and-history-shape
+Last updated: 0000352-coordinator-admin-in-step-prs
 
 ---
 
@@ -400,3 +400,10 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 | ADR | Title | Status | Summary |
 |-----|-------|--------|---------|
 | ADR-001 | the history check reads titles from the chart | accepted | `check-initiative-history.mjs` reads the `Title` column of the chart `## Steps` table. It expects one commit per step in chart order, then at most one chore commit. It finds an archived chart by the id in `--head`. |
+
+### Feature 0000352: coordinator-admin-in-step-prs
+
+| ADR | Title | Status | Summary |
+|-----|-------|--------|---------|
+| ADR-001 | queue items name their step in item.md | accepted | A queue item is a folder in `plan/.initiative-queue/`. Its `item.md` holds `**Step:**` and `**Destination:**`. The step commits the item before P4 raises the PR. Admin that fits no step lands through a `chore/` PR. |
+| ADR-002 | reserve-id.mjs refuses --commit on initiative/* | accepted | The script reads the branch name before the reservation. On `initiative/*` it exits 1, changes nothing, and names the `feat/` route. |

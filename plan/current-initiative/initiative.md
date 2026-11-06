@@ -8,7 +8,7 @@ status: "active"  # proposed | charted | active | delivered | blocked
 **Goal:** A delivered initiative branch holds one squash per step, titled `{feature-id}: {Feature title} (#{n})`, then one `{initiative-id}: Initiative admin (#{n})` commit. Nothing force-pushes, and step sessions run to the end with no help.
 **Branch:** initiative/0000349-clean-initiative-history
 **Status:** active
-**Position:** 2
+**Position:** 3
 **Step CI fixes:** allowed, for a fix inside the step's own scope
 
 ## Stop conditions
@@ -136,7 +136,7 @@ status: "active"  # proposed | charted | active | delivered | blocked
 | Step | Feature id | Title | Backlog entries | Bump | Version | Status |
 |------|------------|-------|-----------------|------|---------|--------|
 | 1 | 0000351-step-titles-and-history-shape | Step titles and history shape | 0000350, 0000339, 0000345 (rule 4), 0000268 | minor | 0.49.0 | merged |
-| 2 | 0000352-coordinator-admin-in-step-prs | Coordinator admin in step PRs | 0000345 (rules 1, 2, and 5), 0000332 | minor | | pending |
+| 2 | 0000352-coordinator-admin-in-step-prs | Coordinator admin in step PRs | 0000345 (rules 1, 2, and 5), 0000332 | minor | 0.50.0 | merged |
 | 3 | 0000353-reshape-at-delivery | Reshape at delivery | 0000345 (rule 3) | minor | | pending |
 | 4 | 0000354-steps-run-to-the-end | Steps run to the end | 0000334, 0000343, 0000256, 0000270, 0000344 | minor | | pending |
 | 5 | 0000355-codeql-and-branch-cleanup | CodeQL and branch cleanup in CI | 0000346, 0000338, 0000356 | minor | | pending |
