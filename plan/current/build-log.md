@@ -65,6 +65,25 @@ Complete: P0 (2026-11-06T02:34:01Z)
 Schema change: none. Dependency: none.
 Complete: P1 (2026-11-06T02:36:13Z)
 
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-06T02:49:46Z` |
+| End | `2026-11-06T02:49:46Z` |
+| Wall clock | `30` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Departure from the concurrency plan: units ran inline, not as subagents. Each unit was a few lines in shared workflow files, and the merge-guard hook rejects long shell writes. Tests came first and were RED before each change. |
+
+Rework: REQ-004: test-0000319 and test-0000327 counted one write scope, now two (2026-11-06T02:49:46Z)
+Deviation: ravintio-zero/tests/helpers/assert.sh stale_install_skip_reason now accepts a trailing comment on the chart status line, because the chart template writes one.
+Deviation: test-0000169-req-006 reads helpers/unguarded-jobs.sh instead of a fixed job name list, which lists run-tests.sh as a helper.
+Complete: P2 (2026-11-06T02:49:46Z)
+
 ---
 
 ## Summary (filled at ship, P4)
