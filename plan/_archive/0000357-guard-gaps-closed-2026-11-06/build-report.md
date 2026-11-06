@@ -40,3 +40,5 @@ Postmortems: none
 | Human corrections at gates | 0 | 2 | ok |
 
 Breaches: 0. The gate reports and does not block. Counts come from marker lines only.
+
+Retrospective: plan/retrospectives/0000357-guard-gaps-closed-2026-11-06.md
