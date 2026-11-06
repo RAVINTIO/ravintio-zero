@@ -1131,7 +1131,8 @@ write_setup_config_override() {
     return 1
   fi
 
-  if ! cat > "$config_file" << CONFIG_EOF
+  local candidate="$config_file.new"
+  if ! cat > "$candidate" << CONFIG_EOF
 # Setup config: $tool
 
 > Tracked source of truth for active setup flags for **$tool**
@@ -1148,6 +1149,21 @@ write_setup_config_override() {
 \`\`\`
 CONFIG_EOF
   then
+    echo "  ! Warning: failed to write plan/state/${tool}.md — continuing with .ravintio-setup-flags-only behavior" >&2
+    return 1
+  fi
+
+
+  # Leave the record alone when only writtenAt would change (0000354 ADR-002), so a rerun
+  # leaves a clean tree. writtenAt is the last field, so dropping its line compares the rest.
+  if [ -f "$config_file" ] &&
+    [ "$(grep -v '"writtenAt"' "$config_file")" = "$(grep -v '"writtenAt"' "$candidate")" ]; then
+    rm -f "$candidate"
+    echo "  = plan/state/${tool}.md (unchanged)"
+    return 0
+  fi
+  if ! mv "$candidate" "$config_file"; then
+    rm -f "$candidate"
     echo "  ! Warning: failed to write plan/state/${tool}.md — continuing with .ravintio-setup-flags-only behavior" >&2
     return 1
   fi
