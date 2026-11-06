@@ -56,7 +56,7 @@ Complete: P0 (autonomous, design self-confirmed: draft-accepted (initiative))
 
 | Field | Value |
 |-------|-------|
-| Start | `2026-11-06T02:03:00Z` |
+| Start | `2026-11-06T01:55:00Z` |
 | End | `2026-11-06T01:56:04Z` |
 | Wall clock | `1` |
 | Model tier | primary |
