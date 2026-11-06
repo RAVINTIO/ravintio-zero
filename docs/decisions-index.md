@@ -3,7 +3,7 @@
 > Change record. Index of all ADRs across all features. Updated after every pipeline run.
 > Do not archive this file. Update it in place.
 
-Last updated: 0000352-coordinator-admin-in-step-prs
+Last updated: 0000353-reshape-at-delivery
 
 ---
 
@@ -407,3 +407,11 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 |-----|-------|--------|---------|
 | ADR-001 | queue items name their step in item.md | accepted | A queue item is a folder in `plan/.initiative-queue/`. Its `item.md` holds `**Step:**` and `**Destination:**`. The step commits the item before P4 raises the PR. Admin that fits no step lands through a `chore/` PR. |
 | ADR-002 | reserve-id.mjs refuses --commit on initiative/* | accepted | The script reads the branch name before the reservation. On `initiative/*` it exits 1, changes nothing, and names the `feat/` route. |
+
+### Feature 0000353: reshape-at-delivery
+
+| ADR | Title | Status | Summary |
+|-----|-------|--------|---------|
+| ADR-001 | replay with git merge-tree, not a working tree | accepted | `reshape-initiative.mjs` replays each commit with `git merge-tree --write-tree` and writes commits with `git commit-tree`. It never touches a working tree, and a conflict exits 1. |
+| ADR-002 | find step commits by version tag and move tags by delete | accepted | The script reads `v{Version}` from the chart for each step. `--tags` deletes each tag and creates it again at the new commit. `--push` deletes the old tag on the remote and pushes the new one. |
+| ADR-003 | ship uses the replacement branch route for chore | accepted | `## PRs into main` applies the replacement branch route to `chore/*` and `hotfix/*`. It no longer names `--force-with-lease`. |
