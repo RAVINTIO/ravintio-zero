@@ -94,3 +94,35 @@ Complete: P2 (full suite 264 feature and 19 regression suites pass after the tes
 | Notes | The full suite ran in the background while execution checks and reports were written. |
 
 Complete: P3 (autonomous, evidence in acceptance-evidence.md)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-06T01:07:19Z` |
+| End | `2026-11-06T01:07:31Z` |
+| Wall clock | `1` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship, ravintio-retrospective |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | none |
+
+Complete: P4 (autonomous)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `37` |
+| Total agents spawned | `0` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `0` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `1` |
+| Phases skipped | `none` |
