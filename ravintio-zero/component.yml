@@ -1,8 +1,8 @@
 # RAVINTIO Component Manifest
 id: "ravintio-zero"
 name: "RAVINTIO Zero"
-feature: "0000352-coordinator-admin-in-step-prs"
-version: "0.50.0"
+feature: "0000353-reshape-at-delivery"
+version: "0.51.0"
 status: "active"
 type: "component-pack"
 domain: "developer-tooling"

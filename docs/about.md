@@ -1,6 +1,6 @@
 ---
-version: "0.50.0"
-feature: "0000352-coordinator-admin-in-step-prs"
+version: "0.51.0"
+feature: "0000353-reshape-at-delivery"
 updated: "6 Nov 2026"
 ---
 # About
@@ -10,8 +10,8 @@ updated: "6 Nov 2026"
 
 | Field | Value |
 |-------|-------|
-| Version | `0.50.0` |
-| Last feature | `0000352-coordinator-admin-in-step-prs` |
+| Version | `0.51.0` |
+| Last feature | `0000353-reshape-at-delivery` |
 | Updated | `6 Nov 2026` |
 
 ## What this is
