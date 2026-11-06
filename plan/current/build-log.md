@@ -101,6 +101,8 @@ Complete: P2 (2026-11-06T02:49:46Z)
 Complete: P3 (2026-11-06T03:01:08Z)
 Blocked: CodeQL default setup is still on for the repo (code-scanning/default-setup state configured, checked 2026-11-06T03:01:08Z). The advanced workflow cannot upload results while it is on. A human must turn it off in repo settings before the step merges, as the chart row for step 5 requires.
 
+Resolved: CodeQL default setup on (2026-11-06T08:04:56Z, code-scanning/default-setup state now not-configured)
+
 ---
 
 ## Summary (filled at ship, P4)
