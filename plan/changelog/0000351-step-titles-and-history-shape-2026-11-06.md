@@ -2,7 +2,7 @@
 
 **Feature:** Step titles and history shape
 **Version:** 0.49.0
-**PR:** pending, updated at Step 9
+**PR:** #111
 
 ## What changed
 
