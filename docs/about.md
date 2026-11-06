@@ -1,6 +1,6 @@
 ---
-version: "0.49.0"
-feature: "0000351-step-titles-and-history-shape"
+version: "0.50.0"
+feature: "0000352-coordinator-admin-in-step-prs"
 updated: "6 Nov 2026"
 ---
 # About
@@ -10,8 +10,8 @@ updated: "6 Nov 2026"
 
 | Field | Value |
 |-------|-------|
-| Version | `0.49.0` |
-| Last feature | `0000351-step-titles-and-history-shape` |
+| Version | `0.50.0` |
+| Last feature | `0000352-coordinator-admin-in-step-prs` |
 | Updated | `6 Nov 2026` |
 
 ## What this is
