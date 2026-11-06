@@ -22,6 +22,9 @@ check "a braced group" 2 "{ git add -f plan/x; }"
 check "a flag in a variable" 2 'F=-f; git add $F plan/x'
 check "a braced variable" 2 'F=-f; git add "${F}" plan/x'
 check "a variable in git stage" 2 'F=-f; git stage $F plan/x'
+check "a variable after git -C" 2 'git -C dir add $F plan/x'
+check "a variable as the subcommand" 2 'git $CMD plan/x'
+check "git with a variable in the word" 2 'git${IFS}add plan/x'
 
 echo ""
 echo "=== REQ-002 AC-2: plain adds pass ==="
@@ -29,6 +32,8 @@ check "git add path" 0 "git add src/a.js"
 check "git stage path" 0 "git stage src/a.js"
 check "a subshell with a plain add" 0 "(git add src/a.js)"
 check "a variable with no git add" 0 'echo $HOME && git status'
+check "a variable in a commit message that says add" 0 'git commit -m "add $VER"'
+check "a variable in a git -C commit message" 0 'git -C dir commit -m "stage $VER"'
 
 echo ""
 echo "=== REQ-002 AC-3: existing forms stay blocked ==="

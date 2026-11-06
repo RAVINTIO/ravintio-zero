@@ -9,8 +9,9 @@
  * The check runs on each segment of a compound command (split on && || ; & |
  * newlines, parentheses, braces, and backticks, so a subshell or a command
  * substitution becomes its own segment), after quote and backslash characters
- * are removed. A segment that names `git` and `add` or `stage` as words and
- * holds `$` is blocked, because the guard can't read the value of a variable.
+ * are removed. A segment that holds `$` is blocked when its git subcommand is
+ * `add`, `stage`, or a variable, because the guard can't read the value. A
+ * variable glued to `git`, as in `git${IFS}add`, is blocked too.
  * Otherwise a segment is blocked when it carries one of:
  *   - `--force`, or any abbreviation git accepts (`--f`, `--fo`, `--forc`)
  *   - a short flag group that contains `f`, such as `-f` or `-fA`
@@ -52,8 +53,27 @@ function addsFiles(segment) {
   return tokens.includes("git") && (tokens.includes("add") || tokens.includes("stage"));
 }
 
+// The git subcommand: the first word after `git` that is not an option. The
+// options -C and -c take a value, so the value is skipped too.
+function subcommandOf(tokens) {
+  let i = tokens.indexOf("git") + 1;
+  while (i > 0 && i < tokens.length) {
+    if (tokens[i] === "-C" || tokens[i] === "-c") i += 2;
+    else if (tokens[i].startsWith("-")) i += 1;
+    else return tokens[i];
+  }
+  return "";
+}
+
+// A variable the guard can't read blocks only when git's subcommand is add or
+// stage, or is itself a variable. A commit message that says "add $VERSION"
+// passes.
 function expandsVariable(segment) {
-  return addsFiles(segment) && segment.includes("$");
+  if (!segment.includes("$")) return false;
+  const tokens = wordsOf(segment);
+  if (!tokens.includes("git")) return false;
+  const sub = subcommandOf(tokens);
+  return sub === "add" || sub === "stage" || sub.startsWith("$");
 }
 
 function forcesAdd(segment) {
@@ -77,11 +97,17 @@ try {
 }
 
 try {
-  for (const segment of command.split(/&&|\|\||[;&|\n(){}`]/)) {
-    if (expandsVariable(segment)) {
-      block("A git add or git stage with a variable is blocked, because the guard can't read the flags. Write literal paths. ");
+  for (const outer of command.split(/&&|\|\||[;&|\n]/)) {
+    // A variable glued to git, as in git${IFS}add, hides the subcommand.
+    if (/\bgit\$/.test(outer.replace(/["'\\]/g, ""))) {
+      block("A git command built from a variable is blocked, because the guard can't read it. Write the command out. ");
     }
-    if (forcesAdd(segment)) block();
+    for (const segment of outer.split(/[(){}`]/)) {
+      if (expandsVariable(segment)) {
+        block("A git add or git stage with a variable is blocked, because the guard can't read the flags. Write literal paths. ");
+      }
+      if (forcesAdd(segment)) block();
+    }
   }
 } catch {
   // Unreachable for string input. A failure here must not allow a forced add.

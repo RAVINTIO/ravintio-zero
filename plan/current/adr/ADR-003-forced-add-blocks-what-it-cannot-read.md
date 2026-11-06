@@ -16,7 +16,7 @@ Feature 0000317 blocks `git add -f` by reading each command segment. The securit
 
 ## Decision
 
-Treat `stage` like `add`. Split the command on `(`, `)`, `{`, `}`, and the backtick as well as the current separators. Block a `git add` or `git stage` segment that holds `$` or a backtick, because the guard can't read the value. The chart row asks for this, as `merge-guard` blocks what it can't parse. Wire the same guard into Codex as a second Bash group, because the Codex hook model already runs `merge-guard` that way.
+Treat `stage` like `add`. Split the command on `(`, `)`, `{`, `}`, and the backtick as well as the current separators. Block a segment that holds `$` when its git subcommand is `add`, `stage`, or a variable, and block a variable glued to `git`, because the guard can't read the value. A commit message that holds `$` passes. The chart row asks for this, as `merge-guard` blocks what it can't parse. Wire the same guard into Codex as a second Bash group, because the Codex hook model already runs `merge-guard` that way.
 
 ## Alternatives Considered
 

@@ -18,7 +18,9 @@ As a maintainer, I find `git stage -f`, a subshell, and a flag in a variable blo
 ## Functional Requirements
 - The guard treats `stage` like `add` when it checks a segment.
 - The guard splits a command on `(`, `)`, `{`, `}`, and the backtick, so a subshell or a command substitution becomes its own segment.
-- The guard blocks a segment that names `git` and `add` or `stage` as words and holds `$` or a backtick. It cannot read the value, so it blocks.
+- The guard blocks a segment that holds `$` when its git subcommand is `add`, `stage`, or a variable. It cannot read the value, so it blocks.
+- The guard blocks a variable glued to `git`, as in `git${IFS}add`, because that hides the subcommand.
+- A commit message that holds `$`, such as `git commit -m "add $VERSION"`, passes.
 - The block message names the variable case and tells the caller to write literal paths.
 - A test case covers each form: `git stage -f x`, `(git add -f x)`, `$(git add -f x)`, `F=-f; git add $F x`, and `git add "${F}" x`.
 - A plain `git add x` and `git stage x` still pass.
