@@ -2,7 +2,7 @@
 
 **Feature:** Coordinator admin in step PRs
 **Version:** 0.50.0
-**PR:** pending
+**PR:** #112
 
 ## What changed
 
