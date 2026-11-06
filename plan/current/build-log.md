@@ -27,7 +27,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 |-------|-------|
 | Start | `2026-11-06T01:28:32Z` |
 | End | `2026-11-06T01:29:21Z` |
-| Wall clock | `7` |
+| Wall clock | `0` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -55,7 +55,7 @@ Complete: P0 (autonomous, design self-confirmed: draft-accepted (initiative))
 
 | Field | Value |
 |-------|-------|
-| Start | `2026-11-06T01:38:00Z` |
+| Start | `2026-11-06T01:29:25Z` |
 | End | `2026-11-06T01:30:35Z` |
 | Wall clock | `1` |
 | Model tier | primary |
@@ -66,3 +66,19 @@ Complete: P0 (autonomous, design self-confirmed: draft-accepted (initiative))
 | Notes | Artifacts written inline. The units are small and share the delivery text, so a subagent split adds overhead. |
 
 Complete: P1 (autonomous, no gate stop)
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-06T01:30:40Z` |
+| End | `2026-11-06T01:34:09Z` |
+| Wall clock | `3` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Units U1 to U3 ran inline in turn. They share the delivery text and the ship tests, so a split adds overhead. U2 and U3 edited the text before their tests, because the tests only read that text. |
+
+Complete: P2 (full suite result in the P3 block)
