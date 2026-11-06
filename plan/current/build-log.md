@@ -1,0 +1,47 @@
+---
+title: "Build Log - 0000354-steps-run-to-the-end"
+summary: "Working record of the pipeline run, maintained by the orchestrator."
+---
+# Build Log - 0000354-steps-run-to-the-end
+
+> Created at discovery (P0). Appended by the orchestrator at each phase boundary. Survives session changes.
+
+## Header
+
+| Field | Value |
+|-------|-------|
+| Feature ID | `0000354-steps-run-to-the-end` |
+| Pipeline start | `2026-11-06T01:54:30Z` |
+| Tool | `claude-code` |
+| Primary model | `claude-sonnet-5-5` |
+| Cheaper model | `claude-haiku-5-5` |
+| Run speed | `standard` |
+
+---
+
+## Phase Log
+
+### P0: Discovery
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-06T01:54:30Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-orchestrator |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Initiative 0000349 step 4. Migrations 0004 and 0005 do not apply to this repo, so none ran. |
+
+Run mode: autonomous (2026-11-06T01:54:30Z)
+Run speed: standard (2026-11-06T01:54:30Z)
+Backlog pull-in (initiative row): 0000334, 0000343, 0000256, 0000270, and 0000344 pulled in and deleted.
+Version: 0.52.0 (step Bump minor, from 0.51.0)
+Decision applied (initiative chart): The resume cap for a step that exits 0 unmerged (entry 0000334)
+Decision applied (initiative chart): How setup avoids timestamp churn (entry 0000343)
+Decision applied (initiative chart): setup.ps1 parity
+Decision applied (initiative chart): The resume adds a driver argument (entry 0000256)
+Decision applied (initiative chart): The watcher finds no build log (entry 0000270)
+Decision applied (initiative chart): Whether a step may fix its own CI failure (entry 0000344)
