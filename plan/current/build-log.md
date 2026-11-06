@@ -68,3 +68,22 @@ Complete: P0 (2026-11-06T08:26:57Z)
 
 Schema change: none. Dependency: none.
 Complete: P1 (2026-11-06T08:28:45Z)
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-06T08:28:45Z` |
+| End | `2026-11-06T08:58:00Z` |
+| Wall clock | `29` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Departure from the concurrency plan: units ran inline, not as subagents. U-001 and U-003 share both setup scripts, and U-002 and U-004 are a few lines each. Tests came first and were RED before each change. |
+
+Rework: REQ-001: the hook filter, hook parity, and setup hardening suites pinned the old guard command text, and now read the ` || exit 2` suffix (2026-11-06T08:58:00Z)
+Rework: REQ-003: test-0000316 counted one Codex hook, now two (2026-11-06T08:58:00Z)
+Deviation: the hook shell heredoc and Python edits were blocked by the old forced-add guard when their text named the command, so the guard and standard edits used the Edit tool.
+Complete: P2 (2026-11-06T08:58:00Z)
