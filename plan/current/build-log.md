@@ -95,3 +95,17 @@ Complete: P2 (full suite 262 feature and 19 regression suites pass)
 
 Rework: REQ-001: frozen start-action line changed in place (2026-11-06T00:18:57Z)
 Complete: P3 (autonomous, evidence in acceptance-evidence.md)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-06T00:19:11Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship, ravintio-retrospective |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | none |
