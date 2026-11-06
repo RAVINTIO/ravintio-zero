@@ -60,3 +60,21 @@ Scope Lock complete. All four scenario paths captured.
 | Notes | Artifacts written inline. The units are small and share the roadmap text, so a subagent split adds overhead. |
 
 Complete: P1 (autonomous, no gate stop)
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-06T00:33:30Z` |
+| End | `2026-11-06T00:56:40Z` |
+| Wall clock | `23` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Units U1 to U3 ran inline in turn. They share the roadmap text and the cap tests, so a split adds overhead. Batch 1 had no shared write target. |
+
+Deviation: the coordinator cannot reserve an id while the driver runs, because it never edits the working tree then. A queued backlog entry carries an `{id}` placeholder and the step reserves the id. REQ-003, REQ-005, ADR-001, and the standards updated.
+Rework: REQ-004: standards test used a process-substitution loop that test 0000164-req-008 bans (2026-11-06T00:56:27Z)
+Complete: P2 (full suite 264 feature and 19 regression suites pass after the test fix)
