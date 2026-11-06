@@ -66,11 +66,15 @@ Complete: P1 (autonomous, no gate stop)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-05T23:54:02Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-06T00:18:31Z` |
+| Wall clock | `15` |
 | Model tier | primary (orchestration), sonnet (units) |
 | Skills loaded | ravintio-implement |
-| Agents spawned | 0 |
+| Agents spawned | 2 |
 | MCP calls | 0 |
-| Parallel task batches | 0 |
+| Parallel task batches | 1 |
 | Notes | Batches follow the Concurrency plan: batch 1 holds U1 and U2 in parallel, batch 2 holds U3. |
+
+Deviation: archived chart lookup takes the first `plan/_archive/{id}-*/initiative.md`, because real archive folders don't hold `-initiative-`. REQ-003 and ADR-001 updated.
+Deviation: one start-action line stays frozen (test 0000151-req-011), so the brief-title note is a new line.
+Complete: P2 (full suite 262 feature and 19 regression suites pass)
