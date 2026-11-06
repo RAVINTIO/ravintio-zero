@@ -27,7 +27,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 |-------|-------|
 | Start | `2026-11-05T23:51:38Z` |
 | End | `2026-11-05T23:52:36Z` |
-| Wall clock | `4` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -51,7 +51,7 @@ Scope Lock complete. All four scenario paths captured.
 |-------|-------|
 | Start | `2026-11-05T23:53:50Z` |
 | End | `2026-11-05T23:53:55Z` |
-| Wall clock | `6` |
+| Wall clock | `0` |
 | Model tier | primary |
 | Skills loaded | ravintio-plan |
 | Agents spawned | 0 |
@@ -67,7 +67,7 @@ Complete: P1 (autonomous, no gate stop)
 |-------|-------|
 | Start | `2026-11-05T23:54:02Z` |
 | End | `2026-11-06T00:18:31Z` |
-| Wall clock | `15` |
+| Wall clock | `24` |
 | Model tier | primary (orchestration), sonnet (units) |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 2 |
@@ -85,7 +85,7 @@ Complete: P2 (full suite 262 feature and 19 regression suites pass)
 |-------|-------|
 | Start | `2026-11-06T00:18:37Z` |
 | End | `2026-11-06T00:18:57Z` |
-| Wall clock | `4` |
+| Wall clock | `0` |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | 0 |
@@ -101,11 +101,29 @@ Complete: P3 (autonomous, evidence in acceptance-evidence.md)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-06T00:19:11Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-06T00:19:18Z` |
+| Wall clock | `0` |
 | Model tier | primary |
 | Skills loaded | ravintio-ship, ravintio-retrospective |
 | Agents spawned | 0 |
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | none |
+
+Complete: P4 (autonomous)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `28` |
+| Total agents spawned | `2` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `1` |
+| Primary tier agent calls | `0` |
+| Cheaper tier agent calls | `2` |
+| Self-corrections | `1` |
+| Phases skipped | `none` |
