@@ -8,7 +8,7 @@ status: "active"  # proposed | charted | active | delivered | blocked
 **Goal:** A delivered initiative branch holds one squash per step, titled `{feature-id}: {Feature title} (#{n})`, then one `{initiative-id}: Initiative admin (#{n})` commit. Nothing force-pushes, and step sessions run to the end with no help.
 **Branch:** initiative/0000349-clean-initiative-history
 **Status:** active
-**Position:** 4
+**Position:** 5
 **Step CI fixes:** allowed, for a fix inside the step's own scope
 
 ## Stop conditions
