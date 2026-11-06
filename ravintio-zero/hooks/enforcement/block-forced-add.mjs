@@ -2,12 +2,16 @@
 /**
  * PreToolUse hook (matcher: Bash): forced-add guard (feature 0000317, ADR-001).
  *
- * Blocks a `git add` that forces an ignored file into the index. A forced add
- * committed driver logs and the human ack in initiative 0000238.
+ * Blocks a `git add` or `git stage` that forces an ignored file into the
+ * index. A forced add committed driver logs and the human ack in initiative
+ * 0000238. Feature 0000357 widened the guard.
  *
  * The check runs on each segment of a compound command (split on && || ; & |
- * and newlines), after quote and backslash characters are removed. A segment
- * is blocked when it names both `git` and `add` as words and carries one of:
+ * newlines, parentheses, braces, and backticks, so a subshell or a command
+ * substitution becomes its own segment), after quote and backslash characters
+ * are removed. A segment that names `git` and `add` or `stage` as words and
+ * holds `$` is blocked, because the guard can't read the value of a variable.
+ * Otherwise a segment is blocked when it carries one of:
  *   - `--force`, or any abbreviation git accepts (`--f`, `--fo`, `--forc`)
  *   - a short flag group that contains `f`, such as `-f` or `-fA`
  * Flags after a bare `--` are paths and are ignored. This covers the
@@ -26,9 +30,9 @@ import { readStdin } from "./read-stdin.mjs";
 const FORCE_LONG = /^--f(o(r(c(e)?)?)?)?(=.*)?$/;
 const SHORT_GROUP = /^-[A-Za-z]*f[A-Za-z]*$/;
 
-function block() {
+function block(reason = "A forced git add is blocked. ") {
   const message =
-    "[RAVINTIO] block-forced-add: A forced git add is blocked. " +
+    "[RAVINTIO] block-forced-add: " + reason +
     "A step never runs git add -f or git add --force. " +
     "If a file is ignored on purpose, leave it out. " +
     "If it must be tracked, add a negation rule to .gitignore. " +
@@ -39,9 +43,22 @@ function block() {
   process.exit(2);
 }
 
+function wordsOf(segment) {
+  return segment.replace(/["'`\\]/g, "").split(/\s+/).filter(Boolean);
+}
+
+function addsFiles(segment) {
+  const tokens = wordsOf(segment);
+  return tokens.includes("git") && (tokens.includes("add") || tokens.includes("stage"));
+}
+
+function expandsVariable(segment) {
+  return addsFiles(segment) && segment.includes("$");
+}
+
 function forcesAdd(segment) {
-  const tokens = segment.replace(/["'`\\]/g, "").split(/\s+/).filter(Boolean);
-  if (!tokens.includes("git") || !tokens.includes("add")) return false;
+  const tokens = wordsOf(segment);
+  if (!addsFiles(segment)) return false;
   for (const t of tokens) {
     if (t === "--") break;
     if (FORCE_LONG.test(t) || SHORT_GROUP.test(t)) return true;
@@ -60,7 +77,10 @@ try {
 }
 
 try {
-  for (const segment of command.split(/&&|\|\||[;&|\n]/)) {
+  for (const segment of command.split(/&&|\|\||[;&|\n(){}`]/)) {
+    if (expandsVariable(segment)) {
+      block("A git add or git stage with a variable is blocked, because the guard can't read the flags. Write literal paths. ");
+    }
     if (forcesAdd(segment)) block();
   }
 } catch {
