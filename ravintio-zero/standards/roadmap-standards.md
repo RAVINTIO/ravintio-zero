@@ -83,7 +83,7 @@ An initiative runs in this sequence:
 - The orchestrator never resumes an initiative. The initiative skill never resumes a step.
 - A step session has `RAVINTIO_INITIATIVE_STEP=1` in its environment. The auto-trigger hook and the strict-mode hook both name the orchestrator for it, and the initiative skill for any other session while `plan/current-initiative/initiative.md` has `status: active`. The driver lock and the contents of `plan/current/` play no part.
 - `plan/.initiative-ack` is git-ignored, so a step session never commits the human's ack. `plan/.orchestrator-ack` stays tracked.
-- While the driver lock `plan/.initiative-runner.lock` is held, the initiative skill holds new backlog entries in `plan/.initiative-queue/`. After the step merges, it lands them through a coordinator PR (see `## Coordinator PRs`).
+- While the driver lock `plan/.initiative-runner.lock` is held, the initiative skill holds new admin work in `plan/.initiative-queue/`. A step session commits the items that name it, and the coordinator lands any other item (see `## Coordinator PRs`).
 - A step session never moves, renames, or deletes the driver files `plan/.initiative-logs/`, `plan/.initiative-runner.lock`, or `plan/.initiative-queue/`. The driver and the watcher own them, and the coordinator reads the step logs as stop evidence. The phase guard skips `plan/.initiative-logs/`, so a step has no reason to move it.
 
 ### I-A Chart
@@ -247,6 +247,7 @@ Run executes one initiative step from `position`. Ship owns the merge that ends 
 - A schema change that matches a chart-approved row does not stop the step. See Chart-time schema approval.
 - A fork that matches a `## Decisions` row does not stop the step. Apply the row's answer and its bump effect, and log `Decision applied (initiative chart): {fork}` in the build log. The downgrade block still applies. The step stops only for a fork no row covers. A missing table counts as an empty one.
 - A criterion marked `CI` in `## Criteria` counts as validated only after the step's first CI run.
+- The step reads `plan/.initiative-queue/` at P0 and again before P4 raises the PR. It acts only on an item whose `**Step:**` line names its number. It writes the item's content to the item's `**Destination:**` path and commits that path by explicit path on its feature branch, so the squash carries it. The step never moves, renames, or deletes the queue or an item. The coordinator clears the items after the step merges.
 - A confirmation that a skill asks for counts as a fork. If a `Confirmation:` row in `## Decisions` names the skill, its step, and the exact command, run that command with no stop and log `Decision applied (initiative chart): {fork}`. If the command differs in any way, the step stops.
 - P1 runs unless the step's row in `## P1 skips` says `yes`. A step with no `yes` row that would skip P1 prints `I-C Run: Blocked: step {n} has no P1 skip row marked yes.` and stops. A missing table counts as an empty one.
 - If a step skips P1 on a `yes` row, the build log holds `Skipped: P1 (chart row: step {n}, {reason})`.
@@ -360,11 +361,18 @@ Nothing commits directly on `initiative/*`. Every change arrives as a squashed P
 
 Coordinator work covers activation, queued backlog entries, scope edits, and the I-E Delivery archive and retrospective. The coordinator lands it on a `feat/` branch cut from the initiative branch, through a PR whose base is the initiative branch.
 
+Admin work takes one of two routes:
+
+- **Aligned admin.** Admin work aligns with step N when step N caused it or it serves step N. Examples are the setup record after step N's `Setup:` stop, an id that step N reserves, a backlog entry filed from step N's work, a fix to step N's code or CI, and step N's edits to entries the coordinator filed. It goes in the step PR for step N. While the driver runs, the coordinator queues it as an item in `plan/.initiative-queue/`. An item is a folder. Its `item.md` holds `**Step:** {n}` and `**Destination:** {repo path}`, and the other files in the folder are the content. The step commits the item (see I-C Run).
+- **Unaligned admin.** Admin that fits no step, such as the activation chart, lands through a `chore/` PR as it happens, while the driver is stopped. Later steps then run on current admin. At delivery, the one chore commit holds this work.
+
+The next bullets apply to every coordinator PR.
+
 - **Title.** Use the form `{id}-{slug}: {summary} (#{n})`. The id is the 7-digit initiative id.
 - **One-commit PR.** In a one-commit PR, the commit subject uses the same `{id}-{slug}: {summary}` form. GitHub takes the squash title of a one-commit PR from the commit subject, not the PR title.
 - **Local suite.** The full local suite passes before the PR opens.
-- **CI.** CI is green before the agent squash-merges the PR with `gh pr merge --squash`.
-- **Timing.** Raise a coordinator PR only while the driver is stopped. While a step runs, queue the work in `plan/.initiative-queue/`.
+- **CI.** CI is green before the agent squash-merges the PR with `gh pr merge --squash --delete-branch {n}`. The `--delete-branch` flag removes the coordinator branch from `origin`.
+- **Timing.** Raise a coordinator PR only while the driver is stopped. While a step runs, queue aligned admin in `plan/.initiative-queue/` with the step named.
 
 The `merge-guard` hook is unchanged. It already allows a squash into `initiative/*` because it checks only the PR base.
 
@@ -379,7 +387,7 @@ In an initiative step, Steps 1 to 5 run as written. Step 9 gives way to the two 
 Every message in this stage begins with `I-D Advance:` after the `P4 Ship:` prefix.
 
 1. Update `plan/current-initiative/initiative.md` on the feature branch. Set the step's Status to `merged`, fill its Version with the released version, and move `position` to the next step.
-2. Run ship Step 8 now, then push the branch so the sentinel commit is on the remote. Raise the PR against the initiative branch only after that push. The initiative update ships in the same PR, so the squash commit carries it.
+2. Run ship Step 8 now, then push the branch so the sentinel commit is on the remote. Raise the PR against the initiative branch only after that push and after the queue items that name the step are committed. The initiative update ships in the same PR, so the squash commit carries it.
 
    ```bash
    gh pr create --base initiative/{id}-{slug} --title "{feature-id}: {Feature title}"
