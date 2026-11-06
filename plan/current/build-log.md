@@ -1,0 +1,46 @@
+---
+title: "Build Log - 0000352-coordinator-admin-in-step-prs"
+summary: "Working record of the pipeline run, maintained by the orchestrator."
+---
+# Build Log - 0000352-coordinator-admin-in-step-prs
+
+> Created at discovery (P0). Appended by the orchestrator at each phase boundary. Survives session changes.
+
+## Header
+
+| Field | Value |
+|-------|-------|
+| Feature ID | `0000352-coordinator-admin-in-step-prs` |
+| Pipeline start | `2026-11-06T00:30:45Z` |
+| Tool | `claude-code` |
+| Primary model | `claude-sonnet-5-5` |
+| Cheaper model | `claude-haiku-5-5` |
+| Run speed | `standard` |
+
+---
+
+## Phase Log
+
+### P0: Discovery
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-06T00:30:45Z` |
+| End | `2026-11-06T00:33:00Z` |
+| Wall clock | `2` |
+| Model tier | primary |
+| Skills loaded | ravintio-orchestrator |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Initiative 0000349 step 2. Migrations 0004 and 0005 hold ledger rows (not applicable), so none ran. |
+
+Run mode: autonomous (2026-11-06T00:30:45Z)
+Run speed: standard (2026-11-06T00:30:45Z)
+Backlog pull-in (initiative row): 0000332 pulled in and deleted. 0000345 pulled in for rules 1, 2, and 5 and kept for step 3 (rule 3).
+Version: 0.50.0 (step Bump minor, from 0.49.0)
+Scope Lock (happy path): the coordinator queues an item with a step named and that step commits it [source: draft-accepted (initiative)]
+Scope Lock (first-run path): an empty queue changes nothing for a step [source: draft-accepted (initiative)]
+Scope Lock (error path): `reserve-id.mjs --commit` on `initiative/*` exits 1, commits nothing, and names the `feat/` route [source: draft-accepted (initiative)]
+Scope Lock (cross-session continuity): the queue lives on disk and the script keeps no state [source: draft-accepted (initiative)]
+Scope Lock complete. All four scenario paths captured.
