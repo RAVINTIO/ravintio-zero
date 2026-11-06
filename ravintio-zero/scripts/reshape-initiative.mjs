@@ -261,8 +261,14 @@ if (opts.tags) {
     const message = type === 'tag'
       ? git(['for-each-ref', '--format=%(contents)', `refs/tags/${step.tag}`]).replace(/\s+$/, '')
       : `${step.tag}`;
+    const oldObject = git(['rev-parse', '--verify', `refs/tags/${step.tag}`]).trim();
     git(['tag', '-d', step.tag]);
-    git(['tag', '-a', '-m', message || step.tag, step.tag, step.newCommit]);
+    try {
+      git(['tag', '-a', '-m', message || step.tag, step.tag, step.newCommit]);
+    } catch (e) {
+      git(['update-ref', `refs/tags/${step.tag}`, oldObject]);
+      fail(`tag ${step.tag} did not move. The old tag is back: ${String(e.stderr || e.message).trim()}`);
+    }
     process.stdout.write(`moved tag ${step.tag} to ${step.newCommit.slice(0, 7)}\n`);
   }
 }
