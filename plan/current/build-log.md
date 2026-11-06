@@ -27,7 +27,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 |-------|-------|
 | Start | `2026-11-06T02:31:13Z` |
 | End | `2026-11-06T02:34:01Z` |
-| Wall clock | `10` |
+| Wall clock | `3` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -54,7 +54,7 @@ Complete: P0 (2026-11-06T02:34:01Z)
 |-------|-------|
 | Start | `2026-11-06T02:36:13Z` |
 | End | `2026-11-06T02:36:13Z` |
-| Wall clock | `4` |
+| Wall clock | `0` |
 | Model tier | primary |
 | Skills loaded | ravintio-plan |
 | Agents spawned | 0 |
@@ -71,7 +71,7 @@ Complete: P1 (2026-11-06T02:36:13Z)
 |-------|-------|
 | Start | `2026-11-06T02:49:46Z` |
 | End | `2026-11-06T02:49:46Z` |
-| Wall clock | `30` |
+| Wall clock | `0` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 0 |
@@ -90,7 +90,7 @@ Complete: P2 (2026-11-06T02:49:46Z)
 |-------|-------|
 | Start | `2026-11-06T03:01:08Z` |
 | End | `2026-11-06T03:01:08Z` |
-| Wall clock | `8` |
+| Wall clock | `0` |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | 0 |
@@ -103,18 +103,34 @@ Blocked: CodeQL default setup is still on for the repo (code-scanning/default-se
 
 Resolved: CodeQL default setup on (2026-11-06T08:04:56Z, code-scanning/default-setup state now not-configured)
 
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-06T08:05:44Z` |
+| End | `2026-11-06T08:05:44Z` |
+| Wall clock | `0` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Ship resumed after the CodeQL default setup stop was resolved. Wall clock values in P1 to P4 come from recorded timestamps, which are coarse. |
+
+Complete: P4 (2026-11-06T08:05:44Z)
+
 ---
 
 ## Summary (filled at ship, P4)
 
 | Metric | Value |
 |--------|-------|
-| Total phases completed | `` |
-| Total wall clock | `` |
-| Total agents spawned | `` |
-| Total MCP calls | `` |
-| Phases using parallelism | `` |
-| Primary tier agent calls | `` |
-| Cheaper tier agent calls | `` |
-| Self-corrections | `` |
-| Phases skipped | `` |
+| Total phases completed | `5` |
+| Total wall clock | `3` |
+| Total agents spawned | `0` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `0` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `1` |
+| Phases skipped | `0` |
