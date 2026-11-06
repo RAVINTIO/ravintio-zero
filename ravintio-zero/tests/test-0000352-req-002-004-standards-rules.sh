@@ -43,11 +43,12 @@ echo "=== req-004 AC-2: no bare squash command in the pack ==="
 BARE=""
 for f in "$ZERO_DIR"/skills/*/SKILL.md "$ZERO_DIR"/skills/*/references/*.md "$ZERO_DIR"/standards/*.md; do
   while IFS= read -r line; do
+    [ -n "$line" ] || continue
     case "$line" in
       *'--delete-branch'*) ;;
       *) BARE="$BARE$(basename "$f"): $line"$'\n' ;;
     esac
-  done < <(grep -E '^[[:space:]]*gh pr merge --squash' "$f")
+  done <<< "$(grep -E '^[[:space:]]*gh pr merge --squash' "$f" || true)"
 done
 assert_equals "" "$BARE" "AC-2: every command line that starts gh pr merge --squash holds --delete-branch"
 
