@@ -47,7 +47,7 @@ for wf in "$WF_REPO" "$WF_TPL"; do
   n="$(basename "$(dirname "$wf")")/$(basename "$wf")"
   assert_equals "" "$(check "$wf")" "$n holds the job with its condition, checkout, permission, and env"
   W="$(grep -c 'contents: write' "$wf")"
-  assert_equals "1" "$W" "$n still has one write scope (release-tag)"
+  assert_equals "2" "$W" "$n still has two write scopes (release-tag, cleanup-branch)"
 done
 
 print_summary
