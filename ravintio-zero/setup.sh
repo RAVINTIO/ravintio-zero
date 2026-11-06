@@ -425,7 +425,7 @@ install_codex_hooks() {
   # 0000316 req-002: Codex sets no project-dir variable, so the command holds
   # the absolute project path. Single quotes keep the shell from expanding it.
   local quoted_root="${PROJECT_ROOT//\'/\'\\\'\'}"
-  local command_line="node '$quoted_root/$hooks_dir_rel/guard-run.mjs' guard merge-guard.mjs"
+  local command_line="node '$quoted_root/$hooks_dir_rel/guard-run.mjs' guard merge-guard.mjs || exit 2"
   RAVINTIO_HOOK_CMD="$command_line" RAVINTIO_HOOK_MARK="$hooks_dir_rel/merge-guard.mjs" \
     RAVINTIO_HOOK_MARK2="$hooks_dir_rel/guard-run.mjs" \
     RAVINTIO_SETTINGS="$hooks_file" RAVINTIO_SETTINGS_REL="$hooks_file_rel" \
@@ -529,14 +529,18 @@ install_enforcement_hooks() {
   # guard mode, where a missing or crashing script exits 2. The rest run in
   # advisory mode and never block.
   local launcher="node \"\${CLAUDE_PROJECT_DIR}/$hooks_dir_rel/guard-run.mjs\""
-  local gate_cmd="$launcher guard gate-write.mjs"
-  local ratchet_cmd="$launcher guard ratchet-check.mjs"
-  local em_dash_cmd="$launcher guard em-dash-guard.mjs"
+  # 0000357 ADR-002: a guard command exits 2 when the launcher fails. Claude Code
+  # treats exit 1 from a missing launcher as a non-blocking error, which would
+  # let the call through. Advisory commands keep their form.
+  local fail_closed=" || exit 2"
+  local gate_cmd="$launcher guard gate-write.mjs$fail_closed"
+  local ratchet_cmd="$launcher guard ratchet-check.mjs$fail_closed"
+  local em_dash_cmd="$launcher guard em-dash-guard.mjs$fail_closed"
   local trigger_cmd="$launcher advisory auto-trigger-orchestrator.mjs"
   local presence_cmd="$launcher advisory check-orchestrator-presence.mjs"
   local design_cmd="$launcher advisory check-design.mjs"
-  local merge_guard_cmd="$launcher guard merge-guard.mjs"
-  local forced_add_cmd="$launcher guard block-forced-add.mjs"
+  local merge_guard_cmd="$launcher guard merge-guard.mjs$fail_closed"
+  local forced_add_cmd="$launcher guard block-forced-add.mjs$fail_closed"
   local reply_prefix_cmd="$launcher advisory check-reply-prefix.mjs"
 
   if command -v node >/dev/null 2>&1; then

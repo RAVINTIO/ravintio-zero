@@ -286,7 +286,10 @@ function New-HookEntry {
     # missing or crashing script exits 2. The rest run in advisory mode.
     param([string]$Matcher, [string]$Module, [string]$HooksDir)
     $mode = if (@('gate-write', 'ratchet-check', 'em-dash-guard', 'merge-guard', 'block-forced-add') -contains $Module) { 'guard' } else { 'advisory' }
-    $command = 'node "${CLAUDE_PROJECT_DIR}/' + $HooksDir + '/guard-run.mjs" ' + $mode + ' ' + $Module + '.mjs'
+    # 0000357 ADR-002: a guard command exits 2 when the launcher fails, because
+    # Claude Code treats the exit 1 of a missing launcher as non-blocking.
+    $suffix = if ($mode -eq 'guard') { ' || exit 2' } else { '' }
+    $command = 'node "${CLAUDE_PROJECT_DIR}/' + $HooksDir + '/guard-run.mjs" ' + $mode + ' ' + $Module + '.mjs' + $suffix
     [ordered]@{
         matcher = $Matcher
         hooks   = @([ordered]@{ type = 'command'; command = $command })
@@ -771,7 +774,7 @@ function Install-CodexHooks {
     # 0000316 req-002: Codex sets no project-dir variable, so the command holds
     # the absolute project path.
     $rootPath = ($ProjectRoot -replace '\\', '/').TrimEnd('/')
-    $commandLine = 'node "' + $rootPath + '/' + $HooksDirRel + '/guard-run.mjs" guard merge-guard.mjs'
+    $commandLine = 'node "' + $rootPath + '/' + $HooksDirRel + '/guard-run.mjs" guard merge-guard.mjs || exit 2'
     $entry = [ordered]@{
         matcher = 'Bash'
         hooks   = @([ordered]@{ type = 'command'; command = $commandLine; statusMessage = 'Checking merge command' })
