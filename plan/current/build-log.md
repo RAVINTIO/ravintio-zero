@@ -104,3 +104,35 @@ Complete: P2 (2026-11-06T08:58:00Z)
 
 Rework: REQ-002: the first guard draft blocked a commit message that held a variable and passed a variable glued to git. It now reads the git subcommand (2026-11-06T09:10:27Z)
 Complete: P3 (2026-11-06T09:10:27Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-06T09:10:27Z` |
+| End | `2026-11-06T09:11:36Z` |
+| Wall clock | `2` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Wall clock values come from recorded timestamps, which are coarse. |
+
+Complete: P4 (2026-11-06T09:11:36Z)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `46` |
+| Total agents spawned | `0` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `0` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `3` |
+| Phases skipped | `none` |
