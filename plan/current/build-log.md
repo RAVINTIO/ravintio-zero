@@ -44,3 +44,19 @@ Scope Lock (first-run path): an empty queue changes nothing for a step [source: 
 Scope Lock (error path): `reserve-id.mjs --commit` on `initiative/*` exits 1, commits nothing, and names the `feat/` route [source: draft-accepted (initiative)]
 Scope Lock (cross-session continuity): the queue lives on disk and the script keeps no state [source: draft-accepted (initiative)]
 Scope Lock complete. All four scenario paths captured.
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-06T00:31:57Z` |
+| End | `2026-11-06T00:33:22Z` |
+| Wall clock | `2` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Artifacts written inline. The units are small and share the roadmap text, so a subagent split adds overhead. |
+
+Complete: P1 (autonomous, no gate stop)
