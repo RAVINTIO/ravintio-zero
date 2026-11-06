@@ -25,7 +25,8 @@ A step session that ended its turn after P2 stopped the driver with no stated ca
 
 ## Validation results
 
-Recorded at P3.
+- The full suite passes: 271 feature suites and 19 regression suites, after one fix that listed the new helper in `run-tests.sh`. The consistency check, the backlog index check, and the self-description check pass.
+- 12 criteria verified by execution. 0 not-verifiable. Security review found no critical, high, or medium findings. A run of `setup.ps1` was not made. The PowerShell file parses with 0 errors.
 
 ## Skipped phases
 

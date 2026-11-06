@@ -100,3 +100,35 @@ Complete: P2 (autonomous)
 
 Rework: REQ-004: run-tests.sh did not list helpers/driver-args.sh (2026-11-06T02:15:19Z)
 Complete: P3 (autonomous, clean, 0 critical or high findings)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-06T02:19:33Z` |
+| End | `2026-11-06T02:19:33Z` |
+| Wall clock | `0` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship, ravintio-retrospective |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | none |
+
+Complete: P4 (autonomous)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `26` |
+| Total agents spawned | `0` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `0` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `1` |
+| Phases skipped | `none` |
