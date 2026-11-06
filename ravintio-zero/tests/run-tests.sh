@@ -77,6 +77,7 @@ KNOWN_NON_SUITES=(
   "regression/.gitkeep"                    # keeps the folder in git
   "helpers/assert.sh"                      # Bash assert helpers
   "helpers/version.sh"                     # version comparison for the 0000160 req-004 and 0000164 req-011 suites
+  "helpers/driver-args.sh"                 # claude arguments the driver passes, for the driver suites (0000354 REQ-004)
   "helpers/assert.ps1"                     # PowerShell assert helpers (0000036 ADR-002)
   "helpers/setup-workspace.ps1"            # temporary projects for the setup.ps1 suites
   "fixtures/0000038-hook-filter/README.md"              # what the 0000038 fixtures hold

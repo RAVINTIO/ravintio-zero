@@ -9,6 +9,7 @@ set -uo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
+source "$SCRIPT_DIR/helpers/driver-args.sh"
 
 DRIVER="$SCRIPT_DIR/../scripts/initiative-run.mjs"
 TPL="$SCRIPT_DIR/../templates/initiative.template.md"
@@ -79,8 +80,8 @@ R="$(make_fixture a active)"
 run_driver "$R" ok
 assert_equals "0" "$CODE" "req-007 (a): driver exits 0 at delivery"
 assert_equals "2" "$(wc -l < "$R/stub.log" | tr -d ' ')" "req-007 (a): two steps ran"
-assert_equals "-p --output-format stream-json --verbose --permission-mode auto --model sonnet Run initiative step 1" "$(sed -n 1p "$R/stub.log")" "req-007 (a): step 1 arguments"
-assert_equals "-p --output-format stream-json --verbose --permission-mode auto --model sonnet Run initiative step 2" "$(sed -n 2p "$R/stub.log")" "req-007 (a): step 2 arguments"
+assert_equals "$(driver_args sonnet "" Run initiative step 1)" "$(sed -n 1p "$R/stub.log")" "req-007 (a): step 1 arguments"
+assert_equals "$(driver_args sonnet "" Run initiative step 2)" "$(sed -n 2p "$R/stub.log")" "req-007 (a): step 2 arguments"
 assert_equals "0" "$(grep -cE -- '--continue|--resume' "$R/stub.log")" "req-007 (a): no --continue or --resume"
 assert_contains "I-C Run:" "$OUT" "req-007 (a): prints I-C Run: lines"
 assert_contains "I-D Advance:" "$OUT" "req-007 (a): prints I-D Advance: lines"

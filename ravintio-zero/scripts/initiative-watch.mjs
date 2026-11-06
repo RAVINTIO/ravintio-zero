@@ -48,6 +48,10 @@
 //   commit is an ancestor of HEAD. If it is not, or git does not know it, the watcher prints
 //   one "I-C Run: event: branch changed to {branch}" line and no commit lines.
 //
+//   Waiting: with no plan/current/build-log.md, it prints "I-C Run: waiting for the build log" once
+//   per absence and skips the stale check, because a step has not written its log yet (0000354).
+//   The heartbeat and the activity lines name the running step from the newest
+//   plan/.initiative-logs/step-{n}.log by modification time, not from the chart position.
 //   Heartbeat: every HEARTBEAT_MS it prints "I-C Run: heartbeat: ..." with the step (the
 //   position in plan/current-initiative/initiative.md), the phase (the last "### P<n>:"
 //   heading), the last build log line cut to 200 characters, the time since the last change,
@@ -173,6 +177,30 @@ function newestArchived(root) {
   return best;
 }
 
+// The number of the step that runs now: the newest plan/.initiative-logs/step-{n}.log by
+// modification time. Attempt logs do not count. Returns '' if no step log exists (0000354).
+function runningStep(root) {
+  try {
+    refuseLinks(root, LOGS);
+    const dir = join(root, LOGS);
+    let best = '';
+    let bestTime = -1;
+    for (const name of readdirSync(dir)) {
+      const m = name.match(/^step-([0-9]{1,4})\.log$/);
+      if (!m) continue;
+      const time = statSync(join(dir, name)).mtimeMs;
+      if (time > bestTime) {
+        bestTime = time;
+        best = m[1];
+      }
+    }
+    return best;
+  } catch (e) {
+    if (e instanceof Stop) throw e;
+    return '';
+  }
+}
+
 function git(root, args) {
   const r = spawnSync('git', ['-C', root, ...args], { encoding: 'utf8' });
   return r.status === 0 ? r.stdout : '';
@@ -204,7 +232,7 @@ function ago(ms) {
   return m < 1 ? 'under 1 minute' : `${m} minute${m === 1 ? '' : 's'}`;
 }
 
-const state = { path: null, seen: 0, head: null, lastBeat: null, staleKey: null, logPath: null, logOffset: 0, logRest: '' };
+const state = { path: null, seen: 0, head: null, lastBeat: null, staleKey: null, logPath: null, logOffset: 0, logRest: '', waiting: false };
 
 // Collapses control characters and whitespace runs to one space.
 const oneLine = (text) => String(text).replace(/[\u0000-\u001f\u007f]+/g, ' ').replace(/\s+/g, ' ').trim();
@@ -290,7 +318,12 @@ function pass(opts) {
     return true;
   }
 
-  let rel = existsSync(join(root, BUILD_LOG)) ? BUILD_LOG : newestArchived(root);
+  // With no plan/current/build-log.md the step has not written one yet. The watcher still reads
+  // the newest archived log for events, but it skips the stale check (0000354).
+  const hasCurrentLog = existsSync(join(root, BUILD_LOG));
+  if (!hasCurrentLog && !state.waiting) out('I-C Run: waiting for the build log');
+  state.waiting = !hasCurrentLog;
+  let rel = hasCurrentLog ? BUILD_LOG : newestArchived(root);
   let logText = rel ? readText(root, rel) : null;
   if (logText === null) rel = '';
   const lines = logText === null ? [] : logText.split(/\r?\n/);
@@ -317,7 +350,8 @@ function pass(opts) {
 
   // Step log activity.
   const position = initText === null ? '' : field(initText, 'position');
-  if (/^[0-9]{1,4}$/.test(position)) activity(opts, `${LOGS}/step-${position}.log`);
+  const running = runningStep(root) || position;
+  if (/^[0-9]{1,4}$/.test(running)) activity(opts, `${LOGS}/step-${running}.log`);
 
   // Commit events. A last-seen commit that is not an ancestor of HEAD means the branch changed.
   const head = git(root, ['rev-parse', 'HEAD']).trim();
@@ -336,7 +370,7 @@ function pass(opts) {
 
   // Stale log: report each stale state once.
   const [latest] = readCommits(root, null, 1);
-  if (mtime !== null && latest && latest.time - mtime >= STALE_MS && now - mtime > STALE_MS) {
+  if (hasCurrentLog && mtime !== null && latest && latest.time - mtime >= STALE_MS && now - mtime > STALE_MS) {
     const key = `${mtime}:${latest.sha}`;
     if (key !== state.staleKey) {
       state.staleKey = key;
@@ -347,7 +381,7 @@ function pass(opts) {
   // Heartbeat.
   if (opts.once || state.lastBeat === null || now - state.lastBeat >= HEARTBEAT_MS) {
     state.lastBeat = now;
-    const step = initText === null ? 'none' : field(initText, 'position') || 'unknown';
+    const step = runningStep(root) || (initText === null ? 'none' : field(initText, 'position') || 'unknown');
     let phase = 'none';
     for (const l of lines) {
       const m = l.match(/^###\s+(P[0-9]+):/);

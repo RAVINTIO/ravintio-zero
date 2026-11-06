@@ -138,7 +138,7 @@ rm -rf "$WS"
 # ── (c): a second run changes only writtenAt, and the file is not gitignored ─
 
 echo ""
-echo "=== req-001 (c): second run changes only writtenAt; plan/state/claude-code.md is not gitignored ==="
+echo "=== req-001 (c): second run with the same flags leaves the record unchanged (0000354 REQ-003); it is not gitignored ==="
 
 WS=$(make_workspace); cd "$WS"
 bash ravintio-zero/setup.sh claude-code >/dev/null 2>&1
@@ -172,8 +172,8 @@ if [ "$FIRST_WRITTEN_AT" != "$SECOND_WRITTEN_AT" ]; then
 else
   WRITTEN_AT_CHANGED="no"
 fi
-assert_equals "yes" "$WRITTEN_AT_CHANGED" \
-  "req-001 (c): second run changes the writtenAt field"
+assert_equals "no" "$WRITTEN_AT_CHANGED" \
+  "req-001 (c): second run with the same flags keeps the writtenAt field (0000354 REQ-003)"
 
 if git check-ignore -q "plan/state/claude-code.md" 2>/dev/null; then
   IGNORED="yes"

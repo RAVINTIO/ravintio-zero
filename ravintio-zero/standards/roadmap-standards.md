@@ -280,6 +280,17 @@ The driver appends three labels to `OTEL_RESOURCE_ATTRIBUTES` in the child envir
 
 The driver keeps the old value byte for byte and joins the labels with commas. It percent-encodes each label value (`%` first, then `,`, `=`, and space). The labels hold identifiers only.
 
+#### Resume
+
+The driver resumes a step that ends its turn early. A step session exits 0 when the model ends its turn and no background task is pending. If `claude` exits 0, no `Blocked:` line exists, and the position did not move, the driver resumes the session.
+
+- The driver reads the last `session_id` from the stream events in the step log. It checks the id against `^[A-Za-z0-9_-]{8,128}$` and passes it as one argument.
+- The resume runs `claude -p` with the same flags, `--resume {session}`, and a prompt that tells the session to read the build log and continue. It writes to the same step log.
+- The driver prints `I-C Run: Resuming: step {n} ended its turn unmerged, resume {k} of 2` before each resume.
+- The cap is two resumes. If the step is still unmerged after the second, the driver prints `I-C Run: Blocked: step {n} exited without merging after 2 resumes` and exits 1.
+- A non-zero exit, a `Blocked:` line, or a missing session id never resumes.
+- A step session never ends its turn before `I-D Advance: Complete:` or a `Blocked:` line. The orchestrator skill states the rule.
+
 #### Restart stop
 
 The driver loads its code once. After a merged step, it compares the initiative branch ref before and after the step. If the step changed `ravintio-zero/scripts/initiative-run.mjs`, `ravintio-zero/scripts/initiative-watch.mjs`, or `ravintio-zero/skills/ravintio-initiative/SKILL.md`, the driver stops.
@@ -314,6 +325,7 @@ The driver writes the child's stdout and stderr to `plan/.initiative-logs/step-{
 - The initiative skill relays each activity line to the human.
 
 - If `step-{position}.log` exists when a step starts, the driver renames it to `step-{position}.attempt-{k}.log` first. `k` is the lowest number whose path is free. The driver then opens a fresh `step-{position}.log`, so a rerun keeps every earlier attempt and the latest attempt keeps the plain name.
+- If `plan/current/build-log.md` does not exist, the watcher prints `I-C Run: waiting for the build log` once and skips the stale check. It names the running step from the newest `step-{n}.log`, not from the chart position.
 - The driver copies the child's stderr to its own stderr. It never prints the child's stdout or any log content.
 - The driver adds `plan/.initiative-logs/` to `.git/info/exclude`, not `.gitignore`, and adds the line once.
 - Every stop after a step starts ends with `Log: plan/.initiative-logs/step-{position}.log`. Stops before any step starts name no log. If attempt logs exist for the step, the stop line also names them as `Earlier: {paths}.` before the `Log:` field.
@@ -403,7 +415,7 @@ Every message in this stage begins with `I-D Advance:` after the `P4 Ship:` pref
       I-D Advance: Blocked: no CI ran on PR #{n}. CI must trigger on pull requests to `initiative/**`.
       ```
 
-   2. Run `gh pr checks {n} --watch --fail-fast`. A Claude session runs it with the longest Bash timeout, or as a background task if CI takes over 10 minutes. Stop only if a check fails. Push the branch, print the line below, and exit:
+   2. Run `gh pr checks {n} --watch --fail-fast`. A Claude session runs it with the longest Bash timeout, or as a background task if CI takes over 10 minutes. If a check fails, read the chart field `**Step CI fixes:**`. The values are `allowed` and `stop`, and the default is `stop`. With `allowed`, push a fix that stays inside the step's own scope and watch the checks again. With `stop`, or for a fix outside that scope, push the branch, print the line below, and exit:
 
       ```
       I-D Advance: Blocked: CI failed on PR #{n}. Fix the failing check, then tell me to retry.

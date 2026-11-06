@@ -1415,6 +1415,17 @@ function Write-SetupConfigOverride {
         "> match this file on every ``setup.sh``/``setup.ps1`` run.`n`n" +
         "$fence" + "json`n$configJson`n$fence`n"
 
+    # Leave the record alone when only writtenAt would change (0000354 ADR-002), so a rerun
+    # leaves a clean tree. writtenAt is the last field, so dropping its line compares the rest.
+    if (Test-Path -LiteralPath $configFile) {
+        $dropWritten = { param($text) (($text -replace "`r`n", "`n") -split "`n" | Where-Object { $_ -notmatch '"writtenAt"' }) -join "`n" }
+        $existing = [System.IO.File]::ReadAllText($configFile)
+        if ((& $dropWritten $existing).TrimEnd() -eq (& $dropWritten $content).TrimEnd()) {
+            Write-Host "  = plan/state/$ToolName.md (unchanged)"
+            return $true
+        }
+    }
+
     try {
         New-Item -ItemType Directory -Path $configDir -Force -ErrorAction Stop | Out-Null
         Set-Content -Path $configFile -Value $content -Encoding UTF8 -ErrorAction Stop
