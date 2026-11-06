@@ -57,7 +57,7 @@ $root = ($ws -replace '\\', '/').TrimEnd('/')
 Assert-Contains "$root/.codex/hooks/enforcement/guard-run.mjs" ($cmds -join "`n") "req-002 AC-2: the command holds the absolute path"
 Assert-Equal 0 @($cmds | Where-Object { $_ -like '*rev-parse*' }).Count "req-002 AC-2: the command has no git rev-parse"
 $run = Invoke-Setup $ws @('codex')
-Assert-Equal 1 @(Get-AllHookCommands (Join-Path $ws '.codex\hooks.json')).Count "req-002 AC-3: a rerun leaves one hook"
+Assert-Equal 2 @(Get-AllHookCommands (Join-Path $ws '.codex\hooks.json')).Count "req-002 AC-3: a rerun leaves the two guard hooks (0000357)"
 Remove-SetupWorkspace $ws
 
 }
