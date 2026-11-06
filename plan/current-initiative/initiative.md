@@ -138,7 +138,7 @@ status: "active"  # proposed | charted | active | delivered | blocked
 | 1 | 0000351-step-titles-and-history-shape | Step titles and history shape | 0000350, 0000339, 0000345 (rule 4), 0000268 | minor | 0.49.0 | merged |
 | 2 | 0000352-coordinator-admin-in-step-prs | Coordinator admin in step PRs | 0000345 (rules 1, 2, and 5), 0000332 | minor | 0.50.0 | merged |
 | 3 | 0000353-reshape-at-delivery | Reshape at delivery | 0000345 (rule 3) | minor | 0.51.0 | merged |
-| 4 | 0000354-steps-run-to-the-end | Steps run to the end | 0000334, 0000343, 0000256, 0000270, 0000344 | minor | | pending |
+| 4 | 0000354-steps-run-to-the-end | Steps run to the end | 0000334, 0000343, 0000256, 0000270, 0000344 | minor | 0.52.0 | merged |
 | 5 | 0000355-codeql-and-branch-cleanup | CodeQL and branch cleanup in CI | 0000346, 0000338, 0000356 | minor | | pending |
 | 6 | 0000357-guard-gaps-closed | Guard gaps closed | 0000340, 0000341, 0000342 | minor | | pending |
 | 7 | 0000358-clean-step-stops-and-logs | Clean step stops and logs | 0000273, 0000266, 0000335, 0000269 | minor | | pending |
