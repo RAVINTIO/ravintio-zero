@@ -87,3 +87,20 @@ Rework: REQ-001: the hook filter, hook parity, and setup hardening suites pinned
 Rework: REQ-003: test-0000316 counted one Codex hook, now two (2026-11-06T08:58:00Z)
 Deviation: the hook shell heredoc and Python edits were blocked by the old forced-add guard when their text named the command, so the guard and standard edits used the Edit tool.
 Complete: P2 (2026-11-06T08:58:00Z)
+
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-06T08:58:00Z` |
+| End | `2026-11-06T09:10:27Z` |
+| Wall clock | `12` |
+| Model tier | primary |
+| Skills loaded | ravintio-validate-and-accept |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Suite green (280 feature, 19 regression). No critical or high findings. Evidence in acceptance-evidence.md. |
+
+Rework: REQ-002: the first guard draft blocked a commit message that held a variable and passed a variable glued to git. It now reads the git subcommand (2026-11-06T09:10:27Z)
+Complete: P3 (2026-11-06T09:10:27Z)
