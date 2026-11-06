@@ -2,7 +2,7 @@
 
 **Feature:** CodeQL and branch cleanup in CI
 **Version:** 0.53.0
-**PR:** pending
+**PR:** 115
 
 ## What changed
 
