@@ -92,18 +92,18 @@ SETUP_EXIT=$?
 RENDER="$(render_hooks "$WS/.claude/settings.json")"
 
 assert_exit_zero "$SETUP_EXIT" "req-002 (a): setup.sh exits 0 with single-object hooks values"
-assert_equals "0" "$(count_lines "$RENDER" 'PreToolUse|Write|Edit|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard gate-write.mjs')" \
+assert_equals "0" "$(count_lines "$RENDER" 'PreToolUse|Write|Edit|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard gate-write.mjs || exit 2')" \
   "req-002 (a): the single-object PreToolUse RAVINTIO entry is gone"
 assert_equals "0" "$(count_lines "$RENDER" 'UserPromptSubmit|.*|node .claude/hooks/enforcement/check-design.mjs')" \
   "req-002 (a): the single-object UserPromptSubmit RAVINTIO entry is gone"
 for line in \
-  'PreToolUse|Write|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard gate-write.mjs' \
-  'PreToolUse|Edit|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard gate-write.mjs' \
-  'PreToolUse|Write|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard ratchet-check.mjs' \
-  'PreToolUse|Edit|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard ratchet-check.mjs' \
-  'PreToolUse|Write|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard em-dash-guard.mjs' \
-  'PreToolUse|Edit|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard em-dash-guard.mjs' \
-  'PreToolUse|Bash|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard merge-guard.mjs' \
+  'PreToolUse|Write|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard gate-write.mjs || exit 2' \
+  'PreToolUse|Edit|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard gate-write.mjs || exit 2' \
+  'PreToolUse|Write|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard ratchet-check.mjs || exit 2' \
+  'PreToolUse|Edit|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard ratchet-check.mjs || exit 2' \
+  'PreToolUse|Write|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard em-dash-guard.mjs || exit 2' \
+  'PreToolUse|Edit|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard em-dash-guard.mjs || exit 2' \
+  'PreToolUse|Bash|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard merge-guard.mjs || exit 2' \
   'UserPromptSubmit|.*|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" advisory auto-trigger-orchestrator.mjs' \
   'UserPromptSubmit|.*|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" advisory check-orchestrator-presence.mjs' \
   'UserPromptSubmit|.*|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" advisory check-design.mjs'; do

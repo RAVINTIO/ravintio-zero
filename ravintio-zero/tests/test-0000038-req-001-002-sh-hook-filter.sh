@@ -74,13 +74,13 @@ echo ""
 echo "=== req-001 (b): RAVINTIO-only entries go, fresh entries appear once ==="
 
 for line in \
-  'PreToolUse|Write|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard gate-write.mjs' \
-  'PreToolUse|Edit|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard gate-write.mjs' \
-  'PreToolUse|Write|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard ratchet-check.mjs' \
-  'PreToolUse|Edit|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard ratchet-check.mjs' \
-  'PreToolUse|Write|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard em-dash-guard.mjs' \
-  'PreToolUse|Edit|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard em-dash-guard.mjs' \
-  'PreToolUse|Bash|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard merge-guard.mjs' \
+  'PreToolUse|Write|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard gate-write.mjs || exit 2' \
+  'PreToolUse|Edit|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard gate-write.mjs || exit 2' \
+  'PreToolUse|Write|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard ratchet-check.mjs || exit 2' \
+  'PreToolUse|Edit|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard ratchet-check.mjs || exit 2' \
+  'PreToolUse|Write|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard em-dash-guard.mjs || exit 2' \
+  'PreToolUse|Edit|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard em-dash-guard.mjs || exit 2' \
+  'PreToolUse|Bash|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard merge-guard.mjs || exit 2' \
   'UserPromptSubmit|.*|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" advisory auto-trigger-orchestrator.mjs' \
   'UserPromptSubmit|.*|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" advisory check-orchestrator-presence.mjs' \
   'UserPromptSubmit|.*|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" advisory check-design.mjs'; do

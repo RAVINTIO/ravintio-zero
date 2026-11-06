@@ -1,6 +1,6 @@
 # Architecture Overview
 
-Last updated: 0000355-codeql-and-branch-cleanup
+Last updated: 0000357-guard-gaps-closed
 
 ## What this repo is
 
@@ -206,9 +206,9 @@ Setup checks the tool straight after argument parsing, ahead of the old-folder c
 
 **Leftover temporary file.** Each run removes a leftover `settings.json.ravintio-tmp` before its first settings write, even when `node` is missing. It removes a file or a link, never a folder, and never follows a link.
 
-**Hooks run from the project root.** Both scripts set `CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR` to `1` under `env` in `.claude/settings.json` and keep every other `env` entry. They wire each Claude Code hook as `node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" {guard|advisory} {hook}.mjs`. Codex gets the absolute project path, because it sets no project-dir variable. The launcher finds the hook beside itself. In guard mode it turns a missing or crashing script into exit 2 and names the script. In advisory mode it reports a missing script once and exits 0 (0000316).
+**Hooks run from the project root.** Both scripts set `CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR` to `1` under `env` in `.claude/settings.json` and keep every other `env` entry. They wire each Claude Code hook as `node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" {guard|advisory} {hook}.mjs`. Codex gets the absolute project path, because it sets no project-dir variable. The launcher finds the hook beside itself. In guard mode it turns a missing or crashing script into exit 2 and names the script. In advisory mode it reports a missing script once and exits 0 (0000316). Each guard command also ends with ` || exit 2`, so a missing launcher or a missing `node` blocks the call, because Claude Code treats the exit 1 of a missing launcher as non-blocking (0000357).
 
-**Forced adds are blocked.** The `block-forced-add` guard runs on Bash calls and exits 2 on `git add -f`, `--force` and its abbreviations, and any short flag group that contains `f`. The tracked `.gitignore` lists `plan/.initiative-logs/`, `plan/.initiative-queue/`, and `plan/.initiative-runner.lock`. Ship and CI run `git ls-files -ci --exclude-standard` and fail on a listed file (0000317).
+**Forced adds are blocked.** The `block-forced-add` guard runs on Bash calls and exits 2 on `git add -f`, `--force` and its abbreviations, and any short flag group that contains `f`. It reads `git stage` like `git add`, reads a subshell or command substitution as its own segment, and blocks a variable in a `git add` or `git stage` segment or glued to `git`. Setup wires it into Codex too (0000357). The tracked `.gitignore` lists `plan/.initiative-logs/`, `plan/.initiative-queue/`, and `plan/.initiative-runner.lock`. Ship and CI run `git ls-files -ci --exclude-standard` and fail on a listed file (0000317).
 
 **Two scripts, one result.** `setup.sh` and `setup.ps1` wire the same nine hooks, in the same events, matchers, and order. A parity suite fails if they drift. `setup.ps1` runs on Windows PowerShell 5.1 and PowerShell 7. It reads and writes `settings.json` as UTF-8 with no BOM. Flags and the tool name match case in both scripts.
 
