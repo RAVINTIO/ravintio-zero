@@ -1,3 +1,7 @@
 # Agent tool config
 .claude/
 CLAUDE.md
+
+# Reply-prefix misses log, written by the check-reply-prefix hook (0000342).
+# Local to each machine and never committed.
+plan/.prefix-misses.log
