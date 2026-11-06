@@ -84,6 +84,23 @@ Deviation: ravintio-zero/tests/helpers/assert.sh stale_install_skip_reason now a
 Deviation: test-0000169-req-006 reads helpers/unguarded-jobs.sh instead of a fixed job name list, which lists run-tests.sh as a helper.
 Complete: P2 (2026-11-06T02:49:46Z)
 
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-06T03:01:08Z` |
+| End | `2026-11-06T03:01:08Z` |
+| Wall clock | `8` |
+| Model tier | primary |
+| Skills loaded | ravintio-validate-and-accept |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Suite green (276 feature, 19 regression). No critical or high findings. Evidence in acceptance-evidence.md. |
+
+Complete: P3 (2026-11-06T03:01:08Z)
+Blocked: CodeQL default setup is still on for the repo (code-scanning/default-setup state configured, checked 2026-11-06T03:01:08Z). The advanced workflow cannot upload results while it is on. A human must turn it off in repo settings before the step merges, as the chart row for step 5 requires.
+
 ---
 
 ## Summary (filled at ship, P4)
