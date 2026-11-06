@@ -242,7 +242,7 @@ Run executes one initiative step from `position`. Ship owns the merge that ends 
 - Cut the step's feature branch from the initiative branch, not from `main`.
 - P0 writes `autonomous` to `plan/.run-mode` without asking the run-mode question.
 - P0 writes the initiative's `**Speed:**` field, `fast` or `standard`, to `plan/.run-speed` without asking the run-speed question. If the field is absent or holds another value, P0 writes `standard`.
-- P0 builds `feature-brief.md` from the backlog entries that the step's row lists. It pulls each entry in and deletes its folder in the same commit. It does not ask pull-in, leave, or discard.
+- P0 builds `feature-brief.md` from the backlog entries that the step's row lists. The brief title is the `Title` column of the row. It pulls each entry in and deletes its folder in the same commit. It does not ask pull-in, leave, or discard.
 - P0 self-confirms the design and the Scope Lock Challenge. Each scope lock line ends with `[source: draft-accepted (initiative)]`. The design confirmation records `draft-accepted (initiative)` in place of a human confirmation.
 - A schema change that matches a chart-approved row does not stop the step. See Chart-time schema approval.
 - A fork that matches a `## Decisions` row does not stop the step. Apply the row's answer and its bump effect, and log `Decision applied (initiative chart): {fork}` in the build log. The downgrade block still applies. The step stops only for a fork no row covers. A missing table counts as an empty one.
@@ -341,6 +341,19 @@ Only three branch prefixes may target `main`:
 
 Every `feat/*` branch targets an initiative branch and never targets `main`. The agent never merges a PR into `main`. The ship skill section `## PRs into main` sets the squash rules for `chore/*` and `hotfix/*`.
 
+## Commit titles
+
+A delivered initiative branch holds one squash per charted step, then at most one chore commit.
+
+| Commit | Title |
+|--------|-------|
+| Step squash | `{feature-id}: {Feature title} (#{n})`, with the `Title` column of the step |
+| Chore commit | `{initiative-id}: Initiative admin (#{n})` |
+
+`check-initiative-history.mjs` reads the `Title` column and compares each step title exactly. Chart writes each title in sentence case.
+
+A step that changes a chart format updates the active `initiative.md` in the same step. If the step can't convert a record, it files a backlog entry and names the record in its PR.
+
 ## Coordinator PRs
 
 Nothing commits directly on `initiative/*`. Every change arrives as a squashed PR, so the first-parent history is one titled squash per change.
@@ -348,6 +361,7 @@ Nothing commits directly on `initiative/*`. Every change arrives as a squashed P
 Coordinator work covers activation, queued backlog entries, scope edits, and the I-E Delivery archive and retrospective. The coordinator lands it on a `feat/` branch cut from the initiative branch, through a PR whose base is the initiative branch.
 
 - **Title.** Use the form `{id}-{slug}: {summary} (#{n})`. The id is the 7-digit initiative id.
+- **One-commit PR.** In a one-commit PR, the commit subject uses the same `{id}-{slug}: {summary}` form. GitHub takes the squash title of a one-commit PR from the commit subject, not the PR title.
 - **Local suite.** The full local suite passes before the PR opens.
 - **CI.** CI is green before the agent squash-merges the PR with `gh pr merge --squash`.
 - **Timing.** Raise a coordinator PR only while the driver is stopped. While a step runs, queue the work in `plan/.initiative-queue/`.
@@ -368,8 +382,10 @@ Every message in this stage begins with `I-D Advance:` after the `P4 Ship:` pref
 2. Run ship Step 8 now, then push the branch so the sentinel commit is on the remote. Raise the PR against the initiative branch only after that push. The initiative update ships in the same PR, so the squash commit carries it.
 
    ```bash
-   gh pr create --base initiative/{id}-{slug}
+   gh pr create --base initiative/{id}-{slug} --title "{feature-id}: {Feature title}"
    ```
+
+   The title is the step's `Title` column. The squash carries it.
 
 3. Set the changelog `**PR:**` field to the PR number from the `gh pr create` output. Commit the change and push the branch. Never commit after the squash, because the squash carries the number onto the initiative branch.
 4. Wait for CI in two parts.

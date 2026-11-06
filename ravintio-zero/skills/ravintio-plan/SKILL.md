@@ -164,6 +164,12 @@ When the confirmed design groups features into waves:
 - Suffix wave artifacts, for example `execution-plan-wave-2.md`. Reference prior-wave manifests and contracts rather than re-specifying them.
 - The glossary and risk register are cumulative. Add entries each wave and never remove prior ones. Risks remain unless explicitly mitigated.
 
+## Chart formats
+
+If a step changes a chart format, update `plan/current-initiative/initiative.md` in the same step. A new table or column is an example.
+
+If the step can't convert a record, file a backlog entry for it and name the record in its PR.
+
 ## Commit cadence
 
 Commit after every meaningful artifact write. Do not batch commits to the phase gate.

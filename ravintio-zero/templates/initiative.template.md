@@ -16,6 +16,9 @@ status: "proposed"  # proposed | charted | active | delivered | blocked
 > `Bump` takes `major`, `minor`, or `patch`. Leave it empty for the default, `minor`.
 > `position` names the next step to run.
 >
+> `Title` is a short description of the step. Chart writes the title in sentence case.
+> P0, ship, and the history check read it.
+>
 > `## Schema changes` lists each step's predicted data change. The human approves the rows at
 > Chart. See Chart-time schema approval in `ravintio-zero/standards/roadmap-standards.md`.
 >
@@ -81,6 +84,6 @@ status: "proposed"  # proposed | charted | active | delivered | blocked
 
 ## Steps
 
-| Step | Feature id | Backlog entries | Bump | Version | Status |
-|------|------------|-----------------|------|---------|--------|
-| 1 | {{feature id}} | {{backlog ids}} | minor | | pending |
+| Step | Feature id | Title | Backlog entries | Bump | Version | Status |
+|------|------------|-------|-----------------|------|---------|--------|
+| 1 | {{feature id}} | {{step title in sentence case}} | {{backlog ids}} | minor | | pending |
