@@ -51,3 +51,19 @@ Scope Lock (error path): two resumes then Blocked:, a missing session id, or a n
 Scope Lock (cross-session continuity): the session id stays in memory, the step log and branch ref hold the state [source: draft-accepted (initiative)]
 Scope Lock complete. All four scenario paths captured.
 Complete: P0 (autonomous, design self-confirmed: draft-accepted (initiative))
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-06T02:03:00Z` |
+| End | `2026-11-06T01:56:04Z` |
+| Wall clock | `1` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Artifacts written inline. The units are small and share text, so a subagent split adds overhead. |
+
+Complete: P1 (autonomous, no gate stop)
