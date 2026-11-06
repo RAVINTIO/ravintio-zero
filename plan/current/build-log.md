@@ -33,7 +33,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Agents spawned | 0 |
 | MCP calls | 0 |
 | Parallel task batches | 0 |
-| Notes | Initiative 0000349 step 3. Migrations 0004 and 0005 do not apply (no `planifest-*` folder, no `roadmap.md` draft, no `roadmap/**` pattern), so none ran. |
+| Notes | Initiative 0000349 step 3. Migrations 0004 and 0005 do not apply to this repo, so none ran. |
 
 Run mode: autonomous (2026-11-06T01:28:32Z)
 Run speed: standard (2026-11-06T01:28:32Z)
@@ -82,3 +82,19 @@ Complete: P1 (autonomous, no gate stop)
 | Notes | Units U1 to U3 ran inline in turn. They share the delivery text and the ship tests, so a split adds overhead. U2 and U3 edited the text before their tests, because the tests only read that text. |
 
 Complete: P2 (full suite result in the P3 block)
+
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-06T01:34:00Z` |
+| End | `2026-11-06T01:43:45Z` |
+| Wall clock | `9` |
+| Model tier | primary |
+| Skills loaded | ravintio-validate-and-accept |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | The full suite ran in the background while execution checks and reports were written. |
+
+Complete: P3 (autonomous, evidence in acceptance-evidence.md)
