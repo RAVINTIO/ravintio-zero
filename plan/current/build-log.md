@@ -26,8 +26,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-06T01:54:30Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-06T01:54:51Z` |
+| Wall clock | `4` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -45,3 +45,9 @@ Decision applied (initiative chart): setup.ps1 parity
 Decision applied (initiative chart): The resume adds a driver argument (entry 0000256)
 Decision applied (initiative chart): The watcher finds no build log (entry 0000270)
 Decision applied (initiative chart): Whether a step may fix its own CI failure (entry 0000344)
+Scope Lock (happy path): a fake claude exits 0 unmerged, the driver resumes, and the resumed session merges [source: draft-accepted (initiative)]
+Scope Lock (first-run path): a step that merges first time gets no resume, and a watcher with no build log prints the waiting line [source: draft-accepted (initiative)]
+Scope Lock (error path): two resumes then Blocked:, a missing session id, or a non-zero exit never resumes [source: draft-accepted (initiative)]
+Scope Lock (cross-session continuity): the session id stays in memory, the step log and branch ref hold the state [source: draft-accepted (initiative)]
+Scope Lock complete. All four scenario paths captured.
+Complete: P0 (autonomous, design self-confirmed: draft-accepted (initiative))
