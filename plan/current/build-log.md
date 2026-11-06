@@ -51,3 +51,20 @@ Decision applied (initiative chart): Forced-add forms the guard can't parse (ent
 Decision applied (initiative chart): Codex has no forced-add guard (entry 0000341)
 Decision applied (initiative chart): Where the prefix-misses log is ignored (entry 0000342)
 Complete: P0 (2026-11-06T08:26:57Z)
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-06T08:27:00Z` |
+| End | `2026-11-06T08:28:45Z` |
+| Wall clock | `1` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Artifacts written inline: the units are short and share one context. |
+
+Schema change: none. Dependency: none.
+Complete: P1 (2026-11-06T08:28:45Z)
