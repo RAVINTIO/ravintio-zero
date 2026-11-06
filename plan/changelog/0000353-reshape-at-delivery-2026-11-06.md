@@ -2,7 +2,7 @@
 
 **Feature:** Reshape at delivery
 **Version:** 0.51.0
-**PR:** pending
+**PR:** #113
 
 ## What changed
 
