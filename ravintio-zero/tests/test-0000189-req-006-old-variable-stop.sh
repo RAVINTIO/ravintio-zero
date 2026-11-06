@@ -8,6 +8,7 @@ set -uo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
+source "$SCRIPT_DIR/helpers/driver-args.sh"
 
 DRIVER="$SCRIPT_DIR/../scripts/initiative-run.mjs"
 WORK="$(mktemp -d)"
@@ -68,7 +69,7 @@ echo "=== req-006 AC-3: new variables work ==="
 R="$(make_fixture new)"
 run_driver "$R" RAVINTIO_INITIATIVE_MODEL=sonnet RAVINTIO_INITIATIVE_MAX_TURNS=40
 assert_equals "0" "$CODE" "req-006 AC-3: exits 0"
-assert_equals "-p --output-format stream-json --verbose --permission-mode auto --model sonnet --max-turns 40 Run initiative step 1" "$(cat "$R/stub.log")" "req-006 AC-3: model and cap passed to claude -p"
+assert_equals "$(driver_args sonnet 40 Run initiative step 1)" "$(cat "$R/stub.log")" "req-006 AC-3: model and cap passed to claude -p"
 
 R="$(make_fixture empty-old)"
 run_driver "$R" RAVINTIO_ROADMAP_MODEL= RAVINTIO_ROADMAP_MAX_TURNS=
