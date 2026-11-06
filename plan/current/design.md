@@ -71,4 +71,4 @@ None
 - custom-001 local git only, custom-002 prefer subagent decomposition, custom-004 ship push and raise PR, custom-006 standing setup refresh approval. Files live in `ravintio-overrides/instructions/`.
 
 ## Confirmation
-Human confirmed this design before proceeding: draft-accepted (initiative) // Date and Time confirmed: 06 Nov 2026 @ 08:30 AM UTC
+Human confirmed this design before proceeding: draft-accepted (initiative) // Date and Time confirmed: 06 Nov 2026 @ 08:26 AM UTC

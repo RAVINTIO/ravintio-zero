@@ -26,8 +26,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-06T08:25:57Z` |
-| End | `2026-11-06T08:31:00Z` |
-| Wall clock | `5` |
+| End | `2026-11-06T08:26:57Z` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -50,4 +50,4 @@ Decision applied (initiative chart): How a hook fails closed with no launcher (e
 Decision applied (initiative chart): Forced-add forms the guard can't parse (entry 0000341)
 Decision applied (initiative chart): Codex has no forced-add guard (entry 0000341)
 Decision applied (initiative chart): Where the prefix-misses log is ignored (entry 0000342)
-Complete: P0 (2026-11-06T08:31:00Z)
+Complete: P0 (2026-11-06T08:26:57Z)
