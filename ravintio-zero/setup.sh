@@ -417,7 +417,7 @@ install_codex_hooks() {
 
   mkdir -p "$dest"
   local script_name
-  for script_name in merge-guard.mjs read-stdin.mjs guard-run.mjs; do
+  for script_name in merge-guard.mjs block-forced-add.mjs read-stdin.mjs guard-run.mjs; do
     cp "$src/$script_name" "$dest/$script_name"
     echo "  + $hooks_dir_rel/$script_name"
   done
@@ -426,7 +426,8 @@ install_codex_hooks() {
   # the absolute project path. Single quotes keep the shell from expanding it.
   local quoted_root="${PROJECT_ROOT//\'/\'\\\'\'}"
   local command_line="node '$quoted_root/$hooks_dir_rel/guard-run.mjs' guard merge-guard.mjs || exit 2"
-  RAVINTIO_HOOK_CMD="$command_line" RAVINTIO_HOOK_MARK="$hooks_dir_rel/merge-guard.mjs" \
+  local forced_add_line="node '$quoted_root/$hooks_dir_rel/guard-run.mjs' guard block-forced-add.mjs || exit 2"
+  RAVINTIO_HOOK_CMD="$command_line" RAVINTIO_HOOK_CMD2="$forced_add_line" RAVINTIO_HOOK_MARK="$hooks_dir_rel/merge-guard.mjs" \
     RAVINTIO_HOOK_MARK2="$hooks_dir_rel/guard-run.mjs" \
     RAVINTIO_SETTINGS="$hooks_file" RAVINTIO_SETTINGS_REL="$hooks_file_rel" \
     node -e "$RAVINTIO_WRITE_SETTINGS_JS"'
@@ -457,19 +458,21 @@ install_codex_hooks() {
         else if (rest.length > 0) kept.push({ ...g, hooks: rest });
       }
       kept.push({ matcher: "Bash", hooks: [{ type: "command", command: process.env.RAVINTIO_HOOK_CMD, statusMessage: "Checking merge command" }] });
+      kept.push({ matcher: "Bash", hooks: [{ type: "command", command: process.env.RAVINTIO_HOOK_CMD2, statusMessage: "Checking git add command" }] });
       s.hooks.PreToolUse = kept;
       writeSettings(sf, JSON.stringify(s, null, 2) + "\n");
     ' || exit 1
-  echo "  + $hooks_file_rel (merge-guard wired)"
+  echo "  + $hooks_file_rel (merge-guard and block-forced-add wired)"
 
   echo ""
   echo "  Active hooks:"
   echo "    merge-guard (PreToolUse: Bash)"
+  echo "    block-forced-add (PreToolUse: Bash)"
   echo "  Fallback hooks, stated as instructions in AGENTS.md:"
   echo "    gate-write, ratchet-check, em-dash-guard, auto-trigger-orchestrator,"
   echo "    check-orchestrator-presence, check-design, check-reply-prefix"
   echo "  Review and trust the project hooks with /hooks in Codex."
-  echo "  Until you trust it, Codex skips merge-guard, including in codex exec."
+  echo "  Until you trust it, Codex skips merge-guard and block-forced-add, including in codex exec."
 }
 
 install_enforcement_hooks() {

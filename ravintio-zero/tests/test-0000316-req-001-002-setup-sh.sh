@@ -93,7 +93,7 @@ assert_equals "0" "$(printf '%s\n' "$CODEX_CMD" | grep -c 'rev-parse')" "req-002
 [ -f "$WS/.codex/hooks/enforcement/guard-run.mjs" ] && R=yes || R=no
 assert_equals "yes" "$R" "req-002 AC-2: guard-run.mjs is copied for Codex"
 (cd "$WS" && bash ravintio-zero/setup.sh codex >/dev/null 2>&1)
-assert_equals "1" "$(node -e 'const s=JSON.parse(require("fs").readFileSync(process.argv[1],"utf8"));console.log(s.hooks.PreToolUse.flatMap(g=>g.hooks).length)' "$WS/.codex/hooks.json")" "req-002 AC-3: a Codex rerun leaves one hook"
+assert_equals "2" "$(node -e 'const s=JSON.parse(require("fs").readFileSync(process.argv[1],"utf8"));console.log(s.hooks.PreToolUse.flatMap(g=>g.hooks).length)' "$WS/.codex/hooks.json")" "req-002 AC-3: a Codex rerun leaves the two guard hooks (0000357)"
 rm -rf "$WS"
 
 print_summary

@@ -765,7 +765,7 @@ function Install-CodexHooks {
     Write-Host "  Installing RAVINTIO Codex hooks"
 
     [System.IO.Directory]::CreateDirectory($dest) | Out-Null
-    foreach ($name in @('merge-guard.mjs', 'read-stdin.mjs', 'guard-run.mjs')) {
+    foreach ($name in @('merge-guard.mjs', 'block-forced-add.mjs', 'read-stdin.mjs', 'guard-run.mjs')) {
         Copy-RavintioItem (Join-Path $src $name) $dest
         Write-Host "  + $HooksDirRel/$name"
     }
@@ -778,6 +778,11 @@ function Install-CodexHooks {
     $entry = [ordered]@{
         matcher = 'Bash'
         hooks   = @([ordered]@{ type = 'command'; command = $commandLine; statusMessage = 'Checking merge command' })
+    }
+    $forcedAddLine = 'node "' + $rootPath + '/' + $HooksDirRel + '/guard-run.mjs" guard block-forced-add.mjs || exit 2'
+    $forcedAddEntry = [ordered]@{
+        matcher = 'Bash'
+        hooks   = @([ordered]@{ type = 'command'; command = $forcedAddLine; statusMessage = 'Checking git add command' })
     }
 
     if (Test-Path -LiteralPath $hooksFile) {
@@ -800,25 +805,26 @@ function Install-CodexHooks {
         }
         $pattern = '(^|[\s"''/\\])(' + [regex]::Escape($mark) + '|' + [regex]::Escape("$HooksDirRel/guard-run.mjs") + ')'
         $filtered = @(Remove-RavintioHookCommands -Entries $existing.hooks.PreToolUse -Pattern $pattern)
-        $existing.hooks.PreToolUse = $filtered + @($entry)
+        $existing.hooks.PreToolUse = $filtered + @($entry) + @($forcedAddEntry)
         Write-SettingsOrExit -Path $hooksFile -Json ($existing | ConvertTo-Json -Depth 100) -SettingsRel $HooksFileRel
     }
     else {
         $dir = Split-Path -Parent $hooksFile
         if (-not (Test-Path $dir)) { New-Item -ItemType Directory -Path $dir -Force | Out-Null }
-        $settings = [PSCustomObject]@{ hooks = [PSCustomObject]@{ PreToolUse = @($entry) } }
+        $settings = [PSCustomObject]@{ hooks = [PSCustomObject]@{ PreToolUse = @($entry, $forcedAddEntry) } }
         Write-SettingsOrExit -Path $hooksFile -Json ($settings | ConvertTo-Json -Depth 100) -SettingsRel $HooksFileRel
     }
-    Write-Host "  + $HooksFileRel (merge-guard wired)"
+    Write-Host "  + $HooksFileRel (merge-guard and block-forced-add wired)"
 
     Write-Host ""
     Write-Host "  Active hooks:"
     Write-Host "    merge-guard (PreToolUse: Bash)"
+    Write-Host "    block-forced-add (PreToolUse: Bash)"
     Write-Host "  Fallback hooks, stated as instructions in AGENTS.md:"
     Write-Host "    gate-write, ratchet-check, em-dash-guard, auto-trigger-orchestrator,"
     Write-Host "    check-orchestrator-presence, check-design, check-reply-prefix"
     Write-Host "  Review and trust the project hooks with /hooks in Codex."
-    Write-Host "  Until you trust it, Codex skips merge-guard, including in codex exec."
+    Write-Host "  Until you trust it, Codex skips merge-guard and block-forced-add, including in codex exec."
 }
 
 function Invoke-RavintioGuardrails {
