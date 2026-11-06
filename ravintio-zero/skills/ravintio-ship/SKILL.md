@@ -177,9 +177,8 @@ A PR into `main` comes from a `chore/*`, `hotfix/*`, or `initiative/*` branch. A
 
 - Before you ask the human to merge, the branch holds one commit on `origin/main`. Skip this for `initiative/*`.
 - Title the commit per `ravintio-zero/standards/commit-standards.md` and name the PR number. List the squashed commit titles in the body.
-- For `chore/*`, squash in place and push with `git push --force-with-lease origin {branch}`. Only `chore/*` may use `--force-with-lease`. Never use plain `--force`.
-- For `hotfix/*` with more than one commit, cut a new branch from `origin/main` and build one squashed commit there. Raise a replacement PR. Close the old PR with a link to the new one.
-- You never force-push `main`, `initiative/*`, `feat/*`, or `hotfix/*`.
+- For `chore/*` or `hotfix/*` with more than one commit, cut a new branch from `origin/main` and build one squashed commit there. Raise a replacement PR. Close the old PR with a link to the new one, then delete the old branch.
+- You never force-push `main`, `initiative/*`, `feat/*`, `hotfix/*`, or `chore/*`. No branch history is rewritten in place.
 - Wait for green CI on the single-commit head before you ask the human to merge.
 
 ## Parallelism
