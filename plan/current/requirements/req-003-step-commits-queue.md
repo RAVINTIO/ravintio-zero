@@ -17,6 +17,7 @@ As a step session, I commit the queued items that name my step before P4 raises 
 
 ## Functional Requirements
 - `roadmap-standards.md` I-C Run says a step reads `plan/.initiative-queue/` at P0 and again before P4, and acts only on items whose `**Step:**` names its number.
+- If the destination or the content holds `{id}`, the step reserves one id with `reserve-id.mjs` on its feature branch and replaces each `{id}`. The coordinator never edits the working tree while the driver runs, so it cannot reserve the id itself.
 - For each such item, the step writes the content to the destination, stages the destination by explicit path, and commits it on its feature branch before P4 raises the PR.
 - The step never moves, renames, or deletes the queue folder or an item. The coordinator clears the items after the step merges.
 - I-D Advance step 2 says the PR is raised only after the queue commits.

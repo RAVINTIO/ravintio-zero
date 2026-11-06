@@ -18,7 +18,7 @@ As a coordinator, I read the `feat/` route in each skill that calls `reserve-id.
 ## Functional Requirements
 - The initiative, postmortem, and retrospective skills each say that `--commit` refuses on `initiative/*`.
 - Each says to run it on a `feat/` branch, so the counter commit rides in a coordinator PR.
-- The initiative skill `## Backlog queue` states that a queued entry takes its id with `--commit` only after the coordinator is on its `feat/` branch.
+- The initiative skill `## Backlog queue` tells the coordinator not to reserve an id while the driver runs. A queued entry carries an `{id}` placeholder, and the step reserves the id.
 
 ## Acceptance Criteria
 - [ ] AC-1: three skills name the route
