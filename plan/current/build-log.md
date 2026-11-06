@@ -78,3 +78,20 @@ Complete: P1 (autonomous, no gate stop)
 Deviation: archived chart lookup takes the first `plan/_archive/{id}-*/initiative.md`, because real archive folders don't hold `-initiative-`. REQ-003 and ADR-001 updated.
 Deviation: one start-action line stays frozen (test 0000151-req-011), so the brief-title note is a new line.
 Complete: P2 (full suite 262 feature and 19 regression suites pass)
+
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-06T00:18:37Z` |
+| End | `2026-11-06T00:18:57Z` |
+| Wall clock | `4` |
+| Model tier | primary |
+| Skills loaded | ravintio-validate-and-accept |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | none |
+
+Rework: REQ-001: frozen start-action line changed in place (2026-11-06T00:18:57Z)
+Complete: P3 (autonomous, evidence in acceptance-evidence.md)
