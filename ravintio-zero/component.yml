@@ -2,7 +2,7 @@
 id: "ravintio-zero"
 name: "RAVINTIO Zero"
 feature: "0000354-steps-run-to-the-end"
-version: "0.52.0"
+version: "0.53.0"
 status: "active"
 type: "component-pack"
 domain: "developer-tooling"

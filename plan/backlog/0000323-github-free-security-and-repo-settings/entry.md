@@ -25,11 +25,11 @@ theme: "unsorted"
 | Dependabot alerts | on |
 | Dependabot security updates | off |
 | Dependabot version updates (`.github/dependabot.yml`) | absent |
-| Code scanning (CodeQL default setup) | not configured |
+| Code scanning (CodeQL advanced setup) | `.github/workflows/codeql.yml` runs on PRs into `main` and `initiative/**`. A human turns default setup off. |
 | Private vulnerability reporting | off |
 | `SECURITY.md` | absent |
 | Branch protection or ruleset on `main` | done (see the ruleset section) |
-| Delete head branches after a PR lands | off |
+| Delete head branches after a PR lands | the `cleanup-branch` job in `.github/workflows/ravintio.yml` does it |
 | Repo topics | none |
 | `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, issue and PR templates | absent |
 | `CODEOWNERS` | absent |
@@ -62,14 +62,13 @@ Security settings:
 
 - Turn on secret scanning and push protection.
 - Turn on Dependabot security updates.
-- Turn on CodeQL default setup for JavaScript and GitHub Actions. Copilot Autofix for code scanning alerts is free on public repos.
+- Turn CodeQL default setup off, because the workflow in `.github/workflows/codeql.yml` runs it. Copilot Autofix for code scanning alerts is free on public repos.
 - Turn on private vulnerability reporting. Security advisories and CVE requests then work from the **Security** tab.
 
 Repo settings:
 
 - Create a GitHub account for the agent with the **Write** role on this repo. Point the agent's `gh` and `git` credentials at it.
 - After CodeQL runs, add **Require code scanning results** to the ruleset.
-- Turn on **Automatically delete head branches**.
 - Add topics, and consider turning on Discussions.
 
 Committed files:

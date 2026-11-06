@@ -85,7 +85,7 @@ Write `plan/current/verification-report.md`: what was started and how, then per 
 
 Produce `plan/current/security-report.md`. Every finding names a specific file, endpoint, or configuration. Generic advice is not acceptable. Cover:
 
-- **Injection points**: unvalidated input, query construction, template rendering
+- **Injection points**: unvalidated input, query construction, template rendering, and incomplete escaping or sanitising (an escape that misses a character, such as a backslash before an escaped pipe, quote, or delimiter)
 - **Credential handling**: hardcoded secrets, environment exposure, token handling
 - **Path traversal**: file access built from user input
 - **Dependency risk**: known vulnerabilities, abandoned maintenance, excessive permissions

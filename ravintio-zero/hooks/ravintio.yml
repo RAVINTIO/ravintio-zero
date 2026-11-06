@@ -2,17 +2,19 @@ name: RAVINTIO Strict Pipeline
 
 on:
   pull_request:
+    types: [ opened, synchronize, reopened, closed ]
     branches: [ main, master, 'initiative/**' ]
   push:
     branches: [ main, master, 'initiative/**' ]
 
-# Every job reads the repo and nothing more, except release-tag.
+# Every job reads the repo and nothing more, except release-tag and
+# cleanup-branch (0000355 ADR-003).
 permissions:
   contents: read
 
 jobs:
   validate-branch:
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request' && github.event.action != 'closed'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -56,8 +58,9 @@ jobs:
   # Fails a PR from initiative/* to main whose first-parent history holds an
   # untitled commit (0000319 req-002). It reads the branch head, not the PR
   # merge ref, so the merge commit is not counted.
+  # ravintio:job-guard-exempt
   initiative-history:
-    if: github.event_name == 'pull_request' && github.base_ref == 'main' && startsWith(github.head_ref, 'initiative/')
+    if: github.event_name == 'pull_request' && github.event.action != 'closed' && github.base_ref == 'main' && startsWith(github.head_ref, 'initiative/')
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -75,8 +78,9 @@ jobs:
   # Fails a PR into main from outside an initiative whose branch name or
   # commit count breaks the rule (0000327 req-002). It reads the branch head,
   # not the PR merge ref, so the merge commit is not counted.
+  # ravintio:job-guard-exempt
   squash-before-main:
-    if: github.event_name == 'pull_request' && github.base_ref == 'main'
+    if: github.event_name == 'pull_request' && github.event.action != 'closed' && github.base_ref == 'main'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -93,6 +97,7 @@ jobs:
 
   # Fails a push to main whose newest commit squashed an initiative PR
   # (0000319 req-004).
+  # ravintio:job-guard-exempt
   main-merge-check:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
@@ -110,6 +115,7 @@ jobs:
   # Tags the merge commit on the default branch after the human merges
   # (0000169 ADR-002). Only this job holds write access, and it never runs
   # PR code.
+  # ravintio:job-guard-exempt
   release-tag:
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
     runs-on: ubuntu-latest
@@ -130,3 +136,34 @@ jobs:
 
       - name: Tag the merge commit
         run: node ravintio-zero/scripts/release-tag.mjs
+
+  # Deletes the head branch of a merged PR (0000355 ADR-003). It holds the
+  # only pull request write scope, runs no PR code, and has no checkout. It
+  # skips a fork head, refuses main and master, and reads the ref from env.
+  # ravintio:job-guard-exempt
+  cleanup-branch:
+    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Delete the head branch
+        env:
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          case "$HEAD_REF" in
+            main|master) echo "Refusing to delete a protected branch."; exit 0 ;;
+            *..*|*[!A-Za-z0-9._/-]*) echo "Head branch name fails the allowed pattern. Nothing deleted."; exit 0 ;;
+          esac
+          if [ "${#HEAD_REF}" -gt 200 ]; then
+            echo "Head branch name is over 200 characters. Nothing deleted."
+            exit 0
+          fi
+          if ! gh api "repos/$REPO/git/ref/heads/$HEAD_REF" >/dev/null 2>&1; then
+            echo "Branch $HEAD_REF is already gone."
+            exit 0
+          fi
+          gh api -X DELETE "repos/$REPO/git/refs/heads/$HEAD_REF"
+          echo "Deleted branch $HEAD_REF."

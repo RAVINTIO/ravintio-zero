@@ -1,5 +1,5 @@
 ---
-version: "0.52.0"
+version: "0.53.0"
 feature: "0000354-steps-run-to-the-end"
 updated: "6 Nov 2026"
 ---
@@ -10,7 +10,7 @@ updated: "6 Nov 2026"
 
 | Field | Value |
 |-------|-------|
-| Version | `0.52.0` |
+| Version | `0.53.0` |
 | Last feature | `0000354-steps-run-to-the-end` |
 | Updated | `6 Nov 2026` |
 
