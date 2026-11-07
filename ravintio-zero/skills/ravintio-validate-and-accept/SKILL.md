@@ -41,7 +41,11 @@ Run the stack's declared checks in this order:
 1. **Semantic correctness**: every requirement needs a mapped, executing test identifiable by req-ID. Every acceptance criterion needs a covering test. Produce a coverage table. A missing criterion is a failure, not a warning.
 2. **Lint**
 3. **Typecheck**
-4. **Test**: for this pack run `RAVINTIO_TEST_QUIET=1 bash ravintio-zero/tests/run-tests.sh`, which prints only failures and the summary If a suite fails, read the `Failed suites:` list under the totals for each file name.
+4. **Test**: for this pack run `RAVINTIO_TEST_QUIET=1 bash ravintio-zero/tests/run-tests.sh`, which prints only failures and the summary. If a suite fails, read the `Failed suites:` list under the totals for each file name.
+   - <!-- rule: p3-clean-clone --> **Clean clone.** Commit your work, then run the suite in a clean clone of `HEAD` with `node ravintio-zero/scripts/clean-clone-test.mjs -- {suite command}`. It removes the clone when the run ends. If it prints an `OS gap:` line, copy that line to the build log.
+   - <!-- rule: p3-baseline-check --> **Baseline.** Save the output and run `node ravintio-zero/scripts/baseline-failures.mjs check {output}`. Stop only on a `new:` suite. List each `inherited:` suite in the build report.
+   - <!-- rule: p3-rerun-failed --> **Rerun.** After a fix, rerun only the failed suites first.
+   - <!-- rule: p3-full-suite --> **Full suite.** Run the full suite once, green apart from inherited suites, before acceptance.
 5. **Build**
 
 If a check fails, self-correct: read the error, find the root cause, fix it, re-run. Record each cycle (check, error, root cause, fix, result). For each cycle whose fix touches a requirement's code or test, append `Rework: REQ-{nnn}: {reason} ({ISO-8601 timestamp})` to the build log, as `ravintio-zero/standards/workflow-governance-standards.md` defines. Maximum **5 cycles**. Loop mechanics (state file, run-log records, stop rules, escalation format) follow `ravintio-loop-runner`, with a cap of 5. After 5 failed cycles, STOP and escalate in both run modes:

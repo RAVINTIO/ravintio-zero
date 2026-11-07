@@ -77,6 +77,7 @@ Read the archived `build-log.md`. It is now the only copy. Write `build-report.m
 - Self-corrections, with whether each was avoidable.
 - One improvement suggestion per phase where warranted.
 - The postmortems the run wrote to `plan/postmortems/`, by path, or `Postmortems: none`.
+- <!-- rule: ship-inherited-failures --> The inherited failures from `baseline-failures.md` in the archive folder, one line each, or `Inherited failures: none`. Offer a backlog entry for each.
 
 Then run `node ravintio-zero/scripts/workflow-metrics.mjs "{archive-folder}"` and append its output to `build-report.md`. If it exits non-zero, write `Workflow governance: not measured ({reason})` instead. The reason is `build log unreadable` or `thresholds invalid`, never a path or error text. A breach does not stop ship in either run mode.
 
