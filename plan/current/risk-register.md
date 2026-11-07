@@ -24,4 +24,4 @@ version: "0.1.0"
 
 | ID | Assumption | Impact if Wrong | Status |
 |----|-----------|----------------|--------|
-| A-001 | Git reports the commit that adds a log line through `git log -S` or `git blame`. | The time check skips. | open |
+| A-001 | Git reports the commit that adds a log line through `git log -S` or `git blame`. | The time check compares with the clock. | open |

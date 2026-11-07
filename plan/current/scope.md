@@ -12,7 +12,7 @@ version: "0.1.0"
 
 ## In Scope
 
-- `Question` in the status set of the orchestrator, `pipeline-reference.md`, both boot templates, `CLAUDE.md`, and the `check-reply-prefix.mjs` comment.
+- `Question` in the status set of the orchestrator, `pipeline-reference.md`, both boot templates, and the `check-reply-prefix.mjs` comment.
 - `Question:` on the product id check line.
 - The clock command in five phase skills.
 - Two `build-log-check.mjs` checks: a future time and a closed block with no `Complete:` line.

@@ -18,8 +18,7 @@ As a maintainer, I find that every phase reads `date -u +%Y-%m-%dT%H:%M:%SZ` and
 ## Functional Requirements
 - The orchestrator, plan, implement, validate-and-accept, and ship skills tell the phase to read `date -u +%Y-%m-%dT%H:%M:%SZ` for every logged time and never type one.
 - `build-log-check.mjs` finds each ISO time in the log, finds the commit that added its line, and reports a finding when the time is later than that commit's time. A one-minute margin applies.
-- If git cannot read the history of the log, the time check skips.
-- A time on a line not yet committed is compared with the current clock.
+- A time on a line not yet committed, or in a log git cannot read, is compared with the current clock.
 
 ## Acceptance Criteria
 - [ ] AC-1: skills name the clock command

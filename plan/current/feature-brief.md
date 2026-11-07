@@ -56,7 +56,7 @@ None. No data store changes.
 ## Scope Boundaries
 
 ### In Scope
-- Add `Question` to the status set in the orchestrator skill, `pipeline-reference.md`, the two boot templates, this repo's `CLAUDE.md`, and the comment in `check-reply-prefix.mjs`.
+- Add `Question` to the status set in the orchestrator skill, `pipeline-reference.md`, the two boot templates, and the comment in `check-reply-prefix.mjs`.
 - Reserve `Blocked:` for exception stops in the phase skills and orchestrator references. A question line, such as the product id check, uses `Question:`.
 - Tell each phase skill to read the clock with `date -u +%Y-%m-%dT%H:%M:%SZ` and never type a time.
 - `build-log-check.mjs` fails a time later than the commit that adds it, and a closed phase block with no `Complete:` or `Skipped:` line.

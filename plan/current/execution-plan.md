@@ -86,7 +86,7 @@ flowchart LR
 
 | ID | Assumption | Impact if Wrong |
 |----|-----------|----------------|
-| A-001 | Git reports the commit that adds a log line | The time check skips |
+| A-001 | Git reports the commit that adds a log line | The time check compares with the clock |
 
 ## Open Questions
 

@@ -17,7 +17,7 @@ The design declares Bash, Node, and PowerShell. The chart approves no dependency
 
 ## Decision
 
-Use the declared stack. The time check calls `git` through `node:child_process`, as other scripts here do.
+Use the declared stack. The time check calls `git` through `node:child_process` to run `git blame`, as other scripts here do.
 
 ## Alternatives Considered
 
@@ -34,4 +34,4 @@ Use the declared stack. The time check calls `git` through `node:child_process`,
 ## Consequences
 
 - Positive: no dependency or install change.
-- Negative: the time check depends on a `git` binary and skips without one.
+- Negative: without a `git` binary the time check compares each time with the clock.

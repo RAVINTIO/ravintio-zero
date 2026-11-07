@@ -16,7 +16,7 @@ version: "0.1.0"
 As a human on the loop, I see `Question:` on a routine question, so that `Blocked:` marks only an exception stop.
 
 ## Functional Requirements
-- The status set reads Starting, Resuming, Complete, Question, Blocked, or Skipped in the orchestrator skill, `pipeline-reference.md`, `standard-boot.md`, `codex-boot.md`, and this repo's `CLAUDE.md`.
+- The status set reads Starting, Resuming, Complete, Question, Blocked, or Skipped in the orchestrator skill, `pipeline-reference.md`, `standard-boot.md`, and `codex-boot.md`. This repo's `CLAUDE.md` is generated from the boot template and ignored by git, so setup carries the change and the local copy is edited by hand.
 - The orchestrator skill adds one line: `Question:` is for a routine question to the human, and `Blocked:` is for an exception stop.
 - The product id check in the start actions reference uses `Question:`. Every other `Blocked:` line stays.
 - The comment in `check-reply-prefix.mjs` lists the status set. The hook logic does not change.

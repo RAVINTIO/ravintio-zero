@@ -67,3 +67,21 @@ Complete: P0 (2026-11-07T05:02:08Z)
 
 Schema change: none. Dependency: none.
 Complete: P1 (2026-11-07T05:03:15Z)
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-07T05:03:22Z` |
+| End | `{{pending}}` |
+| Wall clock | `{{pending}}` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Departure from the concurrency plan: units ran inline, not as subagents. The units share one context and the files are small. Tests come first and are RED before each change. |
+Deviation: CLAUDE.md is generated from the boot template and ignored by git, so the chart row's CLAUDE.md edit lands in standard-boot.md and codex-boot.md. The local copy was edited by hand.
+Deviation: the time check compares with the clock when git cannot report a line's commit, where REQ-002 first said it skips. REQ-002, the scope, the risk register, and ADR-001 now say so.
+Rework: REQ-001: test-0000151-req-011 pinned the old status line and the product id line, and now rewrites them in its base fixture (2026-11-07T05:32:35Z)
+Rework: REQ-002: test-0000151-req-011 pinned hard limit 9, so the clock rule is a new paragraph (2026-11-07T05:32:35Z)
