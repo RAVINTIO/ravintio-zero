@@ -43,7 +43,7 @@ Follow the I-A Chart and I-B Activate sections of the roadmap standards. Activat
 
 - **Guard.** Run a guard check on each entry. Check whether it widens a guard, such as `merge-guard`, `gate-write`, `ratchet-check`, or another fail-closed hook. Name the guard and the new forms it would allow. Ask for a separate approval for each widening, apart from the chart confirmation.
 - **Lanes.** Coach a `Lane` and an `After` list for each step, and the `**Concurrency:**` field (default 3). Steps that edit the same files share a lane. A step that changes most files lists every earlier step in `After`, and every later step lists it. See Chart-time lanes.
-- **Confirmation.** Plan each step confirmation. List each confirmation that a step's skills ask for. Record the exact command as a `Confirmation:` row in `## Decisions`, or plan a human stop for that step.
+- **Confirmation.** Plan each step confirmation, per rule `agree-explicit` in `orchestrator-p0-coaching.md`. List each one that a step's skills ask for. Record the exact command as a `Confirmation:` row in `## Decisions`, or plan a human stop for that step.
 
 Concurrent steps are the normal flow. The driver starts each ready step in its own worktree, up to `**Concurrency:**` at once, and runs the merge queue for each ready PR. At Activate, start two background tasks:
 
