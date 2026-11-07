@@ -26,14 +26,16 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-07T21:30:12Z` |
-| End | `pending` |
-| Wall clock | `pending` |
+| End | `2026-11-07T21:31:27Z` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
 | Notes | `Run mode: autonomous. Run speed: standard.` |
+
+Complete: P0 (2026-11-07T21:31:27Z)
 
 ---
 
@@ -78,15 +80,15 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 
 | Metric | Value |
 |--------|-------|
-| Total phases completed | `0` |
-| Total wall clock | `{{minutes from pipeline start to the P4 End}}` |
+| Total phases completed | `5` |
+| Total wall clock | `70` |
 | Total agents spawned | `0` |
 | Total MCP calls | `0` |
 | Phases using parallelism | `0` |
 | Primary tier agent calls | `0` |
 | Cheaper tier agent calls | `0` |
 | Self-corrections | `0` |
-| Phases skipped | `{{list or "none"}}` |
+| Phases skipped | `none` |
 
 ### P0 log
 
@@ -108,7 +110,7 @@ Complete: P0 (2026-11-07T21:31:27Z)
 |-------|-------|
 | Start | `2026-11-07T21:31:46Z` |
 | End | `2026-11-07T21:32:44Z` |
-| Wall clock | `6` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator, ravintio-plan |
 | Agents spawned | `0` |
@@ -124,7 +126,7 @@ Complete: P1 (2026-11-07T21:32:44Z)
 |-------|-------|
 | Start | `2026-11-07T21:32:50Z` |
 | End | `2026-11-07T21:55:53Z` |
-| Wall clock | `45` |
+| Wall clock | `23` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator, ravintio-implement |
 | Agents spawned | `0` |
@@ -145,7 +147,7 @@ Complete: P2 (2026-11-07T21:55:53Z)
 |-------|-------|
 | Start | `2026-11-07T21:56:08Z` |
 | End | `2026-11-07T21:56:24Z` |
-| Wall clock | `5` |
+| Wall clock | `0` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator, ravintio-validate-and-accept |
 | Agents spawned | `0` |
@@ -160,11 +162,13 @@ Complete: P3 (2026-11-07T21:56:24Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-07T21:56:50Z` |
-| End | `pending` |
-| Wall clock | `pending` |
+| End | `2026-11-07T21:56:55Z` |
+| Wall clock | `0` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator, ravintio-ship, ravintio-retrospective |
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
 | Notes | `Initiative step. The merge queue sets the version.` |
+
+Complete: P4 (2026-11-07T21:56:55Z)
