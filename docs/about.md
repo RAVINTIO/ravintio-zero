@@ -1,6 +1,6 @@
 ---
-version: "0.51.0"
-feature: "0000353-reshape-at-delivery"
+version: "0.52.0"
+feature: "0000354-steps-run-to-the-end"
 updated: "6 Nov 2026"
 ---
 # About
@@ -10,8 +10,8 @@ updated: "6 Nov 2026"
 
 | Field | Value |
 |-------|-------|
-| Version | `0.51.0` |
-| Last feature | `0000353-reshape-at-delivery` |
+| Version | `0.52.0` |
+| Last feature | `0000354-steps-run-to-the-end` |
 | Updated | `6 Nov 2026` |
 
 ## What this is

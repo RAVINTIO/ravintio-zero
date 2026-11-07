@@ -3,7 +3,7 @@
 > Change record. Index of all ADRs across all features. Updated after every pipeline run.
 > Do not archive this file. Update it in place.
 
-Last updated: 0000353-reshape-at-delivery
+Last updated: 0000354-steps-run-to-the-end
 
 ---
 
@@ -415,3 +415,10 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 | ADR-001 | replay with git merge-tree, not a working tree | accepted | `reshape-initiative.mjs` replays each commit with `git merge-tree --write-tree` and writes commits with `git commit-tree`. It never touches a working tree, and a conflict exits 1. |
 | ADR-002 | find step commits by version tag and move tags by delete | accepted | The script reads `v{Version}` from the chart for each step. `--tags` deletes each tag and creates it again at the new commit. `--push` deletes the old tag on the remote and pushes the new one. |
 | ADR-003 | ship uses the replacement branch route for chore | accepted | `## PRs into main` applies the replacement branch route to `chore/*` and `hotfix/*`. It no longer names `--force-with-lease`. |
+
+### Feature 0000354: steps-run-to-the-end
+
+| ADR | Title | Status | Summary |
+|-----|-------|--------|---------|
+| ADR-001 | resume with the session id from the stream | accepted | The driver reads `session_id` from the step's stream events and resumes an unmerged step with `claude -p --resume`, at most twice. A third unmerged exit prints `Blocked:`. |
+| ADR-002 | compare tool and flags, not the timestamp | accepted | Setup rewrites `plan/state/{tool}.md` only when `tool` or `flags` differ, so a rerun leaves a clean tree. |

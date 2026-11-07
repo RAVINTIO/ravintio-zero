@@ -47,9 +47,17 @@
 //      and leaves the lock alone.
 //   3. Runs `claude -p --output-format stream-json --verbose --permission-mode auto --model {model} [--max-turns {n}]
 //      "Run initiative step {position}"`
-//      and waits. It never passes --continue or --resume, so each step gets a
-//      fresh session. The position goes to claude as one argument, never
-//      through a shell.
+//      and waits. Each step starts a fresh session. The position goes to claude as one
+//      argument, never through a shell. The driver never passes --continue. It passes --resume
+//      only as step 3a describes.
+//   3a. If claude exits 0, no block exists, and the position did not move, the step may have
+//      ended its turn early (0000334). The driver reads the last session_id from the stream
+//      events, checks it against ^[A-Za-z0-9_-]{8,128}$, and runs the same command with
+//      "--resume {session}" and a continue prompt, up to two times. It prints "I-C Run:
+//      Resuming: step {n} ended its turn unmerged, resume {k} of 2" before each. The resume
+//      writes to the same step log. If the step is still unmerged after the second resume, it
+//      prints "I-C Run: Blocked: step {n} exited without merging after 2 resumes" and exits 1.
+//      With no valid session id it does not resume. A non-zero exit or a block never resumes.
 //   4. After each step it stops if plan/current/build-log.md ends on a
 //      "Blocked:" line with no later "Resolved:" line. It runs the same check on
 //      plan/_archive/{feature-id}-*/build-log.md, in the newest folder (by name) whose
@@ -141,6 +149,10 @@ const MAX_LINE = 500;
 const MODEL = /^[A-Za-z0-9][A-Za-z0-9._:[\]-]{0,63}$/;
 const TURNS = /^[1-9][0-9]{0,3}$/;
 const DEFAULT_MODEL = 'sonnet';
+const SESSION = /^[A-Za-z0-9_-]{8,128}$/;
+const SESSION_FIELD = /"session_id"\s*:\s*"([^"]*)"/g;
+const MAX_RESUMES = 2;
+const CONTINUE_PROMPT = (n) => `Continue initiative step ${n}. Read plan/current/build-log.md first. Do not end your turn before I-D Advance: Complete: or a Blocked: line.`;
 
 class Stop extends Error {}
 
@@ -416,25 +428,41 @@ function delivered(root, id, slug) {
   return readdirSync(dir).some((n) => prefixes.some((p) => n.startsWith(p)));
 }
 
-function runStep(root, position, cfg, fd, labels) {
+// Runs one claude -p session for the step. With a session id it adds --resume and the continue
+// prompt. Returns the exit status and the last session_id the child printed, or '' if none.
+function runStep(root, position, cfg, fd, labels, resumeId) {
   return new Promise((resolveStep) => {
     const bin = process.env.CLAUDE_BIN || 'claude';
     const args = ['-p', '--output-format', 'stream-json', '--verbose', '--permission-mode', 'auto', '--model', cfg.model];
     if (cfg.turns) args.push('--max-turns', cfg.turns);
-    args.push(`Run initiative step ${position}`);
+    if (resumeId) args.push('--resume', resumeId, CONTINUE_PROMPT(position));
+    else args.push(`Run initiative step ${position}`);
     const child = spawn(bin, args, {
       cwd: root,
       env: { ...process.env, CLAUDE_CODE_PRINT_BG_WAIT_CEILING_MS: process.env.CLAUDE_CODE_PRINT_BG_WAIT_CEILING_MS ?? '0', RAVINTIO_INITIATIVE_STEP: '1', OTEL_RESOURCE_ATTRIBUTES: withInitiativeLabels(process.env.OTEL_RESOURCE_ATTRIBUTES, labels.id, labels.slug, position) },
       stdio: ['ignore', 'pipe', 'pipe'],
     });
     activeChild = child;
-    child.stdout.on('data', (chunk) => writeSync(fd, chunk));
+    let session = '';
+    let rest = '';
+    child.stdout.on('data', (chunk) => {
+      writeSync(fd, chunk);
+      // Events are one JSON object per line. Keep the tail of a split line for the next chunk.
+      const text = rest + chunk.toString('utf8');
+      const cut = text.lastIndexOf('\n');
+      const whole = cut < 0 ? '' : text.slice(0, cut);
+      rest = (cut < 0 ? text : text.slice(cut + 1)).slice(-4096);
+      for (const m of whole.matchAll(SESSION_FIELD)) session = m[1];
+    });
     child.stderr.on('data', (chunk) => {
       writeSync(fd, chunk);
       writeSync(2, chunk);
     });
-    child.on('error', (e) => resolveStep({ error: e.code || 'spawn error' }));
-    child.on('close', (code, signal) => resolveStep({ code, signal }));
+    child.on('error', (e) => resolveStep({ error: e.code || 'spawn error', session: '' }));
+    child.on('close', (code, signal) => {
+      for (const m of rest.matchAll(SESSION_FIELD)) session = m[1];
+      resolveStep({ code, signal, session });
+    });
   });
 }
 
@@ -498,32 +526,43 @@ async function main() {
     currentLog = log.rel;
     earlierLogs = log.earlier;
     out(`I-C Run: Starting: initiative step ${position} in a fresh session`);
-    let res;
+    // Runs the step, then once more per resume. A step that exits 0 without merging and without a
+    // block may have ended its turn early (0000334), so the driver resumes its session.
+    let session = '';
+    let resumes = 0;
     try {
-      res = await runStep(root, position, cfg, log.fd, { id, slug });
+    for (;;) {
+      const res = await runStep(root, position, cfg, log.fd, { id, slug }, resumes > 0 ? session : '');
+      activeChild = null;
+      if (res.error) throw new Stop(`I-C Run: Blocked: could not start claude (${res.error})`);
+      if (res.code !== 0) {
+        const cap = cfg.turns ? `. The step may have reached RAVINTIO_INITIATIVE_MAX_TURNS=${cfg.turns}` : '';
+        throw new Stop(`I-C Run: Blocked: claude exited ${res.code ?? res.signal} on step ${position}${cap}`);
+      }
+      if (res.session) session = res.session;
+      if (delivered(root, id, slug)) {
+        ran.push(position);
+        reportSteps(ran);
+        out(`I-E Delivery: Complete: initiative ${id}-${slug} archived, driver done`);
+        return;
+      }
+      const block = openBlock(root) || archivedBlock(root, featureId, started - 1000);
+      if (block) throw new Stop(`I-C Run: Blocked: step ${position} stopped. ${block}`);
+      rm = readInitiativeFromBranch(root, rm.branch);
+      if (rm.position !== position) break;
+      if (!SESSION.test(session)) {
+        throw new Stop(`I-C Run: Blocked: step ${position} is not merged into the initiative branch, position stayed at ${position}`);
+      }
+      if (resumes >= MAX_RESUMES) {
+        throw new Stop(`I-C Run: Blocked: step ${position} exited without merging after ${MAX_RESUMES} resumes, position stayed at ${position}`);
+      }
+      resumes++;
+      out(`I-C Run: Resuming: step ${position} ended its turn unmerged, resume ${resumes} of ${MAX_RESUMES}`);
+    }
     } finally {
       closeSync(log.fd);
     }
-    activeChild = null;
-    if (res.error) throw new Stop(`I-C Run: Blocked: could not start claude (${res.error})`);
-    if (res.code !== 0) {
-      const cap = cfg.turns ? `. The step may have reached RAVINTIO_INITIATIVE_MAX_TURNS=${cfg.turns}` : '';
-      throw new Stop(`I-C Run: Blocked: claude exited ${res.code ?? res.signal} on step ${position}${cap}`);
-    }
     ran.push(position);
-
-    if (delivered(root, id, slug)) {
-      reportSteps(ran);
-      out(`I-E Delivery: Complete: initiative ${id}-${slug} archived, driver done`);
-      return;
-    }
-    const block = openBlock(root) || archivedBlock(root, featureId, started - 1000);
-    if (block) throw new Stop(`I-C Run: Blocked: step ${position} stopped. ${block}`);
-
-    rm = readInitiativeFromBranch(root, rm.branch);
-    if (rm.position === position) {
-      throw new Stop(`I-C Run: Blocked: step ${position} is not merged into the initiative branch, position stayed at ${position}`);
-    }
     if (rm.status !== 'active') throw new Stop(`I-C Run: Blocked: initiative status is ${rm.status}, not active`);
     const total = countSteps(rm.text);
     if (total > 0 && Number(rm.position) > total) {
