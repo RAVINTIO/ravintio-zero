@@ -27,6 +27,7 @@
 //   "I-C Run: event:". The events are:
 //     - a new "Complete:" line, such as "P1 Plan: Complete: ..."
 //     - a new "Blocked:" line
+//     - a new "Question:" line
 //     - a new "Resolved:" line
 //     - a new commit, with its subject only
 //   When the watched build log is a different file from the last pass, it also prints the
@@ -222,6 +223,7 @@ function gitOk(root, args) {
 function eventLine(line) {
   const t = line.trim().replace(/^[-*#>\s]+/, '');
   if (/\bBlocked:/.test(t) && !/\bComplete:/.test(t)) return t;
+  if (/\bQuestion:/.test(t) && !/\bComplete:/.test(t)) return t;
   if (/\bResolved:/.test(t) && !/\bComplete:/.test(t)) return t;
   if (/\bComplete:/.test(t)) return t;
   return '';

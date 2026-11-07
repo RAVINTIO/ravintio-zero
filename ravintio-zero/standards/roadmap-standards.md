@@ -288,8 +288,8 @@ The driver resumes a step that ends its turn early. A step session exits 0 when 
 - The resume runs `claude -p` with the same flags, `--resume {session}`, and a prompt that tells the session to read the build log and continue. It writes to the same step log.
 - The driver prints `I-C Run: Resuming: step {n} ended its turn unmerged, resume {k} of 2` before each resume.
 - The cap is two resumes. If the step is still unmerged after the second, the driver prints `I-C Run: Blocked: step {n} exited without merging after 2 resumes` and exits 1.
-- A non-zero exit, a `Blocked:` line, or a missing session id never resumes.
-- A step session never ends its turn before `I-D Advance: Complete:` or a `Blocked:` line. The orchestrator skill states the rule.
+- A non-zero exit, an open `Blocked:` or `Question:` line, or a missing session id never resumes. A `Question:` line with no later `Resolved:` line stops the driver at once, and the stop line repeats it. The continue prompt names `Question:` as a valid place to end a turn.
+- A step session never ends its turn before `I-D Advance: Complete:`, a `Blocked:` line, or a `Question:` line. The orchestrator skill states the rule.
 
 #### Restart stop
 
@@ -310,6 +310,7 @@ The installed pack files live outside the repo copy the driver reads. After a me
 - The driver releases the lock and exits 1.
 - The list shows at most 5 names, then `and {k} more`.
 - The check runs after the delivery, block, and not-merged checks, so a delivered initiative never stops here. If git is unreadable, the driver skips the check.
+- After the last step, the driver runs the check before it prints `I-E Delivery: Pending:`. If the step changed a setup file, the driver prints the `Setup:` line, exits 1, and prints no `Pending:` line. The initiative skill reruns setup and starts a new driver, which prints `Pending:`.
 - The initiative skill treats the line as a setup step and not a failure. It reruns setup in this order:
   1. Read the setup command from the `Confirmation:` row.
   2. Run only that exact command. If the row is missing or differs, stop for the human.
