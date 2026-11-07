@@ -24,8 +24,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-07T21:30:43Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-07T21:31:03Z` |
+| Wall clock | `0` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -48,8 +48,8 @@ Complete: P0 (2026-11-07T21:31:03Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-07T21:31:44Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-07T21:31:48Z` |
+| Wall clock | `0` |
 | Model tier | primary |
 | Skills loaded | ravintio-plan |
 | Agents spawned | 0 |
@@ -63,8 +63,8 @@ Complete: P1 (2026-11-07T21:31:48Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-07T21:31:59Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-07T21:48:02Z` |
+| Wall clock | `16` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 0 |
@@ -79,8 +79,8 @@ Complete: P2 (2026-11-07T21:48:02Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-07T22:01:45Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-07T22:01:45Z` |
+| Wall clock | `0` |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | 0 |
@@ -88,3 +88,35 @@ Complete: P2 (2026-11-07T21:48:02Z)
 | Parallel task batches | 0 |
 | Notes | Full suite on a clean tree: 303 feature suites and 19 regression suites pass. |
 Complete: P3 (2026-11-07T22:01:45Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-07T22:01:56Z` |
+| End | `2026-11-07T22:01:56Z` |
+| Wall clock | `0` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | initiative step: the merge queue sets the version |
+
+Complete: P4 (2026-11-07T22:01:56Z)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | 5 |
+| Total wall clock | 31 |
+| Total agents spawned | 0 |
+| Total MCP calls | 0 |
+| Phases using parallelism | 0 |
+| Primary tier agent calls | 0 |
+| Cheaper tier agent calls | 0 |
+| Self-corrections | 1 |
+| Phases skipped | none |
