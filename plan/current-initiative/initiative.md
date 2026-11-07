@@ -1,11 +1,11 @@
 ---
 title: "Initiative: 0000360 - backlog sweep"
-summary: "Closes 60 open backlog entries in 19 steps, and makes the driver run independent steps at once in worktrees."
+summary: "Closes 61 open backlog entries in 20 steps, and makes the driver run independent steps at once in worktrees."
 status: "active"  # proposed | charted | active | delivered | blocked
 ---
 # Initiative: 0000360 - backlog sweep
 
-**Goal:** Close every open backlog entry except the four that need paid services. The first three steps make the driver run independent steps at once, each in its own worktree, with each version set as its step merges.
+**Goal:** Close every open backlog entry except the four that need paid services. The first three steps make the driver run independent steps at once, each in its own worktree, with each version set as its step merges. The last step moves the pack source to `src/ravintio-zero/`.
 **Branch:** initiative/0000360-backlog-sweep
 **Status:** active
 **Position:** 1
@@ -48,6 +48,7 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 17 | ravintio-zero | A `plan/state/` record of the last confirmed pack version | additive |
 | 18 | ravintio-zero | A shared brand guard allowlist file | additive |
 | 19 | ravintio-zero | none | none |
+| 20 | ravintio-zero | none. The pack source moves to `src/ravintio-zero/`, and no file format changes. | none |
 
 ## Dependencies
 
@@ -74,12 +75,13 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 18 | Dependabot, GitHub secret scanning and push protection, private vulnerability reporting | service | Free GitHub features (0000323) |
 | 18 | actionlint, zizmor | library | Workflow lint job in CI (0000325) |
 | 19 | none | none | none |
+| 20 | none | none | none |
 
 ## Decisions
 
 | Step | Fork | Pre-approved answer | Bump effect |
 |------|------|---------------------|-------------|
-| 1-19 | Confirmation: setup rerun at each `Setup:` stop | Run the exact command `ravintio-zero/setup.sh claude-code --strict-orchestrator`. If the command differs in any way, stop for the human. | none |
+| 1-20 | Confirmation: setup rerun at each `Setup:` stop | Run the exact command `ravintio-zero/setup.sh claude-code --strict-orchestrator`. If the command differs in any way, stop for the human. | none |
 | 1 | The orchestrator skill has 118 bytes left under its 9000 byte cap | Move the Context Hygiene section to `references/orchestrator-context-hygiene.md` with a Pack Index row, and update the cap tests (0000371), before the `Question:` edit | none |
 | 1 | The driver changes while it runs | The coordinator takes the `Restart:` stop and starts a new driver and watcher | none |
 | 2 | Steps 1 and 2 still bump in P4 | Steps 1 and 2 use today's P4 bump. The merge queue sets versions from step 3 on. | none |
@@ -105,15 +107,20 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 14 | The prose linter blocks existing breaches | It blocks new breaches only, against the per-file baseline | none |
 | 15 | The archetype resolver could let an override weaken a hook-enforced rule | The resolver ignores any override of a rule a hook enforces, and a test proves it. Otherwise stop. | none |
 | 18 | Human-only settings (0000323, 0000325) | Human stop: the step prints a checklist of secret scanning, push protection, Dependabot security updates, private vulnerability reporting, topics, and the lint job as a required check, then waits | none |
-| 19 | The pack prose rewrite breaks wording-pinned tests | Step 19 runs after every other step, and tests read rule anchors from step 4 | none |
-| 1-19 | A test pins text that the step edits | Update the pin in the same step and log a `Rework:` line | none |
-| 1-19 | A step changes the tree while its own suite runs | Rerun the suite on a clean tree before closing the phase | none |
+| 19 | The pack prose rewrite breaks wording-pinned tests | Step 19 runs after steps 1 to 18, and tests read rule anchors from step 4 | none |
+| 20 | How the pack source moves (0000396) | Commit a pure `git mv ravintio-zero src/ravintio-zero` first. Then copy `src/ravintio-zero/` back to `ravintio-zero/` as a plain file system copy with no history. No symlink. | none |
+| 20 | Consumer repos after the move | Consumer installs keep the `ravintio-zero/` path. Pack references that consumers read stay unchanged. | none |
+| 20 | The two copies diverge | By design. `src/ravintio-zero/` is the source. `ravintio-zero/` is the installed copy, and it changes only through a refresh from the source. | none |
+| 20 | Guards that cover `ravintio-zero/` | Extend each one to cover `src/ravintio-zero/` too. No guard gains a new allowed form. | none |
+| 20 | Step 20 runs last | Step 20 runs after step 19, so steps 1 to 19 edit `ravintio-zero/` at the old layout | none |
+| 1-20 | A test pins text that the step edits | Update the pin in the same step and log a `Rework:` line | none |
+| 1-20 | A step changes the tree while its own suite runs | Rerun the suite on a clean tree before closing the phase | none |
 
 ## Baselines
 
 | Step | Target | Baseline | Source |
 |------|--------|----------|--------|
-| 1-19 | none | none | No step sets a speed or size target |
+| 1-20 | none | none | No step sets a speed or size target |
 
 ## Criteria
 
@@ -123,13 +130,15 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 13 | The output style installs for Claude Code and Codex | Deterministic | local |
 | 18 | Each GitHub setting reads on through `gh api` | Deterministic after the human stop | CI |
 | 18 | The workflow lint job passes | Deterministic | CI |
-| 1-19 | Windows setup tests pass | Deterministic | CI |
+| 20 | `git log --follow src/ravintio-zero/setup.sh` reaches commits from before the move | Deterministic | local |
+| 20 | `ravintio-zero/` matches `src/ravintio-zero/` byte for byte at the step's end | Deterministic | local |
+| 1-20 | Windows setup tests pass | Deterministic | CI |
 
 ## P1 skips
 
 | Step | Skip P1 | Reason |
 |------|---------|--------|
-| 1-19 | no | Every step changes scripts, hooks, skills, or tests |
+| 1-20 | no | Every step changes scripts, hooks, skills, or tests |
 
 ## Lanes
 
@@ -156,6 +165,7 @@ Step 3 moves these columns into `## Steps`. Until then, steps 1 to 3 run one at 
 | 17 | guards | 6 |
 | 18 | github | 4 |
 | 19 | writing | 5-18 |
+| 20 | layout | 19 |
 
 ## Steps
 
@@ -180,3 +190,4 @@ Step 3 moves these columns into `## Steps`. Until then, steps 1 to 3 run one at 
 | 17 | 0000393-session-integrity-and-guards | Session integrity and guards | 0000271, 0000367, 0000272, 0000260 | minor | | pending |
 | 18 | 0000394-github-security-and-ci-lint | GitHub security and CI lint | 0000323, 0000324, 0000325 | minor | | pending |
 | 19 | 0000395-pack-prose-to-the-standard | Pack prose to the standard | 0000302 | minor | | pending |
+| 20 | 0000397-pack-source-in-src | Pack source in src | 0000396 | minor | | pending |
