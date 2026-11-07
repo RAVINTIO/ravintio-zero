@@ -26,7 +26,7 @@ Project hooks run only after a person trusts them. Run `/hooks` in Codex to trus
 
 ## Reply Conventions
 
-Begin every reply in an active run with a prefix. Use the status form `{prefix} {Status}: {one-liner}`. The status is Starting, Resuming, Complete, Blocked, or Skipped.
+Begin every reply in an active run with a prefix. Use the status form `{prefix} {Status}: {one-liner}`. The status is Starting, Resuming, Complete, Question, Blocked, or Skipped.
 
 | Prefix | Use for |
 |--------|---------|

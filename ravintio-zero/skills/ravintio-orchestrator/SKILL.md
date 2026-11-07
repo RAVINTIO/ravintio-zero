@@ -42,10 +42,11 @@ Every request is a feature change. It runs one route: the five-phase pipeline. E
 | P3 | Validate and Accept | `P3 Validate:` | ravintio-validate-and-accept |
 | P4 | Ship | `P4 Ship:` | ravintio-ship |
 
-Status messages use one form: `{prefix} {Status}: {one-liner}`. The status is Starting, Resuming, Complete, Blocked, or Skipped.
+Status messages use one form: `{prefix} {Status}: {one-liner}`. The status is Starting, Resuming, Complete, Question, Blocked, or Skipped.
 - Entering a phase: `P0 Discovery: Starting: {one-liner}`
 - Resuming: `P2 Implement: Resuming: {what was in progress, what is next}`
 - Completing: `P1 Plan: Complete: {summary}`
+- Asking: `P0 Discovery: Question: {routine question}`. `Question:` asks a routine question. `Blocked:` marks an exception stop only.
 - Blocking: `P0 Discovery: Blocked: {specific gap}`
 - Skipping: `P3 Validate: Skipped: {reason}`
 
