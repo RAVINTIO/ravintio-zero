@@ -13,7 +13,7 @@ ORCH="$(orch_combined "$ZERO_DIR/skills/ravintio-orchestrator")"
 CATALOGUE="$ZERO_DIR/skills/ravintio-orchestrator/references/orchestrator-skills-catalogue.md"
 SHIP="$ZERO_DIR/skills/ravintio-ship/SKILL.md"
 
-STOPS=$(awk '/^## Exception Stops/{f=1;next} /^## /{f=0} f' "$ORCH")
+STOPS=$(orch_section "## Exception Stops")
 STEP5=$(awk '/^### Step 5: Build assessment/{f=1;next} /^### /{f=0} f' "$SHIP")
 
 echo ""

@@ -29,14 +29,14 @@ same_ignoring_override_block() { # pack file, installed file
 has() { grep -qF -- "$1" "$2" && echo yes || echo no; }
 
 echo "=== (a) roadmap-standards clarity check ==="
-CHART=$(sed -n '/^### I-A Chart/,/^### Chart-time schema approval/p' "$STD")
+CHART=$(orch_section "### I-A Chart")
 assert_contains 'clarity check' "$CHART" "Chart has a clarity check"
 assert_contains 'a problem, a wanted outcome, and one observable condition' "$CHART" "names the three things"
 assert_contains 'sharpen it or strike the step' "$CHART" "human sharpens or strikes"
 assert_contains 'Chart never rewrites an entry itself' "$CHART" "Chart never rewrites"
 
 echo "=== (a) roadmap-standards dependency survey ==="
-DEP=$(sed -n '/^### Chart-time dependency approval/,/^### I-B Activate/p' "$STD")
+DEP=$(orch_section "### Chart-time dependency approval")
 assert_contains '## Dependencies' "$DEP" "names the Dependencies table"
 assert_contains '`library`' "$DEP" "kind library"
 assert_contains '`service`' "$DEP" "kind service"
@@ -54,7 +54,7 @@ assert_equals "yes" "$(has 'Chart-time dependency approval' "$ENTRY")" "header n
 assert_equals "yes" "$(has 'Approved dependencies' "$DESIGN")" "design template field"
 
 echo "=== (b) Exception Stops ==="
-STOPS=$(sed -n '/^## Exception Stops/,/^## Mid-Pipeline/p' "$ORCH")
+STOPS=$(orch_section "## Exception Stops")
 ROWS=$(echo "$STOPS" | grep -c '^| [^E-]')
 assert_equals "6" "$ROWS" "six exception rows"
 assert_contains 'Blocked: new dependency {name} is not on the approved list. Approve it or choose an approved alternative.' "$STOPS" "dependency message"

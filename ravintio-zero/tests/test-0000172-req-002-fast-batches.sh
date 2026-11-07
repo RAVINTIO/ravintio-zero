@@ -37,7 +37,7 @@ for skill in plan implement validate-and-accept ship; do
 done
 
 # AC-3: orchestrator Phase Invocation names the run speed file and fast batch
-osec="$(awk '/^## Phase Invocation/{f=1;next} /^## /{f=0} f' "$ORCH")"
+osec="$(orch_section "## Phase Invocation")"
 ok=1
 if [ -n "$osec" ] \
   && printf '%s\n' "$osec" | grep -qF 'plan/.run-speed' \

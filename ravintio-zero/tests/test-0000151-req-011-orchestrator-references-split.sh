@@ -61,7 +61,7 @@ sed -e 's|The status is Starting, Resuming, Complete, Blocked, or Skipped\.|The 
 missing_lines() {
   local base="$1"; shift
   local all="$TMP/all.$$"
-  cat "$@" > "$all"
+  cat "$@" | strip_rule_anchors > "$all"
   grep -v '^[[:space:]]*$' "$base" | grep -v '^#' | grep -vx -- '---' | while IFS= read -r line; do
     grep -Fxq -- "$line" "$all" || printf '%s\n' "$line"
   done
