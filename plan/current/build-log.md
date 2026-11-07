@@ -66,7 +66,7 @@ Complete: P1 (2026-11-07T21:32:51Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-07T21:33:00Z` |
-| End | `{{filled when P2 completes}}` |
+| End | `2026-11-07T21:35:39Z` |
 | Wall clock | 0 |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
@@ -74,3 +74,8 @@ Complete: P1 (2026-11-07T21:32:51Z)
 | MCP calls | 0 |
 | Parallel task batches | 1 |
 | Notes | U1 to U3 form batch 1 and were written inline, no subagents: three small edits that share one design |
+
+Tests run: REQ-001: test-0000385-req-001-affected-tests.sh (2026-11-07T21:35:39Z)
+Tests run: REQ-002: test-0000385-req-002-baseline-failures.sh (2026-11-07T21:35:39Z)
+Tests run: REQ-003: test-0000385-req-003-clean-clone.sh (2026-11-07T21:35:39Z)
+Complete: P2 (2026-11-07T21:35:39Z)
