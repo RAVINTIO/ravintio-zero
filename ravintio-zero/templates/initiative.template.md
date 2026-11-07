@@ -91,3 +91,10 @@ status: "proposed"  # proposed | charted | active | delivered | blocked
 | Step | Feature id | Title | Backlog entries | Bump | Version | Status |
 |------|------------|-------|-----------------|------|---------|--------|
 | 1 | {{feature id}} | {{step title in sentence case}} | {{backlog ids}} | minor | | pending |
+
+## Merges
+
+The merge queue adds one row for each step it merges. See the merge queue section of the roadmap standards.
+
+| Step | PR | Merge commit | Version | Merged at |
+|------|----|--------------|---------|-----------|
