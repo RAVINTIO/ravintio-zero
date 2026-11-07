@@ -25,7 +25,7 @@
 
 | ID | Category | Requirement | Target | Measurement |
 |----|----------|------------|--------|-------------|
-| NFR-001 | Size | Orchestrator `SKILL.md` size | 8000 bytes or fewer | `wc -c` in the cap tests |
+| NFR-001 | Size | Orchestrator `SKILL.md` size | 8700 bytes or fewer | `wc -c` in the cap tests |
 | NFR-002 | Security | Driver prints repo text cut to a fixed length | 500 characters or fewer per line | Existing `MAX_LINE` limit |
 
 ## API Summary

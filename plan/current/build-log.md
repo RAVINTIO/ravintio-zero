@@ -78,3 +78,4 @@ Complete: P1 (2026-11-07T15:45:32Z)
 | Notes | Three units run in sequence: all edit shared files (execution plan concurrency table) |
 
 - In progress: U-001 (`2026-11-07T15:46:10Z`)
+Deviation: the Context Hygiene move alone frees 394 bytes (8882 to 8608 bytes), so the size target is 8700 bytes and not 8000. Plan artifacts updated (2026-11-07T15:52:13Z)

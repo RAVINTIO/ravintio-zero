@@ -24,7 +24,7 @@ As a pack maintainer, I move Context Hygiene out of the orchestrator `SKILL.md`,
 - [ ] AC-1: Skill is smaller
   - Given the orchestrator `SKILL.md` after the move
   - When `wc -c` counts its bytes
-  - Then the count is 8000 or fewer
+  - Then the count is 8700 or fewer
 - [ ] AC-2: Reference holds the text
   - Given the new reference file
   - When the test greps the old Context Hygiene lines

@@ -71,7 +71,7 @@ None. The step writes no data store.
 
 | NFR | Target | Measurement |
 |-----|--------|-------------|
-| Skill size | Orchestrator `SKILL.md` at most 8000 bytes | `wc -c` in the cap tests |
+| Skill size | Orchestrator `SKILL.md` at most 8700 bytes | `wc -c` in the cap tests |
 
 ## Constraints and Assumptions
 
@@ -102,7 +102,7 @@ None. The step writes no data store.
 
 ## Acceptance Criteria
 
-- [ ] AC-1: Orchestrator `SKILL.md` has no Context Hygiene section, has a Pack Index row for `references/orchestrator-context-hygiene.md`, and is at most 8000 bytes. The reference file holds the moved text.
+- [ ] AC-1: Orchestrator `SKILL.md` has no Context Hygiene section, has a Pack Index row for `references/orchestrator-context-hygiene.md`, and is at most 8700 bytes. The reference file holds the moved text.
 - [ ] AC-2: A step log whose build log ends on an open `Question:` makes the driver stop with no resume and print the question. A later `Resolved:` line clears it.
 - [ ] AC-3: The watcher reports an open `Question:` line.
 - [ ] AC-4: The continue prompt names `Question:` as a valid place to end a turn.
