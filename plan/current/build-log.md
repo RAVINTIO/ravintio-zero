@@ -154,3 +154,17 @@ Complete: P2 (2026-11-07T21:55:53Z)
 | Notes | `Run inline. The full suite already ran green at the P2 close.` |
 
 Complete: P3 (2026-11-07T21:56:24Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-07T21:56:50Z` |
+| End | `pending` |
+| Wall clock | `pending` |
+| Model tier | primary |
+| Skills loaded | ravintio-orchestrator, ravintio-ship, ravintio-retrospective |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | `Initiative step. The merge queue sets the version.` |
