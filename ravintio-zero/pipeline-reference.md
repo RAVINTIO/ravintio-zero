@@ -42,7 +42,7 @@ Initiative stages use five more prefixes. They use the same `{prefix} {Status}: 
 | `I-A Chart:` | Chart | Planning an initiative with the human and taking their confirmation |
 | `I-B Activate:` | Activate | Cutting the initiative branch, writing the active initiative, and offering the driver |
 | `I-C Run:` | Run | Running one initiative step through P0 to P4 |
-| `I-D Advance:` | Advance | Merging the step PR into the initiative branch and tagging it |
+| `I-D Advance:` | Advance | Handing the step PR to the merge queue, which merges it into the initiative branch and tags it |
 | `I-E Delivery:` | Delivery | Archiving the initiative and raising the initiative PR to `main` |
 
 - Starting a step: `I-C Run: Starting: {step}`
@@ -127,7 +127,7 @@ Ship is the terminal phase. It runs three steps in order.
 1. **Archive.** The changelog entry is written to `plan/changelog/{feature-id}-{YYYY-MM-DD}.md`, then `plan/current/` is archived to `plan/_archive/{feature-id}-{date}/` and cleared. The orchestrator sentinel is deleted last, after the archive is confirmed complete.
 2. **Build assessment.** An assessment sub-agent reads the archived `build-log.md` and produces a structured efficiency report at `plan/_archive/{feature-id}-{date}/build-report.md`.
 3. **Tag and PR.** The agent reads the version from `component.yml`, checks the PR body for attribution lines, then raises the PR. It creates no tag. After the human merges, the CI `release-tag` job tags the merge commit on `main` with `v{version}`. In a gated run, it first asks the human whether to push and raise the PR or output a PR description for manual use. If `local-git-only` is active in `ravintio-overrides/instructions/`, the agent skips the prompt and outputs a PR description directly.
-   - **Initiative step.** When `plan/current-initiative/initiative.md` has `status: active`, the order differs. The agent raises the PR with `--base initiative/{id}-{slug}`, waits for green CI, squash-merges, fetches, then tags the squash commit and pushes the tag. After the last step, I-E Delivery archives the initiative and raises one PR to `main` that asks for a merge commit. The agent never merges that PR. See the ship skill's Initiative steps section.
+   - **Initiative step.** When `plan/current-initiative/initiative.md` has `status: active`, the order differs. The agent raises the PR with `--base initiative/{id}-{slug}` and waits for green CI. P4 sets no version. The merge queue sets the version, squash-merges, then tags the squash commit and pushes the tag. Under the concurrent driver the step writes its PR number to its control folder and ends, and the driver runs the queue. After the last step, I-E Delivery archives the initiative and raises one PR to `main` that asks for a merge commit. The agent never merges that PR. See the ship skill's Initiative steps section.
 
 ### Build Log
 

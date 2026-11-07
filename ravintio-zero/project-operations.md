@@ -102,16 +102,16 @@ Three parts run an initiative. The human talks only to their own session. Step s
 | Part | What it is | Runs where | Owns |
 |------|-----------|------------|------|
 | `ravintio-initiative` skill | The initiative coordinator | The human's session | Chart, activate, watching the steps, progress reports, and delivery |
-| Driver, `initiative-run.mjs` | A script with no AI | A background task that the initiative skill starts | Starting each step session in turn, and stopping on a `Blocked:` line |
-| `ravintio-orchestrator` skill | The feature coordinator | Each step session, a separate `claude -p` process | One feature from P0 to P4, then the merge into the initiative branch |
+| Driver, `initiative-run.mjs` | A script with no AI | A background task that the initiative skill starts | Starting step sessions in worktrees, running the merge queue, and stopping on a `Blocked:` line |
+| `ravintio-orchestrator` skill | The feature coordinator | Each step session, a separate `claude -p` process | One feature from P0 to P4, up to a step PR with green CI |
 
 An initiative runs in this sequence:
 
 1. **I-A Chart.** The initiative skill plans the steps with the human and takes their approval.
 2. **I-B Activate.** The initiative skill cuts the initiative branch and starts the driver.
-3. **I-C Run.** The driver starts a step session. It loads the orchestrator and builds one feature from P0 to P4.
-4. **I-D Advance.** The step session merges its feature PR into the initiative branch, tags the merge commit, and exits.
-5. The driver starts the next step session. Stages I-C and I-D repeat until no steps remain.
+3. **I-C Run.** The driver starts each step whose lane is free and whose `After` steps have merged, up to `**Concurrency:**` at once. Each step session runs in its own worktree. It loads the orchestrator and builds one feature from P0 to P4.
+4. **I-D Advance.** The step session raises its PR, waits for green CI, writes the PR number to its control folder, and exits. The driver runs the merge queue for each ready PR, one at a time. The queue sets the version, merges the PR into the initiative branch, and tags the merge commit.
+5. The driver starts more steps as lanes free up. Stages I-C and I-D repeat until every step has merged.
 6. While steps run, the initiative skill watches the build log and git, and reports to the human. It never edits the working tree.
 7. **I-E Delivery.** After the driver exits, the initiative skill archives the initiative and raises the initiative PR to `main`. It then gives the final report.
 

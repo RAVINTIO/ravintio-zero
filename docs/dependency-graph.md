@@ -1,6 +1,6 @@
 # Dependency Graph
 
-Last updated: 0000205-initiative-skill
+Last updated: 0000379-parallel-steps-on-worktrees
 
 ## Component dependency diagram
 
@@ -15,6 +15,8 @@ graph TD
         ENFSHARED["hooks/enforcement/read-stdin.mjs\nshared module, always installed"]
         VERSION["scripts/product-version.mjs"]
         DRIVER["scripts/initiative-run.mjs"]
+        CHART["scripts/initiative-chart.mjs"]
+        QUEUE["scripts/merge-queue.mjs"]
         LABELS["scripts/initiative-labels.mjs"]
         ATTRIB["scripts/check-attribution.mjs"]
         RELTAG["scripts/release-tag.mjs"]
@@ -51,10 +53,13 @@ graph TD
     ENFORCE --> NODE
 
     ENFORCE -->|"merge-guard reads PR base"| GH
-    DRIVER -->|"starts one claude -p per step"| GH
+    DRIVER -->|"starts one claude -p per running step"| GH
     DRIVER --> NODE
     DRIVER -->|"imports the label encoder"| LABELS
     DRIVER -->|"writes one log per step"| LOGS
+    DRIVER -->|"imports the chart parser"| CHART
+    DRIVER -->|"runs one ready PR at a time"| QUEUE
+    QUEUE --> GH
     SKILLS -->|"orchestrator loads on demand"| REFS
     SKILLS -->|"ship runs at Steps 5 and 9"| METRICS
     METRICS -->|"reads thresholds"| STANDARDS
@@ -74,9 +79,9 @@ graph TD
 
 **Setup wires eight hooks into `.claude/settings.json`.** `gate-write`, `ratchet-check`, and `em-dash-guard` run on `PreToolUse` for Write and Edit. `merge-guard` runs on `PreToolUse` for Bash. `auto-trigger-orchestrator`, `check-orchestrator-presence`, and `check-design` run on `UserPromptSubmit`, in that order. `check-reply-prefix` runs on `Stop`. Setup finds its own entries by module name on any matcher, and replaces a non-array event value with a warning.
 
-**Two components make network calls, both on request.** `merge-guard` runs `gh pr view` to read a PR base before a merge. `initiative-run.mjs` starts `claude` and `gh` child processes. No other hook or script makes an outbound network call. `node` is the only dependency of the pack itself.
+**Two components make network calls, both on request.** `merge-guard` runs `gh pr view` to read a PR base before a merge. `initiative-run.mjs` starts `claude`, `gh`, and `git` child processes, and runs `merge-queue.mjs`, which calls `gh`. No other hook or script makes an outbound network call. `node` is the only dependency of the pack itself.
 
-**The driver depends on `claude` and `gh`.** `initiative-run.mjs` uses Node built-ins, `initiative-labels.mjs`, the `claude` command, and `gh`. It reads `plan/current-initiative/initiative.md` from the initiative branch ref, and `plan/current/build-log.md` and the newest archived build log for a `Blocked:` line. It never edits the working tree. It also runs `git rev-parse` and `git diff --name-only` with argument arrays to see whether a step changed the driver, the watcher, or the initiative skill. `initiative-watch.mjs` uses Node built-ins and `git log`, and it only reads.
+**The driver depends on `claude` and `gh`.** `initiative-run.mjs` uses Node built-ins, `initiative-labels.mjs`, the `claude` command, and `gh`. It reads `plan/current-initiative/initiative.md` from the initiative branch ref, and `plan/current/build-log.md` and the newest archived build log for a `Blocked:` line. It never edits the main working tree. Under `**Concurrency:**` it creates and removes step worktrees in `plan/.initiative-worktrees/`, reads the chart through `initiative-chart.mjs`, and runs `merge-queue.mjs` in a queue worktree. It also runs `git rev-parse` and `git diff --name-only` with argument arrays to see whether a step changed the driver, the watcher, or the initiative skill. `initiative-watch.mjs` uses Node built-ins and `git log`, and it only reads.
 
 **The driver passes a model and labels to each child.** It passes `--model` from `RAVINTIO_INITIATIVE_MODEL`, which defaults to `sonnet`. It passes `--max-turns` only when `RAVINTIO_INITIATIVE_MAX_TURNS` is set. If a `RAVINTIO_*` name is unset, the driver reads the legacy `PLANIFEST_ROADMAP_MODEL` or `PLANIFEST_ROADMAP_MAX_TURNS` in 0.x, and the `RAVINTIO_*` value wins if both are set. It appends `work.kind`, `ravintio.initiative`, and `ravintio.step` labels to `OTEL_RESOURCE_ATTRIBUTES` in the child environment.
 

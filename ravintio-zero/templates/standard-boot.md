@@ -47,7 +47,7 @@ Use `Supervise:` for out-of-phase work. Examples are supervising an initiative d
 
 ## Worktrees
 
-A human session works on a `feat/` branch in the main working tree and creates no worktrees. The initiative driver may run steps in worktrees under `plan/.initiative-worktrees/`.
+A human session works on a `feat/` branch in the main working tree, with no worktrees. The driver may use `plan/.initiative-worktrees/`.
 
 ## Escalation
 
