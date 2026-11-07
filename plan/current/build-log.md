@@ -65,3 +65,17 @@ Complete: P0 (2026-11-07T06:04:45Z)
 
 Schema change: none. Dependency: none.
 Complete: P1 (2026-11-07T06:05:36Z)
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-07T06:05:44Z` |
+| End | `PENDING` |
+| Wall clock | `0` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Departure from the concurrency plan: units ran inline, not as subagents. The two units are short text edits that share one context. Tests come first and are RED before each change. |
