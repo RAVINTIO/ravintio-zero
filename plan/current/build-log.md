@@ -96,5 +96,5 @@ Complete: P2 (2026-11-07T21:35:39Z)
 
 Tests run: full suite in a clean clone of HEAD: 304 feature and 19 regression passed, 1 failed (inherited: test-0000037-req-004-remove-old-folder.sh) (2026-11-07T21:51:25Z)
 OS gap: local macos, CI ubuntu, windows
-Baseline recorded at P0: 3 failed suites on the base commit, see baseline-failures.md. The P0 run began after the plan commit and ran during P1 and P2.
+Baseline recorded at P0: 3 failed suites on the base commit, see baseline-failures.md. The base-commit run started from the P0 commit during P1, so it ran beside the build.
 Complete: P3 (2026-11-07T21:51:25Z)
