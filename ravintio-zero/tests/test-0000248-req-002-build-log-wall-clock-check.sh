@@ -15,9 +15,10 @@ TEMPLATE="$ZERO_DIR/templates/build-log.template.md"
 TMP=$(mktemp -d -t ravintio_0000248_req002_XXXXXX)
 trap 'rm -rf "$TMP"' EXIT
 
-# block <n> <name> <start> <end> <wall>: one phase block.
+# block <n> <name> <start> <end> <wall>: one phase block, closed with a Complete line (0000358).
 block() {
   printf '### P%s: %s\n\n| Field | Value |\n|-------|-------|\n| Start | `%s` |\n| End | `%s` |\n| Wall clock | `%s` |\n| Model tier | primary |\n\n' "$1" "$2" "$3" "$4" "$5"
+  printf 'Complete: P%s (%s)\n\n' "$1" "$4"
 }
 # summary <total>: the Summary table.
 summary() {
