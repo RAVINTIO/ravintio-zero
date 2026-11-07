@@ -26,7 +26,7 @@ model: haiku
 ## What You Produce
 
 The test file:
-- Is placed in the appropriate test directory for the stack (e.g. `src/{component-id}/tests/`, `ravintio-zero/tests/`)
+- Is placed in the appropriate test directory for the stack (e.g. `src/{component-id}/tests/`, `ravintio-zero/tests/`). In a developer repo, use the repo's own test folder from the stack declaration
 - Is named after the requirement: `test-{req-id}-{slug}.{ext}`
 - Has a test description that includes the requirement ID: e.g. `describe('req-001-tdd-subloop-protocol: ...')` or `# req-001`
 - Tests exactly the behaviour described in the requirement's acceptance criteria, one criterion per test function: the test file is the unit per requirement
