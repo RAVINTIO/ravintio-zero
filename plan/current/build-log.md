@@ -101,3 +101,18 @@ Complete: P2 (2026-11-07T05:44:12Z)
 | Parallel task batches | 0 |
 | Notes | none |
 Complete: P3 (2026-11-07T05:45:01Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-07T05:45:14Z` |
+| End | `{{pending}}` |
+| Wall clock | `{{pending}}` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | initiative 0000349 step 7 |
+
