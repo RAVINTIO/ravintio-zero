@@ -92,12 +92,12 @@ Complete: P2 (2026-11-07T05:44:12Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-07T05:44:12Z` |
-| End | `{{pending}}` |
-| Wall clock | `{{pending}}` |
+| End | `2026-11-07T05:45:01Z` |
+| Wall clock | `0` |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | 0 |
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | none |
-
+Complete: P3 (2026-11-07T05:45:01Z)
