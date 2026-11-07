@@ -42,3 +42,18 @@ Scope Lock (error path): A cause with no match lists none found and never blocks
 Scope Lock (cross-session continuity): The result lives in the execution plan and survives a resume [source: draft-accepted (initiative)]
 Scope Lock complete. All four scenario paths captured.
 Complete: P0 (2026-11-07T21:31:03Z)
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-07T21:31:44Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | none |
+Complete: P1 (2026-11-07T21:31:48Z)
