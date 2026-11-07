@@ -24,7 +24,7 @@ CONTENT=$(cat "$SKILL")
 echo ""
 echo "=== req-001: P1/P2 gates stop in gated mode only ==="
 
-TABLE_SECTION=$(printf '%s\n' "$CONTENT" | sed -n '/## Phase Invocation/,/^## Mid-Pipeline/p')
+TABLE_SECTION=$(orch_section "## Phase Invocation")
 
 P1_ROW=$(printf '%s\n' "$TABLE_SECTION" | grep '| P1 Plan |')
 assert_contains "Gated: STOP for confirmation. Autonomous: no stop." "$P1_ROW" \

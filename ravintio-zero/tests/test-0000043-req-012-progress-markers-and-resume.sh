@@ -15,7 +15,7 @@ VAL="$ZERO_DIR/skills/ravintio-validate-and-accept/SKILL.md"
 TPL="$ZERO_DIR/templates/build-log.template.md"
 DRIVER="$ZERO_DIR/scripts/initiative-run.mjs"
 PM="$(awk '$0 == "## Progress Markers and Interrupted Units" {on=1; next} on && /^---$/ {exit} on {print}' "$STD")"
-RES="$(awk '$0 == "## Resume Detection" {on=1; next} on && /^---$/ {exit} on {print}' "$ORCH")"$'\n'"$(cat "$ZERO_DIR/skills/ravintio-orchestrator/references/orchestrator-resume-detection.md")"
+RES="$(orch_section "## Resume Detection")$'\n'$(orch_section "## Findings and checks")$'\n'$(orch_section "## Checks")"
 
 echo "=== req-012 (a): each dispatched unit writes progress markers ==="
 assert_contains '- In progress: {unit} ({ISO-8601 timestamp})' "$PM" "req-012 (a): standard defines the In progress: line"

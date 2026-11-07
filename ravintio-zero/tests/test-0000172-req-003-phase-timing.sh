@@ -28,7 +28,7 @@ if grep -q '^| Run speed |' "$TPL" \
 check "req-003 AC-1: template holds Run speed, End, Wall clock, Total wall clock rows" "$ok"
 
 # AC-2: orchestrator Phase Invocation closes each phase block
-sec="$(awk '/^## Phase Invocation/{f=1;next} /^## /{f=0} f' "$ORCH")"
+sec="$(orch_section "## Phase Invocation")"
 ok=1
 if [ -n "$sec" ] \
   && printf '%s\n' "$sec" | grep -qF 'End' \

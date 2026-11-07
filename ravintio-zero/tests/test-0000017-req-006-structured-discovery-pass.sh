@@ -24,7 +24,7 @@ assert_equals "yes" "$(grep_has "### Adoption Modes" "$ORCHESTRATOR")" \
   "req-006: orchestrator has the adoption-modes discovery section"
 
 # the adoption-modes section covers all four modes and the discovery.md lifecycle
-MODE_SECTION=$(sed -n '/### Adoption Modes/,/#### Retrofit Scan/p' "$ORCHESTRATOR")
+MODE_SECTION=$(orch_section "### Adoption Modes")
 for mode in Greenfield "Standard Iterative" Retrofit "External Anchor"; do
   assert_contains "$mode" "$MODE_SECTION" \
     "req-006: $mode mode present in the adoption table"
@@ -91,7 +91,7 @@ assert_equals "yes" "$(grep_has "trust it as-is" "$ORCHESTRATOR")" \
   "req-006: resume trusts existing discovery.md"
 assert_equals "yes" "$(grep_has "regenerate it fresh" "$ORCHESTRATOR")" \
   "req-006: missing/incomplete discovery.md regenerated, not patched"
-RESUME_SECTION=$(sed -n '/## Resume Detection/,/^---$/p' "$ORCHESTRATOR")$'\n'$(cat "$ZERO_DIR/skills/ravintio-orchestrator/references/orchestrator-resume-detection.md")
+RESUME_SECTION=$(orch_section "## Resume Detection")$'\n'$(orch_section "## Findings and checks")$'\n'$(orch_section "## Checks")
 assert_contains "discovery.md" "$RESUME_SECTION" \
   "req-006: Resume Detection covers discovery.md"
 

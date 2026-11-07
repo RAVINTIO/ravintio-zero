@@ -41,7 +41,7 @@ assert_contains 'ask the human to fix the field' "$DECOMP" \
   "req-004: discovery asks the human to fix the field"
 
 echo "=== req-004: discovery start actions read releaseSize ==="
-STEP10=$(printf '%s\n' "$START" | grep -E '^10\. \*\*Backlog pickup\*\*')
+STEP10=$(rule_text p0-start-backlog-pickup)
 assert_contains '`releaseSize`' "$STEP10" \
   "req-004: backlog pickup reads releaseSize"
 

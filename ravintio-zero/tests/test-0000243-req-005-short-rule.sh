@@ -33,8 +33,9 @@ assert_contains "resume-detect.mjs" "$(awk '/^## Resume Detection$/ {on=1} on &&
 
 echo "=== AC-3: the reference holds every line of the old section ==="
 missing_lines() {
+  local held; held="$(strip_rule_anchors < "$2")"
   grep -v '^[[:space:]]*$' "$1" | grep -v '^#' | while IFS= read -r line; do
-    grep -Fxq -- "$line" "$2" || printf '%s\n' "$line"
+    printf '%s\n' "$held" | grep -Fxq -- "$line" || printf '%s\n' "$line"
   done
 }
 assert_equals "" "$(missing_lines "$BASE" "$REF")" "every old line is in the reference"
