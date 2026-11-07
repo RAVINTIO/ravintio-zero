@@ -46,3 +46,17 @@ Scope Lock (error path): A Question: line followed by Resolved: does not stop th
 Scope Lock (cross-session continuity): The stop reads the build log on disk, so a restarted driver sees the same question [source: draft-accepted (initiative)]
 Scope Lock complete. All four scenario paths captured.
 Decision applied (initiative chart): Move Context Hygiene to references/orchestrator-context-hygiene.md before the Question: edit
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-07T15:44:23Z` |
+| End | |
+| Wall clock | |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | none |
