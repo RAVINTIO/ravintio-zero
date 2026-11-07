@@ -1,6 +1,6 @@
 ---
-version: "0.55.0"
-feature: "0000358-clean-step-stops-and-logs"
+version: "0.56.0"
+feature: "0000359-safe-parallel-commits"
 updated: "7 Nov 2026"
 ---
 # About
@@ -10,7 +10,7 @@ updated: "7 Nov 2026"
 
 | Field | Value |
 |-------|-------|
-| Version | `0.55.0` |
+| Version | `0.56.0` |
 | Last feature | `0000354-steps-run-to-the-end` |
 | Updated | `6 Nov 2026` |
 

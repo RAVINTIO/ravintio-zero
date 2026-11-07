@@ -155,6 +155,14 @@ When `plan/.run-speed` holds `fast`, dispatch these batches in order, each in on
 
 At `standard`, the steps above apply. The five-attempt escalation is unchanged.
 
+### Shared tree
+
+Dispatched units share one working tree.
+
+- Never run `git stash`, `git checkout -- {path}`, `git reset`, or `git clean` while any subagent runs. Each one removes the uncommitted work of the running units.
+- To test a clean tree mid-phase, use a scratch clone in a scratch folder.
+- If a tree-wide git operation cannot wait, wait for the subagents first. Record in the build log that the step waits for its subagents before the operation.
+
 ## Commit cadence
 
 Commit after every requirement's completed TDD cycle at minimum, and after every meaningful artifact write. Never batch changes to the phase gate. Each commit carries the code and the docs that describe it together.
