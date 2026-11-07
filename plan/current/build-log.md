@@ -86,3 +86,18 @@ Deviation: the time check compares with the clock when git cannot report a line'
 Rework: REQ-001: test-0000151-req-011 pinned the old status line and the product id line, and now rewrites them in its base fixture (2026-11-07T05:32:35Z)
 Rework: REQ-002: test-0000151-req-011 pinned hard limit 9, so the clock rule is a new paragraph (2026-11-07T05:32:35Z)
 Complete: P2 (2026-11-07T05:44:12Z)
+
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-07T05:44:12Z` |
+| End | `{{pending}}` |
+| Wall clock | `{{pending}}` |
+| Model tier | primary |
+| Skills loaded | ravintio-validate-and-accept |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | none |
+
