@@ -53,7 +53,7 @@ Each action names its owner, where it lives, and what verifies it.
 
 Turn each action into a backlog entry or a repo instruction:
 
-- For a backlog entry, use `ravintio-zero/templates/backlog-entry.template.md` and reserve the id with `node ravintio-zero/scripts/reserve-id.mjs --commit`, which commits `plan/backlog/.next-id` alone at once. Leave the entry uncommitted if no run is active.
+- For a backlog entry, use `ravintio-zero/templates/backlog-entry.template.md` and reserve the id with `node ravintio-zero/scripts/reserve-id.mjs --commit`, which commits `plan/backlog/.next-id` alone at once. The flag refuses on `initiative/*`, so run it on a `feat/` branch. Leave the entry uncommitted if no run is active.
 - For a repo instruction, add a file to `ravintio-overrides/instructions/`.
 
 Link each filed action from the record.
