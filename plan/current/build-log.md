@@ -86,3 +86,22 @@ Departure: Rework: REQ-004: test-0000378 AC-3 pinned Position 1, now 3 by design
 Departure: tests/run-tests.sh allowlist gained helpers/scheduler-fixture.sh (2026-11-07T18:05:58Z)
 Deviation: running and ready live in the control area, not the committed chart (ADR-001)
 Complete: P2 (2026-11-07T18:05:58Z)
+
+---
+
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-07T18:06:08Z` |
+| End | `2026-11-07T19:07:25Z` |
+| Wall clock | 5 |
+| Model tier | primary |
+| Skills loaded | ravintio-validate-and-accept |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Full suite green. Two self-corrections before the run (boot template cap, helper allowlist). |
+
+Gate accepted: draft-accepted (initiative) (2026-11-07T19:07:25Z)
+Complete: P3 (2026-11-07T19:07:25Z)
