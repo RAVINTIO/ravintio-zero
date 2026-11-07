@@ -81,6 +81,7 @@ Run this scan before you write the execution plan. For each cause below that the
 - **Skill-text budget:** the run edits any `SKILL.md`. Grep for the line cap.
 - **Size cap:** the run edits a skill that a cap test measures, such as the orchestrator. Grep for the skill name and `-le`.
 - **Backlog entry id:** the run pulls in an entry. Grep for the entry id.
+- **Workflow job or step edit:** the run adds or edits a job or step in a workflow file. Grep for `ravintio.yml`.
 
 If a grep matches nothing, write `none found` in the row.
 

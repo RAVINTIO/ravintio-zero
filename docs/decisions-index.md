@@ -422,3 +422,11 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 |-----|-------|--------|---------|
 | ADR-001 | resume with the session id from the stream | accepted | The driver reads `session_id` from the step's stream events and resumes an unmerged step with `claude -p --resume`, at most twice. A third unmerged exit prints `Blocked:`. |
 | ADR-002 | compare tool and flags, not the timestamp | accepted | Setup rewrites `plan/state/{tool}.md` only when `tool` or `flags` differ, so a rerun leaves a clean tree. |
+
+### Feature 0000355: codeql-and-branch-cleanup
+
+| ADR | Title | Status | Summary |
+|-----|-------|--------|---------|
+| ADR-001 | stack choice | accepted | The step adds no language, library, or service. CodeQL runs as a workflow action. |
+| ADR-002 | run CodeQL from a workflow file | accepted | Advanced setup scans pull requests into `initiative/**`. A human turns default setup off. |
+| ADR-003 | delete merged head branches from a scoped CI job | accepted | The `cleanup-branch` job holds `contents: write` on that job only, and every other pull request job skips `closed`. |

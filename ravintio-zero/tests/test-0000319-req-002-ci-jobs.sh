@@ -59,7 +59,7 @@ echo "=== NFR-001: no job gains a token scope ==="
 for wf in "$WF_REPO" "$WF_TPL"; do
   n="$(basename "$(dirname "$wf")")/$(basename "$wf")"
   W="$(grep -c 'contents: write' "$wf")"
-  assert_equals "1" "$W" "$n has one write scope (release-tag)"
+  assert_equals "2" "$W" "$n has two write scopes (release-tag, cleanup-branch)"
 done
 
 print_summary
