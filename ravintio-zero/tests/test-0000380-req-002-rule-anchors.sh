@@ -44,6 +44,10 @@ child="$(bash -c 'source "$1"; export RULE_PACK_ROOT="$2"; assert_rule item-1 ab
 assert_contains "FAIL=1" "$child" "a missing key term fails"
 assert_contains "absent-term" "$child" "the failure line names the missing term"
 
+echo "=== strip_rule_anchors removes the comment and its space ==="
+assert_equals "1. **Pending.** Check." "$(printf '1. <!-- rule: resume-1 --> **Pending.** Check.\n' | strip_rule_anchors)" "a list item reads as it did before the anchor"
+assert_equals "plain line" "$(printf '<!-- rule: x-1 --> plain line\n' | strip_rule_anchors)" "a leading anchor is removed"
+
 echo "=== a duplicate anchor id fails ==="
 printf '<!-- rule: item-1 -->\ndup\n' > "$FAKE/templates/dup.md"
 out="$(rule_text item-1)"; rc=$?

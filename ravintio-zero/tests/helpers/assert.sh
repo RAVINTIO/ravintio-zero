@@ -231,6 +231,13 @@ rule_text() {
   ' "$file"
 }
 
+# strip_rule_anchors removes every "<!-- rule: id -->" comment from stdin, with
+# the space after it. Use it when a test compares skill text line by line against
+# an older revision, so that adding an anchor changes no comparison.
+strip_rule_anchors() {
+  sed -E 's/<!-- rule: [a-z0-9-]+ --> ?//g'
+}
+
 # assert_rule <id> <term>... passes when the anchor exists once and its rule
 # text holds every term. A failure line names the anchor, and the missing terms.
 assert_rule() {

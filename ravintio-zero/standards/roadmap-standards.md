@@ -252,20 +252,20 @@ A repo instruction that the human asks for while a step runs goes into the scope
 
 Run executes one initiative step. Concurrent steps are the normal flow: the driver starts each ready step in its own worktree (see Concurrent steps). A chart without `**Concurrency:**` runs one step at a time from `position`. Ship ends the step at a ready PR, and the merge queue merges it (see I-D Advance under Ship stages). The step differs from a normal run in these ways:
 
-- Cut the step's feature branch from the initiative branch, not from `main`. Under the concurrent driver, the driver cuts it and the session starts on it in its worktree.
-- P0 writes `autonomous` to `plan/.run-mode` without asking the run-mode question.
-- P0 writes the initiative's `**Speed:**` field, `fast` or `standard`, to `plan/.run-speed` without asking the run-speed question. If the field is absent or holds another value, P0 writes `standard`.
-- P0 builds `feature-brief.md` from the backlog entries that the step's row lists. The brief title is the `Title` column of the row. It pulls each entry in and deletes its folder in the same commit. It does not ask pull-in, leave, or discard.
-- P0 self-confirms the design and the Scope Lock Challenge. Each scope lock line ends with `[source: draft-accepted (initiative)]`. The design confirmation records `draft-accepted (initiative)` in place of a human confirmation.
-- A schema change that matches a chart-approved row does not stop the step. See Chart-time schema approval.
-- A fork that matches a `## Decisions` row does not stop the step. Apply the row's answer and its bump effect, and log `Decision applied (initiative chart): {fork}` in the build log. The downgrade block still applies. The step stops only for a fork no row covers. A missing table counts as an empty one.
-- A criterion marked `CI` in `## Criteria` counts as validated only after the step's first CI run.
-- The step reads the queue at P0 and again before P4 raises the PR. Under the concurrent driver the queue is `$RAVINTIO_INITIATIVE_ROOT/plan/.initiative-queue/`, and otherwise it is `plan/.initiative-queue/`. It acts only on an item whose `**Step:**` line names its number. If the destination or the content holds `{id}`, it reserves one id with `node ravintio-zero/scripts/reserve-id.mjs` on its feature branch and replaces each `{id}`. It writes the item's content to the item's `**Destination:**` path and commits that path by explicit path on its feature branch, so the squash carries it. The step never moves, renames, or deletes the queue or an item. The coordinator clears the items after the step merges.
-- A confirmation that a skill asks for counts as a fork. If a `Confirmation:` row in `## Decisions` names the skill, its step, and the exact command, run that command with no stop and log `Decision applied (initiative chart): {fork}`. If the command differs in any way, the step stops.
-- P1 runs unless the step's row in `## P1 skips` says `yes`. A step with no `yes` row that would skip P1 prints `I-C Run: Blocked: step {n} has no P1 skip row marked yes.` and stops. A missing table counts as an empty one.
-- If a step skips P1 on a `yes` row, the build log holds `Skipped: P1 (chart row: step {n}, {reason})`.
-- P0 stops only when a backlog entry is too vague to draft a brief from. Print `Blocked:` with the entry and what is missing. The exception stops in Exception Stops still apply, including the credential stop.
-- P0 applies the step's `Bump` (`major`, `minor`, or `patch`, default `minor`) to the initiative branch's version to plan with. That is the last known version from Discovery Start Actions step 8. P4 writes no version. The merge queue sets the released version at merge, in merge order. The initiative branch's version comes from `product.yml`, or from `docs/about.md` when `product.yml` is absent. The downgrade block still applies.
+- <!-- rule: icrun-branch --> Cut the step's feature branch from the initiative branch, not from `main`. Under the concurrent driver, the driver cuts it and the session starts on it in its worktree.
+- <!-- rule: icrun-run-mode --> P0 writes `autonomous` to `plan/.run-mode` without asking the run-mode question.
+- <!-- rule: icrun-run-speed --> P0 writes the initiative's `**Speed:**` field, `fast` or `standard`, to `plan/.run-speed` without asking the run-speed question. If the field is absent or holds another value, P0 writes `standard`.
+- <!-- rule: icrun-brief --> P0 builds `feature-brief.md` from the backlog entries that the step's row lists. The brief title is the `Title` column of the row. It pulls each entry in and deletes its folder in the same commit. It does not ask pull-in, leave, or discard.
+- <!-- rule: icrun-self-confirm --> P0 self-confirms the design and the Scope Lock Challenge. Each scope lock line ends with `[source: draft-accepted (initiative)]`. The design confirmation records `draft-accepted (initiative)` in place of a human confirmation.
+- <!-- rule: icrun-schema-row --> A schema change that matches a chart-approved row does not stop the step. See Chart-time schema approval.
+- <!-- rule: icrun-decision-row --> A fork that matches a `## Decisions` row does not stop the step. Apply the row's answer and its bump effect, and log `Decision applied (initiative chart): {fork}` in the build log. The downgrade block still applies. The step stops only for a fork no row covers. A missing table counts as an empty one.
+- <!-- rule: icrun-ci-criterion --> A criterion marked `CI` in `## Criteria` counts as validated only after the step's first CI run.
+- <!-- rule: icrun-queue --> The step reads the queue at P0 and again before P4 raises the PR. Under the concurrent driver the queue is `$RAVINTIO_INITIATIVE_ROOT/plan/.initiative-queue/`, and otherwise it is `plan/.initiative-queue/`. It acts only on an item whose `**Step:**` line names its number. If the destination or the content holds `{id}`, it reserves one id with `node ravintio-zero/scripts/reserve-id.mjs` on its feature branch and replaces each `{id}`. It writes the item's content to the item's `**Destination:**` path and commits that path by explicit path on its feature branch, so the squash carries it. The step never moves, renames, or deletes the queue or an item. The coordinator clears the items after the step merges.
+- <!-- rule: icrun-confirmation --> A confirmation that a skill asks for counts as a fork. If a `Confirmation:` row in `## Decisions` names the skill, its step, and the exact command, run that command with no stop and log `Decision applied (initiative chart): {fork}`. If the command differs in any way, the step stops.
+- <!-- rule: icrun-p1-skip --> P1 runs unless the step's row in `## P1 skips` says `yes`. A step with no `yes` row that would skip P1 prints `I-C Run: Blocked: step {n} has no P1 skip row marked yes.` and stops. A missing table counts as an empty one.
+- <!-- rule: icrun-p1-skipped-log --> If a step skips P1 on a `yes` row, the build log holds `Skipped: P1 (chart row: step {n}, {reason})`.
+- <!-- rule: icrun-p0-stops --> P0 stops only when a backlog entry is too vague to draft a brief from. Print `Blocked:` with the entry and what is missing. The exception stops in Exception Stops still apply, including the credential stop.
+- <!-- rule: icrun-bump --> P0 applies the step's `Bump` (`major`, `minor`, or `patch`, default `minor`) to the initiative branch's version to plan with. That is the last known version from Discovery Start Actions step 8. P4 writes no version. The merge queue sets the released version at merge, in merge order. The initiative branch's version comes from `product.yml`, or from `docs/about.md` when `product.yml` is absent. The downgrade block still applies.
 
 All messages use the `I-C Run:` prefix.
 
@@ -386,23 +386,23 @@ The driver writes the child's stdout and stderr to `plan/.initiative-logs/step-{
 
 ## Merge carve-out
 
-Merging into `main` is human-only in every run mode. The agent never commits to `main`.
+<!-- rule: carveout-main-human-only --> Merging into `main` is human-only in every run mode. The agent never commits to `main`.
 
-The agent may run `gh pr merge --squash` only when all of these hold:
+<!-- rule: carveout-squash-conditions --> The agent may run `gh pr merge --squash` only when all of these hold:
 
-- The PR base matches `initiative/*`.
-- The PR is for the agent's own feature branch.
-- A step PR had a clean P3 and has green CI. A coordinator PR meets the bar in `## Coordinator PRs` instead, with a passing local suite and green CI.
+- <!-- rule: carveout-base --> The PR base matches `initiative/*`.
+- <!-- rule: carveout-own-branch --> The PR is for the agent's own feature branch.
+- <!-- rule: carveout-clean-p3 --> A step PR had a clean P3 and has green CI. A coordinator PR meets the bar in `## Coordinator PRs` instead, with a passing local suite and green CI.
 
-The initiative PR to `main` stays human-only. The agent never merges it. The `merge-guard` hook enforces this rule. Other skills and instructions point here for the full wording.
+<!-- rule: carveout-initiative-pr --> The initiative PR to `main` stays human-only. The agent never merges it. The `merge-guard` hook enforces this rule. Other skills and instructions point here for the full wording.
 
-Only three branch prefixes may target `main`:
+<!-- rule: carveout-main-prefixes --> Only three branch prefixes may target `main`:
 
 - `initiative/*`
 - `chore/*`
 - `hotfix/*`
 
-Every `feat/*` branch targets an initiative branch and never targets `main`. The agent never merges a PR into `main`. The ship skill section `## PRs into main` sets the squash rules for `chore/*` and `hotfix/*`.
+<!-- rule: carveout-feat-targets --> Every `feat/*` branch targets an initiative branch and never targets `main`. The agent never merges a PR into `main`. The ship skill section `## PRs into main` sets the squash rules for `chore/*` and `hotfix/*`.
 
 ## Commit titles
 
