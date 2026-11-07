@@ -2,7 +2,7 @@
 
 **Feature:** Merge-time versioning
 **Version:** 0.58.0
-**PR:** pending
+**PR:** 127
 
 ## What changed
 
