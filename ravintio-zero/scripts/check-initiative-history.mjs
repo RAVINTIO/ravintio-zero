@@ -10,8 +10,10 @@
 //            The {id} is the 7 digits after `initiative/` in the --head value.
 //
 // The script reads the `## Steps` table of the chart. It finds the `Feature id` and `Title` columns by name.
+// The `Version` column is optional. Steps with a Version come first, in ascending semver order, which is merge order (0000378).
+// Steps with no Version follow in chart position. If the column is missing or every Version is in chart order, the order is the chart order.
 // It lists `git log --first-parent` from the merge base of the base and head to the head, oldest first.
-// Those commits must be the steps in chart order, each with the subject
+// Those commits must be the steps in merge order, each with the subject
 // `{first 7 digits of Feature id}: {Title} (#{n})`.
 // At most one more commit may follow, with the subject `{initiative id}: Initiative admin (#{n})`.
 // The initiative id comes from the chart heading `# Initiative: {7 digits} - ...`.
@@ -86,6 +88,19 @@ function cells(line) {
   return line.trim().replace(/^\|/, '').replace(/\|$/, '').split('|').map((c) => c.trim());
 }
 
+// Reads `1.2.3` or `v1.2` into numbers. Returns an empty list when the cell holds no version.
+function parseVersion(text) {
+  const match = /^v?(\d+)\.(\d+)(?:\.(\d+))?$/.exec(text.trim());
+  return match ? [Number(match[1]), Number(match[2]), Number(match[3] ?? 0)] : [];
+}
+
+// Orders versions ascending. A step with no version sorts after every versioned step.
+function compareVersions(a, b) {
+  if (a.length === 0 || b.length === 0) return a.length === b.length ? 0 : a.length === 0 ? 1 : -1;
+  for (let i = 0; i < 3; i++) if (a[i] !== b[i]) return a[i] - b[i];
+  return 0;
+}
+
 function parseChart(text) {
   const heading = /^# Initiative: (\d{7}) - /m.exec(text);
   if (!heading) fail('chart heading `# Initiative: {7 digits} - ...` not found');
@@ -103,14 +118,18 @@ function parseChart(text) {
   const titleCol = header.indexOf('Title');
   if (idCol < 0) fail('`## Steps` table has no `Feature id` column');
   if (titleCol < 0) fail('`## Steps` table has no `Title` column');
+  const versionCol = header.indexOf('Version');
   const steps = rows.slice(1)
     .filter((r) => !r.every((c) => /^:?-+:?$/.test(c)))
     .map((r) => {
       const featureId = /^\d{7}/.exec(r[idCol] ?? '')?.[0];
       if (!featureId) fail(`step row has no 7-digit Feature id: ${r.join(' | ')}`);
-      return `${featureId}: ${r[titleCol] ?? ''}`;
+      const version = versionCol < 0 ? [] : parseVersion(r[versionCol] ?? '');
+      return { subject: `${featureId}: ${r[titleCol] ?? ''}`, version };
     });
-  return { initiativeId: heading[1], steps };
+  // Array.sort is stable, so steps with equal or no Version keep their chart position.
+  steps.sort((a, b) => compareVersions(a.version, b.version));
+  return { initiativeId: heading[1], steps: steps.map((s) => s.subject) };
 }
 
 // Splits `{prefix} (#{n})` into the prefix. Returns null if the suffix is missing.

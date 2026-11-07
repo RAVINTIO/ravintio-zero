@@ -15,7 +15,8 @@
 //   --remote        the remote name for --push. Default origin.
 //
 // The script reads the `## Steps` table of the chart by column name: `Feature id`, `Title`, and `Version`.
-// It finds each step commit through the tag `v{Version}`. It replays the steps in chart order with
+// It finds each step commit through the tag `v{Version}`. It replays the steps in ascending Version order, which is
+// merge order (0000378). When every Version is in chart order, that is the chart order. It replays them with
 // `git merge-tree --write-tree` and writes commits with `git commit-tree`, so it never touches a working tree
 // or an index. The new branch is `{branch}-reshaped`. The old branch stays as it is.
 // A conflict, a missing tag, a bad name, or an existing target branch exits 1 and writes no branch.
@@ -99,6 +100,13 @@ function cells(line) {
   return line.trim().replace(/^\|/, '').replace(/\|$/, '').split('|').map((c) => c.trim());
 }
 
+function compareTags(a, b) {
+  const parts = (tag) => tag.slice(1).split('.').map(Number);
+  const [pa, pb] = [parts(a), parts(b)];
+  for (let i = 0; i < 3; i++) if ((pa[i] ?? 0) !== (pb[i] ?? 0)) return (pa[i] ?? 0) - (pb[i] ?? 0);
+  return 0;
+}
+
 function parseChart(path) {
   if (!existsSync(path)) fail(`chart not found: ${path}`);
   const text = readFileSync(path, 'utf8');
@@ -130,6 +138,8 @@ function parseChart(path) {
       return { n: i + 1, title: `${featureId}: ${r[col.Title] ?? ''}`, tag };
     });
   if (steps.length === 0) fail('`## Steps` lists no step');
+  // Merge order: ascending semver. The sort is stable, so equal versions keep their chart position.
+  steps.sort((a, b) => compareTags(a.tag, b.tag));
   return { initiativeId: heading[1], steps };
 }
 
@@ -166,7 +176,7 @@ for (const step of steps) {
     fail(`step ${step.n} has no tag ${step.tag}`);
   }
   if (!position.has(commit)) fail(`step ${step.n} tag ${step.tag} does not point at a first-parent commit of ${opts.branch}`);
-  if (position.get(commit) <= previousIndex) fail(`step ${step.n} tag ${step.tag} is out of chart order`);
+  if (position.get(commit) <= previousIndex) fail(`step ${step.n} tag ${step.tag} is out of merge order`);
   previousIndex = position.get(commit);
   step.commit = old[previousIndex];
   step.number = numberOf(step.commit.subject);
@@ -184,7 +194,7 @@ for (const item of opts.assign) {
   const full = resolveCommit(hashText, '--assign commit');
   if (!position.has(full)) fail(`--assign commit is not on the first-parent line of ${opts.branch}: ${hashText}`);
   if (stepHashes.has(full)) fail(`--assign commit is a step commit: ${hashText}`);
-  const step = steps[Number(stepText) - 1];
+  const step = steps.find((s) => s.n === Number(stepText));
   if (!step) fail(`--assign names a step that the chart lacks: ${stepText}`);
   step.admin.push(old[position.get(full)]);
 }
