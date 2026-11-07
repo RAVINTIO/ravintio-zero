@@ -23,14 +23,12 @@ SEC="$(section '## PRs into main' "$SHIP")"
 echo ""
 echo "=== req-003 AC-1: force-push limit ==="
 assert_equals "yes" "$([ -n "$SEC" ] && echo yes || echo no)" "AC-1: section '## PRs into main' exists"
-leases="$(printf '%s\n' "$SEC" | grep -F -- '--force-with-lease')"
-bad="$(printf '%s\n' "$leases" | grep -vF 'chore/*')"
-assert_equals "yes" "$([ -n "$leases" ] && echo yes || echo no)" "AC-1: --force-with-lease appears"
-assert_equals "" "$bad" "AC-1: every --force-with-lease line names chore/*"
+assert_equals "no" "$(has '--force-with-lease' "$SEC")" "AC-1: no --force-with-lease"
 assert_equals "yes" "$(has 'replacement PR' "$SEC")" "AC-1: names the replacement PR"
 assert_equals "yes" "$(printf '%s\n' "$SEC" | grep -F 'replacement PR' | grep -qF 'hotfix/*' && echo yes || echo no)" "AC-1: replacement PR is for hotfix/*"
+assert_equals "yes" "$(printf '%s\n' "$SEC" | grep -F 'replacement PR' | grep -qF 'chore/*' && echo yes || echo no)" "AC-1: replacement PR is for chore/*"
 nf="$(printf '%s\n' "$SEC" | grep -F 'never force-push')"
-for b in 'main' 'initiative/*' 'feat/*' 'hotfix/*'; do
+for b in 'main' 'initiative/*' 'feat/*' 'hotfix/*' 'chore/*'; do
   assert_equals "yes" "$(has "$b" "$nf")" "AC-1: never force-push names $b"
 done
 

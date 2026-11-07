@@ -449,15 +449,29 @@ The initiative skill runs this stage after the last step merges. Every message b
 
 1. Move `plan/current-initiative/` to `plan/_archive/{id}-{slug}-initiative-{date}/` and set the initiative `status: delivered`. Update links that point at the old path. Land the move as a coordinator PR.
 2. Run `ravintio-retrospective` in initiative mode. It writes `plan/retrospectives/{id}-{slug}-initiative-{date}.md`. Land the record as a coordinator PR, so the initiative PR carries it. A missing retrospective never blocks delivery.
-3. Run `node ravintio-zero/scripts/check-initiative-history.mjs` before you raise the initiative PR. If it reports a failing commit, list each failing commit in the PR body and stop. Do not merge or force-push to fix the history.
-4. Raise one PR from the initiative branch to `main`. The PR title says to merge with a merge commit, as in `{id}-{slug}: deliver initiative (merge with a merge commit)`.
+3. Reshape the branch with the driver stopped. Run the script from the initiative branch.
 
    ```bash
-   gh pr create --base main --head initiative/{id}-{slug}
+   node ravintio-zero/scripts/reshape-initiative.mjs --branch initiative/{id}-{slug} --assign {hash}={step} --tags --push
    ```
 
-5. Make the first line of the body say to merge with a merge commit, not a squash, so each step tag stays reachable from `main`. Then list each step with its version and tag, and name the retrospective record. Scan the body for credential patterns before you raise the PR, as in Step 9.
-6. Report the PR URL and end the run.
+   - The script replays each step in chart order onto the base the branch was cut from. It finds each step commit through its `v{Version}` tag.
+   - Pass one `--assign {hash}={step}` for each admin commit that aligns with a step. That commit folds into the step's new commit.
+   - The script adds one chore commit whose tree equals the old head, so the final tree stays unchanged. Admin that aligns with no step lives only there.
+   - The script writes `initiative/{id}-{slug}-reshaped` and leaves the old branch in place. It never force-pushes a branch or a tag.
+   - With `--tags` it moves each local step tag. With `--push` it also pushes the new branch, deletes each old tag on `origin`, and pushes a new tag with the same name and message.
+   - If a replay conflicts, the script exits 1 and names the commit. Stop for the human and drop no hunk.
+   - A step tag then points at a tree that lacks the unassigned admin. The final tree is identical and CI runs on it.
+
+4. Run `node ravintio-zero/scripts/check-initiative-history.mjs --head initiative/{id}-{slug}-reshaped` and the full suite on the reshaped branch. If the check reports a failing commit, list each failing commit in the PR body and stop. Do not merge or force-push to fix the history.
+5. Raise one PR from the reshaped branch to `main`. Close any PR from the old branch with a link to the new one. The PR title says to merge with a merge commit, as in `{id}-{slug}: deliver initiative (merge with a merge commit)`.
+
+   ```bash
+   gh pr create --base main --head initiative/{id}-{slug}-reshaped
+   ```
+
+6. Make the first line of the body say to merge with a merge commit, not a squash, so each step tag stays reachable from `main`. Then list each step with its version and tag, and name the retrospective record. Scan the body for credential patterns before you raise the PR, as in Step 9.
+7. Report the PR URL and end the run. After the human merges the PR, delete the old branch, `initiative/{id}-{slug}`, locally and on `origin`.
 
 The `main` ruleset allows only the merge commit method. See `ravintio-zero/docs/main-ruleset.md`.
 
