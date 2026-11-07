@@ -123,7 +123,32 @@ export function updateChart(text, { step, pr, version, mergedAt }) {
     if (c[0] === String(step) && c[1] === `#${pr}`) existing.push(i);
   }
   if (existing.length === 0) lines.splice(lastTable + 1, 0, mergeRow);
+  setPosition(lines);
   return lines.join("\n");
+}
+
+/** Point an existing Position field at the lowest unmerged step, or one past the last. */
+function setPosition(lines) {
+  const range = sectionRange(lines, "Steps");
+  if (!range) return;
+  let header = null;
+  let lowest = null;
+  let last = 0;
+  for (let i = range[0] + 1; i < range[1]; i++) {
+    if (!lines[i].trim().startsWith("|")) continue;
+    const cells = splitRow(lines[i]);
+    if (header === null) { header = cells; continue; }
+    const n = Number(cells[0]);
+    if (!Number.isInteger(n)) continue;
+    last = Math.max(last, n);
+    if (cells[header.indexOf("Status")] !== "merged" && (lowest === null || n < lowest)) lowest = n;
+  }
+  if (header === null || last === 0) return;
+  const position = lowest ?? last + 1;
+  for (let i = 0; i < lines.length; i++) {
+    const m = /^(\s*(?:\*\*Position:\*\*|[Pp]osition:)\s*)\d+(.*)$/.exec(lines[i]);
+    if (m) { lines[i] = `${m[1]}${position}${m[2]}`; break; }
+  }
 }
 
 // ---------------------------------------------------------------- versions

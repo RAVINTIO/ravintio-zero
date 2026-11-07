@@ -16,7 +16,7 @@ description: Coordinates an initiative from chart to delivery in the human's ses
 | Part | Runs where | Owns |
 |------|-----------|------|
 | This skill | The human's session | I-A Chart, I-B Activate, reports, queue, I-E Delivery |
-| Driver `ravintio-zero/scripts/initiative-run.mjs` | A background task you start | One step session after another, and the stop on a `Blocked:` line |
+| Driver `ravintio-zero/scripts/initiative-run.mjs` | A background task you start | Up to `**Concurrency:**` step sessions at once, each in a worktree, the merge queue, and the stop on a `Blocked:` line |
 | `ravintio-orchestrator` | Each step session, a separate `claude -p` process | One feature from P0 to P4, then I-C Run and I-D Advance |
 
 ## Hard limits
@@ -25,7 +25,7 @@ description: Coordinates an initiative from chart to delivery in the human's ses
 2. Never edit the working tree while the driver lock `plan/.initiative-runner.lock` is held.
 3. Never merge into `main` and never commit to `main`. The human merges the initiative PR.
 4. Write `plan/.initiative-ack` with your session id. Never write `plan/.orchestrator-ack`.
-5. A step session never moves, renames, or deletes `plan/.initiative-logs/`, `plan/.initiative-runner.lock`, or `plan/.initiative-queue/`. The driver and the watcher own them.
+5. A step session never moves, renames, or deletes `plan/.initiative-logs/`, `plan/.initiative-runner.lock`, `plan/.initiative-queue/`, `plan/.initiative-worktrees/`, or `plan/.initiative-control/`. The driver and the watcher own them.
 6. The hard limits of the orchestrator apply here too.
 
 ## Session start
@@ -42,9 +42,10 @@ description: Coordinates an initiative from chart to delivery in the human's ses
 Follow the I-A Chart and I-B Activate sections of the roadmap standards. Activation lands as a coordinator PR. Take the human's confirmation per item. Chart builds the `## Decisions`, `## Baselines`, `## Criteria`, and `## P1 skips` tables. Chart also does these:
 
 - **Guard.** Run a guard check on each entry. Check whether it widens a guard, such as `merge-guard`, `gate-write`, `ratchet-check`, or another fail-closed hook. Name the guard and the new forms it would allow. Ask for a separate approval for each widening, apart from the chart confirmation.
+- **Lanes.** Coach a `Lane` and an `After` list for each step, and the `**Concurrency:**` field (default 3). Steps that edit the same files share a lane. A step that changes most files lists every earlier step in `After`, and every later step lists it. See Chart-time lanes.
 - **Confirmation.** Plan each step confirmation. List each confirmation that a step's skills ask for. Record the exact command as a `Confirmation:` row in `## Decisions`, or plan a human stop for that step.
 
-At Activate, start two background tasks:
+Concurrent steps are the normal flow. The driver starts each ready step in its own worktree, up to `**Concurrency:**` at once, and runs the merge queue for each ready PR. At Activate, start two background tasks:
 
 - The driver: `node ravintio-zero/scripts/initiative-run.mjs`.
 - The monitor: `node ravintio-zero/scripts/initiative-watch.mjs`. It prints one line per event and a heartbeat every 5 minutes.
@@ -57,24 +58,24 @@ Report at least every 5 minutes while the driver runs, at each phase end, and on
 
 An interval report names:
 
-- the step and its phase
+- each running step and its phase
 - the last build log line and its age
 - the commits since the last report
 - any stop
 - whether the driver still runs
 
-While the step runs, the monitor also prints `I-C Run: activity:` lines, one per tool call, subagent start, or assistant text. Relay each one to the human at once, in the order received. Do not wait for the next interval report.
+While steps run, the monitor also prints `I-C Run: activity:` lines with the step number, one per tool call, subagent start, or assistant text. Relay each one to the human at once, in the order received. Do not wait for the next interval report.
 
 If nothing changed, say so and give the time since the last change. If the step keeps committing and its build log has not changed for 15 minutes, say the log is stale.
 
 A progress report, on request and at each phase end, has two parts:
 
 - **Initiative:** steps merged out of the total, backlog entries done out of the total, and a table of each step's feature, entries, version, and status.
-- **Current step:** the phase, the progress within it, and what comes next. Progress is units done out of planned in P2, and criteria verified out of total from P3. Add highlights, such as what the step changes for the user, and any risk.
+- **Current step:** report each running step and each ready step waiting for the queue. For each running step, give the phase, the progress within it, and what comes next. Progress is units done out of planned in P2, and criteria verified out of total from P3. Add highlights, such as what the step changes for the user, and any risk.
 
 ## Stops
 
-If the driver prints `Blocked:` or exits non-zero, report the stop line and the step log path `plan/.initiative-logs/step-{position}.log`. Never resume the step. Ask the human how to proceed. After the human acts, offer to restart the driver.
+If the driver prints `Blocked:` or exits non-zero, report the stop line and the step log path `plan/.initiative-logs/step-{n}.log`. Relay each `I-C Run: Step {n}: {state}` line too, which names every step's state. Never resume the step. Ask the human how to proceed. After the human acts, offer to restart the driver.
 
 A `Restart:` line is not a failure. It means a merged step changed the driver, the watcher, or this skill, and the running code is old. Report the line. Then start a new driver and a new watcher without asking. Read this skill again first if the line names it.
 

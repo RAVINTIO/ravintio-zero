@@ -45,6 +45,10 @@ Use `Supervise:` for out-of-phase work. Examples are supervising an initiative d
 
 **Reporting rule.** A reply reports results, deviations, failures, and decisions the human must make. A reply never states that the agent followed a standing rule. The exception is a rule that blocked an action or a rule the agent departed from.
 
+## Worktrees
+
+A human session works on a `feat/` branch in the main working tree and creates no worktrees. The initiative driver may run steps in worktrees under `plan/.initiative-worktrees/`.
+
 ## Escalation
 
 If you are blocked, unable to resolve tests after 5 attempts, or confused by conflicting requirements, **STOP**. Do not guess. State clearly what is blocking you and ask the human for direction.

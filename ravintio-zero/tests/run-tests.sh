@@ -81,6 +81,7 @@ KNOWN_NON_SUITES=(
   "helpers/assert.sh"                      # Bash assert helpers
   "helpers/version.sh"                     # version comparison for the 0000160 req-004 and 0000164 req-011 suites
   "helpers/driver-args.sh"                 # claude arguments the driver passes, for the driver suites (0000354 REQ-004)
+  "helpers/scheduler-fixture.sh"           # git repo and stub fixtures for the concurrent driver suites (0000379)
   "helpers/unguarded-jobs.sh"              # lists workflow jobs with no guard and no marker (0000355 REQ-003)
   "helpers/assert.ps1"                     # PowerShell assert helpers (0000036 ADR-002)
   "helpers/setup-workspace.ps1"            # temporary projects for the setup.ps1 suites

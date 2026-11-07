@@ -86,11 +86,13 @@ Last, run `ravintio-retrospective` in run mode. It writes the record to `plan/re
 
 ### Step 6: Version bump
 
+In an initiative step, skip this step and write `**Version:** set by the merge queue at merge` in the changelog. The merge queue sets the version at merge.
+
 Derive the current product version with `node ravintio-zero/scripts/product-version.mjs`, then run `node ravintio-zero/scripts/version-files.mjs set {version}` to write it to every file in `ravintio-zero/version-files.txt`. Run `node ravintio-zero/scripts/version-files.mjs check` before the push. If it exits 1, stop in both run modes and fix the files it names. The version must match `[0-9]+\.[0-9]+(\.[0-9]+)?` and must not be lower than the last release tag. If it fails validation, ask the human for the value. Never tag a fabricated version.
 
 ### Step 7: Release tag
 
-Create no tag. After the human merges the PR, the CI `release-tag` job tags the merge commit on `main` with `v{version}`. A squash merge leaves a branch tag off `main`. For an initiative step: I-D Advance tags the squash commit.
+Create no tag. After the human merges the PR, the CI `release-tag` job tags the merge commit on `main` with `v{version}`. A squash merge leaves a branch tag off `main`. For an initiative step: the merge queue tags the squash commit.
 
 ### Step 8: Clear sentinels
 
@@ -192,7 +194,7 @@ Ship steps run in order, because most steps read the one before.
 When `plan/.run-speed` holds `fast`, run one batch after Step 4 in one message. It has two units with disjoint files:
 
 1. Step 5, the build assessment, in a cheaper-tier subagent. It writes only `build-report.md` in the archive folder.
-2. Step 6, the version bump, inline. It writes only `docs/about.md`, `product.yml`, and `component.yml`.
+2. Step 6, the version bump, inline. It writes only `docs/about.md`, `product.yml`, and `component.yml`. An initiative step skips it.
 
 Each unit commits its own files by path, one commit at a time, per `## Fast batches` in `ravintio-zero/standards/agent-dispatch-standards.md`. Step 7 starts after both land. At `standard`, run Steps 5 and 6 in order.
 
@@ -204,7 +206,9 @@ Before the PR, the step commits the items in `plan/.initiative-queue/` that name
 
 After `gh pr create`, the agent sets `**PR:**` to the PR number, commits, and pushes it before it waits on CI and before the squash. It never commits after the squash.
 
-To merge the step PR, copy this plain line. Replace `{n}` with the literal PR number from the `gh pr create` output. Use no command substitution, variables, or pipes on the line, or `merge-guard` cannot confirm the squash and blocks it.
+The step never edits the chart and never merges. After green CI, it hands the PR to the merge queue, as I-D Advance describes. If `RAVINTIO_INITIATIVE_QUEUE` is `1`, it writes the PR number to `$RAVINTIO_INITIATIVE_CONTROL/ready`, prints `I-D Advance: Ready: PR #{n}`, and ends. Otherwise it runs `node ravintio-zero/scripts/merge-queue.mjs run --step {step} --pr {n}`.
+
+The queue merges with this plain line. `{n}` is the literal PR number from the `gh pr create` output. A merge line takes no command substitution, variables, or pipes, or `merge-guard` cannot confirm the squash and blocks it.
 
 ```bash
 gh pr merge --squash --delete-branch {n}

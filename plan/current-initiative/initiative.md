@@ -8,7 +8,7 @@ status: "active"  # proposed | charted | active | delivered | blocked
 **Goal:** Close every open backlog entry except the four that need paid services. The first three steps make the driver run independent steps at once, each in its own worktree, with each version set as its step merges. Step 20 moves the pack source to `src/ravintio-zero/`. The last step, step 21, makes activation smoother for the human.
 **Branch:** initiative/0000360-backlog-sweep
 **Status:** active
-**Position:** 3
+**Position:** 4
 **Speed:** standard
 **Step CI fixes:** allowed
 **Concurrency:** 3
@@ -31,7 +31,7 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 |------|-----------|--------|------|
 | 1 | ravintio-zero | none | none |
 | 2 | ravintio-zero | Chart `Version` and `Status` set by the merge queue. A merge queue record per step. | additive |
-| 3 | ravintio-zero | `## Steps` gains `Lane` and `After` columns and the `running` and `ready` statuses. The `**Concurrency:**` field. A per-step log and control area. | additive |
+| 3 | ravintio-zero | `## Steps` gains `Lane` and `After` columns. The parser accepts `running` and `ready`, which the driver derives and never commits. The `**Concurrency:**` field. A per-step log and control area. | additive |
 | 4 | ravintio-zero | `<!-- rule: {id} -->` anchors in skills, standards, and templates, read by a test helper | additive |
 | 5 | ravintio-zero | `.ravintio-manifest` paths relative to the repo root | additive |
 | 6 | ravintio-zero | The setup manifest records every write, including pack-owned commands | additive |
@@ -143,56 +143,34 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 |------|---------|--------|
 | 1-21 | no | Every step changes scripts, hooks, skills, or tests |
 
-## Lanes
-
-Step 3 moves these columns into `## Steps`. Until then, steps 1 to 3 run one at a time in chart order.
-
-| Step | Lane | After |
-|------|------|-------|
-| 1 | driver | |
-| 2 | driver | 1 |
-| 3 | driver | 2 |
-| 4 | tests | 3 |
-| 5 | setup | 4 |
-| 6 | setup | 5 |
-| 7 | plan | 4 |
-| 8 | plan | 7 |
-| 9 | run | 4 |
-| 10 | run | 9 |
-| 11 | orchestrator | 8 |
-| 12 | orchestrator | 4 |
-| 13 | writing | 4 |
-| 14 | writing | 6, 13 |
-| 15 | writing | 6, 14 |
-| 16 | ship | 4 |
-| 17 | guards | 6 |
-| 18 | github | 4 |
-| 19 | writing | 5-18 |
-| 20 | layout | 19 |
-| 21 | initiative | 20 |
-
 ## Steps
 
-| Step | Feature id | Title | Backlog entries | Bump | Version | Status |
-|------|------------|-------|-----------------|------|---------|--------|
-| 1 | 0000377-driver-stops-and-headroom | Driver stops and headroom | 0000371, 0000370, 0000373 | minor | 0.57.0 | merged |
-| 2 | 0000378-merge-time-versioning | Merge-time versioning | 0000374, 0000376, 0000372, 0000368 | minor | 0.58.0 | merged |
-| 3 | 0000379-parallel-steps-on-worktrees | Parallel steps on worktrees | 0000375 | minor | | pending |
-| 4 | 0000380-test-helpers-and-rule-anchors | Test helpers and rule anchors | 0000261, 0000308, 0000337 | minor | | pending |
-| 5 | 0000381-setup-safety | Setup safety | 0000262, 0000289, 0000293, 0000290 | minor | | pending |
-| 6 | 0000382-install-lifecycle | Install lifecycle | 0000283, 0000299, 0000292, 0000291, 0000298, 0000286 | minor | | pending |
-| 7 | 0000383-test-impact-scan | Test impact scan | 0000361, 0000362, 0000363, 0000369, 0000297 | minor | | pending |
-| 8 | 0000384-plan-checks | Plan checks | 0000255, 0000263, 0000333, 0000347, 0000280, 0000364 | minor | | pending |
-| 9 | 0000385-faster-test-runs | Faster test runs | 0000294, 0000295, 0000296 | minor | | pending |
-| 10 | 0000386-unit-dispatch | Unit dispatch | 0000330, 0000366 | minor | | pending |
-| 11 | 0000387-light-discovery-and-audits | Light discovery and audits | 0000281, 0000284, 0000348, 0000328, 0000329 | minor | | pending |
-| 12 | 0000388-replies-and-questions | Replies and questions | 0000257, 0000258, 0000259, 0000306 | minor | | pending |
-| 13 | 0000389-writing-standard | Writing standard | 0000300 | minor | | pending |
-| 14 | 0000390-prose-checks | Prose checks | 0000301, 0000303, 0000304 | minor | | pending |
-| 15 | 0000391-standards-archetypes | Standards archetypes | 0000305 | minor | | pending |
-| 16 | 0000392-ship-postmortems | Ship postmortems | 0000285 | minor | | pending |
-| 17 | 0000393-session-integrity-and-guards | Session integrity and guards | 0000271, 0000367, 0000272, 0000260 | minor | | pending |
-| 18 | 0000394-github-security-and-ci-lint | GitHub security and CI lint | 0000323, 0000324, 0000325 | minor | | pending |
-| 19 | 0000395-pack-prose-to-the-standard | Pack prose to the standard | 0000302 | minor | | pending |
-| 20 | 0000397-pack-source-in-src | Pack source in src | 0000396 | minor | | pending |
-| 21 | 0000399-smoother-activation | Smoother activation | 0000398 | minor | | pending |
+| Step | Feature id | Title | Backlog entries | Bump | Version | Status | Lane | After |
+|------|------------|-------|-----------------|------|---------|--------|------|-------|
+| 1 | 0000377-driver-stops-and-headroom | Driver stops and headroom | 0000371, 0000370, 0000373 | minor | 0.57.0 | merged | driver | |
+| 2 | 0000378-merge-time-versioning | Merge-time versioning | 0000374, 0000376, 0000372, 0000368 | minor | 0.58.0 | merged | driver | 1 |
+| 3 | 0000379-parallel-steps-on-worktrees | Parallel steps on worktrees | 0000375 | minor | 0.59.0 | merged | driver | 2 |
+| 4 | 0000380-test-helpers-and-rule-anchors | Test helpers and rule anchors | 0000261, 0000308, 0000337 | minor | | pending | tests | 3 |
+| 5 | 0000381-setup-safety | Setup safety | 0000262, 0000289, 0000293, 0000290 | minor | | pending | setup | 4 |
+| 6 | 0000382-install-lifecycle | Install lifecycle | 0000283, 0000299, 0000292, 0000291, 0000298, 0000286 | minor | | pending | setup | 5 |
+| 7 | 0000383-test-impact-scan | Test impact scan | 0000361, 0000362, 0000363, 0000369, 0000297 | minor | | pending | plan | 4 |
+| 8 | 0000384-plan-checks | Plan checks | 0000255, 0000263, 0000333, 0000347, 0000280, 0000364 | minor | | pending | plan | 7 |
+| 9 | 0000385-faster-test-runs | Faster test runs | 0000294, 0000295, 0000296 | minor | | pending | run | 4 |
+| 10 | 0000386-unit-dispatch | Unit dispatch | 0000330, 0000366 | minor | | pending | run | 9 |
+| 11 | 0000387-light-discovery-and-audits | Light discovery and audits | 0000281, 0000284, 0000348, 0000328, 0000329 | minor | | pending | orchestrator | 8 |
+| 12 | 0000388-replies-and-questions | Replies and questions | 0000257, 0000258, 0000259, 0000306 | minor | | pending | orchestrator | 4 |
+| 13 | 0000389-writing-standard | Writing standard | 0000300 | minor | | pending | writing | 4 |
+| 14 | 0000390-prose-checks | Prose checks | 0000301, 0000303, 0000304 | minor | | pending | writing | 6, 13 |
+| 15 | 0000391-standards-archetypes | Standards archetypes | 0000305 | minor | | pending | writing | 6, 14 |
+| 16 | 0000392-ship-postmortems | Ship postmortems | 0000285 | minor | | pending | ship | 4 |
+| 17 | 0000393-session-integrity-and-guards | Session integrity and guards | 0000271, 0000367, 0000272, 0000260 | minor | | pending | guards | 6 |
+| 18 | 0000394-github-security-and-ci-lint | GitHub security and CI lint | 0000323, 0000324, 0000325 | minor | | pending | github | 4 |
+| 19 | 0000395-pack-prose-to-the-standard | Pack prose to the standard | 0000302 | minor | | pending | writing | 5-18 |
+| 20 | 0000397-pack-source-in-src | Pack source in src | 0000396 | minor | | pending | layout | 19 |
+| 21 | 0000399-smoother-activation | Smoother activation | 0000398 | minor | | pending | initiative | 20 |
+
+## Merges
+
+| Step | PR | Merge commit | Version | Merged at |
+|------|----|--------------|---------|-----------|
+| 3 | #128 | tag v0.59.0 | 0.59.0 | 2026-11-07T19:15:39Z |
