@@ -58,7 +58,7 @@ Complete: P0 (2026-11-07T15:44:03Z)
 | Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-plan |
-| Agents spawned | 0 |
+| Agents spawned | 1 |
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | none |
@@ -74,7 +74,7 @@ Complete: P1 (2026-11-07T15:45:32Z)
 | Wall clock | `28` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
-| Agents spawned | 0 |
+| Agents spawned | 1 |
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | Three units run in sequence: all edit shared files (execution plan concurrency table) |
@@ -106,14 +106,16 @@ Complete: P3 (2026-11-07T16:14:20Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-07T16:14:35Z` |
-| End | |
-| Wall clock | |
+| End | `2026-11-07T16:14:53Z` |
+| Wall clock | `0` |
 | Model tier | primary |
 | Skills loaded | ravintio-ship |
 | Agents spawned | 0 |
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | none |
+
+Complete: P4 (2026-11-07T16:14:53Z)
 
 ---
 
@@ -122,7 +124,7 @@ Complete: P3 (2026-11-07T16:14:20Z)
 | Metric | Value |
 |--------|-------|
 | Total phases completed | `5` |
-| Total wall clock | `` |
+| Total wall clock | `31` |
 | Total agents spawned | `2` |
 | Total MCP calls | `0` |
 | Phases using parallelism | `0` |
