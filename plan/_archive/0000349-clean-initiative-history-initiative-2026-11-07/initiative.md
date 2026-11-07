@@ -1,13 +1,13 @@
 ---
 title: "Initiative: 0000349 - clean initiative history"
 summary: "Initiative branches deliver N + 1 commits, each step titled with its feature title, and steps run to the end safely without help."
-status: "active"  # proposed | charted | active | delivered | blocked
+status: "delivered"  # proposed | charted | active | delivered | blocked
 ---
 # Initiative: 0000349 - clean initiative history
 
 **Goal:** A delivered initiative branch holds one squash per step, titled `{feature-id}: {Feature title} (#{n})`, then one `{initiative-id}: Initiative admin (#{n})` commit. Nothing force-pushes, and step sessions run to the end with no help.
 **Branch:** initiative/0000349-clean-initiative-history
-**Status:** active
+**Status:** delivered
 **Position:** 9
 **Step CI fixes:** allowed, for a fix inside the step's own scope
 
