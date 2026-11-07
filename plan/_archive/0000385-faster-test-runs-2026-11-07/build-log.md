@@ -67,12 +67,12 @@ Complete: P1 (2026-11-07T21:32:51Z)
 |-------|-------|
 | Start | `2026-11-07T21:33:00Z` |
 | End | `2026-11-07T21:35:39Z` |
-| Wall clock | 0 |
+| Wall clock | 3 |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 0 |
 | MCP calls | 0 |
-| Parallel task batches | 1 |
+| Parallel task batches | 0 |
 | Notes | U1 to U3 form batch 1 and were written inline, no subagents: three small edits that share one design |
 
 Tests run: REQ-001: test-0000385-req-001-affected-tests.sh (2026-11-07T21:35:39Z)
@@ -98,3 +98,35 @@ Tests run: full suite in a clean clone of HEAD: 304 feature and 19 regression pa
 OS gap: local macos, CI ubuntu, windows
 Baseline recorded at P0: 3 failed suites on the base commit, see baseline-failures.md. The base-commit run started from the P0 commit during P1, so it ran beside the build.
 Complete: P3 (2026-11-07T21:51:25Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-07T21:52:00Z` |
+| End | `2026-11-07T21:52:00Z` |
+| Wall clock | 0 |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | initiative step: the merge queue sets the version |
+
+Complete: P4 (2026-11-07T21:52:00Z)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | 5 |
+| Total wall clock | 21 |
+| Total agents spawned | 0 |
+| Total MCP calls | 0 |
+| Phases using parallelism | 0 |
+| Primary tier agent calls | 0 |
+| Cheaper tier agent calls | 0 |
+| Self-corrections | 0 |
+| Phases skipped | none |
