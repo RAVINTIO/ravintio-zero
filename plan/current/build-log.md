@@ -71,7 +71,7 @@ Complete: P1 (2026-11-07T06:05:36Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-07T06:05:44Z` |
-| End | `PENDING` |
+| End | `2026-11-07T06:29:02Z` |
 | Wall clock | `0` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
@@ -79,3 +79,5 @@ Complete: P1 (2026-11-07T06:05:36Z)
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | Departure from the concurrency plan: units ran inline, not as subagents. The two units are short text edits that share one context. Tests come first and are RED before each change. |
+Note: the first full run failed test-0000010 because the tree changed during the run (a commit). It passed alone and in a clean rerun: 286 feature suites and 19 regression suites.
+Complete: P2 (2026-11-07T06:29:02Z)
