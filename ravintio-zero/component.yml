@@ -38,6 +38,8 @@ responsibilities:
   - "Tag the merge commit on main from CI with the product version, never a feature-branch commit"
   - "Map user stories in P1 and write acceptance criteria as Gherkin steps, checked by the consistency check and guarded by the ratchet"
   - "Run the Scope Lock Challenge before design confirmation, drafted inline"
+  - "Give tests shared helpers to read pack text: orch_section returns a named section from SKILL.md, the references, or the roadmap standards, and rule_text and assert_rule read a rule by its rule anchor, so moving or rewording a rule breaks no test"
+  - "Cap a test command with with_timeout, which works on macOS, Linux, and Git Bash"
   - "Enforce one question at a time across all phase skills"
   - "Run an approved initiative as a chain of feature steps, with the merge-guard hook limiting agent merges to squash merges into initiative branches"
   - "Write each hook block reason to stderr and stdout, so the agent sees why a write stopped"

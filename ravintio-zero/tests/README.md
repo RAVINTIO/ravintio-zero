@@ -10,10 +10,23 @@ PowerShell 7. All suites cover the Claude Code target only.
 |------|----------|
 | `test-*.sh` | Per-feature Bash suites |
 | `test-*.ps1` | Per-feature PowerShell suites, which run `setup.ps1` |
-| `helpers/` | Shared assertions (`assert.sh`, `assert.ps1`) and the `setup.ps1` workspace helper |
+| `helpers/` | Shared assertions (`assert.sh`, `assert.ps1`), the pack text helpers, `with_timeout` (`timeout.sh`), and the `setup.ps1` workspace helper |
 | `regression/` | The long-term regression pack and its manifest |
 | `run-tests.sh` | The runner for every suite |
 | `run-tests.ps1` | The runner for the PowerShell suites only |
+
+## Reading pack text
+
+A suite that asserts what a skill, standard, or template says reads it through
+a helper in `helpers/assert.sh`. See section 8 of `standards/testing-standards.md`.
+
+- `orch_section "<heading>"` returns a section from `SKILL.md`, the orchestrator
+  references, or the roadmap standards.
+- `rule_text <id>` and `assert_rule <id> <term>...` read a rule by its
+  `<!-- rule: <id> -->` anchor.
+- `strip_rule_anchors` removes anchors before a line-by-line comparison.
+- `with_timeout <seconds> <command>...` caps a command. Source
+  `helpers/timeout.sh` first.
 
 ## Running the tests
 
