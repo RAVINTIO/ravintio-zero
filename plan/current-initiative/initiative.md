@@ -1,13 +1,13 @@
 ---
 title: "Initiative: 0000360 - backlog sweep"
 summary: "Closes 60 open backlog entries in 19 steps, and makes the driver run independent steps at once in worktrees."
-status: "charted"  # proposed | charted | active | delivered | blocked
+status: "active"  # proposed | charted | active | delivered | blocked
 ---
 # Initiative: 0000360 - backlog sweep
 
 **Goal:** Close every open backlog entry except the four that need paid services. The first three steps make the driver run independent steps at once, each in its own worktree, with each version set as its step merges.
 **Branch:** initiative/0000360-backlog-sweep
-**Status:** charted
+**Status:** active
 **Position:** 1
 **Speed:** standard
 **Step CI fixes:** allowed
