@@ -9,6 +9,8 @@ description: Implements requirements with tests and documentation landing togeth
 
 **Prefix.** Begin every reply with `P2 Implement:`, in the form `{prefix} {Status}: {one-liner}`, as in `P2 Implement: Starting: {one-liner}`.
 
+**Times.** Read every time you log with `date -u +%Y-%m-%dT%H:%M:%SZ` and never type one. `build-log-check.mjs` fails a time later than its commit.
+
 **Pack files.** Read each of these from the pack folder before the step that uses it:
 
 - `ravintio-zero/templates/component.template.yml`

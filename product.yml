@@ -10,8 +10,8 @@
 
 id: "ravintio-zero"
 name: "RAVINTIO Zero"
-version: "0.54.0"
-feature: "0000357-guard-gaps-closed"
+version: "0.55.0"
+feature: "0000358-clean-step-stops-and-logs"
 
 versionPolicy: "max-component-version"
 

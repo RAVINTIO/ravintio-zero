@@ -438,3 +438,9 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 | ADR-001 | stack choice | accepted | The step adds no language, library, or service. The wrapper is shell text in the hook command. |
 | ADR-002 | a guard command exits 2 when the launcher fails | accepted | Setup appends an exit 2 fallback to each guard-mode command, so a missing launcher blocks the call. Advisory commands keep their form. |
 | ADR-003 | the forced-add guard blocks what it cannot read | accepted | The guard reads `git stage`, subshells, and variables, and Codex runs it too. |
+
+### Feature 0000358: clean-step-stops-and-logs
+
+| ADR | Title | Status | Summary |
+|-----|-------|--------|---------|
+| ADR-001 | stack choice | accepted | The step adds no language, library, or service. The time check calls `git blame` through `node:child_process`. |

@@ -1,7 +1,7 @@
 ---
-version: "0.54.0"
-feature: "0000357-guard-gaps-closed"
-updated: "6 Nov 2026"
+version: "0.55.0"
+feature: "0000358-clean-step-stops-and-logs"
+updated: "7 Nov 2026"
 ---
 # About
 
@@ -10,7 +10,7 @@ updated: "6 Nov 2026"
 
 | Field | Value |
 |-------|-------|
-| Version | `0.54.0` |
+| Version | `0.55.0` |
 | Last feature | `0000354-steps-run-to-the-end` |
 | Updated | `6 Nov 2026` |
 

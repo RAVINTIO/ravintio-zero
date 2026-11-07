@@ -26,6 +26,8 @@ Non-negotiable. They apply in every session, every phase.
 11. **Every run archives `plan/current/`.** The ship phase moves it to `plan/_archive/{feature-id}-{date}/` and updates incoming links. Never leave a permanent working folder behind.
 12. **`discovery.md` exists and is complete before the first coaching question.** A missing or incomplete `plan/current/discovery.md` at that point is a pipeline error: stop and write it.
 
+Read every time you log with `date -u +%Y-%m-%dT%H:%M:%SZ` and never type one.
+
 In an active initiative, stage by explicit path and never stage a `plan/backlog/` entry the step did not write. Never run `git add -f` or `git add --force`. If a file is ignored on purpose, leave it out. If it must be tracked, add a negation rule to `.gitignore`. A step session never moves, renames, or deletes `plan/.initiative-logs/`, `plan/.initiative-runner.lock`, or `plan/.initiative-queue/`. The driver and the watcher own them.
 
 ---
@@ -42,10 +44,11 @@ Every request is a feature change. It runs one route: the five-phase pipeline. E
 | P3 | Validate and Accept | `P3 Validate:` | ravintio-validate-and-accept |
 | P4 | Ship | `P4 Ship:` | ravintio-ship |
 
-Status messages use one form: `{prefix} {Status}: {one-liner}`. The status is Starting, Resuming, Complete, Blocked, or Skipped.
+Status messages use one form: `{prefix} {Status}: {one-liner}`. The status is Starting, Resuming, Complete, Question, Blocked, or Skipped.
 - Entering a phase: `P0 Discovery: Starting: {one-liner}`
 - Resuming: `P2 Implement: Resuming: {what was in progress, what is next}`
 - Completing: `P1 Plan: Complete: {summary}`
+- Asking: `P0 Discovery: Question: {routine question}`. `Question:` asks a routine question. `Blocked:` marks an exception stop only.
 - Blocking: `P0 Discovery: Blocked: {specific gap}`
 - Skipping: `P3 Validate: Skipped: {reason}`
 
