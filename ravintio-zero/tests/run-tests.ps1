@@ -115,7 +115,10 @@ if ($null -ne $treeBefore) {
 Write-Host ""
 Write-Host "================================"
 Write-Host "PowerShell suites: $($suites.Count - $failed.Count) passed, $($failed.Count) failed."
-foreach ($name in $failed) { Write-Host "  failed: $name" }
+if ($failed.Count -gt 0) {
+    Write-Host "Failed suites:"
+    foreach ($name in $failed) { Write-Host "  $name" }
+}
 Write-Host "================================"
 if ($failed.Count -gt 0 -or $treeChanged.Count -gt 0) { exit 1 }
 exit 0

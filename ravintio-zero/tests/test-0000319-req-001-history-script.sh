@@ -37,43 +37,65 @@ run_script() {
   CODE=$?
 }
 
+# Writes a chart with a Steps table. Arguments: file, then "feature-id|Title" pairs.
+make_chart() {
+  local file="$1"; shift
+  {
+    echo "# Initiative: 0000319 - fixture"
+    echo ""
+    echo "## Steps"
+    echo ""
+    echo "| Step | Feature id | Title | Bump |"
+    echo "|------|------------|-------|------|"
+    local n=1 pair
+    for pair in "$@"; do
+      echo "| $n | ${pair%%|*} | ${pair#*|} | minor |"
+      n=$((n + 1))
+    done
+  } > "$file"
+}
+
 echo "=== req-001 AC-1: titled squashes pass ==="
 R="$(new_repo titled)"
-add_commit "$R" "0000319-initiative-history-checks: add script (#12)"
-add_commit "$R" "0000320-other-thing2: second change (#13)"
-run_script --root "$R" --base main --head HEAD
+make_chart "$TMP/titled.md" "0000319-initiative-history-checks|Add script" "0000320-other-thing2|Second change"
+add_commit "$R" "0000319: Add script (#12)"
+add_commit "$R" "0000320: Second change (#13)"
+run_script --root "$R" --base main --head HEAD --chart "$TMP/titled.md"
 assert_equals "0" "$CODE" "req-001 AC-1: titled history exits 0"
 
 echo ""
 echo "=== req-001 AC-2: a direct commit fails and is named ==="
 R="$(new_repo direct)"
-add_commit "$R" "0000319-initiative-history-checks: add script (#12)"
+make_chart "$TMP/direct.md" "0000319-initiative-history-checks|Add script"
+add_commit "$R" "0000319: Add script (#12)"
 add_commit "$R" "fix stuff"
 HASH="$(git -C "$R" rev-parse --short HEAD)"
-run_script --root "$R" --base main --head HEAD
+run_script --root "$R" --base main --head HEAD --chart "$TMP/direct.md"
 assert_equals "1" "$CODE" "req-001 AC-2: untitled commit exits 1"
 assert_contains "$HASH" "$OUT" "req-001 AC-2: prints the short hash"
 assert_contains "fix stuff" "$OUT" "req-001 AC-2: prints the subject"
 case "$OUT" in
-  *"add script"*) assert_equals "absent" "present" "req-001 AC-2: titled commit not listed" ;;
+  *"Add script"*) assert_equals "absent" "present" "req-001 AC-2: titled commit not listed" ;;
   *) assert_equals "absent" "absent" "req-001 AC-2: titled commit not listed" ;;
 esac
 
 echo ""
 echo "=== req-001 AC-2: near-miss titles fail ==="
-for subj in "0000319-Bad_Slug: x (#1)" "000319-short-id: x (#1)" "0000319-no-number: x" "0000319-slug:  (#1)"; do
+make_chart "$TMP/near.md" "0000319-initiative-history-checks|Add script"
+for subj in "0000319: Add script" "000319: Add script (#1)" "0000319: Add script (#x)" "0000319-slug: Add script (#1)" "0000319: Add scripts (#1)"; do
   R="$(new_repo "near$RANDOM")"
   add_commit "$R" "$subj"
-  run_script --root "$R" --base main --head HEAD
+  run_script --root "$R" --base main --head HEAD --chart "$TMP/near.md"
   assert_equals "1" "$CODE" "req-001 AC-2: rejects '$subj'"
 done
 
 echo ""
-echo "=== req-001 AC-3: empty branch exits 0 with a note ==="
+echo "=== req-001 AC-3: empty branch with charted steps fails ==="
 R="$(new_repo empty)"
-run_script --root "$R" --base main --head HEAD
-assert_equals "0" "$CODE" "req-001 AC-3: empty branch exits 0"
-assert_contains "no commits" "$OUT" "req-001 AC-3: empty branch prints a note"
+make_chart "$TMP/empty.md" "0000319-initiative-history-checks|Add script"
+run_script --root "$R" --base main --head HEAD --chart "$TMP/empty.md"
+assert_equals "1" "$CODE" "req-001 AC-3: missing step exits 1"
+assert_contains "missing" "$OUT" "req-001 AC-3: names the missing step"
 
 echo ""
 echo "=== req-001 AC-3: missing base ref exits 1 ==="

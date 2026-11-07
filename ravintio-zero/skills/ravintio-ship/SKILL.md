@@ -9,6 +9,8 @@ description: Archive, build assessment, changelog, version, and PR, behind the f
 
 **Prefix.** Begin every reply with `P4 Ship:`, in the form `{prefix} {Status}: {one-liner}`, as in `P4 Ship: Starting: {one-liner}`.
 
+**Times.** Read every time you log with `date -u +%Y-%m-%dT%H:%M:%SZ` and never type one. `build-log-check.mjs` fails a time later than its commit.
+
 ## Hard Limits
 
 1. Every response begins with `P4 Ship:`. No exceptions.
@@ -111,7 +113,7 @@ Should I raise the PR, or will you?
 
 In `autonomous`, take option [1] without asking.
 
-Title: `{feature-id}: {one-line summary}`. Body: summary bullets, key decisions, validation results, test plan. In `autonomous`, add an `## Acceptance evidence` section with the contents of the archived `acceptance-evidence.md`. Add the same `## Workflow governance` section from `build-report.md`, or the `Workflow governance: not measured ({reason})` line, in both run modes and for both PR options. A breach does not stop ship. PR bodies carry no AI attribution. Leave out `Generated with [Claude Code]` lines (with or without a robot emoji), `Co-Authored-By:` lines that name an AI tool, and `Claude-Session:` lines or claude.ai/code session links.
+Title: `{feature-id}: {one-line summary}`. In an initiative step, the title is `{feature-id}: {Feature title}`, with the text of the step's `Title` column in `initiative.md`, because the squash carries it. Body: summary bullets, key decisions, validation results, test plan. In `autonomous`, add an `## Acceptance evidence` section with the contents of the archived `acceptance-evidence.md`. Add the same `## Workflow governance` section from `build-report.md`, or the `Workflow governance: not measured ({reason})` line, in both run modes and for both PR options. A breach does not stop ship. PR bodies carry no AI attribution. Leave out `Generated with [Claude Code]` lines (with or without a robot emoji), `Co-Authored-By:` lines that name an AI tool, and `Claude-Session:` lines or claude.ai/code session links.
 
 Before `gh pr create`, write the PR body to a temporary file and run `node ravintio-zero/scripts/check-attribution.mjs <file>` on it. If it fails, remove the attribution lines and rerun. If it still fails, stop in both run modes:
 
@@ -177,9 +179,8 @@ A PR into `main` comes from a `chore/*`, `hotfix/*`, or `initiative/*` branch. A
 
 - Before you ask the human to merge, the branch holds one commit on `origin/main`. Skip this for `initiative/*`.
 - Title the commit per `ravintio-zero/standards/commit-standards.md` and name the PR number. List the squashed commit titles in the body.
-- For `chore/*`, squash in place and push with `git push --force-with-lease origin {branch}`. Only `chore/*` may use `--force-with-lease`. Never use plain `--force`.
-- For `hotfix/*` with more than one commit, cut a new branch from `origin/main` and build one squashed commit there. Raise a replacement PR. Close the old PR with a link to the new one.
-- You never force-push `main`, `initiative/*`, `feat/*`, or `hotfix/*`.
+- For `chore/*` or `hotfix/*` with more than one commit, cut a new branch from `origin/main` and build one squashed commit there. Raise a replacement PR. Close the old PR with a link to the new one, then delete the old branch.
+- You never force-push `main`, `initiative/*`, `feat/*`, `hotfix/*`, or `chore/*`. No branch history is rewritten in place.
 - Wait for green CI on the single-commit head before you ask the human to merge.
 
 ## Parallelism
@@ -198,6 +199,8 @@ Each unit commits its own files by path, one commit at a time, per `## Fast batc
 ## Initiative steps
 
 When `plan/current-initiative/initiative.md` has `status: active`, read `ravintio-zero/standards/roadmap-standards.md` first. Step 9 gives way to its I-D Advance stage, and I-E Delivery follows the last step. Outside an initiative, ignore this section.
+
+Before the PR, the step commits the items in `plan/.initiative-queue/` that name it, as I-C Run describes.
 
 After `gh pr create`, the agent sets `**PR:**` to the PR number, commits, and pushes it before it waits on CI and before the squash. It never commits after the squash.
 

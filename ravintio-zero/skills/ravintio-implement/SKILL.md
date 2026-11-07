@@ -9,6 +9,8 @@ description: Implements requirements with tests and documentation landing togeth
 
 **Prefix.** Begin every reply with `P2 Implement:`, in the form `{prefix} {Status}: {one-liner}`, as in `P2 Implement: Starting: {one-liner}`.
 
+**Times.** Read every time you log with `date -u +%Y-%m-%dT%H:%M:%SZ` and never type one. `build-log-check.mjs` fails a time later than its commit.
+
 **Pack files.** Read each of these from the pack folder before the step that uses it:
 
 - `ravintio-zero/templates/component.template.yml`
@@ -152,6 +154,14 @@ When `plan/.run-speed` holds `fast`, dispatch these batches in order, each in on
 4. Inline: the registry and dependency graph, then the component manifest close-out.
 
 At `standard`, the steps above apply. The five-attempt escalation is unchanged.
+
+### Shared tree
+
+Dispatched units share one working tree.
+
+- Never run `git stash`, `git checkout -- {path}`, `git reset`, or `git clean` while any subagent runs. Each one removes the uncommitted work of the running units.
+- To test a clean tree mid-phase, use a scratch clone in a scratch folder.
+- If a tree-wide git operation cannot wait, wait for the subagents first. Record in the build log that the step waits for its subagents before the operation.
 
 ## Commit cadence
 

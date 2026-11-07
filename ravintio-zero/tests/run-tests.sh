@@ -8,6 +8,8 @@
 #   RAVINTIO_PREFLIGHT_ONLY=1   check for stray files, run no suite, and exit
 #   RAVINTIO_TEST_QUIET=1       hide PASS lines and banners, keep every failure and the summary
 #
+# Under the totals the runner lists each failed suite by file name, in quiet mode too (0000358).
+#
 # The runner removes every RAVINTIO_ variable from the environment of each suite (0000315), so a
 # suite gives the same result in any session. The initiative driver sets RAVINTIO_INITIATIVE_STEP
 # in every step session, and the hooks read it. A suite that needs a variable sets it for its own
@@ -55,6 +57,7 @@ if TREE_BEFORE="$(snapshot_tree)"; then TREE_CHECK=1; fi
 TOTAL_PASS=0
 TOTAL_FAIL=0
 PS_SKIPPED=0
+FAILED_SUITES=()
 
 # ── Pre-flight: every file under tests/ is a suite or a known non-suite ──────
 #
@@ -77,6 +80,8 @@ KNOWN_NON_SUITES=(
   "regression/.gitkeep"                    # keeps the folder in git
   "helpers/assert.sh"                      # Bash assert helpers
   "helpers/version.sh"                     # version comparison for the 0000160 req-004 and 0000164 req-011 suites
+  "helpers/driver-args.sh"                 # claude arguments the driver passes, for the driver suites (0000354 REQ-004)
+  "helpers/unguarded-jobs.sh"              # lists workflow jobs with no guard and no marker (0000355 REQ-003)
   "helpers/assert.ps1"                     # PowerShell assert helpers (0000036 ADR-002)
   "helpers/setup-workspace.ps1"            # temporary projects for the setup.ps1 suites
   "fixtures/0000038-hook-filter/README.md"              # what the 0000038 fixtures hold
@@ -169,7 +174,7 @@ run_suite() {
   case $? in
     0) TOTAL_PASS=$((TOTAL_PASS + 1)) ;;
     2) PS_SKIPPED=$((PS_SKIPPED + 1)) ;;
-    *) TOTAL_FAIL=$((TOTAL_FAIL + 1)) ;;
+    *) TOTAL_FAIL=$((TOTAL_FAIL + 1)); FAILED_SUITES+=("$(basename "$1")") ;;
   esac
 }
 
@@ -202,7 +207,7 @@ else
     case $? in
       0) REGRESSION_PASS=$((REGRESSION_PASS + 1)) ;;
       2) PS_SKIPPED=$((PS_SKIPPED + 1)) ;;
-      *) REGRESSION_FAIL=$((REGRESSION_FAIL + 1)) ;;
+      *) REGRESSION_FAIL=$((REGRESSION_FAIL + 1)); FAILED_SUITES+=("regression/$(basename "$regression_test")") ;;
     esac
   done
 fi
@@ -228,6 +233,10 @@ echo ""
 echo "================================"
 echo "Feature suites:    $TOTAL_PASS passed, $TOTAL_FAIL failed."
 echo "Regression suite:  $REGRESSION_PASS passed, $REGRESSION_FAIL failed."
+if [ "${#FAILED_SUITES[@]}" -gt 0 ]; then
+  echo "Failed suites:"
+  for failed_suite in "${FAILED_SUITES[@]}"; do echo "  $failed_suite"; done
+fi
 if [ "$PS_SKIPPED" -gt 0 ]; then
   echo "Skipped $PS_SKIPPED PowerShell suites: pwsh not found"
 fi

@@ -180,7 +180,7 @@ stale_install_skip_reason() {
   local init="$root/plan/current-initiative/initiative.md"
   local manifest="$root/.claude/skills/.ravintio-manifest"
   [ -f "$init" ] && [ -f "$manifest" ] || return 1
-  grep -qE '^status: "?active"?[[:space:]]*$' "$init" || return 1
+  grep -qE '^status: "?active"?[[:space:]]*(#.*)?$' "$init" || return 1
   [ -n "$(find "$root/ravintio-zero/skills" -type f -newer "$manifest" -print -quit 2>/dev/null)" ] || return 1
   echo "an initiative is active and the install manifest is older than the newest pack skill"
 }

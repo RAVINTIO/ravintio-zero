@@ -16,6 +16,9 @@ status: "proposed"  # proposed | charted | active | delivered | blocked
 > `Bump` takes `major`, `minor`, or `patch`. Leave it empty for the default, `minor`.
 > `position` names the next step to run.
 >
+> `Title` is a short description of the step. Chart writes the title in sentence case.
+> P0, ship, and the history check read it.
+>
 > `## Schema changes` lists each step's predicted data change. The human approves the rows at
 > Chart. See Chart-time schema approval in `ravintio-zero/standards/roadmap-standards.md`.
 >
@@ -29,12 +32,16 @@ status: "proposed"  # proposed | charted | active | delivered | blocked
 > step's skill asks for. See Chart-time confirmations in the same file.
 >
 > `## P1 skips` says whether each step may skip P1. See Chart-time P1 skips in the same file.
+>
+> `**Step CI fixes:**` says whether a step may fix its own CI failure. `allowed` lets the step push a
+> fix inside its own scope. `stop` stops the step. The default is `stop`. See I-D Advance in the same file.
 
 **Goal:** {{What the whole chain delivers, in one or two sentences.}}
 **Branch:** initiative/{{id}}-{{slug}}
 **Status:** {{proposed | charted | active | delivered | blocked}}
 **Position:** {{number of the next step to run, for example 1}}
 **Speed:** {{standard | fast, optional, a missing field means standard}}
+**Step CI fixes:** {{allowed | stop, optional, a missing field means stop}}
 
 ## Stop conditions
 
@@ -81,6 +88,6 @@ status: "proposed"  # proposed | charted | active | delivered | blocked
 
 ## Steps
 
-| Step | Feature id | Backlog entries | Bump | Version | Status |
-|------|------------|-----------------|------|---------|--------|
-| 1 | {{feature id}} | {{backlog ids}} | minor | | pending |
+| Step | Feature id | Title | Backlog entries | Bump | Version | Status |
+|------|------------|-------|-----------------|------|---------|--------|
+| 1 | {{feature id}} | {{step title in sentence case}} | {{backlog ids}} | minor | | pending |

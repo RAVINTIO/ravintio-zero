@@ -3,7 +3,7 @@
 > Change record. Index of all ADRs across all features. Updated after every pipeline run.
 > Do not archive this file. Update it in place.
 
-Last updated: 0000327-squash-before-main
+Last updated: 0000354-steps-run-to-the-end
 
 ---
 
@@ -394,3 +394,59 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 | ADR | Title | Status | Summary |
 |-----|-------|--------|---------|
 | ADR-001 | CI checks the branch and commit count of a PR into main | accepted | `check-pr-into-main.mjs` runs in the CI job `squash-before-main`. It passes a `chore/*` or `hotfix/*` PR with one commit, ignores `initiative/*`, and fails everything else. No hook changes. |
+
+### Feature 0000351: step-titles-and-history-shape
+
+| ADR | Title | Status | Summary |
+|-----|-------|--------|---------|
+| ADR-001 | the history check reads titles from the chart | accepted | `check-initiative-history.mjs` reads the `Title` column of the chart `## Steps` table. It expects one commit per step in chart order, then at most one chore commit. It finds an archived chart by the id in `--head`. |
+
+### Feature 0000352: coordinator-admin-in-step-prs
+
+| ADR | Title | Status | Summary |
+|-----|-------|--------|---------|
+| ADR-001 | queue items name their step in item.md | accepted | A queue item is a folder in `plan/.initiative-queue/`. Its `item.md` holds `**Step:**` and `**Destination:**`. The step commits the item before P4 raises the PR. Admin that fits no step lands through a `chore/` PR. |
+| ADR-002 | reserve-id.mjs refuses --commit on initiative/* | accepted | The script reads the branch name before the reservation. On `initiative/*` it exits 1, changes nothing, and names the `feat/` route. |
+
+### Feature 0000353: reshape-at-delivery
+
+| ADR | Title | Status | Summary |
+|-----|-------|--------|---------|
+| ADR-001 | replay with git merge-tree, not a working tree | accepted | `reshape-initiative.mjs` replays each commit with `git merge-tree --write-tree` and writes commits with `git commit-tree`. It never touches a working tree, and a conflict exits 1. |
+| ADR-002 | find step commits by version tag and move tags by delete | accepted | The script reads `v{Version}` from the chart for each step. `--tags` deletes each tag and creates it again at the new commit. `--push` deletes the old tag on the remote and pushes the new one. |
+| ADR-003 | ship uses the replacement branch route for chore | accepted | `## PRs into main` applies the replacement branch route to `chore/*` and `hotfix/*`. It no longer names `--force-with-lease`. |
+
+### Feature 0000354: steps-run-to-the-end
+
+| ADR | Title | Status | Summary |
+|-----|-------|--------|---------|
+| ADR-001 | resume with the session id from the stream | accepted | The driver reads `session_id` from the step's stream events and resumes an unmerged step with `claude -p --resume`, at most twice. A third unmerged exit prints `Blocked:`. |
+| ADR-002 | compare tool and flags, not the timestamp | accepted | Setup rewrites `plan/state/{tool}.md` only when `tool` or `flags` differ, so a rerun leaves a clean tree. |
+
+### Feature 0000355: codeql-and-branch-cleanup
+
+| ADR | Title | Status | Summary |
+|-----|-------|--------|---------|
+| ADR-001 | stack choice | accepted | The step adds no language, library, or service. CodeQL runs as a workflow action. |
+| ADR-002 | run CodeQL from a workflow file | accepted | Advanced setup scans pull requests into `initiative/**`. A human turns default setup off. |
+| ADR-003 | delete merged head branches from a scoped CI job | accepted | The `cleanup-branch` job holds `contents: write` on that job only, and every other pull request job skips `closed`. |
+
+### Feature 0000357: guard-gaps-closed
+
+| ADR | Title | Status | Summary |
+|-----|-------|--------|---------|
+| ADR-001 | stack choice | accepted | The step adds no language, library, or service. The wrapper is shell text in the hook command. |
+| ADR-002 | a guard command exits 2 when the launcher fails | accepted | Setup appends an exit 2 fallback to each guard-mode command, so a missing launcher blocks the call. Advisory commands keep their form. |
+| ADR-003 | the forced-add guard blocks what it cannot read | accepted | The guard reads `git stage`, subshells, and variables, and Codex runs it too. |
+
+### Feature 0000358: clean-step-stops-and-logs
+
+| ADR | Title | Status | Summary |
+|-----|-------|--------|---------|
+| ADR-001 | stack choice | accepted | The step adds no language, library, or service. The time check calls `git blame` through `node:child_process`. |
+
+### Feature 0000359-safe-parallel-commits
+
+| ADR | Title | Status | Summary |
+|-----|-------|--------|---------|
+| ADR-001 | stack choice | accepted | The step adds no language, library, or service. The rules are skill and standard text, checked by Bash suites. |

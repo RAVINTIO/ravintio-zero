@@ -89,9 +89,13 @@ A line that starts `Restart: Setup:` names both. Rerun setup first. Read this sk
 
 ## Backlog queue
 
-While the lock is held, write each new backlog entry to `plan/.initiative-queue/{id}-{slug}/entry.md`. Reserve its id with `node ravintio-zero/scripts/reserve-id.mjs --commit`, which commits `plan/backlog/.next-id` alone at once. When a step merges and the driver is between steps or has exited, move the queued entries to `plan/backlog/` on a `feat/` branch and land them as a coordinator PR. Never touch the queue while a step runs.
+While the lock is held, queue admin work. Do not edit the working tree and do not reserve an id. Write each item as a folder in `plan/.initiative-queue/`. Its `item.md` holds `**Step:** {n}` and `**Destination:** {repo path}`, and the other files are the content. For a new backlog entry, set the destination to `plan/backlog/{id}-{slug}/entry.md` and write `{id}` where the id goes. The step reserves the id and fills it in.
 
-Nothing commits directly on the initiative branch. Activation, queued entries, scope edits, and the I-E Delivery archive and retrospective all follow `## Coordinator PRs` in the roadmap standards. Raise one only while the driver is stopped.
+Name the step that the work aligns with, or the next pending step. After a step merges, clear the items that named it. Never move or delete an item while a step runs. Admin that fits no step waits until the driver stops, then lands through a `chore/` PR.
+
+`reserve-id.mjs --commit` refuses on `initiative/*`. When the driver is stopped, run it on a `feat/` branch so the counter commit rides in the coordinator PR.
+
+Nothing commits directly on the initiative branch. Activation, scope edits, and the I-E Delivery archive and retrospective follow `## Coordinator PRs` in the roadmap standards. Raise one only while the driver is stopped, and merge it with `gh pr merge --squash --delete-branch {n}`.
 
 ## Repo instructions during a run
 
@@ -103,7 +107,7 @@ If the human asks for a repo instruction while a step runs, add it to the scope 
 
 ## I-E Delivery
 
-After the driver exits, follow the I-E Delivery section of the roadmap standards. It runs the history check and sets the merge commit title. Then give the final report:
+After the driver exits, follow the I-E Delivery section of the roadmap standards. It reshapes the branch with `reshape-initiative.mjs`, moves the step tags, runs the history check, and sets the merge commit title. Raise the PR from `initiative/{id}-{slug}-reshaped`. After the human merges it, delete the old branch. Then give the final report:
 
 1. The initiative PR URL.
 2. Each step with its version and tag.

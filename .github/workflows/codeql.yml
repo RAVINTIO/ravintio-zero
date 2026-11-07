@@ -1,0 +1,43 @@
+name: CodeQL
+
+# Advanced setup (0000355 ADR-002). Default setup scans PRs into the default
+# branch only, so a flaw in a step PR into initiative/** showed up late.
+# A human turns default setup off in the repo settings, because the two
+# setups cannot run together.
+on:
+  pull_request:
+    branches: [ main, 'initiative/**' ]
+  push:
+    branches: [ main ]
+
+# The analysis reads the repo and uploads results.
+permissions:
+  contents: read
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ javascript-typescript, actions ]
+    steps:
+      # Pinned to the v4 commit, with no token left in .git/config while the
+      # PR's code is analysed.
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      - name: Initialise CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          build-mode: none
+
+      - name: Analyse
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:${{ matrix.language }}"

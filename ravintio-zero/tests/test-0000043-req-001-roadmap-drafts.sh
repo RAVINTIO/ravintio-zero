@@ -25,7 +25,7 @@ done
 for s in proposed charted active delivered blocked; do
   assert_contains "$s" "$T" "req-001 (a): template names status $s"
 done
-assert_contains '| Step | Feature id | Backlog entries | Bump | Version | Status |' "$T" \
+assert_contains '| Step | Feature id | Title | Backlog entries | Bump | Version | Status |' "$T" \
   "req-001 (a): template has the six-column step table"
 
 echo ""

@@ -286,7 +286,10 @@ function New-HookEntry {
     # missing or crashing script exits 2. The rest run in advisory mode.
     param([string]$Matcher, [string]$Module, [string]$HooksDir)
     $mode = if (@('gate-write', 'ratchet-check', 'em-dash-guard', 'merge-guard', 'block-forced-add') -contains $Module) { 'guard' } else { 'advisory' }
-    $command = 'node "${CLAUDE_PROJECT_DIR}/' + $HooksDir + '/guard-run.mjs" ' + $mode + ' ' + $Module + '.mjs'
+    # 0000357 ADR-002: a guard command exits 2 when the launcher fails, because
+    # Claude Code treats the exit 1 of a missing launcher as non-blocking.
+    $suffix = if ($mode -eq 'guard') { ' || exit 2' } else { '' }
+    $command = 'node "${CLAUDE_PROJECT_DIR}/' + $HooksDir + '/guard-run.mjs" ' + $mode + ' ' + $Module + '.mjs' + $suffix
     [ordered]@{
         matcher = $Matcher
         hooks   = @([ordered]@{ type = 'command'; command = $command })
@@ -762,7 +765,7 @@ function Install-CodexHooks {
     Write-Host "  Installing RAVINTIO Codex hooks"
 
     [System.IO.Directory]::CreateDirectory($dest) | Out-Null
-    foreach ($name in @('merge-guard.mjs', 'read-stdin.mjs', 'guard-run.mjs')) {
+    foreach ($name in @('merge-guard.mjs', 'block-forced-add.mjs', 'read-stdin.mjs', 'guard-run.mjs')) {
         Copy-RavintioItem (Join-Path $src $name) $dest
         Write-Host "  + $HooksDirRel/$name"
     }
@@ -771,10 +774,15 @@ function Install-CodexHooks {
     # 0000316 req-002: Codex sets no project-dir variable, so the command holds
     # the absolute project path.
     $rootPath = ($ProjectRoot -replace '\\', '/').TrimEnd('/')
-    $commandLine = 'node "' + $rootPath + '/' + $HooksDirRel + '/guard-run.mjs" guard merge-guard.mjs'
+    $commandLine = 'node "' + $rootPath + '/' + $HooksDirRel + '/guard-run.mjs" guard merge-guard.mjs || exit 2'
     $entry = [ordered]@{
         matcher = 'Bash'
         hooks   = @([ordered]@{ type = 'command'; command = $commandLine; statusMessage = 'Checking merge command' })
+    }
+    $forcedAddLine = 'node "' + $rootPath + '/' + $HooksDirRel + '/guard-run.mjs" guard block-forced-add.mjs || exit 2'
+    $forcedAddEntry = [ordered]@{
+        matcher = 'Bash'
+        hooks   = @([ordered]@{ type = 'command'; command = $forcedAddLine; statusMessage = 'Checking git add command' })
     }
 
     if (Test-Path -LiteralPath $hooksFile) {
@@ -797,25 +805,26 @@ function Install-CodexHooks {
         }
         $pattern = '(^|[\s"''/\\])(' + [regex]::Escape($mark) + '|' + [regex]::Escape("$HooksDirRel/guard-run.mjs") + ')'
         $filtered = @(Remove-RavintioHookCommands -Entries $existing.hooks.PreToolUse -Pattern $pattern)
-        $existing.hooks.PreToolUse = $filtered + @($entry)
+        $existing.hooks.PreToolUse = $filtered + @($entry) + @($forcedAddEntry)
         Write-SettingsOrExit -Path $hooksFile -Json ($existing | ConvertTo-Json -Depth 100) -SettingsRel $HooksFileRel
     }
     else {
         $dir = Split-Path -Parent $hooksFile
         if (-not (Test-Path $dir)) { New-Item -ItemType Directory -Path $dir -Force | Out-Null }
-        $settings = [PSCustomObject]@{ hooks = [PSCustomObject]@{ PreToolUse = @($entry) } }
+        $settings = [PSCustomObject]@{ hooks = [PSCustomObject]@{ PreToolUse = @($entry, $forcedAddEntry) } }
         Write-SettingsOrExit -Path $hooksFile -Json ($settings | ConvertTo-Json -Depth 100) -SettingsRel $HooksFileRel
     }
-    Write-Host "  + $HooksFileRel (merge-guard wired)"
+    Write-Host "  + $HooksFileRel (merge-guard and block-forced-add wired)"
 
     Write-Host ""
     Write-Host "  Active hooks:"
     Write-Host "    merge-guard (PreToolUse: Bash)"
+    Write-Host "    block-forced-add (PreToolUse: Bash)"
     Write-Host "  Fallback hooks, stated as instructions in AGENTS.md:"
     Write-Host "    gate-write, ratchet-check, em-dash-guard, auto-trigger-orchestrator,"
     Write-Host "    check-orchestrator-presence, check-design, check-reply-prefix"
     Write-Host "  Review and trust the project hooks with /hooks in Codex."
-    Write-Host "  Until you trust it, Codex skips merge-guard, including in codex exec."
+    Write-Host "  Until you trust it, Codex skips merge-guard and block-forced-add, including in codex exec."
 }
 
 function Invoke-RavintioGuardrails {
@@ -1414,6 +1423,17 @@ function Write-SetupConfigOverride {
         "> this tool's config directory is a local completion-status cache, reconciled to`n" +
         "> match this file on every ``setup.sh``/``setup.ps1`` run.`n`n" +
         "$fence" + "json`n$configJson`n$fence`n"
+
+    # Leave the record alone when only writtenAt would change (0000354 ADR-002), so a rerun
+    # leaves a clean tree. writtenAt is the last field, so dropping its line compares the rest.
+    if (Test-Path -LiteralPath $configFile) {
+        $dropWritten = { param($text) (($text -replace "`r`n", "`n") -split "`n" | Where-Object { $_ -notmatch '"writtenAt"' }) -join "`n" }
+        $existing = [System.IO.File]::ReadAllText($configFile)
+        if ((& $dropWritten $existing).TrimEnd() -eq (& $dropWritten $content).TrimEnd()) {
+            Write-Host "  = plan/state/$ToolName.md (unchanged)"
+            return $true
+        }
+    }
 
     try {
         New-Item -ItemType Directory -Path $configDir -Force -ErrorAction Stop | Out-Null

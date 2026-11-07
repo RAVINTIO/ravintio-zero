@@ -7,6 +7,7 @@
 //   --init  if the counter is missing, create it from the highest id in the
 //           backlog, archive, changelog, and roadmap folders beside it, plus one.
 //   --commit  after the reservation, commit the counter file alone (0000247).
+//             It refuses on a branch that starts with initiative/ (0000352).
 //
 // Prints one id per line and exits 0. On any failure it prints one line to
 // stderr and exits 1. A failure before the counter write leaves the counter as
@@ -93,6 +94,22 @@ function writeCounter(file, value, width) {
 const opts = parseArgs(process.argv.slice(2));
 const file = path.resolve(opts.file);
 const lockPath = `${file}.lock`;
+
+// The branch the counter commit would land on, or '' if git can't say (0000352).
+function currentBranch() {
+  try {
+    return execFileSync('git', ['rev-parse', '--abbrev-ref', 'HEAD'], { cwd: path.dirname(file), stdio: 'pipe' })
+      .toString().trim();
+  } catch {
+    return '';
+  }
+}
+
+// Nothing commits directly on an initiative branch. The check runs before the
+// reservation, so a refusal leaves no gap in the id sequence.
+if (opts.commit && currentBranch().startsWith('initiative/')) {
+  fail('--commit refuses on initiative/*. Run it on a feat/ branch so the counter commit rides in a coordinator PR');
+}
 
 if (isSymlink(file)) fail(`${file} is a symlink`);
 if (isSymlink(lockPath)) fail(`${lockPath} is a symlink`);

@@ -1,7 +1,7 @@
 ---
-version: "0.48.1"
-feature: "0000327-squash-before-main"
-updated: "1 Nov 2026"
+version: "0.56.0"
+feature: "0000359-safe-parallel-commits"
+updated: "7 Nov 2026"
 ---
 # About
 
@@ -10,9 +10,9 @@ updated: "1 Nov 2026"
 
 | Field | Value |
 |-------|-------|
-| Version | `0.48.1` |
-| Last feature | `0000327-squash-before-main` |
-| Updated | `1 Nov 2026` |
+| Version | `0.56.0` |
+| Last feature | `0000354-steps-run-to-the-end` |
+| Updated | `6 Nov 2026` |
 
 ## What this is
 

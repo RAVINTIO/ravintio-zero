@@ -11,12 +11,18 @@
  *   2. Each block has a readable Start and End, and a whole-number Wall clock.
  *   3. Wall clock is within one minute of End minus Start.
  *   4. The Summary "Total wall clock" row is filled and not "not recorded".
+ *   5. A closed block (its End holds a time) holds a "Complete: P<n>" line,
+ *      unless a "Skipped: P<n>" line excuses the phase (0000358).
+ *   6. No logged time is later than the commit that adds its line, with a
+ *      one-minute margin. A line not yet committed, or a log outside git,
+ *      is compared with the current clock (0000358).
  *
  * Every finding names the phase. Exit codes: 0 = clean, 1 = findings.
  */
 
+import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
-import { join } from "node:path";
+import { dirname, basename, join } from "node:path";
 
 const file = process.argv[2] ?? join(process.cwd(), "plan", "current", "build-log.md");
 const findings = [];
@@ -74,6 +80,56 @@ for (let n = 0; n <= 4; n++) {
       findings.push(`P${n}: Wall clock ${wall} differs by more than one minute from the ${span.toFixed(1)} minutes between Start and End`);
     }
   }
+}
+
+// Check 5: a closed block holds a Complete line.
+for (const [n, body] of blocks) {
+  const end = field(body, "End");
+  const closed = end !== null && ISO.test(end);
+  if (closed && !skipped.has(n) && !new RegExp(`^\\s*(?:[-*]\\s*)?Complete:\\s*P${n}\\b`, "m").test(body)) {
+    findings.push(`P${n}: End is filled and the block has no "Complete: P${n}" line`);
+  }
+}
+
+// Check 6: no logged time is later than the commit that adds its line.
+/** Committer time in ms for each line of the file, or null when git can't say. */
+function commitTimes(path) {
+  try {
+    const out = execFileSync("git", ["blame", "--porcelain", "--", basename(path)], {
+      cwd: dirname(path), encoding: "utf-8", stdio: ["ignore", "pipe", "ignore"], maxBuffer: 64 * 1024 * 1024,
+    });
+    const times = new Map(); // sha -> ms
+    const lines = [];        // final line index -> ms
+    let sha = null, finalLine = 0;
+    for (const row of out.split("\n")) {
+      const head = /^([0-9a-f]{40}) \d+ (\d+)/.exec(row);
+      if (head) { sha = head[1]; finalLine = Number(head[2]); continue; }
+      const ct = /^committer-time (\d+)$/.exec(row);
+      if (ct) times.set(sha, Number(ct[1]) * 1000);
+      if (row.startsWith("\t")) lines[finalLine - 1] = times.get(sha);
+    }
+    return lines;
+  } catch {
+    return null;
+  }
+}
+{
+  const MARGIN = 60000;
+  const now = Date.now();
+  const lineTimes = commitTimes(file);
+  const rows = text.split("\n");
+  let phase = null;
+  rows.forEach((row, i) => {
+    const h = /^### P([0-4]):/.exec(row);
+    if (h) phase = Number(h[1]);
+    const limit = (lineTimes && lineTimes[i] !== undefined ? lineTimes[i] : now) + MARGIN;
+    const source = lineTimes && lineTimes[i] !== undefined ? "the commit that adds it" : "the clock";
+    for (const m of row.matchAll(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2})?Z/g)) {
+      const t = Date.parse(m[0].length === 17 ? m[0].replace("Z", ":00Z") : m[0]);
+      if (Number.isNaN(t) || t <= limit) continue;
+      findings.push(`${phase === null ? "Header" : `P${phase}`}: time ${m[0]} on line ${i + 1} is later than ${source}`);
+    }
+  });
 }
 
 const total = field(text, "Total wall clock");

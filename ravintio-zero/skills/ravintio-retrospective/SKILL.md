@@ -58,7 +58,7 @@ Write at least one thing to keep and one to change. A change names its owner, wh
 
 Turn each change into a backlog entry or a repo instruction:
 
-- For a backlog entry, use `ravintio-zero/templates/backlog-entry.template.md` and reserve the id with `node ravintio-zero/scripts/reserve-id.mjs --commit`, which commits `plan/backlog/.next-id` alone at once. Name the source retrospective in the entry. Leave the entry uncommitted if no run is active.
+- For a backlog entry, use `ravintio-zero/templates/backlog-entry.template.md` and reserve the id with `node ravintio-zero/scripts/reserve-id.mjs --commit`, which commits `plan/backlog/.next-id` alone at once. The flag refuses on `initiative/*`, so run it on a `feat/` branch. Name the source retrospective in the entry. Leave the entry uncommitted if no run is active.
 - For a repo instruction, add a file to `ravintio-overrides/instructions/` that names the source retrospective.
 
 Link each filed item from the record.

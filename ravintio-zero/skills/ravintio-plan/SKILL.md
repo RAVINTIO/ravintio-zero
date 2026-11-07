@@ -9,6 +9,8 @@ description: Produces the plan-phase artifact set (requirements, ADRs, scope, ri
 
 **Prefix.** Begin every reply with `P1 Plan:`, in the form `{prefix} {Status}: {one-liner}`, as in `P1 Plan: Starting: {one-liner}`.
 
+**Times.** Read every time you log with `date -u +%Y-%m-%dT%H:%M:%SZ` and never type one. `build-log-check.mjs` fails a time later than its commit.
+
 **Pack files.** Read each of these from the pack folder before the step that uses it:
 
 - `ravintio-zero/templates/execution-plan.template.md`
@@ -81,6 +83,7 @@ Run this scan before you write the execution plan. For each cause below that the
 - **Skill-text budget:** the run edits any `SKILL.md`. Grep for the line cap.
 - **Size cap:** the run edits a skill that a cap test measures, such as the orchestrator. Grep for the skill name and `-le`.
 - **Backlog entry id:** the run pulls in an entry. Grep for the entry id.
+- **Workflow job or step edit:** the run adds or edits a job or step in a workflow file. Grep for `ravintio.yml`.
 
 If a grep matches nothing, write `none found` in the row.
 
@@ -163,6 +166,12 @@ When the confirmed design groups features into waves:
 - Produce artifacts for the current wave only. Later waves may change.
 - Suffix wave artifacts, for example `execution-plan-wave-2.md`. Reference prior-wave manifests and contracts rather than re-specifying them.
 - The glossary and risk register are cumulative. Add entries each wave and never remove prior ones. Risks remain unless explicitly mitigated.
+
+## Chart formats
+
+If a step changes a chart format, update `plan/current-initiative/initiative.md` in the same step. A new table or column is an example.
+
+If the step can't convert a record, file a backlog entry for it and name the record in its PR.
 
 ## Commit cadence
 

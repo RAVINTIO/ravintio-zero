@@ -13,7 +13,7 @@ Conventions for every downstream phase:
 - **Skills inbox:** re-check at each transition.
 - **Run mode:** read `plan/.run-mode` at each transition and apply that phase's STOP rule below.
 - **Run speed:** read `plan/.run-speed`. At `fast`, dispatch the phase's fast batch.
-- **Close the block:** when a phase completes, fill `End` and `Wall clock`.
+- **Close the block:** when a phase completes, read the clock with `date -u +%Y-%m-%dT%H:%M:%SZ`, fill `End` and `Wall clock`, and add a `Complete: P<n> ({time})` line. Never type a time.
 
 | Phase | Invoke | Gate condition | STOP rule |
 |-------|--------|----------------|-----------|
