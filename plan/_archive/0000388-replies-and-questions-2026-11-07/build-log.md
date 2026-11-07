@@ -26,14 +26,16 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-07T22:00:03Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-07T22:00:30Z` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | initiative 0000360 step 12 |
+
+Complete: P0 (2026-11-07T22:00:30Z)
 
 Run mode: autonomous (2026-11-07T22:00:03Z)
 Run speed: standard (2026-11-07T22:00:03Z)
@@ -62,19 +64,23 @@ Design confirmed: draft-accepted (initiative) (2026-11-07T22:00:49Z)
 | Parallel task batches | 0 |
 | Notes | 5 requirements, 1 ADR, consistency check clean |
 
+Complete: P1 (2026-11-07T22:03:15Z)
+
 ### P2: Implement
 
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-07T22:03:25Z` |
 | End | `2026-11-07T22:30:33Z` |
-| Wall clock | `12` |
+| Wall clock | `27` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 4 |
 | MCP calls | 0 |
 | Parallel task batches | 2 |
 | Notes | batches from the execution plan Concurrency plan |
+
+Complete: P2 (2026-11-07T22:30:33Z)
 
 - In progress: U1 (2026-11-07T22:03:25Z)
 - In progress: U2 (2026-11-07T22:03:25Z)
@@ -102,4 +108,38 @@ Design confirmed: draft-accepted (initiative) (2026-11-07T22:00:49Z)
 | Parallel task batches | 0 |
 | Notes | Autonomous: evidence in acceptance-evidence.md |
 
+Complete: P3 (2026-11-07T22:31:00Z)
+
 - Rework: orchestrator SKILL.md time line trimmed to the 8700 byte cap (2026-11-07T22:31:00Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-07T22:31:15Z` |
+| End | `2026-11-07T22:31:25Z` |
+| Wall clock | `1` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | initiative step, PR handed to the merge queue |
+
+Complete: P4 (2026-11-07T22:31:25Z)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | 5 |
+| Total wall clock | 32 |
+| Total agents spawned | 5 |
+| Total MCP calls | 0 |
+| Phases using parallelism | 1 |
+| Primary tier agent calls | 0 |
+| Cheaper tier agent calls | 5 |
+| Self-corrections | 1 |
+| Phases skipped | none |
