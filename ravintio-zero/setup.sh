@@ -99,6 +99,43 @@ copy_skills() {
   done
 }
 
+remove_manifest_entries() {
+  # Removes each folder the manifest lists, and only a folder that sits directly
+  # inside the skills directory (0000381 ADR-001, backlog 0000262). A line is
+  # relative to the repo root. A legacy absolute line passes the same test. A
+  # line with a ".." segment, a link, or a parent other than the skills
+  # directory is skipped with a warning.
+  local manifest="$1" skills_dir="$2" line path parent phys_skills
+  phys_skills="$(cd -P "$skills_dir" 2>/dev/null && pwd)" || return 0
+  while IFS= read -r line || [ -n "$line" ]; do
+    line="${line%$'\r'}"
+    [ -n "$line" ] || continue
+    case "$line" in
+      /*) path="$line" ;;
+      *) path="$PROJECT_ROOT/$line" ;;
+    esac
+    path="${path%/}"
+    case "/$path/" in
+      */../*|*/./*)
+        echo "  ! Warning: manifest entry outside the skills directory, skipped: $line"
+        continue ;;
+    esac
+    parent="$(cd -P "$(dirname "$path")" 2>/dev/null && pwd)" || parent=""
+    if [ "$parent" != "$phys_skills" ]; then
+      echo "  ! Warning: manifest entry outside the skills directory, skipped: $line"
+      continue
+    fi
+    if [ -L "$path" ]; then
+      echo "  ! Warning: manifest entry is a link, skipped: $line"
+      continue
+    fi
+    if [ -d "$path" ]; then
+      rm -rf "$path"
+      echo "  - removed: $(basename "$path")"
+    fi
+  done < "$manifest"
+}
+
 prune_bundled_files() {
   # Removes the pack copies an older install bundled into a skill (0000171
   # req-004). It deletes only the paths where that install put a pack file:
@@ -1024,16 +1061,13 @@ setup_tool() {
   echo "  Setting up $tool"
   echo "  Skills directory: $TOOL_SKILLS_DIR/"
 
-  # Manifest cleanup — remove only previously installed directories on re-run
+  # Manifest cleanup — remove only previously installed directories on re-run.
+  # A line is removed only if it is a direct child of the skills directory
+  # (0000381 ADR-001).
   local manifest="$skills_dir/.ravintio-manifest"
   if [ -f "$manifest" ]; then
     echo "  Re-run detected — removing previously installed directories"
-    while IFS= read -r dir_path; do
-      if [ -n "$dir_path" ] && [ -d "$dir_path" ]; then
-        rm -rf "$dir_path"
-        echo "  - removed: $(basename "$dir_path")"
-      fi
-    done < "$manifest"
+    remove_manifest_entries "$manifest" "$skills_dir"
     rm -f "$manifest"
   fi
 
@@ -1092,10 +1126,11 @@ setup_tool() {
     merge_allowed_tools "$PROJECT_ROOT/$TOOL_SETTINGS_FILE"
   fi
 
-  # Write manifest listing all installed skill directories (enables safe re-run cleanup)
+  # Write manifest listing all installed skill directories, relative to the
+  # repo root (enables safe re-run cleanup, 0000381 ADR-001). A link is not listed.
   local installed_dirs=()
   for dir in "$skills_dir"/*/; do
-    [ -d "$dir" ] && installed_dirs+=("${dir%/}")
+    [ -d "$dir" ] && [ ! -L "${dir%/}" ] && installed_dirs+=("$TOOL_SKILLS_DIR/$(basename "$dir")")
   done
   if [ ${#installed_dirs[@]} -gt 0 ]; then
     printf '%s\n' "${installed_dirs[@]}" > "$manifest"

@@ -131,3 +131,4 @@ Complete: P1 (2026-11-07T21:32:44Z)
 | MCP calls | `0` |
 | Parallel task batches | `0` |
 | Notes | `Units U1 to U4 edit setup.sh and setup.ps1, so they run in sequence inline. Tests come first in each unit.` |
+- Done: U1 manifest confinement (2026-11-07T21:36:19Z)

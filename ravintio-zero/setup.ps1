@@ -116,6 +116,39 @@ function Test-RavintioLink {
     return (([System.IO.File]::GetAttributes($Path) -band $link) -eq $link)
 }
 
+# Removes each folder the manifest lists, and only a folder that sits directly inside the
+# skills directory (0000381 ADR-001, backlog 0000262). A line is relative to the repo root.
+# A legacy absolute line passes the same test. A line with a ".." segment, a link, or a
+# parent other than the skills directory is skipped with a warning.
+function Remove-ManifestEntries {
+    param([string]$Manifest, [string]$SkillsDir)
+    $physSkills = [System.IO.Path]::GetFullPath($SkillsDir).TrimEnd('\', '/')
+    foreach ($line in @(Get-Content -Path $Manifest -Encoding UTF8)) {
+        $line = ([string]$line).TrimEnd("`r")
+        if ($line -eq '') { continue }
+        if ([System.IO.Path]::IsPathRooted($line)) { $path = $line } else { $path = Join-Path $ProjectRoot $line }
+        $path = $path.TrimEnd('\', '/')
+        if ((($path -replace '\\', '/') -split '/') -contains '..' -or (($path -replace '\\', '/') -split '/') -contains '.') {
+            Write-Host "  ! Warning: manifest entry outside the skills directory, skipped: $line"
+            continue
+        }
+        $full = [System.IO.Path]::GetFullPath($path)
+        $parent = [System.IO.Path]::GetDirectoryName($full)
+        if ($null -eq $parent -or $parent.TrimEnd('\', '/') -ne $physSkills) {
+            Write-Host "  ! Warning: manifest entry outside the skills directory, skipped: $line"
+            continue
+        }
+        if (Test-RavintioLink $full) {
+            Write-Host "  ! Warning: manifest entry is a link, skipped: $line"
+            continue
+        }
+        if ([System.IO.Directory]::Exists($full)) {
+            Remove-Item -LiteralPath $full -Recurse -Force
+            Write-Host "  - removed: $(Split-Path -Leaf $full)"
+        }
+    }
+}
+
 # Removes the pack copies an older install bundled into a skill (0000171
 # req-004). It deletes only the paths where that install put a pack file:
 # assets/templates/{name}, assets/schemas/{name}, and references/{name}.
@@ -1300,16 +1333,12 @@ function Invoke-RavintioSetup {
     Write-Host "  Setting up $ToolName"
     Write-Host "  Skills directory: $($toolConfig.SkillsDir)/"
 
-    # Manifest cleanup — remove only previously installed directories on re-run
+    # Manifest cleanup: remove only previously installed directories on re-run.
+    # A line is removed only if it is a direct child of the skills directory (0000381 ADR-001).
     $manifest = Join-Path $skillsDir ".ravintio-manifest"
     if (Test-Path $manifest) {
-        Write-Host "  Re-run detected — removing previously installed directories"
-        Get-Content -Path $manifest -Encoding UTF8 | Where-Object { $_ -ne '' } | ForEach-Object {
-            if (Test-Path $_) {
-                Remove-Item -Path $_ -Recurse -Force
-                Write-Host "  - removed: $(Split-Path -Leaf $_)"
-            }
-        }
+        Write-Host "  Re-run detected - removing previously installed directories"
+        Remove-ManifestEntries -Manifest $manifest -SkillsDir $skillsDir
         Remove-Item -Path $manifest -Force
     }
 
@@ -1369,9 +1398,10 @@ function Invoke-RavintioSetup {
         Merge-AllowedTools -SettingsPath $settingsPath
     }
 
-    # Write manifest listing all installed skill directories (enables safe re-run cleanup)
+    # Write manifest listing all installed skill directories, relative to the repo root
+    # (enables safe re-run cleanup, 0000381 ADR-001). A link is not listed.
     New-Item -ItemType Directory -Path $skillsDir -Force | Out-Null
-    $installedDirs = @(Get-ChildItem -Path $skillsDir -Directory | ForEach-Object { $_.FullName })
+    $installedDirs = @(Get-ChildItem -Path $skillsDir -Directory | Where-Object { -not (Test-RavintioLink $_.FullName) } | ForEach-Object { ($toolConfig.SkillsDir.TrimEnd('/', '\') -replace '\\', '/') + '/' + $_.Name })
     if ($installedDirs.Count -gt 0) {
         $installedDirs | Set-Content -Path $manifest -Encoding UTF8
         Write-Host "  + .ravintio-manifest ($($installedDirs.Count) entries)"

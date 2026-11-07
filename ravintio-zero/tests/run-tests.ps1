@@ -50,6 +50,16 @@ function Get-TreeSnapshot {
 }
 
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
+function Get-SkillsListing {
+    # The folder is ignored by git, so the tree snapshot cannot see it (0000381 REQ-001).
+    $top = (& git -C $here rev-parse --show-toplevel 2>$null)
+    if ($LASTEXITCODE -ne 0 -or -not $top) { return @() }
+    $dir = Join-Path $top '.claude/skills'
+    if (-not (Test-Path -LiteralPath $dir)) { return @() }
+    return @(Get-ChildItem -LiteralPath $dir -Recurse -Force | ForEach-Object { $_.FullName.Substring($top.Length) } | Sort-Object)
+}
+
+$skillsBefore = Get-SkillsListing
 $treeBefore = Get-TreeSnapshot
 $hostExe = (Get-Process -Id $PID).Path
 Write-Host "Host: PowerShell $($PSVersionTable.PSVersion) ($($PSVersionTable.PSEdition)), $hostExe"
@@ -112,6 +122,10 @@ if ($null -ne $treeBefore) {
     foreach ($path in $treeChanged) { Write-Host "Tree changed during the run: $path" }
 }
 
+$skillsAfter = Get-SkillsListing
+$skillsChanged = @(Compare-Object -ReferenceObject @($skillsBefore) -DifferenceObject @($skillsAfter) | ForEach-Object { $_.InputObject })
+foreach ($path in $skillsChanged) { Write-Host "Skills changed during the run: $path" }
+
 Write-Host ""
 Write-Host "================================"
 Write-Host "PowerShell suites: $($suites.Count - $failed.Count) passed, $($failed.Count) failed."
@@ -120,5 +134,5 @@ if ($failed.Count -gt 0) {
     foreach ($name in $failed) { Write-Host "  $name" }
 }
 Write-Host "================================"
-if ($failed.Count -gt 0 -or $treeChanged.Count -gt 0) { exit 1 }
+if ($failed.Count -gt 0 -or $treeChanged.Count -gt 0 -or $skillsChanged.Count -gt 0) { exit 1 }
 exit 0
