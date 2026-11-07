@@ -65,3 +65,24 @@ Complete: P0 (2026-11-07T17:02:01Z)
 
 Gate accepted: draft-accepted (initiative) (2026-11-07T17:03:45Z)
 Complete: P1 (2026-11-07T17:03:45Z)
+
+---
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-07T17:03:45Z` |
+| End | `2026-11-07T18:05:58Z` |
+| Wall clock | 40 |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | 6 |
+| MCP calls | 0 |
+| Parallel task batches | 3 |
+| Notes | Batches follow the Concurrency plan: U1 to U3, then U4, then U5 and U6. Tests written before code in each unit. |
+
+Departure: Rework: REQ-004: test-0000378 AC-3 pinned Position 1, now 3 by design (2026-11-07T18:05:58Z)
+Departure: tests/run-tests.sh allowlist gained helpers/scheduler-fixture.sh (2026-11-07T18:05:58Z)
+Deviation: running and ready live in the control area, not the committed chart (ADR-001)
+Complete: P2 (2026-11-07T18:05:58Z)
