@@ -40,3 +40,8 @@ plan/.initiative-queue/
 plan/.initiative-runner.lock
 # Once-per-session record for the orchestrator load instruction (0000320).
 plan/.orchestrator-loaded
+
+# Reply-prefix misses log, written by the check-reply-prefix hook (0000342).
+# Local to each machine. Setup also adds it to .git/info/exclude, which a
+# fresh clone lacks, so CI sees it only here.
+plan/.prefix-misses.log

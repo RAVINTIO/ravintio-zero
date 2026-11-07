@@ -430,3 +430,11 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 | ADR-001 | stack choice | accepted | The step adds no language, library, or service. CodeQL runs as a workflow action. |
 | ADR-002 | run CodeQL from a workflow file | accepted | Advanced setup scans pull requests into `initiative/**`. A human turns default setup off. |
 | ADR-003 | delete merged head branches from a scoped CI job | accepted | The `cleanup-branch` job holds `contents: write` on that job only, and every other pull request job skips `closed`. |
+
+### Feature 0000357: guard-gaps-closed
+
+| ADR | Title | Status | Summary |
+|-----|-------|--------|---------|
+| ADR-001 | stack choice | accepted | The step adds no language, library, or service. The wrapper is shell text in the hook command. |
+| ADR-002 | a guard command exits 2 when the launcher fails | accepted | Setup appends an exit 2 fallback to each guard-mode command, so a missing launcher blocks the call. Advisory commands keep their form. |
+| ADR-003 | the forced-add guard blocks what it cannot read | accepted | The guard reads `git stage`, subshells, and variables, and Codex runs it too. |
