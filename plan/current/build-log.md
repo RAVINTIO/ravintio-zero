@@ -70,10 +70,28 @@ Complete: P1 (2026-11-07T16:29:00Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-07T16:29:00Z` |
+| End | `2026-11-07T16:48:23Z` |
+| Wall clock | 19 |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | 4 |
+| MCP calls | 0 |
+| Parallel task batches | 2 |
+| Notes | none |
+
+Parallel batches: batch 1 U1 and U3, batch 2 U2 and U4 (U2 started once U1 finished, U4 once U3 finished), batch 3 U5 docs inline. Tier: primary (sonnet), class code.
+Rework: REQ-005: U4 changed the req-003 AC-1 fixture in test-0000353-req-001-004-reshape-script.sh because the fold now clears its conflict (2026-11-07T16:48:23Z)
+Complete: P2 (2026-11-07T16:48:23Z)
+
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-07T16:48:23Z` |
 | End | |
 | Wall clock | |
 | Model tier | primary |
-| Skills loaded | ravintio-implement |
+| Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | 0 |
 | MCP calls | 0 |
 | Parallel task batches | 0 |
