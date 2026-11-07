@@ -83,3 +83,20 @@ Coverage is a proxy, not a target. The goal is confidence that the requirements 
 | Critical path coverage | 100% | 100% |
 
 "Critical path" = the primary user-facing flows identified in the design requirements' acceptance criteria.
+
+---
+
+## 8. Pack text helpers
+
+A test that asserts what a skill, standard, or template says reads the text through a helper in `ravintio-zero/tests/helpers/assert.sh`. Never hard-code the file that holds a rule, and never cut a section out with your own `sed` or `awk` range. Moving a section or rewording a rule then breaks no test.
+
+| Helper | Use it to |
+|--------|-----------|
+| `orch_section "<heading>"` | Get a section of `SKILL.md`, the orchestrator references, or the roadmap standards. |
+| `rule_text <id>` | Get the text of the rule that carries `<!-- rule: <id> -->`. |
+| `assert_rule <id> <term>...` | Check that the anchor exists once and its text holds every key term. |
+| `with_timeout <seconds> <command>...` | Cap a command. It exits 124 on expiry. |
+
+`with_timeout` lives in `helpers/timeout.sh`, so source that file first. It works on macOS, which has no `timeout` command. It runs external commands only.
+
+To anchor a rule, put `<!-- rule: <id> -->` at the start of its line or item. Use lowercase letters, digits, and hyphens, and keep each id unique across `skills/`, `standards/`, and `templates/`. The rule is the anchor line and the lines after it, up to a blank line, a heading, or the next anchor. Tests assert key terms, not whole sentences. If you delete an anchor, the test that reads it fails and names the id.
