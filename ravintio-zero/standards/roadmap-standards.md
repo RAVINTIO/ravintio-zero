@@ -368,6 +368,29 @@ A delivered initiative branch holds one squash per charted step, then at most on
 
 A step that changes a chart format updates the active `initiative.md` in the same step. If the step can't convert a record, it files a backlog entry and names the record in its PR.
 
+## Merge queue
+
+`ravintio-zero/scripts/merge-queue.mjs` merges one ready step PR at a time and sets the step's version at merge. Two steps that run at once then never compute the same version. The driver calls it from step 3 of initiative 0000360. Until then, P4 sets the version and I-D Advance merges the PR, and the queue runs only by hand.
+
+| Command | Action |
+|---------|--------|
+| `title --step {n} --title {text}` | Exits 1 unless the text equals `{first 7 digits of Feature id}: {Title}` from the chart row |
+| `versions` | Exits 1 and names each file in `ravintio-zero/version-files.txt` whose version differs |
+| `run --step {n} --pr {k}` | Takes one PR through the actions below |
+
+`run` takes these actions in order and stops on the first failure:
+
+1. Check the PR title.
+2. Merge the initiative branch into the PR branch and push, with no force. A conflict stops the queue.
+3. Wait for CI with `gh pr checks {k} --watch --fail-fast`.
+4. Apply the row's `Bump` to the initiative branch version and write the result to every file in `version-files.txt`.
+5. Check that every version file holds the same version.
+6. Write the row's `Version` and the status `merged`, and add a row to the `## Merges` table. The `Merge commit` cell reads `tag v{version}`.
+7. Commit those files by path, push, and squash-merge with `--delete-branch`.
+8. Tag the merge commit `v{version}` and push the tag.
+
+Each version follows merge order. `reshape-initiative.mjs` and `check-initiative-history.mjs` sort the steps by the `Version` column in ascending order, and a step with no `Version` follows the versioned steps in chart order.
+
 ## Coordinator PRs
 
 Nothing commits directly on `initiative/*`. Every change arrives as a squashed PR, so the first-parent history is one titled squash per change.
@@ -422,7 +445,7 @@ Every message in this stage begins with `I-D Advance:` after the `P4 Ship:` pref
       I-D Advance: Blocked: CI failed on PR #{n}. Fix the failing check, then tell me to retry.
       ```
 
-5. If every check is green, squash-merge the PR. The `--delete-branch` flag removes the feature branch from `origin`. Write `{n}` as the literal PR number from the `gh pr create` output. Use no command substitution, variables, or pipes on this line, or `merge-guard` blocks it.
+5. If every check is green, check the PR title, then squash-merge the PR. Run `node ravintio-zero/scripts/merge-queue.mjs title --step {step} --title "{PR title}"`. If it exits 1, fix the PR title with `gh pr edit` and run it again. The `--delete-branch` flag removes the feature branch from `origin`. Write `{n}` as the literal PR number from the `gh pr create` output. Use no command substitution, variables, or pipes on this line, or `merge-guard` blocks it.
 
    ```bash
    gh pr merge --squash --delete-branch {n}
@@ -468,12 +491,13 @@ The initiative skill runs this stage after the last step merges. Every message b
    node ravintio-zero/scripts/reshape-initiative.mjs --branch initiative/{id}-{slug} --assign {hash}={step} --tags --push
    ```
 
-   - The script replays each step in chart order onto the base the branch was cut from. It finds each step commit through its `v{Version}` tag.
+   - The script replays each step in merge order onto the base the branch was cut from. Merge order is ascending `Version`. It finds each step commit through its `v{Version}` tag.
    - Pass one `--assign {hash}={step}` for each admin commit that aligns with a step. That commit folds into the step's new commit.
+   - If a replay conflicts, the script tries folding each earlier admin commit into the next step. It keeps a fold only if the replay is clean and the final tree equals the old head. It prints one `fold:` line for each fold it keeps. Name every fold in the delivery PR body.
    - The script adds one chore commit whose tree equals the old head, so the final tree stays unchanged. Admin that aligns with no step lives only there.
    - The script writes `initiative/{id}-{slug}-reshaped` and leaves the old branch in place. It never force-pushes a branch or a tag.
    - With `--tags` it moves each local step tag. With `--push` it also pushes the new branch, deletes each old tag on `origin`, and pushes a new tag with the same name and message.
-   - If a replay conflicts, the script exits 1 and names the commit. Stop for the human and drop no hunk.
+   - If no fold clears the conflict, the script exits 1 and names the commit. Stop for the human and drop no hunk.
    - A step tag then points at a tree that lacks the unassigned admin. The final tree is identical and CI runs on it.
 
 4. Run `node ravintio-zero/scripts/check-initiative-history.mjs --head initiative/{id}-{slug}-reshaped` and the full suite on the reshaped branch. If the check reports a failing commit, list each failing commit in the PR body and stop. Do not merge or force-push to fix the history.

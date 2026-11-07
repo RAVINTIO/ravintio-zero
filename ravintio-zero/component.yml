@@ -59,6 +59,8 @@ responsibilities:
   - "Give the ship skill a plain squash-merge line with a literal PR number, and fail the build log at ship Step 3 when a phase has a blank or wrong wall clock, with scripts/build-log-check.mjs"
   - "Require a PATH search before a P3 report says a program is missing, and give a claim that only documentation backs the outcome unverified (docs only), which never counts as verified"
   - "Stop the initiative driver with an I-D Advance: Setup: line after a merged step that changes installed pack files, so the initiative skill reruns setup before the next step"
+  - "Merge one ready step PR at a time with merge-queue.mjs, which checks the PR title against the chart, sets the version from the step Bump in every file that version-files.txt lists, checks that the files agree, and tags the merge commit, so versions follow merge order"
+  - "Reshape and check an initiative branch in merge order, and fold the admin commits that clear a replay conflict"
 
 exceptions:
   - "Does not generate application code. That is the implement phase's job in consumer projects."
@@ -115,7 +117,7 @@ scope:
     - "The 16 skills: 12 pipeline skills across the five phases, ravintio-initiative for coordinating an initiative from the human's session, ravintio-file-backlog for filing an uncommitted backlog entry in another repo, ravintio-postmortem for blameless postmortems, and ravintio-retrospective for blameless run and initiative retrospectives"
     - "Skills read templates, schemas, and standards from ravintio-zero/ by full path, with no per-skill copies"
     - "Orchestrator references: skills/ravintio-orchestrator/references/orchestrator-*.md"
-    - "scripts/: check-attribution.mjs, consistency-check.mjs, product-version.mjs, release-tag.mjs, reserve-id.mjs, reshape-initiative.mjs, resume-detect.mjs, initiative-labels.mjs, initiative-run.mjs, self-description-check.mjs, workflow-metrics.mjs, promote-to-regression.sh, refresh-delete-boot-files"
+    - "scripts/: check-attribution.mjs, consistency-check.mjs, product-version.mjs, release-tag.mjs, reserve-id.mjs, reshape-initiative.mjs, merge-queue.mjs, version-files.mjs, resume-detect.mjs, initiative-labels.mjs, initiative-run.mjs, self-description-check.mjs, workflow-metrics.mjs, promote-to-regression.sh, refresh-delete-boot-files"
     - "tests/ and tests/regression/ for the pack's own behaviour"
   outOfScope:
     - "Application-level code generation (handled by the implement phase in consumer projects)"

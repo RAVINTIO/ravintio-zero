@@ -3,7 +3,7 @@
 > Change record. Index of all ADRs across all features. Updated after every pipeline run.
 > Do not archive this file. Update it in place.
 
-Last updated: 0000354-steps-run-to-the-end
+Last updated: 0000378-merge-time-versioning
 
 ---
 
@@ -450,3 +450,10 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 | ADR | Title | Status | Summary |
 |-----|-------|--------|---------|
 | ADR-001 | stack choice | accepted | The step adds no language, library, or service. The rules are skill and standard text, checked by Bash suites. |
+
+### Feature 0000378-merge-time-versioning
+
+| ADR | Title | Status | Summary |
+|-----|-------|--------|---------|
+| ADR-001 | The merge queue merges the initiative branch into the PR branch | accepted | The queue updates a step PR with `git merge` and pushes without force, because the repo rules forbid force-pushes. |
+| ADR-002 | Merge order comes from the chart Version column | accepted | The reshape and the history check sort steps by `Version` in ascending order. A step with no `Version` keeps its chart position after the versioned steps. |
