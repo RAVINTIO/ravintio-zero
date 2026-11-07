@@ -2,7 +2,7 @@
 
 **Feature:** Parallel steps on worktrees
 **Version:** set by the merge queue at merge
-**PR:** {pending, updated at Step 9}
+**PR:** #128
 
 ## What changed
 
