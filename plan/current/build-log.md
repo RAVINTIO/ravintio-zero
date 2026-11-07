@@ -60,3 +60,28 @@ Complete: P0 (2026-11-07T20:19:24Z)
 | Notes | artifacts written inline, no subagents: the artifacts share one design |
 
 Complete: P1 (2026-11-07T20:20:21Z)
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-07T20:42:23Z` |
+| End | |
+| Wall clock | |
+| Model tier | primary and cheaper |
+| Skills loaded | ravintio-implement |
+| Agents spawned | 3 |
+| MCP calls | 0 |
+| Parallel task batches | 1 |
+| Notes | helpers and anchors inline, suite conversion by 3 sonnet subagents |
+
+Done: U1 timeout helper (2026-11-07T20:42:23Z)
+Done: U2 section helper (2026-11-07T20:42:23Z)
+Done: U3 rule helper and anchors (2026-11-07T20:42:23Z)
+Done: U4 suite conversion (2026-11-07T20:42:23Z)
+Done: U5 docs (2026-11-07T20:42:23Z)
+Deviation: test-0000243-req-003-004-hook-injection.sh stays as is. Its time limit lives inside the hook under test, so the suite has no test-level cap to move.
+Deviation: orch_section also returns text under the new "### Adoption Modes" subsections, so those assertions now read slightly wider text. Every needle is unchanged.
+Rework: tests pinning numbered-step lines (0000031, 0000037, 0000039, 0000040, 0000042, 0000151-req-011, 0000243-req-005) updated to anchors
+Tests run: full Bash suite, 302 feature and 19 regression passed, 0 failed
+Complete: P2 (2026-11-07T20:42:23Z)
