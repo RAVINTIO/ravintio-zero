@@ -73,8 +73,8 @@ Complete: P1 (2026-11-07T05:03:15Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-07T05:03:22Z` |
-| End | `{{pending}}` |
-| Wall clock | `{{pending}}` |
+| End | `2026-11-07T05:44:12Z` |
+| Wall clock | `40` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 0 |
@@ -85,3 +85,4 @@ Deviation: CLAUDE.md is generated from the boot template and ignored by git, so 
 Deviation: the time check compares with the clock when git cannot report a line's commit, where REQ-002 first said it skips. REQ-002, the scope, the risk register, and ADR-001 now say so.
 Rework: REQ-001: test-0000151-req-011 pinned the old status line and the product id line, and now rewrites them in its base fixture (2026-11-07T05:32:35Z)
 Rework: REQ-002: test-0000151-req-011 pinned hard limit 9, so the clock rule is a new paragraph (2026-11-07T05:32:35Z)
+Complete: P2 (2026-11-07T05:44:12Z)
