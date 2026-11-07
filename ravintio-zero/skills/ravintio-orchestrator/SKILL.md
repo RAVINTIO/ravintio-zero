@@ -123,3 +123,5 @@ Mid-Pipeline Requirement Changes is in the Pack Index row for `orchestrator-mid-
 ## Subagent Dispatch
 
 Consult `ravintio-zero/standards/agent-dispatch-standards.md` before spawning every subagent. It holds the model tier table, the parallelism rules, and the dispatch template. Prefer parallel decomposition over sequential inline work. Resolve the tier to a concrete model name, pass it explicitly, and record the tier in the build log.
+
+Never run `git stash`, `git checkout -- {path}`, `git reset`, or `git clean` while any subagent runs.

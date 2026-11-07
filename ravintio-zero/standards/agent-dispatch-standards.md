@@ -115,6 +115,8 @@ At `fast`, a phase dispatches every unit of its fast batch in one message. It ma
 
 - Units in one batch write disjoint files. A dependency manifest or lock file counts as shared, so at most one unit in a batch may add a dependency.
 - Units share one working tree, so they commit one at a time. Each unit stages its own files by path, never with `git add -A` or `git add .`. If a commit meets `.git/index.lock`, wait and retry it.
+- Each unit commits with `git commit -m "{message}" -- {paths}`, so the commit takes only its own paths and not files another unit has staged.
+- Never run `git commit --amend` in a batch. A unit that needs to fix an earlier commit makes a new commit.
 - Never run `git stash`, `git checkout`, or `git reset` in a subagent during a batch. A stash takes the uncommitted work of every other subagent in the tree.
 - The Cannot parallelise table still applies.
 - Phases run in order. No unit of phase N+1 starts before phase N ends.

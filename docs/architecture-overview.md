@@ -1,6 +1,6 @@
 # Architecture Overview
 
-Last updated: 0000358-clean-step-stops-and-logs
+Last updated: 0000359-safe-parallel-commits
 
 ## What this repo is
 
@@ -61,7 +61,7 @@ On resume, a missing or unknown `plan/.run-mode` makes the orchestrator ask the 
 **Run speed.** After the run mode, the orchestrator asks for a run speed and writes `standard` or `fast` to `plan/.run-speed`. A missing or unknown value counts as `standard`. An initiative step takes the initiative's `**Speed:**` field.
 
 - **Standard.** Each phase applies its own parallelism rules.
-- **Fast.** Each phase skill dispatches the units in its `### Fast batch` list, each batch in one message. The rules sit in `## Fast batches` of the dispatch standard. A subagent in a batch never runs `git stash`, `git checkout`, or `git reset`, because a stash takes the uncommitted work of every other subagent (0000247). In an active initiative, a step stages by explicit path and leaves queued backlog entries untracked.
+- **Fast.** Each phase skill dispatches the units in its `### Fast batch` list, each batch in one message. The rules sit in `## Fast batches` of the dispatch standard. A subagent in a batch never runs `git stash`, `git checkout`, or `git reset`, because a stash takes the uncommitted work of every other subagent (0000247). Each unit commits with `git commit -m "{message}" -- {paths}` and never amends in a batch. The step session never runs `git stash`, `git checkout -- {path}`, `git reset`, or `git clean` while any subagent runs, and it tests a clean tree in a scratch clone (0000359). In an active initiative, a step stages by explicit path and leaves queued backlog entries untracked.
 
 Phases run in order at either speed, and the gates and exception stops stay the same. Each build-log phase block records `End` and `Wall clock`, and the build report lists them with the agent count. Phases read every logged time from `date -u +%Y-%m-%dT%H:%M:%SZ` and close each block with a `Complete:` line. `scripts/build-log-check.mjs` fails a time later than the commit that adds it, and a closed block with no `Complete:` or `Skipped:` line (0000358). Ship Step 8 deletes `plan/.run-speed` with the other sentinels.
 

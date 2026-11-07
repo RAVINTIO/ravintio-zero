@@ -444,3 +444,9 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 | ADR | Title | Status | Summary |
 |-----|-------|--------|---------|
 | ADR-001 | stack choice | accepted | The step adds no language, library, or service. The time check calls `git blame` through `node:child_process`. |
+
+### Feature 0000359-safe-parallel-commits
+
+| ADR | Title | Status | Summary |
+|-----|-------|--------|---------|
+| ADR-001 | stack choice | accepted | The step adds no language, library, or service. The rules are skill and standard text, checked by Bash suites. |
