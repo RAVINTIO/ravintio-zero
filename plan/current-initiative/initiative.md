@@ -8,7 +8,7 @@ status: "active"  # proposed | charted | active | delivered | blocked
 **Goal:** Close every open backlog entry except the four that need paid services. The first three steps make the driver run independent steps at once, each in its own worktree, with each version set as its step merges. Step 20 moves the pack source to `src/ravintio-zero/`. The last step, step 21, makes activation smoother for the human.
 **Branch:** initiative/0000360-backlog-sweep
 **Status:** active
-**Position:** 3
+**Position:** 4
 **Speed:** standard
 **Step CI fixes:** allowed
 **Concurrency:** 3
@@ -149,7 +149,7 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 |------|------------|-------|-----------------|------|---------|--------|------|-------|
 | 1 | 0000377-driver-stops-and-headroom | Driver stops and headroom | 0000371, 0000370, 0000373 | minor | 0.57.0 | merged | driver | |
 | 2 | 0000378-merge-time-versioning | Merge-time versioning | 0000374, 0000376, 0000372, 0000368 | minor | 0.58.0 | merged | driver | 1 |
-| 3 | 0000379-parallel-steps-on-worktrees | Parallel steps on worktrees | 0000375 | minor | | pending | driver | 2 |
+| 3 | 0000379-parallel-steps-on-worktrees | Parallel steps on worktrees | 0000375 | minor | 0.59.0 | merged | driver | 2 |
 | 4 | 0000380-test-helpers-and-rule-anchors | Test helpers and rule anchors | 0000261, 0000308, 0000337 | minor | | pending | tests | 3 |
 | 5 | 0000381-setup-safety | Setup safety | 0000262, 0000289, 0000293, 0000290 | minor | | pending | setup | 4 |
 | 6 | 0000382-install-lifecycle | Install lifecycle | 0000283, 0000299, 0000292, 0000291, 0000298, 0000286 | minor | | pending | setup | 5 |
@@ -168,3 +168,9 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 19 | 0000395-pack-prose-to-the-standard | Pack prose to the standard | 0000302 | minor | | pending | writing | 5-18 |
 | 20 | 0000397-pack-source-in-src | Pack source in src | 0000396 | minor | | pending | layout | 19 |
 | 21 | 0000399-smoother-activation | Smoother activation | 0000398 | minor | | pending | initiative | 20 |
+
+## Merges
+
+| Step | PR | Merge commit | Version | Merged at |
+|------|----|--------------|---------|-----------|
+| 3 | #128 | tag v0.59.0 | 0.59.0 | 2026-11-07T19:15:39Z |
