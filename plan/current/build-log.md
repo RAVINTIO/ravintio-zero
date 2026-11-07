@@ -39,3 +39,11 @@ Run mode: autonomous (2026-11-07T22:00:03Z)
 Run speed: standard (2026-11-07T22:00:03Z)
 Adoption mode: standard-iterative (signal: plan/_archive/ has feature dirs)
 Pending migrations 0004 and 0005 skipped: Applies-when is false in the pack source.
+Adopted backlog entries 0000257, 0000258, 0000259, 0000306 (folders deleted, index regenerated)
+Decision applied (initiative chart): 0000258 solution (reword, quote, name session, skip in coordinator)
+Scope Lock (happy path): hook injects hh:mm, reply and driver lines start with it [source: draft-accepted (initiative)]
+Scope Lock (first-run path): no miss log yet, first miss creates it [source: draft-accepted (initiative)]
+Scope Lock (error path): reply with no prefix logs a miss and shows the new warning [source: draft-accepted (initiative)]
+Scope Lock (cross-session continuity): clock read per prompt, no carried state [source: draft-accepted (initiative)]
+Scope Lock complete. All four scenario paths captured.
+Design confirmed: draft-accepted (initiative) (2026-11-07T22:00:49Z)
