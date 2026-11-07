@@ -36,3 +36,9 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 Run mode: autonomous (2026-11-07T21:30:43Z, initiative step)
 Backlog pull-in: 0000361, 0000362, 0000363, 0000369, 0000297 (chart row 7)
 Version: 0.60.0 plus minor bump gives 0.61.0 (the merge queue sets the released version)
+Scope Lock (happy path): The scan finds a cause, greps pack and repo tests, and lists each match under Test impact [source: draft-accepted (initiative)]
+Scope Lock (first-run path): A repo with no tests folder lists none found [source: draft-accepted (initiative)]
+Scope Lock (error path): A cause with no match lists none found and never blocks the plan [source: draft-accepted (initiative)]
+Scope Lock (cross-session continuity): The result lives in the execution plan and survives a resume [source: draft-accepted (initiative)]
+Scope Lock complete. All four scenario paths captured.
+Complete: P0 (2026-11-07T21:31:03Z)
