@@ -2,7 +2,7 @@
 
 **Feature:** Safe parallel commits
 **Version:** 0.56.0
-**PR:** pending
+**PR:** 120
 
 ## What changed
 
