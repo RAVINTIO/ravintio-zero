@@ -87,3 +87,16 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Cheaper tier agent calls | `0` |
 | Self-corrections | `0` |
 | Phases skipped | `{{list or "none"}}` |
+
+### P0 log
+
+- Run mode: autonomous (2026-11-07T21:31:23Z, initiative step)
+- Run speed: standard (2026-11-07T21:31:23Z, initiative step)
+- Adoption mode: standard-iterative (signal: plan/_archive/ holds prior runs)
+- Version: planned from 0.60.0 with a minor bump. The merge queue sets the released version.
+- Decision applied (initiative chart): Confirmation: setup rerun at each Setup: stop
+- Scope Lock (happy path): re-run reads a relative manifest, removes only listed folders under the skills directory, copies capability skills whole, prunes retired commands [source: draft-accepted (initiative)]
+- Scope Lock (first-run path): with no manifest and a developer CLAUDE.md, setup moves its content to ravintio-overrides/instructions/ and prints the path [source: draft-accepted (initiative)]
+- Scope Lock (error path): a manifest line outside the skills directory is skipped with a warning, and a folder with no SKILL.md warns and installs nothing [source: draft-accepted (initiative)]
+- Scope Lock (cross-session continuity): setup is idempotent and never overwrites the preserved instructions file [source: draft-accepted (initiative)]
+- Scope Lock complete. All four scenario paths captured.
