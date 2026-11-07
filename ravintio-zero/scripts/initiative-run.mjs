@@ -59,7 +59,8 @@
 //      prints "I-C Run: Blocked: step {n} exited without merging after 2 resumes" and exits 1.
 //      With no valid session id it does not resume. A non-zero exit or a block never resumes.
 //   4. After each step it stops if plan/current/build-log.md ends on a
-//      "Blocked:" line with no later "Resolved:" line. It runs the same check on
+//      "Blocked:" or "Question:" line with no later "Resolved:" line. A step that ends its
+//      turn on a question is never resumed, so it cannot guess an answer (0000370). It runs the same check on
 //      plan/_archive/{feature-id}-*/build-log.md, in the newest folder (by name) whose
 //      name starts with the step's feature id and that changed after the step started.
 //      Ship archives plan/current/ before CI, so a block can sit only in the archive. The
@@ -152,7 +153,7 @@ const DEFAULT_MODEL = 'sonnet';
 const SESSION = /^[A-Za-z0-9_-]{8,128}$/;
 const SESSION_FIELD = /"session_id"\s*:\s*"([^"]*)"/g;
 const MAX_RESUMES = 2;
-const CONTINUE_PROMPT = (n) => `Continue initiative step ${n}. Read plan/current/build-log.md first. Do not end your turn before I-D Advance: Complete: or a Blocked: line.`;
+const CONTINUE_PROMPT = (n) => `Continue initiative step ${n}. Read plan/current/build-log.md first. Do not end your turn before I-D Advance: Complete:, a Blocked: line, or a Question: line.`;
 
 class Stop extends Error {}
 
@@ -344,8 +345,9 @@ function openLog(root, position) {
   }
 }
 
-// Returns the last Blocked: line when no Resolved: line follows it, else null.
-// Either line may carry a list marker, such as "- " or "* ".
+// Returns the last Blocked: or Question: line when no Resolved: line follows it, else null.
+// Either line may carry a list marker, such as "- " or "* ". A Question: line may also carry a
+// short prefix, such as "P0 Discovery: " (0000370).
 function openBlock(root) {
   const file = join(root, BUILD_LOG);
   if (!existsSync(file)) return null;
@@ -355,7 +357,7 @@ function openBlock(root) {
 function blockIn(text) {
   let last = null;
   for (const line of text.split(/\r?\n/)) {
-    if (/^\s*(?:[-*+]\s+)?Blocked:/.test(line)) last = line.trim();
+    if (/^\s*(?:[-*+]\s+)?(?:Blocked:|(?:[^:\n]{1,30}:\s+)?Question:)/.test(line)) last = line.trim();
     else if (/^\s*(?:[-*+]\s+)?Resolved:/.test(line)) last = null;
   }
   return last === null ? null : last.slice(0, MAX_LINE);

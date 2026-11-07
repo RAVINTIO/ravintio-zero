@@ -288,8 +288,8 @@ The driver resumes a step that ends its turn early. A step session exits 0 when 
 - The resume runs `claude -p` with the same flags, `--resume {session}`, and a prompt that tells the session to read the build log and continue. It writes to the same step log.
 - The driver prints `I-C Run: Resuming: step {n} ended its turn unmerged, resume {k} of 2` before each resume.
 - The cap is two resumes. If the step is still unmerged after the second, the driver prints `I-C Run: Blocked: step {n} exited without merging after 2 resumes` and exits 1.
-- A non-zero exit, a `Blocked:` line, or a missing session id never resumes.
-- A step session never ends its turn before `I-D Advance: Complete:` or a `Blocked:` line. The orchestrator skill states the rule.
+- A non-zero exit, an open `Blocked:` or `Question:` line, or a missing session id never resumes. A `Question:` line with no later `Resolved:` line stops the driver at once, and the stop line repeats it. The continue prompt names `Question:` as a valid place to end a turn.
+- A step session never ends its turn before `I-D Advance: Complete:`, a `Blocked:` line, or a `Question:` line. The orchestrator skill states the rule.
 
 #### Restart stop
 

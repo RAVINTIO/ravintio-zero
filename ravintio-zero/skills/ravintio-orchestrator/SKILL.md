@@ -58,7 +58,7 @@ Out-of-phase work uses `Supervise:` with the same form, as in `Supervise: {Statu
 
 **Reporting rule.** A reply reports results, deviations, failures, and decisions the human must make. A reply never states that the agent followed a standing rule. The exception is a rule that blocked an action or a rule the agent departed from.
 
-In a step session, never end your turn before `I-D Advance: Complete:` or a `Blocked:` line. Carry on from each phase to the next.
+In a step session, never end your turn before `I-D Advance: Complete:`, a `Blocked:` line, or a `Question:` line. Carry on from each phase to the next.
 
 I-A to I-E are stage letters, not phase numbers. The pipeline still has exactly five phases, P0 to P4. When an initiative is involved, read `ravintio-zero/standards/roadmap-standards.md` first.
 
