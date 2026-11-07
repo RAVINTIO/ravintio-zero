@@ -2,7 +2,7 @@
 
 **Feature:** Test helpers and rule anchors
 **Version:** set by the merge queue at merge
-**PR:** pending, updated at Step 9
+**PR:** #129
 
 ## What changed
 
