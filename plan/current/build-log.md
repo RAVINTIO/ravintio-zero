@@ -101,3 +101,17 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Scope Lock (cross-session continuity): setup is idempotent and never overwrites the preserved instructions file [source: draft-accepted (initiative)]
 - Scope Lock complete. All four scenario paths captured.
 Complete: P0 (2026-11-07T21:31:27Z)
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-07T21:31:46Z` |
+| End | `pending` |
+| Wall clock | `pending` |
+| Model tier | primary |
+| Skills loaded | ravintio-orchestrator, ravintio-plan |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | `Planned inline. Four small requirements share setup.sh and setup.ps1, so they cannot split across agents.` |
