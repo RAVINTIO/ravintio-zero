@@ -57,11 +57,11 @@ flowchart LR
 
 | Unit | Depends on | Writes | Batch | Sequential reason |
 |------|-----------|--------|-------|-------------------|
-| U1 timeout helper | none | `tests/helpers/timeout.sh`, `tests/run-tests.sh`, `tests/test-0000380-req-003-timeout-helper.sh`, `tests/test-0000321-req-005-default-migration.sh` | 1 | none |
-| U2 section helper | none | `tests/helpers/assert.sh`, `tests/test-0000380-req-001-section-helper.sh` | 1 | none |
-| U3 rule helper and anchors | U2 | `tests/helpers/assert.sh`, orchestrator references, `standards/roadmap-standards.md`, `tests/test-0000380-req-002-rule-anchors.sh` | 2 | U3 edits `assert.sh`, which U2 also edits |
-| U4 suite conversion | U2, U3 | `tests/test-*.sh` that extract orchestrator sections | 3 | none |
-| U5 docs | U1, U2, U3 | `standards/testing-standards.md`, `tests/README.md`, `component.yml`, `docs/` | 3 | none |
+| U1 | none | `tests/helpers/timeout.sh`, `tests/run-tests.sh`, `tests/test-0000380-req-003-timeout-helper.sh`, `tests/test-0000321-req-005-default-migration.sh` | 1 | none |
+| U2 | none | `tests/helpers/assert.sh`, `tests/test-0000380-req-001-section-helper.sh` | 1 | none |
+| U3 | U2 | `tests/helpers/assert.sh`, orchestrator references, `standards/roadmap-standards.md`, `tests/test-0000380-req-002-rule-anchors.sh` | 2 | U3 edits `assert.sh`, which U2 also edits |
+| U4 | U2, U3 | `tests/test-*.sh` that extract orchestrator sections | 3 | none |
+| U5 | U1, U2, U3 | `standards/testing-standards.md`, `tests/README.md`, `component.yml`, `docs/` | 3 | none |
 
 ## Assumptions
 
