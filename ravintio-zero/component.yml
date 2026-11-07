@@ -1,8 +1,8 @@
 # RAVINTIO Component Manifest
 id: "ravintio-zero"
 name: "RAVINTIO Zero"
-feature: "0000327-squash-before-main"
-version: "0.48.1"
+feature: "0000351-step-titles-and-history-shape"
+version: "0.49.0"
 status: "active"
 type: "component-pack"
 domain: "developer-tooling"

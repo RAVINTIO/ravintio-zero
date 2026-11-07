@@ -49,7 +49,16 @@ Messages are objective and scope-focused. Prohibited:
 - Phrases that confirm rather than describe
 - Contradictory messaging: describing a change then reversing it in the same message. One atomic commit, one clear description.
 
-### 5. Body (optional)
+### 5. Initiative commit titles
+
+A squash commit on an initiative branch uses one of two forms:
+
+- A step commit: `{feature-id}: {Feature title} (#{n})`, with the 7-digit feature id and the `Title` column of the step.
+- The one chore commit: `{initiative-id}: Initiative admin (#{n})`.
+
+The other rules in this file apply to every commit that is not an initiative squash.
+
+### 6. Body (optional)
 
 A blank line after the subject may be followed by a body explaining *why*, not *what*.
 
