@@ -62,3 +62,19 @@ Decision applied (initiative chart): Move Context Hygiene to references/orchestr
 | Notes | none |
 
 Complete: P1 (2026-11-07T15:45:32Z)
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-07T15:46:10Z` |
+| End | |
+| Wall clock | |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Three units run in sequence: all edit shared files (execution plan concurrency table) |
+
+- In progress: U-001 (`2026-11-07T15:46:10Z`)
