@@ -79,3 +79,22 @@ Tests run: REQ-001: test-0000385-req-001-affected-tests.sh (2026-11-07T21:35:39Z
 Tests run: REQ-002: test-0000385-req-002-baseline-failures.sh (2026-11-07T21:35:39Z)
 Tests run: REQ-003: test-0000385-req-003-clean-clone.sh (2026-11-07T21:35:39Z)
 Complete: P2 (2026-11-07T21:35:39Z)
+
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-07T21:51:25Z` |
+| End | `2026-11-07T21:51:25Z` |
+| Wall clock | 0 |
+| Model tier | primary |
+| Skills loaded | ravintio-validate-and-accept |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | CI, verification, and security review done inline. The suite ran through clean-clone-test.mjs. |
+
+Tests run: full suite in a clean clone of HEAD: 304 feature and 19 regression passed, 1 failed (inherited: test-0000037-req-004-remove-old-folder.sh) (2026-11-07T21:51:25Z)
+OS gap: local macos, CI ubuntu, windows
+Baseline recorded at P0: 3 failed suites on the base commit, see baseline-failures.md. The P0 run began after the plan commit and ran during P1 and P2.
+Complete: P3 (2026-11-07T21:51:25Z)
