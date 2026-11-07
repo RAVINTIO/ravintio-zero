@@ -67,11 +67,11 @@ Design confirmed: draft-accepted (initiative) (2026-11-07T22:00:49Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-07T22:03:25Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-07T22:30:33Z` |
+| Wall clock | `12` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
-| Agents spawned | 0 |
+| Agents spawned | 4 |
 | MCP calls | 0 |
 | Parallel task batches | 2 |
 | Notes | batches from the execution plan Concurrency plan |
@@ -86,3 +86,4 @@ Design confirmed: draft-accepted (initiative) (2026-11-07T22:00:49Z)
 - Rework: test-0000205-req-006 pins allow the leading time (2026-11-07T22:08:44Z)
 - Rework: test-0000240-req-002 line cap 200 to 206 for the time (2026-11-07T22:08:44Z)
 - In progress: U3 (2026-11-07T22:08:44Z)
+- Done: U3 (2026-11-07T22:30:33Z)
