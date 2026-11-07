@@ -212,6 +212,34 @@ function Remove-RetiredSkills {
     }
 }
 
+# A boot file that lacks the pack's first line is the developer's own. Copy it to
+# ravintio-overrides/instructions/ before the write, so the override block re-applies
+# it (0000381 ADR-002, backlog 0000290). A file with the pack line, an empty file, and
+# a link are left alone. An existing destination is never overwritten: a number is added.
+function Save-DeveloperBootFile {
+    param([string]$FullPath, [string]$Content)
+    if (-not (Test-Path -LiteralPath $FullPath -PathType Leaf)) { return }
+    if (Test-RavintioLink $FullPath) { return }
+    $existing = [System.IO.File]::ReadAllText($FullPath)
+    if ($existing.Trim() -eq '') { return }
+    $marker = (($Content -split "`r?`n")[0]).Trim()
+    if ($marker -ne '' -and (($existing -split "`r?`n") | Where-Object { $_.TrimEnd() -eq $marker })) { return }
+    $overrides = Join-Path $ProjectRoot 'ravintio-overrides'
+    $destDir = Join-Path $overrides 'instructions'
+    if ((Test-RavintioLink $overrides) -or (Test-RavintioLink $destDir)) { return }
+    New-Item -ItemType Directory -Path $destDir -Force | Out-Null
+    $base = [System.IO.Path]::GetFileNameWithoutExtension($FullPath)
+    $dest = Join-Path $destDir "original-$base.md"
+    $n = 1
+    while ([System.IO.File]::Exists($dest)) {
+        $n++
+        $dest = Join-Path $destDir "original-$base-$n.md"
+    }
+    $text = "<!-- Moved from $([System.IO.Path]::GetFileName($FullPath)) by setup on first install. -->`n" + $existing
+    [System.IO.File]::WriteAllText($dest, $text, (New-Object System.Text.UTF8Encoding($false)))
+    Write-Host "  ~ $([System.IO.Path]::GetFileName($FullPath)) content kept in ravintio-overrides/instructions/$([System.IO.Path]::GetFileName($dest))"
+}
+
 function Write-RavintioBootFile {
     # Boot files are disposable build outputs (0000029 ADR-001): always
     # regenerate from the current template so template fixes propagate on
@@ -223,6 +251,7 @@ function Write-RavintioBootFile {
     $fullPath = Join-Path $ProjectRoot $RelPath
     $dir = Split-Path -Parent $fullPath
     New-Item -ItemType Directory -Path $dir -Force | Out-Null
+    Save-DeveloperBootFile -FullPath $fullPath -Content $Content
 
     if (-not (Test-Path $fullPath)) {
         Set-Content -Path $fullPath -Value $Content -Encoding UTF8

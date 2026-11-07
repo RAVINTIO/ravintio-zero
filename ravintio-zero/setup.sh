@@ -195,6 +195,35 @@ prune_retired_skills() {
   done
 }
 
+preserve_developer_boot_file() {
+  # A boot file that lacks the pack's first line is the developer's own. Copy
+  # it to ravintio-overrides/instructions/ before the write, so the override
+  # block re-applies it (0000381 ADR-002, backlog 0000290). A file with the pack
+  # line, an empty file, and a link are left alone. An existing destination is
+  # never overwritten: setup numbers the new file instead.
+  local path="$1" content="$2" marker base dest_dir dest n=1
+  [ -f "$path" ] && [ ! -L "$path" ] || return 0
+  grep -q '[^[:space:]]' "$path" 2>/dev/null || return 0
+  marker="$(printf '%s\n' "$content" | head -1)"
+  if [ -n "$marker" ] && grep -qxF -- "$marker" "$path"; then
+    return 0
+  fi
+  base="$(basename "$path" .md)"
+  dest_dir="$PROJECT_ROOT/ravintio-overrides/instructions"
+  [ -L "$PROJECT_ROOT/ravintio-overrides" ] || [ -L "$dest_dir" ] && return 0
+  mkdir -p "$dest_dir"
+  dest="$dest_dir/original-$base.md"
+  while [ -e "$dest" ] || [ -L "$dest" ]; do
+    n=$((n + 1))
+    dest="$dest_dir/original-$base-$n.md"
+  done
+  {
+    printf '<!-- Moved from %s by setup on first install. -->\n' "$(basename "$path")"
+    cat "$path"
+  } > "$dest"
+  echo "  ~ $(basename "$path") content kept in ${dest#"$PROJECT_ROOT"/}"
+}
+
 write_boot_file() {
   # Boot files are disposable build outputs (0000029 ADR-001): always
   # regenerate from the current template so template fixes propagate on every
@@ -204,6 +233,7 @@ write_boot_file() {
   local content="$2"
 
   mkdir -p "$(dirname "$path")"
+  preserve_developer_boot_file "$path" "$content"
   if [ ! -f "$path" ]; then
     echo "$content" > "$path"
     echo "  + $(basename "$path") (created)"

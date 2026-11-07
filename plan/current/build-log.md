@@ -132,3 +132,5 @@ Complete: P1 (2026-11-07T21:32:44Z)
 | Parallel task batches | `0` |
 | Notes | `Units U1 to U4 edit setup.sh and setup.ps1, so they run in sequence inline. Tests come first in each unit.` |
 - Done: U1 manifest confinement (2026-11-07T21:36:19Z)
+- Done: U2 capability skill folders (2026-11-07T21:38:35Z)
+- Done: U3 CLAUDE.md preserved (2026-11-07T21:38:35Z)
