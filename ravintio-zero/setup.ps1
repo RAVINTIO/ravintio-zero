@@ -1149,16 +1149,22 @@ function Copy-CapabilitySkills {
     $capSkillsDir = Join-Path $ProjectRoot 'ravintio-overrides\capability-skills'
     if (-not (Test-Path $capSkillsDir)) { return }
 
-    $found = @(Get-ChildItem -Path $capSkillsDir -Directory | Where-Object {
-        Test-Path (Join-Path $_.FullName 'SKILL.md')
-    })
+    $found = @()
+    foreach ($candidate in @(Get-ChildItem -Path $capSkillsDir -Directory)) {
+        if (Test-Path (Join-Path $candidate.FullName 'SKILL.md')) {
+            $found += $candidate
+        } else {
+            Write-Host "  ! Warning: capability skill '$($candidate.Name)' missing SKILL.md - skipping"
+        }
+    }
     if ($found.Count -eq 0) { return }
 
     Write-Host ""
     Write-Host "  Syncing capability skills from ravintio-overrides/capability-skills/"
     foreach ($dir in $found) {
         $destDir = Join-Path $TargetDir $dir.Name
-        Copy-Item -Path $dir.FullName -Destination $destDir -Recurse -Force
+        # The whole folder, so references, scripts, and assets install too (0000381 REQ-002).
+        Copy-RavintioTree -SourceDir $dir.FullName -DestDir $destDir
         Write-Host "  + capability-skill: $($dir.Name)"
     }
 }

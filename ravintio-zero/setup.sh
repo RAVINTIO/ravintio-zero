@@ -237,7 +237,8 @@ copy_capability_skills() {
 
     local dest_dir="$target_dir/$skill_name"
     mkdir -p "$dest_dir"
-    cp "$skill_md" "$dest_dir/SKILL.md"
+    # The whole folder, so references/, scripts/, and assets/ install too (0000381 REQ-002).
+    cp -R "$skill_dir/." "$dest_dir/"
     echo "  + capability-skill: $skill_name"
     found=true
   done
