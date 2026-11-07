@@ -24,8 +24,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-07T20:18:17Z` |
-| End | |
-| Wall clock | |
+| End | `2026-11-07T20:19:24Z` |
+| Wall clock | 1 |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -50,8 +50,8 @@ Complete: P0 (2026-11-07T20:19:24Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-07T20:20:21Z` |
-| End | |
-| Wall clock | |
+| End | `2026-11-07T20:20:21Z` |
+| Wall clock | 0 |
 | Model tier | primary |
 | Skills loaded | ravintio-plan |
 | Agents spawned | 0 |
@@ -66,8 +66,8 @@ Complete: P1 (2026-11-07T20:20:21Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-07T20:42:23Z` |
-| End | |
-| Wall clock | |
+| End | `2026-11-07T20:42:23Z` |
+| Wall clock | 0 |
 | Model tier | primary and cheaper |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 3 |
@@ -91,8 +91,8 @@ Complete: P2 (2026-11-07T20:42:23Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-07T20:42:54Z` |
-| End | |
-| Wall clock | |
+| End | `2026-11-07T20:42:54Z` |
+| Wall clock | 0 |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | 0 |
@@ -101,3 +101,35 @@ Complete: P2 (2026-11-07T20:42:23Z)
 | Notes | CI, verification, and security review done inline |
 
 Complete: P3 (2026-11-07T20:42:54Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-07T20:43:09Z` |
+| End | `2026-11-07T20:43:16Z` |
+| Wall clock | 0 |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | initiative step: the merge queue sets the version |
+
+Complete: P4 (2026-11-07T20:43:16Z)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | 5 |
+| Total wall clock | 24 |
+| Total agents spawned | 3 |
+| Total MCP calls | 0 |
+| Phases using parallelism | 1 |
+| Primary tier agent calls | 0 |
+| Cheaper tier agent calls | 3 |
+| Self-corrections | 0 |
+| Phases skipped | none |
