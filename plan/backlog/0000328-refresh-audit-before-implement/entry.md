@@ -24,6 +24,14 @@ Run 0000009 audited dependencies in P0 and planned the fix from that result. A n
 
 Have `ravintio-plan` re-run the dependency audit when a requirement targets advisories or dependency versions. Any fix outside the approved list then surfaces at the plan gate, not mid-implement.
 
+## Wanted outcome
+
+A late advisory surfaces at the plan gate, not mid-implement. Tests check these conditions:
+
+- `ravintio-plan` re-runs the dependency audit before the plan gate when a requirement targets advisories or dependency versions.
+- The build log gains a line `Audit: re-run at P1 ({result})`.
+- A fix outside the approved dependency list stops at the plan gate.
+
 ## Why Deferred
 
 The human asked to move it from the `ravintio-docs` backlog, where a pack change is out of scope.

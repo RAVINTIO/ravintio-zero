@@ -26,6 +26,14 @@ The pack is a dependency. Its version must never affect the product version, and
 
 Record the last confirmed pack version in its own place, such as a `plan/state/` file, and compare against that. State in the pack update policy and the `about.md` template that `docs/about.md` holds the product version only.
 
+## Wanted outcome
+
+Resume detection never compares the pack version with the product version. Tests check these conditions:
+
+- `resume-detect.mjs` compares the pack version with a `plan/state/` record of the last confirmed pack version, never with `docs/about.md`.
+- With the pack at `0.37.0`, the product at `0.4.0`, and the record at `0.37.0`, it reports no pack version finding. With the record at `0.36.0`, it reports one.
+- The pack update policy and the `about.md` template say that `docs/about.md` holds the product version only.
+
 ## Why Deferred
 
 The human found it in the `ravintio-docs` repo during P0 resume detection. The fix belongs in the Zero pack, not in the consumer repo.

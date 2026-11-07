@@ -26,6 +26,14 @@ Backlog entries and other plan files are where the old name most often returns. 
 
 Run the brand guard's line and path checks from `pre-push`, or from `pre-commit` on staged files only. Exit non-zero on a hit and print the file and line number. Reuse the test's allowlist so the local check and CI can't disagree.
 
+## Wanted outcome
+
+The brand guard runs before a push, with the same allowlist as CI. Tests check these conditions:
+
+- A push of a file that holds the old product name exits non-zero and prints the file and line.
+- A clean push passes.
+- The `pre-push` check and `test-0000160-req-006` read one shared allowlist file.
+
 ## Why Deferred
 
 The human filed it on request. It changes a hook in the pack, so it needs its own run with tests.

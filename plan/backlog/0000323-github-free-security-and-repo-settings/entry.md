@@ -80,6 +80,14 @@ Committed files:
 - Artifact attestations (`actions/attest-build-provenance`) for the `release-tag` job, if it publishes an artifact.
 - `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, issue templates, a PR template, `CODEOWNERS`, and `.github/release.yml` for generated release notes.
 
+## Wanted outcome
+
+The repo uses the free GitHub security and repo features. Tests and checks verify these conditions:
+
+- The repo holds `SECURITY.md`, `.github/dependabot.yml`, `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, issue and PR templates, and `CODEOWNERS`.
+- No workflow uses `actions/checkout@v`, because every checkout is pinned by SHA.
+- The step stops once for the human with a checklist of settings: secret scanning, push protection, Dependabot security updates, private vulnerability reporting, and topics. After the human acts, `gh api` reports each one on.
+
 ## Why Deferred
 
 The human filed it on request. Each settings change needs repo admin rights.

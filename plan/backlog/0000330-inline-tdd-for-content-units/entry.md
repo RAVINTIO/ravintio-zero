@@ -24,6 +24,14 @@ Copied from the `ravintio-docs` repo, entry 0000012, found in its run 0000009 du
 
 Define an inline TDD path for small units that apply agreed text or make single-file changes. Keep the RED-before-change rule and the build-log markers.
 
+## Wanted outcome
+
+A content unit can run the TDD loop inline without a departure. Tests check these conditions:
+
+- `ravintio-implement` names the rule for an inline unit: one that applies agreed text or changes one file.
+- An inline unit logs its `RED:` marker before its `GREEN:` marker, and `build-log-check.mjs` accepts it with no departure line.
+- A unit that misses the rule still runs the test-writer, implementer, and refactor subagents.
+
 ## Why Deferred
 
 The human asked to move it from the `ravintio-docs` backlog, where a pack change is out of scope.

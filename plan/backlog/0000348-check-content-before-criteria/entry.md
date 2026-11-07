@@ -24,6 +24,14 @@ In run 0000016, a confirmed criterion said each Mermaid diagram renders as an SV
 
 In P0 coaching, before confirming a criterion that tests existing content or data, check that at least one instance exists. If none does, offer a reworded criterion at the design gate.
 
+## Wanted outcome
+
+Discovery confirms no criterion about content that does not exist. Tests check these conditions:
+
+- The P0 coaching reference tells the agent to check that at least one instance exists before it confirms a criterion about existing content or data.
+- If none exists, coaching offers a reworded criterion before the design gate.
+- A fixture criterion about rendered Mermaid diagrams, in a repo with no diagram, gets the reworded offer.
+
 ## Why Deferred
 
 It changes the pack. The `ravintio-docs` retrospective filed it here for the pack maintainer.
