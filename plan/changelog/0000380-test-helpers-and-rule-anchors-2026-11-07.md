@@ -22,6 +22,7 @@ Moving or rewording a rule broke 10 to 29 suites in earlier features. Step 19 re
 - `SKILL.md` carries no anchors, because it has 369 bytes under its 9000 byte cap.
 - `test-0000243-req-003-004-hook-injection.sh` is unchanged. Its time limit lives inside the hook under test.
 - Converting the remaining suites is filed as backlog entry 0000401.
+- CI failed once on `test-0000172-req-001-run-speed.sh`. The anchors made its section longer than one awk write buffer, so `grep -q` ended the pipe early under pipefail. The suite now reads the section through `orch_section`.
 
 ## Validation results
 

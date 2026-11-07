@@ -84,6 +84,7 @@ Deviation: test-0000243-req-003-004-hook-injection.sh stays as is. Its time limi
 Deviation: orch_section also returns text under the new "### Adoption Modes" subsections, so those assertions now read slightly wider text. Every needle is unchanged.
 Rework: tests pinning numbered-step lines (0000031, 0000037, 0000039, 0000040, 0000042, 0000151-req-011, 0000243-req-005) updated to anchors
 Tests run: full Bash suite, 302 feature and 19 regression passed, 0 failed
+Rework: test-0000172-req-001-run-speed.sh: CI failed on Linux because the I-C Run section outgrew one awk write buffer and grep -q ended the pipe early under pipefail. The suite now reads the section through orch_section (2026-11-07T21:00:50Z)
 Complete: P2 (2026-11-07T20:42:23Z)
 
 ### P3: Validate and Accept
