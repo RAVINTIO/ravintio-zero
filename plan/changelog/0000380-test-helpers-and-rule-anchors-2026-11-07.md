@@ -9,8 +9,8 @@
 - `orch_section` returns a named section from `SKILL.md`, the orchestrator references, and the roadmap standards (0000261).
 - `rule_text` and `assert_rule` read a rule by its `<!-- rule: {id} -->` anchor. `strip_rule_anchors` removes anchors before a line comparison (0000308).
 - `with_timeout` in `tests/helpers/timeout.sh` caps a command on macOS, Linux, and Git Bash (0000337).
-- 55 rules in the orchestrator references and the roadmap standards carry anchors.
-- 20 suites read pack text through the helpers.
+- 72 rules in the orchestrator references and the roadmap standards carry anchors.
+- 16 suites read pack text through the helpers.
 - Three new suites test the helpers. `testing-standards.md`, the tests README, and `component.yml` describe them.
 
 ## Why
