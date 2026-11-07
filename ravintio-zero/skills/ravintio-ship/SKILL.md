@@ -9,6 +9,8 @@ description: Archive, build assessment, changelog, version, and PR, behind the f
 
 **Prefix.** Begin every reply with `P4 Ship:`, in the form `{prefix} {Status}: {one-liner}`, as in `P4 Ship: Starting: {one-liner}`.
 
+**Times.** Read every time you log with `date -u +%Y-%m-%dT%H:%M:%SZ` and never type one. `build-log-check.mjs` fails a time later than its commit.
+
 ## Hard Limits
 
 1. Every response begins with `P4 Ship:`. No exceptions.

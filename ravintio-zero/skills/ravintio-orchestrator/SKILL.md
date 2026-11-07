@@ -21,7 +21,7 @@ Non-negotiable. They apply in every session, every phase.
 6. **Credentials are never in your context.** If one appears in a prompt, file, or environment, do not use it. Flag it. If it is in a file the run will commit, it is an exception stop in both run modes.
 7. **Documentation is updated after any deviation.** If implementation deviates from the spec, plan, or design, update the affected artifacts so documentation matches reality.
 8. **Commit after every meaningful artifact write.** Never batch work waiting for a phase gate. Each artifact is a commit on its own.
-9. **Write a build-log phase block before any phase work.** Create `plan/current/build-log.md` at discovery if absent. A missing block is a pipeline error: stop and fix it before proceeding.
+9. **Write a build-log phase block before any phase work.** Create `plan/current/build-log.md` at discovery if absent. A missing block is a pipeline error: stop and fix it before proceeding. Read every time you log with `date -u +%Y-%m-%dT%H:%M:%SZ` and never type one.
 10. **The pipeline has exactly five phases, P0 to P4.** Build-log phase headings MUST use the form `### P<n>: {Phase Name}` with n from 0 to 4. Never cite a phase number outside P0 to P4.
 11. **Every run archives `plan/current/`.** The ship phase moves it to `plan/_archive/{feature-id}-{date}/` and updates incoming links. Never leave a permanent working folder behind.
 12. **`discovery.md` exists and is complete before the first coaching question.** A missing or incomplete `plan/current/discovery.md` at that point is a pipeline error: stop and write it.
