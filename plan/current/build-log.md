@@ -117,3 +117,17 @@ Complete: P0 (2026-11-07T21:31:27Z)
 | Notes | `Planned inline. Four small requirements share setup.sh and setup.ps1, so they cannot split across agents.` |
 
 Complete: P1 (2026-11-07T21:32:44Z)
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-07T21:32:50Z` |
+| End | `pending` |
+| Wall clock | `pending` |
+| Model tier | primary |
+| Skills loaded | ravintio-orchestrator, ravintio-implement |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | `Units U1 to U4 edit setup.sh and setup.ps1, so they run in sequence inline. Tests come first in each unit.` |
