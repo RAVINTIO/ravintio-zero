@@ -47,3 +47,17 @@ Scope Lock (error path): reply with no prefix logs a miss and shows the new warn
 Scope Lock (cross-session continuity): clock read per prompt, no carried state [source: draft-accepted (initiative)]
 Scope Lock complete. All four scenario paths captured.
 Design confirmed: draft-accepted (initiative) (2026-11-07T22:00:49Z)
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-07T22:00:30Z` |
+| End | `2026-11-07T22:03:15Z` |
+| Wall clock | `3` |
+| Model tier | cheaper |
+| Skills loaded | ravintio-plan |
+| Agents spawned | 1 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | 5 requirements, 1 ADR, consistency check clean |
