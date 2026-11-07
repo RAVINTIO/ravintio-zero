@@ -52,11 +52,19 @@ function Get-TreeSnapshot {
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 function Get-SkillsListing {
     # The folder is ignored by git, so the tree snapshot cannot see it (0000381 REQ-001).
-    $top = (& git -C $here rev-parse --show-toplevel 2>$null)
-    if ($LASTEXITCODE -ne 0 -or -not $top) { return @() }
-    $dir = Join-Path $top '.claude/skills'
-    if (-not (Test-Path -LiteralPath $dir)) { return @() }
-    return @(Get-ChildItem -LiteralPath $dir -Recurse -Force | ForEach-Object { $_.FullName.Substring($top.Length) } | Sort-Object)
+    # Windows PowerShell 5.1 turns native stderr into a terminating error under 'Stop', so relax it here.
+    $savedPreference = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
+    try {
+        $top = & git -C $here rev-parse --show-toplevel 2>$null
+        if ($LASTEXITCODE -ne 0 -or -not $top) { return ,@() }
+        $dir = Join-Path $top '.claude/skills'
+        if (-not (Test-Path -LiteralPath $dir)) { return ,@() }
+        return ,@(Get-ChildItem -LiteralPath $dir -Recurse -Force | ForEach-Object { $_.FullName.Substring($top.Length) } | Sort-Object)
+    }
+    finally {
+        $ErrorActionPreference = $savedPreference
+    }
 }
 
 $skillsBefore = Get-SkillsListing
@@ -123,7 +131,10 @@ if ($null -ne $treeBefore) {
 }
 
 $skillsAfter = Get-SkillsListing
-$skillsChanged = @(Compare-Object -ReferenceObject @($skillsBefore) -DifferenceObject @($skillsAfter) | ForEach-Object { $_.InputObject })
+$skillsChanged = @()
+if (@($skillsBefore).Count -gt 0 -or @($skillsAfter).Count -gt 0) {
+    $skillsChanged = @(Compare-Object -ReferenceObject @($skillsBefore) -DifferenceObject @($skillsAfter) | ForEach-Object { $_.InputObject })
+}
 foreach ($path in $skillsChanged) { Write-Host "Skills changed during the run: $path" }
 
 Write-Host ""
