@@ -32,3 +32,5 @@ Total wall clock to the P4 End: 24 minutes.
 - P4: the installed ship skill under `.claude/skills` is stale until the coordinator reruns setup at the `Setup:` stop.
 
 Postmortems: none
+
+Retrospective: plan/retrospectives/0000378-merge-time-versioning-2026-11-07.md
