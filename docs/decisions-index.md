@@ -3,7 +3,7 @@
 > Change record. Index of all ADRs across all features. Updated after every pipeline run.
 > Do not archive this file. Update it in place.
 
-Last updated: 0000379-parallel-steps-on-worktrees
+Last updated: 0000385-faster-test-runs
 
 ---
 
@@ -466,3 +466,10 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 | ADR-002 | A chart without a Concurrency field keeps the serial path | accepted | The driver runs the scheduler only when the chart holds `**Concurrency:**`. Old charts and suites keep the serial path. |
 | ADR-003 | A step ends at ready and the driver runs the merge queue | accepted | A step under the concurrent driver writes its PR number to `ready` and ends. The driver runs `merge-queue.mjs run` one PR at a time. P4 sets no version. |
 | ADR-004 | The driver copies git-ignored setup output into each worktree | accepted | The driver copies `.claude/`, `CLAUDE.md`, `AGENTS.md`, and `.codex/` into each worktree, so a step has its hooks and skills. |
+
+### Feature 0000385-faster-test-runs
+
+| ADR | Title | Status | Summary |
+|-----|-------|--------|---------|
+| ADR-001 | Baseline failures match by suite name | accepted | `baseline-failures.mjs` records and compares the suite file names under `Failed suites:`, because the runner prints no stable test ids. |
+| ADR-002 | Clean clone through a script | accepted | P3 runs the suite through `clean-clone-test.mjs`, which clones `HEAD`, runs the command, and removes the clone on every exit. |

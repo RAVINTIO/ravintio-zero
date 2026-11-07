@@ -1,6 +1,6 @@
 # Architecture Overview
 
-Last updated: 0000379-parallel-steps-on-worktrees
+Last updated: 0000385-faster-test-runs
 
 ## What this repo is
 
@@ -252,3 +252,5 @@ The workflow guards each of those jobs to `pull_request` events. On a pull reque
 This project has one component and keeps `product.yml` anyway. Its top-level `id` gives the product a stable name for versioning and for attributing archived runs, wherever the repo is cloned. The orchestrator hard-stops at discovery when that `id` is missing.
 
 The five phase names live in prose in `ravintio-zero/pipeline-reference.md`. No module encodes them.
+
+**Test scope.** A TDD cycle runs the new test and the tests that cover the changed files. The implement skill runs one full suite in the background before P2 completes and logs a `Tests run:` line per cycle. P0 records the suites that fail on the base commit in `plan/current/baseline-failures.md` with `scripts/baseline-failures.mjs record`. P3 runs the suite in a clean clone of `HEAD` through `scripts/clean-clone-test.mjs`, then `baseline-failures.mjs check` prints each failed suite as `inherited:` or `new:` and exits 1 on a new one. Ship lists the inherited suites in the build report (0000385 ADR-001, ADR-002).
