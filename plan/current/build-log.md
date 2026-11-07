@@ -30,7 +30,7 @@ Run speed: standard (2026-11-07T17:00:18Z)
 |-------|-------|
 | Start | `2026-11-07T17:00:18Z` |
 | End | `2026-11-07T17:02:01Z` |
-| Wall clock | 3 |
+| Wall clock | 2 |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -45,6 +45,7 @@ Scope Lock (first-run path): A chart with no Lane, After, or Concurrency runs on
 Scope Lock (error path): A Blocked: line in one running step stops new starts and the report names every step's state [source: draft-accepted (initiative)]
 Scope Lock (cross-session continuity): Row statuses and the control area survive a driver restart and the driver reuses a running step's worktree [source: draft-accepted (initiative)]
 Scope Lock complete. All four scenario paths captured.
+Complete: P0 (2026-11-07T17:02:01Z)
 
 ---
 
@@ -52,9 +53,9 @@ Scope Lock complete. All four scenario paths captured.
 
 | Field | Value |
 |-------|-------|
-| Start | `2026-11-07T17:03:45Z` |
+| Start | `2026-11-07T17:02:01Z` |
 | End | `2026-11-07T17:03:45Z` |
-| Wall clock | 4 |
+| Wall clock | 2 |
 | Model tier | primary |
 | Skills loaded | ravintio-plan |
 | Agents spawned | 0 |
@@ -63,3 +64,4 @@ Scope Lock complete. All four scenario paths captured.
 | Notes | 7 requirements, 4 ADRs. Consistency check clean. Gate self-confirmed (initiative step). |
 
 Gate accepted: draft-accepted (initiative) (2026-11-07T17:03:45Z)
+Complete: P1 (2026-11-07T17:03:45Z)
