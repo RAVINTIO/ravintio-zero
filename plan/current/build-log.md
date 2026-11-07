@@ -88,10 +88,26 @@ Complete: P2 (2026-11-07T16:48:23Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-07T16:48:23Z` |
+| End | `2026-11-07T16:49:02Z` |
+| Wall clock | 1 |
+| Model tier | primary |
+| Skills loaded | ravintio-validate-and-accept |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | none |
+
+Complete: P3 (2026-11-07T16:49:02Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-07T16:49:02Z` |
 | End | |
 | Wall clock | |
 | Model tier | primary |
-| Skills loaded | ravintio-validate-and-accept |
+| Skills loaded | ravintio-ship |
 | Agents spawned | 0 |
 | MCP calls | 0 |
 | Parallel task batches | 0 |
