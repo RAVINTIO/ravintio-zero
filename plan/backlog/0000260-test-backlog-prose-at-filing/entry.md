@@ -22,6 +22,14 @@ Commit 05abbb9 filed `plan/backlog/0000257-timestamp-reply-prefixes/entry.md` wi
 
 Run the wording test over `plan/backlog/` entries in the filing skill or a pre-commit check, so the author fixes the text at filing.
 
+## Wanted outcome
+
+The filing flow catches wording the pack tests reject before the entry is committed. Tests check these conditions:
+
+- `ravintio-file-backlog` runs the pack wording check on the new entry before it reports the path.
+- A fixture entry that holds a banned phrase makes the check exit non-zero and name the file and line.
+- A clean fixture entry passes.
+
 ## Why Deferred
 
 It changes the filing flow, which is outside a size cap step.
