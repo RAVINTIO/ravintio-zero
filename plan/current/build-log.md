@@ -107,11 +107,13 @@ Complete: P0 (2026-11-07T21:31:27Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-07T21:31:46Z` |
-| End | `pending` |
-| Wall clock | `pending` |
+| End | `2026-11-07T21:32:44Z` |
+| Wall clock | `6` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator, ravintio-plan |
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
 | Notes | `Planned inline. Four small requirements share setup.sh and setup.ps1, so they cannot split across agents.` |
+
+Complete: P1 (2026-11-07T21:32:44Z)
