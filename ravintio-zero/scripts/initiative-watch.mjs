@@ -106,9 +106,14 @@ const ARCHIVE = 'plan/_archive';
 class Stop extends Error {}
 
 const cut = (text, max) => (text.length > max ? text.slice(0, max) : text);
+// Local time as hh:mm, 24-hour and zero padded. Every printed line starts with it (0000388).
+const clock = () => {
+  const d = new Date();
+  return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+};
 const out = (line) => {
   try {
-    writeSync(1, `${cut(line, MAX_LINE)}\n`);
+    writeSync(1, `${clock()} ${cut(line, MAX_LINE - 6)}\n`);
   } catch {
     // A closed pipe must not stop the watcher with a stack trace.
   }

@@ -86,7 +86,7 @@ LONG="$(printf 'a%.0s' $(seq 1 1000))"
 } > "$R/plan/.initiative-logs/step-3.log"
 watch "$R" --since-bytes 0
 LONGEST="$(printf '%s\n' "$ACT" | awk '{ if (length($0) > m) m = length($0) } END { print m }')"
-assert_equals "yes" "$([ "$LONGEST" -le 200 ] && echo yes || echo no)" "req-003 AC-1: every activity line is 200 characters or fewer"
+assert_equals "yes" "$([ "$LONGEST" -le 206 ] && echo yes || echo no)" "req-003 AC-1: every activity line is 200 characters or fewer, plus the 6-character time"
 assert_contains "I-C Run: activity: tool: Bash aaa" "$(printf '%s\n' "$ACT" | sed -n 1p)" "req-003 AC-1: the cut line keeps its prefix"
 assert_equals "2" "$(printf '%s\n' "$ACT" | grep -c .)" "req-003 AC-2: a multi-line command stays on one line"
 

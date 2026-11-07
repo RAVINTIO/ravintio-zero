@@ -46,6 +46,9 @@ The driver still requires status `active` before it runs a step.
 
 Initiative stages use five more prefixes. They use the same `{prefix} {Status}: {one-liner}` form.
 
+<!-- rule: reply-time-form -->
+Every reply begins with the local time. The form is `hh:mm {prefix} {Status}: {one-liner}`. The `UserPromptSubmit` hook gives the time. The reply-prefix hook accepts a prefix with or without the time.
+
 | Prefix | Stage |
 |--------|-------|
 | `I-A Chart:` | Chart |
