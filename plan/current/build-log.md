@@ -47,6 +47,8 @@ Scope Lock (cross-session continuity): The stop reads the build log on disk, so 
 Scope Lock complete. All four scenario paths captured.
 Decision applied (initiative chart): Move Context Hygiene to references/orchestrator-context-hygiene.md before the Question: edit
 
+Complete: P0 (2026-11-07T15:44:03Z)
+
 ### P1: Plan
 
 | Field | Value |
@@ -69,7 +71,7 @@ Complete: P1 (2026-11-07T15:45:32Z)
 |-------|-------|
 | Start | `2026-11-07T15:46:10Z` |
 | End | `2026-11-07T16:13:57Z` |
-| Wall clock | `15` |
+| Wall clock | `28` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 0 |
@@ -82,3 +84,19 @@ Deviation: the Context Hygiene move alone frees 394 bytes (8882 to 8608 bytes), 
 - Done: U-001, U-002, U-003 (2026-11-07T16:13:57Z)
 Tests run: full local suite, 289 feature and 19 regression passed, 0 failed
 Complete: P2 (2026-11-07T16:13:57Z)
+
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-07T16:14:02Z` |
+| End | `2026-11-07T16:14:20Z` |
+| Wall clock | `1` |
+| Model tier | primary |
+| Skills loaded | ravintio-validate-and-accept |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Suite green before P3, new tests rerun, no self-correction cycles |
+
+Complete: P3 (2026-11-07T16:14:20Z)
