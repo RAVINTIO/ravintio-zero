@@ -104,11 +104,29 @@ Complete: P3 (2026-11-07T16:49:02Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-07T16:49:02Z` |
-| End | |
-| Wall clock | |
+| End | `2026-11-07T16:49:11Z` |
+| Wall clock | 0 |
 | Model tier | primary |
 | Skills loaded | ravintio-ship |
 | Agents spawned | 0 |
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | none |
+
+Complete: P4 (2026-11-07T16:49:11Z)
+
+---
+
+## Summary
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `24` |
+| Total agents spawned | `4` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `1` |
+| Primary tier agent calls | `4` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `0` |
+| Phases skipped | none |
