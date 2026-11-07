@@ -1,6 +1,6 @@
 # Architecture Overview
 
-Last updated: 0000357-guard-gaps-closed
+Last updated: 0000358-clean-step-stops-and-logs
 
 ## What this repo is
 
@@ -19,7 +19,7 @@ The repo runs its own pipeline on the `ravintio-zero/` it ships. Git reads its h
 
 ## Pipeline
 
-The pipeline runs five phases, numbered P0 to P4. There is one route: every change is a feature change, and a small change is a small run. Each agent message starts with its phase prefix, then a status and a one-liner, as in `P1 Plan: Complete: 4 requirements, 2 ADRs`.
+The pipeline runs five phases, numbered P0 to P4. There is one route: every change is a feature change, and a small change is a small run. Each agent message starts with its phase prefix, then a status and a one-liner, as in `P1 Plan: Complete: 4 requirements, 2 ADRs`. The status is Starting, Resuming, Complete, Question, Blocked, or Skipped. `Question:` asks the human a routine question, and `Blocked:` marks an exception stop only.
 
 | Phase | Prefix | Owning skill |
 |-------|--------|--------------|
@@ -63,7 +63,7 @@ On resume, a missing or unknown `plan/.run-mode` makes the orchestrator ask the 
 - **Standard.** Each phase applies its own parallelism rules.
 - **Fast.** Each phase skill dispatches the units in its `### Fast batch` list, each batch in one message. The rules sit in `## Fast batches` of the dispatch standard. A subagent in a batch never runs `git stash`, `git checkout`, or `git reset`, because a stash takes the uncommitted work of every other subagent (0000247). In an active initiative, a step stages by explicit path and leaves queued backlog entries untracked.
 
-Phases run in order at either speed, and the gates and exception stops stay the same. Each build-log phase block records `End` and `Wall clock`, and the build report lists them with the agent count. Ship Step 8 deletes `plan/.run-speed` with the other sentinels.
+Phases run in order at either speed, and the gates and exception stops stay the same. Each build-log phase block records `End` and `Wall clock`, and the build report lists them with the agent count. Phases read every logged time from `date -u +%Y-%m-%dT%H:%M:%SZ` and close each block with a `Complete:` line. `scripts/build-log-check.mjs` fails a time later than the commit that adds it, and a closed block with no `Complete:` or `Skipped:` line (0000358). Ship Step 8 deletes `plan/.run-speed` with the other sentinels.
 
 **Exception stops.** Both modes stop and print `{prefix} Blocked: {action needed}` in these cases:
 
@@ -232,7 +232,7 @@ Setup checks the tool straight after argument parsing, ahead of the old-folder c
 
 A wording test greps every tracked file outside history for the retired word that once described RAVINTIO Zero. It passes only lines that match an allowlist of generic uses. A phase guard test fails on a phase number outside P0 to P4 or on a retired letter prefix. A brand guard test fails on any tracked path or line outside history that holds the earlier product name, unless an allowlist entry matches. It also fails on a stale allowlist entry.
 
-`ravintio-zero/tests/run-tests.sh` runs every Bash and PowerShell suite. Before any suite runs, it checks every file under `tests/`. A file that is neither a suite nor on its known list fails the run, and the runner names it. Without `pwsh`, it prints how many PowerShell suites it skipped. Each suite starts without any `RAVINTIO_` variable except `RAVINTIO_PWSH`, `RAVINTIO_TIMING_FILE`, and `RAVINTIO_TEST_QUIET`. The runner compares tracked and untracked files before the first suite and after the last, and it fails the run and names each path that changed (0000315).
+`ravintio-zero/tests/run-tests.sh` runs every Bash and PowerShell suite. Before any suite runs, it checks every file under `tests/`. A file that is neither a suite nor on its known list fails the run, and the runner names it. Without `pwsh`, it prints how many PowerShell suites it skipped. Each suite starts without any `RAVINTIO_` variable except `RAVINTIO_PWSH`, `RAVINTIO_TIMING_FILE`, and `RAVINTIO_TEST_QUIET`. The runner compares tracked and untracked files before the first suite and after the last, and it fails the run and names each path that changed (0000315). Under the totals it lists each failed suite by file name under `Failed suites:`, in quiet mode too (0000358).
 
 Set `RAVINTIO_TEST_QUIET=1` to hide PASS lines and banners. The runner then keeps every FAIL line with its detail, the failing suite name, the summary, and the exit codes. A quiet full run prints about 3 KB. Skills that run the full suite set it.
 

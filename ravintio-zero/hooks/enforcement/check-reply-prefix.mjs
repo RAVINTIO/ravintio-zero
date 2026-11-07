@@ -16,6 +16,10 @@
  * P4 Ship:, I-A Chart:, I-B Activate:, I-C Run:, I-D Advance:, I-E Delivery:,
  * and Supervise:. The phase name "Validate and Accept" is not valid.
  *
+ * A prefix is followed by a status: Starting, Resuming, Complete, Question,
+ * Blocked, or Skipped. The hook checks the prefix only. Question is for a routine
+ * question. Blocked marks an exception stop.
+ *
  * Receives: JSON on stdin (Claude Code Stop payload) with last_assistant_message
  * and transcript_path (a JSONL file). Transcript content may be a string or an
  * array of { type: "text", text } blocks. The hook checks the first non-empty

@@ -26,12 +26,13 @@ Every agent response begins with a phase prefix. You always know where you are.
 
 Messages shorten P3 to "Validate". Skills and the build log keep the full name "Validate and Accept".
 
-Status messages use one form: `{prefix} {Status}: {one-liner}`. The status is Starting, Resuming, Complete, Blocked, or Skipped.
+Status messages use one form: `{prefix} {Status}: {one-liner}`. The status is Starting, Resuming, Complete, Question, Blocked, or Skipped.
 
 - Entering a phase: `P1 Plan: Starting: {one-liner}`
 - Resuming: `P1 Plan: Resuming: {what was in progress, what is next}`
 - Completing: `P1 Plan: Complete: {one-liner summary}`
-- Blocked: `P0 Discovery: Blocked: {specific gap}`
+- Question: `P0 Discovery: Question: {routine question}`. Use it for a routine question to the human.
+- Blocked: `P0 Discovery: Blocked: {specific gap}`. Use it for an exception stop only.
 - Skipped: `P3 Validate: Skipped: {reason}`
 
 Initiative stages use five more prefixes. They use the same `{prefix} {Status}: {one-liner}` form.

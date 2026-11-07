@@ -9,6 +9,8 @@ description: Produces the plan-phase artifact set (requirements, ADRs, scope, ri
 
 **Prefix.** Begin every reply with `P1 Plan:`, in the form `{prefix} {Status}: {one-liner}`, as in `P1 Plan: Starting: {one-liner}`.
 
+**Times.** Read every time you log with `date -u +%Y-%m-%dT%H:%M:%SZ` and never type one. `build-log-check.mjs` fails a time later than its commit.
+
 **Pack files.** Read each of these from the pack folder before the step that uses it:
 
 - `ravintio-zero/templates/execution-plan.template.md`

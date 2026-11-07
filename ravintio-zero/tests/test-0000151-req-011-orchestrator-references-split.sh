@@ -50,7 +50,11 @@ sed -e '/^| Discovery findings | `ravintio-zero\/templates\//d' -e '/^| A featur
   -e '/^| A pause record |/d' -e '/^| A park record |/d' \
   -e "/^Never assume you know a template's format\\./d" \
   -e 's|then `git checkout -b feat/{feature-id}` (use|then `git checkout -b hotfix/{feature-id}` (use|' \
-  "$BASE_RENAMED.tmp4" > "$BASE_RENAMED"
+  "$BASE_RENAMED.tmp4" > "$BASE_RENAMED.tmp5"
+# 0000358 added the Question status and moved the product id check from Blocked: to Question:.
+sed -e 's|The status is Starting, Resuming, Complete, Blocked, or Skipped\.|The status is Starting, Resuming, Complete, Question, Blocked, or Skipped.|' \
+  -e 's|`P0 Discovery: Blocked: No declared product id found|`P0 Discovery: Question: No declared product id found|' \
+  "$BASE_RENAMED.tmp5" > "$BASE_RENAMED"
 
 # Print every non-blank, non-heading line of $1 that no later file holds as a
 # whole line. Usage: missing_lines base file...

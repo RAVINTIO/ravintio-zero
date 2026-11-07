@@ -26,7 +26,7 @@ The `commit-msg` hook is blocking. It rejects commits that break `commit-standar
 
 ## Reply Conventions
 
-Begin every reply in an active run with a prefix. Use the status form `{prefix} {Status}: {one-liner}`. The status is Starting, Resuming, Complete, Blocked, or Skipped.
+Begin every reply in an active run with a prefix. Use the status form `{prefix} {Status}: {one-liner}`. The status is Starting, Resuming, Complete, Question, Blocked, or Skipped.
 
 | Prefix | Use for |
 |--------|---------|
