@@ -100,3 +100,4 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Scope Lock (error path): a manifest line outside the skills directory is skipped with a warning, and a folder with no SKILL.md warns and installs nothing [source: draft-accepted (initiative)]
 - Scope Lock (cross-session continuity): setup is idempotent and never overwrites the preserved instructions file [source: draft-accepted (initiative)]
 - Scope Lock complete. All four scenario paths captured.
+Complete: P0 (2026-11-07T21:31:27Z)
