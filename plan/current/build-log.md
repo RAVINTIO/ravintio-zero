@@ -68,8 +68,8 @@ Complete: P1 (2026-11-07T15:45:32Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-07T15:46:10Z` |
-| End | |
-| Wall clock | |
+| End | `2026-11-07T16:13:57Z` |
+| Wall clock | `15` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 0 |
@@ -79,3 +79,6 @@ Complete: P1 (2026-11-07T15:45:32Z)
 
 - In progress: U-001 (`2026-11-07T15:46:10Z`)
 Deviation: the Context Hygiene move alone frees 394 bytes (8882 to 8608 bytes), so the size target is 8700 bytes and not 8000. Plan artifacts updated (2026-11-07T15:52:13Z)
+- Done: U-001, U-002, U-003 (2026-11-07T16:13:57Z)
+Tests run: full local suite, 289 feature and 19 regression passed, 0 failed
+Complete: P2 (2026-11-07T16:13:57Z)
