@@ -2,7 +2,7 @@
 
 **Feature:** Replies and questions
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** #133
 
 ## What changed
 
