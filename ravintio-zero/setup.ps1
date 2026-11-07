@@ -263,6 +263,52 @@ function Write-RavintioBootFile {
     }
 }
 
+# Commands an earlier release shipped in the tool's command folder and no longer
+# ships (0000381 ADR-002, backlog 0000293).
+$RetiredCommands = @('fast-path', 'change-pipeline', 'retrofit')
+
+# Removes a command file the pack no longer ships. Two sources name it: the command
+# manifest from a past run, and the retired list above. A file counts as the pack's
+# only if it is a plain file that is not a link, and (for the retired list) its front
+# matter holds the matching "name:" line. A developer's own command stays.
+function Remove-RetiredCommands {
+    param([string]$Dir)
+    if (-not [System.IO.Directory]::Exists($Dir)) { return }
+    if (Test-RavintioLink $Dir) { return }
+    $manifest = Join-Path $Dir '.ravintio-manifest'
+    if ([System.IO.File]::Exists($manifest)) {
+        foreach ($line in @(Get-Content -LiteralPath $manifest -Encoding UTF8)) {
+            $name = ([string]$line).TrimEnd("`r")
+            if ($name -eq '' -or $name -match '[\\/]' -or $name.StartsWith('.')) { continue }
+            if (Test-Path -LiteralPath (Join-Path $WorkflowsSrc $name)) { continue }
+            $f = Join-Path $Dir $name
+            if ([System.IO.File]::Exists($f) -and -not (Test-RavintioLink $f)) {
+                Remove-Item -LiteralPath $f -Force
+                Write-Host "  - pruned retired command: $name"
+            }
+        }
+    }
+    foreach ($name in $RetiredCommands) {
+        $f = Join-Path $Dir "$name.md"
+        if (-not [System.IO.File]::Exists($f)) { continue }
+        if (Test-RavintioLink $f) { continue }
+        $head = @(Get-Content -LiteralPath $f -TotalCount 8)
+        if (@($head | Where-Object { $_ -match "^name:\s*$([regex]::Escape($name))\s*$" }).Count -gt 0) {
+            Remove-Item -LiteralPath $f -Force
+            Write-Host "  - pruned retired command: $name.md"
+        }
+    }
+}
+
+# Lists the command files the pack installed, so the next run can prune one the pack stops shipping.
+function Write-CommandsManifest {
+    param([string]$Dir)
+    if (-not [System.IO.Directory]::Exists($Dir)) { return }
+    if (Test-RavintioLink $Dir) { return }
+    $names = @(Get-ChildItem -Path $WorkflowsSrc -Filter '*.md' | ForEach-Object { $_.Name })
+    Set-Content -LiteralPath (Join-Path $Dir '.ravintio-manifest') -Value $names -Encoding UTF8
+}
+
 function Copy-RavintioWorkflow {
     param($WorkflowFile, $TargetDir)
 
@@ -1389,9 +1435,11 @@ function Invoke-RavintioSetup {
     # Copy workflows (if tool defines a workflow dir)
     if ($toolConfig.WorkflowsDir -and (Test-Path $WorkflowsSrc)) {
         $workflowsDir = Join-Path $ProjectRoot $toolConfig.WorkflowsDir
+        Remove-RetiredCommands -Dir $workflowsDir
         Get-ChildItem -Path $WorkflowsSrc -Filter '*.md' | ForEach-Object {
             Copy-RavintioWorkflow -WorkflowFile $_.FullName -TargetDir $workflowsDir
         }
+        Write-CommandsManifest -Dir $workflowsDir
     }
 
     # Create boot file (if tool defines one)

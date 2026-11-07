@@ -414,6 +414,51 @@ append_override_instructions() {
   echo "  Appending override instructions from ravintio-overrides/instructions/"
 }
 
+# Commands an earlier release shipped in the tool's command folder and no longer
+# ships (0000381 ADR-002, backlog 0000293).
+RETIRED_COMMANDS="fast-path change-pipeline retrofit"
+
+prune_retired_commands() {
+  # Removes a command file the pack no longer ships. Two sources name it: the
+  # command manifest from a past run, and the retired list above. A file counts
+  # as the pack's only if it is a plain file that is not a link, and (for the
+  # retired list) its front matter holds the matching "name:" line. A
+  # developer's own command stays.
+  local dir="$1" manifest="$1/.ravintio-manifest" line name f
+  [ -d "$dir" ] && [ ! -L "$dir" ] || return 0
+  if [ -f "$manifest" ]; then
+    while IFS= read -r line || [ -n "$line" ]; do
+      name="${line%$'\r'}"
+      case "$name" in ""|*/*|.*) continue ;; esac
+      [ -e "$WORKFLOWS_SRC/$name" ] && continue
+      f="$dir/$name"
+      if [ -f "$f" ] && [ ! -L "$f" ]; then
+        rm -f "$f"
+        echo "  - pruned retired command: $name"
+      fi
+    done < "$manifest"
+  fi
+  for name in $RETIRED_COMMANDS; do
+    f="$dir/$name.md"
+    [ -f "$f" ] && [ ! -L "$f" ] || continue
+    if head -8 "$f" | grep -Eq "^name:[[:space:]]*$name[[:space:]]*\r?$"; then
+      rm -f "$f"
+      echo "  - pruned retired command: $name.md"
+    fi
+  done
+}
+
+write_commands_manifest() {
+  # Lists the command files the pack installed, so the next run can prune one
+  # the pack stops shipping.
+  local dir="$1" wf
+  [ -d "$dir" ] && [ ! -L "$dir" ] || return 0
+  : > "$dir/.ravintio-manifest"
+  for wf in "$WORKFLOWS_SRC"/*.md; do
+    [ -f "$wf" ] && basename "$wf" >> "$dir/.ravintio-manifest"
+  done
+}
+
 copy_workflow() {
   local workflow_file="$1"
   local target_dir="$2"
@@ -1114,9 +1159,11 @@ setup_tool() {
   # Copy workflows (if tool defines a workflow dir)
   if [ -n "${TOOL_WORKFLOWS_DIR:-}" ] && [ -d "$WORKFLOWS_SRC" ]; then
     local workflows_dir="$PROJECT_ROOT/$TOOL_WORKFLOWS_DIR"
+    prune_retired_commands "$workflows_dir"
     for wf in "$WORKFLOWS_SRC"/*.md; do
       [ -f "$wf" ] && copy_workflow "$wf" "$workflows_dir"
     done
+    write_commands_manifest "$workflows_dir"
   fi
 
   # Create boot file (if tool defines one)
