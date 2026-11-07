@@ -1,6 +1,6 @@
 # Architecture Overview
 
-Last updated: 0000359-safe-parallel-commits
+Last updated: 0000377-driver-stops-and-headroom
 
 ## What this repo is
 
@@ -82,7 +82,7 @@ No mode merges a PR or commits to `main`. The human merges every PR.
 
 **Ship order.** P4 creates no tag. Step 8 reads the run mode, then clears the pipeline sentinels in a commit. Step 9 checks the PR body with `scripts/check-attribution.mjs`, pushes the branch, and raises the PR. Step 10 is the final gate. So the sentinels never reach `main` through the PR.
 
-**Orchestrator references.** The orchestrator `SKILL.md` is 9,000 bytes or fewer. It keeps the Hard Limits, the prefix table, a short Resume Detection rule, the Pack Index, and Context Hygiene. Fourteen files under `skills/ravintio-orchestrator/references/` hold the sections that apply at one moment of a run. They cover adoption modes, discovery coaching, discovery records, mid-pipeline changes, run speed, scope lock, session commands, the skills catalogue, resume detection, P0 coaching, the fresh P0 start, the P0 gate, phase invocation, and exception stops. Each moved section keeps its lines word for word. The initiative stage prefix block sits in `ravintio-zero/standards/roadmap-standards.md`. The Pack Index names one trigger for each file and one rule for template reads. A line-preservation test fails if a moved line is missing.
+**Orchestrator references.** The orchestrator `SKILL.md` is 9,000 bytes or fewer. It keeps the Hard Limits, the prefix table, a short Resume Detection rule, and the Pack Index. Fifteen files under `skills/ravintio-orchestrator/references/` hold the sections that apply at one moment of a run. They cover adoption modes, discovery coaching, discovery records, mid-pipeline changes, run speed, scope lock, session commands, the skills catalogue, resume detection, P0 coaching, the fresh P0 start, the P0 gate, phase invocation, and exception stops, and context hygiene. Each moved section keeps its lines word for word. The initiative stage prefix block sits in `ravintio-zero/standards/roadmap-standards.md`. The Pack Index names one trigger for each file and one rule for template reads. A line-preservation test fails if a moved line is missing.
 
 **Model tiers.** Every Agent call passes `model`, set to `sonnet` or `haiku`. The three TDD skills set `model: haiku`. A haiku unit that fails twice retries on sonnet. A WebFetch of a full reference page goes through a sonnet or haiku subagent that returns an extract.
 

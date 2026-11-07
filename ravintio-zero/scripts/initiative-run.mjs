@@ -85,7 +85,8 @@
 //      releases the lock, and exits 1. If the step also changed a restart file, it prints one
 //      line, "I-D Advance: Restart: Setup: step {n} changed {files}. Rerun setup, then start a
 //      new driver so step {next} runs the new code." The files list restart files first, names
-//      each once, and shows at most 5, then "and {k} more".
+//      each once, and shows at most 5, then "and {k} more". After the last step the Setup
+//      check also runs, before the Pending line, and a hit stops the driver with no Pending (0000373).
 //   7. It repeats until delivery: initiative.md is gone and
 //      plan/_archive/{id}-{slug}-initiative-*/ exists. It then exits 0.
 //      If every step in the "## Steps" table has merged but the archive is not there yet,
@@ -568,6 +569,13 @@ async function main() {
     if (rm.status !== 'active') throw new Stop(`I-C Run: Blocked: initiative status is ${rm.status}, not active`);
     const total = countSteps(rm.text);
     if (total > 0 && Number(rm.position) > total) {
+      // The last step may have changed pack files that setup installs. Name them before delivery
+      // runs on stale installed copies (0000373). No next step exists, so no Restart label.
+      const lastSetup = changedSetup(root, headBefore, branchHead(root, rm.branch));
+      if (lastSetup.length > 0) {
+        reportSteps(ran);
+        throw new Stop(`I-D Advance: Setup: step ${position} changed ${nameFiles(lastSetup)}. Rerun setup, then start a new driver.`);
+      }
       reportSteps(ran);
       out(`I-E Delivery: Pending: all ${total} steps merged, initiative delivery runs from the initiative skill`);
       return;

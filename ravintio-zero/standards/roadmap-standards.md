@@ -310,6 +310,7 @@ The installed pack files live outside the repo copy the driver reads. After a me
 - The driver releases the lock and exits 1.
 - The list shows at most 5 names, then `and {k} more`.
 - The check runs after the delivery, block, and not-merged checks, so a delivered initiative never stops here. If git is unreadable, the driver skips the check.
+- After the last step, the driver runs the check before it prints `I-E Delivery: Pending:`. If the step changed a setup file, the driver prints the `Setup:` line, exits 1, and prints no `Pending:` line. The initiative skill reruns setup and starts a new driver, which prints `Pending:`.
 - The initiative skill treats the line as a setup step and not a failure. It reruns setup in this order:
   1. Read the setup command from the `Confirmation:` row.
   2. Run only that exact command. If the row is missing or differs, stop for the human.
