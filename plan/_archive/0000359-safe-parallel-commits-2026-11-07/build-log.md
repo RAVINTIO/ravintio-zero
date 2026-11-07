@@ -102,7 +102,7 @@ Complete: P3 (2026-11-07T06:29:25Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-07T06:29:39Z` |
-| End | `PENDING` |
+| End | `2026-11-07T06:30:03Z` |
 | Wall clock | `0` |
 | Model tier | primary |
 | Skills loaded | ravintio-ship |
@@ -110,3 +110,20 @@ Complete: P3 (2026-11-07T06:29:25Z)
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | initiative 0000349 step 8 |
+Complete: P4 (2026-11-07T06:30:03Z)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `25` |
+| Total agents spawned | `0` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `0` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `0` |
+| Phases skipped | `none` |
