@@ -52,11 +52,13 @@ Decision applied (initiative chart): Move Context Hygiene to references/orchestr
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-07T15:44:23Z` |
-| End | |
-| Wall clock | |
+| End | `2026-11-07T15:45:32Z` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-plan |
 | Agents spawned | 0 |
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | none |
+
+Complete: P1 (2026-11-07T15:45:32Z)
