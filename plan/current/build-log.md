@@ -26,8 +26,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-07T15:43:26Z` |
-| End | |
-| Wall clock | |
+| End | `2026-11-07T15:44:03Z` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -40,3 +40,9 @@ Run speed: standard (2026-11-07T15:43:26Z, initiative Speed field)
 Adoption mode: standard-iterative (signal: archive in plan/_archive/ beside source)
 Backlog pull-in: 0000371, 0000370, 0000373 (initiative step row)
 Version: 0.56.0 -> 0.57.0 (minor, chart Bump column)
+Scope Lock (happy path): A step writes Question: and ends its turn, and the driver stops with no resume and prints the question [source: draft-accepted (initiative)]
+Scope Lock (first-run path): A build log with no Question: line behaves as today [source: draft-accepted (initiative)]
+Scope Lock (error path): A Question: line followed by Resolved: does not stop the driver [source: draft-accepted (initiative)]
+Scope Lock (cross-session continuity): The stop reads the build log on disk, so a restarted driver sees the same question [source: draft-accepted (initiative)]
+Scope Lock complete. All four scenario paths captured.
+Decision applied (initiative chart): Move Context Hygiene to references/orchestrator-context-hygiene.md before the Question: edit
