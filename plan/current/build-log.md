@@ -44,3 +44,19 @@ Scope Lock complete. All four scenario paths captured.
 Backlog pulled in: 0000261, 0000308, 0000337
 Version: plan 0.60.0 (minor on 0.59.0); the merge queue sets the released version
 Complete: P0 (2026-11-07T20:19:24Z)
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-07T20:20:21Z` |
+| End | |
+| Wall clock | |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | artifacts written inline, no subagents: the artifacts share one design |
+
+Complete: P1 (2026-11-07T20:20:21Z)
