@@ -8,7 +8,7 @@ status: "active"  # proposed | charted | active | delivered | blocked
 **Goal:** Close every open backlog entry except the four that need paid services. The first three steps make the driver run independent steps at once, each in its own worktree, with each version set as its step merges. Step 20 moves the pack source to `src/ravintio-zero/`. The last step, step 21, makes activation smoother for the human.
 **Branch:** initiative/0000360-backlog-sweep
 **Status:** active
-**Position:** 1
+**Position:** 2
 **Speed:** standard
 **Step CI fixes:** allowed
 **Concurrency:** 3
@@ -175,7 +175,7 @@ Step 3 moves these columns into `## Steps`. Until then, steps 1 to 3 run one at 
 
 | Step | Feature id | Title | Backlog entries | Bump | Version | Status |
 |------|------------|-------|-----------------|------|---------|--------|
-| 1 | 0000377-driver-stops-and-headroom | Driver stops and headroom | 0000371, 0000370, 0000373 | minor | | pending |
+| 1 | 0000377-driver-stops-and-headroom | Driver stops and headroom | 0000371, 0000370, 0000373 | minor | 0.57.0 | merged |
 | 2 | 0000378-merge-time-versioning | Merge-time versioning | 0000374, 0000376, 0000372, 0000368 | minor | | pending |
 | 3 | 0000379-parallel-steps-on-worktrees | Parallel steps on worktrees | 0000375 | minor | | pending |
 | 4 | 0000380-test-helpers-and-rule-anchors | Test helpers and rule anchors | 0000261, 0000308, 0000337 | minor | | pending |
