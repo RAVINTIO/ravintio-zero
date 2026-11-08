@@ -17,12 +17,19 @@
  *      one-minute margin. A line not yet committed, or a log outside git,
  *      is compared with the current clock (0000358).
  *
+ *   7. Each "Resolved:" line, and each "Rework:" line, has a "Postmortem:" line
+ *      that names a record. The record exists and passes postmortem-check.mjs
+ *      (0000392). A "Postmortem:" line that names a REQ-nnn covers that
+ *      requirement. Any other "Postmortem:" line covers one "Resolved:" line
+ *      or one "Rework:" line that names no requirement.
+ *
  * Every finding names the phase. Exit codes: 0 = clean, 1 = findings.
  */
 
 import { execFileSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { dirname, basename, join } from "node:path";
+import { checkRecord } from "./postmortem-check.mjs";
 
 const file = process.argv[2] ?? join(process.cwd(), "plan", "current", "build-log.md");
 const findings = [];
@@ -130,6 +137,32 @@ function commitTimes(path) {
       findings.push(`${phase === null ? "Header" : `P${phase}`}: time ${m[0]} on line ${i + 1} is later than ${source}`);
     }
   });
+}
+
+// Check 7: every stop and every rework has a postmortem (0000392).
+{
+  const lineRe = (word) => new RegExp(`^\\s*(?:[-*]\\s*)?${word}:(.*)$`, "gm");
+  const resolved = [...text.matchAll(lineRe("Resolved"))].length;
+  const reworks = [...text.matchAll(lineRe("Rework"))].map((m) => m[1]);
+  const reworkReqs = new Set(reworks.flatMap((r) => r.match(/REQ-\d+/g) ?? []).slice(0, 1000));
+  const bareReworks = reworks.filter((r) => !/REQ-\d+/.test(r)).length;
+  const records = [...text.matchAll(lineRe("Postmortem"))].map((m) => m[1].trim());
+  const covered = new Set();
+  let stopLines = 0;
+  for (const rec of records) {
+    const reqs = rec.match(/REQ-\d+/g) ?? [];
+    if (reqs.length) reqs.forEach((r) => covered.add(r)); else stopLines++;
+    const path = rec.split(/\s+/)[0];
+    if (!existsSync(path)) { findings.push(`Postmortem: record ${path} does not exist`); continue; }
+    for (const f of checkRecord(readFileSync(path, "utf-8"))) findings.push(`Postmortem: ${path}: ${f}`);
+  }
+  const needStops = resolved + bareReworks;
+  if (stopLines < needStops) {
+    findings.push(`Postmortem: ${needStops} stop or rework line(s) need a "Postmortem:" line and ${stopLines} found`);
+  }
+  for (const r of [...reworkReqs].sort()) {
+    if (!covered.has(r)) findings.push(`Postmortem: ${r} has a "Rework:" line and no "Postmortem:" line that names it`);
+  }
 }
 
 const total = field(text, "Total wall clock");
