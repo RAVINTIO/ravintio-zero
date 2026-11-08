@@ -28,8 +28,8 @@ Run mode: autonomous (2026-11-08T01:05:40Z, initiative step 16)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-08T01:05:40Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-08T01:07:50Z` |
+| Wall clock | 0 |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -37,7 +37,24 @@ Run mode: autonomous (2026-11-08T01:05:40Z, initiative step 16)
 | Parallel task batches | 0 |
 | Notes | Resume findings: migrations 0004 and 0005 do not apply (no planifest-zero, no roadmap.md). |
 
+Scope lock: in scope are the ship postmortem check, the CAPA record check, and the queue CI wait [source: draft-accepted (initiative)]
 Decision applied (initiative chart): migrations 0004 and 0005 stay pending, their Applies when condition is false.
+
+Complete: P0 (2026-11-08T01:07:50Z)
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-08T01:07:50Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | none |
 
 ---
 
