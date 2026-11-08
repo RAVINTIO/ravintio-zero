@@ -1,6 +1,6 @@
 ---
 title: "Backlog index"
-summary: "42 backlog entries across 8 themes."
+summary: "39 backlog entries across 8 themes."
 ---
 # Backlog index
 
