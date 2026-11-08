@@ -116,6 +116,10 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 20 | Guards that cover `ravintio-zero/` | Extend each one to cover `src/ravintio-zero/` too. No guard gains a new allowed form. | none |
 | 20 | Step 20 runs last | Step 20 runs after step 19, so steps 1 to 19 edit `ravintio-zero/` at the old layout | none |
 | 21 | Step 21 runs last (0000398) | Step 21 runs after step 20. It edits the pack source in `src/ravintio-zero/` and refreshes the installed copy. | none |
+| 1-21 | Coordinator instructions in a worktree | Read `$RAVINTIO_INITIATIVE_ROOT/plan/.initiative-queue/` at the start of every session, including one that starts after P4. The worktree's own `plan/.initiative-queue/` is always empty. | none |
+| 1-21 | The step PR fails CI or conflicts after ship archived the run | Restore `design.md` and `build-log.md` from `plan/_archive/{feature-id}-{date}/` to `plan/current/`. Fix the check or merge the initiative branch, log a `Rework:` line, push, and watch CI to green. Archive the run again, then write `ready`. | none |
+| 1-21 | When to write `ready` | Only after `gh pr checks {n} --watch --fail-fast` shows every check passed on the PR head | none |
+| 1-21 | Where a block goes | Write the `Blocked:` line at the start of a line in the build log, with no phase prefix, so the driver sees it. If `plan/current/` is gone, restore it first, as above. | none |
 | 1-21 | A test pins text that the step edits | Update the pin in the same step and log a `Rework:` line | none |
 | 1-21 | A step changes the tree while its own suite runs | Rerun the suite on a clean tree before closing the phase | none |
 
