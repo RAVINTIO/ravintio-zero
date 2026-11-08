@@ -38,7 +38,7 @@ Quality improvements out of scope: extracting shared utilities used by only one 
 1. **Identify** refactoring opportunities from the in-scope list above.
 2. **Apply** improvements incrementally, one concern at a time.
 <!-- rule: refactor-affected-tests -->
-3. **Run the affected tests** after each significant change. These are the current requirement's test and the tests that cover the changed files. `ravintio-implement` runs the full suite once before P2 completes.
+3. **Run the affected tests** after each significant change. These are the current requirement's test and the tests that cover the changed files. In a developer repo, use the repo's own test command from the stack declaration. `ravintio-implement` runs the full suite once before P2 completes.
 4. **Confirm ALL GREEN**: every affected test must pass. If any test breaks, revert the last change and try a different approach.
 5. **Report** the refactor completion:
    ```
