@@ -124,3 +124,5 @@ Question: P3 Validate: Question: Human stop (chart row, step 18). Turn on secret
 | Cheaper tier agent calls | `{{count}}` |
 | Self-corrections | `{{count}}` |
 | Phases skipped | `{{list or "none"}}` |
+
+Resolved: human stop for step 18 (2026-11-08T09:17:47Z, the human turned on secret scanning, push protection, and topics. workflow-lint-required waits for workflow-lint to run on main.)
