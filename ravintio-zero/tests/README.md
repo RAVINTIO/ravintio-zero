@@ -11,6 +11,7 @@ PowerShell 7. All suites cover the Claude Code target only.
 | `test-*.sh` | Per-feature Bash suites |
 | `test-*.ps1` | Per-feature PowerShell suites, which run `setup.ps1` |
 | `helpers/` | Shared assertions (`assert.sh`, `assert.ps1`), the pack text helpers, `with_timeout` (`timeout.sh`), and the `setup.ps1` workspace helper |
+| `brand-guard-allowlist.txt` | The brand guard allowlist. `scripts/brand-guard.sh` (the `pre-push` check) and `test-0000160-req-006-brand-guard.sh` (CI) both read it. |
 | `regression/` | The long-term regression pack and its manifest |
 | `run-tests.sh` | The runner for every suite |
 | `run-tests.ps1` | The runner for the PowerShell suites only |

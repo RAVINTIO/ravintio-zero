@@ -466,3 +466,11 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 | ADR-002 | A chart without a Concurrency field keeps the serial path | accepted | The driver runs the scheduler only when the chart holds `**Concurrency:**`. Old charts and suites keep the serial path. |
 | ADR-003 | A step ends at ready and the driver runs the merge queue | accepted | A step under the concurrent driver writes its PR number to `ready` and ends. The driver runs `merge-queue.mjs run` one PR at a time. P4 sets no version. |
 | ADR-004 | The driver copies git-ignored setup output into each worktree | accepted | The driver copies `.claude/`, `CLAUDE.md`, `AGENTS.md`, and `.codex/` into each worktree, so a step has its hooks and skills. |
+
+### Feature 0000394-github-security-and-ci-lint
+
+| ADR | Title | Status | Summary |
+|-----|-------|--------|---------|
+| ADR-001 | One brand guard allowlist file | accepted | `brand-guard-allowlist.txt` holds the excluded prefixes and allowed lines. `pre-push` and the CI brand test both read it, and the hook runs only when `product.yml` declares the id `ravintio-zero`. |
+| ADR-002 | Workflow lint tooling and scope | accepted | A `workflow-lint` job runs pinned `actionlint` and `zizmor` on the repo workflows. It is not mirrored to the consumer template. |
+| ADR-003 | Settings check script and the human stop | accepted | `github-settings.mjs` lists and checks the admin-only settings. The step stops once for the human at P3. |
