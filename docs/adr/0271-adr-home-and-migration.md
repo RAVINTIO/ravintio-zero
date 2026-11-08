@@ -3,8 +3,10 @@ title: "ADR 001: ADR home in docs/adr and migration 0009"
 summary: "Every ADR lives in docs/adr under a four-digit repo-wide number. A script-backed migration moves and renumbers the archived ADRs."
 status: "proposed"
 version: "0.1.0"
+component: "ravintio-zero"
+feature: "0000384-plan-checks"
 ---
-# ADR-001 - ADR home in docs/adr and migration 0009
+# ADR-0271 - ADR home in docs/adr and migration 0009
 
 **Skill:** [plan](../skills/ravintio-plan/SKILL.md)
 **Feature:** 0000384-plan-checks
@@ -52,8 +54,8 @@ Each feature writes ADRs to `plan/current/adr/` and ship archives them. The arch
 
 ## Related ADRs
 
-- ADR-002 - related-to
-- ADR-003 - related-to
+- ADR-0272 - related-to
+- ADR-0273 - related-to
 
 ## Supersedes
 

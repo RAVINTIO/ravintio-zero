@@ -3,8 +3,10 @@ title: "ADR 002: Consistency check additions"
 summary: "Checks 9 and 10 are new, check 8 gains an optional column, and reference resolution reads docs/adr."
 status: "proposed"
 version: "0.1.0"
+component: "ravintio-zero"
+feature: "0000384-plan-checks"
 ---
-# ADR-002 - Consistency check additions
+# ADR-0272 - Consistency check additions
 
 **Skill:** [plan](../skills/ravintio-plan/SKILL.md)
 **Feature:** 0000384-plan-checks
@@ -49,7 +51,7 @@ Four backlog entries ask `consistency-check.mjs` to catch a plan gap: a shell fe
 
 ## Related ADRs
 
-- ADR-001 - related-to
+- ADR-0271 - related-to
 
 ## Supersedes
 

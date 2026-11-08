@@ -136,10 +136,10 @@ Agent spawning is level-2 parallelism (the Agent tool for independent sub-tasks 
 
 ```
 Agent({ description: "Implement REQ-001: {one-liner}", subagent_type: "general-purpose", model: "haiku",
-  prompt: "Requirement: plan/current/requirements/req-001-{slug}.md. ADR: plan/current/adr/ADR-00N-{slug}.md. Stack: {constraint}. Task: {what to build}. If you discover an out-of-scope bug/gap, file it at plan/backlog/{backlog-id-1}-{slug}/entry.md per templates/backlog-entry.template.md; do not report it back for me to relay. Never run git stash, git checkout, or git reset: a stash takes the uncommitted work of every other subagent. Confirm: files modified, what changed." })
+  prompt: "Requirement: plan/current/requirements/req-001-{slug}.md. ADR: docs/adr/{NNNN}-{slug}.md. Stack: {constraint}. Task: {what to build}. If you discover an out-of-scope bug/gap, file it at plan/backlog/{backlog-id-1}-{slug}/entry.md per templates/backlog-entry.template.md; do not report it back for me to relay. Never run git stash, git checkout, or git reset: a stash takes the uncommitted work of every other subagent. Confirm: files modified, what changed." })
 
 Agent({ description: "Implement REQ-002: {one-liner}", subagent_type: "general-purpose", model: "haiku",
-  prompt: "Requirement: plan/current/requirements/req-002-{slug}.md. ADR: plan/current/adr/ADR-00N-{slug}.md. Stack: {constraint}. Task: {what to build}. If you discover an out-of-scope bug/gap, file it at plan/backlog/{backlog-id-2}-{slug}/entry.md per templates/backlog-entry.template.md; do not report it back for me to relay. Never run git stash, git checkout, or git reset: a stash takes the uncommitted work of every other subagent. Confirm: files modified, what changed." })
+  prompt: "Requirement: plan/current/requirements/req-002-{slug}.md. ADR: docs/adr/{NNNN}-{slug}.md. Stack: {constraint}. Task: {what to build}. If you discover an out-of-scope bug/gap, file it at plan/backlog/{backlog-id-2}-{slug}/entry.md per templates/backlog-entry.template.md; do not report it back for me to relay. Never run git stash, git checkout, or git reset: a stash takes the uncommitted work of every other subagent. Confirm: files modified, what changed." })
 ```
 
 **Commit subject limit:** a commit subject has at most 72 characters. The commit-msg hook rejects longer ones, so state the limit in every prompt that commits.

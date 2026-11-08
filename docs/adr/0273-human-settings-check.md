@@ -3,8 +3,10 @@ title: "ADR 003: Human-only settings check"
 summary: "A script reads allowlisted repository settings with GET and blocks P1 on a mismatch."
 status: "proposed"
 version: "0.1.0"
+component: "ravintio-zero"
+feature: "0000384-plan-checks"
 ---
-# ADR-003 - Human-only settings check
+# ADR-0273 - Human-only settings check
 
 **Skill:** [plan](../skills/ravintio-plan/SKILL.md)
 **Feature:** 0000384-plan-checks
@@ -49,7 +51,7 @@ Backlog entry 0000364 notes that a step found a human-only setting wrong at P3, 
 
 ## Related ADRs
 
-- ADR-001 - related-to
+- ADR-0271 - related-to
 
 ## Supersedes
 
