@@ -99,6 +99,43 @@ copy_skills() {
   done
 }
 
+remove_manifest_entries() {
+  # Removes each folder the manifest lists, and only a folder that sits directly
+  # inside the skills directory (0000381 ADR-001, backlog 0000262). A line is
+  # relative to the repo root. A legacy absolute line passes the same test. A
+  # line with a ".." segment, a link, or a parent other than the skills
+  # directory is skipped with a warning.
+  local manifest="$1" skills_dir="$2" line path parent phys_skills
+  phys_skills="$(cd -P "$skills_dir" 2>/dev/null && pwd)" || return 0
+  while IFS= read -r line || [ -n "$line" ]; do
+    line="${line%$'\r'}"
+    [ -n "$line" ] || continue
+    case "$line" in
+      /*) path="$line" ;;
+      *) path="$PROJECT_ROOT/$line" ;;
+    esac
+    path="${path%/}"
+    case "/$path/" in
+      */../*|*/./*)
+        echo "  ! Warning: manifest entry outside the skills directory, skipped: $line"
+        continue ;;
+    esac
+    parent="$(cd -P "$(dirname "$path")" 2>/dev/null && pwd)" || parent=""
+    if [ "$parent" != "$phys_skills" ]; then
+      echo "  ! Warning: manifest entry outside the skills directory, skipped: $line"
+      continue
+    fi
+    if [ -L "$path" ]; then
+      echo "  ! Warning: manifest entry is a link, skipped: $line"
+      continue
+    fi
+    if [ -d "$path" ]; then
+      rm -rf "$path"
+      echo "  - removed: $(basename "$path")"
+    fi
+  done < "$manifest"
+}
+
 prune_bundled_files() {
   # Removes the pack copies an older install bundled into a skill (0000171
   # req-004). It deletes only the paths where that install put a pack file:
@@ -158,6 +195,35 @@ prune_retired_skills() {
   done
 }
 
+preserve_developer_boot_file() {
+  # A boot file that lacks the pack's first line is the developer's own. Copy
+  # it to ravintio-overrides/instructions/ before the write, so the override
+  # block re-applies it (0000381 ADR-002, backlog 0000290). A file with the pack
+  # line, an empty file, and a link are left alone. An existing destination is
+  # never overwritten: setup numbers the new file instead.
+  local path="$1" content="$2" marker base dest_dir dest n=1
+  [ -f "$path" ] && [ ! -L "$path" ] || return 0
+  grep -q '[^[:space:]]' "$path" 2>/dev/null || return 0
+  marker="$(printf '%s\n' "$content" | head -1)"
+  if [ -n "$marker" ] && grep -qxF -- "$marker" "$path"; then
+    return 0
+  fi
+  base="$(basename "$path" .md)"
+  dest_dir="$PROJECT_ROOT/ravintio-overrides/instructions"
+  [ -L "$PROJECT_ROOT/ravintio-overrides" ] || [ -L "$dest_dir" ] && return 0
+  mkdir -p "$dest_dir"
+  dest="$dest_dir/original-$base.md"
+  while [ -e "$dest" ] || [ -L "$dest" ]; do
+    n=$((n + 1))
+    dest="$dest_dir/original-$base-$n.md"
+  done
+  {
+    printf '<!-- Moved from %s by setup on first install. -->\n' "$(basename "$path")"
+    cat "$path"
+  } > "$dest"
+  echo "  ~ $(basename "$path") content kept in ${dest#"$PROJECT_ROOT"/}"
+}
+
 write_boot_file() {
   # Boot files are disposable build outputs (0000029 ADR-001): always
   # regenerate from the current template so template fixes propagate on every
@@ -167,6 +233,7 @@ write_boot_file() {
   local content="$2"
 
   mkdir -p "$(dirname "$path")"
+  preserve_developer_boot_file "$path" "$content"
   if [ ! -f "$path" ]; then
     echo "$content" > "$path"
     echo "  + $(basename "$path") (created)"
@@ -200,7 +267,8 @@ copy_capability_skills() {
 
     local dest_dir="$target_dir/$skill_name"
     mkdir -p "$dest_dir"
-    cp "$skill_md" "$dest_dir/SKILL.md"
+    # The whole folder, so references/, scripts/, and assets/ install too (0000381 REQ-002).
+    cp -R "$skill_dir/." "$dest_dir/"
     echo "  + capability-skill: $skill_name"
     found=true
   done
@@ -344,6 +412,51 @@ append_override_instructions() {
   } >> "$boot_file"
 
   echo "  Appending override instructions from ravintio-overrides/instructions/"
+}
+
+# Commands an earlier release shipped in the tool's command folder and no longer
+# ships (0000381 ADR-002, backlog 0000293).
+RETIRED_COMMANDS="fast-path change-pipeline retrofit"
+
+prune_retired_commands() {
+  # Removes a command file the pack no longer ships. Two sources name it: the
+  # command manifest from a past run, and the retired list above. A file counts
+  # as the pack's only if it is a plain file that is not a link, and (for the
+  # retired list) its front matter holds the matching "name:" line. A
+  # developer's own command stays.
+  local dir="$1" manifest="$1/.ravintio-manifest" line name f
+  [ -d "$dir" ] && [ ! -L "$dir" ] || return 0
+  if [ -f "$manifest" ]; then
+    while IFS= read -r line || [ -n "$line" ]; do
+      name="${line%$'\r'}"
+      case "$name" in ""|*/*|.*) continue ;; esac
+      [ -e "$WORKFLOWS_SRC/$name" ] && continue
+      f="$dir/$name"
+      if [ -f "$f" ] && [ ! -L "$f" ]; then
+        rm -f "$f"
+        echo "  - pruned retired command: $name"
+      fi
+    done < "$manifest"
+  fi
+  for name in $RETIRED_COMMANDS; do
+    f="$dir/$name.md"
+    [ -f "$f" ] && [ ! -L "$f" ] || continue
+    if head -8 "$f" | grep -Eq "^name:[[:space:]]*$name[[:space:]]*\r?$"; then
+      rm -f "$f"
+      echo "  - pruned retired command: $name.md"
+    fi
+  done
+}
+
+write_commands_manifest() {
+  # Lists the command files the pack installed, so the next run can prune one
+  # the pack stops shipping.
+  local dir="$1" wf
+  [ -d "$dir" ] && [ ! -L "$dir" ] || return 0
+  : > "$dir/.ravintio-manifest"
+  for wf in "$WORKFLOWS_SRC"/*.md; do
+    [ -f "$wf" ] && basename "$wf" >> "$dir/.ravintio-manifest"
+  done
 }
 
 copy_workflow() {
@@ -1024,16 +1137,13 @@ setup_tool() {
   echo "  Setting up $tool"
   echo "  Skills directory: $TOOL_SKILLS_DIR/"
 
-  # Manifest cleanup — remove only previously installed directories on re-run
+  # Manifest cleanup — remove only previously installed directories on re-run.
+  # A line is removed only if it is a direct child of the skills directory
+  # (0000381 ADR-001).
   local manifest="$skills_dir/.ravintio-manifest"
   if [ -f "$manifest" ]; then
     echo "  Re-run detected — removing previously installed directories"
-    while IFS= read -r dir_path; do
-      if [ -n "$dir_path" ] && [ -d "$dir_path" ]; then
-        rm -rf "$dir_path"
-        echo "  - removed: $(basename "$dir_path")"
-      fi
-    done < "$manifest"
+    remove_manifest_entries "$manifest" "$skills_dir"
     rm -f "$manifest"
   fi
 
@@ -1049,9 +1159,11 @@ setup_tool() {
   # Copy workflows (if tool defines a workflow dir)
   if [ -n "${TOOL_WORKFLOWS_DIR:-}" ] && [ -d "$WORKFLOWS_SRC" ]; then
     local workflows_dir="$PROJECT_ROOT/$TOOL_WORKFLOWS_DIR"
+    prune_retired_commands "$workflows_dir"
     for wf in "$WORKFLOWS_SRC"/*.md; do
       [ -f "$wf" ] && copy_workflow "$wf" "$workflows_dir"
     done
+    write_commands_manifest "$workflows_dir"
   fi
 
   # Create boot file (if tool defines one)
@@ -1092,10 +1204,11 @@ setup_tool() {
     merge_allowed_tools "$PROJECT_ROOT/$TOOL_SETTINGS_FILE"
   fi
 
-  # Write manifest listing all installed skill directories (enables safe re-run cleanup)
+  # Write manifest listing all installed skill directories, relative to the
+  # repo root (enables safe re-run cleanup, 0000381 ADR-001). A link is not listed.
   local installed_dirs=()
   for dir in "$skills_dir"/*/; do
-    [ -d "$dir" ] && installed_dirs+=("${dir%/}")
+    [ -d "$dir" ] && [ ! -L "${dir%/}" ] && installed_dirs+=("$TOOL_SKILLS_DIR/$(basename "$dir")")
   done
   if [ ${#installed_dirs[@]} -gt 0 ]; then
     printf '%s\n' "${installed_dirs[@]}" > "$manifest"
