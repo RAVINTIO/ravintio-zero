@@ -64,11 +64,11 @@ flowchart LR
 
 | Unit | Depends on | Writes | Batch | Sequential reason |
 |------|-----------|--------|-------|-------------------|
-| U1 | none | `setup.sh`, `setup.ps1`, `tests/test-0000382-req-004-*`, `tests/test-0000382-req-005-*` | 1 | Edits the setup scripts that every unit edits |
+| U1 | none | `scripts/install-lifecycle.mjs`, `setup.sh`, `setup.ps1`, `tests/test-0000382-req-004-*`, `tests/test-0000382-req-005-*` | 1 | Edits the setup scripts that every unit edits |
 | U2 | U1 | `setup.sh`, `setup.ps1`, `tests/helpers/*`, existing suites, `tests/test-0000382-req-002-*` | 2 | Shared write target |
 | U3 | U2 | `setup.sh`, `setup.ps1`, `tests/test-0000382-req-001-*` | 3 | Shared write target |
 | U4 | U3 | `setup.sh`, `setup.ps1`, `tests/test-0000382-req-003-*` | 4 | Shared write target |
-| U5 | U4 | `hooks/enforcement/*`, `getting-started.md`, `project-operations.md` | 5 | Reads the finished command names |
+| U5 | U4 | `hooks/enforcement/*`, `getting-started.md`, `project-operations.md`, `pipeline-reference.md` | 5 | Reads the finished command names |
 | U6 | U5 | `scripts/pack-facts.mjs`, `pack-facts.json`, `hooks/ravintio.yml`, `tests/test-0000382-req-006-*` | 6 | Records the finished flags and hooks |
 
 ## Assumptions

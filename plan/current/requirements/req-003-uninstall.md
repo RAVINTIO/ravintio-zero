@@ -19,7 +19,8 @@ As a developer, I remove Zero's setup changes with one command and keep my own w
 
 - `setup.sh claude-code --uninstall` unsets `core.hooksPath`, removes the RAVINTIO hook entries from `.claude/settings.json`, and removes the files in the manifests, the workflow, and `.gitattributes` when setup wrote them.
 - It keeps the developer's own `settings.json` entries and files.
-- It deletes nothing under `plan/` and lists the `plan/` records.
+- It deletes no record under `plan/` and lists the records. It removes the two marker files `plan/.orchestrator-strict` and `plan/.orchestrator-ack`, because they belong to the guards it removes.
+- It removes a skill only when the manifest lists it and the pack or `ravintio-overrides/capability-skills/` names it, so a skill the developer placed in the skills folder survives.
 - It prints each guard it removes and refuses while `plan/.orchestrator-active` or `plan/.initiative-runner.lock` exists.
 - `setup.sh` and `setup.ps1` behave the same.
 
@@ -32,7 +33,7 @@ As a developer, I remove Zero's setup changes with one command and keep my own w
 - [ ] AC-2: Plan untouched
   - Given `plan/` records
   - When the developer runs uninstall
-  - Then nothing under `plan/` is deleted and the output lists the records
+  - Then no record under `plan/` is deleted and the output lists the records
 - [ ] AC-3: Refuses during a run
   - Given `plan/.orchestrator-active` exists
   - When the developer runs uninstall

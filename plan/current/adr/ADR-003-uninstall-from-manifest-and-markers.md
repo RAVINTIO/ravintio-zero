@@ -21,11 +21,11 @@ Uninstall removes only these items. It prints each one it removes.
 
 - The `core.hooksPath` setting, when it points at `ravintio-zero/hooks`.
 - Hook entries in `.claude/settings.json` whose command points at `.claude/hooks/enforcement/`.
-- The folders and files in the skills and commands manifests, with the confinement check from step 5.
+- The folders and files in the skills and commands manifests, with the confinement check from step 5. A skill folder goes only if the pack or the capability skills name it.
 - `.github/workflows/ravintio.yml` and `.gitattributes`, only when they match the pack copy.
-- The strict-mode and setup-flag markers.
+- The strict-mode marker, the acknowledgement marker, and the setup-flag marker.
 
-It refuses while `plan/.orchestrator-active` or `plan/.initiative-runner.lock` exists. It deletes nothing under `plan/` and lists the records.
+It refuses while `plan/.orchestrator-active` or `plan/.initiative-runner.lock` exists. It deletes no record under `plan/` and lists the records. It keeps `CLAUDE.md` and the `env`, `allowedTools`, and `attribution` values that setup set, and lists them.
 
 ## Alternatives Considered
 
