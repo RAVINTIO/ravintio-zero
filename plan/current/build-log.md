@@ -27,7 +27,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 |-------|-------|
 | Start | `2026-11-08T09:56:43Z` |
 | End | `2026-11-08T09:58:31Z` |
-| Wall clock | `19` |
+| Wall clock | `2` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -53,7 +53,7 @@ Complete: P0 (2026-11-08T09:58:31Z)
 |-------|-------|
 | Start | `2026-11-08T09:58:31Z` |
 | End | `2026-11-08T10:00:15Z` |
-| Wall clock | `10` |
+| Wall clock | `2` |
 | Model tier | primary |
 | Skills loaded | ravintio-plan |
 | Agents spawned | 0 |
@@ -134,7 +134,7 @@ Complete: P4 (2026-11-08T10:48:45Z)
 | Total agents spawned | `7` |
 | Total MCP calls | `0` |
 | Phases using parallelism | `1` |
-| Primary tier agent calls | `0` |
-| Cheaper tier agent calls | `7` |
+| Primary tier agent calls | `7` |
+| Cheaper tier agent calls | `0` |
 | Self-corrections | `3` |
 | Phases skipped | `none` |
