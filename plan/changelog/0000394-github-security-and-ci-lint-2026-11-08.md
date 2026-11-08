@@ -2,7 +2,7 @@
 
 **Feature:** GitHub security and CI lint
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** #137
 
 ## What changed
 
