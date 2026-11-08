@@ -27,7 +27,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 |-------|-------|
 | Start | `2026-11-08T02:32:04Z` |
 | End | `2026-11-08T02:33:14Z` |
-| Wall clock | `4` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | `0` |
@@ -57,7 +57,7 @@ Complete: P0 (2026-11-08T02:33:14Z)
 |-------|-------|
 | Start | `2026-11-08T02:33:14Z` |
 | End | `2026-11-08T02:34:24Z` |
-| Wall clock | `3` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator, ravintio-plan |
 | Agents spawned | `0` |
@@ -73,7 +73,7 @@ Complete: P1 (2026-11-08T02:34:24Z)
 |-------|-------|
 | Start | `2026-11-08T02:34:24Z` |
 | End | `2026-11-08T03:21:06Z` |
-| Wall clock | `110` |
+| Wall clock | `47` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator, ravintio-implement |
 | Agents spawned | `0` |
@@ -101,7 +101,7 @@ Complete: P2 (2026-11-08T03:21:06Z)
 |-------|-------|
 | Start | `2026-11-08T03:21:06Z` |
 | End | `2026-11-08T03:21:06Z` |
-| Wall clock | `1` |
+| Wall clock | `0` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator, ravintio-validate-and-accept |
 | Agents spawned | `0` |
@@ -116,8 +116,8 @@ Complete: P3 (2026-11-08T03:21:06Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-08T03:21:06Z` |
-| End | `pending` |
-| Wall clock | `pending` |
+| End | `2026-11-08T03:21:24Z` |
+| Wall clock | `0` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator, ravintio-ship, ravintio-retrospective |
 | Agents spawned | `0` |
@@ -125,10 +125,20 @@ Complete: P3 (2026-11-08T03:21:06Z)
 | Parallel task batches | `0` |
 | Notes | `Initiative step. The merge queue sets the version.` |
 
+Complete: P4 (2026-11-08T03:21:24Z)
+
 ---
 
 ## Summary (filled at ship, P4)
 
 | Metric | Value |
 |--------|-------|
-| Total phases completed | `pending` |
+| Total phases completed | `5` |
+| Total wall clock | `49` |
+| Total agents spawned | `0` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `0` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `4` |
+| Phases skipped | `none` |
