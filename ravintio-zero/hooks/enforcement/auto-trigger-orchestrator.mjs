@@ -106,6 +106,29 @@ function resumeFindings(cwd) {
   }
 }
 
+// Install check (0000382): the cheap part of `setup.sh --doctor`. A clone that
+// has the pack but no wired git hooks, or a repo whose setup never ran, gets
+// one report per session, because this hook emits once per session. A passing
+// check, a missing script, or a timeout adds nothing.
+function installCheck(cwd) {
+  try {
+    const script = join(cwd, "ravintio-zero", "scripts", "install-lifecycle.mjs");
+    if (!existsSync(script)) return "";
+    const run = spawnSync(process.execPath, [script, "doctor", "--quick", "--root", cwd, "--tool", "claude-code"], {
+      encoding: "utf-8",
+      timeout: 2000,
+      env: process.env,
+    });
+    if (run.error || run.status !== 1) return "";
+    const lines = run.stdout.split("\n").filter((l) => l.includes("FAIL")).map((l) => `- ${l.replace(/^\s*FAIL\s*/, "")}`);
+    if (lines.length === 0) return "";
+    return "Install check (tell the human once, then carry on): this clone is not fully set up. " +
+      "Run ./ravintio-zero/setup.sh claude-code to install the guards.\n" + lines.join("\n") + "\n";
+  } catch {
+    return "";
+  }
+}
+
 try {
   const raw = await readStdin();
   const input = JSON.parse(raw);
@@ -133,7 +156,7 @@ try {
       "with an active initiative (plan/current-initiative/initiative.md). " +
       "Load the ravintio-initiative skill now, before responding to the user's prompt. " +
       "Begin with resume detection as described in the skill.\n" +
-      resumeFindings(cwd)
+      resumeFindings(cwd) + installCheck(cwd)
     );
     process.exit(0);
   }
@@ -146,7 +169,7 @@ try {
     "and the orchestrator has not been loaded yet for this session. " +
     "Load the ravintio-orchestrator skill now, before responding to the user's prompt. " +
     "Begin with resume detection as described in the skill.\n" +
-    resumeFindings(cwd)
+    resumeFindings(cwd) + installCheck(cwd)
   );
 
   process.exit(0);

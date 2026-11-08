@@ -23,6 +23,7 @@ make_workspace() {
   dir=$(mktemp -d -t ravintio_0000032_req003_test_XXXXXX)
   cp -r "$ZERO_DIR" "$dir/ravintio-zero"
   git init "$dir" >/dev/null 2>&1
+  commit_workspace_pack "$dir"
   git config --global --add safe.directory "$dir" >/dev/null 2>&1 || true
   echo "$dir"
 }
@@ -35,6 +36,7 @@ echo "=== req-003 (a): old file present, folder held only that file ==="
 WS=$(make_workspace); cd "$WS"
 mkdir -p "ravintio-overrides/setup-config"
 echo "stale" > "ravintio-overrides/setup-config/claude-code.md"
+commit_workspace_pack "$WS"
 
 RUN_OUTPUT="$(bash ravintio-zero/setup.sh claude-code 2>&1)"
 assert_exit_zero $? "req-003 (a): setup exits 0 after removing the old file and folder"
@@ -65,7 +67,9 @@ echo "=== req-003 (b): folder holds another file — folder and that file remain
 WS=$(make_workspace); cd "$WS"
 mkdir -p "ravintio-overrides/setup-config"
 echo "stale" > "ravintio-overrides/setup-config/claude-code.md"
+commit_workspace_pack "$WS"
 echo "keep me" > "ravintio-overrides/setup-config/other-tool.md"
+commit_workspace_pack "$WS"
 
 RUN_OUTPUT="$(bash ravintio-zero/setup.sh claude-code 2>&1)"
 assert_exit_zero $? "req-003 (b): setup exits 0"
@@ -107,8 +111,10 @@ echo "=== req-003 (d): second run against an already-migrated repo prints no rem
 WS=$(make_workspace); cd "$WS"
 mkdir -p "ravintio-overrides/setup-config"
 echo "stale" > "ravintio-overrides/setup-config/claude-code.md"
+commit_workspace_pack "$WS"
 
 bash ravintio-zero/setup.sh claude-code >/dev/null 2>&1
+commit_workspace_pack "$WS"
 
 RUN_OUTPUT="$(bash ravintio-zero/setup.sh claude-code 2>&1)"
 assert_exit_zero $? "req-003 (d): second run exits 0"
@@ -131,6 +137,7 @@ else
   WS=$(make_workspace); cd "$WS"
   mkdir -p "ravintio-overrides/setup-config"
   echo "stale" > "ravintio-overrides/setup-config/claude-code.md"
+  commit_workspace_pack "$WS"
   chmod 555 "ravintio-overrides/setup-config"
 
   RUN_OUTPUT="$(bash ravintio-zero/setup.sh claude-code 2>&1)"
