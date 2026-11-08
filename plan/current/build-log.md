@@ -66,10 +66,27 @@ Complete: P1 (2026-11-08T01:08:06Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-08T01:08:06Z` |
+| End | `2026-11-08T02:17:44Z` |
+| Wall clock | `60` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | `3` |
+| MCP calls | `0` |
+| Parallel task batches | `1` |
+| Notes | U1 and U2 inline. U3, U4, U5 in one parallel batch on sonnet. U1 and U2 departed from the TDD trio: inline, because each is small and U2 reads U1 output. |
+- Rework: REQ-003: generator printed nothing through a symlinked path, fixed with realpath (2026-11-08T02:17:44Z)
+- Rework: REQ-005: regression copy of the v0.4.0 pin lacked outputStyle (2026-11-08T02:17:44Z)
+Complete: P2 (2026-11-08T02:17:44Z)
+
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-08T02:17:44Z` |
 | End | `` |
 | Wall clock | `` |
 | Model tier | primary |
-| Skills loaded | ravintio-implement |
+| Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
