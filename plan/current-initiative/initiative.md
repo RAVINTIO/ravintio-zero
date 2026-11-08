@@ -162,7 +162,7 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 9 | 0000385-faster-test-runs | Faster test runs | 0000294, 0000295, 0000296 | minor | | pending | run | 4 |
 | 10 | 0000386-unit-dispatch | Unit dispatch | 0000330, 0000366 | minor | | pending | run | 9 |
 | 11 | 0000387-light-discovery-and-audits | Light discovery and audits | 0000281, 0000284, 0000348, 0000328, 0000329 | minor | | pending | orchestrator | 8 |
-| 12 | 0000388-replies-and-questions | Replies and questions | 0000257, 0000258, 0000259, 0000306 | minor | | pending | orchestrator | 4 |
+| 12 | 0000388-replies-and-questions | Replies and questions | 0000257, 0000258, 0000259, 0000306 | minor | 0.64.0 | merged | orchestrator | 4 |
 | 13 | 0000389-writing-standard | Writing standard | 0000300 | minor | | pending | writing | 4 |
 | 14 | 0000390-prose-checks | Prose checks | 0000301, 0000303, 0000304 | minor | | pending | writing | 6, 13 |
 | 15 | 0000391-standards-archetypes | Standards archetypes | 0000305 | minor | | pending | writing | 6, 14 |
@@ -182,3 +182,4 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 5 | #131 | tag v0.61.0 | 0.61.0 | 2026-11-08T01:04:33Z |
 | 7 | #132 | tag v0.62.0 | 0.62.0 | 2026-11-08T02:38:25Z |
 | 6 | #136 | tag v0.63.0 | 0.63.0 | 2026-11-08T15:23:07Z |
+| 12 | #133 | tag v0.64.0 | 0.64.0 | 2026-11-08T16:55:17Z |
