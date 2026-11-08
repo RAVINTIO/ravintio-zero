@@ -68,8 +68,8 @@ Complete: P1 (2026-11-08T01:09:03Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-08T01:09:14Z` |
-| End | `{{timestamp, filled when the phase completes}}` |
-| Wall clock | `{{whole minutes from Start to End}}` |
+| End | `2026-11-08T01:29:45Z` |
+| Wall clock | 21 |
 | Model tier | primary and cheaper |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 1 |
@@ -78,6 +78,17 @@ Complete: P1 (2026-11-08T01:09:03Z)
 | Notes | U2 by a sonnet subagent, U1, U3, and U4 inline |
 
 In progress: U2 community files (2026-11-08T01:09:14Z)
+Done: U2 community files (2026-11-08T01:10:23Z)
+Done: U3 brand guard before push (2026-11-08T01:12:00Z)
+Done: U4 settings checklist script (2026-11-08T01:12:30Z)
+Done: U1 pinned actions, lint job, supply-chain workflows (2026-11-08T01:13:30Z)
+Done: U5 docs, manifest, and reworked tests (2026-11-08T01:29:45Z)
+Rework: test-0000355-req-005 read the pulled-in entry 0000323, so the step removed it (2026-11-08T01:29:45Z)
+Rework: test-0000042-req-010, test-0000160-req-003, and run-tests.sh now cover the shared allowlist file (2026-11-08T01:29:45Z)
+Deviation: design.md `## Component Paths` listed two paths on one line, so the write guard read one. The step put one path on each line. Scope is unchanged.
+Deviation: attestations for release-tag stay deferred, as the brief says. The step added no dependency beyond the approved list.
+
+Complete: P2 (2026-11-08T01:29:45Z)
 
 ---
 
