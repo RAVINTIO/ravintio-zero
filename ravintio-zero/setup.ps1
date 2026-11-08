@@ -116,6 +116,39 @@ function Test-RavintioLink {
     return (([System.IO.File]::GetAttributes($Path) -band $link) -eq $link)
 }
 
+# Removes each folder the manifest lists, and only a folder that sits directly inside the
+# skills directory (0000381 ADR-001, backlog 0000262). A line is relative to the repo root.
+# A legacy absolute line passes the same test. A line with a ".." segment, a link, or a
+# parent other than the skills directory is skipped with a warning.
+function Remove-ManifestEntries {
+    param([string]$Manifest, [string]$SkillsDir)
+    $physSkills = [System.IO.Path]::GetFullPath($SkillsDir).TrimEnd('\', '/')
+    foreach ($line in @(Get-Content -Path $Manifest -Encoding UTF8)) {
+        $line = ([string]$line).TrimEnd("`r")
+        if ($line -eq '') { continue }
+        if ([System.IO.Path]::IsPathRooted($line)) { $path = $line } else { $path = Join-Path $ProjectRoot $line }
+        $path = $path.TrimEnd('\', '/')
+        if ((($path -replace '\\', '/') -split '/') -contains '..' -or (($path -replace '\\', '/') -split '/') -contains '.') {
+            Write-Host "  ! Warning: manifest entry outside the skills directory, skipped: $line"
+            continue
+        }
+        $full = [System.IO.Path]::GetFullPath($path)
+        $parent = [System.IO.Path]::GetDirectoryName($full)
+        if ($null -eq $parent -or $parent.TrimEnd('\', '/') -ne $physSkills) {
+            Write-Host "  ! Warning: manifest entry outside the skills directory, skipped: $line"
+            continue
+        }
+        if (Test-RavintioLink $full) {
+            Write-Host "  ! Warning: manifest entry is a link, skipped: $line"
+            continue
+        }
+        if ([System.IO.Directory]::Exists($full)) {
+            Remove-Item -LiteralPath $full -Recurse -Force
+            Write-Host "  - removed: $(Split-Path -Leaf $full)"
+        }
+    }
+}
+
 # Removes the pack copies an older install bundled into a skill (0000171
 # req-004). It deletes only the paths where that install put a pack file:
 # assets/templates/{name}, assets/schemas/{name}, and references/{name}.
@@ -179,6 +212,34 @@ function Remove-RetiredSkills {
     }
 }
 
+# A boot file that lacks the pack's first line is the developer's own. Copy it to
+# ravintio-overrides/instructions/ before the write, so the override block re-applies
+# it (0000381 ADR-002, backlog 0000290). A file with the pack line, an empty file, and
+# a link are left alone. An existing destination is never overwritten: a number is added.
+function Save-DeveloperBootFile {
+    param([string]$FullPath, [string]$Content)
+    if (-not (Test-Path -LiteralPath $FullPath -PathType Leaf)) { return }
+    if (Test-RavintioLink $FullPath) { return }
+    $existing = [System.IO.File]::ReadAllText($FullPath)
+    if ($existing.Trim() -eq '') { return }
+    $marker = (($Content -split "`r?`n")[0]).Trim()
+    if ($marker -ne '' -and (($existing -split "`r?`n") | Where-Object { $_.TrimEnd() -eq $marker })) { return }
+    $overrides = Join-Path $ProjectRoot 'ravintio-overrides'
+    $destDir = Join-Path $overrides 'instructions'
+    if ((Test-RavintioLink $overrides) -or (Test-RavintioLink $destDir)) { return }
+    New-Item -ItemType Directory -Path $destDir -Force | Out-Null
+    $base = [System.IO.Path]::GetFileNameWithoutExtension($FullPath)
+    $dest = Join-Path $destDir "original-$base.md"
+    $n = 1
+    while ([System.IO.File]::Exists($dest)) {
+        $n++
+        $dest = Join-Path $destDir "original-$base-$n.md"
+    }
+    $text = "<!-- Moved from $([System.IO.Path]::GetFileName($FullPath)) by setup on first install. -->`n" + $existing
+    [System.IO.File]::WriteAllText($dest, $text, (New-Object System.Text.UTF8Encoding($false)))
+    Write-Host "  ~ $([System.IO.Path]::GetFileName($FullPath)) content kept in ravintio-overrides/instructions/$([System.IO.Path]::GetFileName($dest))"
+}
+
 function Write-RavintioBootFile {
     # Boot files are disposable build outputs (0000029 ADR-001): always
     # regenerate from the current template so template fixes propagate on
@@ -190,6 +251,7 @@ function Write-RavintioBootFile {
     $fullPath = Join-Path $ProjectRoot $RelPath
     $dir = Split-Path -Parent $fullPath
     New-Item -ItemType Directory -Path $dir -Force | Out-Null
+    Save-DeveloperBootFile -FullPath $fullPath -Content $Content
 
     if (-not (Test-Path $fullPath)) {
         Set-Content -Path $fullPath -Value $Content -Encoding UTF8
@@ -199,6 +261,52 @@ function Write-RavintioBootFile {
         Set-Content -Path $fullPath -Value $Content -Encoding UTF8
         Write-Host "  ~ $RelPath (regenerated from template)"
     }
+}
+
+# Commands an earlier release shipped in the tool's command folder and no longer
+# ships (0000381 ADR-002, backlog 0000293).
+$RetiredCommands = @('fast-path', 'change-pipeline', 'retrofit')
+
+# Removes a command file the pack no longer ships. Two sources name it: the command
+# manifest from a past run, and the retired list above. A file counts as the pack's
+# only if it is a plain file that is not a link, and (for the retired list) its front
+# matter holds the matching "name:" line. A developer's own command stays.
+function Remove-RetiredCommands {
+    param([string]$Dir)
+    if (-not [System.IO.Directory]::Exists($Dir)) { return }
+    if (Test-RavintioLink $Dir) { return }
+    $manifest = Join-Path $Dir '.ravintio-manifest'
+    if ([System.IO.File]::Exists($manifest)) {
+        foreach ($line in @(Get-Content -LiteralPath $manifest -Encoding UTF8)) {
+            $name = ([string]$line).TrimEnd("`r")
+            if ($name -eq '' -or $name -match '[\\/]' -or $name.StartsWith('.')) { continue }
+            if (Test-Path -LiteralPath (Join-Path $WorkflowsSrc $name)) { continue }
+            $f = Join-Path $Dir $name
+            if ([System.IO.File]::Exists($f) -and -not (Test-RavintioLink $f)) {
+                Remove-Item -LiteralPath $f -Force
+                Write-Host "  - pruned retired command: $name"
+            }
+        }
+    }
+    foreach ($name in $RetiredCommands) {
+        $f = Join-Path $Dir "$name.md"
+        if (-not [System.IO.File]::Exists($f)) { continue }
+        if (Test-RavintioLink $f) { continue }
+        $head = @(Get-Content -LiteralPath $f -TotalCount 8)
+        if (@($head | Where-Object { $_ -match "^name:\s*$([regex]::Escape($name))\s*$" }).Count -gt 0) {
+            Remove-Item -LiteralPath $f -Force
+            Write-Host "  - pruned retired command: $name.md"
+        }
+    }
+}
+
+# Lists the command files the pack installed, so the next run can prune one the pack stops shipping.
+function Write-CommandsManifest {
+    param([string]$Dir)
+    if (-not [System.IO.Directory]::Exists($Dir)) { return }
+    if (Test-RavintioLink $Dir) { return }
+    $names = @(Get-ChildItem -Path $WorkflowsSrc -Filter '*.md' | ForEach-Object { $_.Name })
+    Set-Content -LiteralPath (Join-Path $Dir '.ravintio-manifest') -Value $names -Encoding UTF8
 }
 
 function Copy-RavintioWorkflow {
@@ -1116,16 +1224,22 @@ function Copy-CapabilitySkills {
     $capSkillsDir = Join-Path $ProjectRoot 'ravintio-overrides\capability-skills'
     if (-not (Test-Path $capSkillsDir)) { return }
 
-    $found = @(Get-ChildItem -Path $capSkillsDir -Directory | Where-Object {
-        Test-Path (Join-Path $_.FullName 'SKILL.md')
-    })
+    $found = @()
+    foreach ($candidate in @(Get-ChildItem -Path $capSkillsDir -Directory)) {
+        if (Test-Path (Join-Path $candidate.FullName 'SKILL.md')) {
+            $found += $candidate
+        } else {
+            Write-Host "  ! Warning: capability skill '$($candidate.Name)' missing SKILL.md - skipping"
+        }
+    }
     if ($found.Count -eq 0) { return }
 
     Write-Host ""
     Write-Host "  Syncing capability skills from ravintio-overrides/capability-skills/"
     foreach ($dir in $found) {
         $destDir = Join-Path $TargetDir $dir.Name
-        Copy-Item -Path $dir.FullName -Destination $destDir -Recurse -Force
+        # The whole folder, so references, scripts, and assets install too (0000381 REQ-002).
+        Copy-RavintioTree -SourceDir $dir.FullName -DestDir $destDir
         Write-Host "  + capability-skill: $($dir.Name)"
     }
 }
@@ -1300,16 +1414,12 @@ function Invoke-RavintioSetup {
     Write-Host "  Setting up $ToolName"
     Write-Host "  Skills directory: $($toolConfig.SkillsDir)/"
 
-    # Manifest cleanup — remove only previously installed directories on re-run
+    # Manifest cleanup: remove only previously installed directories on re-run.
+    # A line is removed only if it is a direct child of the skills directory (0000381 ADR-001).
     $manifest = Join-Path $skillsDir ".ravintio-manifest"
     if (Test-Path $manifest) {
-        Write-Host "  Re-run detected — removing previously installed directories"
-        Get-Content -Path $manifest -Encoding UTF8 | Where-Object { $_ -ne '' } | ForEach-Object {
-            if (Test-Path $_) {
-                Remove-Item -Path $_ -Recurse -Force
-                Write-Host "  - removed: $(Split-Path -Leaf $_)"
-            }
-        }
+        Write-Host "  Re-run detected - removing previously installed directories"
+        Remove-ManifestEntries -Manifest $manifest -SkillsDir $skillsDir
         Remove-Item -Path $manifest -Force
     }
 
@@ -1325,9 +1435,11 @@ function Invoke-RavintioSetup {
     # Copy workflows (if tool defines a workflow dir)
     if ($toolConfig.WorkflowsDir -and (Test-Path $WorkflowsSrc)) {
         $workflowsDir = Join-Path $ProjectRoot $toolConfig.WorkflowsDir
+        Remove-RetiredCommands -Dir $workflowsDir
         Get-ChildItem -Path $WorkflowsSrc -Filter '*.md' | ForEach-Object {
             Copy-RavintioWorkflow -WorkflowFile $_.FullName -TargetDir $workflowsDir
         }
+        Write-CommandsManifest -Dir $workflowsDir
     }
 
     # Create boot file (if tool defines one)
@@ -1369,9 +1481,10 @@ function Invoke-RavintioSetup {
         Merge-AllowedTools -SettingsPath $settingsPath
     }
 
-    # Write manifest listing all installed skill directories (enables safe re-run cleanup)
+    # Write manifest listing all installed skill directories, relative to the repo root
+    # (enables safe re-run cleanup, 0000381 ADR-001). A link is not listed.
     New-Item -ItemType Directory -Path $skillsDir -Force | Out-Null
-    $installedDirs = @(Get-ChildItem -Path $skillsDir -Directory | ForEach-Object { $_.FullName })
+    $installedDirs = @(Get-ChildItem -Path $skillsDir -Directory | Where-Object { -not (Test-RavintioLink $_.FullName) } | ForEach-Object { ($toolConfig.SkillsDir.TrimEnd('/', '\') -replace '\\', '/') + '/' + $_.Name })
     if ($installedDirs.Count -gt 0) {
         $installedDirs | Set-Content -Path $manifest -Encoding UTF8
         Write-Host "  + .ravintio-manifest ($($installedDirs.Count) entries)"

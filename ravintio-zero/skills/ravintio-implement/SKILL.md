@@ -57,6 +57,8 @@ Before adding any library or service, check that it is on the approved list. The
 
 ## TDD inner loop
 
+Run the suites that `## Test impact` names before the full suite. A failure there costs seconds, not a full run.
+
 For each functional requirement, orchestrate three subagents in sequence. This is the mandatory implementation discipline.
 
 ```

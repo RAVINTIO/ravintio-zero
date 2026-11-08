@@ -41,7 +41,7 @@ Run the stack's declared checks in this order:
 1. **Semantic correctness**: every requirement needs a mapped, executing test identifiable by req-ID. Every acceptance criterion needs a covering test. Produce a coverage table. A missing criterion is a failure, not a warning.
 2. **Lint**
 3. **Typecheck**
-4. **Test**: for this pack run `RAVINTIO_TEST_QUIET=1 bash ravintio-zero/tests/run-tests.sh`, which prints only failures and the summary. If a suite fails, read the `Failed suites:` list under the totals for each file name.
+4. **Test**: in a developer repo run the repo's own test command from the stack declaration. For this pack run `RAVINTIO_TEST_QUIET=1 bash ravintio-zero/tests/run-tests.sh`, which prints only failures and the summary. If a suite fails, read the `Failed suites:` list under the totals for each file name.
    - <!-- rule: p3-clean-clone --> **Clean clone.** Commit your work, then run the suite in a clean clone of `HEAD` with `node ravintio-zero/scripts/clean-clone-test.mjs -- {suite command}`. It removes the clone when the run ends. If it prints an `OS gap:` line, copy that line to the build log.
    - <!-- rule: p3-baseline-check --> **Baseline.** Save the output and run `node ravintio-zero/scripts/baseline-failures.mjs check {output}`. Stop only on a `new:` suite. List each `inherited:` suite in the build report.
    - <!-- rule: p3-rerun-failed --> **Rerun.** After a fix, rerun only the failed suites first.
