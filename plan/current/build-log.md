@@ -76,3 +76,7 @@ Complete: P1 (2026-11-08T10:00:15Z)
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | none |
+In progress: U1 checks (2026-11-08T10:00:56Z)
+In progress: U2 templates and standards (2026-11-08T10:00:56Z)
+In progress: U3 human settings check (2026-11-08T10:00:56Z)
+In progress: U4 migration 0009 (2026-11-08T10:00:56Z)
