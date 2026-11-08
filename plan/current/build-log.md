@@ -39,3 +39,9 @@ Run mode: autonomous (2026-11-08T09:56:43Z, initiative step)
 Run speed: standard (2026-11-08T09:56:43Z, initiative speed field)
 Adoption mode: standard-iterative (signal: plan/_archive/ has feature dirs and docs/about.md exists)
 Backlog review: skipped, initiative step takes entries from its chart row
+Scope Lock (happy path): A planner reserves an ADR number, writes to docs/adr/, and every check passes [source: draft-accepted (initiative)]
+Scope Lock (first-run path): A repo with no docs/adr/ gets the folder, the counter, and moved ADRs from the migration [source: draft-accepted (initiative)]
+Scope Lock (error path): An unlisted shell feature, a missing living docs unit, or a wrong human setting prints a finding or Blocked before P2 [source: draft-accepted (initiative)]
+Scope Lock (cross-session continuity): The migration writes by path and skips existing targets, so a rerun finishes the move [source: draft-accepted (initiative)]
+Scope Lock complete. All four scenario paths captured.
+Design confirmed: draft-accepted (initiative) (2026-11-08T09:58:20Z)
