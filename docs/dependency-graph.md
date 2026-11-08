@@ -1,6 +1,6 @@
 # Dependency Graph
 
-Last updated: 0000379-parallel-steps-on-worktrees
+Last updated: 0000389-writing-standard
 
 ## Component dependency diagram
 

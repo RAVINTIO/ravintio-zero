@@ -1,6 +1,6 @@
 # Architecture Overview
 
-Last updated: 0000379-parallel-steps-on-worktrees
+Last updated: 0000389-writing-standard
 
 ## What this repo is
 
@@ -144,6 +144,10 @@ For Codex, `setup.sh codex` and `setup.ps1 codex` install skills in `.agents/ski
 Boot files are disposable build outputs. Every run regenerates `CLAUDE.md` from the template, then re-appends the contents of `ravintio-overrides/instructions/` between sentinel markers. Durable local customisation lives in the overrides directory, never in the boot file. An override with a `target:` field goes to that installed skill instead of the boot file (0000245 ADR-001). The hook rules live in `standards/hook-enforcement.md` (0000245 ADR-002).
 
 ---
+
+## Writing standard
+
+`ravintio-zero/standards/writing-standards.md` holds the pack's prose rules in two marked regions. `scripts/writing-style.mjs` prints each tool's output from those regions. For Claude Code, `setup.sh` and `setup.ps1` write `.claude/output-styles/ravintio-writing.md` and set `outputStyle` to `ravintio-writing` when the key is absent. They leave any other value. For Codex, they keep one writing block in `AGENTS.md`. `--no-writing-style` skips both outputs, and the setup record and `ravintio-refresh-setup` carry the flag. An output style reaches only the main session, so the Agent Dispatch Template and the driver's `--append-system-prompt` name the standard for subagents and step sessions (0000389).
 
 ## Setup-config record
 

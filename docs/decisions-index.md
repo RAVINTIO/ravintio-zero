@@ -3,7 +3,7 @@
 > Change record. Index of all ADRs across all features. Updated after every pipeline run.
 > Do not archive this file. Update it in place.
 
-Last updated: 0000379-parallel-steps-on-worktrees
+Last updated: 0000389-writing-standard
 
 ---
 
@@ -466,3 +466,12 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 | ADR-002 | A chart without a Concurrency field keeps the serial path | accepted | The driver runs the scheduler only when the chart holds `**Concurrency:**`. Old charts and suites keep the serial path. |
 | ADR-003 | A step ends at ready and the driver runs the merge queue | accepted | A step under the concurrent driver writes its PR number to `ready` and ends. The driver runs `merge-queue.mjs run` one PR at a time. P4 sets no version. |
 | ADR-004 | The driver copies git-ignored setup output into each worktree | accepted | The driver copies `.claude/`, `CLAUDE.md`, `AGENTS.md`, and `.codex/` into each worktree, so a step has its hooks and skills. |
+
+### Feature 0000389-writing-standard
+
+| ADR | Title | Status | Summary |
+|-----|-------|--------|---------|
+| ADR-001 | One standard generates both outputs | accepted | `writing-standards.md` marks two regions, and `scripts/writing-style.mjs` prints the Claude Code and Codex outputs from them. |
+| ADR-002 | Setup leaves an existing output style | accepted | Setup sets `outputStyle` only when absent. `--no-writing-style` skips the install. |
+| ADR-003 | Dates and semicolons follow the writing standard | accepted | Body text uses `2026-08-18` or "August 18, 2026". The semicolon leaves the em dash replacements. |
+| ADR-004 | Briefs name the standard | accepted | The dispatch template and the driver's `--append-system-prompt` name the standard. |

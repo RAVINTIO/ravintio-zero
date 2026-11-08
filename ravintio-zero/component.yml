@@ -33,6 +33,7 @@ responsibilities:
   - "Detect and recommend adoption mode at discovery, and state standard-iterative mode without asking when it is the only signal"
   - "Stream step session activity: the driver starts each step with stream-json output and the watcher prints one activity line per tool call, subagent start, and assistant text"
   - "Check each initiative entry at chart for a guard widening, list the confirmations that a step's skills ask for, and record in a P1 skips table whether each step may skip P1"
+  - "Ship a British English writing standard and generate a Claude Code output style and a Codex AGENTS.md section from it, unless --no-writing-style is set, and leave an outputStyle already set"
   - "Suggest and confirm the version number at discovery"
   - "Reject AI attribution lines in PR descriptions at ship and in CI, and turn off host attribution in setup when unset"
   - "Tag the merge commit on main from CI with the product version, never a feature-branch commit"
