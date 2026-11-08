@@ -128,7 +128,7 @@ The plan phase ends at one human gate. Before presenting the gate summary:
 1. Run `node ravintio-zero/scripts/consistency-check.mjs` over the artifact set.
 2. Fix what it flags and re-run until clean. This mechanical check is mandatory.
 
-Then present the artifact set summary and stop for human confirmation.
+Then present the artifact set summary and stop for human confirmation. Agreement follows rule `agree-explicit` in `ravintio-orchestrator/references/orchestrator-p0-coaching.md`.
 
 ## Concurrency plan
 
