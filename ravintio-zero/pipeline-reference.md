@@ -73,7 +73,7 @@ Twelve skills drive the pipeline.
 | `ravintio-migrator` | Applies pending pack migrations interactively |
 | `ravintio-refresh-setup` | Re-runs setup with the flags currently in effect |
 | `ravintio-file-backlog` | Files one uncommitted backlog entry in another repo |
-| `ravintio-postmortem` | Writes one blameless postmortem per failed CI run or Blocked stop, and files its actions |
+| `ravintio-postmortem` | Writes one blameless postmortem per failed CI run, Blocked stop, or reworked requirement, with a corrective, preventive, and detective row, and files its actions |
 | `ravintio-retrospective` | Writes one blameless retrospective per shipped run and per delivered initiative, and files its changes |
 | `ravintio-initiative` | Coordinates an initiative from chart to delivery in the human's session, reports progress, and never runs a step |
 

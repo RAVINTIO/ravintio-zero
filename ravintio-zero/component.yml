@@ -62,6 +62,8 @@ responsibilities:
   - "Require a PATH search before a P3 report says a program is missing, and give a claim that only documentation backs the outcome unverified (docs only), which never counts as verified"
   - "Stop the initiative driver with an I-D Advance: Setup: line after a merged step that changes installed pack files, so the initiative skill reruns setup before the next step"
   - "Merge one ready step PR at a time with merge-queue.mjs, which checks the PR title against the chart, sets the version from the step Bump in every file that version-files.txt lists, checks that the files agree, and tags the merge commit, so versions follow merge order"
+  - "Fail the build log at ship Step 3 when a Resolved: line or a reworked requirement has no Postmortem: line, and check that each postmortem holds a corrective, preventive, and detective row with scripts/postmortem-check.mjs"
+  - "Make merge-queue.mjs wait for every check on the version commit it pushes, and stop with the failing check name"
   - "Reshape and check an initiative branch in merge order, and fold the admin commits that clear a replay conflict"
   - "Run up to the chart's Concurrency of initiative steps at once, each in its own worktree, and merge each ready step PR through merge-queue.mjs in ready order"
   - "Parse the initiative chart Steps table by header name, with its Lane and After columns and the Concurrency field, with initiative-chart.mjs"
