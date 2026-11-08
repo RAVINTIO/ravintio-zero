@@ -26,8 +26,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-08T09:56:43Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-08T09:58:31Z` |
+| Wall clock | `19` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -45,3 +45,18 @@ Scope Lock (error path): An unlisted shell feature, a missing living docs unit, 
 Scope Lock (cross-session continuity): The migration writes by path and skips existing targets, so a rerun finishes the move [source: draft-accepted (initiative)]
 Scope Lock complete. All four scenario paths captured.
 Design confirmed: draft-accepted (initiative) (2026-11-08T09:58:20Z)
+Complete: P0 (2026-11-08T09:58:31Z)
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-08T09:58:31Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | P1 runs inline, the artifacts cross-reference each other |
