@@ -13,6 +13,22 @@ CHANGED_FILES=$(git diff --name-only $TARGET_BRANCH...HEAD)
 # Get all commit messages on this branch
 COMMIT_MESSAGES=$(git log $TARGET_BRANCH...HEAD --format="%s")
 
+# Brand guard (0000394): in the pack source only, flag the retired product name
+# in the files this push changes. It reads the allowlist that CI uses.
+if grep -q '^id: "ravintio-zero"' product.yml 2>/dev/null && [ -f ravintio-zero/scripts/brand-guard.sh ]; then
+    BRAND_HITS=$(git diff --name-only --diff-filter=d $TARGET_BRANCH...HEAD | bash ravintio-zero/scripts/brand-guard.sh)
+    if [ -n "$BRAND_HITS" ]; then
+        echo "❌ RAVINTIO BRAND GUARD FAILED: Push Rejected."
+        echo "----------------------------------------------------------------"
+        echo "These files or lines use the retired product name:"
+        echo "$BRAND_HITS"
+        echo "Fix them, or add an entry with a reason to"
+        echo "ravintio-zero/tests/brand-guard-allowlist.txt."
+        echo "----------------------------------------------------------------"
+        exit 1
+    fi
+fi
+
 # Check if this branch is entirely Fast Path commits
 # Fast Path commits use the convention: fix(fast-path): description
 if echo "$COMMIT_MESSAGES" | grep -qE "^fix\(fast-path\):"; then
