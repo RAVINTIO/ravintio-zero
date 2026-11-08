@@ -26,8 +26,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-08T13:32:14Z` |
-| End | |
-| Wall clock | |
+| End | `2026-11-08T14:49:44Z` |
+| Wall clock | `12` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | `0` |
@@ -36,3 +36,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Notes | Hotfix in the coordinator session of initiative 0000360, while the driver is stopped. The human approved the route. Departure: no `plan/.orchestrator-ack`, because the initiative skill forbids it and the strict hook accepts `plan/.initiative-ack`. |
 
 - Adoption mode: standard-iterative (signal: plan/_archive/ holds prior runs)
+
+- Design confirmed by the human (2026-11-08T14:49:44Z). Run mode: autonomous. Run speed: fast.
+
+Complete: P0 (2026-11-08T14:49:44Z)
