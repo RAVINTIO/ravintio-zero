@@ -26,8 +26,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-08T01:05:16Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-08T01:06:19Z` |
+| Wall clock | `0` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | `0` |
@@ -44,3 +44,18 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Scope Lock complete. All four scenario paths captured.
 - Version: 0.60.0 to 0.61.0 (minor, chart row). The merge queue sets the released version.
 - Backlog 0000300 pulled into the brief (2026-11-08T01:06:13Z)
+Complete: P0 (2026-11-08T01:06:19Z)
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-08T01:06:19Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | none |
