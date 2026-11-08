@@ -295,6 +295,18 @@ stale_install_skip_reason() {
   echo "an initiative is active and the install manifest is older than the newest pack skill"
 }
 
+# Commits a test workspace's pack and override folders (0000382 ADR-002).
+# Setup refuses uncommitted pack files, so a suite calls this after it copies
+# the pack and after it plants any file in ravintio-zero/ or ravintio-overrides/.
+# It makes the folder a git repository when it is not one.
+commit_workspace_pack() {
+  git -C "$1" rev-parse --is-inside-work-tree >/dev/null 2>&1 || git init -q "$1" >/dev/null 2>&1
+  git -C "$1" add -A . >/dev/null 2>&1
+  git -C "$1" -c user.email=test@example.com -c user.name=test -c commit.gpgsign=false \
+    -c core.hooksPath=/dev/null commit -q --allow-empty -m "Commit the test pack" >/dev/null 2>&1
+  return 0
+}
+
 print_summary() {
   FAIL=$((FAIL + $(_count_undefined_asserts)))
   echo ""

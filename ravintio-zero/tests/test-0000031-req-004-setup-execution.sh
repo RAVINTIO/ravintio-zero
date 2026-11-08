@@ -16,7 +16,7 @@ echo "=== (a) fresh install ==="
 mkdir -p "$WS/clone"
 cp -R "$ZERO_DIR" "$WS/clone/ravintio-zero"
 mkdir -p "$WS/clone/ravintio-overrides/instructions"
-( cd "$WS/clone" && git init -q . && bash ravintio-zero/setup.sh claude-code >/dev/null 2>&1 )
+( cd "$WS/clone" && git init -q . && commit_workspace_pack . && bash ravintio-zero/setup.sh claude-code >/dev/null 2>&1 )
 assert_equals "0" "$?" "setup.sh exits 0"
 assert_equals "yes" "$([ -f "$WS/clone/.claude/settings.json" ] && echo yes || echo no)" "settings.json written"
 SKILLS=$(ls -d "$WS/clone/.claude/skills/"*/ 2>/dev/null | wc -l | tr -d ' ')
@@ -34,7 +34,7 @@ assert_equals "16" "$SKILLS2" "still exactly 16 skills after re-run"
 echo "=== (c) install installs enforcement hooks only ==="
 mkdir -p "$WS/clone2"
 cp -R "$ZERO_DIR" "$WS/clone2/ravintio-zero"
-( cd "$WS/clone2" && git init -q . && bash ravintio-zero/setup.sh claude-code >/dev/null 2>&1 )
+( cd "$WS/clone2" && git init -q . && commit_workspace_pack . && bash ravintio-zero/setup.sh claude-code >/dev/null 2>&1 )
 assert_equals "0" "$?" "setup.sh exits 0"
 assert_equals "yes" "$([ -d "$WS/clone2/.claude/hooks/enforcement" ] && echo yes || echo no)" "enforcement hooks installed"
 assert_equals "no" "$([ -d "$WS/clone2/.claude/hooks/telemetry" ] && echo yes || echo no)" "telemetry hooks absent"
@@ -43,7 +43,7 @@ echo "=== (c2) retired telemetry flags are rejected ==="
 mkdir -p "$WS/clone3"
 cp -R "$ZERO_DIR" "$WS/clone3/ravintio-zero"
 # 0000196 ADR-002: a retired flag now fails during argument parsing, so setup exits 1.
-( cd "$WS/clone3" && git init -q . && bash ravintio-zero/setup.sh claude-code --structured-telemetry-mcp >/dev/null 2>&1 )
+( cd "$WS/clone3" && git init -q . && commit_workspace_pack . && bash ravintio-zero/setup.sh claude-code --structured-telemetry-mcp >/dev/null 2>&1 )
 assert_equals "1" "$?" "setup.sh exits 1 on the retired --structured-telemetry-mcp"
 assert_equals "no" "$([ -d "$WS/clone3/.claude/hooks/telemetry" ] && echo yes || echo no)" "no telemetry hook directory after a run with the retired flag"
 
