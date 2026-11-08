@@ -77,13 +77,17 @@ In a gated run, ask the human about a gap of the second kind. Ask one question a
 
 ## Test impact scan
 
-Run this scan before you write the execution plan. For each cause below that the run triggers, grep `ravintio-zero/tests/`. List every match under `## Test impact` in the execution plan, in the unit that edits the file.
+Run this scan before you write the execution plan. For each cause below that the run triggers, grep `ravintio-zero/tests/` and the repo's own test folders. Take those folders from the stack declaration, or use `tests/`, `test/`, and `__tests__/`. List every match under `## Test impact` in the execution plan, in the unit that edits the file.
 
 - **Skill count:** the run adds or removes a skill. Grep for `skills/` with `wc -l`.
 - **Skill-text budget:** the run edits any `SKILL.md`. Grep for the line cap.
 - **Size cap:** the run edits a skill that a cap test measures, such as the orchestrator. Grep for the skill name and `-le`.
 - **Backlog entry id:** the run pulls in an entry. Grep for the entry id.
 - **Workflow job or step edit:** the run adds or edits a job or step in a workflow file. Grep for `ravintio.yml`.
+- **Reference file edit:** the run edits a file in a skill's `references/` folder. Grep for the file name to find frozen-line tests.
+- **New test file:** the run adds a test file. List the repo-wide style tests, such as `test-0000164-req-008`.
+- **Non-suite file:** the run adds a file under `ravintio-zero/tests/` that is not a `test-*.sh` suite. List `run-tests.sh` and `run-tests.ps1`.
+- **Fixture-pinned line:** the run edits an existing pack line. Grep `ravintio-zero/tests/fixtures/` for the line.
 
 If a grep matches nothing, write `none found` in the row.
 

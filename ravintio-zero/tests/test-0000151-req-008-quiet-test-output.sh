@@ -76,8 +76,8 @@ assert_contains "  PASS: equal case" "$RN" "runner normal keeps PASS lines"
 echo "=== (c) documentation ==="
 assert_contains "RAVINTIO_TEST_QUIET" "$(head -12 "$SCRIPT_DIR/run-tests.sh")" "run-tests.sh header documents the variable"
 assert_contains "RAVINTIO_TEST_QUIET" "$(head -12 "$SCRIPT_DIR/run-tests.ps1")" "run-tests.ps1 header documents the variable"
-for f in $(grep -rl 'run-tests' "$ZERO_DIR/skills" --include=SKILL.md); do
-  assert_equals "yes" "$(grep 'run-tests' "$f" | grep -q 'RAVINTIO_TEST_QUIET=1' && echo yes || echo no)" "$(basename "$(dirname "$f")") names RAVINTIO_TEST_QUIET=1 in the command"
+for f in $(grep -rl 'bash ravintio-zero/tests/run-tests' "$ZERO_DIR/skills" --include=SKILL.md); do
+  assert_equals "yes" "$(grep 'bash ravintio-zero/tests/run-tests' "$f" | grep -q 'RAVINTIO_TEST_QUIET=1' && echo yes || echo no)" "$(basename "$(dirname "$f")") names RAVINTIO_TEST_QUIET=1 in the command"
 done
 
 echo "=== (a) assert.ps1 helpers print and do not recurse ==="
