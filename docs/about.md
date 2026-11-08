@@ -21,7 +21,7 @@ repository holds one component, `ravintio-zero`. It is a component pack of
 standards, skills, hooks, templates, schemas, and setup scripts.
 
 The pipeline runs five phases: discovery, plan, implement, validate and
-accept, and ship. Twelve skills drive it. Every change is a feature change
+accept, and ship. Sixteen skills drive it. Every change is a feature change
 and runs the same pipeline. A small change is a small run.
 
 RAVINTIO Zero ships no telemetry and makes no outbound network calls.

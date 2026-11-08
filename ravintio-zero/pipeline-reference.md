@@ -56,7 +56,7 @@ If you see a `Resuming` message at the start of a session, the orchestrator dete
 
 ## Skills
 
-Twelve skills drive the pipeline.
+Sixteen skills drive the pipeline.
 
 | Skill | Role |
 |-------|------|

@@ -28,13 +28,13 @@ const HOOK_FACTS = {
   "block-forced-add": "Blocks git add with a force flag, and git add with a variable path.",
   "auto-trigger-orchestrator": "Tells the model to load the orchestrator skill once per session, with resume findings and an install check.",
   "check-orchestrator-presence": "Warns once per session when the orchestrator is not loaded. In strict mode it asks for an acknowledgement first.",
-  "check-design": "Warns when the work has no confirmed design.",
+  "check-design": "Adds the confirmed design scope to the context of each prompt.",
   "check-reply-prefix": "Warns when a reply lacks the phase prefix.",
 };
 
 const GIT_HOOK_FACTS = {
   "pre-commit": { blocks: false, does: "Prints an advisory when source changes land without plan, docs, or component manifest changes." },
-  "pre-push": { blocks: true, does: "Runs the pack's push checks before a push." },
+  "pre-push": { blocks: true, does: "Blocks a push when the branch diff lacks plan, docs, or component manifest changes." },
   "commit-msg": { blocks: true, does: "Rejects AI attribution, affirmatory language, and subjects over 72 characters." },
 };
 
