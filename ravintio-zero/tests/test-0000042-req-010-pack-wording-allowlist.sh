@@ -73,6 +73,8 @@ ALLOWLIST=(
   "^docs/decisions-index\\.md\$${TAB}framework-cut-down"
   # The 0000160 brand guard allowlist names the old folder pattern.
   "^ravintio-zero/tests/test-0000160-req-006-brand-guard\\.sh\$${TAB}planifest.{1,8}framework"
+  # The shared brand guard allowlist holds those entries (0000394).
+  "^ravintio-zero/tests/brand-guard-allowlist\\.txt\$${TAB}."
   # This test and its regression copy, which must name the word to match it.
   "^ravintio-zero/tests/(regression/)?test-0000042-req-010-pack-wording-allowlist\\.sh\$${TAB}."
 )

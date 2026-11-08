@@ -78,6 +78,7 @@ KNOWN_NON_SUITES=(
   "regression/test-gate-write-windows.mjs" # the regression copy of the same
   "regression/regression-manifest.json"    # the promoted-suite list
   "regression/.gitkeep"                    # keeps the folder in git
+  "brand-guard-allowlist.txt"              # the brand guard allowlist, read by pre-push and the CI brand test (0000394)
   "helpers/assert.sh"                      # Bash assert helpers
   "helpers/timeout.sh"                     # with_timeout, the portable time limit (0000380)
   "helpers/version.sh"                     # version comparison for the 0000160 req-004 and 0000164 req-011 suites
