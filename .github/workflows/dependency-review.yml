@@ -1,0 +1,23 @@
+name: Dependency review
+
+# Flags a pull request that adds a dependency with a known vulnerability
+# (0000394 REQ-002). The repo has no lockfile today, so the action reports
+# on the workflow actions that Dependabot tracks.
+on:
+  pull_request:
+    branches: [ main, 'initiative/**' ]
+
+permissions:
+  contents: read
+
+jobs:
+  dependency-review:
+    if: github.event_name == 'pull_request' && github.event.action != 'closed'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      - name: Review dependencies
+        uses: actions/dependency-review-action@a1d282b36b6f3519aa1f3fc636f609c47dddb294 # v5.0.0

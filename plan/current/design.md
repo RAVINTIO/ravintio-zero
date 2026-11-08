@@ -38,7 +38,8 @@ summary: "Security files, pinned actions, a workflow lint job, and a local brand
 - API versioning: not applicable
 
 ## Component Paths
-- `ravintio-zero/` and `.github/`
+- `ravintio-zero/`
+- `.github/`
 
 ## Scope
 - In: community and security files, SHA pins, dependency review and Scorecard workflows, the lint job, the shared brand guard allowlist and `pre-push` check, the settings checklist
