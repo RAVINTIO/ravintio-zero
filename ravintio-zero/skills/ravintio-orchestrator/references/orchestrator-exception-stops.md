@@ -11,9 +11,13 @@ At each stop, follow these steps:
 1. <!-- rule: stops-log-blocked --> Append `Blocked: {exception} ({ISO-8601 timestamp})` to the build log under the current phase block, and commit it.
 2. <!-- rule: stops-print-message --> Print the message for the exception, then wait.
 3. <!-- rule: stops-log-resolved --> When the human acts, append `Resolved: {exception} ({ISO-8601 timestamp}, {decision})` to the build log, and commit it.
-4. <!-- rule: stops-postmortem --> Run `ravintio-postmortem` for the stop, before ship.
+4. <!-- rule: stops-postmortem --> Run `ravintio-postmortem` for the stop, before ship. Append `Postmortem: {path} ({ISO-8601 timestamp})` to the build log and commit it.
 
 After the human acts, the run resumes in the same mode from `plan/.run-mode`.
+
+<!-- rule: stops-postmortem-rework --> A `Rework:` line is a self-correction, so it needs a postmortem too. Before ship, run `ravintio-postmortem` for the rework. One record may cover several requirements. Append `Postmortem: {path} REQ-{nnn}, REQ-{nnn} ({ISO-8601 timestamp})`, and name every requirement the record covers. A `Rework:` line that names no requirement needs a `Postmortem:` line with no `REQ-` id.
+
+<!-- rule: stops-postmortem-ship-check --> Ship runs `build-log-check.mjs`, which fails a `Resolved:` line or a reworked requirement that has no `Postmortem:` line. It also runs `postmortem-check.mjs` on each record. Write the missing record. Never edit the log to hide the gap.
 
 | Exception | Message |
 |-----------|---------|
