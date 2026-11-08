@@ -18,6 +18,7 @@ SETUP_DIR="$SCRIPT_DIR/setup"
 
 VALID_TOOLS="claude-code codex"
 STRICT_ORCHESTRATOR=false
+NO_WRITING_STYLE=false
 
 # Prepended to every node script that writes settings.json (0000034 ADR-002).
 # Writes a temporary file in the same folder, then renames it over the target,
@@ -733,6 +734,112 @@ merge_allowed_tools() {
   fi
 }
 
+install_writing_style_claude() {
+  # Writes the writing-standard output style and sets outputStyle when the key
+  # is absent (0000389 req-003, req-005). Runs after merge_allowed_tools so it
+  # is the last writer of settings.json. A rerun changes no byte.
+  local settings_file="$1"
+  local settings_rel="${settings_file#"$PROJECT_ROOT"/}"
+  local style_rel=".claude/output-styles/ravintio-writing.md"
+
+  if [ "$NO_WRITING_STYLE" = true ]; then
+    echo "  - writing style skipped (--no-writing-style)"
+    return 0
+  fi
+  if ! command -v node >/dev/null 2>&1; then
+    echo "  ! Warning: node not found, skipping the writing style install"
+    return 0
+  fi
+  RAVINTIO_STYLE_SCRIPT="$(cd "$SCRIPT_DIR/scripts" && pwd -P)/writing-style.mjs" \
+  RAVINTIO_STYLE_FILE="$PROJECT_ROOT/$style_rel" RAVINTIO_STYLE_REL="$style_rel" \
+  RAVINTIO_SETTINGS="$settings_file" RAVINTIO_SETTINGS_REL="$settings_rel" \
+  node -e "$RAVINTIO_WRITE_SETTINGS_JS"'
+    const fs = require("fs"), path = require("path"), cp = require("child_process");
+    const r = cp.spawnSync(process.execPath, [process.env.RAVINTIO_STYLE_SCRIPT, "claude-code"], {encoding:"utf8"});
+    if (r.status !== 0 || !r.stdout.trim()) {
+      console.log("  ! Warning: writing-style.mjs failed, skipping the writing style install");
+      process.exit(0);
+    }
+    const out = r.stdout;
+    const f = process.env.RAVINTIO_STYLE_FILE, rel = process.env.RAVINTIO_STYLE_REL;
+    const had = fs.existsSync(f);
+    if (had && fs.readFileSync(f, "utf8") === out) {
+      console.log("  - " + rel + " (unchanged)");
+    } else {
+      fs.mkdirSync(path.dirname(f), {recursive: true});
+      fs.writeFileSync(f, out, "utf8");
+      console.log((had ? "  ~ " : "  + ") + rel + (had ? " (updated)" : " (created)"));
+    }
+    const sf = process.env.RAVINTIO_SETTINGS;
+    let s = {};
+    if (fs.existsSync(sf)) {
+      const raw = fs.readFileSync(sf,"utf8").replace(/^\uFEFF/,"");
+      try { s = JSON.parse(raw); } catch (_) {
+        process.stderr.write("! Error: " + process.env.RAVINTIO_SETTINGS_REL +
+          " is not valid JSON. Fix it and rerun setup.\n");
+        process.exit(1);
+      }
+    }
+    if (!Object.prototype.hasOwnProperty.call(s, "outputStyle")) {
+      s.outputStyle = "ravintio-writing";
+      fs.mkdirSync(path.dirname(sf),{recursive:true});
+      writeSettings(sf, JSON.stringify(s,null,2)+"\n");
+      console.log("  ~ .claude/settings.json (outputStyle set to ravintio-writing)");
+    } else if (s.outputStyle === "ravintio-writing") {
+      console.log("  - .claude/settings.json (outputStyle already ravintio-writing)");
+    } else {
+      console.log("  - .claude/settings.json (outputStyle already set to " + String(s.outputStyle) + ", left as is)");
+    }
+  ' || exit 1
+}
+
+writing_block_of() {
+  # Prints the writing block (markers included) found in one file, or nothing.
+  [ -f "$1" ] || return 0
+  command -v node >/dev/null 2>&1 || return 0
+  RAVINTIO_FILE="$1" node -e '
+    const t = require("fs").readFileSync(process.env.RAVINTIO_FILE, "utf8");
+    const a = t.indexOf("<!-- ravintio-writing:start -->");
+    const e = "<!-- ravintio-writing:end -->";
+    const b = t.indexOf(e);
+    if (a !== -1 && b > a) process.stdout.write(t.slice(a, b + e.length));
+  '
+}
+
+install_writing_style_codex() {
+  # Puts exactly one writing block in AGENTS.md (0000389 req-004, req-005).
+  # $1 = boot file path, $2 = the block the file held before it was regenerated.
+  local boot="$1" prev="${2:-}"
+
+  if [ "$NO_WRITING_STYLE" = true ]; then
+    echo "  - writing style skipped (--no-writing-style)"
+    return 0
+  fi
+  if ! command -v node >/dev/null 2>&1; then
+    echo "  ! Warning: node not found, skipping the writing section"
+    return 0
+  fi
+  RAVINTIO_STYLE_SCRIPT="$(cd "$SCRIPT_DIR/scripts" && pwd -P)/writing-style.mjs" RAVINTIO_BOOT="$boot" RAVINTIO_PREV="$prev" node -e '
+    const fs = require("fs"), cp = require("child_process");
+    const r = cp.spawnSync(process.execPath, [process.env.RAVINTIO_STYLE_SCRIPT, "codex"], {encoding:"utf8"});
+    if (r.status !== 0 || !r.stdout.trim()) {
+      console.log("  ! Warning: writing-style.mjs failed, skipping the writing section");
+      process.exit(0);
+    }
+    const block = r.stdout.replace(/\n+$/, "");
+    const S = "<!-- ravintio-writing:start -->", E = "<!-- ravintio-writing:end -->";
+    let t = fs.readFileSync(process.env.RAVINTIO_BOOT, "utf8");
+    const a = t.indexOf(S), b = t.indexOf(E);
+    if (a !== -1 && b > a) t = t.slice(0, a) + block + t.slice(b + E.length);
+    else t = t.replace(/\n*$/, "\n\n") + block + "\n";
+    fs.writeFileSync(process.env.RAVINTIO_BOOT, t, "utf8");
+    const prev = process.env.RAVINTIO_PREV;
+    console.log(!prev ? "  + AGENTS.md (writing section added)"
+      : prev === block ? "  - AGENTS.md (writing section unchanged)"
+      : "  ~ AGENTS.md (writing section updated)");
+  ' || exit 1
+}
+
 activate_guardrails() {
   echo ""
   echo "  Activating RAVINTIO Git Guardrails"
@@ -1055,7 +1162,10 @@ setup_tool() {
   fi
 
   # Create boot file (if tool defines one)
+  local prev_writing_block=""
   if [ -n "${TOOL_BOOT_FILE:-}" ]; then
+    # Read the old writing block before the boot file is regenerated (0000389).
+    prev_writing_block="$(writing_block_of "$PROJECT_ROOT/$TOOL_BOOT_FILE")"
     if [ -z "${TOOL_BOOT_CONTENT:-}" ] && [ -n "${TOOL_BOOT_TEMPLATE:-}" ]; then
       TOOL_BOOT_CONTENT=$(cat "$SCRIPT_DIR/../$TOOL_BOOT_TEMPLATE")
     fi
@@ -1068,6 +1178,11 @@ setup_tool() {
     append_override_instructions "$TOOL_BOOT_FILE" "$skills_dir"
   else
     append_override_instructions "" "$skills_dir"
+  fi
+
+  # Codex writing section goes last in the boot file, after the overrides (0000389 req-004).
+  if [ "$tool" = "codex" ] && [ -n "${TOOL_BOOT_FILE:-}" ]; then
+    install_writing_style_codex "$PROJECT_ROOT/$TOOL_BOOT_FILE" "$prev_writing_block"
   fi
 
   # Ordered BEFORE the enforcement hook install so that install is the last
@@ -1090,6 +1205,8 @@ setup_tool() {
   # Add Agent to allowedTools so sub-agent dispatch works without per-use confirmation (REQ-002)
   if [ -n "${TOOL_SETTINGS_FILE:-}" ]; then
     merge_allowed_tools "$PROJECT_ROOT/$TOOL_SETTINGS_FILE"
+    # Last writer of settings.json this run (0000389 req-003).
+    install_writing_style_claude "$PROJECT_ROOT/$TOOL_SETTINGS_FILE"
   fi
 
   # Write manifest listing all installed skill directories (enables safe re-run cleanup)
@@ -1123,6 +1240,7 @@ write_setup_config_override() {
 
   local flags=()
   [ "$STRICT_ORCHESTRATOR" = true ] && flags+=("--strict-orchestrator")
+  [ "$NO_WRITING_STYLE" = true ] && flags+=("--no-writing-style")
 
   local flags_json="[]"
   if [ ${#flags[@]} -gt 0 ]; then
@@ -1246,6 +1364,7 @@ write_setup_flags_marker() {
 
   local flags=()
   [ "$STRICT_ORCHESTRATOR" = true ] && flags+=("--strict-orchestrator")
+  [ "$NO_WRITING_STYLE" = true ] && flags+=("--no-writing-style")
 
   local flags_json="[]"
   if [ ${#flags[@]} -gt 0 ]; then
@@ -1284,6 +1403,7 @@ TOOL=""
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --strict-orchestrator) STRICT_ORCHESTRATOR=true; shift ;;
+    --no-writing-style) NO_WRITING_STYLE=true; shift ;;
     --structured-telemetry-mcp|--context-mode-mcp|--include-full-skill-library|--backend-url)
       retired_flag_error "$1" ;;
     --backend-url=*)
@@ -1309,6 +1429,8 @@ if [ -z "$TOOL" ]; then
   echo "  --strict-orchestrator        Write plan/.orchestrator-strict to enable strict mode."
   echo "                               The check-orchestrator-presence hook will require the"
   echo "                               orchestrator to ack each new session before proceeding."
+  echo "  --no-writing-style           Skip the writing standard install: no Claude Code output"
+  echo "                               style and outputStyle setting, no Codex AGENTS.md section."
   echo ""
   echo "Run from the repository root."
   echo "Each tool's config: ravintio-zero/setup/<tool>.sh"
