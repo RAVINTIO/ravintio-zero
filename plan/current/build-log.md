@@ -56,14 +56,30 @@ Complete: P0 (2026-11-08T02:33:14Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-08T02:33:14Z` |
-| End | `pending` |
-| Wall clock | `pending` |
+| End | `2026-11-08T02:34:24Z` |
+| Wall clock | `3` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator, ravintio-plan |
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
 | Notes | `Planned inline. Units share setup.sh and setup.ps1.` |
+
+Complete: P1 (2026-11-08T02:34:24Z)
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-08T02:34:24Z` |
+| End | `pending` |
+| Wall clock | `pending` |
+| Model tier | primary |
+| Skills loaded | ravintio-orchestrator, ravintio-implement |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | `Units U1 to U6 share setup.sh and setup.ps1, so they run in sequence inline.` |
 
 ---
 
