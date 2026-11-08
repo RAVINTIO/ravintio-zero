@@ -14,6 +14,10 @@
 # Manual arg parsing — supports --flag style for cross-platform consistency
 $Tool = $null
 $StrictOrchestrator = $false
+$NoStrictOrchestrator = $false
+$Mode = 'install'
+$UpdateSource = $null
+$ShowHelp = $false
 # Flags that earlier releases removed (0000034 ADR-001). A retired flag does
 # nothing, so setup fails on it during argument parsing, before any change
 # (0000196 ADR-002). The message names the flag and never prints what follows
@@ -26,15 +30,42 @@ function Stop-OnRetiredFlag {
     [Console]::Error.WriteLine("  Remove it from the command, then rerun setup.")
     exit 1
 }
+function Set-RavintioMode {
+    param([string]$NewMode)
+    if ($script:Mode -ne 'install') {
+        [Console]::Error.WriteLine("! Error: use only one of --doctor, --update, and --uninstall in one run.")
+        exit 1
+    }
+    $script:Mode = $NewMode
+}
 $i = 0
 while ($i -lt $args.Count) {
     # PowerShell 7 splits a -File argument such as --backend-url=https://x at
     # its first colon, so match the flag by prefix and print the name only.
     if ("$($args[$i])".StartsWith('--backend-url=')) { Stop-OnRetiredFlag '--backend-url' }
     if ($RetiredFlags -ccontains $args[$i]) { Stop-OnRetiredFlag "$($args[$i])" }
+    if ("$($args[$i])".StartsWith('--update=')) {
+        Set-RavintioMode 'update'
+        $UpdateSource = "$($args[$i])".Substring('--update='.Length)
+        $i++
+        continue
+    }
     # Case-sensitive, the same as setup.sh (0000035 ADR-003).
     switch -CaseSensitive ($args[$i]) {
+        { $_ -ceq '-h' -or $_ -ceq '--help' } { $ShowHelp = $true; $i++ }
         '--strict-orchestrator' { $StrictOrchestrator = $true; $i++ }
+        '--no-strict-orchestrator' { $NoStrictOrchestrator = $true; $i++ }
+        '--doctor' { Set-RavintioMode 'doctor'; $i++ }
+        '--uninstall' { Set-RavintioMode 'uninstall'; $i++ }
+        '--update' {
+            Set-RavintioMode 'update'
+            if (($i + 1) -ge $args.Count -or "$($args[$i + 1])".StartsWith('-')) {
+                [Console]::Error.WriteLine("! Error: --update needs a source folder, such as --update ../zero/ravintio-zero")
+                exit 1
+            }
+            $UpdateSource = "$($args[$i + 1])"
+            $i += 2
+        }
         default {
             if ($args[$i] -like '-*') { Write-Host "Unknown flag: $(("$($args[$i])" -split '=', 2)[0])"; exit 1 }
             else { $Tool = $args[$i]; $i++ }
@@ -1023,6 +1054,13 @@ See [plan/feature-structure.md](../plan/feature-structure.md) for the canonical 
         Write-Host "  + plan/ (created)"
     }
     
+    # The pipeline writes its working files to plan/current/ (0000382, backlog 0000283).
+    $planCurrent = Join-Path $planDir "current"
+    if (-not (Test-Path $planCurrent)) {
+        New-Item -ItemType Directory -Path $planCurrent -Force | Out-Null
+        Write-Host "  + plan/current/ (created)"
+    }
+
     $planReadme = Join-Path $planDir "README.md"
     if (-not (Test-Path $planReadme)) {
         Set-Content -Path $planReadme -Value @'
@@ -1171,7 +1209,7 @@ The relationship is bidirectional:
 
 ---
 
-## Retrofit Ã¢â‚¬â€ Adding RAVINTIO to an Existing Repo
+## Retrofit - Adding RAVINTIO to an Existing Repo
 
 If the repo already has code:
 
@@ -1620,11 +1658,11 @@ function Remove-LegacySetupConfig {
 
 # --- Main ---
 
-if (-not $Tool) {
+function Write-RavintioHelp {
     Write-Host ""
     Write-Host "RAVINTIO Setup"
     Write-Host ""
-    Write-Host "Usage: .\ravintio-zero\setup.ps1 claude-code [flags]"
+    Write-Host "Usage: .\ravintio-zero\setup.ps1 <tool> [flags]"
     Write-Host ""
     Write-Host "Tools:"
     foreach ($t in $ValidTools) {
@@ -1635,9 +1673,25 @@ if (-not $Tool) {
     Write-Host "  --strict-orchestrator        Write plan/.orchestrator-strict to enable strict mode."
     Write-Host "                               The check-orchestrator-presence hook will require the"
     Write-Host "                               orchestrator to ack each new session before proceeding."
+    Write-Host "                               A re-run without a strict flag keeps strict mode as it is."
+    Write-Host "  --no-strict-orchestrator     Remove plan/.orchestrator-strict and turn strict mode off."
+    Write-Host "  --doctor                     Check the install and name each problem. Exits 1 on a problem."
+    Write-Host "  --update <source>            Copy a newer pack from <source>, commit it, and rerun setup"
+    Write-Host "                               with the flags in plan/state/<tool>.md."
+    Write-Host "  --uninstall                  Reverse the setup changes and keep your own files and plan/ records."
+    Write-Host "                               Refuses while a run is active."
+    Write-Host "  -h, --help                   Print this help and exit 0."
+    Write-Host ""
+    Write-Host "Setup copies only committed files. Commit ravintio-zero/ and ravintio-overrides/ first."
+    Write-Host "Your own skills belong in ravintio-overrides/capability-skills/. Setup removes skills"
+    Write-Host "placed straight into the tool's skills folder."
     Write-Host ""
     Write-Host "Run from the repository root."
     Write-Host "Each tool's config: ravintio-zero\setup\[tool].ps1"
+}
+
+if ($ShowHelp -or -not $Tool) {
+    Write-RavintioHelp
     exit 0
 }
 
@@ -1652,6 +1706,42 @@ if (-not ($ValidTools -ccontains $Tool)) {
     exit 1
 }
 
+if ($StrictOrchestrator -and $NoStrictOrchestrator) {
+    [Console]::Error.WriteLine("! Error: use only one of --strict-orchestrator and --no-strict-orchestrator.")
+    exit 1
+}
+
+$Lifecycle = Join-Path $ScriptDir 'scripts\install-lifecycle.mjs'
+
+function Invoke-RavintioLifecycle {
+    param([string[]]$LifecycleArgs)
+    if (-not (Get-Command node -ErrorAction SilentlyContinue)) {
+        [Console]::Error.WriteLine("! Error: node is not installed, and $($LifecycleArgs[0]) needs it.")
+        exit 1
+    }
+    # Out-Host keeps the output out of the return value.
+    & node $Lifecycle @LifecycleArgs | Out-Host
+    return $LASTEXITCODE
+}
+
+if ($Mode -eq 'doctor') {
+    exit (Invoke-RavintioLifecycle @('doctor', '--root', $ProjectRoot, '--tool', $Tool))
+}
+if ($Mode -eq 'uninstall') {
+    exit (Invoke-RavintioLifecycle @('uninstall', '--root', $ProjectRoot, '--tool', $Tool))
+}
+if ($Mode -eq 'update') {
+    $rc = Invoke-RavintioLifecycle @('update', '--root', $ProjectRoot, '--tool', $Tool, '--source', $UpdateSource)
+    if ($rc -ne 0) { exit 1 }
+    $recorded = (& node $Lifecycle flags --root $ProjectRoot --tool $Tool | Out-String).Trim()
+    if ($LASTEXITCODE -ne 0) { exit 1 }
+    $shown = if ($recorded) { $recorded } else { 'none' }
+    Write-Host "  Rerunning setup with the recorded flags: $shown"
+    $rerun = @($Tool) + @($recorded -split '\s+' | Where-Object { $_ })
+    & (Join-Path $ScriptDir 'setup.ps1') @rerun
+    exit $LASTEXITCODE
+}
+
 # Stop before installing anything if an old-brand folder is still present
 # (0000160 REQ-002, ADR-003). The migration renames it first.
 foreach ($oldFolder in @('planifest-zero', 'planifest-overrides')) {
@@ -1661,6 +1751,41 @@ foreach ($oldFolder in @('planifest-zero', 'planifest-overrides')) {
         [Console]::Error.WriteLine("  Run ravintio-zero/migrations/migrate-ravintio-rename.ps1 first, then rerun setup.")
         exit 1
     }
+}
+
+# Install only committed pack and override files (0000382 ADR-002, backlog
+# 0000299). The check has no bypass flag. Ignored files do not count.
+function Assert-RavintioCommittedPack {
+    $inside = $null
+    if (Get-Command git -ErrorAction SilentlyContinue) {
+        $inside = (& git -C $ProjectRoot rev-parse --is-inside-work-tree 2>$null)
+    }
+    if ($inside -ne 'true') {
+        [Console]::Error.WriteLine("! Error: setup needs a git repository, so it can check that the pack is committed.")
+        [Console]::Error.WriteLine("  Run git init, commit ravintio-zero/ and ravintio-overrides/, then rerun setup.")
+        exit 1
+    }
+    $changed = @(& git -C $ProjectRoot status --porcelain --untracked-files=all -- ravintio-zero ravintio-overrides 2>$null | Where-Object { $_ })
+    if ($changed.Count -gt 0) {
+        [Console]::Error.WriteLine("! Error: setup copies only committed pack and override files. These files have uncommitted changes:")
+        foreach ($c in $changed) { [Console]::Error.WriteLine("    $($c.Substring(3))") }
+        [Console]::Error.WriteLine("  Commit or discard them, then rerun setup. Nothing was copied.")
+        exit 1
+    }
+}
+Assert-RavintioCommittedPack
+
+# Strict mode follows the flags (0000382 ADR-001, backlog 0000291). A plain
+# re-run keeps it as it is. --no-strict-orchestrator turns it off.
+$strictFile = Join-Path (Join-Path $ProjectRoot 'plan') '.orchestrator-strict'
+if ($NoStrictOrchestrator) {
+    if (Test-Path -LiteralPath $strictFile) {
+        Remove-Item -LiteralPath $strictFile -Force
+        Write-Host "  - plan/.orchestrator-strict removed (--no-strict-orchestrator turned strict mode off)"
+    }
+} elseif ((-not $StrictOrchestrator) -and (Test-Path -LiteralPath $strictFile)) {
+    $StrictOrchestrator = $true
+    Write-Host "  = plan/.orchestrator-strict kept (strict mode stays on. Use --no-strict-orchestrator to turn it off)"
 }
 
 Write-Host "RAVINTIO Setup"
@@ -1683,5 +1808,7 @@ Invoke-RavintioSetup -ToolName $Tool
 Write-Host ""
 Write-Host "Setup complete."
 Write-Host "  Source of truth: ravintio-zero/"
-Write-Host "  Re-run after you update the pack."
+Write-Host "  Re-run after you update the pack. Check the install with: .\ravintio-zero\setup.ps1 $Tool --doctor"
+Write-Host "  Put your own skills in ravintio-overrides/capability-skills/. Setup removes skills"
+Write-Host "  placed straight into the skills folder."
 
