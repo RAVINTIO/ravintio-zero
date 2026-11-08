@@ -72,14 +72,58 @@ Complete: P1 (2026-11-08T02:34:24Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-08T02:34:24Z` |
-| End | `pending` |
-| Wall clock | `pending` |
+| End | `2026-11-08T03:21:06Z` |
+| Wall clock | `110` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator, ravintio-implement |
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
 | Notes | `Units U1 to U6 share setup.sh and setup.ps1, so they run in sequence inline.` |
+
+- Done: U1 flags, help, banner, strict persistence (2026-11-08T03:21:06Z)
+- Done: U2 clean-tree check and test workspaces (2026-11-08T03:21:06Z)
+- Done: U3 doctor and update (2026-11-08T03:21:06Z)
+- Done: U4 uninstall (2026-11-08T03:21:06Z)
+- Done: U5 docs, hook message, session-start check (2026-11-08T03:21:06Z)
+- Done: U6 pack facts and CI step (2026-11-08T03:21:06Z)
+- Rework: REQ-002: about 70 suites ran setup in uncommitted workspaces, so each commits its pack through commit_workspace_pack (2026-11-08T03:21:06Z)
+- Rework: REQ-004: test-0000354 expected a plain re-run to drop strict mode, so it passes --no-strict-orchestrator (2026-11-08T03:21:06Z)
+- Rework: REQ-005: test-0000196 pinned the old usage line (2026-11-08T03:21:06Z)
+- Rework: REQ-001: install-lifecycle.mjs named old brand words, so the detector builds them from parts (2026-11-08T03:21:06Z)
+- Tests: full run 317 feature suites and 19 regression suites passed, including PowerShell
+
+Complete: P2 (2026-11-08T03:21:06Z)
+
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-08T03:21:06Z` |
+| End | `2026-11-08T03:21:06Z` |
+| Wall clock | `1` |
+| Model tier | primary |
+| Skills loaded | ravintio-orchestrator, ravintio-validate-and-accept |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | `Run inline. The full suite already ran green at the P2 close.` |
+
+Complete: P3 (2026-11-08T03:21:06Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-08T03:21:06Z` |
+| End | `pending` |
+| Wall clock | `pending` |
+| Model tier | primary |
+| Skills loaded | ravintio-orchestrator, ravintio-ship, ravintio-retrospective |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | `Initiative step. The merge queue sets the version.` |
 
 ---
 
