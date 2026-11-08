@@ -245,7 +245,7 @@ for (const [readme, files] of byReadme) {
 writeIfChanged(mapFile, `${JSON.stringify(map, null, 2)}\n`);
 
 // ---- Index and counter ------------------------------------------------------
-function cell(s) { return String(s || '').replace(/\r?\n/g, ' ').replace(/\|/g, '\\|').trim(); }
+function cell(s) { return String(s || '').replace(/\r?\n/g, ' ').replace(/\\/g, '\\\\').replace(/\|/g, '\\|').trim(); }
 function adrFiles() {
   const names = new Set(readdir(R('docs', 'adr')).filter((f) => /^\d{4}-.*\.md$/.test(f)));
   if (opts.dryRun) for (const it of items) names.add(it.file);
