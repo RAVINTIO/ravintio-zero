@@ -37,3 +37,10 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 
 - Adoption mode: standard-iterative (signal: `plan/_archive/` holds prior runs)
 - Run mode: autonomous (2026-11-08T01:05:16Z)
+- Scope Lock (happy path): Setup writes the output style and sets `outputStyle`, and adds the Codex section [source: draft-accepted (initiative)]
+- Scope Lock (first-run path): A repo with no settings file gets one with `outputStyle` set [source: draft-accepted (initiative)]
+- Scope Lock (error path): An existing `outputStyle` stays and setup says so [source: draft-accepted (initiative)]
+- Scope Lock (cross-session continuity): A rerun with `--no-writing-style` leaves `outputStyle` as found [source: draft-accepted (initiative)]
+- Scope Lock complete. All four scenario paths captured.
+- Version: 0.60.0 to 0.61.0 (minor, chart row). The merge queue sets the released version.
+- Backlog 0000300 pulled into the brief (2026-11-08T01:06:13Z)
