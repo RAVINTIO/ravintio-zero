@@ -109,6 +109,20 @@ Question: P3 Validate: Question: Human stop (chart row, step 18). Turn on secret
 
 Complete: P3 (2026-11-08T09:18:44Z)
 
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-08T09:19:03Z` |
+| End | `{{timestamp}}` |
+| Wall clock | `{{minutes}}` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | none |
+
 ---
 
 ---
