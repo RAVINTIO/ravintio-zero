@@ -2,7 +2,7 @@
 
 **Feature:** Short subject for the queue's base merge
 **Version:** no bump. This PR is not a chart step of initiative 0000360.
-**PR:** pending
+**PR:** #140
 
 ## What changed
 
