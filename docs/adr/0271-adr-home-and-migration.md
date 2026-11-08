@@ -1,7 +1,7 @@
 ---
 title: "ADR 001: ADR home in docs/adr and migration 0009"
 summary: "Every ADR lives in docs/adr under a four-digit repo-wide number. A script-backed migration moves and renumbers the archived ADRs."
-status: "proposed"
+status: "accepted"
 version: "0.1.0"
 component: "ravintio-zero"
 feature: "0000384-plan-checks"

@@ -1,7 +1,7 @@
 ---
 title: "ADR 002: Consistency check additions"
 summary: "Checks 9 and 10 are new, check 8 gains an optional column, and reference resolution reads docs/adr."
-status: "proposed"
+status: "accepted"
 version: "0.1.0"
 component: "ravintio-zero"
 feature: "0000384-plan-checks"

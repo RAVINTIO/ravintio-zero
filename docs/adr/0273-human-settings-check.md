@@ -1,7 +1,7 @@
 ---
 title: "ADR 003: Human-only settings check"
 summary: "A script reads allowlisted repository settings with GET and blocks P1 on a mismatch."
-status: "proposed"
+status: "accepted"
 version: "0.1.0"
 component: "ravintio-zero"
 feature: "0000384-plan-checks"
