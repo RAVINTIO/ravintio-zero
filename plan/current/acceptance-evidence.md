@@ -20,6 +20,7 @@ No critical or high findings. The step fixed one template injection and four flo
 - `node ravintio-zero/scripts/github-settings.mjs list` printed six items.
 - `node ravintio-zero/scripts/github-settings.mjs check` exited 1. It reported `dependabot-security-updates` and `private-vulnerability-reporting` on, and `secret-scanning`, `push-protection`, `topics`, and `workflow-lint-required` off.
 - A scratch repo push with the old name exited 1 and printed `docs/note.md:2`. A clean push exited 0.
+- After the human stop, `check` reported `secret-scanning`, `push-protection`, and `topics` on. Only `workflow-lint-required` stays off.
 - Not verifiable before the PR: the `workflow-lint` job in CI, and the `workflow-lint-required` setting, which needs the job on `main`.
 
 ## Search evidence
