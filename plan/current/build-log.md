@@ -83,10 +83,25 @@ Complete: P2 (2026-11-08T02:17:44Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-08T02:17:44Z` |
+| End | `2026-11-08T02:19:04Z` |
+| Wall clock | `6` |
+| Model tier | primary |
+| Skills loaded | ravintio-validate-and-accept |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Autonomous run, evidence in acceptance-evidence.md |
+Complete: P3 (2026-11-08T02:19:04Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-08T02:19:04Z` |
 | End | `` |
 | Wall clock | `` |
 | Model tier | primary |
-| Skills loaded | ravintio-validate-and-accept |
+| Skills loaded | ravintio-ship |
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
