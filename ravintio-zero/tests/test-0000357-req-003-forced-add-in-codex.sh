@@ -16,6 +16,7 @@ new_project() {
   WS=$(mktemp -d -t ravintio_0000357_req003_XXXXXX)
   cp -r "$ZERO_DIR" "$WS/ravintio-zero"
   git init "$WS" >/dev/null 2>&1
+  commit_workspace_pack "$WS"
 }
 
 # group_count <hooks.json> <module>: Bash groups whose command names the module.

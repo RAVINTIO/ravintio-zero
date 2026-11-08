@@ -18,6 +18,7 @@ make_workspace() {
   dir=$(mktemp -d -t ravintio_0000196_req002_test_XXXXXX)
   cp -r "$ZERO_DIR" "$dir/ravintio-zero"
   git init "$dir" >/dev/null 2>&1
+  commit_workspace_pack "$dir"
   echo "$dir"
 }
 

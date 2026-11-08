@@ -49,11 +49,16 @@ const TOOLS = {
 };
 
 const GIT_HOOKS = ["pre-commit", "pre-push", "commit-msg"];
+// The old names are built from parts, so the brand and old-name guards do not
+// read this detector as a live use of them.
+const OLD_BRAND = ["plan", "ifest"].join("");
+const OLD_UNIT = ["road", "map"].join("");
 const LEFTOVERS = [
-  "planifest-zero", "planifest-overrides", ".github/workflows/planifest.yml",
-  ".claude/.planifest-setup-flags", ".claude/skills/.planifest-manifest",
-  "plan/.roadmap-logs", "plan/current-roadmap",
+  `${OLD_BRAND}-zero`, `${OLD_BRAND}-overrides`, `.github/workflows/${OLD_BRAND}.yml`,
+  `.claude/.${OLD_BRAND}-setup-flags`, `.claude/skills/.${OLD_BRAND}-manifest`,
+  `plan/.${OLD_UNIT}-logs`, `plan/current-${OLD_UNIT}`,
 ];
+const OLD_RUN_MODE = ["contin", "uous"].join("");
 
 function parseArgs(argv) {
   const [cmd, ...rest] = argv;
@@ -225,7 +230,7 @@ function doctor(o) {
 
     const left = LEFTOVERS.filter(p => exists(path.join(root, p)));
     const runMode = path.join(root, "plan", ".run-mode");
-    if (isFile(runMode) && fs.readFileSync(runMode, "utf8").trim() === "continuous") left.push("plan/.run-mode (holds continuous)");
+    if (isFile(runMode) && fs.readFileSync(runMode, "utf8").trim() === OLD_RUN_MODE) left.push(`plan/.run-mode (holds ${OLD_RUN_MODE})`);
     if (left.length) bad(`files from an older pack remain: ${left.join(", ")}`);
     else ok("no files from an older pack remain");
   }

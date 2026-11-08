@@ -938,8 +938,11 @@ EOF
 
   # The pipeline writes its working files to plan/current/ (0000382, backlog 0000283).
   if [ ! -d "$plan_dir/current" ]; then
-    mkdir -p "$plan_dir/current"
-    echo "  + plan/current/ (created)"
+    if mkdir -p "$plan_dir/current" 2>/dev/null; then
+      echo "  + plan/current/ (created)"
+    else
+      echo "  ! Warning: could not create plan/current/, continuing" >&2
+    fi
   fi
 
   if [ ! -f "$plan_dir/README.md" ]; then

@@ -1057,8 +1057,12 @@ See [plan/feature-structure.md](../plan/feature-structure.md) for the canonical 
     # The pipeline writes its working files to plan/current/ (0000382, backlog 0000283).
     $planCurrent = Join-Path $planDir "current"
     if (-not (Test-Path $planCurrent)) {
-        New-Item -ItemType Directory -Path $planCurrent -Force | Out-Null
-        Write-Host "  + plan/current/ (created)"
+        try {
+            New-Item -ItemType Directory -Path $planCurrent -Force -ErrorAction Stop | Out-Null
+            Write-Host "  + plan/current/ (created)"
+        } catch {
+            [Console]::Error.WriteLine("  ! Warning: could not create plan/current/, continuing")
+        }
     }
 
     $planReadme = Join-Path $planDir "README.md"
@@ -1209,7 +1213,7 @@ The relationship is bidirectional:
 
 ---
 
-## Retrofit - Adding RAVINTIO to an Existing Repo
+## Retrofit Ã¢â‚¬â€ Adding RAVINTIO to an Existing Repo
 
 If the repo already has code:
 
