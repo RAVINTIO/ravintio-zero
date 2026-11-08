@@ -1,11 +1,11 @@
 ---
-title: "Backlog Entry: 0000403 - test impact scan covers skill-wide grep pins"
+title: "Backlog Entry: 0000404 - test impact scan covers skill-wide grep pins"
 summary: "A retrospective finding: a new file name in a skill tripped a test that greps every skill."
 status: "open"
 priority: "low"
 theme: "pipeline-checks"
 ---
-# Backlog Entry: 0000403 - test impact scan covers skill-wide grep pins
+# Backlog Entry: 0000404 - test impact scan covers skill-wide grep pins
 
 **Source feature:** 0000383-test-impact-scan
 **Source phase:** P2

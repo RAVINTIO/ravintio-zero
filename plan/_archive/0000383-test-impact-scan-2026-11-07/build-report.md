@@ -12,7 +12,7 @@ Run speed: standard
 
 - Parallelism: none. The five edits are short and share the plan skill, so dispatch would add cost without a gain.
 - Multi-task phases that ran sequentially: P2 and P1 ran inline for that reason.
-- Self-corrections: 1, avoidable. A pin test matched the plan skill's new `run-tests.sh` name. The scan has no cause for it, which backlog entry 0000403 files.
+- Self-corrections: 1, avoidable. A pin test matched the plan skill's new `run-tests.sh` name. The scan has no cause for it, which backlog entry 0000404 files.
 - Improvement, P2: run the suites that `## Test impact` names before the full suite. This step wrote that rule into the implement skill.
 
 ## Workflow governance
