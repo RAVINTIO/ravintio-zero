@@ -26,8 +26,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-08T02:32:04Z` |
-| End | `pending` |
-| Wall clock | `pending` |
+| End | `2026-11-08T02:33:14Z` |
+| Wall clock | `4` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | `0` |
@@ -44,6 +44,26 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Decision applied (initiative chart): 0000291 cut back, strict mode stays on across re-runs and only --no-strict-orchestrator turns it off
 - Decision applied (initiative chart): 0000299 refusal is paired with an update command that commits pack files first
 - Backlog pulled in: 0000283, 0000299, 0000292, 0000291, 0000298, 0000286
+- Scope Lock (happy path): commit the pack, run setup, doctor, update, and uninstall with one command each [source: draft-accepted (initiative)]
+- Scope Lock (first-run path): a teammate who clones runs the documented setup, and session start warns if no hooks are wired [source: draft-accepted (initiative)]
+- Scope Lock (error path): setup names uncommitted files, doctor names a bad hook, and uninstall refuses during a run [source: draft-accepted (initiative)]
+- Scope Lock (cross-session continuity): every command is idempotent and update keeps the recorded flags [source: draft-accepted (initiative)]
+- Scope Lock complete. All four scenario paths captured.
+Complete: P0 (2026-11-08T02:33:14Z)
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-08T02:33:14Z` |
+| End | `pending` |
+| Wall clock | `pending` |
+| Model tier | primary |
+| Skills loaded | ravintio-orchestrator, ravintio-plan |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | `Planned inline. Units share setup.sh and setup.ps1.` |
 
 ---
 
