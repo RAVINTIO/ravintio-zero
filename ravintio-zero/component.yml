@@ -13,7 +13,7 @@ responsibilities:
   - "Enforce the confirmed-design gate: block in-project writes outside declared component scope, and pass targets whose real path lies outside the project"
   - "Inject active scope context on every agent turn via the check-design hook"
   - "Declare preferred and avoided libraries per language via library-standards docs"
-  - "Provide formatting standards: date format (DD MMM YYYY), locale (British English), verbosity"
+  - "Provide formatting standards: date format (ISO or long form), locale (British English), verbosity"
   - "Supply migration files for propagating standards changes across existing repos"
   - "Register and sync capability skills from ravintio-overrides/"
   - "Maintain the build log throughout a pipeline run for the ship-phase build assessment"
