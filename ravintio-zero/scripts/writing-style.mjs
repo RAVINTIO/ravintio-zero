@@ -7,7 +7,7 @@
 //   codex        an AGENTS.md section: the summary region between markers
 //
 // Exit codes: 0 = printed, 1 = bad tool or a missing region.
-import { readFileSync } from "node:fs";
+import { readFileSync, realpathSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -54,7 +54,9 @@ export function generate(tool, standardText) {
   throw new Error(`unknown tool: ${tool}`);
 }
 
-if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
+// Compare real paths: a symlinked project path (macOS /var) differs from import.meta.url.
+const isMain = (() => { try { return realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url)); } catch { return false; } })();
+if (process.argv[1] && isMain) {
   const tool = process.argv[2];
   const std = process.argv[3] ?? join(dirname(fileURLToPath(import.meta.url)), "..", "standards", "writing-standards.md");
   try {

@@ -30,6 +30,12 @@ assert_contains "writing-standards.md" "$OUT" "codex output points to the standa
 assert_contains "Keep every sentence under 25 words" "$OUT" "codex output holds the summary region"
 
 echo ""
+echo "=== generator: symlinked path ==="
+ln -s "$ZERO_DIR/scripts" "$TMP/linked-scripts"
+OUT="$(node "$TMP/linked-scripts/writing-style.mjs" codex)"
+assert_contains "ravintio-writing:start" "$OUT" "output is not empty when run through a symlinked path"
+
+echo ""
 echo "=== generator: failures ==="
 node "$GEN" vim >/dev/null 2>"$TMP/err"; assert_equals "1" "$?" "unknown tool exits 1"
 echo "no regions" > "$TMP/std.md"
