@@ -41,6 +41,10 @@ run_setup "$ws" claude-code --doctor; rc=$?
 assert_equals "0" "$rc" "doctor exits 0 after setup"
 assert_contains "Doctor found no problems" "$(cat "$ws/out")" "doctor reports no problems"
 
+echo "=== doctor accepts a boot file with a BOM (Windows PowerShell 5.1) ==="
+printf '\xef\xbb\xbf' | cat - "$ws/CLAUDE.md" > "$ws/CLAUDE.bom" && mv "$ws/CLAUDE.bom" "$ws/CLAUDE.md"
+run_setup "$ws" claude-code --doctor; rc=$?
+assert_equals "0" "$rc" "doctor exits 0 on a boot file with a BOM"
 echo "=== AC-2: doctor names a non-executable hook ==="
 chmod -x "$ws/ravintio-zero/hooks/pre-push"
 run_setup "$ws" claude-code --doctor; rc=$?
@@ -60,6 +64,8 @@ run_setup "$ws" claude-code --strict-orchestrator
 commit_workspace_pack "$ws"
 src="$TMP/newer"; mkdir -p "$src"; cp -r "$ZERO_DIR" "$src/ravintio-zero"
 echo "new pack file" > "$src/ravintio-zero/NEW-IN-UPDATE.md"
+# CI runners have no git identity, and update commits.
+export GIT_AUTHOR_NAME=test GIT_AUTHOR_EMAIL=test@example.com GIT_COMMITTER_NAME=test GIT_COMMITTER_EMAIL=test@example.com
 run_setup "$ws" claude-code --update "$src/ravintio-zero"; rc=$?
 assert_equals "0" "$rc" "update exits 0"
 [ -f "$ws/ravintio-zero/NEW-IN-UPDATE.md" ] && r=yes || r=no

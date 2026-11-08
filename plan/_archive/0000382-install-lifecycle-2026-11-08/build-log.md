@@ -142,3 +142,7 @@ Complete: P4 (2026-11-08T03:21:24Z)
 | Cheaper tier agent calls | `0` |
 | Self-corrections | `4` |
 | Phases skipped | `none` |
+
+## Post-ship CI fix
+
+Rework: 2026-11-08T12:37:47Z PR 136 CI failed in two suites. Windows PowerShell 5.1 writes a BOM into CLAUDE.md, so doctor missed the first line. The update test ran with no git identity, so the commit failed. Doctor now strips a BOM, and the test sets a git identity. A BOM case joins the doctor suite.

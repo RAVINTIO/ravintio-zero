@@ -173,9 +173,11 @@ function doctor(o) {
 
   if (!o.quick) {
     const template = path.join(PACK, t.bootTemplate);
-    const first = isFile(template) ? fs.readFileSync(template, "utf8").split(/\r?\n/)[0] : "";
+    // Windows PowerShell 5.1 writes a BOM, so strip it before comparing lines.
+    const readText = (f) => fs.readFileSync(f, "utf8").replace(/^\uFEFF/, "");
+    const first = isFile(template) ? readText(template).split(/\r?\n/)[0] : "";
     const bootPath = path.join(root, t.boot);
-    if (isFile(bootPath) && first && fs.readFileSync(bootPath, "utf8").split(/\r?\n/).includes(first)) ok(`${t.boot} is the pack's`);
+    if (isFile(bootPath) && first && readText(bootPath).split(/\r?\n/).includes(first)) ok(`${t.boot} is the pack's`);
     else bad(`${t.boot} is missing or is not the pack's. Rerun setup`);
   }
 
