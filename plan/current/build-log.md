@@ -96,13 +96,13 @@ Complete: P2 (2026-11-08T01:29:45Z)
 |-------|-------|
 | Start | `2026-11-08T01:29:56Z` |
 | End | `2026-11-08T09:18:44Z` |
-| Wall clock | 0 |
+| Wall clock | 469 |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | 0 |
 | MCP calls | 0 |
 | Parallel task batches | 0 |
-| Notes | none |
+| Notes | includes a human stop for GitHub settings, about 453 minutes |
 
 Checks: full suite 305 feature and 19 regression suites passed (2026-11-08T01:43:49Z)
 Question: P3 Validate: Question: Human stop (chart row, step 18). Turn on secret-scanning, push-protection, and topics, then tell me to resume. Run `node ravintio-zero/scripts/github-settings.mjs list` for the steps. The `workflow-lint-required` item waits until `workflow-lint` runs on `main`. (2026-11-08T01:44:09Z)
@@ -114,14 +114,16 @@ Complete: P3 (2026-11-08T09:18:44Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-08T09:19:03Z` |
-| End | `{{timestamp}}` |
-| Wall clock | `{{minutes}}` |
+| End | `2026-11-08T09:19:08Z` |
+| Wall clock | 1 |
 | Model tier | primary |
 | Skills loaded | ravintio-ship |
 | Agents spawned | 0 |
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | none |
+
+Complete: P4 (2026-11-08T09:19:08Z)
 
 ---
 
@@ -131,14 +133,14 @@ Complete: P3 (2026-11-08T09:18:44Z)
 
 | Metric | Value |
 |--------|-------|
-| Total phases completed | `{{count}}` |
-| Total wall clock | `{{minutes from pipeline start to the P4 End}}` |
-| Total agents spawned | `{{count}}` |
-| Total MCP calls | `{{count}}` |
-| Phases using parallelism | `{{count}}` |
-| Primary tier agent calls | `{{count}}` |
-| Cheaper tier agent calls | `{{count}}` |
-| Self-corrections | `{{count}}` |
-| Phases skipped | `{{list or "none"}}` |
+| Total phases completed | 5 |
+| Total wall clock | 475 |
+| Total agents spawned | 1 |
+| Total MCP calls | 0 |
+| Phases using parallelism | 1 |
+| Primary tier agent calls | 0 |
+| Cheaper tier agent calls | 1 |
+| Self-corrections | 2 |
+| Phases skipped | none |
 
 Resolved: human stop for step 18 (2026-11-08T09:17:47Z, the human turned on secret scanning, push protection, and topics. workflow-lint-required waits for workflow-lint to run on main.)
