@@ -13,6 +13,11 @@
  * differs. It never rewrites pushed history. Every git and gh call takes an
  * argument array. Set GH_BIN and GIT_BIN to override the binaries.
  *
+ * The queue waits for CI before the version push and again after it, because
+ * the push restarts CI on the new head (feature 0000392, REQ-003, ADR-002).
+ * It polls `gh pr checks --json name,bucket` every MQ_POLL_MS ms (default
+ * 10000) until MQ_TIMEOUT_MS ms (default 1800000) have passed.
+ *
  * The chart `Merge commit` cell holds `tag v{version}`. The queue never commits
  * after the squash, so the sha lives in the tag and in the printed output.
  */
@@ -42,6 +47,38 @@ function gh(root, args, opts = {}) {
 
 function failText(e) {
   return `${e.stderr || ""}${e.stdout || ""}`.trim() || e.message;
+}
+
+function sleepSync(ms) {
+  Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
+}
+
+/** Poll PR checks until all pass. Stop on a failed check or a timeout. */
+function waitForChecks(root, pr) {
+  const poll = Number(process.env.MQ_POLL_MS) || 10000;
+  const timeout = Number(process.env.MQ_TIMEOUT_MS) || 1800000;
+  const start = Date.now();
+  for (;;) {
+    let out = "";
+    try {
+      out = gh(root, ["pr", "checks", pr, "--json", "name,bucket"]);
+    } catch (e) {
+      out = e.stdout || "";
+    }
+    let list = null;
+    try {
+      list = JSON.parse(out);
+    } catch {
+      list = null;
+    }
+    if (Array.isArray(list) && list.length > 0) {
+      const bad = list.filter((c) => c.bucket === "fail" || c.bucket === "cancel");
+      if (bad.length) throw new Stop(`CI failed on PR #${pr}: ${bad.map((c) => c.name).join(", ")}`);
+      if (list.every((c) => c.bucket === "pass" || c.bucket === "skipping")) return;
+    }
+    if (Date.now() - start >= timeout) throw new Stop(`timed out waiting for CI on PR #${pr}`);
+    sleepSync(poll);
+  }
 }
 
 // ---------------------------------------------------------------- chart
@@ -281,8 +318,7 @@ function cmdRun(a) {
   }
 
   // 3. Wait for CI.
-  const checks = spawnSync(GH, ["pr", "checks", pr, "--watch", "--fail-fast"], { cwd: root, stdio: "inherit" });
-  if (checks.status !== 0) throw new Stop(`CI failed on PR #${pr}`);
+  waitForChecks(root, pr);
 
   // 4. Next version from the base branch.
   const current = versionsOnRef(root, `origin/${base}`, list);
@@ -308,6 +344,8 @@ function cmdRun(a) {
     git(root, ["add", "--", ...paths]);
     git(root, ["commit", "-m", `chore(${featureId.slice(0, 7)}): set version ${next} for step ${step}`, "--", ...paths]);
     git(root, ["push", "origin", `${head}:${head}`]);
+    // The push restarts CI on the new head. Wait before the merge.
+    waitForChecks(root, pr);
   } else {
     cmdVersions({ root, list });
   }
