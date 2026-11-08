@@ -104,6 +104,9 @@ Complete: P2 (2026-11-08T01:29:45Z)
 | Parallel task batches | 0 |
 | Notes | none |
 
+Checks: full suite 305 feature and 19 regression suites passed (2026-11-08T01:43:49Z)
+Question: P3 Validate: Question: Human stop (chart row, step 18). Turn on secret-scanning, push-protection, and topics, then tell me to resume. Run `node ravintio-zero/scripts/github-settings.mjs list` for the steps. The `workflow-lint-required` item waits until `workflow-lint` runs on `main`. (2026-11-08T01:44:09Z)
+
 ---
 
 ---
