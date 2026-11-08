@@ -47,6 +47,22 @@ Backlog pulled in: 0000323, 0000324, 0000325
 Version: plan 0.61.0 (minor on 0.60.0); the merge queue sets the released version
 Complete: P0 (2026-11-08T01:06:29Z)
 
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-08T01:07:58Z` |
+| End | `2026-11-08T01:09:03Z` |
+| Wall clock | 1 |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | artifacts written inline: they share one design |
+
+Complete: P1 (2026-11-08T01:09:03Z)
+
 ---
 
 ---
