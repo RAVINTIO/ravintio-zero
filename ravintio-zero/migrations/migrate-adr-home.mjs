@@ -103,7 +103,7 @@ let map = {};
 let mapExisted = false;
 try { map = JSON.parse(fs.readFileSync(mapFile, 'utf8')); mapExisted = true; } catch { /* first run */ }
 
-// ---- Phase 1: restore from git history ------------------------------------
+// ---- Step A: restore from git history -------------------------------------
 const skippedFeatures = [];
 if (opts.restore && !mapExisted) {
   const found = new Set();
@@ -144,7 +144,7 @@ if (opts.restore && !mapExisted) {
   if (skippedFeatures.length) log(`No ADRs in git history for features: ${skippedFeatures.join(', ')}`);
 }
 
-// ---- Phase 2: number ------------------------------------------------------
+// ---- Step B: number -------------------------------------------------------
 items.sort((a, b) => (a.fid < b.fid ? -1 : a.fid > b.fid ? 1 : a.n - b.n || (a.slug < b.slug ? -1 : 1)));
 
 let highest = 0;
