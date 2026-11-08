@@ -90,6 +90,20 @@ Deviation: attestations for release-tag stay deferred, as the brief says. The st
 
 Complete: P2 (2026-11-08T01:29:45Z)
 
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-08T01:29:56Z` |
+| End | `{{timestamp, filled when the phase completes}}` |
+| Wall clock | `{{whole minutes from Start to End}}` |
+| Model tier | primary |
+| Skills loaded | ravintio-validate-and-accept |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | none |
+
 ---
 
 ---
