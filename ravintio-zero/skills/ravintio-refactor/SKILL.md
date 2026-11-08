@@ -40,7 +40,7 @@ Quality improvements out of scope: extracting shared utilities used by only one 
 3. **Run the full test suite** after each significant change:
    ```
    RAVINTIO_TEST_QUIET=1 bash ravintio-zero/tests/run-tests.sh
-   # or the appropriate full suite command for the stack
+   # or the repo's own test command from the stack declaration
    ```
 4. **Confirm ALL GREEN**: every test in the suite must pass, not just the current requirement's test. If any test breaks, revert the last change and try a different approach.
 5. **Report** the refactor completion:

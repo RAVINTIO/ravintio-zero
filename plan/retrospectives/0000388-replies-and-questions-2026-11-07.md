@@ -31,10 +31,10 @@ The step shipped the time prefix, the clearer warning, the agreement rule, and t
 
 ## Change
 
-- Make the test impact scan list every cap of an edited skill (`plan/backlog/0000403-scan-every-size-cap/entry.md`).
+- Make the test impact scan list every cap of an edited skill (`plan/backlog/0000406-scan-every-size-cap/entry.md`).
 
 ## Actions
 
 | Change | Owner | Lives in | Verified by | Filed as |
 |--------|-------|----------|-------------|----------|
-| Scan every size cap for an edited skill | pack maintainers | `skills/ravintio-plan/SKILL.md` | A test of the scan text | 0000403 |
+| Scan every size cap for an edited skill | pack maintainers | `skills/ravintio-plan/SKILL.md` | A test of the scan text | 0000406 |

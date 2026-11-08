@@ -10,7 +10,7 @@ PowerShell 7. All suites cover the Claude Code target only.
 |------|----------|
 | `test-*.sh` | Per-feature Bash suites |
 | `test-*.ps1` | Per-feature PowerShell suites, which run `setup.ps1` |
-| `helpers/` | Shared assertions (`assert.sh`, `assert.ps1`), the pack text helpers, `with_timeout` (`timeout.sh`), and the `setup.ps1` workspace helper |
+| `helpers/` | Shared assertions (`assert.sh`, `assert.ps1`), the pack text helpers, `commit_workspace_pack`, `with_timeout` (`timeout.sh`), and the `setup.ps1` workspace helper |
 | `regression/` | The long-term regression pack and its manifest |
 | `run-tests.sh` | The runner for every suite |
 | `run-tests.ps1` | The runner for the PowerShell suites only |
@@ -27,6 +27,10 @@ a helper in `helpers/assert.sh`. See section 8 of `standards/testing-standards.m
 - `strip_rule_anchors` removes anchors before a line-by-line comparison.
 - `with_timeout <seconds> <command>...` caps a command. Source
   `helpers/timeout.sh` first.
+
+## Workspaces that run setup
+
+Setup copies only committed pack and override files, so a suite that runs `setup.sh` commits the pack in its workspace first. Call `commit_workspace_pack "$ws"` from `helpers/assert.sh` after the copy and after any file you plant in `ravintio-zero/` or `ravintio-overrides/`. The PowerShell helper `Invoke-Setup` commits before each run. `Save-WorkspacePack` does the same on request.
 
 ## Running the tests
 
@@ -60,6 +64,10 @@ Both runners also compare tracked and untracked files before the first suite and
 after the last. If a suite changes one, the run fails and names the path with
 `Tree changed during the run`. The check skips ignored files and skips itself
 outside a git repository.
+
+Git ignores `.claude/skills/`, so the tree check cannot see it. Both runners
+list that folder before the first suite and after the last. If a suite adds or
+removes a path, the run fails and names it with `Skills changed during the run`.
 
 You can also run a single suite directly:
 

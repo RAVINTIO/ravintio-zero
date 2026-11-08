@@ -24,6 +24,7 @@ new_project() {
   WS=$(mktemp -d -t ravintio_0000200_req004_XXXXXX)
   cp -r "$ZERO_DIR" "$WS/ravintio-zero"
   git init "$WS" >/dev/null 2>&1
+  commit_workspace_pack "$WS"
 }
 
 echo ""

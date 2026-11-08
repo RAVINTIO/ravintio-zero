@@ -46,6 +46,9 @@ jobs:
       - name: Check the backlog index
         run: node ravintio-zero/scripts/backlog-index.mjs --check
 
+      - name: Check the pack facts file
+        run: node ravintio-zero/scripts/pack-facts.mjs --check
+
       - name: Fail on a committed ignored file
         run: |
           IGNORED=$(git ls-files -ci --exclude-standard)
