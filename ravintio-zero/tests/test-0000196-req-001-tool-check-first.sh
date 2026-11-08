@@ -16,6 +16,7 @@ make_workspace() {
   dir=$(mktemp -d -t ravintio_0000196_req001_test_XXXXXX)
   cp -r "$ZERO_DIR" "$dir/ravintio-zero"
   git init "$dir" >/dev/null 2>&1
+  commit_workspace_pack "$dir"
   echo "$dir"
 }
 
@@ -70,7 +71,7 @@ BEFORE="$(snapshot)"
 OUT="$(bash ravintio-zero/setup.sh 2>&1)"
 EXIT=$?
 assert_equals "0" "$EXIT" "req-001 AC-2: no tool exits 0"
-assert_contains "Usage: ./ravintio-zero/setup.sh claude-code [flags]" "$OUT" "req-001 AC-2: no tool prints the usage text"
+assert_contains "Usage: ./ravintio-zero/setup.sh <tool> [flags]" "$OUT" "req-001 AC-2: no tool prints the usage text"
 assert_equals "$BEFORE" "$(snapshot)" "req-001 AC-2: no tool leaves the tree unchanged"
 assert_equals "" "$(hooks_path)" "req-001 AC-2: no tool leaves core.hooksPath unset"
 cd /; rm -rf "$WS"

@@ -131,7 +131,7 @@ The plan phase ends at one human gate. Before presenting the gate summary:
 2. Fix what it flags and re-run until clean. This mechanical check is mandatory.
 3. If `plan/current-initiative/initiative.md` exists, run `node ravintio-zero/scripts/human-settings-check.mjs`. On exit 1, print its `Blocked` line and stop before P2.
 
-Then present the artifact set summary and stop for human confirmation.
+Then present the artifact set summary and stop for human confirmation. Agreement follows rule `agree-explicit` in `ravintio-orchestrator/references/orchestrator-p0-coaching.md`.
 
 ## Concurrency plan
 

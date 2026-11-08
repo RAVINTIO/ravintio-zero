@@ -17,6 +17,7 @@ new_workspace() {
   ws=$(mktemp -d -t ravintio_0000171_req004_test_XXXXXX)
   cp -r "$ZERO_DIR" "$ws/ravintio-zero"
   git init "$ws" >/dev/null 2>&1
+  commit_workspace_pack "$ws"
   mkdir -p "$ws/.claude"
   WORKSPACES+=("$ws")
   printf '%s\n' "$ws"

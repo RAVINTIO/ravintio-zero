@@ -49,6 +49,7 @@ WS=$(mktemp -d -t ravintio_0000317_req002_XXXXXX)
 trap 'rm -rf "$WS"' EXIT
 cp -r "$ZERO_DIR" "$WS/ravintio-zero"
 git init "$WS" >/dev/null 2>&1
+commit_workspace_pack "$WS"
 (cd "$WS" && bash ravintio-zero/setup.sh claude-code >/dev/null 2>&1 && bash ravintio-zero/setup.sh claude-code >/dev/null 2>&1)
 COUNT=$(grep -c 'guard block-forced-add.mjs' "$WS/.claude/settings.json")
 assert_equals "1" "$COUNT" "req-002 AC-3: settings hold one guard entry after a rerun"

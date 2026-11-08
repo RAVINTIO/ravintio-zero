@@ -12,6 +12,13 @@
  * it finds none, it rereads up to 4 times, waiting RAVINTIO_PREFIX_REREAD_MS
  * (default 250) between reads. If it still finds none, it exits silently.
  *
+ * A reply may lead with the local time as hh:mm and a space, before the
+ * prefix (feature 0000388, REQ-001). A time without a prefix is a miss.
+ *
+ * The hook skips the check, with no log and no warning, when
+ * RAVINTIO_INITIATIVE_STEP is not "1" and plan/.initiative-runner.lock exists
+ * under the working directory (feature 0000388, ADR-001).
+ *
  * Valid prefixes: P0 Discovery:, P1 Plan:, P2 Implement:, P3 Validate:,
  * P4 Ship:, I-A Chart:, I-B Activate:, I-C Run:, I-D Advance:, I-E Delivery:,
  * and Supervise:. The phase name "Validate and Accept" is not valid.
@@ -25,7 +32,9 @@
  * array of { type: "text", text } blocks. The hook checks the first non-empty
  * line of the reply.
  *
- * Outputs: JSON { systemMessage: "<string>" } on stdout for a miss, or
+ * Outputs: JSON { systemMessage: "<string>" } on stdout for a miss. The message
+ * names the "Reply prefix check", quotes the first 40 characters of the reply,
+ * names the session, and says the miss does not mean a run stopped, or
  * nothing otherwise. A miss also appends "<ISO timestamp> <first 80
  * characters of the reply>" to plan/.prefix-misses.log under payload.cwd
  * (else process.cwd()).
@@ -55,6 +64,8 @@ const VALID_PREFIXES = [
 ];
 
 const LOG_SNIPPET_LENGTH = 80;
+const QUOTE_LENGTH = 40;
+const TIME_RE = /^[0-2][0-9]:[0-5][0-9] /;
 
 function textOf(content) {
   if (typeof content === "string") return content;
@@ -127,13 +138,17 @@ try {
 
   if (!existsSync(join(cwd, "plan", ".orchestrator-active"))) process.exit(0);
 
+  const isStep = process.env.RAVINTIO_INITIATIVE_STEP === "1";
+  if (!isStep && existsSync(join(cwd, "plan", ".initiative-runner.lock"))) process.exit(0);
+
   const given = input?.last_assistant_message;
   const reply =
     typeof given === "string" && given.trim() ? given : await findFinalReply(input?.transcript_path);
   if (reply === null) process.exit(0);
 
   const firstLine = reply.split("\n").find((l) => l.trim() !== "") ?? "";
-  if (VALID_PREFIXES.some((p) => firstLine.trimStart().startsWith(p))) process.exit(0);
+  const lead = firstLine.trimStart().replace(TIME_RE, "");
+  if (VALID_PREFIXES.some((p) => lead.startsWith(p))) process.exit(0);
 
   const snippet = reply.trim().replace(/\s+/g, " ").slice(0, LOG_SNIPPET_LENGTH);
   try {
@@ -153,9 +168,14 @@ try {
     // A log failure must not stop the warning.
   }
 
+  // eslint-disable-next-line no-control-regex
+  const quote = snippet.replace(/[\x00-\x1f\x7f]/g, " ").slice(0, QUOTE_LENGTH);
+  const who = isStep ? "step session" : "this session";
   const systemMessage =
-    "[RAVINTIO] Reply is missing a valid prefix. Start every reply in an active run with " +
-    "one of: " + VALID_PREFIXES.join(" ") + " The miss is logged to plan/.prefix-misses.log.";
+    `[RAVINTIO] Reply prefix check: the last reply in ${who} starts "${quote}" ` +
+    "and has no valid prefix. This does not mean a run stopped. " +
+    "Start every reply in an active run with hh:mm and one of: " + VALID_PREFIXES.join(" ") +
+    " The miss is logged to plan/.prefix-misses.log.";
   process.stdout.write(JSON.stringify({ systemMessage }));
   process.exit(0);
 } catch {
