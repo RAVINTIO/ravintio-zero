@@ -159,7 +159,7 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 6 | 0000382-install-lifecycle | Install lifecycle | 0000283, 0000299, 0000292, 0000291, 0000298, 0000286 | minor | 0.63.0 | merged | setup | 5 |
 | 7 | 0000383-test-impact-scan | Test impact scan | 0000361, 0000362, 0000363, 0000369, 0000297 | minor | 0.62.0 | merged | plan | 4 |
 | 8 | 0000384-plan-checks | Plan checks | 0000255, 0000263, 0000333, 0000347, 0000280, 0000364 | minor | | pending | plan | 7 |
-| 9 | 0000385-faster-test-runs | Faster test runs | 0000294, 0000295, 0000296 | minor | | pending | run | 4 |
+| 9 | 0000385-faster-test-runs | Faster test runs | 0000294, 0000295, 0000296 | minor | 0.64.0 | merged | run | 4 |
 | 10 | 0000386-unit-dispatch | Unit dispatch | 0000330, 0000366 | minor | | pending | run | 9 |
 | 11 | 0000387-light-discovery-and-audits | Light discovery and audits | 0000281, 0000284, 0000348, 0000328, 0000329 | minor | | pending | orchestrator | 8 |
 | 12 | 0000388-replies-and-questions | Replies and questions | 0000257, 0000258, 0000259, 0000306 | minor | | pending | orchestrator | 4 |
@@ -182,3 +182,4 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 5 | #131 | tag v0.61.0 | 0.61.0 | 2026-11-08T01:04:33Z |
 | 7 | #132 | tag v0.62.0 | 0.62.0 | 2026-11-08T02:38:25Z |
 | 6 | #136 | tag v0.63.0 | 0.63.0 | 2026-11-08T15:23:07Z |
+| 9 | #130 | tag v0.64.0 | 0.64.0 | 2026-11-08T16:38:35Z |
