@@ -47,7 +47,7 @@ Complete: P0 (2026-11-08T14:49:44Z)
 |-------|-------|
 | Start | `2026-11-08T14:50:55Z` |
 | End | `2026-11-08T14:51:01Z` |
-| Wall clock | `3` |
+| Wall clock | `0` |
 | Model tier | primary |
 | Skills loaded | ravintio-plan |
 | Agents spawned | `0` |
@@ -65,6 +65,7 @@ Complete: P1 (2026-11-08T14:51:01Z)
 |-------|-------|
 | Start | `2026-11-08T14:51:01Z` |
 | End | `2026-11-08T15:08:49Z` |
+| Wall clock | `17` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | `0` |
@@ -81,9 +82,40 @@ Complete: P2 (2026-11-08T15:08:49Z)
 |-------|-------|
 | Start | `2026-11-08T15:08:49Z` |
 | End | `2026-11-08T15:08:49Z` |
+| Wall clock | `0` |
 | Model tier | primary |
 | Skills loaded | none |
 | Agents spawned | `0` |
 | Notes | Tests run: 331 suites, 329 passed. The two failures scan the step worktrees and pass in a clean clone. Security: no findings. Autonomous run: the acceptance evidence goes in the PR. |
 
 Complete: P3 (2026-11-08T15:08:49Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-08T15:09:12Z` |
+| End | `2026-11-08T15:09:12Z` |
+| Wall clock | `0` |
+| Model tier | primary |
+| Skills loaded | none |
+| Agents spawned | `0` |
+| Notes | No version bump: this PR is not a chart step. The coordinator squash-merges it into the initiative branch after green CI. |
+
+Complete: P4 (2026-11-08T15:09:12Z)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `96` |
+| Total agents spawned | `0` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `0` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `0` |
+| Phases skipped | none |

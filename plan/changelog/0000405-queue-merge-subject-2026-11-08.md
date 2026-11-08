@@ -20,7 +20,9 @@ On 2026-11-08 the queue stopped on step 6 of initiative 0000360. Git's default s
 
 ## Validation results
 
-- Pending P3.
+- Suites: 329 of 331 passed. `test-0000042-req-006` and `test-0000043-req-009` scan the step worktrees under `plan/.initiative-worktrees/`. Both pass in a clean clone of the branch.
+- All three criteria verified by running the new suite.
+- Security review: no findings.
 
 ## Skipped phases
 
