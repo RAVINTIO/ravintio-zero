@@ -58,9 +58,9 @@ CODE=$?
 echo ""
 echo "=== req-006 AC-1: the final report names each step ==="
 assert_equals "0" "$CODE" "driver exits 0 at delivery"
-LAST="$(printf '%s\n' "$OUT" | grep -n '^I-E Delivery:' | tail -1 | cut -d: -f1)"
-S1="$(printf '%s\n' "$OUT" | grep -n '^I-E Delivery: Complete: step 1 merged' | cut -d: -f1)"
-S2="$(printf '%s\n' "$OUT" | grep -n '^I-E Delivery: Complete: step 2 merged' | cut -d: -f1)"
+LAST="$(printf '%s\n' "$OUT" | grep -n '^[0-9:]* I-E Delivery:' | tail -1 | cut -d: -f1)"
+S1="$(printf '%s\n' "$OUT" | grep -n '^[0-9:]* I-E Delivery: Complete: step 1 merged' | cut -d: -f1)"
+S2="$(printf '%s\n' "$OUT" | grep -n '^[0-9:]* I-E Delivery: Complete: step 2 merged' | cut -d: -f1)"
 [ -n "$S1" ] && [ "$S1" -lt "$LAST" ] && r=yes || r=no
 assert_equals "yes" "$r" "step 1 line comes before the last I-E Delivery: line"
 [ -n "$S2" ] && [ "$S2" -lt "$LAST" ] && r=yes || r=no
@@ -91,7 +91,7 @@ OUT="$(cd "$P" && PATH="$WORK/bin2:$PATH" node "$DRIVER" --root "$P" 2>&1)"
 CODE=$?
 assert_equals "0" "$CODE" "pending: driver exits 0"
 assert_contains "I-E Delivery: Complete: step 2 merged" "$OUT" "pending: names step 2"
-assert_equals "I-E Delivery: Pending: all 2 steps merged, initiative delivery runs from the initiative skill" "$(printf '%s\n' "$OUT" | tail -1)" "pending: last line is the Pending line"
+assert_equals "I-E Delivery: Pending: all 2 steps merged, initiative delivery runs from the initiative skill" "$(printf '%s\n' "$OUT" | tail -1 | cut -c7-)" "pending: last line is the Pending line"
 assert_equals "no" "$([ -e "$P/plan/.initiative-runner.lock" ] && echo yes || echo no)" "pending: lock released"
 
 print_summary

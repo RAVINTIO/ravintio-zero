@@ -105,7 +105,7 @@ Do this before any push, in every run mode and for both PR options, so no PR car
 
 If a local-git-only override is active in `ravintio-overrides/instructions/`, skip the question and output the description block. Otherwise, follow the run mode.
 
-In `gated`, ask the human:
+In `gated`, ask the human. Agreement follows rule `agree-explicit` in `ravintio-orchestrator/references/orchestrator-p0-coaching.md`.
 
 ```
 P4 Ship: Version v{version} set. CI tags the merge commit on main.

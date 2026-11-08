@@ -26,7 +26,7 @@ The `commit-msg` hook is blocking. It rejects commits that break `commit-standar
 
 ## Reply Conventions
 
-Begin every reply in an active run with a prefix. Use the status form `{prefix} {Status}: {one-liner}`. The status is Starting, Resuming, Complete, Question, Blocked, or Skipped.
+Begin every reply in an active run with the time and a prefix. Use the form `hh:mm {prefix} {Status}: {one-liner}`. The hook gives the time. The status is Starting, Resuming, Complete, Question, Blocked, or Skipped.
 
 | Prefix | Use for |
 |--------|---------|
@@ -41,7 +41,7 @@ Begin every reply in an active run with a prefix. Use the status form `{prefix} 
 | `I-D Advance:` | Initiative advance stage |
 | `I-E Delivery:` | Initiative delivery stage |
 
-Use `Supervise:` for out-of-phase work. Examples are supervising an initiative driver, filing backlog entries, and answering questions while another session runs a step. It takes the same status form, as in `Supervise: Complete: {one-liner}`.
+Use `Supervise:` for out-of-phase work. Examples are supervising a driver, filing backlog entries, and answering questions during another session's step. It takes the same status form, as in `Supervise: Complete: {one-liner}`.
 
 **Reporting rule.** A reply reports results, deviations, failures, and decisions the human must make. A reply never states that the agent followed a standing rule. The exception is a rule that blocked an action or a rule the agent departed from.
 

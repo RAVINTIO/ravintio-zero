@@ -56,3 +56,22 @@ With more than 5 or 6 features, group them into waves. Each wave is a separate p
 ### Past retrospectives
 
 When you write `discovery.md`, add the newest three records in `plan/retrospectives/`, with the open changes they filed. If the folder is empty, write "none". Coach the first question from what those records say to keep and to change.
+
+### Question form
+
+Match the question to the form of the answer.
+
+<!-- rule: question-closed -->
+For a closed decision, use the host's choice tool, such as AskUserQuestion in Claude Code. A closed decision is an approve or reject, a pick from known options, or an accept of items from a list. Put the recommended option first and label it. Ask one decision per question. Example: "Which adoption mode? Iterative (Recommended), Big bang."
+
+<!-- rule: question-open -->
+For an open question, use plain text and never invent options. An open question asks for a value, a reason, or design input. Example: "What p95 latency target should the search endpoint meet?"
+
+<!-- rule: question-list -->
+For a list of items, offer "Agree to all N", "Agree to some" (with the items to pick), and "Change wording". The tool adds "Other". Example: for six requirements, offer "Agree to all six", "Agree to some", and "Change wording".
+
+<!-- rule: question-agreement -->
+A picked option counts as explicit agreement when its label says so, as in "Yes, I agree to all six". A bare "Ok" is ambiguous, so ask again.
+
+<!-- rule: question-no-tool -->
+If the host has no choice tool, use the text form. Number the options, mark the recommended one, and ask the human to reply with a number.

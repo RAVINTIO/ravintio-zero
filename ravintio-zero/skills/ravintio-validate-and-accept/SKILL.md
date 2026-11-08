@@ -114,7 +114,7 @@ Read `plan/.run-mode`. The evidence is the same in both modes:
 3. Execution evidence: what was run, what was observed, any `not-verifiable` criteria
 4. Search evidence: for any program reported missing, the `PATH` check commands with a found or not-found result, and each unverified claim by name
 
-In `gated`, this gate stops for the human. Present the evidence. The human accepts, requests changes, or rejects.
+In `gated`, this gate stops for the human. Present the evidence. The human accepts, requests changes, or rejects. Agreement follows rule `agree-explicit` in `ravintio-orchestrator/references/orchestrator-p0-coaching.md`.
 
 In `autonomous`, do not stop. Write the evidence to `plan/current/acceptance-evidence.md` and commit it. The PR may be public. The evidence holds results, counts, and `file:line` cites, and never raw command output, environment values, or file contents. The ship phase copies it into the PR description under `## Acceptance evidence`. The human reviews it there before merging.
 
