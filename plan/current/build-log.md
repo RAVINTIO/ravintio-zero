@@ -68,3 +68,25 @@ Complete: P0 (2026-11-09T14:57:47Z)
 - Decision: ADR-0285, ADR-0286, ADR-0287 proposed.
 - Consistency check: clean.
 Complete: P1 (2026-11-09T15:02:06Z)
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-09T15:26:44Z` |
+| End | `pending` |
+| Wall clock | `pending` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | `3` |
+| MCP calls | `0` |
+| Parallel task batches | `1` |
+| Notes | U1 inline, U3 to U5 in one parallel batch on sonnet |
+
+- Done: U1 rules module and linter (REQ-001, REQ-002): 38 assertions pass
+- Deviation: I wrote the U1 code before its tests. The tests passed on the first run, so U1 shows no RED. U3, U4, and U5 each showed RED first.
+- Done: U2 baseline recorded for 377 files
+- Done: U3 enforcement points (REQ-003): `commit-msg`, pre-commit, CI `prose` job. One fixture line in `test-commit-msg-hook.sh` reworded from passive to active, assertion unchanged.
+- Done: U4 docs edit pass (REQ-004)
+- Done: U5 advisory hook (REQ-005). Pins updated for the new hook: hook-filter fixture, shared-module test, advisory command count. `prose-rules.mjs` is not in the Codex copy list because Codex does not use the hook.
+- Done: U6 living docs
