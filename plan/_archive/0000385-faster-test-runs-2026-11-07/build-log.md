@@ -99,6 +99,8 @@ OS gap: local macos, CI ubuntu, windows
 Baseline recorded at P0: 3 failed suites on the base commit, see baseline-failures.md. The base-commit run started from the P0 commit during P1, so it ran beside the build.
 Complete: P3 (2026-11-07T21:51:25Z)
 
+Rework: merged origin/initiative/0000360-backlog-sweep into the step branch (2026-11-09T00:00:05Z). Only plan/current-initiative/initiative.md conflicted, resolved to the initiative side. Clean-clone suite: 325 feature and 19 regression passed, 2 failed. test-0000037-req-004-remove-old-folder.sh also fails on the initiative branch. test-0000318-req-004-merge-guard-pinned.sh fails only in a local clone with no origin ref and passes in the worktree.
+
 ### P4: Ship
 
 | Field | Value |
