@@ -41,7 +41,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Scope Lock (happy path): A fix gets the light track, and each rule reads from a reference [source: draft-accepted (initiative)]
 - Scope Lock (first-run path): A repo with no track marker reads as full track [source: draft-accepted (initiative)]
 - Scope Lock (error path): A light run that grows switches to full and logs the switch [source: draft-accepted (initiative)]
-- Scope Lock (cross-session continuity): The track marker in \`discovery.md\` survives a session change [source: draft-accepted (initiative)]
+- Scope Lock (cross-session continuity): The track marker in `discovery.md` survives a session change [source: draft-accepted (initiative)]
 - Scope Lock complete. All four scenario paths captured.
 - Version: 0.66.0 plus minor bump gives 0.67.0. The merge queue sets the released version.
 - Complete: P0 (2026-11-09T06:49:55Z)
