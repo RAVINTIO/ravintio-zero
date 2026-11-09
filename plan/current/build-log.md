@@ -96,14 +96,19 @@ Complete: P2 (2026-11-09T23:37:56Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-09T23:38:04Z` |
-| End | `{{timestamp, filled when the phase completes}}` |
-| Wall clock | `0` |
+| End | `2026-11-09T23:58:27Z` |
+| Wall clock | `22` |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
-| Agents spawned | `0` |
+| Agents spawned | `1` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
-| Notes | none |
+| Notes | Baseline recorded at P3 from targeted runs at 2adff7e3, because P0 skipped the base run. |
+
+- Tests run: full suite: 373 passed, 2 failed (2026-11-09T23:58:27Z)
+- Rework: REQ-003: three whole-repo scan tests read the wrong root from the installed folder (2026-11-09T23:58:27Z)
+
+Complete: P3 (2026-11-09T23:58:27Z)
 
 ---
 
