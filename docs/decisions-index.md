@@ -472,3 +472,9 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 | ADR | Title | Status | Summary |
 |-----|-------|--------|---------|
 | ADR-001 | The scan stays a skill instruction | accepted | Each new cause is one bullet in the plan skill's `## Test impact scan`. The planner runs the greps and no script is added. |
+
+### Feature 0000393-session-integrity-and-guards
+
+| ADR | Title | Status | Summary |
+|-----|-------|--------|---------|
+| ADR-001 | gate-write takes Bash calls | accepted | `gate-write.mjs` reads Bash redirects, `tee`, and `sed -i`, and setup wires it on the Bash matcher. No new hook module. |
