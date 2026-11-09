@@ -1,12 +1,12 @@
 ---
-title: "ADR 276: Workflow lint tooling and scope"
+title: "ADR 278: Workflow lint tooling and scope"
 summary: "A pinned actionlint and zizmor job in the repo's own workflow, not mirrored to consumers."
 status: "accepted"
 version: "0.1.0"
 component: "ravintio-zero"
 feature: "0000394-github-security-and-ci-lint"
 ---
-# ADR-0276 - Workflow lint tooling and scope
+# ADR-0278 - Workflow lint tooling and scope
 
 **Status:** accepted
 **Component:** ravintio-zero
@@ -45,7 +45,7 @@ A `workflow-lint` job in `.github/workflows/ravintio.yml` installs `zizmor` from
 
 ## Related ADRs
 
-- ADR-0275 - related-to
+- ADR-0277 - related-to
 
 ## Supersedes
 
