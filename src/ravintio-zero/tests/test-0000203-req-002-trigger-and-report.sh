@@ -7,8 +7,8 @@ set -uo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
-ZERO_DIR="$SCRIPT_DIR/.."
-REPO="$ZERO_DIR/.."
+ZERO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+REPO="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
 ORCH="$(orch_combined "$ZERO_DIR/skills/ravintio-orchestrator")"
 CATALOGUE="$ZERO_DIR/skills/ravintio-orchestrator/references/orchestrator-skills-catalogue.md"
 SHIP="$ZERO_DIR/skills/ravintio-ship/SKILL.md"
