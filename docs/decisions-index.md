@@ -3,7 +3,7 @@
 > Change record. Index of all ADRs across all features. Updated after every pipeline run.
 > Do not archive this file. Update it in place.
 
-Last updated: 0000386-unit-dispatch
+Last updated: 0000391-standards-archetypes
 
 ---
 
@@ -309,3 +309,7 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 | [ADR-0288](adr/0288-shared-prose-rules-module.md) | Shared prose rules module | accepted | One module in hooks/enforcement/ holds the prose rules, and the linter script and the Stop hook both import it. | 0000390-prose-checks |
 | [ADR-0289](adr/0289-prose-baseline-ratchet.md) | Prose baseline ratchet | accepted | A per-file count of breaches by rule, kept in git, may fall and never rise. | 0000390-prose-checks |
 | [ADR-0290](adr/0290-prose-scope-and-enforcement-points.md) | Prose scope and enforcement points | accepted | The linter reads a fixed set of Markdown paths and runs in commit-msg, pre-commit, and CI. | 0000390-prose-checks |
+| [ADR-0291](adr/0291-archetype-manifest-format.md) | Archetype manifest format | accepted | Each archetype is a JSON manifest plus a files folder that mirrors ravintio-overrides. | 0000391-standards-archetypes |
+| [ADR-0292](adr/0292-override-resolver-and-protected-rules.md) | Override resolver and protected rules | accepted | A resolver returns an override before the pack copy, unless protected.json says the file is hook-enforced. | 0000391-standards-archetypes |
+| [ADR-0293](adr/0293-archetype-command.md) | Archetype command | accepted | One Node script implements archetype list and use. Setup scripts only dispatch to it. | 0000391-standards-archetypes |
+| [ADR-0294](adr/0294-p3-archetype-gates.md) | P3 archetype gates | accepted | A script reads gates from installed archetypes and exits 1 on a failed gate. The validate skill reads its output. | 0000391-standards-archetypes |

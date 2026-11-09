@@ -1,6 +1,6 @@
 # Architecture Overview
 
-Last updated: 0000411-queue-waits
+Last updated: 0000391-standards-archetypes
 
 ## What this repo is
 
@@ -160,6 +160,16 @@ Boot files are disposable build outputs. Every run regenerates `CLAUDE.md` from 
 ## Writing standard
 
 `ravintio-zero/standards/writing-standards.md` holds the pack's prose rules in two marked regions. `scripts/writing-style.mjs` prints each tool's output from those regions. For Claude Code, `setup.sh` and `setup.ps1` write `.claude/output-styles/ravintio-writing.md` and set `outputStyle` to `ravintio-writing` when the key is absent. They leave any other value. For Codex, they keep one writing block in `AGENTS.md`. `--no-writing-style` skips both outputs, and the setup record and `ravintio-refresh-setup` carry the flag. An output style reaches only the main session, so the Agent Dispatch Template and the driver's `--append-system-prompt` name the standard for subagents and step sessions (0000389).
+
+## Archetypes and overrides
+
+`ravintio-zero/archetypes/` holds the catalogue of starter archetypes. Each one has an `archetype.json` manifest and a `files/` folder that mirrors `ravintio-overrides/`. An archetype is an `alternative`, which swaps a pack default, or a `constraint`, which adds rules and gates. Two alternatives can't claim the same slot.
+
+`scripts/resolve-override.mjs` resolves a standard or template. An override in `ravintio-overrides/standards/` or `ravintio-overrides/templates/` wins over the pack copy. `archetypes/protected.json` lists the files that hooks enforce, and the resolver always returns the pack copy of those.
+
+`scripts/archetype.mjs` implements `archetype list` and `archetype use {kind}/{name}`. `setup.sh` and `setup.ps1` only dispatch to it. `use` runs every check first, writes nothing on a clash, copies the files into `ravintio-overrides/`, and records the pick in `ravintio-overrides/archetypes.json`.
+
+`scripts/archetype-gates.mjs` runs at P3. It reads the gates of each installed archetype, prints one `PASS` or `FAIL` line per gate, and exits 1 on a failed gate. The validate skill reads its output.
 
 ## Prose checks
 
