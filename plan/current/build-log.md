@@ -89,6 +89,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Rework: REQ-002: the boot template had no commit section, so U2 added one and raised its cap from 3,600 to 3,800 bytes (2026-11-09T07:35:20Z)
 - Rework: REQ-001: test-0000377 capped SKILL.md at 8,700 bytes, so the cap rose to 9,000, and run-tests.sh lists the new fixture files (2026-11-09T07:35:20Z)
 - Rework: merged origin/initiative/0000360-backlog-sweep into PR #143 and resolved conflicts in architecture-overview.md, backlog/index.md, and build-log.template.md (2026-11-09T09:11:47Z)
+- Full suite after merge: 338 feature suites and 19 regression suites passed, 2 failed in the clean clone (test-0000037-req-004-remove-old-folder.sh, test-0000318-req-004-merge-guard-pinned.sh). Both pass in the working tree and neither touches files this step changed. The clone has no core.hooksPath and carries an old origin/initiative/0000312 ref. CI decides (2026-11-09T10:00:00Z)
 - Full suite: 337 feature suites and 19 regression suites passed, 0 failed (2026-11-09T07:35:20Z)
 - Complete: P2 (2026-11-09T07:35:20Z)
 
