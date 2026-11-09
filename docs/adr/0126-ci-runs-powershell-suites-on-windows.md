@@ -1,12 +1,14 @@
 ---
 title: "ADR 003: CI runs the PowerShell suites on Windows under both hosts"
 summary: "A windows-latest job runs run-tests.ps1 with powershell and with pwsh. Bash suites stay out of CI for now."
-status: "accepted"
+status: "superseded"
 version: "0.1.0"
 component: "ravintio-zero"
 feature: "0000036-test-runner-coverage"
 ---
 # ADR-0126 - CI runs the PowerShell suites on Windows under both hosts
+
+**Status:** superseded by [ADR-0284](0284-ci-runs-suites-in-shards.md)
 
 **Skill:** [adr-agent](../../../.claude/skills/planifest-adr-agent/SKILL.md)
 **Feature:** 0000036-test-runner-coverage

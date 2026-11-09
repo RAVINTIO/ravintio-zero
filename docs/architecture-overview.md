@@ -1,6 +1,6 @@
 # Architecture Overview
 
-Last updated: 0000387-light-discovery-and-audits
+Last updated: 0000409-ci-shards
 
 ## What this repo is
 
@@ -255,7 +255,7 @@ Set `RAVINTIO_TEST_QUIET=1` to hide PASS lines and banners. The runner then keep
 
 `helpers/assert.sh` fails a Bash suite that calls an undefined `assert_*` function, and it offers `assert_not_contains`. The installed-copies check in `test-0000151-req-014` skips while an initiative is active and `.claude/skills/.ravintio-manifest` is older than the newest pack skill.
 
-The PowerShell suites run `setup.ps1` in temporary projects. In CI, the `windows-powershell` job runs them as a two-entry matrix, one entry for Windows PowerShell 5.1 and one for PowerShell 7. The entries run in parallel and neither cancels the other. Helpers print per-case timing. `run-tests.ps1` also prints `[timing] setup.ps1 total: {ms} ms over {n} cases` before its summary. Suites append each setup time to the file that `RAVINTIO_TIMING_FILE` names, and the runner deletes it at the end. The `bash-suites` job runs `run-tests.sh` on `ubuntu-latest` with `RAVINTIO_REQUIRE_PWSH=1`. So it runs every Bash suite and fails if `pwsh` is missing.
+The PowerShell suites run `setup.ps1` in temporary projects. Both runners read `RAVINTIO_SHARD=i/n` and run only shard i of n (0000409). In CI, the `windows-powershell-shard` job runs the `.ps1` suites under Windows PowerShell 5.1 in 4 parallel shards, and no shard cancels another. Helpers print per-case timing. `run-tests.ps1` also prints `[timing] setup.ps1 total: {ms} ms over {n} cases` before its summary. Suites append each setup time to the file that `RAVINTIO_TIMING_FILE` names, and the runner deletes it at the end. The `bash-suites-shard` job runs `run-tests.sh` on `ubuntu-latest` in 4 shards with `RAVINTIO_REQUIRE_PWSH=1`. So it runs every Bash suite, runs the `.ps1` suites under `pwsh`, and fails if `pwsh` is missing. The `bash-suites` and `windows-powershell (powershell)` summary jobs carry the required check names and pass only when every shard passed.
 
 The workflow guards each of those jobs to `pull_request` events. On a pull request, `validate-branch` also runs `scripts/check-attribution.mjs` on the PR description, which it reads from an `env:` entry. On a push to `main` or `master`, only the `release-tag` job runs. It holds `contents: write` and runs `scripts/release-tag.mjs`, which tags `HEAD` with `v{version}` from `product.yml` and skips a tag that exists. The consumer template `hooks/ravintio.yml` carries `validate-branch` and `release-tag` only.
 

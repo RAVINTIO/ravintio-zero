@@ -3,7 +3,7 @@
 > Change record. Index of all ADRs across all features. Updated after every pipeline run.
 > Do not archive this file. Update it in place.
 
-Last updated: 0000394-github-security-and-ci-lint
+Last updated: 0000409-ci-shards
 
 ---
 
@@ -144,7 +144,7 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 | [ADR-0123](adr/0123-ps1-flags-are-case-sensitive.md) | setup.ps1 flags are case-sensitive | accepted | The setup.ps1 flag switch matches case, as setup.sh does, and leftover temporary files go at the start of each run. | 0000035-powershell-setup-parity |
 | [ADR-0124](adr/0124-stray-test-files-fail-the-run.md) | Stray test files fail the run | accepted | run-tests.sh names every file under tests/ that is neither a suite nor a known non-suite, and exits 1. | 0000036-test-runner-coverage |
 | [ADR-0125](adr/0125-powershell-suites-without-pester.md) | PowerShell suites use a plain assert helper | accepted | test-*.ps1 suites use a small helper instead of Pester, and run-tests.sh runs or reports them. | 0000036-test-runner-coverage |
-| [ADR-0126](adr/0126-ci-runs-powershell-suites-on-windows.md) | CI runs the PowerShell suites on Windows under both hosts | accepted | A windows-latest job runs run-tests.ps1 with powershell and with pwsh. Bash suites stay out of CI for now. | 0000036-test-runner-coverage |
+| [ADR-0126](adr/0126-ci-runs-powershell-suites-on-windows.md) | CI runs the PowerShell suites on Windows under both hosts | superseded | A windows-latest job runs run-tests.ps1 with powershell and with pwsh. Bash suites stay out of CI for now. | 0000036-test-runner-coverage |
 | [ADR-0127](adr/0127-repo-self-hosts-on-planifest-zero.md) | The repo self-hosts on planifest-zero | accepted | Delete planifest-framework/ with git rm -r, so the repo runs on the planifest-zero/ it ships. Repoint core.hooksPath first, move the setup record to plan/state/, and defer the reinstall until after merge. | 0000037-self-host-on-planifest-zero |
 | [ADR-0128](adr/0128-bash-suites-run-in-ci-on-ubuntu.md) | The Bash suites run in CI on Ubuntu | accepted | A bash-suites job on ubuntu-latest runs run-tests.sh with PLANIFEST_REQUIRE_PWSH=1, a pinned checkout, and contents: read. The validate-telemetry-schema job goes. | 0000037-self-host-on-planifest-zero |
 | [ADR-0129](adr/0129-setup-repairs-hook-entries-it-owns.md) | Setup repairs the hook entries it owns | accepted | setup.sh removes Planifest PreToolUse entries by module name on any matcher. Both scripts warn on a non-array PreToolUse or UserPromptSubmit value, print it, replace it with the Planifest entries, and exit 0. | 0000037-self-host-on-planifest-zero |
@@ -302,3 +302,4 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 | [ADR-0281](adr/0281-one-brand-guard-allowlist-file.md) | One brand guard allowlist file | accepted | The CI test and pre-push read one allowlist file, and the guard runs only in the pack source. | 0000394-github-security-and-ci-lint |
 | [ADR-0282](adr/0282-workflow-lint-tooling-and-scope.md) | Workflow lint tooling and scope | accepted | A pinned actionlint and zizmor job in the repo's own workflow, not mirrored to consumers. | 0000394-github-security-and-ci-lint |
 | [ADR-0283](adr/0283-settings-check-and-human-stop.md) | Settings check script and the human stop | accepted | A script lists and checks the admin-only settings, and the step stops once for the human at P3. | 0000394-github-security-and-ci-lint |
+| [ADR-0284](adr/0284-ci-runs-suites-in-shards.md) | CI runs the suites in shards | accepted | CI runs 4 bash shards and 4 Windows PowerShell 5.1 shards behind summary jobs with the required names, and drops pwsh on Windows. Supersedes ADR-0126. | 0000409-ci-shards |

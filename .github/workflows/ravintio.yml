@@ -103,27 +103,23 @@ jobs:
       - name: Run zizmor
         run: zizmor --no-online-audits .github/workflows
 
-  # The PowerShell suites, run under both Windows hosts (0000036 ADR-003).
-  # run-tests.ps1 starts each suite with the host that runs it.
-  windows-powershell:
+  # The PowerShell suites under Windows PowerShell 5.1, in 4 parallel shards
+  # (0000409 ADR-0284, which supersedes 0000036 ADR-003). pwsh runs the same
+  # suites on Linux in bash-suites-shard. fail-fast stays off so one failing
+  # shard does not cancel the others.
+  windows-powershell-shard:
+    name: windows-powershell shard ${{ matrix.shard }}
     if: github.event_name == 'pull_request' && github.event.action != 'closed'
     runs-on: windows-latest
     permissions:
       contents: read
-    # Both hosts run in parallel. fail-fast stays off so one failure does not
-    # cancel the other, and the job passes only when both entries pass
-    # (0000151 req-015).
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - shell: powershell
-          - shell: pwsh
-    # A step's shell key takes no expression, so the matrix sets the job
-    # default instead.
+        shard: [1, 2, 3, 4]
     defaults:
       run:
-        shell: ${{ matrix.shell }}
+        shell: powershell
     steps:
       # Pinned to the v4 commit, with no token left in .git/config while the
       # PR's code runs (0000036 S-005).
@@ -131,19 +127,43 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: PowerShell suites on ${{ matrix.shell }}
+      - name: PowerShell suites, one shard of 4
+        env:
+          RAVINTIO_SHARD: ${{ matrix.shard }}/4
         run: |
           & ./ravintio-zero/tests/run-tests.ps1
           exit $LASTEXITCODE
 
-  # The Bash suites on Linux (0000037 ADR-002). run-tests.sh also runs the
-  # .ps1 suites with pwsh, which ubuntu-latest ships. RAVINTIO_REQUIRE_PWSH
-  # fails the run if pwsh is missing, so no suite skips unseen.
-  bash-suites:
+  # Carries the required check name "windows-powershell (powershell)". It runs
+  # even when a shard fails, and passes only when every shard passed. Its "if"
+  # adds always() to the pull request guard, so it carries the marker.
+  # ravintio:job-guard-exempt
+  windows-powershell:
+    name: windows-powershell (powershell)
+    if: always() && github.event_name == 'pull_request' && github.event.action != 'closed'
+    needs: windows-powershell-shard
+    runs-on: ubuntu-latest
+    permissions: {}
+    steps:
+      - name: Every shard passed
+        env:
+          RESULT: ${{ needs.windows-powershell-shard.result }}
+        run: test "$RESULT" = success
+
+  # The Bash suites on Linux in 4 parallel shards (0000037 ADR-002, 0000409
+  # ADR-0284). run-tests.sh also runs the .ps1 suites with pwsh, which
+  # ubuntu-latest ships. RAVINTIO_REQUIRE_PWSH fails the run if pwsh is
+  # missing, so no suite skips unseen.
+  bash-suites-shard:
+    name: bash-suites shard ${{ matrix.shard }}
     if: github.event_name == 'pull_request' && github.event.action != 'closed'
     runs-on: ubuntu-latest
     permissions:
       contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
     steps:
       # Pinned to the v4 commit, with no token left in .git/config while the
       # PR's code runs (0000036 S-005).
@@ -151,10 +171,26 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Bash suites on Linux
+      - name: Bash suites on Linux, one shard of 4
         env:
           RAVINTIO_REQUIRE_PWSH: "1"
+          RAVINTIO_SHARD: ${{ matrix.shard }}/4
         run: bash ravintio-zero/tests/run-tests.sh
+
+  # Carries the required check name "bash-suites". It runs even when a shard
+  # fails, and passes only when every shard passed. Its "if" adds always() to
+  # the pull request guard, so it carries the marker.
+  # ravintio:job-guard-exempt
+  bash-suites:
+    if: always() && github.event_name == 'pull_request' && github.event.action != 'closed'
+    needs: bash-suites-shard
+    runs-on: ubuntu-latest
+    permissions: {}
+    steps:
+      - name: Every shard passed
+        env:
+          RESULT: ${{ needs.bash-suites-shard.result }}
+        run: test "$RESULT" = success
 
   # Fails a PR from initiative/* to main whose first-parent history holds an
   # untitled commit (0000319 req-002). It reads the branch head, not the PR

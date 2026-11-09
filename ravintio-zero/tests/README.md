@@ -96,12 +96,22 @@ clean up after themselves, so a run leaves your working tree unaffected.
 
 ## CI
 
-The `windows-powershell` job in `.github/workflows/ravintio.yml` runs
-`run-tests.ps1` on `windows-latest`, once under each host.
+CI splits the suites into shards that run in parallel. Both runners read
+`RAVINTIO_SHARD=i/n` and run only shard i of n. To run one shard yourself:
 
-The `bash-suites` job runs `run-tests.sh` on `ubuntu-latest`. It sets
-`RAVINTIO_REQUIRE_PWSH=1`, so the run fails if `pwsh` is missing. The job
-also runs the `.ps1` suites under `pwsh` on Linux.
+```bash
+RAVINTIO_SHARD=2/4 bash ravintio-zero/tests/run-tests.sh
+```
+
+The `windows-powershell-shard` job in `.github/workflows/ravintio.yml` runs
+`run-tests.ps1` on `windows-latest` under Windows PowerShell 5.1, in 4 shards.
+
+The `bash-suites-shard` job runs `run-tests.sh` on `ubuntu-latest` in 4
+shards. It sets `RAVINTIO_REQUIRE_PWSH=1`, so the run fails if `pwsh` is
+missing. It also runs the `.ps1` suites under `pwsh` on Linux.
+
+The `bash-suites` and `windows-powershell (powershell)` jobs carry the
+required check names. Each one passes only when every shard passed.
 
 ## The regression pack
 
