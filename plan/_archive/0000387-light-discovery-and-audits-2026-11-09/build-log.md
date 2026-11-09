@@ -25,7 +25,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 |-------|-------|
 | Start | `2026-11-09T06:49:19Z` |
 | End | `2026-11-09T06:49:55Z` |
-| Wall clock | `4` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -52,7 +52,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 |-------|-------|
 | Start | `2026-11-09T06:50:50Z` |
 | End | `2026-11-09T06:51:18Z` |
-| Wall clock | `7` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-plan |
 | Agents spawned | 0 |
@@ -106,3 +106,36 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Notes | none |
 
 - Complete: P3 (2026-11-09T07:36:08Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-09T07:36:31Z` |
+| End | `2026-11-09T07:36:31Z` |
+| Wall clock | `0` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | none |
+
+- Decision applied (initiative chart): P4 sets no version. The merge queue sets it.
+- Complete: P4 (2026-11-09T07:36:31Z)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | 5 |
+| Total wall clock | 47 |
+| Total agents spawned | 4 |
+| Total MCP calls | 0 |
+| Phases using parallelism | 1 |
+| Primary tier agent calls | 0 |
+| Cheaper tier agent calls | 4 |
+| Self-corrections | 2 |
+| Phases skipped | none |
