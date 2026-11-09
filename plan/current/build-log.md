@@ -67,8 +67,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-09T01:27:16Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-09T02:34:48Z` |
+| Wall clock | `70 min` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 4 |
@@ -84,3 +84,4 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Done: U4 (2026-11-09T01:29:42Z)
 - Done: U3 (2026-11-09T01:32:14Z)
 - Done: U1 (2026-11-09T02:26:42Z)
+- Complete: P2 (2026-11-09T02:34:48Z)
