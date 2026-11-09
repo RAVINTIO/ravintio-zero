@@ -5,7 +5,7 @@
 set -uo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 ZERO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-REPO_DIR="$(cd "$ZERO_DIR/.." && pwd)"
+REPO_DIR="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
 echo ""
@@ -43,6 +43,8 @@ ravintio-zero/tests/test-0000189-req-008-open-backlog-entries.sh'
 
 allowed() {
   local f="$1" d
+  # The source copy under src/ shares the allowlist of the installed copy (0000397).
+  case "$f" in src/ravintio-zero/*) f="${f#src/}" ;; esac
   if printf '%s\n' "$ALLOW_FILES" | grep -qxF -- "$f"; then return 0; fi
   while IFS= read -r d; do
     case "$f" in "$d"*) return 0 ;; esac
