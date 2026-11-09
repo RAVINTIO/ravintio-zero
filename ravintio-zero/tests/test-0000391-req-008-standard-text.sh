@@ -39,7 +39,7 @@ if [ "$TOTAL" -le 1720 ]; then assert_contains ok ok "total $TOTAL <= 1720"; els
 
 OB=$(wc -c < "$SK/ravintio-orchestrator/SKILL.md" | tr -d ' ')
 if [ "$OB" -le 9000 ]; then assert_contains ok ok "orchestrator $OB <= 9000 bytes"; else assert_contains ok "$OB" "orchestrator <= 9000 bytes"; fi
-assert_contains ok "$(grep -c 'archetype' "$SK/ravintio-orchestrator/SKILL.md" | grep -q '^0$' && echo ok)" "orchestrator holds no archetype text"
+if grep -qi 'archetype' "$SK/ravintio-orchestrator/SKILL.md"; then assert_contains ok found "orchestrator holds no archetype text"; else assert_contains ok ok "orchestrator holds no archetype text"; fi
 
 for s in ravintio-implement ravintio-plan; do
   F="$SK/$s/SKILL.md"
