@@ -40,4 +40,4 @@ As a pack user, I pick several archetypes, so that the command reports a clash a
 
 ## Dependencies
 - REQ-003 archetype command.
-- ADR-0294 records the check order.
+- ADR-0293 records the check order.

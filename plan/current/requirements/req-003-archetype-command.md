@@ -41,4 +41,4 @@ As a pack user, I run `setup.sh archetype use {kind}/{name}`, so that the archet
 
 ## Dependencies
 - REQ-004 supplies the checks that run first.
-- ADR-0294 records the command design.
+- ADR-0293 records the command design.

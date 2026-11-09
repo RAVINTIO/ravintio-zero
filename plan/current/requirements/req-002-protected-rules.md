@@ -39,4 +39,4 @@ As a maintainer, I list the rules that a hook enforces, so that an override neve
 
 ## Dependencies
 - REQ-001 resolver.
-- ADR-0293 records the list format.
+- ADR-0292 records the list format.

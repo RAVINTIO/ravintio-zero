@@ -41,4 +41,4 @@ As a team lead, I add a constraint, so that P3 fails when a gate breaks.
 
 ## Dependencies
 - REQ-003 records the installed archetypes.
-- ADR-0295 records the gate design.
+- ADR-0294 records the gate design.
