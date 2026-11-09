@@ -37,16 +37,16 @@ if [ "$VL" -le 200 ]; then assert_contains ok ok "validate $VL <= 200"; else ass
 TOTAL=$(cat "$SK"/*/SKILL.md | wc -l | tr -d ' ')
 if [ "$TOTAL" -le 1720 ]; then assert_contains ok ok "total $TOTAL <= 1720"; else assert_contains ok "$TOTAL" "total <= 1720"; fi
 
-if git -C "$ZERO_DIR/.." diff --quiet HEAD -- ravintio-zero/skills/ravintio-orchestrator/SKILL.md; then
-  assert_contains ok ok "orchestrator unchanged"
-else assert_contains ok changed "orchestrator unchanged"; fi
+OB=$(wc -c < "$SK/ravintio-orchestrator/SKILL.md" | tr -d ' ')
+if [ "$OB" -le 9000 ]; then assert_contains ok ok "orchestrator $OB <= 9000 bytes"; else assert_contains ok "$OB" "orchestrator <= 9000 bytes"; fi
+assert_contains ok "$(grep -c 'archetype' "$SK/ravintio-orchestrator/SKILL.md" | grep -q '^0$' && echo ok)" "orchestrator holds no archetype text"
 
 for s in ravintio-implement ravintio-plan; do
   F="$SK/$s/SKILL.md"
   assert_contains "$POINTER" "$(cat "$F")" "$s points at the standard"
   assert_contains 'resolve-override.mjs' "$(cat "$F")" "$s names the resolver"
-  ADDED=$(git -C "$ZERO_DIR/.." diff --numstat HEAD -- "ravintio-zero/skills/$s/SKILL.md" | cut -f1)
-  if [ "${ADDED:-0}" -le 3 ]; then assert_contains ok ok "$s adds ${ADDED:-0} <= 3 lines"; else assert_contains ok "$ADDED" "$s adds <= 3 lines"; fi
+  PL=$(grep -c "archetype-standards.md" "$F")
+  if [ "$PL" -le 1 ]; then assert_contains ok ok "$s names the standard $PL time"; else assert_contains ok "$PL" "$s names the standard once"; fi
 done
 
 assert_summary 2>/dev/null || true
