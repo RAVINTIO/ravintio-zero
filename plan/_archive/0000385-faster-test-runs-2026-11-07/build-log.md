@@ -132,3 +132,5 @@ Complete: P4 (2026-11-07T21:52:00Z)
 | Cheaper tier agent calls | 0 |
 | Self-corrections | 0 |
 | Phases skipped | none |
+
+Rework: 2026-11-09T03:57:21Z Merged initiative/0000360-backlog-sweep at 3dc6b7c2 into PR #130. Moved ADR-001 and ADR-002 to docs/adr/0275 and 0276, set .next-id to 0277, and rebuilt the index. Full suite green (336 feature, 19 regression).
