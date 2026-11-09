@@ -64,14 +64,14 @@ Complete: P1 (2026-11-09T21:42:32Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-09T21:42:43Z` |
-| End | `{{timestamp, filled when the phase completes}}` |
-| Wall clock | `0` |
+| End | `2026-11-09T23:37:56Z` |
+| Wall clock | `38` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
-| Agents spawned | `0` |
+| Agents spawned | `7` |
 | MCP calls | `0` |
-| Parallel task batches | `0` |
-| Notes | none |
+| Parallel task batches | `2` |
+| Notes | Two suites fail in any clone at base and here: 0000037-req-004 needs local git config and 0000318-req-004 needs an origin ref. |
 
 - In progress: U1 move (2026-11-09T21:42:43Z)
 - Done: U1 move (code, inline, none, 2026-11-09T21:42:49Z)
@@ -84,6 +84,10 @@ Complete: P1 (2026-11-09T21:42:32Z)
 - Rework: REQ-003: the first suite run from the source failed 43 suites on repo-root paths. U3 split them into four tracks (2026-11-09T22:16:54Z)
 - Rework: REQ-005: prose baseline keys for migrations/_done moved with the path. prose-check diff now lets src/ravintio-zero keep the old count (2026-11-09T22:16:54Z)
 - Deviation: U3 ran as four tracks (U3a to U3d), not one unit, after the first suite run showed the failing set. Plan batch 3 held U3 beside U4, U5, and U6, so the four tracks ran after them (2026-11-09T22:16:54Z)
+
+- Tests run: full suite: 372 passed, 3 failed (2026-11-09T23:37:56Z)
+
+Complete: P2 (2026-11-09T23:37:56Z)
 
 ---
 
