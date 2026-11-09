@@ -1,0 +1,14 @@
+{
+  "standards/commit-standards.md": { "mode": "ignore" },
+  "standards/hook-enforcement.md": { "mode": "ignore" },
+  "standards/roadmap-standards.md": { "mode": "ignore" },
+  "standards/workflow-governance-standards.md": { "mode": "ignore" },
+  "standards/writing-standards.md": {
+    "mode": "require",
+    "pinned": [
+      "Keep every sentence under 25 words. Aim for an average near 15.",
+      "Do not use em dashes or semicolons. End the sentence and start a new one.",
+      "Treat \"is\", \"are\", \"was\", or \"were\" plus a past participle as passive voice. Name the actor and put it before the verb."
+    ]
+  }
+}
