@@ -144,3 +144,5 @@ Complete: P4 (2026-11-08T09:19:08Z)
 | Phases skipped | none |
 
 Resolved: human stop for step 18 (2026-11-08T09:17:47Z, the human turned on secret scanning, push protection, and topics. workflow-lint-required waits for workflow-lint to run on main.)
+
+Rework: merged initiative/0000360-backlog-sweep into PR #137. Brand guard allowlist file gained the docs/adr/ prefix and the decisions-index row pattern. This step ADRs are now docs/adr/0275 to 0277 (2026-11-09T07:10:07Z)
