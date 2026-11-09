@@ -33,6 +33,14 @@ a helper in `helpers/assert.sh`. See section 8 of `standards/testing-standards.m
 
 Setup copies only committed pack and override files, so a suite that runs `setup.sh` commits the pack in its workspace first. Call `commit_workspace_pack "$ws"` from `helpers/assert.sh` after the copy and after any file you plant in `ravintio-zero/` or `ravintio-overrides/`. The PowerShell helper `Invoke-Setup` commits before each run. `Save-WorkspacePack` does the same on request.
 
+## Test scope in a run
+
+A TDD cycle runs the new test and the tests that cover the changed files. P3 runs
+the full suite once, in a clean clone of `HEAD`, with `scripts/clean-clone-test.mjs`.
+`scripts/baseline-failures.mjs` compares the failed suites with the ones P0
+recorded, so P3 stops only on a new failure. `testing-standards.md` section 9
+holds the rules.
+
 ## Running the tests
 
 ```bash
