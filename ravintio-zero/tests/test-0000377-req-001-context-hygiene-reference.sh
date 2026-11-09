@@ -12,9 +12,10 @@ SKILL="$ZERO_DIR/skills/ravintio-orchestrator/SKILL.md"
 REF="$ZERO_DIR/skills/ravintio-orchestrator/references/orchestrator-context-hygiene.md"
 
 echo ""
-echo "=== req-001 AC-1: the skill is 8700 bytes or fewer ==="
+# Cap raised from 8700 to 9000 for the light track row and the commit grouping pointer (0000387).
+echo "=== req-001 AC-1: the skill is 9000 bytes or fewer ==="
 BYTES=$(wc -c < "$SKILL" | tr -d ' ')
-assert_equals "yes" "$([ "$BYTES" -le 8700 ] && echo yes || echo no)" "req-001 AC-1: SKILL.md holds $BYTES bytes (cap 8700)"
+assert_equals "yes" "$([ "$BYTES" -le 9000 ] && echo yes || echo no)" "req-001 AC-1: SKILL.md holds $BYTES bytes (cap 9000)"
 
 echo ""
 echo "=== req-001 AC-2: the reference holds the text ==="
