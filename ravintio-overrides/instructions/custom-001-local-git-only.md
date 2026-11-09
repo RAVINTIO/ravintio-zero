@@ -11,4 +11,4 @@ One narrow exception: `gh pr merge --squash` for your own feature PR into `initi
 Report back if any remote git or GitHub command fails for any reason.
 
 ### Commit Granularly, Continuously
-Commit locally after every meaningful artifact write — do not batch changes waiting for a phase gate, an approval checkpoint, or task completion. A single requirement doc, ADR, TDD cycle, or config fix is a commit on its own; don't hold it pending a bigger, later commit. Uncommitted work in the working directory is unrecoverable progress — commit early and often so nothing sits unsaved.
+Commit locally after every meaningful artifact write. Do not batch changes while you wait for a phase gate, an approval checkpoint, or task completion. A single requirement doc, ADR, TDD cycle, or config fix is a commit on its own. Don't hold it pending a bigger, later commit. Uncommitted work in the working directory is unrecoverable progress, so commit early and often and leave nothing unsaved.

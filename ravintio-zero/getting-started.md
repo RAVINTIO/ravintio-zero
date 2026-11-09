@@ -62,7 +62,7 @@ If the pack or `ravintio-overrides/` holds an uncommitted file, setup lists each
 
 Setup installs:
 
-- Skill folders with YAML frontmatter into `.claude/skills/`, auto-discovered by Claude Code. Retired skills are pruned.
+- Skill folders with YAML frontmatter into `.claude/skills/`, auto-discovered by Claude Code. Setup prunes retired skills.
 - No copies of templates, standards, or schemas. Skills read them from `ravintio-zero/` by full path.
 - Enforcement hooks wired into `.claude/settings.json`.
 - The `CLAUDE.md` boot file.
@@ -97,7 +97,7 @@ Doctor exits 1 and names each problem. Update copies the pack from a local folde
 
 A re-run without a strict flag keeps strict mode as it is. The pack facts file, `ravintio-zero/pack-facts.json`, lists the flags, hooks, and skills in one place.
 
-→ **Git guardrails and the orchestrator sentinel** are activated automatically by setup. See [project-operations.md](project-operations.md) for how they work and how to enable strict mode.
+→ **Git guardrails and the orchestrator sentinel** come on automatically with setup. See [project-operations.md](project-operations.md) for how they work and how to enable strict mode.
 
 ### 4. Write your first feature brief
 

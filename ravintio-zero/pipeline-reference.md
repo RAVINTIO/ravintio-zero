@@ -50,7 +50,7 @@ Initiative stages use five more prefixes. They use the same `{prefix} {Status}: 
 
 I-A to I-E are stage letters, not phase numbers. The pipeline still has exactly five phases, P0 to P4.
 
-If you see a `Resuming` message at the start of a session, the orchestrator detected existing artifacts in `plan/current/` and is continuing where it left off.
+If you see a `Resuming` message at the start of a session, the orchestrator found existing artifacts in `plan/current/` and continues where it stopped.
 
 ---
 
@@ -77,7 +77,7 @@ Sixteen skills drive the pipeline.
 | `ravintio-retrospective` | Writes one blameless retrospective per shipped run and per delivered initiative, and files its changes |
 | `ravintio-initiative` | Coordinates an initiative from chart to delivery in the human's session, reports progress, and never runs a step |
 
-The TDD trio (`ravintio-test-writer`, `ravintio-implementer`, `ravintio-refactor`) is dispatched by `ravintio-implement`, once per requirement. After GREEN and refactor, the improvement loop runs up to 2 cycles per requirement and records an `Improve:` marker for each.
+`ravintio-implement` dispatches the TDD trio (`ravintio-test-writer`, `ravintio-implementer`, `ravintio-refactor`) once per requirement. After GREEN and refactor, the improvement loop runs up to 2 cycles per requirement and records an `Improve:` marker for each.
 
 ---
 
@@ -124,14 +124,14 @@ Phases run in order at either speed, and every gate and escalation stays in plac
 
 Ship is the terminal phase. It runs three steps in order.
 
-1. **Archive.** The changelog entry is written to `plan/changelog/{feature-id}-{YYYY-MM-DD}.md`, then `plan/current/` is archived to `plan/_archive/{feature-id}-{date}/` and cleared. The orchestrator sentinel is deleted last, after the archive is confirmed complete.
+1. **Archive.** Ship writes the changelog entry to `plan/changelog/{feature-id}-{YYYY-MM-DD}.md`, then archives `plan/current/` to `plan/_archive/{feature-id}-{date}/` and clears it. Ship deletes the orchestrator sentinel last, after the archive completes.
 2. **Build assessment.** An assessment sub-agent reads the archived `build-log.md` and produces a structured efficiency report at `plan/_archive/{feature-id}-{date}/build-report.md`.
 3. **Tag and PR.** The agent reads the version from `component.yml`, checks the PR body for attribution lines, then raises the PR. It creates no tag. After the human merges, the CI `release-tag` job tags the merge commit on `main` with `v{version}`. In a gated run, it first asks the human whether to push and raise the PR or output a PR description for manual use. If `local-git-only` is active in `ravintio-overrides/instructions/`, the agent skips the prompt and outputs a PR description directly.
    - **Initiative step.** When `plan/current-initiative/initiative.md` has `status: active`, the order differs. The agent raises the PR with `--base initiative/{id}-{slug}` and waits for green CI. P4 sets no version. The merge queue sets the version, squash-merges, then tags the squash commit and pushes the tag. Under the concurrent driver the step writes its PR number to its control folder and ends, and the driver runs the queue. After the last step, I-E Delivery archives the initiative and raises one PR to `main` that asks for a merge commit. The agent never merges that PR. See the ship skill's Initiative steps section.
 
 ### Build Log
 
-From discovery onwards, the orchestrator maintains `plan/current/build-log.md`, a working file tracking per-phase build metrics. It is created from `ravintio-zero/templates/build-log.template.md` at discovery and appended at each phase boundary. If a session is interrupted and resumed, the orchestrator appends rather than overwrites. Each dispatched unit also logs `In progress:` and `Done:` lines, so a resumed session reruns an interrupted unit. See "Progress Markers and Interrupted Units" in `ravintio-zero/standards/agent-dispatch-standards.md`.
+From discovery onwards, the orchestrator maintains `plan/current/build-log.md`, a working file tracking per-phase build metrics. The orchestrator creates it from `ravintio-zero/templates/build-log.template.md` at discovery and appends to it at each phase boundary. If a session stops and resumes, the orchestrator appends rather than overwrites. Each dispatched unit also logs `In progress:` and `Done:` lines, so a resumed session reruns an interrupted unit. See "Progress Markers and Interrupted Units" in `ravintio-zero/standards/agent-dispatch-standards.md`.
 
 The build log records per phase: model tier used, skills loaded, agents spawned, MCP tool calls, parallel task batch count.
 
@@ -227,11 +227,11 @@ A fourth git hook validates every commit message against `standards/commit-stand
 | `ravintio-zero/hooks/commit-msg` | Commit message validation |
 | `.github/workflows/ravintio.yml` | Tier 3 CI check (copied to the repo on first setup) |
 
-Hooks are wired via `git config core.hooksPath ravintio-zero/hooks`, with no `.git/` directory modifications. Hooks travel with the repo and apply to every contributor who has run `setup.sh`.
+`git config core.hooksPath ravintio-zero/hooks` wires the hooks, with no `.git/` directory modifications. Hooks travel with the repo and apply to every contributor who has run `setup.sh`.
 
 ### What happens on a Tier 2 violation
 
-The push is rejected with a message naming the rule: `src/` was modified with no corresponding update under `plan/`, `docs/`, or any `component.yml`. To fix it, update `plan/` or `docs/` to reflect the `src/` change, then push again.
+The hook rejects the push with a message naming the rule: you changed `src/` with no corresponding update under `plan/`, `docs/`, or any `component.yml`. To fix it, update `plan/` or `docs/` to reflect the `src/` change, then push again.
 
 ---
 
@@ -239,7 +239,7 @@ The push is rejected with a message naming the rule: `src/` was modified with no
 
 ### Lifecycle
 
-When discovery starts, the orchestrator writes `plan/.orchestrator-active` containing the active feature-id (for example `0000002-doc-structure`). This file is the sentinel. Its presence signals that a pipeline run is in progress. It is deleted **last** during ship, after the archive is confirmed complete.
+When discovery starts, the orchestrator writes `plan/.orchestrator-active` containing the active feature-id (for example `0000002-doc-structure`). This file is the sentinel. Its presence signals that a pipeline run is in progress. Ship deletes it **last**, after the archive completes.
 
 ```
 Discovery start     → plan/.orchestrator-active written ("pending" until feature-id confirmed)
@@ -271,7 +271,7 @@ The always-permitted basenames are `CLAUDE.md`, `AGENTS.md`, `.ravintio-session`
 
 ### Manual recovery
 
-If a pipeline run is interrupted and you want to start fresh:
+If a pipeline run stops part-way and you want to start fresh:
 
 ```bash
 # 1. Delete the sentinel
@@ -340,13 +340,13 @@ Run the RAVINTIO pipeline in retrofit mode.
 Feature brief: plan/current/feature-brief.md
 ```
 
-In retrofit mode, discovery includes a codebase scan before coaching. The orchestrator scans entry points and build files, identifies candidate components, maps data ownership, discovers API contracts, notes conventions the pipeline must preserve, and flags tech debt into the risk register. It then presents a discovery summary. Many coaching questions are pre-answered by the scan.
+In retrofit mode, discovery includes a codebase scan before coaching. The orchestrator scans entry points and build files and identifies candidate components. It also maps data ownership, discovers API contracts, notes conventions the pipeline must preserve, and flags tech debt into the risk register. It then presents a discovery summary. Many coaching questions are pre-answered by the scan.
 
 ---
 
 ## Updating the pack
 
-"Updating the pack" means pulling new files into `ravintio-zero/` (via git pull, a submodule update, or copying from the source repo) and then re-running the setup script to propagate the changes.
+"Updating the pack" means pulling new files into `ravintio-zero/` (via git pull, a submodule update, or copying from the source repo). Then re-run the setup script to propagate the changes.
 
 ### Re-run setup after update
 
@@ -374,7 +374,7 @@ ls ravintio-zero/migrations/*.md 2>/dev/null
 Get-ChildItem ravintio-zero/migrations/*.md
 ```
 
-The orchestrator compares that list with the ledger `plan/state/migrations.md`. It invokes `ravintio-migrator` for a migration that has no `done` row and whose condition holds. A migration that does not apply is reported once per pack version. You do not need to run migrations manually.
+The orchestrator compares that list with the ledger `plan/state/migrations.md`. It invokes `ravintio-migrator` for a migration that has no `done` row and whose condition holds. The orchestrator reports a migration that does not apply once per pack version. You do not need to run migrations manually.
 
 ---
 
@@ -395,11 +395,11 @@ The orchestrator compares that list with the ledger `plan/state/migrations.md`. 
 
 ### When to commit plan/
 
-Commit `plan/current/` artifacts throughout the pipeline run, not only at ship. Each phase produces artifacts (design, requirements, ADRs, execution plan) that are worth preserving in git history as they are written. On a feature branch this is low risk and provides a clear record of how the design evolved. Ship archives the completed plan to `plan/_archive/` and clears `plan/current/`, and that is a separate commit, not the first one.
+Commit `plan/current/` artifacts throughout the pipeline run, not only at ship. Each phase produces artifacts (design, requirements, ADRs, execution plan) worth preserving in git history as you write them. On a feature branch this is low risk and provides a clear record of how the design evolved. Ship archives the completed plan to `plan/_archive/` and clears `plan/current/`, and that is a separate commit, not the first one.
 
 ### What "Optional" means
 
-Optional paths are generated by the setup script from sources in `ravintio-zero/`. You can safely `.gitignore` them and instruct contributors to run `setup.sh` after cloning. This keeps the repo lean. Alternatively, commit them so contributors get the files without running setup. Both approaches work.
+The setup script generates optional paths from sources in `ravintio-zero/`. You can safely `.gitignore` them and instruct contributors to run `setup.sh` after cloning. This keeps the repo lean. Alternatively, commit them so contributors get the files without running setup. Both approaches work.
 
 `ravintio-overrides/` is never optional. It contains your customisations and must be committed to be shared.
 
@@ -420,7 +420,7 @@ ravintio-overrides/
     └── 02-naming-conventions.md
 ```
 
-Files are sorted alphabetically and appended between HTML comment markers.
+Setup sorts the files alphabetically and appends them between HTML comment markers.
 
 Keep in `instructions/` only the rules that every session needs. The boot file loads whole in each session. A rule that serves one task belongs in a skill.
 
@@ -433,7 +433,7 @@ target: ravintio-ship
 ### Ship: push and raise the PR, never merge
 ```
 
-Setup removes the frontmatter and appends the text to the installed `ravintio-ship` skill between the same markers. The boot file does not hold it. The value must be lowercase letters, digits, and hyphens, and must name an installed skill. If it does not, setup warns and appends the override to the boot file, so no rule is lost. An override with no `target:` goes to the boot file as before.
+Setup removes the frontmatter and appends the text to the installed `ravintio-ship` skill between the same markers. The boot file does not hold it. The value must be lowercase letters, digits, and hyphens, and must name an installed skill. If it does not, setup warns and appends the override to the boot file, so no rule disappears. An override with no `target:` goes to the boot file as before.
 
 The hook rules live in `ravintio-zero/standards/hook-enforcement.md`. The boot files point to it, and each blocking hook names it in its message.
 

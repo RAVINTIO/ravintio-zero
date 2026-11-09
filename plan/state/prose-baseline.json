@@ -1,84 +1,8 @@
 {
   "version": 1,
   "files": {
-    "docs/adr/0112-setup-config-record-lives-in-plan-state.md": {
-      "passive": 4,
-      "sentence-length": 1
-    },
-    "docs/adr/0113-refresh-setup-source-precedence.md": {
-      "passive": 6,
-      "sentence-length": 2
-    },
-    "docs/adr/0114-inline-cleanup-of-the-old-record.md": {
-      "passive": 2,
-      "sentence-length": 1
-    },
-    "docs/adr/0115-telemetry-is-not-a-framework-concern.md": {
-      "passive": 3,
-      "sentence-length": 2
-    },
-    "docs/adr/0116-setup-cleans-up-telemetry-wiring.md": {
-      "passive": 2,
-      "sentence-length": 2
-    },
-    "docs/adr/0117-the-phase-vocabulary-lives-in-prose.md": {
-      "blocklist": 1,
-      "passive": 8
-    },
-    "docs/adr/0118-retired-flags-warn-and-continue.md": {
-      "sentence-length": 1
-    },
-    "docs/adr/0119-atomic-settings-json-writes.md": {
-      "passive": 3
-    },
-    "docs/adr/0129-setup-repairs-hook-entries-it-owns.md": {
-      "sentence-length": 1
-    },
-    "docs/adr/0132-per-command-hook-filter.md": {
-      "passive": 1
-    },
-    "docs/adr/0134-invalid-json-exits-1.md": {
-      "passive": 1
-    },
-    "docs/adr/0135-single-object-hooks-as-array.md": {
-      "passive": 1
-    },
-    "docs/adr/0138-non-object-settings-exit-1.md": {
-      "sentence-length": 1
-    },
-    "docs/adr/0141-park-on-feature-branch.md": {
-      "passive": 1
-    },
-    "docs/adr/0143-cleanup-skips-unreadable-settings.md": {
-      "passive": 1
-    },
-    "docs/adr/0144-non-array-warning-drops-old-value.md": {
-      "passive": 2
-    },
-    "docs/adr/0146-gated-and-autonomous-run-modes.md": {
-      "passive": 1
-    },
-    "docs/adr/0147-phase-numbers-p0-to-p4-and-prefixes.md": {
-      "sentence-length": 1
-    },
-    "docs/adr/0148-framework-wording-and-identifier-map.md": {
-      "passive": 3
-    },
-    "docs/adr/0150-roadmap-storage-and-lifecycle.md": {
-      "passive": 1
-    },
     "docs/adr/0151-agent-squash-merge-into-roadmap-branches.md": {
       "sentence-length": 1
-    },
-    "docs/adr/0153-tag-after-squash-merge.md": {
-      "passive": 1
-    },
-    "docs/adr/0154-self-confirmed-roadmap-steps-and-stage-prefixes.md": {
-      "blocklist": 1,
-      "passive": 1
-    },
-    "docs/adr/0157-hook-block-reasons-dual-write.md": {
-      "passive": 2
     },
     "docs/adr/0158-ship-clears-sentinels-before-pr.md": {
       "passive": 1
@@ -541,26 +465,6 @@
     "plan/state/migrations.md": {
       "passive": 1
     },
-    "ravintio-overrides/instructions/custom-002-prefer-subagent-decomposition.md": {
-      "passive": 1,
-      "semicolon": 1,
-      "sentence-length": 3
-    },
-    "ravintio-zero/migrations/_done/0001-date-format.md": {
-      "em-dash": 5,
-      "semicolon": 1,
-      "sentence-length": 1
-    },
-    "ravintio-zero/migrations/_done/0002-british-english.md": {
-      "em-dash": 3,
-      "semicolon": 1,
-      "sentence-length": 1
-    },
-    "ravintio-zero/migrations/_done/0003-archive-dirname.md": {
-      "em-dash": 8,
-      "semicolon": 2,
-      "sentence-length": 1
-    },
     "ravintio-zero/migrations/_done/migrate-adoption-mode-and-about-md.md": {
       "em-dash": 3,
       "sentence-length": 1
@@ -576,10 +480,6 @@
       "blocklist": 1,
       "em-dash": 9,
       "passive": 3
-    },
-    "ravintio-zero/skills/ravintio-file-backlog/SKILL.md": {
-      "passive": 2,
-      "sentence-length": 1
     },
     "ravintio-zero/skills/ravintio-implement/SKILL.md": {
       "passive": 6,
@@ -662,11 +562,6 @@
       "passive": 10,
       "sentence-length": 1
     },
-    "ravintio-zero/standards/code-quality-standards.md": {
-      "passive": 7,
-      "semicolon": 12,
-      "sentence-length": 11
-    },
     "ravintio-zero/standards/hook-enforcement.md": {
       "passive": 5,
       "semicolon": 2,
@@ -729,10 +624,6 @@
       "blocklist": 5,
       "passive": 32,
       "semicolon": 9,
-      "sentence-length": 8
-    },
-    "ravintio-zero/standards/roadmap-standards.md": {
-      "passive": 13,
       "sentence-length": 8
     },
     "ravintio-zero/templates/about.template.md": {
@@ -838,8 +729,109 @@
     "ravintio-zero/templates/test-report.template.md": {
       "semicolon": 1
     },
-    "README.md": {
-      "passive": 11
+    "docs/adr/0112-setup-config-record-lives-in-plan-state.md": {
+      "passive": 4,
+      "sentence-length": 1
+    },
+    "docs/adr/0113-refresh-setup-source-precedence.md": {
+      "passive": 6,
+      "sentence-length": 2
+    },
+    "docs/adr/0114-inline-cleanup-of-the-old-record.md": {
+      "passive": 2,
+      "sentence-length": 1
+    },
+    "docs/adr/0115-telemetry-is-not-a-framework-concern.md": {
+      "passive": 3,
+      "sentence-length": 2
+    },
+    "docs/adr/0116-setup-cleans-up-telemetry-wiring.md": {
+      "passive": 2,
+      "sentence-length": 2
+    },
+    "docs/adr/0117-the-phase-vocabulary-lives-in-prose.md": {
+      "blocklist": 1,
+      "passive": 8
+    },
+    "docs/adr/0118-retired-flags-warn-and-continue.md": {
+      "sentence-length": 1
+    },
+    "docs/adr/0119-atomic-settings-json-writes.md": {
+      "passive": 3
+    },
+    "docs/adr/0129-setup-repairs-hook-entries-it-owns.md": {
+      "sentence-length": 1
+    },
+    "docs/adr/0132-per-command-hook-filter.md": {
+      "passive": 1
+    },
+    "docs/adr/0134-invalid-json-exits-1.md": {
+      "passive": 1
+    },
+    "docs/adr/0135-single-object-hooks-as-array.md": {
+      "passive": 1
+    },
+    "docs/adr/0138-non-object-settings-exit-1.md": {
+      "sentence-length": 1
+    },
+    "docs/adr/0141-park-on-feature-branch.md": {
+      "passive": 1
+    },
+    "docs/adr/0143-cleanup-skips-unreadable-settings.md": {
+      "passive": 1
+    },
+    "docs/adr/0144-non-array-warning-drops-old-value.md": {
+      "passive": 2
+    },
+    "docs/adr/0146-gated-and-autonomous-run-modes.md": {
+      "passive": 1
+    },
+    "docs/adr/0147-phase-numbers-p0-to-p4-and-prefixes.md": {
+      "sentence-length": 1
+    },
+    "docs/adr/0148-framework-wording-and-identifier-map.md": {
+      "passive": 3
+    },
+    "docs/adr/0150-roadmap-storage-and-lifecycle.md": {
+      "passive": 1
+    },
+    "docs/adr/0153-tag-after-squash-merge.md": {
+      "passive": 1
+    },
+    "docs/adr/0154-self-confirmed-roadmap-steps-and-stage-prefixes.md": {
+      "blocklist": 1,
+      "passive": 1
+    },
+    "docs/adr/0157-hook-block-reasons-dual-write.md": {
+      "passive": 2
+    },
+    "ravintio-zero/migrations/_done/0001-date-format.md": {
+      "em-dash": 5,
+      "semicolon": 1,
+      "sentence-length": 1
+    },
+    "ravintio-zero/migrations/_done/0002-british-english.md": {
+      "em-dash": 3,
+      "semicolon": 1,
+      "sentence-length": 1
+    },
+    "ravintio-zero/migrations/_done/0003-archive-dirname.md": {
+      "em-dash": 8,
+      "semicolon": 2,
+      "sentence-length": 1
+    },
+    "ravintio-zero/skills/ravintio-file-backlog/SKILL.md": {
+      "passive": 2,
+      "sentence-length": 1
+    },
+    "ravintio-zero/standards/code-quality-standards.md": {
+      "passive": 7,
+      "semicolon": 12,
+      "sentence-length": 11
+    },
+    "ravintio-zero/standards/roadmap-standards.md": {
+      "passive": 13,
+      "sentence-length": 8
     },
     "docs/about.md": {
       "passive": 1
@@ -853,13 +845,6 @@
     "plan/backlog/0000305-archetypes-for-standards-and-templates/entry.md": {
       "sentence-length": 1
     },
-    "ravintio-overrides/instructions/custom-001-local-git-only.md": {
-      "em-dash": 2,
-      "semicolon": 1
-    },
-    "ravintio-zero/getting-started.md": {
-      "passive": 2
-    },
     "ravintio-zero/migrations/0006-migration-ledger.md": {
       "sentence-length": 1
     },
@@ -870,14 +855,6 @@
       "passive": 1
     },
     "ravintio-zero/migrations/0009-adrs-in-docs-adr.md": {
-      "sentence-length": 1
-    },
-    "ravintio-zero/pipeline-reference.md": {
-      "passive": 18,
-      "sentence-length": 3
-    },
-    "ravintio-zero/project-operations.md": {
-      "passive": 6,
       "sentence-length": 1
     },
     "ravintio-zero/standards/agent-dispatch-standards.md": {
@@ -911,9 +888,6 @@
     },
     "ravintio-zero/standards/writing-standards.md": {
       "blocklist": 36
-    },
-    "ravintio-zero/workflows/feature-pipeline.md": {
-      "passive": 3
     }
   }
 }
