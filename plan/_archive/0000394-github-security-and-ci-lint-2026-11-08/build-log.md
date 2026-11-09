@@ -146,3 +146,6 @@ Complete: P4 (2026-11-08T09:19:08Z)
 Resolved: human stop for step 18 (2026-11-08T09:17:47Z, the human turned on secret scanning, push protection, and topics. workflow-lint-required waits for workflow-lint to run on main.)
 
 Rework: merged initiative/0000360-backlog-sweep into PR #137. Brand guard allowlist file gained the docs/adr/ prefix and the decisions-index row pattern. This step ADRs are now docs/adr/0275 to 0277 (2026-11-09T07:10:07Z)
+Rework: merged origin/initiative/0000360-backlog-sweep at b08bc9ad into PR #137 after step 9 merged. This step ADRs are now docs/adr/0277 to 0279 and .next-id is 0280. (2026-11-09T09:12:53Z)
+Tests run: full suite in a clean clone, 337 feature and 19 regression suites passed. test-0000037-req-004-remove-old-folder.sh and test-0000318-req-004-merge-guard-pinned.sh fail only in the clone (no core.hooksPath, no origin/initiative/0000312 ref) and pass in the worktree. (2026-11-09T09:46:20Z)
+Archived: plan/current/ moved to plan/_archive/0000394-github-security-and-ci-lint-2026-11-08/ (2026-11-09T09:46:43Z)
