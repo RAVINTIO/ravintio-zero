@@ -38,6 +38,7 @@ GENERIC=(
   "ravintio/planifest-${WORD}"           # the separate product's repo
   "planifest-${WORD}/"                    # the old folder that 0000030 renamed
   "${WORD}-cut-down"                      # the 0000030 feature id
+  "^[0-9]+:\\| \\[ADR-[0-9]{4}\\]"          # index rows quote the title of an ADR from history (0000384)
 )
 
 FILES=(

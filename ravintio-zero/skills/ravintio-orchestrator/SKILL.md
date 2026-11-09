@@ -45,6 +45,7 @@ Every request is a feature change. It runs one route: the five-phase pipeline. E
 | P4 | Ship | `P4 Ship:` | ravintio-ship |
 
 Status messages use one form: `{prefix} {Status}: {one-liner}`. The status is Starting, Resuming, Complete, Question, Blocked, or Skipped.
+Start with the hook's time: `hh:mm {prefix} {Status}: {one-liner}`.
 - Entering a phase: `P0 Discovery: Starting: {one-liner}`
 - Resuming: `P2 Implement: Resuming: {what was in progress, what is next}`
 - Completing: `P1 Plan: Complete: {summary}`

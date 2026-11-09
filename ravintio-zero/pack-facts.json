@@ -1,0 +1,324 @@
+{
+  "generatedBy": "ravintio-zero/scripts/pack-facts.mjs",
+  "note": "Generated file. Run node ravintio-zero/scripts/pack-facts.mjs to refresh it. CI fails when it is stale.",
+  "tools": [
+    "claude-code",
+    "codex"
+  ],
+  "setupFlags": [
+    {
+      "flag": "--strict-orchestrator",
+      "effect": "Write plan/.orchestrator-strict to enable strict mode. The check-orchestrator-presence hook will require the orchestrator to ack each new session before proceeding. A re-run without a strict flag keeps strict mode as it is."
+    },
+    {
+      "flag": "--no-strict-orchestrator",
+      "effect": "Remove plan/.orchestrator-strict and turn strict mode off."
+    },
+    {
+      "flag": "--doctor",
+      "effect": "Check the install and name each problem. Exits 1 on a problem."
+    },
+    {
+      "flag": "--update <source>",
+      "effect": "Copy a newer pack from <source>, commit it, and rerun setup with the flags in plan/state/<tool>.md."
+    },
+    {
+      "flag": "--uninstall",
+      "effect": "Reverse the setup changes and keep your own files and plan/ records. Refuses while a run is active."
+    },
+    {
+      "flag": "-h, --help",
+      "effect": "Print this help and exit 0."
+    }
+  ],
+  "setupWrites": [
+    {
+      "path": "git config core.hooksPath",
+      "effect": "Set to ravintio-zero/hooks."
+    },
+    {
+      "path": ".claude/skills/",
+      "effect": "Pack skills and capability skills, with a .ravintio-manifest."
+    },
+    {
+      "path": ".claude/commands/",
+      "effect": "Pack commands, with a .ravintio-manifest."
+    },
+    {
+      "path": ".claude/hooks/enforcement/",
+      "effect": "Copies of the pack's enforcement hook scripts."
+    },
+    {
+      "path": ".claude/settings.json",
+      "effect": "Wires the hooks, sets env, allowedTools, and attribution."
+    },
+    {
+      "path": ".claude/.ravintio-setup-flags",
+      "effect": "Local record of the last setup run. Git ignores it."
+    },
+    {
+      "path": "CLAUDE.md",
+      "effect": "Regenerated from the pack template. A first install moves the developer's content to ravintio-overrides/instructions/."
+    },
+    {
+      "path": ".github/workflows/ravintio.yml",
+      "effect": "Created when absent."
+    },
+    {
+      "path": ".gitattributes",
+      "effect": "Created when absent."
+    },
+    {
+      "path": ".gitignore",
+      "effect": "Created when absent."
+    },
+    {
+      "path": "src/",
+      "effect": "Created with a README when absent."
+    },
+    {
+      "path": "plan/",
+      "effect": "Created with README.md, feature-structure.md, current/, and state/{tool}.md."
+    },
+    {
+      "path": "plan/.orchestrator-strict",
+      "effect": "Written with --strict-orchestrator and removed with --no-strict-orchestrator."
+    }
+  ],
+  "hooks": [
+    {
+      "module": "block-forced-add",
+      "event": "PreToolUse",
+      "matcher": "Bash",
+      "mode": "guard",
+      "blocks": true,
+      "does": "Blocks git add with a force flag, and git add with a variable path."
+    },
+    {
+      "module": "gate-write",
+      "event": "PreToolUse",
+      "matcher": "Bash",
+      "mode": "guard",
+      "blocks": true,
+      "does": "Blocks a write to a plan artefact or a source path until the orchestrator sentinel and a confirmed design exist."
+    },
+    {
+      "module": "merge-guard",
+      "event": "PreToolUse",
+      "matcher": "Bash",
+      "mode": "guard",
+      "blocks": true,
+      "does": "Blocks a merge into main. The agent may squash-merge only into initiative branches."
+    },
+    {
+      "module": "em-dash-guard",
+      "event": "PreToolUse",
+      "matcher": "Edit",
+      "mode": "guard",
+      "blocks": true,
+      "does": "Blocks an em dash in scoped prose paths."
+    },
+    {
+      "module": "gate-write",
+      "event": "PreToolUse",
+      "matcher": "Edit",
+      "mode": "guard",
+      "blocks": true,
+      "does": "Blocks a write to a plan artefact or a source path until the orchestrator sentinel and a confirmed design exist."
+    },
+    {
+      "module": "ratchet-check",
+      "event": "PreToolUse",
+      "matcher": "Edit",
+      "mode": "guard",
+      "blocks": true,
+      "does": "Blocks a write that weakens loop criteria or scope while a loop is active."
+    },
+    {
+      "module": "em-dash-guard",
+      "event": "PreToolUse",
+      "matcher": "Write",
+      "mode": "guard",
+      "blocks": true,
+      "does": "Blocks an em dash in scoped prose paths."
+    },
+    {
+      "module": "gate-write",
+      "event": "PreToolUse",
+      "matcher": "Write",
+      "mode": "guard",
+      "blocks": true,
+      "does": "Blocks a write to a plan artefact or a source path until the orchestrator sentinel and a confirmed design exist."
+    },
+    {
+      "module": "ratchet-check",
+      "event": "PreToolUse",
+      "matcher": "Write",
+      "mode": "guard",
+      "blocks": true,
+      "does": "Blocks a write that weakens loop criteria or scope while a loop is active."
+    },
+    {
+      "module": "check-reply-prefix",
+      "event": "Stop",
+      "matcher": ".*",
+      "mode": "advisory",
+      "blocks": false,
+      "does": "Warns when a reply lacks the phase prefix."
+    },
+    {
+      "module": "auto-trigger-orchestrator",
+      "event": "UserPromptSubmit",
+      "matcher": ".*",
+      "mode": "advisory",
+      "blocks": false,
+      "does": "Tells the model to load the orchestrator skill once per session, with resume findings and an install check."
+    },
+    {
+      "module": "check-design",
+      "event": "UserPromptSubmit",
+      "matcher": ".*",
+      "mode": "advisory",
+      "blocks": false,
+      "does": "Adds the confirmed design scope to the context of each prompt."
+    },
+    {
+      "module": "check-orchestrator-presence",
+      "event": "UserPromptSubmit",
+      "matcher": ".*",
+      "mode": "advisory",
+      "blocks": false,
+      "does": "Warns once per session when the orchestrator is not loaded. In strict mode it asks for an acknowledgement first."
+    }
+  ],
+  "gitHooks": [
+    {
+      "name": "commit-msg",
+      "blocks": true,
+      "does": "Rejects AI attribution, affirmatory language, and subjects over 72 characters."
+    },
+    {
+      "name": "pre-commit",
+      "blocks": false,
+      "does": "Prints an advisory when source changes land without plan, docs, or component manifest changes."
+    },
+    {
+      "name": "pre-push",
+      "blocks": true,
+      "does": "Blocks a push when the branch diff lacks plan, docs, or component manifest changes."
+    }
+  ],
+  "commands": [
+    "feature-pipeline.md"
+  ],
+  "skills": [
+    {
+      "name": "ravintio-file-backlog",
+      "description": "Files one uncommitted backlog entry in another repo. Finds or creates plan/backlog/ there, reserves the next id from plan/backlog/.next-id, writes plan/backlog/{id}-{slug}/entry.md, and reports the path. Never touches the target repo's git state. Invoke on request (\"file a backlog entry in {repo}\", \"add this to the backlog of {repo}\")."
+    },
+    {
+      "name": "ravintio-implement",
+      "description": "Implements requirements with tests and documentation landing together through the TDD loop. Invoked during the implement phase."
+    },
+    {
+      "name": "ravintio-implementer",
+      "description": "TDD green phase: writes the minimum code to make one failing test pass and confirms GREEN (zero exit). Invoked by ravintio-implement after ravintio-test-writer confirms RED."
+    },
+    {
+      "name": "ravintio-initiative",
+      "description": "Coordinates an initiative from chart to delivery in the human's session. Charts the steps, activates the branch, starts the driver and a watch monitor, reports progress, queues backlog entries, and delivers the initiative PR. Never resumes or runs a step. Loaded when an initiative is active and the session is not a step session."
+    },
+    {
+      "name": "ravintio-loop-runner",
+      "description": "Canonical loop mechanics for every pipeline loop: state file conventions, stop rules, escalation format, toggle protocol. Loaded by any phase agent entering a loop."
+    },
+    {
+      "name": "ravintio-migrator",
+      "description": "Executes a pending RAVINTIO Zero migration interactively. Reads a migration file, presents findings to the human, applies confirmed changes, and records the result in the migration ledger. Invoked by the orchestrator when pending migrations are detected."
+    },
+    {
+      "name": "ravintio-optimise-agent",
+      "description": "Reviews ravintio-zero/skills/ for superfluous content and presents one suggestion at a time for human confirmation. Never modifies files."
+    },
+    {
+      "name": "ravintio-orchestrator",
+      "description": "Owns discovery and routing for the five-phase RAVINTIO pipeline. Coaches a human from feature brief to confirmed design, then invokes the plan, implement, validate-and-accept, and ship phase skills in sequence."
+    },
+    {
+      "name": "ravintio-plan",
+      "description": "Produces the plan-phase artifact set (requirements, ADRs, scope, risks, glossary) behind one human gate. Invoked by the orchestrator during the plan phase."
+    },
+    {
+      "name": "ravintio-postmortem",
+      "description": "Writes one blameless postmortem for a failed CI run, a Blocked stop, a P2 self-correction, an escaped defect, or a human request. Builds a timeline and a 5 whys chain that ends at a process or tool gap, files each action, and writes the record to plan/postmortems/. Invoked by the orchestrator after a Resolved line, or on request."
+    },
+    {
+      "name": "ravintio-refactor",
+      "description": "TDD refactor phase: improves code quality while keeping all tests passing. Invoked by ravintio-implement after ravintio-implementer confirms GREEN."
+    },
+    {
+      "name": "ravintio-refresh-setup",
+      "description": "Refreshes a RAVINTIO install by detecting the target tool, reading the tracked `plan/state/{tool}.md` record first, falling back to the flags-used marker file and then installed hook wiring, confirming with the human on the loop, and re-invoking setup.sh/setup.ps1 with those flags. Invoke on request (\"refresh the RAVINTIO setup\", \"re-run setup with current settings\", \"refresh setup for {tool}\")."
+    },
+    {
+      "name": "ravintio-retrospective",
+      "description": "Writes one blameless retrospective for a shipped run or a delivered initiative. Reviews what helped, what slowed the work, and what to try next, files each change, and writes the record to plan/retrospectives/. Invoked by ship after the build report and by I-E Delivery before the initiative PR, or on request."
+    },
+    {
+      "name": "ravintio-ship",
+      "description": "Archive, build assessment, changelog, version, and PR, behind the final gate in a gated run."
+    },
+    {
+      "name": "ravintio-test-writer",
+      "description": "TDD red phase: writes exactly one failing test per requirement and confirms RED (non-zero exit). Invoked by ravintio-implement for each requirement in the TDD inner loop."
+    },
+    {
+      "name": "ravintio-validate-and-accept",
+      "description": "CI, security review, execution verification, and the acceptance gate or PR evidence."
+    }
+  ],
+  "phases": [
+    {
+      "prefix": "P0 Discovery",
+      "use": "Discovery"
+    },
+    {
+      "prefix": "P1 Plan",
+      "use": "Plan"
+    },
+    {
+      "prefix": "P2 Implement",
+      "use": "Implement"
+    },
+    {
+      "prefix": "P3 Validate",
+      "use": "Validate and accept"
+    },
+    {
+      "prefix": "P4 Ship",
+      "use": "Ship"
+    }
+  ],
+  "initiativeStages": [
+    {
+      "prefix": "I-A Chart",
+      "use": "Initiative chart stage"
+    },
+    {
+      "prefix": "I-B Activate",
+      "use": "Initiative activate stage"
+    },
+    {
+      "prefix": "I-C Run",
+      "use": "Initiative run stage"
+    },
+    {
+      "prefix": "I-D Advance",
+      "use": "Initiative advance stage"
+    },
+    {
+      "prefix": "I-E Delivery",
+      "use": "Initiative delivery stage"
+    }
+  ]
+}

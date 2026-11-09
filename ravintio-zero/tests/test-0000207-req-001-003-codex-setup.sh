@@ -16,6 +16,7 @@ make_workspace() {
   dir=$(mktemp -d -t ravintio_0000207_codex_test_XXXXXX)
   cp -r "$ZERO_DIR" "$dir/ravintio-zero"
   git init "$dir" >/dev/null 2>&1
+  commit_workspace_pack "$dir"
   echo "$dir"
 }
 
@@ -35,6 +36,7 @@ WS=$(make_workspace)
 cd "$WS"
 mkdir -p ravintio-overrides/instructions
 echo "Local rule for the test." > ravintio-overrides/instructions/custom-001-test.md
+commit_workspace_pack "$WS"
 OUT="$(bash ravintio-zero/setup.sh codex 2>&1)"
 EXIT=$?
 assert_equals "0" "$EXIT" "req-001 AC-1: setup codex exits 0"

@@ -54,7 +54,10 @@ sed -e '/^| Discovery findings | `ravintio-zero\/templates\//d' -e '/^| A featur
 # 0000358 added the Question status and moved the product id check from Blocked: to Question:.
 sed -e 's|The status is Starting, Resuming, Complete, Blocked, or Skipped\.|The status is Starting, Resuming, Complete, Question, Blocked, or Skipped.|' \
   -e 's|`P0 Discovery: Blocked: No declared product id found|`P0 Discovery: Question: No declared product id found|' \
-  "$BASE_RENAMED.tmp5" > "$BASE_RENAMED"
+  "$BASE_RENAMED.tmp5" > "$BASE_RENAMED.tmp6"
+# 0000393 added the pack version record to check 2 of Resume Detection.
+sed -e 's|Record the outcome in the build log\. If rejected,|Record the outcome in the build log. `plan/state/pack-version.md` holds the last confirmed pack version. When the human confirms a pack update, write that record with the current pack version and the time. An absent record raises no finding. If rejected,|' \
+  "$BASE_RENAMED.tmp6" > "$BASE_RENAMED"
 
 # Print every non-blank, non-heading line of $1 that no later file holds as a
 # whole line. Usage: missing_lines base file...
@@ -193,6 +196,7 @@ echo "=== (c) setup installs the reference files ==="
 WS="$(mktemp -d -t ravintio_0000151_req011_ws_XXXXXX)"
 cp -r "$ZERO_DIR" "$WS/ravintio-zero"
 git init "$WS" >/dev/null 2>&1
+commit_workspace_pack "$WS"
 (cd "$WS" && GIT_CEILING_DIRECTORIES="$(dirname "$WS")" bash ravintio-zero/setup.sh claude-code >"$WS/setup.out" 2>"$WS/setup.err")
 assert_exit_zero "$?" "setup.sh exits 0"
 INST="$WS/.claude/skills/ravintio-orchestrator/references"

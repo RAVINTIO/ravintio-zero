@@ -65,18 +65,20 @@ lacks "$ws" "pending migration: 0001" "1 without"
 
 echo ""
 echo "=== 2 pack version ==="
-ws="$(new_ws)"; mk "$ws"
+DIFF2="pack version differs from plan/state/pack-version.md"
+rec() { printf '```json\n{"packVersion": "%s"}\n```\n' "$2" > "$1/plan/state/pack-version.md"; }
+ws="$(new_ws)"; mk "$ws"; mkdir -p "$ws/plan/state"
 printf 'name: x\nversion: "1.2.3"\n' > "$ws/ravintio-zero/component.yml"
-printf -- '---\nversion: "1.2.4"\n---\n' > "$ws/docs/about.md"
-has "$ws" "pack version differs from docs/about.md" "2 differs"
-printf -- '---\nversion: "1.2.3"\n---\n' > "$ws/docs/about.md"
-lacks "$ws" "pack version differs from docs/about.md" "2 equal"
+rec "$ws" "1.2.4"
+has "$ws" "$DIFF2" "2 differs"
+rec "$ws" "1.2.3"
+lacks "$ws" "$DIFF2" "2 equal"
 lacks "$ws" "pack version unreadable" "2 equal"
-printf -- '---\nversion: "latest"\n---\n' > "$ws/docs/about.md"
+rec "$ws" "latest"
 has "$ws" "pack version unreadable" "2 unreadable"
-rm "$ws/docs/about.md"
-lacks "$ws" "pack version unreadable" "2 about absent"
-lacks "$ws" "pack version differs from docs/about.md" "2 about absent"
+rm "$ws/plan/state/pack-version.md"
+lacks "$ws" "pack version unreadable" "2 record absent"
+lacks "$ws" "$DIFF2" "2 record absent"
 
 echo ""
 echo "=== 3 session and initiative ==="
@@ -196,7 +198,7 @@ echo "=== REQ-006 order with every signal ==="
 ws="$(new_ws)"; mk "$ws"
 touch "$ws/ravintio-zero/migrations/0004-a.md"
 printf 'version: "1.0.0"\n' > "$ws/ravintio-zero/component.yml"
-printf 'version: "1.0.1"\n' > "$ws/docs/about.md"
+mkdir -p "$ws/plan/state"; printf '```json\n{"packVersion": "1.0.1"}\n```\n' > "$ws/plan/state/pack-version.md"
 mkdir -p "$ws/plan/current-initiative"
 printf '**Status:** active\n**Position:** 3\n' > "$ws/plan/current-initiative/initiative.md"
 touch "$ws/plan/.initiative-runner.lock" "$ws/plan/.feature-id" "$ws/plan/current/.skips" \
@@ -205,7 +207,7 @@ echo f > "$ws/plan/.orchestrator-active"
 echo gated > "$ws/plan/.run-mode"
 printf '### P1: Plan\nP1 Plan: Complete: x\nBlocked: b\nIn progress: U-001 (t)\n' > "$ws/plan/current/build-log.md"
 EXPECTED=$'pending migration: 0004
-pack version differs from docs/about.md
+pack version differs from plan/state/pack-version.md
 step session
 initiative active
 driver lock held

@@ -16,6 +16,7 @@ trap 'rm -rf "$WS"' EXIT
 cp -r "$ZERO_DIR" "$WS/ravintio-zero"
 cp -r "$REPO_ROOT/ravintio-overrides" "$WS/ravintio-overrides"
 git init "$WS" >/dev/null 2>&1
+commit_workspace_pack "$WS"
 (cd "$WS" && bash ravintio-zero/setup.sh claude-code >/dev/null 2>&1)
 BOOT="$WS/CLAUDE.md"
 SK="$WS/.claude/skills"

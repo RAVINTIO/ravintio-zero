@@ -27,6 +27,7 @@ REPO_ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
 # Paths that start with these prefixes are history or past records.
 EXCLUDED_PREFIXES=(
   "plan/_archive/"                    # archived features: history
+  "docs/adr/"                         # ADRs moved out of the archive: history (0000384)
   "plan/changelog/"                   # release notes: history
   "ravintio-zero/migrations/_done/"  # applied migrations: past records
   "plan/current/"                     # this feature quotes the old words to describe the rename, until ship archives it
@@ -56,16 +57,8 @@ ALLOWLIST=(
   ".${TAB}0000031-five-phase-planifest-zero|0000037-self-host-on-planifest-zero"
 
   # --- Past decisions quoted as they were ---
-  # The section headings for the two past features.
-  "^docs/decisions-index\\.md\$${TAB}^### Feature 0000(031|037): "
-  # Past ADR rows for 0000031 and 0000032 that name the old folders and skills.
-  "^docs/decisions-index\\.md\$${TAB}^\\| ADR-00[12] \\| (Folder rename and product identity|The setup-config record lives|Refresh-setup reads the record|Telemetry is not a pack concern) "
-  # Superseded-ADR rows that name the old override folder and pack.
-  "^docs/decisions-index\\.md\$${TAB}^\\| (0000025 ADR-002|0000018, 0000024, 0000026, 0000027, and 0000028 telemetry ADRs) "
-  # Past ADR rows for 0000037 that name the old pack, folder, variable, and hook entries.
-  "^docs/decisions-index\\.md\$${TAB}^\\| ADR-00[1-3] \\| (The repo self-hosts|The Bash suites run in CI|Setup repairs the hook entries|Setup filters .* hook commands) "
-  # The 0000042 ADR-004 row quotes the retired word it banned.
-  "^docs/decisions-index\\.md\$${TAB}^\\| ADR-004 \\| Pack wording and identifier map "
+  # Index rows quote the title and summary of an ADR from history (0000384).
+  "^docs/decisions-index\\.md\$${TAB}^\\| \\[ADR-[0-9]{4}\\]"
 
   # --- Tests that read pre-rename history ---
   # The 0000034 test builds a fixture that uses the old pack folder name.

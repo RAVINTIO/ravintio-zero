@@ -16,6 +16,7 @@ make_workspace() {
   dir=$(mktemp -d -t ravintio_0000354_req003_test_XXXXXX)
   cp -r "$ZERO_DIR" "$dir/ravintio-zero"
   git init "$dir" >/dev/null 2>&1
+  commit_workspace_pack "$dir"
   git config --global --add safe.directory "$dir" >/dev/null 2>&1 || true
   echo "$dir"
 }
@@ -36,7 +37,7 @@ assert_equals "yes" "$([ "$FIRST_MARKER" = "$(grep writtenAt .claude/.ravintio-s
 
 echo ""
 echo "=== req-003 AC-2: a flag change rewrites the record ==="
-CHANGED="$(bash ravintio-zero/setup.sh claude-code 2>&1)"
+CHANGED="$(bash ravintio-zero/setup.sh claude-code --no-strict-orchestrator 2>&1)"
 assert_contains "+ plan/state/claude-code.md" "$CHANGED" "AC-2: setup says it wrote the record"
 assert_equals "M" "$(git status --porcelain -- plan/state | cut -c2)" "AC-2: the record shows as modified"
 assert_contains '"flags": []' "$(cat plan/state/claude-code.md)" "AC-2: the record holds the new flags"

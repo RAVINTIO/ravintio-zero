@@ -57,6 +57,8 @@ Before adding any library or service, check that it is on the approved list. The
 
 ## TDD inner loop
 
+Run the suites that `## Test impact` names before the full suite. A failure there costs seconds, not a full run.
+
 For each functional requirement, orchestrate three subagents in sequence. This is the mandatory implementation discipline.
 
 ```
@@ -67,7 +69,7 @@ for each requirement:
     1. dispatch ravintio-test-writer  -> wait for RED (non-zero exit)
     2. dispatch ravintio-implementer  -> wait for GREEN (zero exit)
     if GREEN:
-      3. dispatch ravintio-refactor   -> wait for all-suite GREEN
+      3. dispatch ravintio-refactor   -> wait for affected-tests GREEN
       4. run the improvement loop     -> up to 2 cycles
       break
     else if attempt >= 5:
@@ -82,15 +84,26 @@ For each attempt on a requirement after the first, append `Rework: REQ-{nnn}: {r
 
 Every requirement must have a mapped test whose name includes the requirement ID (for example `describe('req-001-auth: login flow', ...)`). Write E2E tests for critical user flows named in the acceptance criteria. Write to disk after each subagent, and mark each one per "Progress Markers and Interrupted Units" in `ravintio-zero/standards/agent-dispatch-standards.md`. Do not accumulate work in memory across requirements.
 
+## Test scope
+
+<!-- rule: implement-affected-tests -->
+- **Each cycle runs the affected tests.** A cycle runs the new test and the tests that cover the changed files of the unit. It does not run the full suite.
+
+<!-- rule: implement-full-suite-once -->
+- **One full suite run before P2 completes.** After the last requirement is GREEN, start one full suite run in the background while you write docs. Fix any failure before you close P2.
+
+<!-- rule: implement-tests-run-line -->
+- **Record the tests.** After each cycle, append `Tests run: REQ-{nnn}: {test files} ({ISO-8601 timestamp})` to the build log. After the full run, append `Tests run: full suite: {n} passed, {m} failed ({ISO-8601 timestamp})`.
+
 ## Improvement loop
 
-After refactor confirms all-suite GREEN, run up to 2 cycles per requirement, as `## Improvement loop` in `ravintio-zero/standards/agent-dispatch-standards.md` describes. Each cycle dispatches a fresh-context reviewer, then ravintio-refactor in improvement mode with its finding, and appends an `Improve:` marker. The loop stops early on `no change worth making`.
+After refactor confirms affected-tests GREEN, run up to 2 cycles per requirement, as `## Improvement loop` in `ravintio-zero/standards/agent-dispatch-standards.md` describes. Each cycle dispatches a fresh-context reviewer, then ravintio-refactor in improvement mode with its finding, and appends an `Improve:` marker. The loop stops early on `no change worth making`.
 
 ## Rules
 
 - **One question at a time** when you need human input.
 - **Implement against the requirements.** The OpenAPI spec defines the contract. Do not add or remove endpoints. Follow the ADRs. Flag a wrong ADR rather than overriding it silently. Do not introduce technology the stack does not declare.
-- **Schema changes.** Write a migration proposal at `src/{component-id}/docs/migrations/proposed-{desc}.md` and STOP for human approval in both run modes: `P2 Implement: Blocked: schema change proposed at {path}. Approve or reject the migration proposal.` Never modify a schema directly. Destructive operations (drop, rename) always stop. This is a hard limit. In an initiative step, a chart-approved additive change does not stop (see `ravintio-zero/standards/roadmap-standards.md`).
+- **Schema changes.** Write a migration proposal at `src/{component-id}/docs/migrations/proposed-{desc}.md` and STOP for human approval in both run modes (agreement follows rule `agree-explicit` in `ravintio-orchestrator/references/orchestrator-p0-coaching.md`): `P2 Implement: Blocked: schema change proposed at {path}. Approve or reject the migration proposal.` Never modify a schema directly. Destructive operations (drop, rename) always stop. This is a hard limit. In an initiative step, a chart-approved additive change does not stop (see `ravintio-zero/standards/roadmap-standards.md`).
 - **Data ownership.** Never write to data owned by another component. Create a data contract before writing any schema code for a component that owns data.
 - **Rollbacks are human-initiated, never automatic.** No agent rolls back a deployment, migration, or artifact on its own.
 - **Deviation.** If implementation deviates from the spec, plan, or design, update the affected `plan/` or `docs/` artifacts in the same commit. Record the deviation in `docs/quirks.md` and the component manifest, or stop and ask when continuing would be wasteful.

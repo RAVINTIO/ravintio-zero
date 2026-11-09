@@ -50,6 +50,7 @@ function block(reason) {
   const message =
     "[RAVINTIO] merge-guard: Merge blocked. Merges into main are human-only. " +
     "The agent may squash-merge only into initiative/*. " + reason +
+    " Next step: open a pull request and leave the merge to the human on the loop." +
     " See ravintio-zero/standards/hook-enforcement.md.\n";
   // Claude Code shows the agent stderr on exit 2. Stdout keeps the tests' view.
   process.stderr.write(message);

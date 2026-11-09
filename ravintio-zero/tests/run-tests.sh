@@ -50,6 +50,16 @@ snapshot_tree() {
   done | LC_ALL=C sort
 }
 
+# Prints the sorted paths under .claude/skills/ of the repository (0000381 REQ-001). The folder is
+# ignored by git, so the tree snapshot cannot see it. A suite that empties it fails the run.
+skills_listing() {
+  local top
+  top="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel 2>/dev/null)" || return 0
+  [ -d "$top/.claude/skills" ] || return 0
+  (cd "$top" && find .claude/skills -mindepth 1 -print 2>/dev/null | LC_ALL=C sort)
+}
+
+SKILLS_BEFORE="$(skills_listing)"
 TREE_BEFORE=""
 TREE_CHECK=0
 if TREE_BEFORE="$(snapshot_tree)"; then TREE_CHECK=1; fi
@@ -75,6 +85,7 @@ KNOWN_NON_SUITES=(
   "test-0000164-req-001-gate-write-outside-project.mjs"  # called by the req-001 .sh suite
   "test-0000164-req-002-gate-write-documented-scope.mjs" # called by the req-002 .sh suite
   "test-0000164-req-006-gate-write-symlink-cases.mjs"    # called by the req-006 .sh suite
+  "test-0000393-req-001-gate-write-shell.mjs"            # called by the 0000393 req-001 .sh suite
   "regression/test-gate-write-windows.mjs" # the regression copy of the same
   "regression/regression-manifest.json"    # the promoted-suite list
   "regression/.gitkeep"                    # keeps the folder in git
@@ -229,6 +240,17 @@ if [ "$TREE_CHECK" -eq 1 ]; then
   fi
 fi
 
+SKILLS_CHANGED=0
+SKILLS_AFTER="$(skills_listing)"
+if [ "$SKILLS_BEFORE" != "$SKILLS_AFTER" ]; then
+  echo ""
+  while IFS= read -r path; do
+    [ -n "$path" ] || continue
+    echo "Skills changed during the run: $path"
+    SKILLS_CHANGED=$((SKILLS_CHANGED + 1))
+  done <<< "$(comm -3 <(printf '%s\n' "$SKILLS_BEFORE") <(printf '%s\n' "$SKILLS_AFTER") | sed 's/^[[:space:]]*//' | LC_ALL=C sort -u)"
+fi
+
 # ── Summary ───────────────────────────────────────────────────────────────────
 
 echo ""
@@ -245,6 +267,9 @@ fi
 if [ "$TREE_CHANGED" -gt 0 ]; then
   echo "Changed paths:     $TREE_CHANGED (named above)"
 fi
+if [ "$SKILLS_CHANGED" -gt 0 ]; then
+  echo "Changed skills:    $SKILLS_CHANGED (named above)"
+fi
 if [ "$UNDISCOVERED" -gt 0 ]; then
   echo "Undiscovered files: $UNDISCOVERED (named above)"
 fi
@@ -256,7 +281,7 @@ if [ "$PS_SKIPPED" -gt 0 ] && [ "${RAVINTIO_REQUIRE_PWSH:-0}" = "1" ]; then
   PS_REQUIRED_FAIL=1
 fi
 
-if [ "$TOTAL_FAIL" -eq 0 ] && [ "$REGRESSION_FAIL" -eq 0 ] && [ "$UNDISCOVERED" -eq 0 ] && [ "$TREE_CHANGED" -eq 0 ] && [ "$PS_REQUIRED_FAIL" -eq 0 ]; then
+if [ "$TOTAL_FAIL" -eq 0 ] && [ "$REGRESSION_FAIL" -eq 0 ] && [ "$UNDISCOVERED" -eq 0 ] && [ "$TREE_CHANGED" -eq 0 ] && [ "$SKILLS_CHANGED" -eq 0 ] && [ "$PS_REQUIRED_FAIL" -eq 0 ]; then
   echo "All tests passed."
   exit 0
 else

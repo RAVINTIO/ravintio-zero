@@ -1,5 +1,5 @@
 ---
-version: "0.60.0"
+version: "0.67.0"
 feature: "0000378-merge-time-versioning"
 updated: "7 Nov 2026"
 ---
@@ -10,7 +10,7 @@ updated: "7 Nov 2026"
 
 | Field | Value |
 |-------|-------|
-| Version | `0.60.0` |
+| Version | `0.67.0` |
 | Last feature | `0000378-merge-time-versioning` |
 | Updated | `7 Nov 2026` |
 
@@ -21,7 +21,7 @@ repository holds one component, `ravintio-zero`. It is a component pack of
 standards, skills, hooks, templates, schemas, and setup scripts.
 
 The pipeline runs five phases: discovery, plan, implement, validate and
-accept, and ship. Twelve skills drive it. Every change is a feature change
+accept, and ship. Sixteen skills drive it. Every change is a feature change
 and runs the same pipeline. A small change is a small run.
 
 RAVINTIO Zero ships no telemetry and makes no outbound network calls.

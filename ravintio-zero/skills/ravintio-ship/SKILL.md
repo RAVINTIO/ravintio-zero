@@ -63,8 +63,9 @@ Stop if it exits non-zero, in both run modes. Fix each phase it names, then reru
 
 1. Determine the archive path: `plan/_archive/{feature-id}-{YYYY-MM-DD}/`. If it exists, suffix `-2`, `-3`, and so on.
 2. Search the repo for links pointing at `plan/current/...` (living docs, `docs/decisions-index.md`, `src/*/docs/`). Update each to the archive path.
-3. Copy all of `plan/current/` to the archive path, then delete the `plan/current/` contents. Never use an atomic move.
-4. `git add` everything: the archive, the deletions, and the link updates. Untracked artifacts must not be left behind. Check with `git status --porcelain` before committing.
+3. Set each of the run's ADRs in `docs/adr/` to status `accepted`. Add one row per new ADR to `docs/decisions-index.md`. The archive links to `docs/adr/` and holds no copy.
+4. Copy all of `plan/current/` to the archive path, then delete the `plan/current/` contents. Never use an atomic move.
+5. `git add` everything: the archive, the deletions, and the link updates. Untracked artifacts must not be left behind. Check with `git status --porcelain` before committing.
    - In an active initiative, stage by explicit path: `plan/current/`, `plan/changelog/`, `plan/_archive/`, and each link update. Never stage a `plan/backlog/` entry the step did not write. The initiative skill queues those, and they stay untracked.
 
 ### Step 5: Build assessment
@@ -77,6 +78,7 @@ Read the archived `build-log.md`. It is now the only copy. Write `build-report.m
 - Self-corrections, with whether each was avoidable.
 - One improvement suggestion per phase where warranted.
 - The postmortems the run wrote to `plan/postmortems/`, by path, or `Postmortems: none`.
+- <!-- rule: ship-inherited-failures --> The inherited failures from `baseline-failures.md` in the archive folder, one line each, or `Inherited failures: none`. Offer a backlog entry for each.
 
 Then run `node ravintio-zero/scripts/workflow-metrics.mjs "{archive-folder}"` and append its output to `build-report.md`. If it exits non-zero, write `Workflow governance: not measured ({reason})` instead. The reason is `build log unreadable` or `thresholds invalid`, never a path or error text. A breach does not stop ship in either run mode.
 
@@ -104,7 +106,7 @@ Do this before any push, in every run mode and for both PR options, so no PR car
 
 If a local-git-only override is active in `ravintio-overrides/instructions/`, skip the question and output the description block. Otherwise, follow the run mode.
 
-In `gated`, ask the human:
+In `gated`, ask the human. Agreement follows rule `agree-explicit` in `ravintio-orchestrator/references/orchestrator-p0-coaching.md`.
 
 ```
 P4 Ship: Version v{version} set. CI tags the merge commit on main.

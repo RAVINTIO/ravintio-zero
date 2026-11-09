@@ -20,11 +20,12 @@ make_workspace() {
   TMPS+=("$dir")
   cp -r "$ZERO_DIR" "$dir/ravintio-zero"
   git init "$dir" >/dev/null 2>&1
+  commit_workspace_pack "$dir"
   mkdir -p "$dir/ravintio-overrides/instructions"
   echo "$dir"
 }
 
-run_setup() { (cd "$1" && bash ravintio-zero/setup.sh claude-code 2>&1); }
+run_setup() { commit_workspace_pack "$1"; (cd "$1" && bash ravintio-zero/setup.sh claude-code 2>&1); }
 count() { grep -cF -- "$1" "$2" 2>/dev/null || true; }
 SHIP=".claude/skills/ravintio-ship/SKILL.md"
 START='<!-- ravintio-overrides:instructions:start -->'

@@ -15,6 +15,10 @@
 $Tool = $null
 $StrictOrchestrator = $false
 $NoWritingStyle = $false
+$NoStrictOrchestrator = $false
+$Mode = 'install'
+$UpdateSource = $null
+$ShowHelp = $false
 # Flags that earlier releases removed (0000034 ADR-001). A retired flag does
 # nothing, so setup fails on it during argument parsing, before any change
 # (0000196 ADR-002). The message names the flag and never prints what follows
@@ -27,16 +31,43 @@ function Stop-OnRetiredFlag {
     [Console]::Error.WriteLine("  Remove it from the command, then rerun setup.")
     exit 1
 }
+function Set-RavintioMode {
+    param([string]$NewMode)
+    if ($script:Mode -ne 'install') {
+        [Console]::Error.WriteLine("! Error: use only one of --doctor, --update, and --uninstall in one run.")
+        exit 1
+    }
+    $script:Mode = $NewMode
+}
 $i = 0
 while ($i -lt $args.Count) {
     # PowerShell 7 splits a -File argument such as --backend-url=https://x at
     # its first colon, so match the flag by prefix and print the name only.
     if ("$($args[$i])".StartsWith('--backend-url=')) { Stop-OnRetiredFlag '--backend-url' }
     if ($RetiredFlags -ccontains $args[$i]) { Stop-OnRetiredFlag "$($args[$i])" }
+    if ("$($args[$i])".StartsWith('--update=')) {
+        Set-RavintioMode 'update'
+        $UpdateSource = "$($args[$i])".Substring('--update='.Length)
+        $i++
+        continue
+    }
     # Case-sensitive, the same as setup.sh (0000035 ADR-003).
     switch -CaseSensitive ($args[$i]) {
+        { $_ -ceq '-h' -or $_ -ceq '--help' } { $ShowHelp = $true; $i++ }
         '--strict-orchestrator' { $StrictOrchestrator = $true; $i++ }
         '--no-writing-style' { $NoWritingStyle = $true; $i++ }
+        '--no-strict-orchestrator' { $NoStrictOrchestrator = $true; $i++ }
+        '--doctor' { Set-RavintioMode 'doctor'; $i++ }
+        '--uninstall' { Set-RavintioMode 'uninstall'; $i++ }
+        '--update' {
+            Set-RavintioMode 'update'
+            if (($i + 1) -ge $args.Count -or "$($args[$i + 1])".StartsWith('-')) {
+                [Console]::Error.WriteLine("! Error: --update needs a source folder, such as --update ../zero/ravintio-zero")
+                exit 1
+            }
+            $UpdateSource = "$($args[$i + 1])"
+            $i += 2
+        }
         default {
             if ($args[$i] -like '-*') { Write-Host "Unknown flag: $(("$($args[$i])" -split '=', 2)[0])"; exit 1 }
             else { $Tool = $args[$i]; $i++ }
@@ -118,6 +149,39 @@ function Test-RavintioLink {
     return (([System.IO.File]::GetAttributes($Path) -band $link) -eq $link)
 }
 
+# Removes each folder the manifest lists, and only a folder that sits directly inside the
+# skills directory (0000381 ADR-001, backlog 0000262). A line is relative to the repo root.
+# A legacy absolute line passes the same test. A line with a ".." segment, a link, or a
+# parent other than the skills directory is skipped with a warning.
+function Remove-ManifestEntries {
+    param([string]$Manifest, [string]$SkillsDir)
+    $physSkills = [System.IO.Path]::GetFullPath($SkillsDir).TrimEnd('\', '/')
+    foreach ($line in @(Get-Content -Path $Manifest -Encoding UTF8)) {
+        $line = ([string]$line).TrimEnd("`r")
+        if ($line -eq '') { continue }
+        if ([System.IO.Path]::IsPathRooted($line)) { $path = $line } else { $path = Join-Path $ProjectRoot $line }
+        $path = $path.TrimEnd('\', '/')
+        if ((($path -replace '\\', '/') -split '/') -contains '..' -or (($path -replace '\\', '/') -split '/') -contains '.') {
+            Write-Host "  ! Warning: manifest entry outside the skills directory, skipped: $line"
+            continue
+        }
+        $full = [System.IO.Path]::GetFullPath($path)
+        $parent = [System.IO.Path]::GetDirectoryName($full)
+        if ($null -eq $parent -or $parent.TrimEnd('\', '/') -ne $physSkills) {
+            Write-Host "  ! Warning: manifest entry outside the skills directory, skipped: $line"
+            continue
+        }
+        if (Test-RavintioLink $full) {
+            Write-Host "  ! Warning: manifest entry is a link, skipped: $line"
+            continue
+        }
+        if ([System.IO.Directory]::Exists($full)) {
+            Remove-Item -LiteralPath $full -Recurse -Force
+            Write-Host "  - removed: $(Split-Path -Leaf $full)"
+        }
+    }
+}
+
 # Removes the pack copies an older install bundled into a skill (0000171
 # req-004). It deletes only the paths where that install put a pack file:
 # assets/templates/{name}, assets/schemas/{name}, and references/{name}.
@@ -181,6 +245,34 @@ function Remove-RetiredSkills {
     }
 }
 
+# A boot file that lacks the pack's first line is the developer's own. Copy it to
+# ravintio-overrides/instructions/ before the write, so the override block re-applies
+# it (0000381 ADR-002, backlog 0000290). A file with the pack line, an empty file, and
+# a link are left alone. An existing destination is never overwritten: a number is added.
+function Save-DeveloperBootFile {
+    param([string]$FullPath, [string]$Content)
+    if (-not (Test-Path -LiteralPath $FullPath -PathType Leaf)) { return }
+    if (Test-RavintioLink $FullPath) { return }
+    $existing = [System.IO.File]::ReadAllText($FullPath)
+    if ($existing.Trim() -eq '') { return }
+    $marker = (($Content -split "`r?`n")[0]).Trim()
+    if ($marker -ne '' -and (($existing -split "`r?`n") | Where-Object { $_.TrimEnd() -eq $marker })) { return }
+    $overrides = Join-Path $ProjectRoot 'ravintio-overrides'
+    $destDir = Join-Path $overrides 'instructions'
+    if ((Test-RavintioLink $overrides) -or (Test-RavintioLink $destDir)) { return }
+    New-Item -ItemType Directory -Path $destDir -Force | Out-Null
+    $base = [System.IO.Path]::GetFileNameWithoutExtension($FullPath)
+    $dest = Join-Path $destDir "original-$base.md"
+    $n = 1
+    while ([System.IO.File]::Exists($dest)) {
+        $n++
+        $dest = Join-Path $destDir "original-$base-$n.md"
+    }
+    $text = "<!-- Moved from $([System.IO.Path]::GetFileName($FullPath)) by setup on first install. -->`n" + $existing
+    [System.IO.File]::WriteAllText($dest, $text, (New-Object System.Text.UTF8Encoding($false)))
+    Write-Host "  ~ $([System.IO.Path]::GetFileName($FullPath)) content kept in ravintio-overrides/instructions/$([System.IO.Path]::GetFileName($dest))"
+}
+
 function Write-RavintioBootFile {
     # Boot files are disposable build outputs (0000029 ADR-001): always
     # regenerate from the current template so template fixes propagate on
@@ -192,6 +284,7 @@ function Write-RavintioBootFile {
     $fullPath = Join-Path $ProjectRoot $RelPath
     $dir = Split-Path -Parent $fullPath
     New-Item -ItemType Directory -Path $dir -Force | Out-Null
+    Save-DeveloperBootFile -FullPath $fullPath -Content $Content
 
     if (-not (Test-Path $fullPath)) {
         Set-Content -Path $fullPath -Value $Content -Encoding UTF8
@@ -201,6 +294,52 @@ function Write-RavintioBootFile {
         Set-Content -Path $fullPath -Value $Content -Encoding UTF8
         Write-Host "  ~ $RelPath (regenerated from template)"
     }
+}
+
+# Commands an earlier release shipped in the tool's command folder and no longer
+# ships (0000381 ADR-002, backlog 0000293).
+$RetiredCommands = @('fast-path', 'change-pipeline', 'retrofit')
+
+# Removes a command file the pack no longer ships. Two sources name it: the command
+# manifest from a past run, and the retired list above. A file counts as the pack's
+# only if it is a plain file that is not a link, and (for the retired list) its front
+# matter holds the matching "name:" line. A developer's own command stays.
+function Remove-RetiredCommands {
+    param([string]$Dir)
+    if (-not [System.IO.Directory]::Exists($Dir)) { return }
+    if (Test-RavintioLink $Dir) { return }
+    $manifest = Join-Path $Dir '.ravintio-manifest'
+    if ([System.IO.File]::Exists($manifest)) {
+        foreach ($line in @(Get-Content -LiteralPath $manifest -Encoding UTF8)) {
+            $name = ([string]$line).TrimEnd("`r")
+            if ($name -eq '' -or $name -match '[\\/]' -or $name.StartsWith('.')) { continue }
+            if (Test-Path -LiteralPath (Join-Path $WorkflowsSrc $name)) { continue }
+            $f = Join-Path $Dir $name
+            if ([System.IO.File]::Exists($f) -and -not (Test-RavintioLink $f)) {
+                Remove-Item -LiteralPath $f -Force
+                Write-Host "  - pruned retired command: $name"
+            }
+        }
+    }
+    foreach ($name in $RetiredCommands) {
+        $f = Join-Path $Dir "$name.md"
+        if (-not [System.IO.File]::Exists($f)) { continue }
+        if (Test-RavintioLink $f) { continue }
+        $head = @(Get-Content -LiteralPath $f -TotalCount 8)
+        if (@($head | Where-Object { $_ -match "^name:\s*$([regex]::Escape($name))\s*$" }).Count -gt 0) {
+            Remove-Item -LiteralPath $f -Force
+            Write-Host "  - pruned retired command: $name.md"
+        }
+    }
+}
+
+# Lists the command files the pack installed, so the next run can prune one the pack stops shipping.
+function Write-CommandsManifest {
+    param([string]$Dir)
+    if (-not [System.IO.Directory]::Exists($Dir)) { return }
+    if (Test-RavintioLink $Dir) { return }
+    $names = @(Get-ChildItem -Path $WorkflowsSrc -Filter '*.md' | ForEach-Object { $_.Name })
+    Set-Content -LiteralPath (Join-Path $Dir '.ravintio-manifest') -Value $names -Encoding UTF8
 }
 
 function Copy-RavintioWorkflow {
@@ -458,7 +597,7 @@ function Read-SettingsObject {
 
 function Merge-EnforcementHookSettings {
     # Merge the eight enforcement hooks into settings.json: gate-write,
-    # ratchet-check, em-dash-guard, and merge-guard (PreToolUse), then
+    # ratchet-check, em-dash-guard, merge-guard, and block-forced-add (PreToolUse), plus gate-write on Bash, then
     # auto-trigger-orchestrator, check-orchestrator-presence, and check-design
     # (UserPromptSubmit), then check-reply-prefix (Stop). Idempotent. The entries match setup.sh in event,
     # matcher, and order (0000035 ADR-001), and a parity suite checks it.
@@ -476,7 +615,8 @@ function Merge-EnforcementHookSettings {
         (New-HookEntry 'Write' 'em-dash-guard' $HooksDir),
         (New-HookEntry 'Edit' 'em-dash-guard' $HooksDir),
         (New-HookEntry 'Bash' 'merge-guard' $HooksDir),
-        (New-HookEntry 'Bash' 'block-forced-add' $HooksDir)
+        (New-HookEntry 'Bash' 'block-forced-add' $HooksDir),
+        (New-HookEntry 'Bash' 'gate-write' $HooksDir)
     )
     $userPromptEntries = @(
         (New-HookEntry '.*' 'auto-trigger-orchestrator' $HooksDir),
@@ -1046,6 +1186,17 @@ See [plan/feature-structure.md](../plan/feature-structure.md) for the canonical 
         Write-Host "  + plan/ (created)"
     }
     
+    # The pipeline writes its working files to plan/current/ (0000382, backlog 0000283).
+    $planCurrent = Join-Path $planDir "current"
+    if (-not (Test-Path $planCurrent)) {
+        try {
+            New-Item -ItemType Directory -Path $planCurrent -Force -ErrorAction Stop | Out-Null
+            Write-Host "  + plan/current/ (created)"
+        } catch {
+            [Console]::Error.WriteLine("  ! Warning: could not create plan/current/, continuing")
+        }
+    }
+
     $planReadme = Join-Path $planDir "README.md"
     if (-not (Test-Path $planReadme)) {
         Set-Content -Path $planReadme -Value @'
@@ -1247,16 +1398,22 @@ function Copy-CapabilitySkills {
     $capSkillsDir = Join-Path $ProjectRoot 'ravintio-overrides\capability-skills'
     if (-not (Test-Path $capSkillsDir)) { return }
 
-    $found = @(Get-ChildItem -Path $capSkillsDir -Directory | Where-Object {
-        Test-Path (Join-Path $_.FullName 'SKILL.md')
-    })
+    $found = @()
+    foreach ($candidate in @(Get-ChildItem -Path $capSkillsDir -Directory)) {
+        if (Test-Path (Join-Path $candidate.FullName 'SKILL.md')) {
+            $found += $candidate
+        } else {
+            Write-Host "  ! Warning: capability skill '$($candidate.Name)' missing SKILL.md - skipping"
+        }
+    }
     if ($found.Count -eq 0) { return }
 
     Write-Host ""
     Write-Host "  Syncing capability skills from ravintio-overrides/capability-skills/"
     foreach ($dir in $found) {
         $destDir = Join-Path $TargetDir $dir.Name
-        Copy-Item -Path $dir.FullName -Destination $destDir -Recurse -Force
+        # The whole folder, so references, scripts, and assets install too (0000381 REQ-002).
+        Copy-RavintioTree -SourceDir $dir.FullName -DestDir $destDir
         Write-Host "  + capability-skill: $($dir.Name)"
     }
 }
@@ -1431,16 +1588,12 @@ function Invoke-RavintioSetup {
     Write-Host "  Setting up $ToolName"
     Write-Host "  Skills directory: $($toolConfig.SkillsDir)/"
 
-    # Manifest cleanup — remove only previously installed directories on re-run
+    # Manifest cleanup: remove only previously installed directories on re-run.
+    # A line is removed only if it is a direct child of the skills directory (0000381 ADR-001).
     $manifest = Join-Path $skillsDir ".ravintio-manifest"
     if (Test-Path $manifest) {
-        Write-Host "  Re-run detected — removing previously installed directories"
-        Get-Content -Path $manifest -Encoding UTF8 | Where-Object { $_ -ne '' } | ForEach-Object {
-            if (Test-Path $_) {
-                Remove-Item -Path $_ -Recurse -Force
-                Write-Host "  - removed: $(Split-Path -Leaf $_)"
-            }
-        }
+        Write-Host "  Re-run detected - removing previously installed directories"
+        Remove-ManifestEntries -Manifest $manifest -SkillsDir $skillsDir
         Remove-Item -Path $manifest -Force
     }
 
@@ -1456,9 +1609,11 @@ function Invoke-RavintioSetup {
     # Copy workflows (if tool defines a workflow dir)
     if ($toolConfig.WorkflowsDir -and (Test-Path $WorkflowsSrc)) {
         $workflowsDir = Join-Path $ProjectRoot $toolConfig.WorkflowsDir
+        Remove-RetiredCommands -Dir $workflowsDir
         Get-ChildItem -Path $WorkflowsSrc -Filter '*.md' | ForEach-Object {
             Copy-RavintioWorkflow -WorkflowFile $_.FullName -TargetDir $workflowsDir
         }
+        Write-CommandsManifest -Dir $workflowsDir
     }
 
     # Create boot file (if tool defines one)
@@ -1507,9 +1662,10 @@ function Invoke-RavintioSetup {
         Install-CodexWritingBlock -BootFilePath (Join-Path $ProjectRoot $toolConfig.BootFile)
     }
 
-    # Write manifest listing all installed skill directories (enables safe re-run cleanup)
+    # Write manifest listing all installed skill directories, relative to the repo root
+    # (enables safe re-run cleanup, 0000381 ADR-001). A link is not listed.
     New-Item -ItemType Directory -Path $skillsDir -Force | Out-Null
-    $installedDirs = @(Get-ChildItem -Path $skillsDir -Directory | ForEach-Object { $_.FullName })
+    $installedDirs = @(Get-ChildItem -Path $skillsDir -Directory | Where-Object { -not (Test-RavintioLink $_.FullName) } | ForEach-Object { ($toolConfig.SkillsDir.TrimEnd('/', '\') -replace '\\', '/') + '/' + $_.Name })
     if ($installedDirs.Count -gt 0) {
         $installedDirs | Set-Content -Path $manifest -Encoding UTF8
         Write-Host "  + .ravintio-manifest ($($installedDirs.Count) entries)"
@@ -1647,11 +1803,11 @@ function Remove-LegacySetupConfig {
 
 # --- Main ---
 
-if (-not $Tool) {
+function Write-RavintioHelp {
     Write-Host ""
     Write-Host "RAVINTIO Setup"
     Write-Host ""
-    Write-Host "Usage: .\ravintio-zero\setup.ps1 claude-code [flags]"
+    Write-Host "Usage: .\ravintio-zero\setup.ps1 <tool> [flags]"
     Write-Host ""
     Write-Host "Tools:"
     foreach ($t in $ValidTools) {
@@ -1662,11 +1818,27 @@ if (-not $Tool) {
     Write-Host "  --strict-orchestrator        Write plan/.orchestrator-strict to enable strict mode."
     Write-Host "                               The check-orchestrator-presence hook will require the"
     Write-Host "                               orchestrator to ack each new session before proceeding."
+    Write-Host "                               A re-run without a strict flag keeps strict mode as it is."
+    Write-Host "  --no-strict-orchestrator     Remove plan/.orchestrator-strict and turn strict mode off."
     Write-Host "  --no-writing-style           Skip the writing standard output: the Claude Code output"
     Write-Host "                               style and the Codex AGENTS.md section."
+    Write-Host "  --doctor                     Check the install and name each problem. Exits 1 on a problem."
+    Write-Host "  --update <source>            Copy a newer pack from <source>, commit it, and rerun setup"
+    Write-Host "                               with the flags in plan/state/<tool>.md."
+    Write-Host "  --uninstall                  Reverse the setup changes and keep your own files and plan/ records."
+    Write-Host "                               Refuses while a run is active."
+    Write-Host "  -h, --help                   Print this help and exit 0."
+    Write-Host ""
+    Write-Host "Setup copies only committed files. Commit ravintio-zero/ and ravintio-overrides/ first."
+    Write-Host "Your own skills belong in ravintio-overrides/capability-skills/. Setup removes skills"
+    Write-Host "placed straight into the tool's skills folder."
     Write-Host ""
     Write-Host "Run from the repository root."
     Write-Host "Each tool's config: ravintio-zero\setup\[tool].ps1"
+}
+
+if ($ShowHelp -or -not $Tool) {
+    Write-RavintioHelp
     exit 0
 }
 
@@ -1681,6 +1853,42 @@ if (-not ($ValidTools -ccontains $Tool)) {
     exit 1
 }
 
+if ($StrictOrchestrator -and $NoStrictOrchestrator) {
+    [Console]::Error.WriteLine("! Error: use only one of --strict-orchestrator and --no-strict-orchestrator.")
+    exit 1
+}
+
+$Lifecycle = Join-Path $ScriptDir 'scripts\install-lifecycle.mjs'
+
+function Invoke-RavintioLifecycle {
+    param([string[]]$LifecycleArgs)
+    if (-not (Get-Command node -ErrorAction SilentlyContinue)) {
+        [Console]::Error.WriteLine("! Error: node is not installed, and $($LifecycleArgs[0]) needs it.")
+        exit 1
+    }
+    # Out-Host keeps the output out of the return value.
+    & node $Lifecycle @LifecycleArgs | Out-Host
+    return $LASTEXITCODE
+}
+
+if ($Mode -eq 'doctor') {
+    exit (Invoke-RavintioLifecycle @('doctor', '--root', $ProjectRoot, '--tool', $Tool))
+}
+if ($Mode -eq 'uninstall') {
+    exit (Invoke-RavintioLifecycle @('uninstall', '--root', $ProjectRoot, '--tool', $Tool))
+}
+if ($Mode -eq 'update') {
+    $rc = Invoke-RavintioLifecycle @('update', '--root', $ProjectRoot, '--tool', $Tool, '--source', $UpdateSource)
+    if ($rc -ne 0) { exit 1 }
+    $recorded = (& node $Lifecycle flags --root $ProjectRoot --tool $Tool | Out-String).Trim()
+    if ($LASTEXITCODE -ne 0) { exit 1 }
+    $shown = if ($recorded) { $recorded } else { 'none' }
+    Write-Host "  Rerunning setup with the recorded flags: $shown"
+    $rerun = @($Tool) + @($recorded -split '\s+' | Where-Object { $_ })
+    & (Join-Path $ScriptDir 'setup.ps1') @rerun
+    exit $LASTEXITCODE
+}
+
 # Stop before installing anything if an old-brand folder is still present
 # (0000160 REQ-002, ADR-003). The migration renames it first.
 foreach ($oldFolder in @('planifest-zero', 'planifest-overrides')) {
@@ -1690,6 +1898,41 @@ foreach ($oldFolder in @('planifest-zero', 'planifest-overrides')) {
         [Console]::Error.WriteLine("  Run ravintio-zero/migrations/migrate-ravintio-rename.ps1 first, then rerun setup.")
         exit 1
     }
+}
+
+# Install only committed pack and override files (0000382 ADR-002, backlog
+# 0000299). The check has no bypass flag. Ignored files do not count.
+function Assert-RavintioCommittedPack {
+    $inside = $null
+    if (Get-Command git -ErrorAction SilentlyContinue) {
+        $inside = (& git -C $ProjectRoot rev-parse --is-inside-work-tree 2>$null)
+    }
+    if ($inside -ne 'true') {
+        [Console]::Error.WriteLine("! Error: setup needs a git repository, so it can check that the pack is committed.")
+        [Console]::Error.WriteLine("  Run git init, commit ravintio-zero/ and ravintio-overrides/, then rerun setup.")
+        exit 1
+    }
+    $changed = @(& git -C $ProjectRoot status --porcelain --untracked-files=all -- ravintio-zero ravintio-overrides 2>$null | Where-Object { $_ })
+    if ($changed.Count -gt 0) {
+        [Console]::Error.WriteLine("! Error: setup copies only committed pack and override files. These files have uncommitted changes:")
+        foreach ($c in $changed) { [Console]::Error.WriteLine("    $($c.Substring(3))") }
+        [Console]::Error.WriteLine("  Commit or discard them, then rerun setup. Nothing was copied.")
+        exit 1
+    }
+}
+Assert-RavintioCommittedPack
+
+# Strict mode follows the flags (0000382 ADR-001, backlog 0000291). A plain
+# re-run keeps it as it is. --no-strict-orchestrator turns it off.
+$strictFile = Join-Path (Join-Path $ProjectRoot 'plan') '.orchestrator-strict'
+if ($NoStrictOrchestrator) {
+    if (Test-Path -LiteralPath $strictFile) {
+        Remove-Item -LiteralPath $strictFile -Force
+        Write-Host "  - plan/.orchestrator-strict removed (--no-strict-orchestrator turned strict mode off)"
+    }
+} elseif ((-not $StrictOrchestrator) -and (Test-Path -LiteralPath $strictFile)) {
+    $StrictOrchestrator = $true
+    Write-Host "  = plan/.orchestrator-strict kept (strict mode stays on. Use --no-strict-orchestrator to turn it off)"
 }
 
 Write-Host "RAVINTIO Setup"
@@ -1712,5 +1955,7 @@ Invoke-RavintioSetup -ToolName $Tool
 Write-Host ""
 Write-Host "Setup complete."
 Write-Host "  Source of truth: ravintio-zero/"
-Write-Host "  Re-run after you update the pack."
+Write-Host "  Re-run after you update the pack. Check the install with: .\ravintio-zero\setup.ps1 $Tool --doctor"
+Write-Host "  Put your own skills in ravintio-overrides/capability-skills/. Setup removes skills"
+Write-Host "  placed straight into the skills folder."
 

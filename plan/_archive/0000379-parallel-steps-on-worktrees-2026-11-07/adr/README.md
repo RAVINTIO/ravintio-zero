@@ -1,0 +1,1 @@
+ADRs moved to docs/adr/. See 0262-running-and-ready-live-in-the-control-area.md, 0263-serial-path-without-concurrency-field.md, 0264-steps-end-at-ready-the-queue-merges.md, 0265-worktrees-copy-setup-output.md.
