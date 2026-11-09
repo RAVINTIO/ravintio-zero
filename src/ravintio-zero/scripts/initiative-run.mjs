@@ -163,15 +163,22 @@ const ARCHIVE = 'plan/_archive';
 // Files whose change leaves the running driver, or the session that relays its output, on old code.
 const WATCHED = [
   'ravintio-zero/scripts/initiative-run.mjs',
+  'src/ravintio-zero/scripts/initiative-run.mjs',
   'ravintio-zero/scripts/initiative-watch.mjs',
+  'src/ravintio-zero/scripts/initiative-watch.mjs',
   'ravintio-zero/skills/ravintio-initiative/SKILL.md',
+  'src/ravintio-zero/skills/ravintio-initiative/SKILL.md',
 ];
 // Paths whose change leaves the installed copies of the pack stale until setup reruns.
 const SETUP_WATCHED = [
   'ravintio-zero/skills/',
+  'src/ravintio-zero/skills/',
   'ravintio-zero/hooks/',
+  'src/ravintio-zero/hooks/',
   'ravintio-zero/setup.sh',
+  'src/ravintio-zero/setup.sh',
   'ravintio-zero/setup/',
+  'src/ravintio-zero/setup/',
 ];
 const MAX_NAMES = 5;
 const STATUS = /^(proposed|charted|draft|active|blocked|delivered|done)$/;

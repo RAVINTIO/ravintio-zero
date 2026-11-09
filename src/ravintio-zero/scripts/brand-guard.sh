@@ -41,7 +41,11 @@ brand_guard_main() {
     esac
   done
   [ -n "$root" ] || root="$(git rev-parse --show-toplevel)"
-  [ -n "$allow" ] || allow="$root/ravintio-zero/tests/brand-guard-allowlist.txt"
+  if [ -z "$allow" ]; then
+    # The pack source lives at src/ravintio-zero/. A consumer install keeps ravintio-zero/.
+    allow="$root/src/ravintio-zero/tests/brand-guard-allowlist.txt"
+    [ -f "$allow" ] || allow="$root/ravintio-zero/tests/brand-guard-allowlist.txt"
+  fi
   if [ ! -f "$allow" ]; then
     echo "brand-guard: allowlist not found at $allow" >&2
     return 2

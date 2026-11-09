@@ -245,7 +245,9 @@ function runDiff(opts) {
   let bad = 0;
   for (const file of Object.keys(now)) {
     for (const rule of Object.keys(now[file])) {
-      const was = before[file]?.[rule] ?? 0;
+      // A file that moved from ravintio-zero/ to src/ravintio-zero/ keeps its old count as the ceiling (0000397).
+      const moved = file.startsWith("src/ravintio-zero/") ? file.slice(4) : null;
+      const was = Math.max(before[file]?.[rule] ?? 0, (moved && before[moved]?.[rule]) || 0);
       if (now[file][rule] > was) {
         bad++;
         console.log(`${file}: ${rule} baseline rises from ${was} to ${now[file][rule]}`);
