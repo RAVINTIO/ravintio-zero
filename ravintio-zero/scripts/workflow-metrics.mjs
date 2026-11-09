@@ -8,6 +8,14 @@
  * Counts marker lines only (ADR-002). Reads thresholds from the Thresholds
  * table of the workflow governance standard (ADR-003). Reports and never blocks.
  *
+ * After the governance table it prints "## Dispatch by class and tier": units
+ * and rework per class and tier pair. A classified Done line reads
+ * "Done: {unit} ({class}, {tier}, {effort}, {timestamp})". A Done line without
+ * class fields counts as unclassified. A Rework marker counts toward the class
+ * and tier of the last classified Done line before it that names the same
+ * REQ id, or toward unclassified when none exists. The section never changes
+ * the exit code.
+ *
  * Exit codes:
  *   0 - the build log and thresholds were read, with or without a breach
  *   1 - build log unreadable, or a threshold key missing or not a whole number
@@ -68,6 +76,29 @@ function readText(path) {
 const LIST_PREFIX = /^\s*(?:(?:[-*]|\d+\.)\s+)?/;
 const FENCE = /^\s*(```|~~~)/;
 
+const CLASSIFIED_DONE =
+  /^Done: (.+?) \((content|code|test|config), (cheaper|primary|inline), (?:low|medium|high|none), [^)]*\)\s*$/;
+const UNCLASSIFIED = "unclassified\tunclassified";
+
+function bump(map, key, field) {
+  const row = map.get(key) || { units: 0, rework: 0 };
+  row[field]++;
+  map.set(key, row);
+}
+
+function dispatchSection(dispatch) {
+  const head = ["## Dispatch by class and tier", ""];
+  if (dispatch.size === 0) return [...head, "No dispatched units.", ""];
+  const last = (k) => (k === UNCLASSIFIED ? 1 : 0);
+  const keys = [...dispatch.keys()].sort((a, b) => last(a) - last(b) || (a < b ? -1 : a > b ? 1 : 0));
+  const rows = keys.map((k) => {
+    const [c, t] = k.split("\t");
+    const r = dispatch.get(k);
+    return `| ${c} | ${t} | ${r.units} | ${r.rework} |`;
+  });
+  return [...head, "| Class | Tier | Units | Rework |", "|-------|------|-------|--------|", ...rows, ""];
+}
+
 function countMarkers(text, tally) {
   let fence = null;
   for (const raw of text.split(/\r?\n/)) {
@@ -80,7 +111,14 @@ function countMarkers(text, tally) {
     if (fence !== null) continue;
     const line = raw.replace(LIST_PREFIX, "");
     const rework = /^Rework: (REQ-\d+):/.exec(line);
-    if (rework) {
+    if (line.startsWith("Done:")) {
+      const done = CLASSIFIED_DONE.exec(line);
+      const key = done ? `${done[2]}\t${done[3]}` : UNCLASSIFIED;
+      bump(tally.dispatch, key, "units");
+      const req = /REQ-\d+/.exec(done ? done[1] : line);
+      if (done && req) tally.lastDone.set(req[0], key);
+    } else if (rework) {
+      bump(tally.dispatch, tally.lastDone.get(rework[1]) || UNCLASSIFIED, "rework");
       tally.rework.set(rework[1], (tally.rework.get(rework[1]) || 0) + 1);
     } else if (line.startsWith("Blocked:")) {
       tally.blocked++;
@@ -126,7 +164,7 @@ function readThresholds(path) {
 
 const { standard, folder } = parseArgs(process.argv.slice(2));
 
-const tally = { rework: new Map(), blocked: 0, design: 0, gate: 0 };
+const tally = { rework: new Map(), blocked: 0, design: 0, gate: 0, dispatch: new Map(), lastDone: new Map() };
 countMarkers(readText(join(folder, "build-log.md")), tally);
 
 let loopFiles = [];
@@ -172,5 +210,6 @@ process.stdout.write(
     "",
     `Breaches: ${breaches}. The gate reports and does not block. Counts come from marker lines only.`,
     "",
+    ...dispatchSection(tally.dispatch),
   ].join("\n"),
 );
