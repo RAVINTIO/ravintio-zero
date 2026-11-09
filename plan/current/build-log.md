@@ -27,7 +27,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 |-------|-------|
 | Start | `2026-11-09T14:55:27Z` |
 | End | `2026-11-09T14:57:47Z` |
-| Wall clock | `5` |
+| Wall clock | `2` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | `0` |
@@ -74,8 +74,8 @@ Complete: P1 (2026-11-09T15:02:06Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-09T15:26:44Z` |
-| End | `pending` |
-| Wall clock | `pending` |
+| End | `2026-11-09T16:27:01Z` |
+| Wall clock | `60` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | `3` |
@@ -90,3 +90,57 @@ Complete: P1 (2026-11-09T15:02:06Z)
 - Done: U4 docs edit pass (REQ-004)
 - Done: U5 advisory hook (REQ-005). Pins updated for the new hook: hook-filter fixture, shared-module test, advisory command count. `prose-rules.mjs` is not in the Codex copy list because Codex does not use the hook.
 - Done: U6 living docs
+- Tests run: full suite: 2 inherited failures, 0 new (2026-11-09T16:27:01Z)
+- Rework: REQ-003: brand and wording tests read the baseline file, so the allowlists name its ADR and changelog keys (2026-11-09T16:27:01Z)
+- Rework: REQ-005: the PowerShell twin of the advisory count pin (2026-11-09T16:27:01Z)
+Complete: P2 (2026-11-09T16:27:01Z)
+
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-09T16:27:01Z` |
+| End | `2026-11-09T16:27:01Z` |
+| Wall clock | `0` |
+| Model tier | primary |
+| Skills loaded | ravintio-validate-and-accept |
+| Agents spawned | `1` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | The docs edit pass ran as one subagent. |
+
+- Docs edit pass: 1 cycle, linter exits 0 on the changed docs
+- Baseline check: inherited `test-0000037-req-004-remove-old-folder.sh`, `test-0000318-req-004-merge-guard-pinned.sh`. New: none.
+Complete: P3 (2026-11-09T16:27:01Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-09T16:27:01Z` |
+| End | `2026-11-09T16:27:01Z` |
+| Wall clock | `0` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Initiative step. The merge queue sets the version. |
+
+Complete: P4 (2026-11-09T16:27:12Z)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `93` |
+| Total agents spawned | `4` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `1` |
+| Primary tier agent calls | `4` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `3` |
+| Phases skipped | none |
