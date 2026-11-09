@@ -1,14 +1,14 @@
 ---
 title: "ADR 285: Unit class, tier, and effort table"
 summary: "A table in the dispatch standards, not a new skill, gives each unit a class, a model tier, and an effort level, and content units may run inline."
-status: "proposed"
+status: "accepted"
 version: "0.1.0"
 component: "ravintio-zero"
 feature: "0000386-unit-dispatch"
 ---
 # ADR-0285 - Unit class, tier, and effort table
 
-**Status:** proposed
+**Status:** accepted
 **Component:** ravintio-zero
 
 ## Context
