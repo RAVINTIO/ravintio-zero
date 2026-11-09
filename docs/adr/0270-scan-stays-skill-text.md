@@ -19,7 +19,7 @@ Five backlog entries ask for more scan causes. A script could run the greps, but
 
 ## Decision
 
-Each cause is one bullet in the `## Test impact scan` of `ravintio-plan`. The planner runs the greps. No script is added.
+Each cause is one bullet in the `## Test impact scan` of `ravintio-plan`. The planner runs the greps. This adds no script.
 
 ## Alternatives Considered
 

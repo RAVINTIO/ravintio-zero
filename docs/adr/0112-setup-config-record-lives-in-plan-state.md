@@ -21,7 +21,7 @@ The location was the wrong category. Every other file under `planifest-overrides
 
 `plan/` already holds machine-written run state as tracked dotfiles. `setup.sh` writes `plan/.orchestrator-strict`, and the orchestrator writes `plan/.orchestrator-active` and `plan/.orchestrator-ack`. Since ADR-0107 the only supported tool is Claude Code, so the record is one file.
 
-The stack is unchanged: bash and PowerShell setup scripts, markdown skills, bash test suites. No new stack choice is made by this feature.
+The stack stays the same: bash and PowerShell setup scripts, markdown skills, bash test suites. This feature makes no new stack choice.
 
 ## Decision
 
@@ -56,11 +56,11 @@ The stack is unchanged: bash and PowerShell setup scripts, markdown skills, bash
 - The record sits with the other machine-written pipeline state and keeps every property 0000025 gave it.
 
 **Negative:**
-- Every consumer repo carries an upgrade step on its next setup run, and this repo's own record stays at the old path until the dev-time framework copy is refreshed.
+- Every consumer repo carries an upgrade step on its next setup run. This repo's own record stays at the old path until someone refreshes the dev-time framework copy.
 - Two locations exist in history, so anyone reading old changelogs or ADRs must map the old path to the new one.
 
 **Risks:**
-- A consumer's `.gitignore` could match `plan/state/` by a broad `plan/` rule. The relocation test asserts the record is not ignored, but only in this repo.
+- A consumer's `.gitignore` could match `plan/state/` by a broad `plan/` rule. The relocation test asserts that no ignore rule matches the record, but only in this repo.
 
 ## Related ADRs
 

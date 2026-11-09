@@ -17,7 +17,7 @@ Backlog entry 0000179 asks for a fresh-context reviewer and an implementer that 
 
 ## Decision
 
-Define the cycle steps and the reviewer brief in the `## Improvement loop` section of the dispatch standard. The implement skill holds a short pointer, because the skills text has a line budget of 1447 lines (test 0000031). ravintio-implement dispatches the reviewer as an unnamed subagent on the primary tier. The refactor skill describes an improvement mode, which applies the finding. The reviewer edits nothing. Cap the loop at 2 cycles per requirement and write one `Improve:` marker per cycle.
+Define the cycle steps and the reviewer brief in the `## Improvement loop` section of the dispatch standard. The implement skill holds a short pointer, because the skills text has a line budget of 1447 lines (test 0000031). The `ravintio-implement` skill dispatches the reviewer as an unnamed subagent on the primary tier. The refactor skill describes an improvement mode, which applies the finding. The reviewer edits nothing. Cap the loop at 2 cycles per requirement and write one `Improve:` marker per cycle.
 
 ## Alternatives Considered
 

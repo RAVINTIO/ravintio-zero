@@ -29,7 +29,7 @@ Three legacy names stay accepted through every 1.x release.
 - `PLANIFEST_ROADMAP_MAX_TURNS` falls back for `RAVINTIO_ROADMAP_MAX_TURNS`.
 - The `planifest-em-dash-allow` sentinel works like `ravintio-em-dash-allow`.
 
-When both names are set, the new name wins. The driver does not merge the two. The scripts write no warning when only the old name is set, so existing runs stay quiet.
+When a run sets both names, the new name wins. The driver does not merge the two. The scripts write no warning when a run sets only the old name, so existing runs stay quiet.
 
 Version 2.0.0 removes all three fallbacks. The release notes for 1.0.0 name that date.
 
@@ -58,7 +58,7 @@ Every other `PLANIFEST_*` variable renames to `RAVINTIO_*` with no fallback. Onl
 
 **Negative:**
 - Three legacy names stay in the code and the brand guard allowlist until 2.0.0.
-- Tests must cover both names and the case where both are set.
+- Tests must cover both names and the case where a run sets both.
 
 **Risks:**
 - Nobody removes the fallbacks at 2.0.0. The allowlist entries name the removal version so the guard test flags them.

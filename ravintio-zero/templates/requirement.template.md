@@ -41,7 +41,7 @@ As a [role], I [action], so that [outcome].
 
 - [ ] Input source: {{filesystem path | hook stdin field | env var name | other}}
 - [ ] Allowed character pattern: `{{e.g. [a-zA-Z0-9\-_.]}}`, all other characters stripped before use
-- [ ] maximum length: {{N}} characters, content beyond this limit is truncated
+- [ ] maximum length: {{N}} characters, the system truncates content beyond this limit
 - [ ] Failure behaviour: {{e.g. substitute default value "unknown" and continue | exit with code 0 | throw error}}
 - [ ] Logging policy: {{raw value not logged | raw value logged at debug level only | sanitised value only in output}}
 

@@ -45,7 +45,7 @@ Park never merges, never commits to `main`, and never force-pushes. The human me
 ## Consequences
 
 **Positive:**
-- Code and plan state stay together on one branch, so nothing is lost.
+- Code and plan state stay together on one branch, so no work disappears.
 - `main` needs no cleanup, and every change lands through a PR.
 - Discard needs a human confirmation, so no branch goes silently.
 

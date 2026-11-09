@@ -1,6 +1,6 @@
 ﻿# Risk Register - Guide
 
-> How risks are identified, assessed, and tracked throughout a feature.
+> How agents identify, assess, and track risks throughout a feature.
 
 *Related: [Plan Skill](../skills/ravintio-plan/SKILL.md) | [Scope Guide](scope-guide.md)*
 
@@ -24,7 +24,7 @@ The Risk Register is a living document. The plan skill seeds it during the plan 
 
 A good risk entry is:
 - **Specific to this feature** - not generic ("data loss is bad")
-- **Actionable** - has a mitigation plan, not just a description
+- **Actionable** - has a mitigation plan, not only a description
 - **Assessed** - likelihood and impact rated, not left blank
 
 | Bad | Good |
@@ -36,7 +36,7 @@ A good risk entry is:
 
 ## Assumptions as Risks
 
-Assumptions from the Design Requirements are automatically logged as risk items with `likelihood: medium`. This ensures they're tracked - if an assumption turns out to be wrong, the risk register already has an entry.
+The plan skill automatically logs assumptions from the Design Requirements as risk items with `likelihood: medium`. This ensures they're tracked - if an assumption turns out to be wrong, the risk register already has an entry.
 
 ---
 

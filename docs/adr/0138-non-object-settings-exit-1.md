@@ -15,7 +15,7 @@ feature: "0000040-setup-json-checks-and-park"
 
 ## Context
 
-ADR-0134 made both scripts exit 1 with a fixed line on invalid JSON. Two gaps remain. In `setup.sh`, valid JSON such as `[]` or `5` passes the parse, and the inline node step then fails to wire hooks yet setup reports them installed (backlog 0000121). In `setup.ps1`, a file that `ConvertFrom-Json` cannot read as an object gets the invalid-JSON message, though the JSON is valid (backlog 0000120).
+ADR-0134 made both scripts exit 1 with a fixed line on invalid JSON. Two gaps remain. In `setup.sh`, valid JSON such as `[]` or `5` passes the parse. The inline node step then fails to wire hooks, yet setup reports them installed (backlog 0000121). In `setup.ps1`, a file that `ConvertFrom-Json` cannot read as an object gets the invalid-JSON message, though the JSON is valid (backlog 0000120).
 
 Setup cannot wire enforcement hooks into a file it cannot read as a settings object. Setup must also never print file content (0000033 req-004).
 

@@ -19,7 +19,7 @@ Entry 0000224 records an id reservation left uncommitted. A session on another b
 
 ## Decision
 
-Add a `--commit` flag. After the script writes the counter, it runs `git add -- {counter}` and `git commit -m {message} -- {counter}`. The path after the double dash limits the commit to that file, whatever else is staged. The skills that reserve ids pass the flag.
+Add a `--commit` flag. After the script writes the counter, it runs `git add -- {counter}` and `git commit -m {message} -- {counter}`. The path after the double dash limits the commit to that file, whatever else sits in the staging area. The skills that reserve ids pass the flag.
 
 ## Alternatives Considered
 

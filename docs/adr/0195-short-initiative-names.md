@@ -49,7 +49,7 @@ These names stay unchanged:
 - Historical records stay accurate.
 
 **Negative:**
-- The word "roadmap" survives in `roadmap-standards.md` and `plan/roadmap/`, so a reader must learn which uses are intended.
+- The word "roadmap" survives in `roadmap-standards.md` and `plan/roadmap/`, so a reader must learn which uses the pack intends.
 - Old test files keep old names, so a search for them finds old terms.
 
 **Risks:**

@@ -101,3 +101,7 @@ Complete: P1 (2026-11-09T19:58:30Z)
 - Done: U6 (content, primary, high, 2026-11-09T20:06:43Z)
 - Done: U7 (content, primary, high, 2026-11-09T20:06:43Z)
 - Done: U14 (content, primary, high, 2026-11-09T20:07:30Z)
+- Done: U8 (content, primary, high, 2026-11-09T20:11:11Z)
+- Done: U10 (content, primary, high, 2026-11-09T20:11:11Z)
+- Done: U12 (content, primary, high, 2026-11-09T20:11:11Z)
+- Done: U13 (content, primary, high, 2026-11-09T20:11:11Z), six migrations/_done files kept as they were, because a test pins them to main

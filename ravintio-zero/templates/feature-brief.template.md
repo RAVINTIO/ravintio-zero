@@ -91,7 +91,7 @@ The agent implements within these constraints - it does not choose the architect
 
 ### Deferred
 - {{what might be delivered later but not now}}
-- {{note what is blocked until deferred items are resolved}}
+- {{note what the deferred items block until you resolve them}}
 
 ## Non-Functional Requirements
 
@@ -128,7 +128,7 @@ Before writing acceptance criteria, consider the paths your feature must handle.
 
 > {{error-sad-path}}
 
-**Cross-session continuity:** If the pipeline or user session is interrupted mid-run, what state is at risk? How is it recovered? Are there partial-write scenarios that leave inconsistent state?
+**Cross-session continuity:** If something interrupts the pipeline or user session mid-run, what state is at risk? How is it recovered? Are there partial-write scenarios that leave inconsistent state?
 
 > {{cross-session-continuity}}
 

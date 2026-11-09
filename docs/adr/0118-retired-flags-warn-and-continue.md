@@ -58,7 +58,7 @@ This supersedes the "Keep the flags as no-ops" rejection in ADR-0107. The rest o
 
 **Negative:**
 - The retired list is code that setup carries for as long as old markers exist.
-- A person who passes a retired flag on purpose gets a warning, not an error, so a script that relied on the exit 1 now passes.
+- A person who passes a retired flag on purpose gets a warning, not an error. A script that relied on the exit 1 now passes.
 
 **Risks:**
 - The value rule skips a real value that happens to start with `--`. No current flag takes a value, so this can't occur today.

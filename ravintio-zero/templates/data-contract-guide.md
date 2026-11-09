@@ -8,7 +8,7 @@
 
 ## Purpose
 
-The Data Contract is the authoritative schema definition for a component's data. It defines which tables exist, what columns they have, what invariants must hold, and who owns the data. It is the single source of truth - the database schema is derived from this document, not the other way around.
+The Data Contract is the authoritative schema definition for a component's data. It defines which tables exist, what columns they have, what invariants must hold, and who owns the data. It is the single source of truth - the database schema derives from this document, not the other way around.
 
 ---
 
@@ -20,7 +20,7 @@ The **implement skill** creates it during the implement phase (P2) when building
 
 ## The Ownership Rule
 
-Data is owned by exactly one component. This is a RAVINTIO hard limit.
+Exactly one component owns each piece of data. This is a RAVINTIO hard limit.
 
 - The owning component reads and writes its data
 - Other components access it via the owner's API (REST, gRPC, events)
@@ -53,7 +53,7 @@ Invariants become CHECK constraints, triggers, or application-layer validations 
 
 ### Migration History
 
-Every schema change is recorded here. The migration proposal process:
+This section records every schema change. The migration proposal process:
 
 1. An agent needs to change the schema
 2. It writes a migration proposal to `src/{component-id}/docs/migrations/proposed-{description}.md`
@@ -61,15 +61,15 @@ Every schema change is recorded here. The migration proposal process:
 4. The human reviews and approves (or rejects)
 5. If approved, the agent applies the migration and updates the data contract
 
-**Destructive operations** (drop column, drop table, rename) additionally require explicit human approval - this is a hard limit.
+**Destructive operations** (drop column, drop table, rename) also require explicit human approval - this is a hard limit.
 
 ---
 
 ## Common Mistakes
 
 1. **Direct schema edits.** Never modify the data contract directly during implementation. Always go through a migration proposal.
-2. **Missing invariants.** If the data has rules (uniqueness, referential integrity, value ranges), they must be here - not just in application code.
-3. **Shared ownership.** If two components "need" to own the same data, the architecture is wrong. One owns it; the other consumes it via API.
+2. **Missing invariants.** If the data has rules (uniqueness, referential integrity, value ranges), they must be here - not only in application code.
+3. **Shared ownership.** If two components "need" to own the same data, the architecture is wrong. One owns it. The other consumes it via API.
 4. **No migration history.** Every change, no matter how small, gets a migration entry. This is the audit trail for schema evolution.
 
 ---

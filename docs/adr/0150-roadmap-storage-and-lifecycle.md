@@ -17,7 +17,7 @@ feature: "0000043-autonomous-roadmaps"
 
 Work that spans several features has no home in `plan/`. The backlog holds single entries and the human sequences them by hand. The human wants a roadmap to hold an ordered chain of steps, where each step is one feature built from one or more backlog entries.
 
-The backlog already solves filing. A human or agent files an entry on any branch, and the entry reaches `main` through the normal PR. Pickup offers pull-in, leave, or discard, and a malformed entry is flagged. The human asked that roadmap drafts follow the same model. They also ruled out a chore PR to land a draft (build log, "chart approval").
+The backlog already solves filing. A human or agent files an entry on any branch, and the entry reaches `main` through the normal PR. Pickup offers pull-in, leave, or discard and flags a malformed entry. The human asked that roadmap drafts follow the same model. They also ruled out a chore PR to land a draft (build log, "chart approval").
 
 An active roadmap needs more than a draft. It needs a branch, a status, a `position`, and a step table that changes with every merged step. Each step then runs as a normal feature in `plan/current/`.
 

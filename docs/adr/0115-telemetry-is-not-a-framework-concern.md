@@ -21,14 +21,14 @@ the events actually happened. A standards document defines the envelope and a cl
 setup flag installs the lot, a verification script confirms the install, and about 20 test suites
 cover it.
 
-Every consumer of Zero pays for that surface. It enlarges the install, adds two setup flags, adds a
-standards document to every phase skill's bundle, and lengthens every test run, whether or not the
+Every consumer of Zero pays for that surface. It enlarges the install and adds two setup flags. It also adds a
+standards document to every phase skill's bundle and lengthens every test run. This holds whether or not the
 consumer ever points it at a backend. Zero's stated job is narrower: enforce the confirmed-design
 pipeline. Observability of an agent session is a property of the tool running the session, not of
 the specification framework the session follows.
 
 The system also failed in practice. Feature 0000032 found that the receipt hook rejected the phase
-name the standards document told agents to send, which produced five failure markers in one run and
+name the standards document told agents to send. This produced five failure markers in one run and
 a block-or-proceed question at the next P0. That defect went unfixed because nothing depended on
 the telemetry it guarded.
 
@@ -77,7 +77,7 @@ the telemetry it guarded.
 
 **Negative:**
 - Anyone relying on Zero's telemetry loses it with no migration path, and must wire their own tool-level hooks. The framework offers no guidance, by decision.
-- The event vocabulary and envelope design are lost to git history. Reviving them means rebuilding from the archive rather than reading a current document.
+- The event vocabulary and envelope design survive only in git history. Reviving them means rebuilding from the archive rather than reading a current document.
 
 **Risks:**
 - The enforcement hook installer interleaves two telemetry entries with six surviving hooks in one array build and one de-duplication filter. A careless deletion drops a hook that must survive. ADR-0116 addresses the upgrade half of this. Tests cover the install half.
@@ -87,12 +87,12 @@ the telemetry it guarded.
 - ADR-0116 - depends-on (what happens to a project that already installed telemetry)
 - ADR-0117 - depends-on (what happens to the artifacts that existed only to serve telemetry)
 - ADR-0107 - related-to (Claude Code is the only tool target)
-- ADR-0111 - related-to (living docs describe the present, so the removal is not narrated in `docs/`)
+- ADR-0111 - related-to (living docs describe the present, so `docs/` does not narrate the removal)
 
 ## Supersedes
 
 - The telemetry decisions of features 0000018, 0000024, 0000026, 0000027, and 0000028 as they apply to `planifest-zero`. Those ADRs live in git history. Their subject no longer exists in this component.
-- ADR-0112's record shape, in one narrow respect: the `backendUrl` field is dropped. Every other part of that decision, including the record's location at `plan/state/{tool}.md` and its git-tracked status, stands unchanged.
+- ADR-0112's record shape, in one narrow respect: this ADR drops the `backendUrl` field. Every other part of that decision, including the record's location at `plan/state/{tool}.md` and its git-tracked status, stands unchanged.
 
 ## Superseded By
 

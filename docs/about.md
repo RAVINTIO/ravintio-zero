@@ -6,7 +6,7 @@ updated: "7 Nov 2026"
 # About
 
 > This file is the canonical version record for this project.
-> Do not edit manually. Version changes are confirmed during discovery.
+> Do not edit manually. Discovery confirms version changes.
 
 | Field | Value |
 |-------|-------|

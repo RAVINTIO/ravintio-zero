@@ -16,7 +16,7 @@ version: "0.1.0"
 ## In Scope
 
 - {{what this feature / phase will deliver}}
-- {{be specific - "authentication" is vague; "JWT-based auth with refresh tokens, scoped to the auth-service component" is clear}}
+- {{be specific - "authentication" is vague, while "JWT-based auth with refresh tokens, scoped to the auth-service component" is clear}}
 
 ## Out of Scope
 
@@ -25,5 +25,5 @@ version: "0.1.0"
 ## Deferred
 
 - {{what might be delivered later}}
-- {{note what is blocked until each deferred item is resolved}}
+- {{note what each deferred item blocks until you resolve it}}
 

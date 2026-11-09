@@ -64,7 +64,7 @@ Both scripts filter `PreToolUse` and `UserPromptSubmit` one command at a time. T
 
 - The 0000037 any-matcher decision (`plan/_archive/0000037-self-host-on-planifest-zero-2026-10-17/adr/`) - extends. This ADR refines its repair rule and does not replace it.
 - ADR-0119 - depends-on (settings writes stay atomic)
-- ADR-0131 - related-to (the stack is unchanged)
+- ADR-0131 - related-to (the stack stays the same)
 
 ## Supersedes
 

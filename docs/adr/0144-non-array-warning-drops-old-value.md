@@ -52,7 +52,7 @@ A hook command can embed a token or a secret. The printed value then reaches the
 - Both scripts print one fixed line, so the parity suite can compare them byte for byte.
 
 **Negative:**
-- The human can no longer recover a hand-written non-array value from the warning. The value is lost unless they have their own copy, such as git history.
+- The human can no longer recover a hand-written non-array value from the warning. The value disappears unless they have their own copy, such as git history.
 
 **Risks:**
 - The two scripts' warning text can drift apart. The parity test asserts the exact line in both to catch this.
@@ -62,7 +62,7 @@ A hook command can embed a token or a secret. The printed value then reaches the
 
 - ADR-0129 - extends (supersedes decision item 4 only, the rest stands)
 - 0000033 req-004 - depends-on (setup never prints settings content)
-- ADR-0138 - related-to (the shape check line is unchanged)
+- ADR-0138 - related-to (the shape check line stays the same)
 
 ## Supersedes
 

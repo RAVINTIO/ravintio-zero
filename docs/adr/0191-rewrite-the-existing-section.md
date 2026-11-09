@@ -19,7 +19,7 @@ Backlog entry 0000184 asks for a new subsection after the **Orchestrator Sentine
 
 ## Decision
 
-Rewrite the body of `## Strict Orchestrator Mode` from the entry's draft and keep the heading. Point the two links at its anchor. Correct the draft where it differs from the hook: the hook acts only while `plan/.orchestrator-active` exists, and it asks for a timestamp when it has no session id. The stack stays Markdown and Bash, with no new dependency.
+Rewrite the body of `## Strict Orchestrator Mode` from the entry's draft and keep the heading. Point the two links at its anchor. Correct the draft where it differs from the hook. The hook acts only while `plan/.orchestrator-active` exists. It asks for a timestamp when it has no session id. The stack stays Markdown and Bash, with no new dependency.
 
 ## Alternatives Considered
 

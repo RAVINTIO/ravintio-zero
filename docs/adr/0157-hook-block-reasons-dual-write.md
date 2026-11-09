@@ -15,7 +15,7 @@ feature: "0000151-hardening-efficiency-and-ci"
 
 ## Context
 
-The Claude Code hooks reference (hooks.md) states three facts. On exit 2, Claude sees stderr. Plain stdout from a hook is not shown. Valid JSON on stdout supplies the reason in place of stderr.
+The Claude Code hooks reference (hooks.md) states three facts. On exit 2, Claude sees stderr. Claude does not show plain stdout from a hook. Valid JSON on stdout supplies the reason in place of stderr.
 
 `merge-guard` writes its reason to both streams. `gate-write`, `em-dash-guard`, and `ratchet-check` write to stdout only. The agent therefore sees a bare block with no reason, and the human cannot tell why a write failed. Existing tests read stdout, so a move to stderr alone would break them.
 
@@ -45,7 +45,7 @@ Each of the three hooks writes the block reason to stderr and to stdout, then ex
 ## Consequences
 
 **Positive:**
-- The agent sees why a write was blocked and can correct it.
+- The agent sees why a hook blocked a write and can correct it.
 - All four blocking hooks behave the same way.
 - Existing stdout tests keep passing.
 

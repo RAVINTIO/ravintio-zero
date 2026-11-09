@@ -15,7 +15,7 @@ feature: "0000034-setup-hardening"
 
 ## Context
 
-`setup.sh` writes `.claude/settings.json` with `fs.writeFileSync` at three sites. `setup.ps1` writes it with `Set-Content` at four sites. Both write in place. If a write stops partway, for example on a full disk, the file can be left truncated (backlog 0000091). Claude Code then can't parse it, so every hook and permission in it is lost.
+`setup.sh` writes `.claude/settings.json` with `fs.writeFileSync` at three sites. `setup.ps1` writes it with `Set-Content` at four sites. Both write in place. If a write stops partway, for example on a full disk, the file can be left truncated (backlog 0000091). Claude Code then can't parse it and loses every hook and permission in it.
 
 `settings.json` is the one file setup writes that also holds the person's own entries. The boot file and the flags marker are setup's own output, and a rerun rewrites them whole.
 
@@ -27,7 +27,7 @@ feature: "0000034-setup-hardening"
 4. If the write fails, setup removes the temporary file and leaves the original unchanged. Each site keeps its current failure behaviour, whether a warning or a stop.
 5. Each run overwrites any leftover temporary file.
 6. Setup removes any leftover temporary file before writing, then creates it exclusively, so a planted link at that path is never followed.
-7. The temporary file takes the original's mode. A read-only `settings.json` stays unchanged. In `setup.sh`, a symlinked `settings.json` is written through to its real file.
+7. The temporary file takes the original's mode. A read-only `settings.json` stays unchanged. `setup.sh` writes a symlinked `settings.json` through to its real file.
 8. The boot file, flags marker, and setup record keep their current writes.
 
 ## Alternatives Considered
@@ -74,4 +74,4 @@ feature: "0000034-setup-hardening"
 
 ## Revision
 
-**2026-10-16, v0.1.1 (P5 security fix, classification: additive).** The P5 review found three Medium issues in the first version. A planted symlink at the temporary path was followed. The rename reset the file mode. `Move-Item -Force` deletes the target first, so a failed move lost both copies. Decisions 3, 6, and 7 now close them.
+**2026-10-16, v0.1.1 (P5 security fix, classification: additive).** The P5 review found three Medium issues in the first version. The script followed a planted symlink at the temporary path. The rename reset the file mode. `Move-Item -Force` deletes the target first, so a failed move lost both copies. Decisions 3, 6, and 7 now close them.

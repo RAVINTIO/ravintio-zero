@@ -35,8 +35,8 @@ path after a successful write, print one line, warn without failing.
 
 ## Decision
 
-1. On every setup run, remove telemetry hook entries from the project's `.claude/settings.json`,
-   identified by their command string referencing the telemetry hook modules or by the
+1. On every setup run, remove telemetry hook entries from the project's `.claude/settings.json`.
+   Identify them by a command string that references the telemetry hook modules or by the
    `mcp__structured-telemetry-mcp__emit_event` matcher. A command references a module only when
    it runs `<module>.mjs` at a path boundary, matched case-sensitively in both setup scripts.
    A bare substring is not enough, so a user hook such as `./my-tools/emit-event-logger.sh` stays.
@@ -69,11 +69,11 @@ path after a successful write, print one line, warn without failing.
 ## Consequences
 
 **Positive:**
-- An upgraded project is repaired by the same command that upgrades it, with no manual step and no separate migration.
+- The same command that upgrades a project also repairs it, with no manual step and no separate migration.
 - After one run, an upgraded project and a fresh install are indistinguishable on disk.
 
 **Negative:**
-- Setup now edits entries in `.claude/settings.json` that it did not write during this run, which is a wider claim over that file than it made before. The claim is limited to entries matching the telemetry commands setup itself once wrote.
+- Setup now edits entries in `.claude/settings.json` that it did not write during this run. That is a wider claim over the file than it made before. The claim covers only entries matching the telemetry commands setup itself once wrote.
 - The cleanup code outlives its usefulness. Once no project in the world has telemetry wiring, it is dead weight that still runs on every invocation.
 
 **Risks:**
