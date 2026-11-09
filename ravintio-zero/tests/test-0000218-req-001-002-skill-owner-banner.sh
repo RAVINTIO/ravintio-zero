@@ -11,8 +11,8 @@ set -uo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
-ZERO_DIR="$SCRIPT_DIR/.."
-REPO_ROOT="$ZERO_DIR/.."
+ZERO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+REPO_ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
 AUTO_TRIGGER="$ZERO_DIR/hooks/enforcement/auto-trigger-orchestrator.mjs"
 PRESENCE="$ZERO_DIR/hooks/enforcement/check-orchestrator-presence.mjs"
 

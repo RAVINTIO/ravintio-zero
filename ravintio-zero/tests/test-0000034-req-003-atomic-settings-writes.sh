@@ -12,8 +12,8 @@ set -uo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
-ZERO_DIR="$SCRIPT_DIR/.."
-REPO_ROOT="$(cd "$ZERO_DIR/.." && pwd)"
+ZERO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+REPO_ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
 
 make_workspace() {
   local dir

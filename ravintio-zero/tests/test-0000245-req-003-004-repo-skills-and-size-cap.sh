@@ -9,7 +9,7 @@ unset RAVINTIO_INITIATIVE_STEP
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 ZERO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-REPO_ROOT="$(cd "$ZERO_DIR/.." && pwd)"
+REPO_ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
 
 WS="$(mktemp -d -t ravintio_0000245_req003_XXXXXX)"
 trap 'rm -rf "$WS"' EXIT

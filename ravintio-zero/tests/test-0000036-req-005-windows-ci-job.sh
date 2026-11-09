@@ -10,7 +10,7 @@ set -uo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
-WORKFLOW="$SCRIPT_DIR/../../.github/workflows/ravintio.yml"
+WORKFLOW="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel 2>/dev/null)/.github/workflows/ravintio.yml"
 
 if [ ! -f "$WORKFLOW" ]; then
   echo "  SKIP: no repo workflow next to ravintio-zero/, so this is a consumer copy"
@@ -30,7 +30,7 @@ assert_equals "0" "$(printf '%s\n' "$JOB" | grep -c 'secrets\.' || true)" "req-0
 # PowerShell 5.1, and pwsh runs the suites on Linux.
 assert_contains "shell: powershell" "$JOB" "req-005: the job runs under Windows PowerShell 5.1"
 assert_equals "0" "$(printf '%s\n' "$JOB" | grep -c 'shell: pwsh' || true)" "req-005: no Windows job runs pwsh"
-assert_equals "1" "$(printf '%s\n' "$JOB" | grep -c 'ravintio-zero/tests/run-tests.ps1' || true)" \
+assert_equals "1" "$(printf '%s\n' "$JOB" | grep -c 'src/ravintio-zero/tests/run-tests.ps1' || true)" \
   "req-005: one step runs run-tests.ps1 for each shard"
 
 # P5 S-005 and S-006.

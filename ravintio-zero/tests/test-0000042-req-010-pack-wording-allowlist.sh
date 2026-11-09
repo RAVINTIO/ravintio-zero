@@ -24,6 +24,7 @@ EXCLUDED_PREFIXES=(
   "docs/adr/"                         # ADRs moved out of the archive: history (0000384)
   "plan/changelog/"                   # release notes: history
   "ravintio-zero/migrations/_done/"  # applied migrations: past records
+  "src/ravintio-zero/migrations/_done/"  # the same records in the source folder
   "plan/current/"                     # this feature quotes the old words to describe the rename, until ship archives it
 )
 
@@ -102,11 +103,12 @@ check_lines() {
   local root="$1" path num text
   while IFS= read -r path; do
     [ -f "$root/$path" ] || continue
+    local apath="${path#src/}"
     while IFS= read -r hit; do
       [ -n "$hit" ] || continue
       num="${hit%%:*}"
       text="${hit#*:}"
-      allowed "$path" "$text" || echo "$path:$num"
+      allowed "$apath" "$text" || echo "$path:$num"
     done <<< "$(grep -inI -- framework "$root/$path" 2>/dev/null)"
   done
 }

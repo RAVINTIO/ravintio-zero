@@ -15,8 +15,12 @@ COMMIT_MESSAGES=$(git log $TARGET_BRANCH...HEAD --format="%s")
 
 # Brand guard (0000394): in the pack source only, flag the retired product name
 # in the files this push changes. It reads the allowlist that CI uses.
-if grep -q '^id: "ravintio-zero"' product.yml 2>/dev/null && [ -f ravintio-zero/scripts/brand-guard.sh ]; then
-    BRAND_HITS=$(git diff --name-only --diff-filter=d $TARGET_BRANCH...HEAD | bash ravintio-zero/scripts/brand-guard.sh)
+BRAND_GUARD=""
+for candidate in src/ravintio-zero/scripts/brand-guard.sh ravintio-zero/scripts/brand-guard.sh; do
+    if [ -f "$candidate" ]; then BRAND_GUARD="$candidate"; break; fi
+done
+if grep -q '^id: "ravintio-zero"' product.yml 2>/dev/null && [ -n "$BRAND_GUARD" ]; then
+    BRAND_HITS=$(git diff --name-only --diff-filter=d $TARGET_BRANCH...HEAD | bash "$BRAND_GUARD")
     if [ -n "$BRAND_HITS" ]; then
         echo "❌ RAVINTIO BRAND GUARD FAILED: Push Rejected."
         echo "----------------------------------------------------------------"

@@ -3,10 +3,11 @@
 set -uo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
-ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
+ZERO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 echo "=== REQ-004 AC-1: both ignore files hold the rule ==="
-for f in "$ROOT/.gitignore" "$ROOT/ravintio-zero/.gitignore"; do
+for f in "$ROOT/.gitignore" "$ZERO_DIR/.gitignore"; do
   assert_equals "1" "$(grep -cxF 'plan/.prefix-misses.log' "$f")" "REQ-004: ${f#"$ROOT"/} holds the rule once"
 done
 
@@ -18,6 +19,6 @@ git -C "$WS" init -q
 cp "$ROOT/.gitignore" "$WS/.gitignore"
 : > "$WS/.git/info/exclude"
 assert_equals "plan/.prefix-misses.log" "$(git -C "$WS" check-ignore plan/.prefix-misses.log)" "REQ-004: the root .gitignore ignores the log"
-cp "$ROOT/ravintio-zero/.gitignore" "$WS/.gitignore"
+cp "$ZERO_DIR/.gitignore" "$WS/.gitignore"
 assert_equals "plan/.prefix-misses.log" "$(git -C "$WS" check-ignore plan/.prefix-misses.log)" "REQ-004: the pack .gitignore ignores the log"
 print_summary

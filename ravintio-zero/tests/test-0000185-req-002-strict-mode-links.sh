@@ -5,7 +5,7 @@
 set -uo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 ZERO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-REPO_DIR="$(cd "$ZERO_DIR/.." && pwd)"
+REPO_DIR="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
 GS="$ZERO_DIR/getting-started.md"

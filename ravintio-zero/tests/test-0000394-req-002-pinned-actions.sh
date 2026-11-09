@@ -10,9 +10,9 @@ set -uo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
-ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
 WF_DIR="$ROOT/.github/workflows"
-TPL="$ROOT/ravintio-zero/hooks/ravintio.yml"
+TPL="$SCRIPT_DIR/../hooks/ravintio.yml"
 
 echo ""
 echo "=== req-002 AC-1: no action uses a floating tag ==="
