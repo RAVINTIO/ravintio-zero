@@ -51,7 +51,7 @@ echo "=== req-002: hook commands use the project root ==="
 CMDS="$(hook_commands "$WS/.claude/settings.json")"
 assert_equals "0" "$(printf '%s\n' "$CMDS" | grep -c -F 'node ".claude/')" "req-002: no command is relative to the working directory"
 assert_equals "0" "$(printf '%s\n' "$CMDS" | grep -v -c -F 'CLAUDE_PROJECT_DIR')" "req-002: every command reads CLAUDE_PROJECT_DIR"
-assert_equals "8" "$(printf '%s\n' "$CMDS" | grep -c -F ' guard ')" "req-002: eight PreToolUse commands run in guard mode"
+assert_equals "9" "$(printf '%s\n' "$CMDS" | grep -c -F ' guard ')" "req-002: nine PreToolUse commands run in guard mode"
 assert_equals "4" "$(printf '%s\n' "$CMDS" | grep -c -F ' advisory ')" "req-002: four commands run in advisory mode"
 
 # AC-1: every command runs from a subfolder and exits like its script.
@@ -79,7 +79,7 @@ mkdir -p "$WS/.claude"
 printf '%s\n' '{"hooks":{"PreToolUse":[{"matcher":"Write","hooks":[{"type":"command","command":"node \".claude/hooks/enforcement/gate-write.mjs\""}]}]}}' > "$WS/.claude/settings.json"
 (cd "$WS" && bash ravintio-zero/setup.sh claude-code >/dev/null 2>&1)
 CMDS="$(hook_commands "$WS/.claude/settings.json")"
-assert_equals "2" "$(printf '%s\n' "$CMDS" | grep -c -F 'gate-write.mjs')" "req-002 AC-3: gate-write appears for Write and Edit only"
+assert_equals "3" "$(printf '%s\n' "$CMDS" | grep -c -F 'gate-write.mjs')" "req-002 AC-3: gate-write appears for Write, Edit and Bash only"
 assert_equals "0" "$(printf '%s\n' "$CMDS" | grep -c -F 'node ".claude/')" "req-002 AC-3: the old relative command is gone"
 rm -rf "$WS"
 

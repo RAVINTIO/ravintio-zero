@@ -757,7 +757,8 @@ install_enforcement_hooks() {
         }
       }
       // PreToolUse: gate-write + ratchet-check + em-dash-guard for Write and Edit,
-      // then merge-guard and block-forced-add for Bash (0000043 req-006, 0000317 req-002)
+      // then merge-guard, block-forced-add and gate-write for Bash (0000043 req-006,
+      // 0000317 req-002, 0000393 req-001)
       // (idempotent: remove then re-add). Remove the three modules on any
       // matcher, so an old Write|Edit entry goes too (0000037 ADR-003).
       const preToolModule = /(^|[\s"\x27\/\\])(gate-write|ratchet-check|em-dash-guard|merge-guard|block-forced-add)\.mjs\b/;
@@ -770,7 +771,8 @@ install_enforcement_hooks() {
         {matcher:"Write", hooks:[{type:"command",command:emDash}]},
         {matcher:"Edit",  hooks:[{type:"command",command:emDash}]},
         {matcher:"Bash",  hooks:[{type:"command",command:mergeGuard}]},
-        {matcher:"Bash",  hooks:[{type:"command",command:forcedAdd}]}
+        {matcher:"Bash",  hooks:[{type:"command",command:forcedAdd}]},
+        {matcher:"Bash",  hooks:[{type:"command",command:gate}]}
       );
       // UserPromptSubmit: auto-trigger first, then presence check, then check-design
       // (REQ-002, REQ-008, idempotent). The same path-boundary match as
@@ -795,7 +797,7 @@ install_enforcement_hooks() {
     echo "  ~ $settings_rel (enforcement hooks wired, Bash kept in the project root)"
   else
     echo "  ! Warning: node not found — skipping settings.json enforcement hook wiring"
-    echo "  ! Manually set env.CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR to 1, and add gate-write, ratchet-check, em-dash-guard (Write/Edit PreToolUse), merge-guard and block-forced-add (Bash PreToolUse), auto-trigger-orchestrator, check-orchestrator-presence and check-design (UserPromptSubmit), and check-reply-prefix (Stop) to $settings_rel"
+    echo "  ! Manually set env.CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR to 1, and add gate-write, ratchet-check, em-dash-guard (Write/Edit PreToolUse), merge-guard, block-forced-add and gate-write (Bash PreToolUse), auto-trigger-orchestrator, check-orchestrator-presence and check-design (UserPromptSubmit), and check-reply-prefix (Stop) to $settings_rel"
   fi
 }
 

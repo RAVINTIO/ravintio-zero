@@ -95,6 +95,14 @@
       "does": "Blocks git add with a force flag, and git add with a variable path."
     },
     {
+      "module": "gate-write",
+      "event": "PreToolUse",
+      "matcher": "Bash",
+      "mode": "guard",
+      "blocks": true,
+      "does": "Blocks a write to a plan artefact or a source path until the orchestrator sentinel and a confirmed design exist."
+    },
+    {
       "module": "merge-guard",
       "event": "PreToolUse",
       "matcher": "Bash",

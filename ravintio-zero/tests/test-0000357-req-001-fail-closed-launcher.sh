@@ -36,8 +36,8 @@ new_project
 CMDS="$(hook_commands "$WS/.claude/settings.json")"
 GUARDS="$(printf '%s\n' "$CMDS" | grep -F ' guard ')"
 ADVISORY="$(printf '%s\n' "$CMDS" | grep -F ' advisory ')"
-assert_equals "8" "$(printf '%s\n' "$GUARDS" | grep -c .)" "REQ-001: eight guard commands are wired"
-assert_equals "8" "$(printf '%s\n' "$GUARDS" | grep -c -F -e "$SUFFIX" | tr -d ' ')" "REQ-001: each guard command ends with the suffix"
+assert_equals "9" "$(printf '%s\n' "$GUARDS" | grep -c .)" "REQ-001: nine guard commands are wired"
+assert_equals "9" "$(printf '%s\n' "$GUARDS" | grep -c -F -e "$SUFFIX" | tr -d ' ')" "REQ-001: each guard command ends with the suffix"
 assert_equals "0" "$(printf '%s\n' "$ADVISORY" | grep -c -F -e "$SUFFIX")" "REQ-001 AC-3: no advisory command has the suffix"
 
 rm -f "$WS/.claude/hooks/enforcement/guard-run.mjs"

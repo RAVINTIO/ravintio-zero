@@ -100,8 +100,8 @@ for input in '{"hooks":null}' '{"a":1,"A":2}'; do
   assert_exit_zero "$SETUP_EXIT" "req-001 (c): setup.sh exits 0 on $input"
   assert_equals "0" "$(grep -c -F -- "$SHAPE_LINE" "$WS/setup.err" || true)" \
     "req-001 (c): the shape line is absent on $input"
-  assert_equals "2" "$(count_gate_write "$WS/.claude/settings.json")" \
-    "req-001 (c): gate-write is wired for Write and Edit on $input"
+  assert_equals "3" "$(count_gate_write "$WS/.claude/settings.json")" \
+    "req-001 (c): gate-write is wired for Write, Edit and Bash on $input"
   rm -rf "$WS"
 done
 
