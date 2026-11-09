@@ -15,7 +15,7 @@ status: "closed"
 
 ## Summary
 
-The first run of the new 0000411 suite never finished. Its fake `gh` answered `gh pr checks` with no output, so the queue sat in the CI wait that step 16 (0000392) had merged into `merge-queue.mjs` minutes earlier.
+The first run of the new 0000411 suite never finished. Its fake `gh` answered `gh pr checks` with no output. The queue then sat in the CI wait that step 16 (0000392) had merged into `merge-queue.mjs` minutes earlier.
 
 ## Timeline
 
@@ -31,12 +31,12 @@ First missed chance to catch it: P1 read the script before the base moved, and n
 ## 5 whys
 
 1. The suite did not finish, because the queue waited for CI checks that the fake never reported.
-2. The fake reported no checks, because it was written against the script as read before step 16 merged.
-3. The script was read early, because the plan took its source from an earlier read rather than the branch point.
+2. The fake reported no checks, because the author wrote it against the script as read before step 16 merged.
+3. The author read the script early, because the plan took its source from an earlier read rather than the branch point.
 4. Parallel steps change shared scripts often, so a read taken before the branch point goes stale within minutes.
 5. The plan phase has no step that rereads changed source at the branch point.
 
-**Gap:** the plan standard has no rule to reread the files a unit edits at the branch point when other work merges into the base during the run.
+**Gap:** the plan standard has no rule to reread the files a unit edits. Other work can merge into the base during the run.
 
 ## Actions
 

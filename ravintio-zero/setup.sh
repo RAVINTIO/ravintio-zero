@@ -584,7 +584,7 @@ install_codex_hooks() {
   echo "    block-forced-add (PreToolUse: Bash)"
   echo "  Fallback hooks, stated as instructions in AGENTS.md:"
   echo "    gate-write, ratchet-check, em-dash-guard, auto-trigger-orchestrator,"
-  echo "    check-orchestrator-presence, check-design, check-reply-prefix"
+  echo "    check-orchestrator-presence, check-design, check-reply-prefix, check-reply-writing"
   echo "  Review and trust the project hooks with /hooks in Codex."
   echo "  Until you trust it, Codex skips merge-guard and block-forced-add, including in codex exec."
 }
@@ -659,9 +659,10 @@ install_enforcement_hooks() {
   local merge_guard_cmd="$launcher guard merge-guard.mjs$fail_closed"
   local forced_add_cmd="$launcher guard block-forced-add.mjs$fail_closed"
   local reply_prefix_cmd="$launcher advisory check-reply-prefix.mjs"
+  local reply_writing_cmd="$launcher advisory check-reply-writing.mjs"
 
   if command -v node >/dev/null 2>&1; then
-    RAVINTIO_GATE="$gate_cmd" RAVINTIO_RATCHET="$ratchet_cmd" RAVINTIO_EM_DASH="$em_dash_cmd" RAVINTIO_TRIGGER="$trigger_cmd" RAVINTIO_PRESENCE="$presence_cmd" RAVINTIO_DESIGN="$design_cmd" RAVINTIO_MERGE_GUARD="$merge_guard_cmd" RAVINTIO_FORCED_ADD="$forced_add_cmd" RAVINTIO_REPLY_PREFIX="$reply_prefix_cmd" RAVINTIO_RETIRED="$RETIRED_HOOK_NAMES" RAVINTIO_SETTINGS="$settings" RAVINTIO_SETTINGS_REL="$settings_rel" node -e "$RAVINTIO_WRITE_SETTINGS_JS$RAVINTIO_SETTINGS_SHAPE_JS"'
+    RAVINTIO_GATE="$gate_cmd" RAVINTIO_RATCHET="$ratchet_cmd" RAVINTIO_EM_DASH="$em_dash_cmd" RAVINTIO_TRIGGER="$trigger_cmd" RAVINTIO_PRESENCE="$presence_cmd" RAVINTIO_DESIGN="$design_cmd" RAVINTIO_MERGE_GUARD="$merge_guard_cmd" RAVINTIO_FORCED_ADD="$forced_add_cmd" RAVINTIO_REPLY_PREFIX="$reply_prefix_cmd" RAVINTIO_REPLY_WRITING="$reply_writing_cmd" RAVINTIO_RETIRED="$RETIRED_HOOK_NAMES" RAVINTIO_SETTINGS="$settings" RAVINTIO_SETTINGS_REL="$settings_rel" node -e "$RAVINTIO_WRITE_SETTINGS_JS$RAVINTIO_SETTINGS_SHAPE_JS"'
       const fs = require("fs"), path = require("path");
       const gate     = process.env.RAVINTIO_GATE;
       const ratchet  = process.env.RAVINTIO_RATCHET;
@@ -672,6 +673,7 @@ install_enforcement_hooks() {
       const mergeGuard = process.env.RAVINTIO_MERGE_GUARD;
       const forcedAdd = process.env.RAVINTIO_FORCED_ADD;
       const replyPrefix = process.env.RAVINTIO_REPLY_PREFIX;
+      const replyWriting = process.env.RAVINTIO_REPLY_WRITING;
       const sf       = process.env.RAVINTIO_SETTINGS;
       let s = {};
       // On invalid JSON, print one fixed line that names the file, write
@@ -787,10 +789,11 @@ install_enforcement_hooks() {
       );
       // Stop: check-reply-prefix warns when a reply lacks a prefix (0000200
       // req-004, idempotent). The same path-boundary match as the other events.
-      const stopModule = /(^|[\s"\x27\/\\])(check-reply-prefix)\.mjs\b/;
+      const stopModule = /(^|[\s"\x27\/\\])(check-reply-prefix|check-reply-writing)\.mjs\b/;
       s.hooks.Stop = keepUserCommands(s.hooks.Stop || [], stopModule);
       s.hooks.Stop.push(
-        {matcher:".*", hooks:[{type:"command",command:replyPrefix}]}
+        {matcher:".*", hooks:[{type:"command",command:replyPrefix}]},
+        {matcher:".*", hooks:[{type:"command",command:replyWriting}]}
       );
       fs.mkdirSync(path.dirname(sf),{recursive:true});
       writeSettings(sf, JSON.stringify(s,null,2)+"\n");
@@ -798,7 +801,7 @@ install_enforcement_hooks() {
     echo "  ~ $settings_rel (enforcement hooks wired, Bash kept in the project root)"
   else
     echo "  ! Warning: node not found — skipping settings.json enforcement hook wiring"
-    echo "  ! Manually set env.CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR to 1, and add gate-write, ratchet-check, em-dash-guard (Write/Edit PreToolUse), merge-guard, block-forced-add and gate-write (Bash PreToolUse), auto-trigger-orchestrator, check-orchestrator-presence and check-design (UserPromptSubmit), and check-reply-prefix (Stop) to $settings_rel"
+    echo "  ! Manually set env.CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR to 1, and add gate-write, ratchet-check, em-dash-guard (Write/Edit PreToolUse), merge-guard, block-forced-add and gate-write (Bash PreToolUse), auto-trigger-orchestrator, check-orchestrator-presence and check-design (UserPromptSubmit), check-reply-prefix and check-reply-writing (Stop) to $settings_rel"
   fi
 }
 

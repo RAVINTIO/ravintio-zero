@@ -34,6 +34,7 @@ When discovery starts, the orchestrator writes `plan/.orchestrator-active` conta
 | **check-design** (UserPromptSubmit) | Injects a hard STOP message if neither the sentinel nor a `feature-brief.md` is present |
 | **auto-trigger-orchestrator** (UserPromptSubmit) | Loads the orchestrator skill once per session when no pipeline is active yet |
 | **check-reply-prefix** (Stop) | Warns when the final reply in an active run lacks a valid phase prefix, and logs each miss to `plan/.prefix-misses.log`. It never blocks |
+| **check-reply-writing** (Stop) | Reports sentences over 25 words and blocklist words in the final reply, only when the writing output style is installed. It never blocks |
 | **merge-guard** (PreToolUse, Bash) | Blocks `gh pr merge` unless it is a squash into an `initiative/*` branch. Merging into `main` stays human-only |
 | **block-forced-add** (PreToolUse, Bash) | Blocks `git add -f` and `git add --force`. Leave an ignored file out, or add a negation rule to `.gitignore` |
 

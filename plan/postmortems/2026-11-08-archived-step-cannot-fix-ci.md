@@ -35,10 +35,10 @@ First missed chance to catch it: 03:22:28. Ship step 4.2 in the roadmap standard
 ## 5 whys
 
 1. Why did step 6 block? It could not edit code to fix PR #136, because `gate-write` requires `plan/current/design.md` and ship had already archived it.
-2. Why was the run archived while CI was still open? The ship sequence archives `plan/current/` before it raises the PR and waits for CI. The chart field `**Step CI fixes:** allowed` assumes the step can still edit after the CI wait, but that path is closed by then.
+2. Why was the run archived while CI was still open? The ship sequence archives `plan/current/` before it raises the PR and waits for CI. The chart field `**Step CI fixes:** allowed` assumes the step can still edit after the CI wait, but that path no longer exists by then.
 3. Why did nothing define how to reopen the run? The roadmap standards and `ravintio-ship` name no procedure for restoring an archived run to fix CI. The queued instruction pointed at `plan/current/`, which did not exist.
 4. Why did the step block three times instead of once? The driver detects a block only from the build log in `plan/current/` or a newly archived one. The step could write neither, so the driver saw no block and resumed twice with a prompt that named a missing file.
-5. Why did CI fail at all after a full local pass? The test workspaces relied on a global git identity, and the local run used `pwsh` but not Windows PowerShell 5.1, which keeps a BOM on `CLAUDE.md`. The local suite has no mode that removes the global git identity, and no fixture with a BOM.
+5. Why did CI fail at all after a full local pass? The test workspaces relied on a global git identity. The local run used `pwsh` but not Windows PowerShell 5.1, which keeps a BOM on `CLAUDE.md`. The local suite has no mode that removes the global git identity, and no fixture with a BOM.
 
 **Gap:** the ship sequence archives the run before the CI gate, and no standard defines how a step reopens an archived run. The driver's block detection depends on a file that the step can no longer write.
 
