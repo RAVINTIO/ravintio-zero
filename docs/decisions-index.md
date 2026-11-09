@@ -3,7 +3,7 @@
 > Change record. Index of all ADRs across all features. Updated after every pipeline run.
 > Do not archive this file. Update it in place.
 
-Last updated: 0000389-writing-standard
+Last updated: 0000394-github-security-and-ci-lint
 
 ---
 
@@ -299,3 +299,6 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 | [ADR-0278](adr/0278-leave-existing-style.md) | Setup leaves an existing output style | accepted | Setup sets outputStyle only when absent, and a flag skips the install. | 0000389-writing-standard |
 | [ADR-0279](adr/0279-date-and-semicolon-rules.md) | Dates and semicolons follow the writing standard | accepted | Body-text dates move to ISO or long form, and the semicolon leaves the em dash replacements. | 0000389-writing-standard |
 | [ADR-0280](adr/0280-name-standard-in-briefs.md) | Briefs name the standard | accepted | Output styles reach only the main session, so dispatch prompts and the driver name the standard. | 0000389-writing-standard |
+| [ADR-0281](adr/0281-one-brand-guard-allowlist-file.md) | One brand guard allowlist file | accepted | The CI test and pre-push read one allowlist file, and the guard runs only in the pack source. | 0000394-github-security-and-ci-lint |
+| [ADR-0282](adr/0282-workflow-lint-tooling-and-scope.md) | Workflow lint tooling and scope | accepted | A pinned actionlint and zizmor job in the repo's own workflow, not mirrored to consumers. | 0000394-github-security-and-ci-lint |
+| [ADR-0283](adr/0283-settings-check-and-human-stop.md) | Settings check script and the human stop | accepted | A script lists and checks the admin-only settings, and the step stops once for the human at P3. | 0000394-github-security-and-ci-lint |
