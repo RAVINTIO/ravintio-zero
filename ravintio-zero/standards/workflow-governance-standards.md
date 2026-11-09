@@ -25,10 +25,22 @@ Read this file when you write a marker line or read a workflow governance sectio
 - `Gate revised: P{N} ({ISO-8601 timestamp}, {what changed})`
 - `Improve: REQ-{nnn}: cycle {n}: {finding}: {change}: suite {pass | fail, reverted} ({ISO-8601 timestamp})`
 - `Improve: REQ-{nnn}: cycle {n}: no change worth making ({ISO-8601 timestamp})`
+- `RED: {unit} ({ISO-8601 timestamp})`
+- `GREEN: {unit} ({ISO-8601 timestamp})`
+
+The implement skill writes the `RED:` and `GREEN:` markers for an inline unit. `workflow-metrics.mjs` does not count them. `build-log-check.mjs` checks that each `GREEN:` follows a `RED:` for the same unit.
 
 The implement skill writes the `Improve:` markers, one per improvement cycle. `workflow-metrics.mjs` does not count them, and no threshold applies. They record the gain for a human to read.
 
 Write each marker line to `build-log.md`. A loop may also write markers to its `loop-state-*.md` file.
+
+## Dispatch by class and tier
+
+`workflow-metrics.mjs` also prints a `## Dispatch by class and tier` section after the governance table. It reads the `Done:` lines described in `agent-dispatch-standards.md` and lists the unit count and the rework count for each class and tier pair.
+
+- A `Rework: REQ-{nnn}:` marker counts toward the class and tier of the last classified `Done:` line before it that names that requirement. With none, it counts as `unclassified`.
+- A `Done:` line without class fields counts as `unclassified`.
+- The section reports and never blocks. No threshold applies. Later runs use it to tune the tier and effort table.
 
 ## Counting rule
 

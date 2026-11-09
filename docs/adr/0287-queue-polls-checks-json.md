@@ -1,12 +1,12 @@
 ---
-title: "ADR 286: Queue polls checks as JSON"
+title: "ADR 287: Queue polls checks as JSON"
 summary: "The merge queue polls gh pr checks as JSON until every check passes, and names a failed check."
 status: "accepted"
 version: "0.1.0"
 component: "ravintio-zero"
 feature: "0000392-ship-postmortems"
 ---
-# ADR-0286 - Queue polls checks as JSON
+# ADR-0287 - Queue polls checks as JSON
 
 **Status:** accepted
 **Component:** ravintio-zero

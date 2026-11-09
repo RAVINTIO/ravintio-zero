@@ -17,13 +17,17 @@
  *      one-minute margin. A line not yet committed, or a log outside git,
  *      is compared with the current clock (0000358).
  *
- *   7. Each "Resolved:" line, and each "Rework:" line, has a "Postmortem:" line
+ *   7. Every "GREEN: {unit}" line has an earlier "RED: {unit}" line, and every
+ *      "Done: {unit} (..., inline, ...)" line has both markers (0000386).
+ *      A unit name is the text between the marker and " (".
+ *
+ *   8. Each "Resolved:" line, and each "Rework:" line, has a "Postmortem:" line
  *      that names a record. The record exists and passes postmortem-check.mjs
  *      (0000392). A "Postmortem:" line that names a REQ-nnn covers that
  *      requirement. Any other "Postmortem:" line covers one "Resolved:" line
  *      or one "Rework:" line that names no requirement.
  *
- * Every finding names the phase. Exit codes: 0 = clean, 1 = findings.
+ * Every finding names the phase or the unit. Exit codes: 0 = clean, 1 = findings.
  */
 
 import { execFileSync } from "node:child_process";
@@ -139,7 +143,37 @@ function commitTimes(path) {
   });
 }
 
-// Check 7: every stop and every rework has a postmortem (0000392).
+// Check 7: RED before GREEN for each unit, and both markers for an inline Done.
+{
+  const red = new Set(), green = new Set();
+  const seen = new Set();
+  const flag = (msg) => { if (!seen.has(msg)) { seen.add(msg); findings.push(msg); } };
+  const marker = (row, word) => {
+    const m = new RegExp(`^\\s*(?:[-*]\\s*)?${word}:\\s*(.+?)\\s+\\(`).exec(row);
+    return m ? m[1] : null;
+  };
+  let fence = null;
+  for (const row of text.split("\n")) {
+    const f = /^\s*(```|~~~)/.exec(row);
+    if (f) { fence = fence === null ? f[1] : fence === f[1] ? null : fence; continue; }
+    if (fence !== null) continue;
+    const r = marker(row, "RED");
+    if (r !== null) { red.add(r); continue; }
+    const g = marker(row, "GREEN");
+    if (g !== null) {
+      if (!red.has(g)) flag(`Unit ${g}: "GREEN: ${g}" has no earlier "RED: ${g}" line`);
+      green.add(g);
+      continue;
+    }
+    const d = /^\s*(?:[-*]\s*)?Done:\s*(.+?)\s+\(([^)]*)\)/.exec(row);
+    if (d && d[2].split(",").map((x) => x.trim())[1] === "inline") {
+      if (!red.has(d[1])) flag(`Unit ${d[1]}: inline "Done:" line has no "RED: ${d[1]}" line`);
+      if (!green.has(d[1])) flag(`Unit ${d[1]}: inline "Done:" line has no "GREEN: ${d[1]}" line`);
+    }
+  }
+}
+
+// Check 8: every stop and every rework has a postmortem (0000392).
 {
   const lineRe = (word) => new RegExp(`^\\s*(?:[-*]\\s*)?${word}:(.*)$`, "gm");
   const resolved = [...text.matchAll(lineRe("Resolved"))].length;

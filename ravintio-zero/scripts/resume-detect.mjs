@@ -181,7 +181,7 @@ try {
   }
 
   // 10. Units in progress.
-  const unitOk = /^(?:(?:REQ|U)-\d{3}(?: (?:test-writer|implementer|refactor|validate|ship))?|P[0-4] cycle \d{1,2})$/;
+  const unitOk = /^(?:(?:REQ|U)-\d{3}(?: (?:test-writer|implementer|refactor|validate|ship|inline))?|P[0-4] cycle \d{1,2})$/;
   log.forEach((l, i) => {
     const m = /^In progress: (.*?) \(([^()]*)\)\s*$/.exec(l);
     if (!m) return;
