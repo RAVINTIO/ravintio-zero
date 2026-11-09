@@ -47,7 +47,7 @@ Complete: P0 (2026-11-09T16:51:19Z)
 |-------|-------|
 | Start | `2026-11-09T16:51:19Z` |
 | End | `2026-11-09T16:52:43Z` |
-| Wall clock | `3` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-plan |
 | Agents spawned | `0` |
@@ -65,7 +65,7 @@ Complete: P1 (2026-11-09T16:52:43Z)
 |-------|-------|
 | Start | `2026-11-09T16:52:43Z` |
 | End | `2026-11-09T16:58:27Z` |
-| Wall clock | `14` |
+| Wall clock | `6` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | `0` |
@@ -78,3 +78,48 @@ Complete: P1 (2026-11-09T16:52:43Z)
 - Done: U-001 REQ-001 queue waits for GitHub. The 0000378, 0000392, 0000405, 0000043, and two 0000379 suites pass (2026-11-09T16:58:27Z)
 
 Complete: P2 (2026-11-09T16:58:27Z)
+
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-09T16:58:00Z` |
+| End | `2026-11-09T17:08:50Z` |
+| Wall clock | `10` |
+| Model tier | primary |
+| Skills loaded | none |
+| Agents spawned | `0` |
+| Notes | Tests run: 375 suites in a clean clone in 4 shards, 372 passed. Two failures match `baseline-failures.md`. `test-0000151-req-004-prune-retired-hooks.sh` exited 141 (SIGPIPE) under the parallel load, and it passes alone on the branch and on the base. Security: no change to checks or guards. The queue still merges only after CI passes. |
+
+- Tests run: 375 suites, 372 passed, 2 inherited, 1 flake that passes alone (2026-11-09T17:08:50Z)
+
+Complete: P3 (2026-11-09T17:08:50Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-09T17:08:50Z` |
+| End | `2026-11-09T17:08:50Z` |
+| Wall clock | `0` |
+| Model tier | primary |
+| Skills loaded | none |
+| Agents spawned | `0` |
+| Notes | No version bump: this PR is not a chart step. The PR also lands the 2026-11-08 postmortem and backlog entries 0000412 to 0000414, which step 17 missed. |
+
+Complete: P4 (2026-11-09T17:08:50Z)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `17` |
+| Total agents spawned | `0` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `0` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `1` |
