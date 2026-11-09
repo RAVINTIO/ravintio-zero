@@ -134,3 +134,18 @@ Complete: P2 (2026-11-09T20:59:43Z)
 
 Docs edit pass: reviewed docs/about.md, docs/architecture-overview.md, docs/dependency-graph.md, README.md, and three pack root docs. Fixed 4 spots in architecture-overview.md. Cycle count 1. prose-check exit 0. The 176 ADRs are historical records, and the pass skipped them because the linter covers their sentences (2026-11-09T21:01:09Z)
 Complete: P3 (2026-11-09T21:21:16Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-09T21:21:25Z` |
+| End | |
+| Wall clock | |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | none |
+
