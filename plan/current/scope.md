@@ -25,6 +25,7 @@ version: "0.1.0"
 - `plan/_archive/`, `ravintio-zero/tests/`, `CLAUDE.md`, and `AGENTS.md`.
 - Plan history records under `plan/changelog/`, `plan/retrospectives/`, `plan/postmortems/`, and `plan/backlog/`.
 - Changes to the linter rules.
+- The six applied migrations in `ravintio-zero/migrations/_done/`. A test pins them to `main` byte for byte, so they keep their baseline entries.
 
 ## Deferred
 

@@ -43,7 +43,7 @@
 
 ## Scope
 - In: Rewrite the prose of every Markdown file the linter scans, outside the linter's own skips. Lower the baseline with each batch. Update tests that pin rewritten wording.
-- Out: Code, SQL, data values, `plan/_archive/`, `ravintio-zero/tests/`, `CLAUDE.md`, `AGENTS.md`, and the linter rules.
+- Out: The six applied migrations in `ravintio-zero/migrations/_done/` (a test pins them to `main`), code, SQL, data values, `plan/_archive/`, `ravintio-zero/tests/`, `CLAUDE.md`, `AGENTS.md`, and the linter rules.
 - Deferred: Nothing deferred.
 
 ## Assumptions

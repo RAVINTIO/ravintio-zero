@@ -16,7 +16,7 @@ version: "0.1.0"
 As a pack maintainer, I see the baseline drop with each fix, so that new breaches cannot hide behind old ones.
 
 ## Functional Requirements
-- `plan/state/prose-baseline.json` holds no entry for a file in the pack, `docs/`, `ravintio-overrides/`, or the repository root.
+- `plan/state/prose-baseline.json` holds no entry for a file in the pack, `docs/`, `ravintio-overrides/`, or the repository root. The six files in `ravintio-zero/migrations/_done/` are the exception, because a test pins them to `main`.
 - Each batch commit lowers the baseline in the same commit as its fixes.
 - A test that pins rewritten wording changes with the rewrite, and the build log holds a `Rework:` line for it.
 
@@ -24,7 +24,7 @@ As a pack maintainer, I see the baseline drop with each fix, so that new breache
 - [ ] AC-1: Baseline is empty for the pack
   - Given the rewrite is complete
   - When I read `plan/state/prose-baseline.json`
-  - Then no key starts with `ravintio-zero/`, `docs/`, `ravintio-overrides/`, or names a root file
+  - Then the only keys outside `plan/` are the six `ravintio-zero/migrations/_done/` files
 - [ ] AC-2: The suite passes
   - Given the baseline update has landed
   - When I run `bash ravintio-zero/tests/run-tests.sh`
