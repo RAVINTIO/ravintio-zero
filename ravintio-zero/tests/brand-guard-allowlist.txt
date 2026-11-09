@@ -30,6 +30,9 @@
 # Index rows quote the title and summary of an ADR from history (0000384).
 ^docs/decisions-index\.md$	^\| \[ADR-[0-9]{4}\]
 
+# The prose baseline keys name old ADR files, whose file names hold the old words (0000390).
+^plan/state/prose-baseline\.json$	^    "docs/adr/[0-9]{4}-[a-z0-9-]+\.md": \{$
+
 # --- Tests that read pre-rename history ---
 # The 0000034 test builds a fixture that uses the old pack folder name.
 ^ravintio-zero/tests/(regression/)?test-0000034-req-003-atomic-settings-writes\.sh$	OLD_PACK="planifest-zero"
