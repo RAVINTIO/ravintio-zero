@@ -153,7 +153,7 @@ echo "=== req-013: formatting standards ==="
 
 assert_file_exists "$STANDARDS/formatting-standards.md"      "req-013: formatting-standards.md exists"
 FMT=$(cat "$STANDARDS/formatting-standards.md")
-assert_contains "DD MMM YYYY"                   "$FMT" "req-013: DD MMM YYYY date format"
+assert_contains "2026-08-18"                    "$FMT" "req-013: ISO body text date format"
 assert_contains "British English"               "$FMT" "req-013: British English locale"
 assert_contains "Verbosity"                     "$FMT" "req-013: verbosity standard"
 

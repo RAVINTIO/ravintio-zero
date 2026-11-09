@@ -1,6 +1,6 @@
 # Component Registry
 
-Last updated: 0000200-reply-conventions
+Last updated: 0000389-writing-standard
 
 ## Registry
 

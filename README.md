@@ -95,6 +95,7 @@ One optional flag:
 
 | Flag | Effect |
 |------|--------|
+| `--no-writing-style` | Skips the writing standard install. By default, setup writes `.claude/output-styles/ravintio-writing.md` and sets `outputStyle` for Claude Code, or adds a writing section to `AGENTS.md` for Codex. Setup leaves an `outputStyle` that is already set. See [writing standards](ravintio-zero/standards/writing-standards.md). |
 | `--strict-orchestrator` | Writes `plan/.orchestrator-strict`, so the orchestrator must acknowledge each new session before work proceeds. See [strict mode](ravintio-zero/project-operations.md#strict-orchestrator-mode). |
 
 ---
