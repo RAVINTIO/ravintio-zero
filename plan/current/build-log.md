@@ -98,3 +98,17 @@ Run mode: autonomous (2026-11-09T14:55:33Z, initiative step 10)
 | Parallel task batches | 0 |
 | Notes | The full suite ran in 4 local shards in a clean clone of HEAD. CI on the PR runs at ship. |
 - Complete: P3 (2026-11-09T15:35:17Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-09T15:35:39Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship, ravintio-retrospective |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Initiative step. The merge queue sets the version. |
