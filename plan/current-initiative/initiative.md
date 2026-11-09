@@ -161,7 +161,7 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 8 | 0000384-plan-checks | Plan checks | 0000255, 0000263, 0000333, 0000347, 0000280, 0000364 | minor | 0.65.0 | merged | plan | 7 |
 | 9 | 0000385-faster-test-runs | Faster test runs | 0000294, 0000295, 0000296 | minor | 0.67.0 | merged | run | 4 |
 | 10 | 0000386-unit-dispatch | Unit dispatch | 0000330, 0000366 | minor | | pending | run | 9 |
-| 11 | 0000387-light-discovery-and-audits | Light discovery and audits | 0000281, 0000284, 0000348, 0000328, 0000329 | minor | | pending | orchestrator | 8 |
+| 11 | 0000387-light-discovery-and-audits | Light discovery and audits | 0000281, 0000284, 0000348, 0000328, 0000329 | minor | 0.70.0 | merged | orchestrator | 8 |
 | 12 | 0000388-replies-and-questions | Replies and questions | 0000257, 0000258, 0000259, 0000306 | minor | 0.64.0 | merged | orchestrator | 4 |
 | 13 | 0000389-writing-standard | Writing standard | 0000300 | minor | 0.68.0 | merged | writing | 4 |
 | 14 | 0000390-prose-checks | Prose checks | 0000301, 0000303, 0000304 | minor | | pending | writing | 6, 13 |
@@ -188,3 +188,4 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 9 | #130 | tag v0.67.0 | 0.67.0 | 2026-11-09T06:47:22Z |
 | 13 | #135 | tag v0.68.0 | 0.68.0 | 2026-11-09T09:10:30Z |
 | 18 | #137 | tag v0.69.0 | 0.69.0 | 2026-11-09T13:15:22Z |
+| 11 | #143 | tag v0.70.0 | 0.70.0 | 2026-11-09T14:27:49Z |
