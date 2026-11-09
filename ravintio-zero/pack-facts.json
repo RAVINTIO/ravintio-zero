@@ -15,6 +15,10 @@
       "effect": "Remove plan/.orchestrator-strict and turn strict mode off."
     },
     {
+      "flag": "--no-writing-style",
+      "effect": "Skip the writing standard install: no Claude Code output style and outputStyle setting, no Codex AGENTS.md section."
+    },
+    {
       "flag": "--doctor",
       "effect": "Check the install and name each problem. Exits 1 on a problem."
     },

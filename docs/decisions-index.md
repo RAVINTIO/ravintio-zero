@@ -3,7 +3,7 @@
 > Change record. Index of all ADRs across all features. Updated after every pipeline run.
 > Do not archive this file. Update it in place.
 
-Last updated: 0000385-faster-test-runs
+Last updated: 0000389-writing-standard
 
 ---
 
@@ -295,3 +295,7 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 | [ADR-0274](adr/0274-gate-write-takes-bash.md) | gate-write takes Bash calls | accepted | gate-write reads Bash redirects, tee, and sed -i, and setup wires it on the Bash matcher. | 0000393-session-integrity-and-guards |
 | [ADR-0275](adr/0275-baseline-by-suite-name.md) | Baseline failures match by suite name | accepted | The baseline records and compares failed suite file names, because the runner prints no stable test ids. | 0000385-faster-test-runs |
 | [ADR-0276](adr/0276-clean-clone-by-script.md) | Clean clone through a script | accepted | P3 runs the suite through clean-clone-test.mjs, which clones HEAD and removes the clone on every exit. | 0000385-faster-test-runs |
+| [ADR-0277](adr/0277-single-source-generators.md) | One standard generates both outputs | accepted | The standard holds marked regions, and one script prints the Claude Code and Codex outputs from them. | 0000389-writing-standard |
+| [ADR-0278](adr/0278-leave-existing-style.md) | Setup leaves an existing output style | accepted | Setup sets outputStyle only when absent, and a flag skips the install. | 0000389-writing-standard |
+| [ADR-0279](adr/0279-date-and-semicolon-rules.md) | Dates and semicolons follow the writing standard | accepted | Body-text dates move to ISO or long form, and the semicolon leaves the em dash replacements. | 0000389-writing-standard |
+| [ADR-0280](adr/0280-name-standard-in-briefs.md) | Briefs name the standard | accepted | Output styles reach only the main session, so dispatch prompts and the driver name the standard. | 0000389-writing-standard |

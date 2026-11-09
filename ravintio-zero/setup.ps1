@@ -14,6 +14,7 @@
 # Manual arg parsing — supports --flag style for cross-platform consistency
 $Tool = $null
 $StrictOrchestrator = $false
+$NoWritingStyle = $false
 $NoStrictOrchestrator = $false
 $Mode = 'install'
 $UpdateSource = $null
@@ -54,6 +55,7 @@ while ($i -lt $args.Count) {
     switch -CaseSensitive ($args[$i]) {
         { $_ -ceq '-h' -or $_ -ceq '--help' } { $ShowHelp = $true; $i++ }
         '--strict-orchestrator' { $StrictOrchestrator = $true; $i++ }
+        '--no-writing-style' { $NoWritingStyle = $true; $i++ }
         '--no-strict-orchestrator' { $NoStrictOrchestrator = $true; $i++ }
         '--doctor' { Set-RavintioMode 'doctor'; $i++ }
         '--uninstall' { Set-RavintioMode 'uninstall'; $i++ }
@@ -783,6 +785,135 @@ function Merge-AllowedTools {
     } else {
         Write-Host "  - .claude/settings.json (attribution already set)"
     }
+}
+
+function Get-WritingStyleOutput {
+    # Runs scripts/writing-style.mjs for one tool and returns its stdout as
+    # UTF-8 text, or $null with a warning when node or the script is missing
+    # or fails (0000389 ADR-001). Skipping keeps setup going, as for the Codex hooks.
+    param([string]$StyleTool)
+    $script = Join-Path (Join-Path $ScriptDir 'scripts') 'writing-style.mjs'
+    if (-not (Get-Command node -ErrorAction SilentlyContinue)) {
+        Write-Host "  ! Warning: node not found, so the writing standard was not installed"
+        return $null
+    }
+    if (-not [System.IO.File]::Exists($script)) {
+        Write-Host "  ! Warning: scripts/writing-style.mjs not found, so the writing standard was not installed"
+        return $null
+    }
+    try {
+        $psi = New-Object System.Diagnostics.ProcessStartInfo
+        $psi.FileName = (Get-Command node).Source
+        $psi.Arguments = "`"$script`" $StyleTool"
+        $psi.RedirectStandardOutput = $true
+        $psi.RedirectStandardError = $true
+        $psi.UseShellExecute = $false
+        $psi.StandardOutputEncoding = New-Object System.Text.UTF8Encoding $false
+        $p = [System.Diagnostics.Process]::Start($psi)
+        $errTask = $p.StandardError.ReadToEndAsync()
+        $out = $p.StandardOutput.ReadToEnd()
+        $p.WaitForExit()
+        if ($p.ExitCode -ne 0 -or [string]::IsNullOrEmpty($out)) { throw 'writing-style.mjs failed' }
+        return $out
+    }
+    catch {
+        Write-Host "  ! Warning: scripts/writing-style.mjs failed, so the writing standard was not installed"
+        return $null
+    }
+}
+
+function Install-ClaudeWritingStyle {
+    # Writes .claude/output-styles/ravintio-writing.md and sets outputStyle in
+    # settings.json when the key is absent (0000389 req-003). Runs after
+    # Merge-AllowedTools so it is the last writer of settings.json.
+    param([string]$SettingsPath)
+
+    if ($NoWritingStyle) {
+        Write-Host "  - writing style skipped (--no-writing-style)"
+        return
+    }
+    $content = Get-WritingStyleOutput -StyleTool 'claude-code'
+    if ($null -eq $content) { return }
+
+    $utf8 = New-Object System.Text.UTF8Encoding $false
+    $styleRel = '.claude/output-styles/ravintio-writing.md'
+    $stylePath = Join-Path $ProjectRoot $styleRel
+    $state = 'created'
+    if ([System.IO.File]::Exists($stylePath)) {
+        $state = if ([System.IO.File]::ReadAllText($stylePath, $utf8) -ceq $content) { 'unchanged' } else { 'updated' }
+    }
+    if ($state -ne 'unchanged') {
+        New-Item -ItemType Directory -Path (Split-Path -Parent $stylePath) -Force | Out-Null
+        [System.IO.File]::WriteAllText($stylePath, $content, $utf8)
+    }
+    $mark = switch ($state) { 'created' { '+' } 'updated' { '~' } default { '-' } }
+    Write-Host "  $mark $styleRel ($state)"
+
+    $settings = [PSCustomObject]@{}
+    if (Test-Path -LiteralPath $SettingsPath) {
+        $raw = [System.IO.File]::ReadAllText($SettingsPath, $utf8)
+        $check = Read-SettingsObject -Raw $raw -Settings ([ref]$settings)
+        if ($check -eq 'invalid') {
+            [Console]::Error.WriteLine("! Error: .claude/settings.json is not valid JSON. Fix it and rerun setup.")
+            exit 1
+        }
+        if ($check -ne 'ok') {
+            Write-Warning "Could not read .claude/settings.json as a JSON object, so outputStyle was not set"
+            return
+        }
+    }
+    $prop = $settings.PSObject.Properties['outputStyle']
+    if ($null -eq $prop) {
+        $settings | Add-Member -NotePropertyName 'outputStyle' -NotePropertyValue 'ravintio-writing' -Force
+        $dir = Split-Path -Parent $SettingsPath
+        if (-not (Test-Path $dir)) { New-Item -ItemType Directory -Path $dir -Force | Out-Null }
+        Write-SettingsOrExit -Path $SettingsPath -Json ($settings | ConvertTo-Json -Depth 100)
+        Write-Host "  ~ .claude/settings.json (outputStyle set to ravintio-writing)"
+    }
+    elseif ("$($prop.Value)" -ceq 'ravintio-writing') {
+        Write-Host "  - .claude/settings.json (outputStyle already ravintio-writing)"
+    }
+    else {
+        Write-Host "  - .claude/settings.json (outputStyle already set to $($prop.Value), left as is)"
+    }
+}
+
+function Install-CodexWritingBlock {
+    # Makes AGENTS.md hold exactly one writing block (0000389 req-004). An
+    # existing block is replaced, otherwise one is appended. The override
+    # stripper matches its own markers only, so it leaves this block alone.
+    param([string]$BootFilePath)
+
+    if ($NoWritingStyle) {
+        Write-Host "  - writing style skipped (--no-writing-style)"
+        return
+    }
+    $block = Get-WritingStyleOutput -StyleTool 'codex'
+    if ($null -eq $block) { return }
+    $block = $block.TrimEnd("`r", "`n")
+
+    $utf8 = New-Object System.Text.UTF8Encoding $false
+    $start = '<!-- ravintio-writing:start -->'
+    $end = '<!-- ravintio-writing:end -->'
+    $text = [System.IO.File]::ReadAllText($BootFilePath, $utf8).Replace("`r`n", "`n")
+    $pattern = '(?s)' + [regex]::Escape($start) + '.*?' + [regex]::Escape($end)
+    if ($text.Contains($start)) {
+        $new = [regex]::Replace($text, $pattern, { param($m) $block }, 'None')
+        # Any second block goes, so one remains.
+        $first = $new.IndexOf($start)
+        $afterFirst = $first + $block.Length
+        $rest = [regex]::Replace($new.Substring($afterFirst), "\n*$pattern", '')
+        $new = $new.Substring(0, $afterFirst) + $rest
+        $state = if ($new -ceq $text) { 'unchanged' } else { 'updated' }
+    }
+    else {
+        $new = $text.TrimEnd("`n") + "`n`n" + $block + "`n"
+        $state = 'added'
+    }
+    if ($new.Length -gt 0 -and -not $new.EndsWith("`n")) { $new += "`n" }
+    if ($state -ne 'unchanged') { [System.IO.File]::WriteAllText($BootFilePath, $new, $utf8) }
+    $mark = switch ($state) { 'added' { '+' } 'updated' { '~' } default { '-' } }
+    Write-Host "  $mark AGENTS.md (writing section $state)"
 }
 
 function Remove-LeftoverSettingsTmp {
@@ -1522,6 +1653,13 @@ function Invoke-RavintioSetup {
     if ($toolConfig.SettingsFile) {
         $settingsPath = Join-Path $ProjectRoot $toolConfig.SettingsFile
         Merge-AllowedTools -SettingsPath $settingsPath
+        # Last writer of settings.json (0000389 ADR-002).
+        Install-ClaudeWritingStyle -SettingsPath $settingsPath
+    }
+
+    # Codex gets the writing block in AGENTS.md, after the override instructions (0000389).
+    if ($ToolName -ceq 'codex' -and $toolConfig.BootFile) {
+        Install-CodexWritingBlock -BootFilePath (Join-Path $ProjectRoot $toolConfig.BootFile)
     }
 
     # Write manifest listing all installed skill directories, relative to the repo root
@@ -1563,6 +1701,7 @@ function Write-SetupConfigOverride {
 
     $flags = @()
     if ($StrictOrchestrator) { $flags += '--strict-orchestrator' }
+    if ($NoWritingStyle) { $flags += '--no-writing-style' }
 
     $writtenAt = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
 
@@ -1615,6 +1754,7 @@ function Write-SetupFlagsMarker {
 
     $flags = @()
     if ($StrictOrchestrator) { $flags += '--strict-orchestrator' }
+    if ($NoWritingStyle) { $flags += '--no-writing-style' }
 
     $marker = [ordered]@{
         tool          = $ToolName
@@ -1680,6 +1820,8 @@ function Write-RavintioHelp {
     Write-Host "                               orchestrator to ack each new session before proceeding."
     Write-Host "                               A re-run without a strict flag keeps strict mode as it is."
     Write-Host "  --no-strict-orchestrator     Remove plan/.orchestrator-strict and turn strict mode off."
+    Write-Host "  --no-writing-style           Skip the writing standard output: the Claude Code output"
+    Write-Host "                               style and the Codex AGENTS.md section."
     Write-Host "  --doctor                     Check the install and name each problem. Exits 1 on a problem."
     Write-Host "  --update <source>            Copy a newer pack from <source>, commit it, and rerun setup"
     Write-Host "                               with the flags in plan/state/<tool>.md."
