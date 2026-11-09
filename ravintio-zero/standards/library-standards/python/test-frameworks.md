@@ -25,4 +25,4 @@
 
 - Use `anyio` backend for `pytest-asyncio` when testing with multiple async backends
 - `testcontainers-python` for tests requiring a real database
-- Do not mock `httpx` calls at the module level; use `respx` for network mocking
+- Do not mock `httpx` calls at the module level. Use `respx` for network mocking

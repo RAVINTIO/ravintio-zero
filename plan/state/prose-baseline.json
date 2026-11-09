@@ -362,8 +362,7 @@
       "passive": 3
     },
     "ravintio-zero/skills/ravintio-orchestrator/SKILL.md": {
-      "passive": 4,
-      "sentence-length": 1
+      "passive": 3
     },
     "ravintio-zero/skills/ravintio-orchestrator/references/orchestrator-adoption-modes.md": {
       "passive": 1,
@@ -382,7 +381,7 @@
     "ravintio-zero/skills/ravintio-orchestrator/references/orchestrator-p0-start-actions.md": {
       "passive": 4,
       "semicolon": 1,
-      "sentence-length": 3
+      "sentence-length": 2
     },
     "ravintio-zero/skills/ravintio-orchestrator/references/orchestrator-phase-invocation.md": {
       "passive": 1,
@@ -403,141 +402,11 @@
     "ravintio-zero/skills/ravintio-orchestrator/references/orchestrator-skills-catalogue.md": {
       "passive": 1
     },
-    "ravintio-zero/skills/ravintio-implement/SKILL.md": {
-      "passive": 6,
-      "sentence-length": 3
-    },
-    "ravintio-zero/skills/ravintio-implementer/SKILL.md": {
-      "passive": 1
-    },
-    "ravintio-zero/skills/ravintio-initiative/SKILL.md": {
-      "passive": 5,
-      "sentence-length": 2
-    },
-    "ravintio-zero/skills/ravintio-loop-runner/SKILL.md": {
-      "passive": 3,
-      "sentence-length": 2
-    },
-    "ravintio-zero/skills/ravintio-plan/SKILL.md": {
-      "passive": 3
-    },
-    "ravintio-zero/skills/ravintio-refactor/SKILL.md": {
-      "passive": 1,
-      "sentence-length": 1
-    },
-    "ravintio-zero/skills/ravintio-refresh-setup/SKILL.md": {
-      "passive": 5,
-      "sentence-length": 4
-    },
-    "ravintio-zero/skills/ravintio-ship/SKILL.md": {
-      "passive": 1,
-      "sentence-length": 1
-    },
-    "ravintio-zero/skills/ravintio-test-writer/SKILL.md": {
-      "blocklist": 1,
-      "passive": 3,
-      "sentence-length": 1
-    },
-    "ravintio-zero/skills/ravintio-validate-and-accept/SKILL.md": {
-      "passive": 10,
-      "sentence-length": 1
-    },
-    "ravintio-zero/standards/hook-enforcement.md": {
-      "passive": 5,
-      "semicolon": 2,
-      "sentence-length": 3
-    },
-    "ravintio-zero/standards/language-quirks-en-gb.md": {
-      "passive": 3,
-      "semicolon": 1
-    },
-    "ravintio-zero/standards/library-standards/_version-policy.md": {
-      "passive": 1,
-      "semicolon": 1
-    },
-    "ravintio-zero/standards/library-standards/databases/prefer-avoid.md": {
-      "semicolon": 1
-    },
-    "ravintio-zero/standards/library-standards/go/test-frameworks.md": {
-      "semicolon": 2
-    },
-    "ravintio-zero/standards/library-standards/javascript/nodejs/prefer-avoid.md": {
-      "blocklist": 1
-    },
-    "ravintio-zero/standards/library-standards/javascript/nodejs/test-frameworks.md": {
-      "semicolon": 2
-    },
-    "ravintio-zero/standards/library-standards/javascript/react/prefer-avoid.md": {
-      "blocklist": 1
-    },
-    "ravintio-zero/standards/library-standards/javascript/react/test-frameworks.md": {
-      "semicolon": 1
-    },
-    "ravintio-zero/standards/library-standards/python/test-frameworks.md": {
-      "semicolon": 1
-    },
-    "ravintio-zero/standards/library-standards/typescript/prefer-avoid.md": {
-      "passive": 1,
-      "semicolon": 1
-    },
-    "ravintio-zero/standards/library-standards/typescript/test-frameworks.md": {
-      "passive": 1,
-      "semicolon": 2
-    },
-    "ravintio-zero/standards/observability-standards.md": {
-      "passive": 1,
-      "semicolon": 1
-    },
-    "ravintio-zero/standards/pack-update-policy.md": {
-      "blocklist": 1,
-      "passive": 5,
-      "semicolon": 3,
-      "sentence-length": 4
-    },
-    "ravintio-zero/standards/reference/backend-stack-evaluation.md": {
-      "blocklist": 6,
-      "passive": 40,
-      "semicolon": 6,
-      "sentence-length": 7
-    },
-    "ravintio-zero/skills/ravintio-file-backlog/SKILL.md": {
-      "passive": 2,
-      "sentence-length": 1
-    },
-    "ravintio-zero/standards/code-quality-standards.md": {
-      "passive": 7,
-      "semicolon": 12,
-      "sentence-length": 11
-    },
     "plan/backlog/0000285-enforce-postmortems-with-capa/entry.md": {
       "passive": 2
     },
     "plan/backlog/0000305-archetypes-for-standards-and-templates/entry.md": {
       "sentence-length": 1
-    },
-    "ravintio-zero/standards/agent-dispatch-standards.md": {
-      "passive": 4,
-      "semicolon": 3,
-      "sentence-length": 8
-    },
-    "ravintio-zero/standards/api-design-standards.md": {
-      "passive": 2
-    },
-    "ravintio-zero/standards/build-target-standards.md": {
-      "passive": 1,
-      "semicolon": 3
-    },
-    "ravintio-zero/standards/commit-standards.md": {
-      "passive": 1,
-      "semicolon": 1
-    },
-    "ravintio-zero/standards/formatting-standards.md": {
-      "blocklist": 1,
-      "passive": 4,
-      "sentence-length": 1
-    },
-    "ravintio-zero/standards/infrastructure-standards.md": {
-      "passive": 1
     }
   }
 }

@@ -14,5 +14,5 @@
 
 ## Notes
 
-- Use `testcontainers` for integration tests that need a real database; do not mock the DB
-- Vitest over Jest for new projects: Jest requires Babel or ts-jest for ESM; Vitest is native
+- Use `testcontainers` for integration tests that need a real database. Do not mock the DB
+- Vitest over Jest for new projects. Jest requires Babel or ts-jest for ESM. Vitest is native

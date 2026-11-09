@@ -29,7 +29,7 @@ Non-negotiable. They apply in every session, every phase.
 
 Read every time you log with `date -u +%Y-%m-%dT%H:%M:%SZ` and never type one.
 
-In an active initiative, stage by explicit path and never stage a `plan/backlog/` entry the step did not write. Never run `git add -f` or `git add --force`. If a file is ignored on purpose, leave it out. If it must be tracked, add a negation rule to `.gitignore`. A step session never moves, renames, or deletes `plan/.initiative-logs/`, `plan/.initiative-runner.lock`, or `plan/.initiative-queue/`. The driver and the watcher own them.
+In an active initiative, stage by explicit path and never stage a `plan/backlog/` entry the step did not write. Never run `git add -f` or `git add --force`. If git ignores a file on purpose, leave it out. If it must be tracked, add a negation rule to `.gitignore`. A step session never moves, renames, or deletes `plan/.initiative-logs/`, `plan/.initiative-runner.lock`, or `plan/.initiative-queue/`. The driver and the watcher own them.
 
 ---
 
@@ -108,7 +108,7 @@ Phase Skip Protocol, Pause Command, and Park Command are in the Pack Index row f
 
 ## P0: Discovery
 
-Opening Briefing, Decomposition, Adoption Modes (the table that step 7 uses), Scope Lock Challenge, Discovery Audit Trail, and Skill Map are in the reference files that the Pack Index lists. Read each file before you act on its topic.
+The Pack Index lists files for Opening Briefing, Decomposition, Adoption Modes, Scope Lock Challenge, Discovery Audit Trail, and Skill Map. Step 7 uses the Adoption Modes table. Read each file before you act on its topic.
 
 Mid-Pipeline Requirement Changes is in the Pack Index row for `orchestrator-mid-pipeline-changes.md`.
 

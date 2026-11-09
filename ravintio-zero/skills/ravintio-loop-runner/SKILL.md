@@ -10,7 +10,7 @@ description: Canonical loop mechanics for every pipeline loop: state file conven
 ## Hard Limits
 
 1. **Every loop has an armed stop rule before its first iteration.** No cap, no loop.
-2. **Agents write `plan/current/.ratchet-approve` only on explicit human instruction, never on their own initiative.** The human must state the path, the reason, and the go-ahead in the same turn. The line format is `path | reason | timestamp` with the human's exact reason text transcribed verbatim. A reason containing a `|` character invalidates the line (strict 3-field parse, fails closed). Commit the write immediately, in its own dedicated commit, before any further work proceeds: the hook's same-uncommitted-changeset backstop blocks the guarded edit if this step is skipped. Writing the marker without that explicit in-the-moment instruction is a violation, not a workaround.
+2. **Agents write `plan/current/.ratchet-approve` only on explicit human instruction, never on their own initiative.** The human must state the path, the reason, and the go-ahead in the same turn. The line format is `path | reason | timestamp` with the human's exact reason text transcribed verbatim. A reason containing a `|` character invalidates the line (strict 3-field parse, fails closed). Commit the write immediately, in its own dedicated commit, before any further work proceeds. The hook's same-uncommitted-changeset backstop blocks the guarded edit if you skip this step. Writing the marker without that explicit in-the-moment instruction is a violation, not a workaround.
 3. **Budget counters are never reset by an agent.** They live in the loop-state file, are git-tracked, and survive interrupt/resume.
 4. **Run-log records are append-only.** Never rewrite a prior iteration's record.
 
@@ -28,7 +28,7 @@ The pipeline never creates `ravintio-overrides/loop-toggles.yml`. Enabling a loo
 
 Create `plan/current/loop-state-{loop-id}.md` from `ravintio-zero/templates/loop-state.template.md` when the loop arms. Update and **commit after every iteration**: the state file is how an interrupted session resumes mid-loop (the `{phase-prefix}: Resuming` convention), and how budget counters survive resume.
 
-While any loop-state file has `status: active`, the `ratchet-check.mjs` hook is armed for `plan/current/` artifact writes. Set `status: done` or `status: escalated` when the loop exits. Never leave a dead loop armed.
+While any loop-state file has `status: active`, the `ratchet-check.mjs` hook guards `plan/current/` artifact writes. Set `status: done` or `status: escalated` when the loop exits. Never leave a dead loop armed.
 
 ## The Iteration Cycle
 
@@ -52,11 +52,11 @@ Armed on every loop, checked at every DECIDE:
 | Iteration cap | iteration == cap (default **3**, the validate-and-accept CI loop uses **5**, a skill may declare its own) | `escalate` |
 | no-progress | The same gap/finding survives **2 consecutive iterations** without measurable change | `escalate`: do not spend the remaining cap restating the problem |
 
-Caps and budgets are enforced by orchestrator control flow reading the state file, not by this text.
+Orchestrator control flow reads the state file and enforces caps and budgets. This text does not.
 
 ## Escalation Format
 
-On `escalate`, populate the state file's Escalation Context section (stop rule hit, outstanding finding, attempts summary, recommended next step) and emit, using the owning phase's prefix, such as `P3 Validate:`:
+On `escalate`, populate the state file's Escalation Context section (stop rule hit, outstanding finding, attempts summary, recommended next step). Then emit, using the owning phase's prefix such as `P3 Validate:`:
 
 ```
 {phase-prefix} Blocked ({loop-id}): {one-line outstanding finding}

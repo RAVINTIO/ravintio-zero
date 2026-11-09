@@ -24,7 +24,7 @@ description: CI, security review, execution verification, and the acceptance gat
 
 ## Build target: docker
 
-When `Build target: docker` is declared in `plan/current/design.md`, run every CI check inside the container (`docker build`, then `docker run --rm {image} {check-command}`). Never run checks against the host toolchain. A missing host runtime is expected, not a failure. Report results from container output.
+When `plan/current/design.md` declares `Build target: docker`, run every CI check inside the container (`docker build`, then `docker run --rm {image} {check-command}`). Never run checks against the host toolchain. Expect a missing host runtime. It is not a failure. Report results from container output.
 
 ## Input
 
@@ -37,7 +37,7 @@ When `Build target: docker` is declared in `plan/current/design.md`, run every C
 
 Run the stack's declared checks in this order:
 
-0. **Library audit**: check `ravintio-overrides/library-standards/{language}/prefer-avoid.md`, then the pack copy. If an avoided library is installed, fail and name the preferred alternative.
+0. **Library audit**: check `ravintio-overrides/library-standards/{language}/prefer-avoid.md`, then the pack copy. If the project installs an avoided library, fail and name the preferred alternative.
 1. **Semantic correctness**: every requirement needs a mapped, executing test identifiable by req-ID. Every acceptance criterion needs a covering test. Produce a coverage table. A missing criterion is a failure, not a warning.
 2. **Lint**
 3. **Typecheck**
@@ -63,7 +63,7 @@ Never proceed while a check fails. Never weaken a test, suppress a lint rule, or
 
 ## Verify by execution
 
-Tests passing proves the tests pass. Acceptance criteria are verified by running the software and observing behaviour. **Reading test output alone never counts.** If a criterion cannot be run, mark it `not-verifiable` with a reason. Never silently pass it.
+Tests passing proves the tests pass. You verify acceptance criteria by running the software and observing behaviour. **Reading test output alone never counts.** If a criterion cannot be run, mark it `not-verifiable` with a reason. Never silently pass it.
 
 Pick the observation method by target type:
 
@@ -86,7 +86,7 @@ Per-criterion outcomes:
 
 **Missing programs.** Run `command -v {program}` before a report says a program is missing. Then look in the common install folders, such as `/opt/homebrew/bin`, `/usr/local/bin`, and `~/.local/bin`. If a search finds the program, run it. A report that names a program as missing lists each command it ran.
 
-Write `plan/current/verification-report.md`: what was started and how, then per criterion the method, outcome, and observation evidence.
+Write `plan/current/verification-report.md`: what you started and how, then per criterion the method, outcome, and observation evidence.
 
 ## Docs edit pass
 
@@ -102,13 +102,13 @@ Write `plan/current/verification-report.md`: what was started and how, then per 
 
 Produce `plan/current/security-report.md`. Every finding names a specific file, endpoint, or configuration. Generic advice is not acceptable. Cover:
 
-- **Injection points**: unvalidated input, query construction, template rendering, and incomplete escaping or sanitising (an escape that misses a character, such as a backslash before an escaped pipe, quote, or delimiter)
+- **Injection points**: unvalidated input, query construction, template rendering, and incomplete escaping or sanitising. This includes an escape that misses a character, such as a backslash before an escaped pipe, quote, or delimiter
 - **Credential handling**: hardcoded secrets, environment exposure, token handling
 - **Path traversal**: file access built from user input
 - **Dependency risk**: known vulnerabilities, abandoned maintenance, excessive permissions
 - **Data exposure**: over-broad responses, logs leaking sensitive values, open network surface
 
-Structure: a findings table (finding, location, severity Critical/High/Medium/Low, mitigation or "not mitigated"), then an overall risk rating and the top actions before production. Rate conservatively. If in doubt, rate higher. Cross-reference the risk register: confirm whether each identified risk is mitigated or still open. Be sure critical and high findings are genuine. If any critical or high finding is not mitigated, STOP in both run modes:
+Structure: a findings table (finding, location, severity Critical/High/Medium/Low, mitigation or "not mitigated"), then an overall risk rating and the top actions before production. Rate conservatively. If in doubt, rate higher. Cross-reference the risk register: confirm whether the code mitigates each identified risk or leaves it open. Be sure critical and high findings are genuine. If the code leaves any critical or high finding unmitigated, STOP in both run modes:
 
 ```
 P3 Validate: Blocked: {n} unmitigated critical or high security findings. Approve a mitigation or accept the risk.
@@ -122,7 +122,7 @@ Read `plan/.run-mode`. The evidence is the same in both modes:
 
 1. Checks run and their results, with the self-correction count
 2. Security findings, led by critical and high
-3. Execution evidence: what was run, what was observed, any `not-verifiable` criteria
+3. Execution evidence: what you ran, what you observed, any `not-verifiable` criteria
 4. Search evidence: for any program reported missing, the `PATH` check commands with a found or not-found result, and each unverified claim by name
 5. Docs edit pass result: the changed docs, the cycle count, and the final `prose-check.mjs` exit code
 
@@ -142,7 +142,7 @@ Rollbacks are human-initiated, never automatic.
 
 ## Parallelism
 
-Batch 1 (parallel): lint + typecheck, library audit + semantic check. Batch 2 (after Batch 1 passes): tests. Batch 3: build. Security analyses (dependency audit, secrets scan, input validation scan) run in parallel with each other. Never run tests before typecheck passes, the summary risk rating before all findings are in, or cycle N+1 before N's fix is verified. File out-of-scope discoveries to `plan/backlog/` per `ravintio-zero/standards/agent-dispatch-standards.md`.
+Batch 1 (parallel): lint + typecheck, library audit + semantic check. Batch 2 (after Batch 1 passes): tests. Batch 3: build. Security analyses (dependency audit, secrets scan, input validation scan) run in parallel with each other. Never run tests before typecheck passes, the summary risk rating before all findings are in, or cycle N+1 before you verify N's fix. File out-of-scope discoveries to `plan/backlog/` per `ravintio-zero/standards/agent-dispatch-standards.md`.
 
 ### Fast batch
 

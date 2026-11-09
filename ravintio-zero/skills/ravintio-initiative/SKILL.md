@@ -22,7 +22,7 @@ description: Coordinates an initiative from chart to delivery in the human's ses
 ## Hard limits
 
 1. Never run, resume, or edit a step. A step session owns `plan/current/`.
-2. Never edit the working tree while the driver lock `plan/.initiative-runner.lock` is held.
+2. Never edit the working tree while the driver holds the lock `plan/.initiative-runner.lock`.
 3. Never merge into `main` and never commit to `main`. The human merges the initiative PR.
 4. Write `plan/.initiative-ack` with your session id. Never write `plan/.orchestrator-ack`.
 5. A step session never moves, renames, or deletes `plan/.initiative-logs/`, `plan/.initiative-runner.lock`, `plan/.initiative-queue/`, `plan/.initiative-worktrees/`, or `plan/.initiative-control/`. The driver and the watcher own them.
@@ -90,25 +90,25 @@ A line that starts `Restart: Setup:` names both. Rerun setup first. Read this sk
 
 ## Backlog queue
 
-While the lock is held, queue admin work. Do not edit the working tree and do not reserve an id. Write each item as a folder in `plan/.initiative-queue/`. Its `item.md` holds `**Step:** {n}` and `**Destination:** {repo path}`, and the other files are the content. For a new backlog entry, set the destination to `plan/backlog/{id}-{slug}/entry.md` and write `{id}` where the id goes. The step reserves the id and fills it in.
+While the driver holds the lock, queue admin work. Do not edit the working tree and do not reserve an id. Write each item as a folder in `plan/.initiative-queue/`. Its `item.md` holds `**Step:** {n}` and `**Destination:** {repo path}`, and the other files are the content. For a new backlog entry, set the destination to `plan/backlog/{id}-{slug}/entry.md` and write `{id}` where the id goes. The step reserves the id and fills it in.
 
 Name the step that the work aligns with, or the next pending step. After a step merges, clear the items that named it. Never move or delete an item while a step runs. Admin that fits no step waits until the driver stops, then lands through a `chore/` PR.
 
-`reserve-id.mjs --commit` refuses on `initiative/*`. When the driver is stopped, run it on a `feat/` branch so the counter commit rides in the coordinator PR.
+`reserve-id.mjs --commit` refuses on `initiative/*`. When the driver has stopped, run it on a `feat/` branch so the counter commit rides in the coordinator PR.
 
-Nothing commits directly on the initiative branch. Activation, scope edits, and the I-E Delivery archive and retrospective follow `## Coordinator PRs` in the roadmap standards. Raise one only while the driver is stopped, and merge it with `gh pr merge --squash --delete-branch {n}`.
+Nothing commits directly on the initiative branch. Activation, scope edits, and the I-E Delivery archive and retrospective follow `## Coordinator PRs` in the roadmap standards. Raise one only after the driver has stopped, and merge it with `gh pr merge --squash --delete-branch {n}`.
 
 ## Repo instructions during a run
 
-If the human asks for a repo instruction while a step runs, add it to the scope of the current or next pending step in `plan/current-initiative/initiative.md`. The skill never writes the override from the initiative session, because `gate-write` blocks that write. The step writes the file.
+If the human asks for a repo instruction while a step runs, add it to a step's scope in `plan/current-initiative/initiative.md`. Pick the current or next pending step. The skill never writes the override from the initiative session, because `gate-write` blocks that write. The step writes the file.
 
-- If the driver lock is held, queue the instruction in `plan/.initiative-queue/{slug}/instruction.md`. The step that runs has already read its scope, so the instruction goes to the next pending step.
+- If the driver holds the lock, queue the instruction in `plan/.initiative-queue/{slug}/instruction.md`. The step that runs has already read its scope, so the instruction goes to the next pending step.
 - When the driver is between steps or has exited, add the instruction to that step's scope in `initiative.md`. Land the edit as a coordinator PR.
 - Tell the human which step took the instruction.
 
 ## I-E Delivery
 
-After the driver exits, follow the I-E Delivery section of the roadmap standards. It reshapes the branch with `reshape-initiative.mjs` in merge order, names each admin fold in the PR body, moves the step tags, runs the history check, and sets the merge commit title. Raise the PR from `initiative/{id}-{slug}-reshaped`. After the human merges it, delete the old branch. Then give the final report:
+After the driver exits, follow the I-E Delivery section of the roadmap standards. It reshapes the branch with `reshape-initiative.mjs` in merge order and names each admin fold in the PR body. It also moves the step tags, runs the history check, and sets the merge commit title. Raise the PR from `initiative/{id}-{slug}-reshaped`. After the human merges it, delete the old branch. Then give the final report:
 
 1. The initiative PR URL.
 2. Each step with its version and tag.

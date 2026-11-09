@@ -105,3 +105,5 @@ Complete: P1 (2026-11-09T19:58:30Z)
 - Done: U10 (content, primary, high, 2026-11-09T20:11:11Z)
 - Done: U12 (content, primary, high, 2026-11-09T20:11:11Z)
 - Done: U13 (content, primary, high, 2026-11-09T20:11:11Z), six migrations/_done files kept as they were, because a test pins them to main
+- Done: U9 (content, primary, high, 2026-11-09T20:30:55Z)
+- Done: U11 part 1 (content, primary, high, 2026-11-09T20:30:55Z), 19 breaches left on lines that fixtures pin
