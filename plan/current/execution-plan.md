@@ -30,8 +30,8 @@ status: "active"
 
 | ID | Category | Requirement | Target | Measurement |
 |----|----------|------------|--------|-------------|
-| NFR-001 | Size | Orchestrator SKILL.md stays under its cap | 9,000 bytes or fewer | test-0000151-req-011 |
-| NFR-002 | Size | Boot template stays under its cap | 3,600 bytes or fewer | test-0000151-req-011 |
+| NFR-001 | Size | Orchestrator SKILL.md stays under its cap | 9,000 bytes or fewer. The 0000377 cap rose from 8,700 to 9,000. | test-0000151-req-011, test-0000377-req-001 |
+| NFR-002 | Size | Boot template stays under its cap | 3,800 bytes or fewer (raised from 3,600 in P2 for the grouping section) | test-0000151-req-011 |
 
 ## API Summary
 
