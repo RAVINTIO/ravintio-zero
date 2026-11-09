@@ -165,9 +165,24 @@ Boot files are disposable build outputs. Every run regenerates `CLAUDE.md` from 
 
 `ravintio-zero/hooks/enforcement/prose-rules.mjs` holds the prose rules. They are `sentence-length` (over 25 words), `blocklist`, `semicolon`, `em-dash`, and `passive`. The rules skip front matter, fenced code, inline code, tables, and HTML comments. Both `scripts/prose-check.mjs` and the `check-reply-writing` Stop hook import the module, because a hook installs as one file beside `read-stdin.mjs`.
 
-`prose-check.mjs` has three commands. `check` reads the in-scope Markdown files, or the staged files, or one commit message. `update` lowers the baseline. `diff --base <ref>` fails when the baseline holds a higher count than it does at `<ref>`. The scope is Markdown under `docs/`, `ravintio-zero/`, `ravintio-overrides/`, `plan/`, `src/`, `.github/`, and the repo root. `plan/_archive/`, `ravintio-zero/tests/`, `CLAUDE.md`, and `AGENTS.md` sit outside it.
+`prose-check.mjs` has three commands. `check` reads the in-scope Markdown files, or the staged files, or one commit message. `update` lowers the baseline. `diff --base <ref>` fails when the baseline holds a higher count than it does at `<ref>`. The scope covers Markdown in these places:
 
-`plan/state/prose-baseline.json` records the breach count for each file and rule. A count may fall and may not rise. The `commit-msg` hook checks the message. The pre-commit hook checks staged files and runs `diff` against `HEAD`. The CI `prose` job checks every file and runs `diff` against the base branch. The P3 docs edit pass in `ravintio-validate-and-accept` ends only when `check` passes on the changed user-facing docs. The advisory `check-reply-writing` hook reports long sentences and blocklist words in a reply, and only when `.claude/output-styles/ravintio-writing.md` exists.
+- `docs/`
+- `ravintio-zero/`
+- `ravintio-overrides/`
+- `plan/`
+- `src/`
+- `.github/`
+- The repo root.
+
+The scope excludes these paths:
+
+- `plan/_archive/`
+- `ravintio-zero/tests/`
+- `CLAUDE.md`
+- `AGENTS.md`
+
+`plan/state/prose-baseline.json` records the breach count for each file and rule. A count may fall and may not rise. The `commit-msg` hook checks the message. The pre-commit hook checks staged files and runs `diff` against `HEAD`. The CI `prose` job checks every file and runs `diff` against the base branch. The P3 docs edit pass in `ravintio-validate-and-accept` ends only when `check` passes on the changed user-facing docs. The advisory `check-reply-writing` hook reports long sentences and blocklist words in a reply. It runs only when `.claude/output-styles/ravintio-writing.md` exists.
 
 ## Setup-config record
 
