@@ -69,6 +69,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - In progress: {unit} ({ISO-8601 timestamp})
 - Done: {unit} ({ISO-8601 timestamp})
 - Resumed after interruption: {unit} rerun, {stash note}
+- Audit: re-run at P1 ({result})
 
 -->
 
