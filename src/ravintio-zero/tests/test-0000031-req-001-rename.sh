@@ -4,7 +4,7 @@
 set -uo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 ZERO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-REPO="$(cd "$ZERO_DIR/.." && pwd)"
+REPO="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
 # Concatenated so repo-wide renames never rewrite this test's target string.
@@ -35,12 +35,12 @@ assert_equals "ravintio-zero" "$(grep -E '^id:' "$REPO/product.yml" | sed 's/id:
   "top-level product id"
 assert_equals "ravintio-zero" "$(grep -E '^\s+- id:' "$REPO/product.yml" | head -1 | sed 's/.*id: *"\{0,1\}\([^"]*\)"\{0,1\}/\1/' | tr -d ' ')" \
   "components[] still names the ravintio-zero component"
-ORCH_SKILL="$(orch_combined "$REPO/ravintio-zero/skills/ravintio-orchestrator")"
+ORCH_SKILL="$(orch_combined "$ZERO_DIR/skills/ravintio-orchestrator")"
 STEP9=$(rule_text p0-start-product-id)
 assert_contains "hard-stop" "$STEP9" "discovery step 9 hard-stops on a missing product id"
 assert_contains "versioning" "$STEP9" "the product id prompt gives versioning as its reason"
 assert_equals "0" "$(printf '%s' "$STEP9" | grep -ci telemetry || true)" "the product id prompt does not cite telemetry"
-assert_equals "1" "$(grep -cE '^id:' "$REPO/ravintio-zero/templates/product.template.yml" || true)" \
+assert_equals "1" "$(grep -cE '^id:' "$ZERO_DIR/templates/product.template.yml" || true)" \
   "product.template.yml declares a top-level id"
 
 echo "=== (d) refresh script renamed and portable ==="
