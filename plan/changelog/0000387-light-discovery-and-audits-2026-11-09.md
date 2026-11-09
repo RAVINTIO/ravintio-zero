@@ -2,7 +2,7 @@
 
 **Feature:** Light discovery and audits
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** #143
 
 ## What changed
 
