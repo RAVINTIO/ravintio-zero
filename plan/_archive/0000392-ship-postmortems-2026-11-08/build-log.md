@@ -130,3 +130,5 @@ Complete: P4 (2026-11-08T01:41:16Z)
 | Cheaper tier agent calls | 1 |
 | Self-corrections | 1 |
 | Phases skipped | none |
+
+Rework: merged origin/initiative/0000360-backlog-sweep into PR #134 (2026-11-09T03:38:46Z). Resolved docs/architecture-overview.md and plan/backlog/index.md, moved ADR-001 and ADR-002 to docs/adr/0275 and 0276. Suites: 337 passed, 0 failed. Regression: 19 passed.
