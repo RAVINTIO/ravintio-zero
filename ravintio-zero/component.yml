@@ -2,7 +2,7 @@
 id: "ravintio-zero"
 name: "RAVINTIO Zero"
 feature: "0000378-merge-time-versioning"
-version: "0.65.0"
+version: "0.66.0"
 status: "active"
 type: "component-pack"
 domain: "developer-tooling"
