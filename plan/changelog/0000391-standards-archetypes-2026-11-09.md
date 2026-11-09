@@ -19,11 +19,11 @@ Teams need to swap a default standard or add a stricter rule without editing the
 
 ## Deviations
 
-None.
+None from the design. Two P2 rework cycles fixed a banned word in a sample file and two test checks that diffed against `HEAD`. Postmortems and backlog entries 0000415 and 0000416 record them.
 
 ## Validation results
 
-The consistency check and the self-description check cover the new files. A background run covers the full suite.
+The full suite passed 371 feature suites and 19 regression suites. A clean clone passed 369 and failed 2 suites that fail on the base commit. The security review found no critical or high finding. Running the commands checked eight acceptance criteria.
 
 ## Skipped phases
 
