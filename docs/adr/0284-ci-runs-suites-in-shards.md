@@ -1,6 +1,6 @@
 ---
 title: "ADR 284: CI runs the suites in shards"
-summary: "CI runs 4 bash shards and 3 Windows PowerShell 5.1 shards behind summary jobs with the required names, and no longer runs pwsh on Windows."
+summary: "CI runs 4 bash shards and 4 Windows PowerShell 5.1 shards behind summary jobs with the required names, and no longer runs pwsh on Windows."
 status: "accepted"
 version: "0.1.0"
 component: "ravintio-zero"
@@ -18,7 +18,7 @@ Each CI test job ran its suites one after another. On PR #135, `windows-powershe
 
 ## Decision
 
-Both runners read `RAVINTIO_SHARD=i/n` and run suite k when `k mod n` equals `i - 1`. CI runs `bash-suites-shard` as a matrix of 4 shards and `windows-powershell-shard` under Windows PowerShell 5.1 as a matrix of 3. Two summary jobs, `bash-suites` and `windows-powershell (powershell)`, need their shard job and fail unless it succeeded, so the ruleset's required names still report. CI no longer runs pwsh on Windows. pwsh still runs every `.ps1` suite on Linux inside `bash-suites-shard`.
+Both runners read `RAVINTIO_SHARD=i/n` and run suite k when `k mod n` equals `i - 1`. CI runs `bash-suites-shard` as a matrix of 4 shards and `windows-powershell-shard` under Windows PowerShell 5.1 as a matrix of 4. Two summary jobs, `bash-suites` and `windows-powershell (powershell)`, need their shard job and fail unless it succeeded, so the ruleset's required names still report. CI no longer runs pwsh on Windows. pwsh still runs every `.ps1` suite on Linux inside `bash-suites-shard`.
 
 ## Alternatives Considered
 

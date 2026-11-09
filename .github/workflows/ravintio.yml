@@ -103,7 +103,7 @@ jobs:
       - name: Run zizmor
         run: zizmor --no-online-audits .github/workflows
 
-  # The PowerShell suites under Windows PowerShell 5.1, in 3 parallel shards
+  # The PowerShell suites under Windows PowerShell 5.1, in 4 parallel shards
   # (0000409 ADR-0284, which supersedes 0000036 ADR-003). pwsh runs the same
   # suites on Linux in bash-suites-shard. fail-fast stays off so one failing
   # shard does not cancel the others.
@@ -116,7 +116,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        shard: [1, 2, 3]
+        shard: [1, 2, 3, 4]
     defaults:
       run:
         shell: powershell
@@ -127,9 +127,9 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: PowerShell suites, one shard of 3
+      - name: PowerShell suites, one shard of 4
         env:
-          RAVINTIO_SHARD: ${{ matrix.shard }}/3
+          RAVINTIO_SHARD: ${{ matrix.shard }}/4
         run: |
           & ./ravintio-zero/tests/run-tests.ps1
           exit $LASTEXITCODE

@@ -11,7 +11,7 @@
   - US-001: As the coordinator of an initiative, I want CI on a step PR to finish in about 5 minutes, so that the queue merges steps sooner.
 - Acceptance criteria confirmed: 3
   - AC-1: With `RAVINTIO_SHARD=i/n`, `run-tests.sh` and `run-tests.ps1` each run a disjoint subset of the suites, and the n subsets cover every suite. A malformed value exits 2.
-  - AC-2: The workflow runs 4 bash shards and 3 Windows PowerShell 5.1 shards, behind summary jobs named `bash-suites` and `windows-powershell (powershell)` that pass only when every shard passes. No Windows pwsh job remains.
+  - AC-2: The workflow runs 4 bash shards and 4 Windows PowerShell 5.1 shards, behind summary jobs named `bash-suites` and `windows-powershell (powershell)` that pass only when every shard passes. No Windows pwsh job remains.
   - AC-3: CI on this PR finishes its slowest required check in 7 minutes or less.
 - Constraints: no suite is skipped. No required check on `main` is renamed.
 - Integrations: GitHub Actions, and the `Protect Main Branch` ruleset

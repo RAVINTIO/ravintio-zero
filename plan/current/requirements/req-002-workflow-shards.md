@@ -1,6 +1,6 @@
 ---
 title: "Requirement: REQ-002 - workflow shards"
-summary: "CI runs 4 bash shards and 3 Windows PowerShell 5.1 shards behind summary jobs that keep the required check names, and drops the Windows pwsh job."
+summary: "CI runs 4 bash shards and 4 Windows PowerShell 5.1 shards behind summary jobs that keep the required check names, and drops the Windows pwsh job."
 status: "active"
 version: "0.1.0"
 ---
@@ -17,7 +17,7 @@ As the coordinator of an initiative, I want CI on a step PR to finish in about 5
 
 ## Functional Requirements
 - A `bash-suites-shard` job runs `run-tests.sh` on `ubuntu-latest` with `RAVINTIO_REQUIRE_PWSH: "1"`, as a matrix of shards 1 to 4.
-- A `windows-powershell-shard` job runs `run-tests.ps1` under Windows PowerShell 5.1 on `windows-latest`, as a matrix of shards 1 to 3.
+- A `windows-powershell-shard` job runs `run-tests.ps1` under Windows PowerShell 5.1 on `windows-latest`, as a matrix of shards 1 to 4.
 - Both shard jobs keep `fail-fast: false`, `contents: read`, the pinned checkout, and `persist-credentials: false`.
 - A `bash-suites` job and a job named `windows-powershell (powershell)` each need their shard job. They run `if: always()` and fail unless every shard succeeded.
 - No job runs the suites under pwsh on Windows.
@@ -26,7 +26,7 @@ As the coordinator of an initiative, I want CI on a step PR to finish in about 5
 - [ ] AC-1: shard jobs
   - Given `.github/workflows/ravintio.yml`
   - When a test reads the shard jobs
-  - Then the bash matrix has 4 shards and the Windows matrix has 3, each with read-only contents and a pinned checkout
+  - Then the bash matrix has 4 shards and the Windows matrix has 4, each with read-only contents and a pinned checkout
 - [ ] AC-2: summary jobs keep the names
   - Given the same workflow
   - When a test reads the summary jobs

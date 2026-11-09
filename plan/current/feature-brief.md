@@ -23,7 +23,7 @@ Every merge-queue run waits for CI on the step PR. The slowest job, `windows-pow
 ## Wanted outcome
 
 - `run-tests.sh` and `run-tests.ps1` accept `RAVINTIO_SHARD=i/n` and run only shard i of n.
-- CI runs 4 bash shards and 3 Windows PowerShell 5.1 shards in parallel.
+- CI runs 4 bash shards and 4 Windows PowerShell 5.1 shards in parallel.
 - The required checks `bash-suites` and `windows-powershell (powershell)` still report, and pass only when every shard passes.
 - CI no longer runs the Windows pwsh job.
 
@@ -99,5 +99,5 @@ GitHub Actions and the `Protect Main Branch` ruleset, which requires checks by n
 ## Acceptance Criteria
 
 - [ ] With `RAVINTIO_SHARD=i/n`, each runner runs a disjoint subset, and the n subsets cover every suite.
-- [ ] The workflow runs 4 bash shards and 3 Windows PowerShell 5.1 shards, behind summary jobs named `bash-suites` and `windows-powershell (powershell)`.
+- [ ] The workflow runs 4 bash shards and 4 Windows PowerShell 5.1 shards, behind summary jobs named `bash-suites` and `windows-powershell (powershell)`.
 - [ ] CI on this PR finishes its slowest required check in 7 minutes or less.

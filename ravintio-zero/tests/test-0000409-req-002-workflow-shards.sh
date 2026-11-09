@@ -25,8 +25,8 @@ WIN_SUM="$(job windows-powershell)"
 # AC-1: shard jobs.
 assert_contains "shard: [1, 2, 3, 4]" "$BASH_SHARD" "REQ-002 AC-1: bash runs 4 shards"
 assert_contains 'RAVINTIO_SHARD: ${{ matrix.shard }}/4' "$BASH_SHARD" "REQ-002 AC-1: each bash shard sets its shard of 4"
-assert_contains "shard: [1, 2, 3]" "$WIN_SHARD" "REQ-002 AC-1: Windows runs 3 shards"
-assert_contains 'RAVINTIO_SHARD: ${{ matrix.shard }}/3' "$WIN_SHARD" "REQ-002 AC-1: each Windows shard sets its shard of 3"
+assert_contains "shard: [1, 2, 3, 4]" "$WIN_SHARD" "REQ-002 AC-1: Windows runs 4 shards"
+assert_contains 'RAVINTIO_SHARD: ${{ matrix.shard }}/4' "$WIN_SHARD" "REQ-002 AC-1: each Windows shard sets its shard of 4"
 for j in "$BASH_SHARD" "$WIN_SHARD"; do
   assert_contains "fail-fast: false" "$j" "REQ-002 AC-1: one failing shard does not cancel the others"
   assert_contains "contents: read" "$j" "REQ-002 AC-1: the shard job has read-only contents"

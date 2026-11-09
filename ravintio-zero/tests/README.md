@@ -104,7 +104,7 @@ RAVINTIO_SHARD=2/4 bash ravintio-zero/tests/run-tests.sh
 ```
 
 The `windows-powershell-shard` job in `.github/workflows/ravintio.yml` runs
-`run-tests.ps1` on `windows-latest` under Windows PowerShell 5.1, in 3 shards.
+`run-tests.ps1` on `windows-latest` under Windows PowerShell 5.1, in 4 shards.
 
 The `bash-suites-shard` job runs `run-tests.sh` on `ubuntu-latest` in 4
 shards. It sets `RAVINTIO_REQUIRE_PWSH=1`, so the run fails if `pwsh` is

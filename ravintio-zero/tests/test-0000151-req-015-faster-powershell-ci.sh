@@ -13,14 +13,14 @@ WORKFLOW="$SCRIPT_DIR/../../.github/workflows/ravintio.yml"
 HELPER="$SCRIPT_DIR/helpers/setup-workspace.ps1"
 
 if [ -f "$WORKFLOW" ]; then
-  # 0000409 ADR-0284: the parallel matrix is now 3 shards under Windows
+  # 0000409 ADR-0284: the parallel matrix is now 4 shards under Windows
   # PowerShell 5.1, in the windows-powershell-shard job.
   JOB="$(awk '/^  windows-powershell-shard:/{f=1; print; next} f && /^  [a-z][a-z-]*:/{exit} f{print}' "$WORKFLOW")"
 
   assert_contains "strategy:" "$JOB" "req-015: the job defines a strategy"
   assert_contains "fail-fast: false" "$JOB" "req-015: one failing entry does not cancel the other"
   assert_contains "matrix:" "$JOB" "req-015: the job defines a matrix"
-  assert_contains "shard: [1, 2, 3]" "$JOB" "req-015: the matrix has three shards"
+  assert_contains "shard: [1, 2, 3, 4]" "$JOB" "req-015: the matrix has four shards"
   assert_contains "$(printf 'defaults:\n      run:\n        shell: powershell')" "$JOB" "req-015: Windows PowerShell 5.1 is the job's default run shell"
   assert_equals "0" "$(printf '%s\n' "$JOB" | grep -cE 'shell: \$\{\{' || true)" "req-015: no step sets an expression shell"
   assert_equals "1" "$(printf '%s\n' "$JOB" | grep -c 'ravintio-zero/tests/run-tests.ps1' || true)" \

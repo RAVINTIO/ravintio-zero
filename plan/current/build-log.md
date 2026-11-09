@@ -77,3 +77,5 @@ Complete: P1 (2026-11-09T14:13:09Z)
 - Done: U-001 REQ-001 runner shards, GREEN at `64544398`. U-002 REQ-002 workflow shards, GREEN at `11f02108` (2026-11-09T14:18:34Z)
 
 Complete: P2 (2026-11-09T14:18:34Z)
+
+- Rework: REQ-002: CI on PR #144 took 7m23s on Windows shard 3, over the 7-minute AC-3 target. The Windows matrix grows from 3 shards to 4, and the design, brief, requirement, ADR, tests, and docs now say 4 (2026-11-09T14:38:14Z)
