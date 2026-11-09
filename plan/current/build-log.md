@@ -104,11 +104,28 @@ Run mode: autonomous (2026-11-09T14:55:33Z, initiative step 10)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-09T15:35:39Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-09T15:36:19Z` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-ship, ravintio-retrospective |
 | Agents spawned | 0 |
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | Initiative step. The merge queue sets the version. |
+- Complete: P4 (2026-11-09T15:36:19Z)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `41` |
+| Total agents spawned | `3` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `1` |
+| Primary tier agent calls | `3` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `1` |
+| Phases skipped | `none` |
