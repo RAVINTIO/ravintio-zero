@@ -63,8 +63,9 @@ Stop if it exits non-zero, in both run modes. Fix each finding it names, then re
 
 1. Determine the archive path: `plan/_archive/{feature-id}-{YYYY-MM-DD}/`. If it exists, suffix `-2`, `-3`, and so on.
 2. Search the repo for links pointing at `plan/current/...` (living docs, `docs/decisions-index.md`, `src/*/docs/`). Update each to the archive path.
-3. Copy all of `plan/current/` to the archive path, then delete the `plan/current/` contents. Never use an atomic move.
-4. `git add` everything: the archive, the deletions, and the link updates. Untracked artifacts must not be left behind. Check with `git status --porcelain` before committing.
+3. Set each of the run's ADRs in `docs/adr/` to status `accepted`. Add one row per new ADR to `docs/decisions-index.md`. The archive links to `docs/adr/` and holds no copy.
+4. Copy all of `plan/current/` to the archive path, then delete the `plan/current/` contents. Never use an atomic move.
+5. `git add` everything: the archive, the deletions, and the link updates. Untracked artifacts must not be left behind. Check with `git status --porcelain` before committing.
    - In an active initiative, stage by explicit path: `plan/current/`, `plan/changelog/`, `plan/_archive/`, and each link update. Never stage a `plan/backlog/` entry the step did not write. The initiative skill queues those, and they stay untracked.
 
 ### Step 5: Build assessment

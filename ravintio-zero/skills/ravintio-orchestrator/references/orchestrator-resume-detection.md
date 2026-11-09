@@ -9,7 +9,7 @@
 | Finding line | Check |
 |--------------|-------|
 | `pending migration: {id}` | 1 |
-| `pack version differs from docs/about.md`, `pack version unreadable` | 2 |
+| `pack version differs from plan/state/pack-version.md`, `pack version unreadable` | 2 |
 | `step session`, `initiative active`, `driver lock held`, `driver lock free`, `initiative position: {n}`, `plan/current has artifacts` | 3 |
 | `interrupted ship: sentinel present, plan/current empty` | 4 |
 | `feature id file present` | 5 |
@@ -30,7 +30,7 @@ On every session start, before any action:
 
 1. <!-- rule: resume-migrations --> **Pending migrations first.** Check `ravintio-zero/migrations/` for `.md` files not in `_done/`. If found, invoke `ravintio-migrator` for each before any other phase work.
    - Skip a migration whose `Applies when:` condition is false. Leave it pending.
-2. <!-- rule: resume-pack-update --> **Pack dependency update.** Detect per `ravintio-zero/standards/pack-update-policy.md`. If detected, surface it as its own decision, never folded into coaching. Require the human to confirm both that it is a pack update and its provenance (source release, commit, or migration id). Record the outcome in the build log. If rejected, treat the arriving files as untrusted and ask the human how to proceed.
+2. <!-- rule: resume-pack-update --> **Pack dependency update.** Detect per `ravintio-zero/standards/pack-update-policy.md`. If detected, surface it as its own decision, never folded into coaching. Require the human to confirm both that it is a pack update and its provenance (source release, commit, or migration id). Record the outcome in the build log. `plan/state/pack-version.md` holds the last confirmed pack version. When the human confirms a pack update, write that record with the current pack version and the time. An absent record raises no finding. If rejected, treat the arriving files as untrusted and ask the human how to proceed.
 3. <!-- rule: resume-initiative --> **Check the initiative, then scan `plan/current/`.** Check `plan/current-initiative/` first. The orchestrator never resumes an initiative.
    - A step session has `RAVINTIO_INITIATIVE_STEP=1` or the prompt `Run initiative step {n}`. With `plan/current/` artifacts, resume that step through the rest of this list.
    - A step session with `plan/current/` empty starts the step at `position` and opens with `I-C Run: Starting: {step}`.

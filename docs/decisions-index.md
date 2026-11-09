@@ -3,472 +3,295 @@
 > Change record. Index of all ADRs across all features. Updated after every pipeline run.
 > Do not archive this file. Update it in place.
 
-Last updated: 0000379-parallel-steps-on-worktrees
+Last updated: 0000392-ship-postmortems
 
 ---
 
-## Note on the reset
+## Where ADRs live
 
-Feature 0000030 emptied `plan/_archive/`, so the ADR files for features 0000001 through 0000029 no longer exist in the working tree. They remain in git history.
-
-This index restarts from 0000030. Decisions from earlier features still bind where their subject survives, but the ADR text has to be read from history.
+Every ADR is a file in `docs/adr/`, named `{NNNN}-{slug}.md`. Migration 0009 (0000384) restored the ADRs of features 0000001 to 0000029 from git history and numbered all ADRs in feature order. Features 0000002, 0000013, and 0000029 had none in history. `docs/adr/.migration-map.json` maps each old reference to its new number.
 
 Rows for features before 0000160 use the product name and paths of their time. 0000160 renamed them.
 
 ---
 
 ## All Architecture Decision Records
-### Feature 0000200: reply-conventions
 
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | Stack choice | accepted | The feature adds one Node.js hook with built-in modules only. It adds no dependency. |
-| ADR-002 | A warn-only Stop hook | accepted | `check-reply-prefix.mjs` warns and logs a reply without a prefix, and always exits 0. |
-
-### Feature 0000199: reserve-ids-from-counter
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | Stack choice | accepted | The feature adds one Node.js script with built-in modules only. It adds no dependency. |
-| ADR-002 | A counter file in place of a scan of every ref | accepted | `plan/backlog/.next-id` holds the next free id and `reserve-id.mjs` reserves blocks under an exclusive lock. |
-
-### Feature 0000198: cap-echoed-plan-text
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | Stack choice | accepted | The feature edits two programs and adds one suite. It adds no dependency. |
-| ADR-002 | A cap helper in each program | accepted | The hook installs as one file, so each program holds its own 200-character cap function. A parity test checks both. |
-
-### Feature 0000197: merge-guard-block-message
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | Stack choice | accepted | The feature edits message text only and adds no dependency. |
-
-### Feature 0000196: setup-argument-checks
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | Stack choice | accepted | The feature keeps Bash and PowerShell and adds no dependency. |
-| ADR-002 | Retired flags fail setup | accepted | A retired flag exits 1 during argument parsing and names the flag. The tool check runs straight after parsing. The refresh skill reports a retired flag and omits it. Supersedes 0000034 ADR-001. |
-
-### Feature 0000192: rename-runner-lock-and-archive
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | Stack choice | accepted | The feature keeps the declared stack and adds no dependency. |
-| ADR-002 | Read both archive folder forms | accepted | I-E Delivery archives to `plan/_archive/{id}-{slug}-initiative-{date}/`. The driver's delivery check also accepts the older `-roadmap-` folder form, so no migration runs. |
-### Feature 0000189: name-the-roadmap-initiative
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | Stack choice | accepted | The feature keeps the declared stack. Migration 0005 ships Bash and PowerShell helpers, and the pack gains no dependency. |
-| ADR-002 | Clean break with migration | accepted | Old names get no aliases. Migration 0005 moves consumer drafts, the CI pattern, and step logs. A model or turns variable with an old prefix stops the driver and names its replacement. |
-| ADR-003 | Move on activation | accepted | I-B Activate moves the initiative to the fixed path `plan/current-initiative/initiative.md`. |
-| ADR-004 | Short initiative names | accepted | Names use the short form `initiative`, and stage prefixes are `I-A` to `I-E`. `roadmap-standards.md` keeps its name. |
-| ADR-005 | Old-name guard allowlist | accepted | A Bash test fails on old names outside an allowlist of exact files and two folders: `plan/_archive/` and `plan/changelog/`. |
-### Feature 0000185: explain-strict-mode
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | Rewrite the existing strict mode section | accepted | The run rewrites `## Strict Orchestrator Mode` in `project-operations.md` in place, rather than adding a second section. The pack gains no dependency. |
-### Feature 0000173: workflow-governance-gates
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | The stack stays as declared | accepted | `workflow-metrics.mjs` uses Node built-in modules only. The pack gains no dependency. |
-| ADR-002 | Fixed marker lines are the only metric source | accepted | The script counts `Rework:`, `Blocked:`, `Requirement change:`, and `Gate revised:` lines in the build log and loop-state files. It never reads free text. |
-| ADR-003 | Thresholds live in a pack standard, and the gate only reports | accepted | `standards/workflow-governance-standards.md` holds the thresholds table. A breach shows in the build report and the PR description and never stops ship. |
-
-### Feature 0000172: subagent-acceleration
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | The stack stays as declared | accepted | The release changes skill, standard, and template text and adds Bash text suites. No script, hook, or library joins the pack. |
-| ADR-002 | The run speed lives in its own sentinel file | accepted | `plan/.run-speed` holds `fast` or `standard`. `plan/.run-mode` keeps its two values. A missing or unknown value counts as `standard`. |
-| ADR-003 | Each phase skill lists its own fast batch | accepted | The dispatch standard holds the fast batch rules. Each phase skill lists its units under `### Fast batch`. Phases still run in order. |
-
-### Feature 0000171: faster-setup-ps1-tests
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | Stack unchanged | accepted | The faster copy uses .NET types that both PowerShell hosts load. No module or tool such as `robocopy` joins the pack. |
-| ADR-002 | setup.ps1 copies files with System.IO calls | accepted | `Copy-RavintioSkills` and `Install-EnforcementHooks` copy through `System.IO` helpers in place of per-file cmdlets. The SKILL.md rewrite keeps `Set-Content`. |
-| ADR-003 | Suites report setup time through a file the runner names | accepted | `Invoke-Setup` appends each time to `RAVINTIO_TIMING_FILE`. `run-tests.ps1` prints the total and case count, then deletes the file. |
-
-### Feature 0000170: story-mapping-and-gherkin
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | Stack unchanged | accepted | The consistency check and the ratchet hook parse Gherkin with Node.js built-ins and regular expressions. No Gherkin parser library joins the pack. |
-| ADR-002 | P1 owns the story mapping pass | accepted | P1 maps stories first and writes `plan/current/story-map.md`. A gap the brief states or implies becomes a story and a requirement. Any other gap goes out of scope. |
-| ADR-003 | A criterion stays one checkbox line | accepted | Each criterion is `- [ ] AC-{n}: {name}` with indented `Given`, `When`, and `Then` bullets. The limit of three counts checkbox lines. |
-| ADR-004 | The ratchet guards step lines | accepted | Each `Given`, `When`, `Then`, `And`, or `But` bullet in `## Acceptance Criteria` is a guarded line. Removing or rewording one blocks unless a human approval marker names the file. |
-
-### Feature 0000169: release-hygiene
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | Stack unchanged | accepted | Two new scripts use Node.js built-ins only. No library, service, or third-party action joins the pack. |
-| ADR-002 | CI tags the merge commit on main | accepted | A `release-tag` job on a push to `main` or `master` tags `HEAD` with the product version and skips a tag that exists. Ship creates no tag before the merge. Only that job holds `contents: write`. |
-| ADR-003 | One attribution check serves ship and CI | accepted | `scripts/check-attribution.mjs` checks a PR body in ship and in `validate-branch`. The body reaches CI through `env:` only. The `commit-msg` hook keeps its own list and gains the host lines. |
-| ADR-004 | Setup turns off host attribution when unset | accepted | Setup writes empty `attribution.commit` and `attribution.pr` strings to `.claude/settings.json` when the key is absent, and leaves a set key alone. |
-
-
-### Feature 0000030: framework-cut-down
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | Claude Code is the only supported tool target | accepted | Drops eight tool targets, the vendored external skill library, and the context-mode integration. Supersedes 0000001 ADR-001 to ADR-004. |
-
-### Feature 0000031: five-phase-planifest-zero
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | Five-phase pipeline contract and skill consolidation | accepted | Collapses the ten-phase pipeline to five phases (discovery, plan, implement, validate and accept, ship) and 21 skills to 12. |
-| ADR-002 | Folder rename and product identity | accepted | Renames `planifest-framework/` to `planifest-zero/`, sets the `product.yml` id to `planifest-zero`, and fixes the Windows refresh script to derive its own path. |
-| ADR-003 | One route: the feature pipeline | accepted | Drops the Change Pipeline and Fast Path routes. Every change runs the five-phase feature pipeline, and one CI parity check applies to every diff. |
-| ADR-004 | Living docs describe the present only | accepted | Moves historical narrative to change records: `plan/changelog/`, `plan/_archive/`, ADR files, and git history. This index and `docs/about.md` carry stated exemptions. |
-
-### Feature 0000032: relocate-setup-config-to-plan-state
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | The setup-config record lives in plan/state/ | accepted | Moves the tracked setup-flags record from `planifest-overrides/setup-config/{tool}.md` to `plan/state/{tool}.md`. Supersedes 0000025 ADR-002. |
-| ADR-002 | Refresh-setup reads the record before the marker | accepted | `planifest-refresh-setup` Step 3 reads `plan/state/{tool}.md` first at high confidence, falling back to the gitignored marker then hook inference. |
-| ADR-003 | Setup removes the old record inline | accepted | `setup.sh` and `setup.ps1` delete the pre-relocation record at its exact path after a successful write, with no separate migration file. |
-
-### Feature 0000033: remove-telemetry-mcp
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | Telemetry is not a pack concern | accepted | Removes the telemetry system from `planifest-zero` with no replacement and no extension seam. Drops `backendUrl` from the setup-config record, narrowing 0000032 ADR-001. |
-| ADR-002 | Setup cleans up telemetry wiring on every run | superseded by 0000164 ADR-003 | Every setup run removes legacy telemetry hook entries, the opt-in sentinel, and the marker directories. One line per removal, a warning without failing. |
-| ADR-003 | The phase vocabulary lives in prose, not in a module | accepted | Deletes `phase-enum.mjs` and states the five phase names in `pipeline-reference.md`. The `product.yml` id and its hard stop stay, for versioning. |
-
-### Feature 0000164: hardening-and-backlog-skill
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | Stack unchanged | accepted | Keeps the declared stack and adds no dependency. `gate-write.mjs` uses `realpathSync` from `node:fs`. |
-| ADR-002 | gate-write scopes to the project by real path | accepted | The hook exits 0 when a target's real path lies outside the project's real root. A symlink inside the project that points outside counts as outside. |
-| ADR-003 | Retire the telemetry cleanup and keep the retired-hooks list | accepted | Setup drops the legacy telemetry cleanup in both shells. The list stays as `RETIRED_HOOK_NAMES` and `$RetiredHookNames`, and hook install drops settings entries for any retired hook. Supersedes 0000033 ADR-002. |
-| ADR-004 | The file-backlog skill never touches the target repo's git state | accepted | `ravintio-file-backlog` writes one uncommitted entry folder. It never commits, pushes, switches branches, stashes, or opens a pull request there. |
-| ADR-005 | Relabel the rename release as 0.12.0 | accepted | 0000160 becomes 0.12.0 and this release is 0.13.0. Supersedes the version decision of 0000160 ADR-001. Moves the fallback removal in 0000160 ADR-002 from 2.0.0 to 1.0.0. |
-
----
-
-## Superseded
-
-| ADR | Superseded by | Reason |
-|-----|---------------|--------|
-| 0000034 ADR-001 | 0000196 ADR-002 | A retired flag now exits 1 during argument parsing instead of warning and continuing. |
-| 0000001 ADR-001 to ADR-004 | 0000030 ADR-001 | The context-mode hook design they governed no longer exists. |
-| 0000025 ADR-002 | 0000032 ADR-001 | The record moved from planifest-overrides/setup-config/ to plan/state/. The ADR text is in git history only. |
-| 0000018, 0000024, 0000026, 0000027, and 0000028 telemetry ADRs | 0000033 ADR-001 | Their subject no longer exists in `planifest-zero`. The ADR text is in git history only. |
-| 0000024 product-id ADR (rationale only, partly superseded) | 0000033 ADR-003 | The `id` field and the hard stop stand. Versioning and archive attribution replace telemetry attribution as the reason. |
-| 0000032 ADR-001 (record shape only, narrowed) | 0000033 ADR-001 | The record drops `backendUrl` and holds `tool`, `flags`, and `writtenAt`. Its location and tracked status stand. |
-| 0000036 ADR-003 (Bash suites out of CI only, narrowed) | 0000037 ADR-002 | The `bash-suites` job runs the Bash suites in CI. The Windows job stands. |
-| 0000037 ADR-003 (decision item 4 only, narrowed) | 0000041 ADR-003 | The non-array warning no longer prints the old value. Warn, replace, and exit 0 stand. |
-| 0000031 ADR-001 (phase numbers and prefixes only, superseded in part) | 0000042 ADR-003 | Phases take the numbers P0 to P4 and number-plus-name prefixes. The five-phase contract and skill consolidation stand. |
-| 0000023 run-mode gate rules (in skills and tests, no ADR) | 0000042 ADR-002 | The two earlier run modes become `gated` and `autonomous`. |
-| 0000042 ADR-002 (merge rule only, amended) | 0000043 ADR-003 | The agent may squash-merge its own step PR into an `initiative/*` branch after a clean P3 and green CI. Merging into `main` stays human-only. |
-| 0000031 ADR-002 (folder and product id only, superseded in part) | 0000160 ADR-001 | The pack folder is `ravintio-zero/` and the product id is `ravintio-zero`. |
-| 0000042 ADR-004 (brand word only, superseded in part) | 0000160 ADR-004 | A separate brand guard test blocks the earlier product name. The wording allowlist test for the retired word stands. |
-| 0000043 ADR-004 (driver child contract, extended) | 0000151 ADR-005 | Each initiative child gets a model, an optional turn cap, a step log, and telemetry labels. The fresh `claude -p` session per step stands. |
-| 0000042 ADR-002 (exception stops, extended) | 0000151 ADR-004 | A sixth exception stop covers a library or service missing from the approved list. It applies to both run modes. |
-
-### Feature 0000034: setup-hardening
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | Retired setup flags warn and continue | accepted | Setup accepts four retired flags with one warning each and skips the `--backend-url` value. Supersedes the no-op rejection in 0000030 ADR-001. |
-| ADR-002 | settings.json writes go through a temporary file and a rename | accepted | Every `settings.json` write uses a same-folder temporary file, keeps the original's mode, and never follows a planted link. |
-| ADR-003 | The stack stays as it is | accepted | No new language, runtime, or test framework. |
-
-
-### Feature 0000035: powershell-setup-parity
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | setup.ps1 writes the same hook entries as setup.sh | accepted | `setup.ps1` wires all six enforcement hooks in the `setup.sh` entry shape, and a static parity suite checks the match. |
-| ADR-002 | setup.ps1 supports Windows PowerShell 5.1 | accepted | `setup.ps1` uses no PowerShell 7-only feature, so it runs on the PowerShell that ships with Windows. |
-| ADR-003 | setup.ps1 flags are case-sensitive | accepted | The flag `switch` matches case, as `setup.sh` does. Both scripts remove a leftover temporary file at the start of each run. |
-
-### Feature 0000036: test-runner-coverage
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | Stray test files fail the run | accepted | `run-tests.sh` names every file under `tests/` that is neither a suite nor a known non-suite, and exits 1. |
-| ADR-002 | PowerShell suites use a plain assert helper | accepted | `test-*.ps1` suites use `helpers/assert.ps1` with no Pester. `run-tests.sh` runs them with `pwsh` or reports the skip. |
-| ADR-003 | CI runs the PowerShell suites on Windows under both hosts | accepted | A `windows-latest` job runs `run-tests.ps1` with `powershell` and with `pwsh`. Bash suites stay out of CI for now. |
-
-### Feature 0000037: self-host-on-planifest-zero
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | The repo self-hosts on planifest-zero | accepted | Repoints `core.hooksPath` to `planifest-zero/hooks`, then deletes `planifest-framework/`. The setup record moves to `plan/state/claude-code.md`. |
-| ADR-002 | The Bash suites run in CI on Ubuntu | accepted | A `bash-suites` job runs `run-tests.sh` with `PLANIFEST_REQUIRE_PWSH=1` and `contents: read`. The `validate-telemetry-schema` job goes. |
-| ADR-003 | Setup repairs the hook entries it owns | accepted | `setup.sh` removes Planifest `PreToolUse` entries on any matcher. Both scripts warn on a non-array hook event and replace it. |
-| ADR-004 | P0 states standard-iterative mode without asking | accepted | When standard-iterative is the only signal, the orchestrator states the mode and its signal. Every other case keeps the question. |
-
-### Feature 0000038: setup-hook-filter-fixes
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | The stack stays as it is | accepted | No new language, runtime, or test framework. |
-| ADR-002 | Setup filters Planifest hook commands one at a time | accepted | Both scripts remove only Planifest commands from a `PreToolUse` or `UserPromptSubmit` entry and keep user commands. `setup.sh` matches `UserPromptSubmit` by path boundary. Refines 0000037 ADR-003. |
-
-### Feature 0000039: setup-hardening-release-sizing
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | The stack stays as it is | accepted | No new language, runtime, or dependency. |
-| ADR-002 | Invalid JSON exits 1 with a fixed message | accepted | The hook install step prints one fixed line naming the file, leaves it unchanged, and exits 1. The telemetry cleanup still warns and carries on. |
-| ADR-003 | A single-object `hooks` value counts as a one-item array | accepted | Both scripts apply the per-command filter to a single-object `hooks` value. Refines 0000038 ADR-002. |
-| ADR-004 | The release budget lives in `product.yml` | accepted | An optional `releaseSize` field sets a budget of 4, 8, or 14 points, with `medium` as the default. It replaces the fixed 3-story rule. |
-
-### Feature 0000040: setup-json-checks-and-park
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | The stack stays as it is | accepted | No new language, runtime, or dependency. |
-| ADR-002 | Valid JSON that is not a settings object exits 1 | accepted | Both scripts print one shared fixed line, leave the file unchanged, and exit 1. Extends 0000039 ADR-002. |
-| ADR-003 | Only `setup.ps1` rejects case-duplicate keys | accepted | `ConvertFrom-Json` can't read them, so `setup.ps1` gives the shared line. `setup.sh` accepts them. |
-| ADR-004 | JSON depth is capped at 1024 | accepted | `Test-JsonText` uses a counter and a `Stack[char]`, runs in linear time, and fails past 1024 levels. |
-| ADR-005 | Park keeps the work on the feature branch | accepted | Park pushes the branch and files a `parked` backlog entry by chore PR. Pickup resumes or discards it. |
-
-### Feature 0000041: setup-cleanup-and-park-hardening
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | The stack stays as it is | accepted | No new language, runtime, or dependency. |
-| ADR-002 | The telemetry cleanup skips unreadable settings | accepted | Both cleanups skip in silence on a parse or shape failure. The hook install step reports the fault once. Extends 0000033 ADR-002. |
-| ADR-003 | The non-array warning drops the old value | accepted | Both scripts name the event and the file only. Supersedes decision item 4 of 0000037 ADR-003. |
-
-### Feature 0000042: autonomous-mode-and-prefixes
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | The stack stays as it is | accepted | No new language, runtime, or dependency. |
-| ADR-002 | Gated and autonomous run modes | accepted | Replaces the two earlier run modes with `gated` and `autonomous`. Autonomous runs to a raised PR. Five exception stops apply to both modes. |
-| ADR-003 | Phase numbers P0 to P4 and number-plus-name prefixes | accepted | Phases run P0 Discovery to P4 Ship. Messages start with `P0 Discovery:` to `P4 Ship:`. A guard test blocks stale cites. Supersedes 0000031 ADR-001 in part. |
-| ADR-004 | Pack wording and identifier map | accepted | No tracked file outside history describes Planifest Zero with the retired word. Identifiers follow one map, and an allowlist test enforces the rule. |
-
-### Feature 0000043: autonomous-roadmaps
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | The stack stays as declared | accepted | No new language, runtime, or dependency. Adds one Node hook, `merge-guard`, and one Node script, `initiative-run.mjs`. |
-| ADR-002 | Roadmap storage and lifecycle | accepted | Drafts live in `plan/roadmap/`. The one active initiative lives in `plan/current-initiative/` on the initiative branch. Ids share the backlog sequence. |
-| ADR-003 | Agent squash-merge into initiative branches | accepted | The agent may run `gh pr merge --squash` for its own step PR into `initiative/*` after a clean P3 and green CI. `merge-guard` enforces it. Amends the 0000042 run-mode merge rule. |
-| ADR-004 | Driver script runs each step in a fresh session | accepted | `initiative-run.mjs` runs each step as its own `claude -p` session in auto permission mode. A lock file stops a second driver. |
-| ADR-005 | Tag after the squash merge in an initiative step | accepted | An initiative step squash-merges first, then tags the squash commit and pushes the tag. Outside an initiative, tag-before-PR stays. |
-| ADR-006 | Self-confirmed initiative steps and stage prefixes | accepted | A step's P0 builds the brief from its backlog entries and self-confirms. I-A Chart is the single human approval, including predicted additive schema changes. Stages I-A to I-E sit beside P0 to P4. |
-| ADR-007 | Progress markers and interrupted-unit resume | accepted | Each dispatched unit logs `In progress:` before it starts and `Done:` with its work. On resume, the session stashes left-over changes and reruns an interrupted unit from its start. |
-
-### Feature 0000151: hardening-efficiency-and-ci
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | The stack stays as declared | accepted | No new language, runtime, or package. Adds one Node helper, `initiative-labels.mjs`, and edits existing files. |
-| ADR-002 | Hook block reasons go to stderr and stdout | accepted | `gate-write`, `em-dash-guard`, and `ratchet-check` write each block reason to both streams, as `merge-guard` does. The stdout write stays plain text. |
-| ADR-003 | Ship clears sentinels before the PR | accepted | Ship runs Step 7 tag, Step 8 clear sentinels, Step 9 push and PR, Step 10 final gate. The tag is pushed with the branch. |
-| ADR-004 | A sixth exception stop for unapproved dependencies | accepted | P1 or P2 adding a library or service that is missing from the approved list stops the run. It applies to both run modes. |
-| ADR-005 | Initiative driver child contract | accepted | The driver passes `--model` and `--max-turns`, writes `plan/.initiative-logs/step-{position}.log`, and appends percent-encoded labels to `OTEL_RESOURCE_ATTRIBUTES`. |
-| ADR-006 | Orchestrator references split | accepted | Rarely used orchestrator sections move word for word to `references/orchestrator-*.md`. A line-preservation test proves no rule was lost. |
-| ADR-007 | Setup prunes retired hooks by list | accepted | Setup deletes an installed hook only if its name is on the retired list, which starts with `phase-enum`. |
-| ADR-008 | Park refuses symlinked entry paths | accepted | Park refuses any symlink in the entry path, checking with `lstat` and real-path containment before it creates, writes, or removes. |
-
-### Feature 0000160: ravintio-rebrand
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | The RAVINTIO rename map | accepted | Prose writes RAVINTIO in block capitals. Identifiers use lowercase `ravintio` and variables use `RAVINTIO_`. History folders stay as written. Supersedes 0000031 ADR-002 in part. |
-| ADR-002 | Legacy aliases stay accepted through 0.x | accepted | Two initiative variables and the em dash sentinel keep their earlier names as fallbacks. The new name wins. The fallbacks go at 1.0.0. 0000164 ADR-005 moves the removal point from 2.0.0 to 1.0.0. |
-| ADR-003 | Consumer migration 0004 | accepted | Bash and PowerShell helpers move the overrides folder and the workflow, remove old markers, move the old pack folder to `.ravintio-backup/` instead of deleting it, and archive 0004. A migration with a false `Applies when:` condition stays pending. Setup stops while an old folder remains. |
-| ADR-004 | Brand guard test | accepted | A test fails on any tracked path or line outside history that holds the earlier product name, unless a path and line allowlist entry matches. A stale entry also fails. |
-| 0000160 ADR-001 (version decision only) | 0000164 ADR-005 | The rename release is 0.12.0, not 1.0.0. The rename map stays in force. |
-| 0000160 ADR-002 (removal point only) | 0000164 ADR-005 | The legacy fallbacks go at 1.0.0, not 2.0.0. |
-| 0000033 ADR-002 | 0000164 ADR-003 | Setup no longer removes legacy telemetry wiring. A pre-0000033 consumer removes it by hand. |
-
-### Feature 0000239: test-suite-reliability
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | Scan the suite for undefined asserts | accepted | `print_summary` scans the running suite for lines that start with an `assert_*` word and fails each name that is not a function. macOS Bash 3.2 has no not-found handler. |
-
-### Feature 0000240: stream-step-session-activity
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | Read the stream in the watcher | accepted | The driver only switches the output format. The watcher reads the step log by byte offset and prints one activity line per event, so one monitor carries every line. |
-
-### Feature 0000241: watcher-false-events
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | Track commits by ancestry and stale by key | accepted | The watcher lists new commits with `git log {last-seen}..HEAD` when the last-seen commit is an ancestor of `HEAD`. Otherwise it prints one branch-change line. A stale state prints once. |
-
-### Feature 0000245: boot-rules-into-skills
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | Targeted overrides append to the named skill | accepted | An override with `target: {skill}` is appended to that installed skill between markers. A bad target falls back to the boot file. |
-| ADR-002 | Hook Enforcement lives in a reference file | accepted | The hook list moves to `standards/hook-enforcement.md`. The boot files point to it and each blocking hook message names it. |
-
-### Feature 0000246: plan-checks-count-and-cap-tests
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | The plan skill scans tests by grep | accepted | The plan skill greps `ravintio-zero/tests/` for tests that hold a skill count, a skill-text budget, a size cap or a backlog entry id. The execution plan lists each match under `## Test impact`. |
-
-### Feature 0000247: git-state-hygiene
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | reserve-id commits the counter by path | accepted | `reserve-id.mjs --commit` runs `git commit -m {subject} -- {counter}`, so the commit holds the counter file alone. The initiative, retrospective, and postmortem skills pass the flag. |
-
-### Feature 0000248: ship-merge-and-wall-clocks
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | the build log check is its own script | accepted | `build-log-check.mjs` checks the build log at ship Step 3, before Archive. `consistency-check.mjs` runs at P1, before the phase blocks exist, so it stays apart. |
-
-### Feature 0000313: driver-setup-stop
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | one stop line for both stops | accepted | A step that changes a restart file and a setup path gets one `I-D Advance: Restart: Setup:` line. A restart-only or setup-only step keeps its own line. |
-
-### Feature 0000314: step-logs-stay-in-place
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | skip the step log folder in the phase guard | accepted | The phase guard skips `plan/.initiative-logs` only. It keeps scanning every other path, so a new untracked skill file is still checked. |
-
-### Feature 0000315: isolated-test-state
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | clear the environment in the runner | accepted | The runners remove every `RAVINTIO_` variable from each suite except `RAVINTIO_PWSH`, `RAVINTIO_TIMING_FILE`, and `RAVINTIO_TEST_QUIET`. They compare tracked and untracked files before and after the run and fail on a change. |
-
-### Feature 0000316: hooks-fail-closed
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | run every hook through a launcher from the project root | accepted | Setup wires each hook as `guard-run.mjs {guard\|advisory} {hook}.mjs` under `${CLAUDE_PROJECT_DIR}` and sets `CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR=1`. In guard mode a missing or crashing script exits 2 and names the script. |
-
-### Feature 0000317: block-forced-adds
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | block forced adds with a guard and a CI check | accepted | The `block-forced-add` Bash guard blocks `git add -f` and its forms. The tracked `.gitignore` lists the driver paths. Ship and CI fail when `git ls-files -ci --exclude-standard` lists a file. |
-
-### Feature 0000318: titled-coordinator-prs
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | coordinator PRs ride the existing merge-guard | accepted | Coordinator work reaches `initiative/*` as titled PRs that the agent squashes after a passing local suite and green CI. The written carve-out names them. `merge-guard.mjs` is unchanged, and a test pins its behaviour. |
-
-### Feature 0000319: initiative-history-checks
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | check history with two stateless git scripts | accepted | `check-initiative-history.mjs` fails on an untitled first-parent commit and has no exception list. `check-main-merge.mjs` fails a one-parent commit from an initiative PR. CI runs both, I-E Delivery runs the first, and the human applies the ruleset. |
-
-### Feature 0000320: quiet-session-start
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | migration ledger outside the pack | accepted | Migration state lives in `plan/state/migrations.md`. `resume-detect.mjs` reads it, the migrator appends to it, and a `**Detect:**` line lets the script see a condition turn true. Migration 0006 copies the `_done/` records. |
-
-### Feature 0000321: backlog-triage
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | generated backlog index checked in CI | accepted | `backlog-index.mjs` writes `plan/backlog/index.md` from the entries. CI fails when the committed file differs from a fresh run. The review age is `backlogReviewDays` in `product.yml`. |
-
-### Feature 0000327: squash-before-main
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | CI checks the branch and commit count of a PR into main | accepted | `check-pr-into-main.mjs` runs in the CI job `squash-before-main`. It passes a `chore/*` or `hotfix/*` PR with one commit, ignores `initiative/*`, and fails everything else. No hook changes. |
-
-### Feature 0000351: step-titles-and-history-shape
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | the history check reads titles from the chart | accepted | `check-initiative-history.mjs` reads the `Title` column of the chart `## Steps` table. It expects one commit per step in chart order, then at most one chore commit. It finds an archived chart by the id in `--head`. |
-
-### Feature 0000352: coordinator-admin-in-step-prs
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | queue items name their step in item.md | accepted | A queue item is a folder in `plan/.initiative-queue/`. Its `item.md` holds `**Step:**` and `**Destination:**`. The step commits the item before P4 raises the PR. Admin that fits no step lands through a `chore/` PR. |
-| ADR-002 | reserve-id.mjs refuses --commit on initiative/* | accepted | The script reads the branch name before the reservation. On `initiative/*` it exits 1, changes nothing, and names the `feat/` route. |
-
-### Feature 0000353: reshape-at-delivery
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | replay with git merge-tree, not a working tree | accepted | `reshape-initiative.mjs` replays each commit with `git merge-tree --write-tree` and writes commits with `git commit-tree`. It never touches a working tree, and a conflict exits 1. |
-| ADR-002 | find step commits by version tag and move tags by delete | accepted | The script reads `v{Version}` from the chart for each step. `--tags` deletes each tag and creates it again at the new commit. `--push` deletes the old tag on the remote and pushes the new one. |
-| ADR-003 | ship uses the replacement branch route for chore | accepted | `## PRs into main` applies the replacement branch route to `chore/*` and `hotfix/*`. It no longer names `--force-with-lease`. |
-
-### Feature 0000354: steps-run-to-the-end
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | resume with the session id from the stream | accepted | The driver reads `session_id` from the step's stream events and resumes an unmerged step with `claude -p --resume`, at most twice. A third unmerged exit prints `Blocked:`. |
-| ADR-002 | compare tool and flags, not the timestamp | accepted | Setup rewrites `plan/state/{tool}.md` only when `tool` or `flags` differ, so a rerun leaves a clean tree. |
-
-### Feature 0000355: codeql-and-branch-cleanup
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | stack choice | accepted | The step adds no language, library, or service. CodeQL runs as a workflow action. |
-| ADR-002 | run CodeQL from a workflow file | accepted | Advanced setup scans pull requests into `initiative/**`. A human turns default setup off. |
-| ADR-003 | delete merged head branches from a scoped CI job | accepted | The `cleanup-branch` job holds `contents: write` on that job only, and every other pull request job skips `closed`. |
-
-### Feature 0000357: guard-gaps-closed
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | stack choice | accepted | The step adds no language, library, or service. The wrapper is shell text in the hook command. |
-| ADR-002 | a guard command exits 2 when the launcher fails | accepted | Setup appends an exit 2 fallback to each guard-mode command, so a missing launcher blocks the call. Advisory commands keep their form. |
-| ADR-003 | the forced-add guard blocks what it cannot read | accepted | The guard reads `git stage`, subshells, and variables, and Codex runs it too. |
-
-### Feature 0000358: clean-step-stops-and-logs
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | stack choice | accepted | The step adds no language, library, or service. The time check calls `git blame` through `node:child_process`. |
-
-### Feature 0000359-safe-parallel-commits
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | stack choice | accepted | The step adds no language, library, or service. The rules are skill and standard text, checked by Bash suites. |
-
-### Feature 0000378-merge-time-versioning
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | The merge queue merges the initiative branch into the PR branch | accepted | The queue updates a step PR with `git merge` and pushes without force, because the repo rules forbid force-pushes. |
-| ADR-002 | Merge order comes from the chart Version column | accepted | The reshape and the history check sort steps by `Version` in ascending order. A step with no `Version` keeps its chart position after the versioned steps. |
-
-### Feature 0000379-parallel-steps-on-worktrees
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | The driver keeps running and ready in the control area | accepted | The committed chart holds `pending` and `merged`. The driver derives `running` and `ready` from `plan/.initiative-control/step-{n}/`. |
-| ADR-002 | A chart without a Concurrency field keeps the serial path | accepted | The driver runs the scheduler only when the chart holds `**Concurrency:**`. Old charts and suites keep the serial path. |
-| ADR-003 | A step ends at ready and the driver runs the merge queue | accepted | A step under the concurrent driver writes its PR number to `ready` and ends. The driver runs `merge-queue.mjs run` one PR at a time. P4 sets no version. |
-| ADR-004 | The driver copies git-ignored setup output into each worktree | accepted | The driver copies `.claude/`, `CLAUDE.md`, `AGENTS.md`, and `.codex/` into each worktree, so a step has its hooks and skills. |
-
-### Feature 0000383-test-impact-scan
-
-| ADR | Title | Status | Summary |
-|-----|-------|--------|---------|
-| ADR-001 | The scan stays a skill instruction | accepted | Each new cause is one bullet in the plan skill's `## Test impact scan`. The planner runs the greps and no script is added. |
+| ADR | Title | Status | Summary | Feature |
+|-----|-------|--------|---------|---------|
+| [ADR-0001](adr/0001-pretooluse-block-mechanism.md) | PreToolUse Block Mechanism — hookSpecificOutput deny vs exit code 2 | accepted | We use hookSpecificOutput.permissionDecision: 'deny' + permissionDecisionReason to block tool calls, rather than exit code 2. This surfaces a specific redirect message to the agent instead of a raw stderr error string. | 0000001-context-mode-enforcement-hooks |
+| [ADR-0002](adr/0002-allowlist-hardcoded-vs-configurable.md) | Bash Allowlist — Hardcoded vs Per-Project Configurable | accepted | The Bash hook allowlist (git, mkdir, rm, mv, cd, ls, npm install, pip install) is hardcoded in the hook script for v1. Per-project configuration is deferred. This constrains customisation but eliminates config schema complexity and keeps hooks stateless. | 0000001-context-mode-enforcement-hooks |
+| [ADR-0003](adr/0003-unconditional-vs-pattern-based-blocking.md) | Blocking Strategy — Unconditional (Grep, WebFetch) vs Pattern-Based (Bash) | accepted | Grep and WebFetch are blocked unconditionally on every invocation. Bash is blocked only when the command matches a set of context-flooding patterns. The asymmetry reflects the tools' usage profiles: Grep and WebFetch have no safe subset in a context-mode environment; Bash is a general-purpose shell that serves many legitimate purposes. | 0000001-context-mode-enforcement-hooks |
+| [ADR-0004](adr/0004-hook-script-ownership-split.md) | Hook Script Ownership — Authored in planifest-framework, Contributed Upstream Later | accepted | Hook scripts are authored and maintained in planifest-framework for this pipeline run. They will be contributed to mksglu/context-mode after the pipeline completes. This is an operational split: planifest-framework owns the wiring; context-mode owns the scripts long-term. | 0000001-context-mode-enforcement-hooks |
+| [ADR-0005](adr/0005-three-tier-enforcement-model.md) | Three-tier enforcement model for multi-tool hook support | accepted | Tools are grouped into three tiers based on their hook capabilities. Tier 1 uses native shell hooks, Tier 2 uses a Bun/TS plugin shim, Tier 3 falls back to MCP + instructions. This is the central architectural choice for Track C. | 0000003-hook-based-enforcement |
+| [ADR-0006](adr/0006-common-envelope-shape.md) | Common envelope shape for hook script inputs | accepted | All Planifest hook scripts receive a standardised JSON envelope {session_id, cwd, tool_input, event} regardless of which tool is running. Adapters translate tool-native payloads to this shape before delegation. | 0000003-hook-based-enforcement |
+| [ADR-0007](adr/0007-flag-file-deduplication.md) | Temp filesystem flag file for phase_start deduplication | accepted | A per-session-per-phase flag file in the OS temp directory prevents duplicate phase_start emissions. The flag file doubles as a start-timestamp store for duration_ms calculation. | 0000003-hook-based-enforcement |
+| [ADR-0008](adr/0008-two-check-gate-model.md) | Two-check path gate for write enforcement (existence + prefix matching) | accepted | gate-write.mjs enforces writes via two checks: design.md existence, then path-prefix membership against the component paths list. LLM-based scope reasoning and exact-match approaches were rejected. | 0000003-hook-based-enforcement |
+| [ADR-0009](adr/0009-exit-zero-failure-mode.md) | Exit-0 failure mode for all hook scripts | accepted | All Planifest hook scripts exit 0 on any unexpected error. They never block a session due to script failure. This is a deliberate safety trade-off: observability is sacrificed to guarantee session continuity. | 0000003-hook-based-enforcement |
+| [ADR-0010](adr/0010-copy-then-delete-archive.md) | Copy-then-delete archive strategy for plan/current/ | accepted | The ship-agent copies plan/current/ to the archive destination before deleting the source. An atomic rename (move) was rejected because partial deletion is harder to recover from than having artefacts in both locations. | 0000003-hook-based-enforcement |
+| [ADR-0011](adr/0011-px-prefix-convention.md) | Px prefix convention for pipeline phase indicators | accepted | Every Planifest pipeline agent response begins with Px: where x is the phase number (0–7). PC: is used by the change-agent. This is a UX convention embedded in all agent SKILL.md files — costly to reverse once deployed. | 0000003-hook-based-enforcement |
+| [ADR-0012](adr/0012-advisory-commit-msg-hook.md) | Blocking commit-msg hook (exit 1 on violation) | superseded |  | 0000003-hook-based-enforcement |
+| [ADR-0013](adr/0013-anthropic-first-skill-trust-model.md) | Anthropic-first skill trust model | accepted |  | 0000003-hook-based-enforcement |
+| [ADR-0014](adr/0014-plan-scoped-skill-lifecycle.md) | Two-tier external skill storage with plan-scoped lifecycle | accepted |  | 0000003-hook-based-enforcement |
+| [ADR-0015](adr/0015-tdd-inner-loop-as-codegen-subloop.md) | TDD inner loop orchestrated within codegen-agent | accepted | The red-green-refactor TDD loop is implemented as a per-requirement sub-loop inside the existing codegen-agent phase (P3), not as a standalone pipeline phase. Three narrow sub-agents handle each TDD phase and are orchestrated by the codegen-agent. | 0000004-tdd-regression-test-quality |
+| [ADR-0016](adr/0016-subagent-model-tier-convention.md) | Sub-agent model tier — recommended_model frontmatter convention | accepted | TDD sub-agents (test-writer, implementer, refactor) declare a preferred cheaper model tier via a recommended_model frontmatter field in their SKILL.md. This is an advisory convention: the invoking orchestrator should honour it, but there is no hard runtime enforcement. | 0000004-tdd-regression-test-quality |
+| [ADR-0017](adr/0017-regression-promotion-criteria.md) | Regression promotion — agent-tag plus human-confirm | accepted | Tests are promoted to the regression pack via a two-step process: the codegen-agent tags candidates during P3, and the human confirms (or rejects) each candidate at P7 Step R. The ship-agent invokes promote-to-regression.sh for confirmed promotions. This balances automation with human curation. | 0000004-tdd-regression-test-quality |
+| [ADR-0018](adr/0018-library-standards-directory-tree.md) | Per-language directory tree for library standards | accepted |  | 0000005-framework-governance |
+| [ADR-0019](adr/0019-planifest-overrides-sibling-directory.md) | planifest-overrides as repo-root sibling directory | accepted |  | 0000005-framework-governance |
+| [ADR-0020](adr/0020-sentinel-file-orchestrator-enforcement.md) | Sentinel file for orchestrator enforcement | accepted |  | 0000005-framework-governance |
+| [ADR-0021](adr/0021-repo-instructions-via-design-md.md) | Repo instructions loaded into design.md at P0 | accepted |  | 0000005-framework-governance |
+| [ADR-0022](adr/0022-markdown-migration-files.md) | Markdown migration files with interactive migrator skill | accepted |  | 0000005-framework-governance |
+| [ADR-0023](adr/0023-two-registry-capability-skills.md) | Two-registry model for capability skills | accepted |  | 0000005-framework-governance |
+| [ADR-0024](adr/0024-build-log-as-markdown.md) | Build log as a plain Markdown working file | accepted |  | 0000006-build-assessment-phase |
+| [ADR-0025](adr/0025-model-tier-abstraction.md) | Model routing via capability tiers, not model names | accepted |  | 0000006-build-assessment-phase |
+| [ADR-0026](adr/0026-parallelism-as-skill-instructions.md) | Parallelism enforced via skill instructions, not hooks | accepted |  | 0000006-build-assessment-phase |
+| [ADR-0027](adr/0027-p8-as-separate-phase.md) | Build Assessment as a separate Phase 8 skill | accepted |  | 0000006-build-assessment-phase |
+| [ADR-0028](adr/0028-explicit-build-target-field.md) | Explicit Build target field over stack inference | accepted |  | 0000007-agent-optimisation |
+| [ADR-0029](adr/0029-telemetry-guidance-centralised.md) | Telemetry guidance centralised in standards file | accepted |  | 0000007-agent-optimisation |
+| [ADR-0030](adr/0030-optimise-agent-suggestion-only.md) | Optimise-agent is suggestion-only | accepted |  | 0000007-agent-optimisation |
+| [ADR-0031](adr/0031-setup-manifest-for-managed-directories.md) | Setup manifest for managed directory tracking | accepted |  | 0000007-agent-optimisation |
+| [ADR-0032](adr/0032-locale-tagged-language-quirks-files.md) | Locale-tagged language quirks files | accepted |  | 0000007-agent-optimisation |
+| [ADR-0033](adr/0033-plugin-as-canonical-source-for-routing-rules.md) | Plugin as canonical source for context-mode routing rules | accepted | Planifest stops maintaining its own routing rules template and delegates that responsibility to the context-mode plugin's system prompt, which injects rules automatically at session start. | 0000008-context-mode-plugin-routing-rules |
+| [ADR-0034](adr/0034-no-per-tool-routing-rules-fallback.md) | No per-tool routing rules fallback for non-plugin tools | accepted | When removing the framework-managed routing rules file, Planifest does not introduce a per-tool fallback mechanism for tools that cannot receive the plugin's system prompt. This gap is explicitly deferred, not silently accepted. | 0000008-context-mode-plugin-routing-rules |
+| [ADR-0035](adr/0035-external-skills-opt-in-flag.md) | External skill library is opt-in via --include-full-skill-library flag | accepted | The curated open-source skill library is not copied to the tool skill directory by default. Users must pass --include-full-skill-library at setup time to include it. | 0000009-framework-rail-tightening |
+| [ADR-0036](adr/0036-attribution-txt-per-skill.md) | attribution.txt as a standalone file alongside each external skill | accepted | Each external skill directory contains an attribution.txt file holding license type, copyright holder, source URL, required attribution text, and the full license text. This is a file, not frontmatter, not a central registry. | 0000009-framework-rail-tightening |
+| [ADR-0037](adr/0037-auto-trigger-hook-plus-fallback.md) | Auto-trigger orchestrator via UserPromptSubmit hook with CLAUDE.md fallback | accepted | The orchestrator is triggered automatically at session start using a UserPromptSubmit hook for Claude Code, with a CLAUDE.md instruction as a fallback for tools that lack hook support. | 0000009-framework-rail-tightening |
+| [ADR-0038](adr/0038-skill-map-in-design-md.md) | Skill-to-requirement map embedded in design.md | accepted | The skill-to-requirement mapping is stored as a ## Skill Map section in plan/current/design.md rather than a separate file, keeping the single confirmed design document as the source of truth for the pipeline run. | 0000009-framework-rail-tightening |
+| [ADR-0039](adr/0039-gate-write-windows-path-normalisation.md) | gate-write Windows path normalisation via posix-norm before startsWith | accepted | The gate-write hook normalises both the cwd and target path to forward-slash form before the startsWith comparison, eliminating the mixed-separator bug that caused always-permitted paths to be blocked on Windows. | 0000009-framework-rail-tightening |
+| [ADR-0040](adr/0040-pause-resume-via-pause-md.md) | Pause and resume via plan/current/pause.md file | accepted | The orchestrator's pause/resume mechanism uses a single file at plan/current/pause.md containing phase, active task, last artifact, and in-progress state. Presence of the file signals a paused session; its content is the resume instruction. | 0000009-framework-rail-tightening |
+| [ADR-0041](adr/0041-agent-tool-in-allowedtools.md) | Agent tool added to allowedTools for Claude Code projects | accepted | Adding 'Agent' to the project-scoped allowedTools in .claude/settings.json written by setup.sh/setup.ps1 removes the per-use confirmation gate for sub-agent spawning, enabling the Subagent Decomposition Directive to be followed in practice. | 0000010-framework-quality-improvements |
+| [ADR-0042](adr/0042-skill-name-field-as-canonical-identifier.md) | SKILL.md name field is the canonical skill identifier | accepted | The name frontmatter field in SKILL.md is the authoritative skill identifier. Directory names must be the kebab-case of that field. Mismatches are normalised by renaming directories, never by changing name fields. | 0000010-framework-quality-improvements |
+| [ADR-0043](adr/0043-input-validation-section-conditional.md) | Input validation section in requirement template is conditional, not mandatory | accepted | The ## Input Validation section added to requirement.template.md is explicitly conditional — required only for requirements that read untrusted external content into model-visible output. Making it mandatory for all requirements would produce noise in requirements where no external input exists. | 0000010-framework-quality-improvements |
+| [ADR-0044](adr/0044-hook-deny-response-format.md) | Hook deny response format — translation in the adapter layer | accepted | Each agentic tool requires a different JSON shape to deny a hook-intercepted tool call. Adapters translate the internal exit-code-2 signal from shared enforcement scripts into the tool's required format, so enforcement scripts remain tool-agnostic. | 0000011-setup-parity-and-consistency |
+| [ADR-0045](adr/0045-workspace-hook-config-write-strategy.md) | Workspace hook config write strategy — Planifest owns the workspace-level file | accepted | For tools that use a single workspace-level hook config file (Windsurf, Cursor, Codex), Planifest setup writes that file entirely with Planifest-managed entries. Users who need custom hooks must use that tool's user-level or system-level config instead. | 0000011-setup-parity-and-consistency |
+| [ADR-0046](adr/0046-hook-adapter-architecture.md) | Hook adapter architecture — delegating to shared enforcement scripts | accepted | Hook adapters delegate to shared enforcement scripts (gate-write.mjs, check-design.mjs) via spawnSync rather than containing enforcement logic inline. This formalises the existing delegating pattern and deprecates self-contained adapters. | 0000011-setup-parity-and-consistency |
+| [ADR-0047](adr/0047-three-file-documentation-architecture.md) | Three-file documentation architecture | accepted | Split the monolithic getting-started.md into three purpose-specific files: lean onboarding, full phase reference, and ops reference. | 0000012-docs-restructure-commit-directives |
+| [ADR-0048](adr/0048-formal-p9-ship-phase.md) | Formal P9 Ship phase — pipeline extended to P0–P9 | accepted | Add P9 as a formal terminal phase for the shipping action, extending the pipeline from P0–P8 to P0–P9 and renaming P7 to Archive. | 0000012-docs-restructure-commit-directives |
+| [ADR-0049](adr/0049-ship-agent-orchestrates-p7-p8-p9.md) | Ship-agent orchestrates P7 Archive, P8 Build Assessment, and P9 Ship | accepted | The ship-agent owns the full close-out sequence: P7 archives, spawns build-assessment-agent for P8, then executes P9 Ship. | 0000012-docs-restructure-commit-directives |
+| [ADR-0050](adr/0050-p9-human-push-pr-decision-protocol.md) | P9 human push/PR decision protocol | accepted | P9 asks the human whether to push and raise the PR automatically or output a PR description for manual use, defaulting to manual if local-git-only is active. | 0000012-docs-restructure-commit-directives |
+| [ADR-0051](adr/0051-run-mode-sentinel-file.md) | Run-mode persisted as sentinel file | accepted | Persist the continuous/interactive run-mode choice to plan/.run-mode rather than holding it only in session memory. | 0000012-docs-restructure-commit-directives |
+| [ADR-0052](adr/0052-retroactive-tags-via-migration.md) | Retroactive release tags delivered as a Planifest migration | accepted | Use the Planifest migration mechanism to apply historical git tags rather than a standalone script or manual instructions. | 0000012-docs-restructure-commit-directives |
+| [ADR-0053](adr/0053-four-adoption-mode-taxonomy.md) | Four Adoption Mode Taxonomy | accepted | Replace the prior three-mode adoption model (Greenfield, Retrofit, Agent Interface Layer) with a four-mode taxonomy: Greenfield, Standard Iterative, Retrofit, External Anchor. | 0000014-improve-adoption-mode-selection |
+| [ADR-0054](adr/0054-signal-conflict-priority-order.md) | Signal Conflict Priority Order | accepted | When multiple adoption mode signals are present, External Anchor takes absolute priority, followed by Standard Iterative, Retrofit, and Greenfield. | 0000014-improve-adoption-mode-selection |
+| [ADR-0055](adr/0055-docs-about-md-as-version-source.md) | docs/about.md as Canonical Version Source | accepted | The project version is stored in docs/about.md (YAML frontmatter), read at P0 and written at P7, rather than in component.yml, git tags, or plan/ artifacts. | 0000014-improve-adoption-mode-selection |
+| [ADR-0056](adr/0056-version-bump-rules-by-track.md) | Version Bump Rules by Pipeline Track | accepted | Version bumps follow a track-keyed semver policy: Fast Path and Change Pipeline produce patch bumps; Feature Pipeline produces minor bumps; major breaking changes produce major bumps. | 0000014-improve-adoption-mode-selection |
+| [ADR-0057](adr/0057-version-regression-hard-block.md) | Version Regression Hard Block | accepted | Confirming a version lower than the currently recorded version is a hard block — the orchestrator refuses and does not proceed until the human provides a valid version. | 0000014-improve-adoption-mode-selection |
+| [ADR-0058](adr/0058-resumable-migration.md) | Resumable Migration with Progress File | accepted | Migration for adoption mode corrections and docs/about.md initialisation uses a JSON progress file for resumability rather than atomic all-or-nothing execution. | 0000014-improve-adoption-mode-selection |
+| [ADR-0059](adr/0059-derived-scope-lock-scenarios.md) | Derived Scope Lock Scenarios over Fixed Checklist | accepted | The Scope Lock Challenge derives happy/sad/bad path scenarios from the specific feature being built rather than using a generic fixed checklist. | 0000014-improve-adoption-mode-selection |
+| [ADR-0060](adr/0060-one-question-at-a-time.md) | One-Question-at-a-Time as Framework-Wide Instruction | accepted | All Planifest phase skills enforce a single question per response and a recommend-then-confirm pattern, rather than leaving interaction style to individual skill authors. | 0000014-improve-adoption-mode-selection |
+| [ADR-0061](adr/0061-incremental-p0-audit-trail.md) | Incremental P0 Audit Trail Writes | accepted | P0 coaching log entries are written to the build log after each question-answer exchange, not accumulated and written at P0 close. | 0000014-improve-adoption-mode-selection |
+| [ADR-0062](adr/0062-docs-lifecycle-ownership.md) | docs/ Lifecycle Ownership | accepted | docs/ is created by the orchestrator at P0, owned by the docs-agent at P6, and extended by the ship-agent at P7. The P6 gate fails if docs/ does not exist. | 0000014-improve-adoption-mode-selection |
+| [ADR-0063](adr/0063-interrupted-p9-detection-signal.md) | Interrupted P9 Detection Signal | accepted | An interrupted P9 is detected by the combination of plan/.orchestrator-active present AND plan/current/ empty — not by a dedicated flag file. | 0000015-pipeline-session-cleanup |
+| [ADR-0064](adr/0064-new-session-recommendation-not-block.md) | New Session Recommendation Not Block | accepted | After P9, the orchestrator recommends starting a new session but does not enforce it — the human decides. | 0000015-pipeline-session-cleanup |
+| [ADR-0065](adr/0065-stale-run-mode-warn-and-clear.md) | Stale Run-Mode Warn-and-Clear at P0 | accepted | When plan/.run-mode is present at P0 start, the orchestrator warns and clears it rather than blocking or silently proceeding. | 0000015-pipeline-session-cleanup |
+| [ADR-0066](adr/0066-run-mode-deletion-at-p9.md) | Run-Mode Deletion Owned by P9 | accepted | plan/.run-mode is deleted at P9 cleanup, not at P0 start. P0 handles the stale case as a recovery path only. | 0000015-pipeline-session-cleanup |
+| [ADR-0067](adr/0067-backlog-folder-not-editable-lifecycle.md) | Backlog Folder Instead of Editable Post-Archive Lifecycle | accepted | Deferred work gets a durable plan/backlog/ home surfaced at the next P0; archived state stays locked — the editable-P7–P9 lifecycle from bug-bounty-hunter PR #4 is rejected. | 0000016-pipeline-governance-and-loop-engineering |
+| [ADR-0068](adr/0068-product-yml-version-policy.md) | product.yml with versionPolicy for Product-Level Versioning | accepted | A root product.yml aggregates one release version across components via a three-value versionPolicy; single-component projects keep component.yml behaviour unchanged. | 0000016-pipeline-governance-and-loop-engineering |
+| [ADR-0069](adr/0069-loop-toggles-in-planifest-overrides.md) | Per-Loop Toggles Live in planifest-overrides/loop-toggles.yml | accepted | Loop enablement is user-owned, tool-agnostic project configuration — one key per loop, values off \| report-only \| on, absent file means all off. | 0000016-pipeline-governance-and-loop-engineering |
+| [ADR-0070](adr/0070-ratchet-approval-marker-file.md) | Single-Use Marker File for Human-Approved Weakening | accepted | Intentional criteria/scope weakening passes the ratchet via plan/current/.ratchet-approve — a human-created, single-use, path-scoped marker consumed by the hook. | 0000016-pipeline-governance-and-loop-engineering |
+| [ADR-0071](adr/0071-cascade-threshold-three-artifacts.md) | Invalidation Cascades Larger Than 3 Artifacts Require Human Approval | accepted | A granted reversal whose cascade invalidates more than 3 downstream artifacts always stops for the human, regardless of run mode. | 0000016-pipeline-governance-and-loop-engineering |
+| [ADR-0072](adr/0072-maker-checker-fresh-context.md) | Verifiers Run as Fresh-Context Subagents with REJECT Default | accepted | Critic, reversal assessor, and cross-model reviewer never share context with the maker; approval requires positive evidence, never absence of objection. | 0000016-pipeline-governance-and-loop-engineering |
+| [ADR-0073](adr/0073-deterministic-caps-budget-enforcement.md) | Caps, Budgets, and the Ratchet Are Enforced Deterministically | accepted | Iteration caps (3 default, P4 keeps 5), the reversal budget (2/feature), and the ratchet rule are enforced by orchestrator control flow reading persisted state plus hooks — never by skill prose alone. | 0000016-pipeline-governance-and-loop-engineering |
+| [ADR-0074](adr/0074-cross-model-gate-pre-p7.md) | Cross-Model Review Gate Sits at End of P6, Strictly Before P7 Archive | accepted | The second-model review gate runs while implementation is fully live and editable — never after archive; the brief's original 'before P9' wording is corrected. | 0000016-pipeline-governance-and-loop-engineering |
+| [ADR-0075](adr/0075-ratchet-approve-agent-write-on-instruction.md) | Ratchet-Approve — Agent Write on Explicit Instruction | accepted | Reverses ADR-0070's human-only-write restriction: the agent may write plan/current/.ratchet-approve, but only when the human explicitly instructs it in the moment, removing hand-typing unreliability while keeping the approval single-use, auditable, and structurally separated from the weakening it authorizes. | 0000017-ratchet-forgery-detection-and-telemetry-schema-spec |
+| [ADR-0076](adr/0076-cross-platform-hook-runtime-unification.md) | Cross-Platform Hook Runtime Unification (.sh → .mjs) | accepted | Ports block-bash.sh, block-grep.sh, and block-webfetch.sh to .mjs, extracting the existing node-fallback logic as the sole implementation, removing both the jq dependency and the Unix-shell requirement identically on every platform. | 0000017-ratchet-forgery-detection-and-telemetry-schema-spec |
+| [ADR-0077](adr/0077-scope-lock-suggested-answers-on-demand-subagent.md) | Scope Lock Suggested Answers via On-Demand Subagent | accepted | The orchestrator always offers a suggested-answer option at each Scope Lock Challenge question, but only dispatches the drafting subagent on explicit human request — never pre-emptively — keeping scope decisions human-owned while offering drafting help. | 0000017-ratchet-forgery-detection-and-telemetry-schema-spec |
+| [ADR-0078](adr/0078-structured-p0-discovery-pass-and-discovery-md-lifecycle.md) | Structured P0 Discovery Pass and discovery.md Lifecycle | accepted | Every adoption mode performs a structured discovery pass at the start of P0, writing findings to a new plan/current/discovery.md that follows build-log.md/design.md's fresh-each-run, archived-at-P7 lifecycle — a relocation of each mode's existing informal discovery behavior, not new scanning capability. | 0000017-ratchet-forgery-detection-and-telemetry-schema-spec |
+| [ADR-0079](adr/0079-unify-telemetry-gating-remove-context-mode-mcp-coupling.md) | Unify Telemetry Gating by Removing the --context-mode-mcp Coupling | accepted | Removes the --context-mode-mcp AND-condition from telemetry hook installation — --structured-telemetry-mcp alone becomes sufficient, closing the exact gap that caused 0000017's telemetry loss. No migration mechanism built; no practical legacy install base exists. | 0000018-telemetry-emission-consistency |
+| [ADR-0080](adr/0080-telemetry-failure-detection-and-interactive-recovery.md) | Telemetry Failure Detection and Interactive Recovery | accepted | Hook-driven emission stays fire-and-forget (ADR-005 unchanged) but now writes a durable failure marker on error, checked by the orchestrator at phase-start checkpoints; agent-driven emission stops and asks immediately inline. Either path: the human is asked once per distinct root cause per run and that answer is honored for the rest of the run. | 0000018-telemetry-emission-consistency |
+| [ADR-0081](adr/0081-discovery-md-elevated-to-hard-limit-status.md) | discovery.md Elevated to Hard Limit Status | accepted | discovery.md's existence-and-completeness requirement is elevated to Hard Limit status in planifest-orchestrator/SKILL.md, matching build-log.md's proven Hard Limit 8 pattern exactly — a self-audit finding from this feature's own P0, where the requirement was silently skipped for lack of enforcement teeth. | 0000018-telemetry-emission-consistency |
+| [ADR-0082](adr/0082-self-description-check-as-separate-script.md) | Repository self-description CI check is a separate script, not an extension of consistency-check.mjs | accepted | req-005 (0000018) adds a new repository-scoped script for README-vs-filesystem drift, rather than folding the check into the existing plan/current/ consistency-check.mjs. | 0000019-self-description-and-session-hygiene-fixes |
+| [ADR-0083](adr/0083-context-pressure-phase-mapping.md) | context_pressure telemetry events map to phase: \\"orchestrator\\" | accepted | The 0000027 hook fix maps context-pressure's envelope phase field to the existing \\"orchestrator\\" enum value rather than adding a new enum member or reusing a different existing value. | 0000019-self-description-and-session-hygiene-fixes |
+| [ADR-0084](adr/0084-hardcoded-deletion-allowlist.md) | Hardcoded, non-extensible deletion allowlist | accepted | The refresh skill's file-deletion capability is restricted to exactly CLAUDE.md and AGENTS.md, hardcoded and never configurable at runtime, so the skill cannot be induced or misconfigured into deleting a user-owned file. | 0000020-setup-refresh-skill |
+| [ADR-0085](adr/0085-single-marker-file-dual-purpose.md) | Single marker file serves as both install-time record and refresh retry cache | accepted | `.claude/.planifest-setup-flags` is the one file both setup.sh/setup.ps1 and the refresh skill read and write, rather than a separate install-time marker and a separate retry-cache file. | 0000020-setup-refresh-skill |
+| [ADR-0086](adr/0086-mandatory-confirmation-gate.md) | Mandatory human confirmation gate regardless of reconstruction confidence | accepted | The refresh skill always requires an explicit human affirmative before deleting or re-invoking setup, even when every reconstructed flag is high confidence, trading convenience for safety. | 0000020-setup-refresh-skill |
+| [ADR-0087](adr/0087-explicit-tool-selection.md) | Tool selection is explicit input, never silently auto-resolved | accepted | The refresh skill requires the target tool to be named (by the human on the loop or asked for) rather than treating multiple detected tool installs as an error condition to guess through. | 0000020-setup-refresh-skill |
+| [ADR-0088](adr/0088-no-automatic-retry.md) | No automatic retry on setup failure | accepted | When the re-invoked setup.sh/setup.ps1 fails partway through, the refresh skill stops and reports rather than retrying automatically, leaving retry as an always-human-initiated action. | 0000020-setup-refresh-skill |
+| [ADR-0089](adr/0089-opus5-model-tier-override-for-audit.md) | claude-opus-5 model-tier override for the content audit subagent | accepted | The req-002 audit pass runs on claude-opus-5 instead of the Model Tier Decision Table's default primary tier (Sonnet), because judging what is redundant vs. load-bearing across an entire instruction corpus is exactly the kind of high-stakes, whole-corpus judgement call the table already reserves for the strongest available reasoning tier. | 0000021-framework-context-bloat-audit |
+| [ADR-0090](adr/0090-guardrailed-baseline-gated-trim-process.md) | Guardrailed, baseline-gated trim process for skill/instruction content | accepted | Trimming redundant content from live enforcement instructions is costly to reverse if done wrong and constrains how every future content-reduction pass on this framework proceeds, so the process is: record a regression-pack baseline first, apply trims only behind two independent guardrails, and retry with failure-derived corrections up to 5 times before reverting rather than either force-committing or silently discarding a failed trim. | 0000021-framework-context-bloat-audit |
+| [ADR-0091](adr/0091-agent-dispatch-standards-file.md) | Extract agent dispatch reference data into a standards file | accepted | Relocates the Model Tier Decision Table and Parallelism Rules + Agent Dispatch Template out of the always-loaded orchestrator skill into a new standards file, cited on demand by the orchestrator, ship-agent, and codegen-agent. | 0000022-orchestrator-redundancy-removal |
+| [ADR-0092](adr/0092-dual-detector-content-loss-verification.md) | Dual-Detector Content-Loss Verification | accepted |  | 0000022-orchestrator-redundancy-removal |
+| [ADR-0093](adr/0093-restore-continuous-run-p1-p3.md) | Restore continuous_run exception for P1-P3 gates | accepted | The Phase Invocation Table's P1/P2/P3 STOP rules hardcoded 'No exception', silently overriding the human's continuous_run choice at P0. Restores the exception these three phases had before a word-count trim pass (commit 42ae808, feature 0000021) dropped it, and records the corrected root-cause attribution. | 0000023-framework-pipeline-fixes |
+| [ADR-0094](adr/0094-product-yml-for-single-component-projects.md) | product.yml Extended to Single-Component Projects as Declared Product ID Home | accepted | product.yml's id field becomes the canonical declared product_id for telemetry across all projects, including single-component ones that previously had no product.yml at all — extending, not superseding, ADR-0068. | 0000024-declared-product-id-for-telemetry |
+| [ADR-0095](adr/0095-ship-agent-pr-footer-default-off.md) | Ship-agent PR footer default-off, opt-in via repo instruction | accepted | The ship-agent's PR description template (both gh pr create and human-push paths) drops the hardcoded AI-attribution footer by default; adopters who want it back add a planifest-overrides/instructions/ file, mirroring the existing local-git-only override pattern. | 0000025-pipeline-gate-and-config-fixes-and-ship-agent-fixes |
+| [ADR-0096](adr/0096-setup-config-overrides-precedence.md) | Setup config overrides precedence | proposed | planifest-overrides/setup-config/{tool}.md becomes the tracked source of truth for active setup flags/backend-url; the gitignored .planifest-setup-flags marker is retained as a local cache reconciled to match it. .orchestrator-strict is explicitly out of scope for this ADR. | 0000025-pipeline-gate-and-config-fixes-and-ship-agent-fixes |
+| [ADR-0097](adr/0097-scope-lock-default-drafted-batch-presented.md) | Scope Lock Default-Drafted, Batch-Presented Answers | accepted | The Scope Lock Challenge now dispatches planifest-scope-lock-agent for all four scenario-path questions in parallel by default and presents all four drafts together for one batch review pass, with per-item explicit accept/edit/reject still required and recorded immediately — narrowly scoped against ADR-0060, which remains in force everywhere else. | 0000025-pipeline-gate-and-config-fixes-and-ship-agent-fixes |
+| [ADR-0098](adr/0098-product-yml-live-component-versions.md) | product.yml components[] as Path Pointers, Not Cached Versions | accepted | Under versionPolicy max-component-version, product.yml's components[] now stores {id, path} pointers to each component's own component.yml, read live by product-version.mjs at derivation time, instead of a cached {id, version} copy that could drift out of sync. | 0000026-context-hook-and-telemetry-backstop-fixes |
+| [ADR-0099](adr/0099-telemetry-emit-event-receipt-backstop.md) | Telemetry emit_event receipt backstop | accepted | Extends the existing check-telemetry-failures.mjs hook family with a PostToolUse receipt writer for emit_event, closing the remaining half of backlog 0000044 (agent-driven emit_event calls verified, not just claimed). | 0000027-backlog-batch-governance-tooling-fixes |
+| [ADR-0100](adr/0100-framework-update-policy-p0-step.md) | Framework Update Policy as a new P0 step, not a migrator extension | accepted | Adds a dedicated P0 Start Actions step detecting a planifest-framework/ dependency update, gated on human confirmation of both the update and its provenance, rather than extending planifest-migrator or introducing a new standalone skill. | 0000027-backlog-batch-governance-tooling-fixes |
+| [ADR-0101](adr/0101-skill-scope-principle.md) | Skill-scope principle — does this skill earn its place | accepted | Records the governing test for whether a skill provides governance or traceability the host tool cannot, with the four TDD-loop skills as worked examples, so future skill additions and removals are judged against a documented standard. | 0000027-backlog-batch-governance-tooling-fixes |
+| [ADR-0102](adr/0102-minimal-phase-1-artifact-set.md) | Minimal default Phase 1 artifact set | accepted | Names execution plan, requirements, scope, risk register, and domain glossary as the always-produced Phase 1 artifact set, with OpenAPI, cost model, SLO definitions, and operational model each gated by an explicit, checkable trigger condition. | 0000027-backlog-batch-governance-tooling-fixes |
+| [ADR-0103](adr/0103-network-level-retry-semantics.md) | Network-level retry semantics for telemetry emission | proposed | Retry only network-level fetch failures in the telemetry emit hooks, never HTTP error statuses, since only the former is the signature of a transient listener gap. | 0000028-telemetry-hardening-and-enforcement-fixes |
+| [ADR-0104](adr/0104-shared-module-placement-and-install-topology.md) | Shared module placement and install topology | proposed | Extracted shared hook modules live inside the existing hooks/enforcement/ and hooks/telemetry/ trees, one directory-scoped module per duplication cluster, with the phase-enum module placed in enforcement/ (always installed) rather than telemetry/ (conditionally installed), and the Tier 1 telemetry glob widened to stop silently dropping new shared modules. | 0000028-telemetry-hardening-and-enforcement-fixes |
+| [ADR-0105](adr/0105-em-dash-guard-attachment-point-and-bypass.md) | Em dash guard attachment point and bypass | proposed | Attach the em dash guard as a PreToolUse(Write, Edit) hook sibling to gate-write.mjs, scoped to Planifest prose paths, bypassed by an in-content sentinel comment rather than a CLI flag. | 0000028-telemetry-hardening-and-enforcement-fixes |
+| [ADR-0106](adr/0106-self-modification-sequencing.md) | Self-modification sequencing for hook extraction and reinstall | proposed | Rewire one caller at a time, re-run setup.sh after each, and verify each hook's live side effect immediately, since exit 0 cannot distinguish a working hook from a silently broken one. | 0000028-telemetry-hardening-and-enforcement-fixes |
+| [ADR-0107](adr/0107-claude-code-only-target.md) | Claude Code is the only supported tool target | accepted | The framework drops eight tool targets, the vendored external skill library, and the context-mode integration. setup.sh and setup.ps1 accept claude-code alone, and the flag surface shrinks from five flags to three. | 0000030-framework-cut-down |
+| [ADR-0108](adr/0108-five-phase-contract.md) | Five-phase pipeline contract and skill consolidation | accepted | The framework moves from a ten-phase pipeline with 21 skills to a five-phase pipeline with 12 skills, reflecting a Claude Code-only target and a single maintainer who does not need ten separate gates. | 0000031-five-phase-planifest-zero |
+| [ADR-0109](adr/0109-rename-and-product-identity.md) | Folder rename and product identity | accepted | The component folder planifest-framework/ is renamed to planifest-zero/ to match the product and repository name. product.yml id becomes planifest-zero, restarting telemetry attribution. The stale Windows refresh script is renamed and fixed to derive its path rather than hardcode it. | 0000031-five-phase-planifest-zero |
+| [ADR-0110](adr/0110-single-route.md) | One route: the feature pipeline | accepted | The framework drops the Change Pipeline and Fast Path routes. Every change, however small, runs the five-phase feature pipeline, and the CI fast-path exemption branch is deleted so one parity check applies to every diff. | 0000031-five-phase-planifest-zero |
+| [ADR-0111](adr/0111-present-state-docs.md) | Living docs describe the present only | accepted | Living documentation describes the current system only. Historical narrative moves exclusively to change records: plan/changelog/, plan/_archive/, ADR files, and git history. docs/decisions-index.md and docs/about.md carry stated exemptions. | 0000031-five-phase-planifest-zero |
+| [ADR-0112](adr/0112-setup-config-record-lives-in-plan-state.md) | The setup-config record lives in plan/state/ | accepted | The tracked record of active setup flags moves from planifest-overrides/setup-config/{tool}.md to plan/state/{tool}.md. It stays git-tracked. planifest-overrides/ returns to holding only human-authored configuration. Supersedes ADR-0096. | 0000032-relocate-setup-config-to-plan-state |
+| [ADR-0113](adr/0113-refresh-setup-source-precedence.md) | Refresh-setup reads the record before the marker | accepted | planifest-refresh-setup Step 3 reads plan/state/{tool}.md first at high confidence, validates it, and falls back to the gitignored marker then hook inference. This makes the tracked record the source of truth in practice, not only on paper. | 0000032-relocate-setup-config-to-plan-state |
+| [ADR-0114](adr/0114-inline-cleanup-of-the-old-record.md) | Setup removes the old record inline | accepted | After a successful write to plan/state/{tool}.md, setup.sh and setup.ps1 delete planifest-overrides/setup-config/{tool}.md at its exact path and remove setup-config/ if it is then empty. No migration file. Removal failure warns and continues. | 0000032-relocate-setup-config-to-plan-state |
+| [ADR-0115](adr/0115-telemetry-is-not-a-framework-concern.md) | Telemetry is not a framework concern | accepted | planifest-zero removes its telemetry system entirely and ships no replacement and no extension seam. Observability belongs to the tool a person runs Planifest inside. planifest-framework, the dev-time copy, keeps its telemetry. | 0000033-remove-telemetry-mcp |
+| [ADR-0116](adr/0116-setup-cleans-up-telemetry-wiring.md) | Setup cleans up telemetry wiring on every run | accepted | Every setup run removes telemetry hook entries from the project's .claude/settings.json, deletes the opt-in sentinel, and deletes the failure and receipt marker directories. One line per removal, a warning without failing, and silence when nothing is present. | 0000033-remove-telemetry-mcp |
+| [ADR-0117](adr/0117-the-phase-vocabulary-lives-in-prose.md) | The phase vocabulary lives in prose, not in a module | accepted | hooks/enforcement/phase-enum.mjs is deleted and pipeline-reference.md states the five phase names directly. The product.yml top-level id field and the orchestrator's product-id hard stop stay, with versioning and archive attribution as their reason. | 0000033-remove-telemetry-mcp |
+| [ADR-0118](adr/0118-retired-flags-warn-and-continue.md) | Retired setup flags warn and continue | accepted | Setup accepts four retired flags, prints one warning for each, skips it, and continues. Any other unknown flag still exits 1. This supersedes the no-op rejection in ADR-0107. | 0000034-setup-hardening |
+| [ADR-0119](adr/0119-atomic-settings-json-writes.md) | settings.json writes go through a temporary file and a rename | accepted | Every settings.json write in both setup scripts writes settings.json.planifest-tmp in the same folder, then renames it over the target. Other files stay as they are. | 0000034-setup-hardening |
+| [ADR-0120](adr/0120-stack-unchanged.md) | The stack stays as it is | accepted | This feature adds no language, runtime, or dependency. Setup stays in Bash and PowerShell, with inline Node for JSON. | 0000034-setup-hardening |
+| [ADR-0121](adr/0121-ps1-hook-entries-match-setup-sh.md) | setup.ps1 writes the same hook entries as setup.sh | accepted | setup.ps1 wires all six enforcement hooks in the setup.sh entry shape, and a static suite checks the match. | 0000035-powershell-setup-parity |
+| [ADR-0122](adr/0122-ps1-supports-powershell-5-1.md) | setup.ps1 supports Windows PowerShell 5.1 | accepted | setup.ps1 keeps support for Windows PowerShell 5.1, so it uses no PowerShell 7-only feature. | 0000035-powershell-setup-parity |
+| [ADR-0123](adr/0123-ps1-flags-are-case-sensitive.md) | setup.ps1 flags are case-sensitive | accepted | The setup.ps1 flag switch matches case, as setup.sh does, and leftover temporary files go at the start of each run. | 0000035-powershell-setup-parity |
+| [ADR-0124](adr/0124-stray-test-files-fail-the-run.md) | Stray test files fail the run | accepted | run-tests.sh names every file under tests/ that is neither a suite nor a known non-suite, and exits 1. | 0000036-test-runner-coverage |
+| [ADR-0125](adr/0125-powershell-suites-without-pester.md) | PowerShell suites use a plain assert helper | accepted | test-*.ps1 suites use a small helper instead of Pester, and run-tests.sh runs or reports them. | 0000036-test-runner-coverage |
+| [ADR-0126](adr/0126-ci-runs-powershell-suites-on-windows.md) | CI runs the PowerShell suites on Windows under both hosts | accepted | A windows-latest job runs run-tests.ps1 with powershell and with pwsh. Bash suites stay out of CI for now. | 0000036-test-runner-coverage |
+| [ADR-0127](adr/0127-repo-self-hosts-on-planifest-zero.md) | The repo self-hosts on planifest-zero | accepted | Delete planifest-framework/ with git rm -r, so the repo runs on the planifest-zero/ it ships. Repoint core.hooksPath first, move the setup record to plan/state/, and defer the reinstall until after merge. | 0000037-self-host-on-planifest-zero |
+| [ADR-0128](adr/0128-bash-suites-run-in-ci-on-ubuntu.md) | The Bash suites run in CI on Ubuntu | accepted | A bash-suites job on ubuntu-latest runs run-tests.sh with PLANIFEST_REQUIRE_PWSH=1, a pinned checkout, and contents: read. The validate-telemetry-schema job goes. | 0000037-self-host-on-planifest-zero |
+| [ADR-0129](adr/0129-setup-repairs-hook-entries-it-owns.md) | Setup repairs the hook entries it owns | accepted | setup.sh removes Planifest PreToolUse entries by module name on any matcher. Both scripts warn on a non-array PreToolUse or UserPromptSubmit value, print it, replace it with the Planifest entries, and exit 0. | 0000037-self-host-on-planifest-zero |
+| [ADR-0130](adr/0130-p0-states-standard-iterative-mode.md) | P0 states standard-iterative mode without asking | accepted | When standard-iterative is the only detected signal, the planifest-zero orchestrator states the mode and its signal at P0 and does not ask for confirmation. Every other mode, and any conflict, keeps the question. | 0000037-self-host-on-planifest-zero |
+| [ADR-0131](adr/0131-stack-unchanged.md) | The stack stays as it is | accepted | This feature adds no language, runtime, or dependency. Setup stays in Bash and PowerShell, with inline Node JavaScript for JSON. | 0000038-setup-hook-filter-fixes |
+| [ADR-0132](adr/0132-per-command-hook-filter.md) | Setup filters hook entries one command at a time | accepted | Both setup scripts remove only the Planifest commands from PreToolUse and UserPromptSubmit entries. They keep user commands, and setup.sh adopts the path-boundary match. | 0000038-setup-hook-filter-fixes |
+| [ADR-0133](adr/0133-stack-unchanged.md) | The stack stays as it is | accepted | This feature adds no language, runtime, or dependency. Setup stays in Bash and PowerShell, with inline Node JavaScript for JSON. | 0000039-setup-hardening-release-sizing |
+| [ADR-0134](adr/0134-invalid-json-exits-1.md) | Invalid JSON exits 1 with a fixed message | accepted | The hook install step in both setup scripts catches invalid JSON, prints one fixed message that names the file, leaves the file unchanged, and exits 1. | 0000039-setup-hardening-release-sizing |
+| [ADR-0135](adr/0135-single-object-hooks-as-array.md) | A single-object hooks value counts as a one-item array | accepted | Both setup scripts treat a single-object hooks value as a one-item array before the per-command filter, so a stale Planifest command goes. | 0000039-setup-hardening-release-sizing |
+| [ADR-0136](adr/0136-release-size-in-product-yml.md) | The release budget lives in product.yml | accepted | The release budget lives in an optional releaseSize field in product.yml. The size classes, budgets, and the medium default live in the orchestrator skill. | 0000039-setup-hardening-release-sizing |
+| [ADR-0137](adr/0137-stack-unchanged.md) | The stack stays as it is | accepted | This feature adds no language, runtime, or dependency. Setup stays in Bash and PowerShell with inline Node JavaScript, and park is Markdown skill text. | 0000040-setup-json-checks-and-park |
+| [ADR-0138](adr/0138-non-object-settings-exit-1.md) | Valid JSON that is not a settings object exits 1 | accepted | Both setup scripts print one shared fixed line and exit 1 when settings.json is valid JSON but not a plain-object settings file, and they leave the file unchanged. | 0000040-setup-json-checks-and-park |
+| [ADR-0139](adr/0139-case-duplicate-keys-ps1-only.md) | Only setup.ps1 rejects case-duplicate keys | accepted | setup.ps1 rejects case-duplicate keys with the shared line because ConvertFrom-Json cannot read them. setup.sh accepts them because node reads them. The difference is deliberate. | 0000040-setup-json-checks-and-park |
+| [ADR-0140](adr/0140-json-depth-cap-1024.md) | Test-JsonText caps depth at 1024 and runs in linear time | accepted | Test-JsonText tracks depth with an integer and a typed character stack, and it fails at depth 1024 with the shared line. Cost grows linearly with input length. | 0000040-setup-json-checks-and-park |
+| [ADR-0141](adr/0141-park-on-feature-branch.md) | Park keeps the work on the feature branch | accepted | Park keeps the work on its feature branch, files a parked backlog entry through a chore PR to main, and returns the working tree to main. Resume and discard happen at a later P1. | 0000040-setup-json-checks-and-park |
+| [ADR-0142](adr/0142-stack-unchanged.md) | The stack stays as it is | accepted | This feature adds no language, runtime, or dependency. Setup stays in Bash and PowerShell with inline Node JavaScript, and park stays a Node script that calls git. | 0000041-setup-cleanup-and-park-hardening |
+| [ADR-0143](adr/0143-cleanup-skips-unreadable-settings.md) | Telemetry cleanup skips an unreadable settings.json | accepted | The legacy telemetry cleanup in both setup scripts skips in silence when settings.json fails the parse or the 0000040 shape rule. The hook install step reports the fault once. A read or write error still warns and continues. | 0000041-setup-cleanup-and-park-hardening |
+| [ADR-0144](adr/0144-non-array-warning-drops-old-value.md) | The non-array warning drops the old value | accepted | Both setup scripts warn on a non-array hooks.PreToolUse or hooks.UserPromptSubmit with the event and file only. The warning no longer prints the old value, and setup keeps no backup. | 0000041-setup-cleanup-and-park-hardening |
+| [ADR-0145](adr/0145-stack-unchanged.md) | The stack stays as it is | accepted | This feature adds no language, runtime, or dependency. Skills stay Markdown, scripts stay Bash and PowerShell, and tests stay shell and node scripts. | 0000042-autonomous-mode-and-prefixes |
+| [ADR-0146](adr/0146-gated-and-autonomous-run-modes.md) | Gated and autonomous run modes | accepted | The run modes interactive and continuous become gated and autonomous. Gated stops at the P1 to P4 gates. Autonomous stops at none and runs to a raised PR. Five exceptions stop both modes. | 0000042-autonomous-mode-and-prefixes |
+| [ADR-0147](adr/0147-phase-numbers-p0-to-p4-and-prefixes.md) | Phase numbers P0 to P4 and number-plus-name prefixes | accepted | The five phases take the numbers P0 to P4, matching Planifest Framework. Build-log headings and message prefixes carry the number and name. The letter prefixes retire, and a grep guard test blocks stale cites outside history. | 0000042-autonomous-mode-and-prefixes |
+| [ADR-0148](adr/0148-framework-wording-and-identifier-map.md) | Framework wording and identifier map | accepted | No tracked file outside history names or describes Planifest Zero as a framework. Prose says Planifest Zero, the pack, or the pipeline. Identifiers follow one map. A new allowlist test enforces the rule. No migration is needed. | 0000042-autonomous-mode-and-prefixes |
+| [ADR-0149](adr/0149-stack-unchanged.md) | The stack stays as declared | accepted | This feature adds no language, runtime, package, or test framework. It adds one Node hook, merge-guard, and one Node script, roadmap-run.mjs. | 0000043-autonomous-roadmaps |
+| [ADR-0150](adr/0150-roadmap-storage-and-lifecycle.md) | Roadmap storage and lifecycle | accepted | Draft roadmaps live in plan/roadmap/ on any branch. The one active roadmap lives in plan/current-roadmap/ on the roadmap branch. Ids share the backlog sequence. The planifest-zero component owns both folders. | 0000043-autonomous-roadmaps |
+| [ADR-0151](adr/0151-agent-squash-merge-into-roadmap-branches.md) | Agent squash-merge into roadmap branches | accepted | The agent may run gh pr merge --squash for its own feature PR into roadmap/* after a clean P3 with green CI. merge-guard enforces this. Merging into main stays human-only. | 0000043-autonomous-roadmaps |
+| [ADR-0152](adr/0152-driver-script-fresh-session-per-step.md) | Driver script runs each step in a fresh session | accepted | A Node driver, roadmap-run.mjs, runs each roadmap step as its own claude -p session with auto permission mode. A lock file stops a second driver. R-B Activate offers to start it in the background. | 0000043-autonomous-roadmaps |
+| [ADR-0153](adr/0153-tag-after-squash-merge.md) | Tag after the squash merge in a roadmap step | accepted | In a roadmap step, P4 squash-merges the PR into the roadmap branch, fetches, tags the squash commit, and pushes the tag. Outside a roadmap, tag-before-PR stays. The roadmap PR asks for a merge commit. | 0000043-autonomous-roadmaps |
+| [ADR-0154](adr/0154-self-confirmed-roadmap-steps-and-stage-prefixes.md) | Self-confirmed roadmap steps and stage prefixes | accepted | Inside an active roadmap, a step's P0 builds the brief from its backlog entries and self-confirms design and scope lock. R-A Chart confirmation is the single human approval. Stage prefixes R-A to R-E sit beside P0 to P4. | 0000043-autonomous-roadmaps |
+| [ADR-0155](adr/0155-progress-markers-and-interrupted-unit-resume.md) | Progress markers and interrupted-unit resume | accepted | Each dispatched unit logs an In progress: line before it starts and a Done: line with its work. On resume, an unmatched In progress: line marks an interrupted unit. The session stashes left-over changes and reruns the unit from its start. | 0000043-autonomous-roadmaps |
+| [ADR-0156](adr/0156-stack-unchanged.md) | The stack stays as declared | accepted | This feature adds no language, runtime, package, or test framework. It adds one Node helper, roadmap-labels.mjs, and edits existing hooks, scripts, skills, and workflows. | 0000151-hardening-efficiency-and-ci |
+| [ADR-0157](adr/0157-hook-block-reasons-dual-write.md) | Hook block reasons go to stderr and stdout | accepted | gate-write, em-dash-guard, and ratchet-check write each block reason to both stderr and stdout, as merge-guard does, so Claude sees the reason and tests can read either stream. | 0000151-hardening-efficiency-and-ci |
+| [ADR-0158](adr/0158-ship-clears-sentinels-before-pr.md) | Ship clears sentinels before the PR | accepted | Ship renumbers to Step 7 tag, Step 8 clear sentinels, Step 9 PR, Step 10 final gate. The tag is pushed with the branch when the agent raises the PR. | 0000151-hardening-efficiency-and-ci |
+| [ADR-0159](adr/0159-dependency-exception-stop.md) | A sixth exception stop for unapproved dependencies | accepted | Every run gains a sixth exception stop when P1 or P2 adds a library or service that is missing from the approved list. | 0000151-hardening-efficiency-and-ci |
+| [ADR-0160](adr/0160-roadmap-driver-child-contract.md) | Roadmap driver child contract | accepted | The driver passes --model and --max-turns, writes per-step logs excluded through .git/info/exclude, and appends percent-encoded labels to OTEL_RESOURCE_ATTRIBUTES. | 0000151-hardening-efficiency-and-ci |
+| [ADR-0161](adr/0161-orchestrator-references-split.md) | Orchestrator references split | accepted | Rarely used orchestrator sections move verbatim to references/orchestrator-*.md files listed in the Pack Index. Core sections stay inline, and a line-preservation check proves no rule was lost. | 0000151-hardening-efficiency-and-ci |
+| [ADR-0162](adr/0162-prune-retired-hooks-by-list.md) | Setup prunes retired hooks by list | accepted | Setup deletes only hooks named on a retired-names list, which gains phase-enum, and never deletes a hook absent from that list. | 0000151-hardening-efficiency-and-ci |
+| [ADR-0163](adr/0163-park-refuses-symlinked-entry-paths.md) | Park refuses symlinked entry paths | accepted | Park refuses any symlink in the entry path, checking each part with lstat and the result with realpath containment, before mkdir, write, and rm. | 0000151-hardening-efficiency-and-ci |
+| [ADR-0164](adr/0164-ravintio-rename-map.md) | RAVINTIO rename map | accepted | Every brand word, path, identifier, and variable moves from planifest to ravintio under one map. Prose writes RAVINTIO in block caps. Identifiers use lowercase. History folders stay as written. | 0000160-ravintio-rebrand |
+| [ADR-0165](adr/0165-legacy-aliases-in-1x.md) | Legacy aliases stay through 1.x | accepted | Two roadmap variables and the old em-dash sentinel stay accepted through 1.x, and the new name wins. Removal is due at 2.0.0. Every other PLANIFEST_ variable renames with no fallback. | 0000160-ravintio-rebrand |
+| [ADR-0166](adr/0166-consumer-migration.md) | Consumer migration 0004 | accepted | Migration 0004 moves consumer overrides, workflow, and markers to the new names, using Bash and PowerShell helpers. Setup stops when old folders remain, and pruning removes old skill folders. | 0000160-ravintio-rebrand |
+| [ADR-0167](adr/0167-brand-guard-test.md) | Brand guard test | accepted | A guard test fails when the old brand word appears outside history and a path-and-line allowlist. It follows the ADR-0148 allowlist model and covers the legacy aliases and the migration files. | 0000160-ravintio-rebrand |
+| [ADR-0168](adr/0168-stack-unchanged.md) | Stack unchanged | accepted | The feature keeps the declared stack and adds no dependency. | 0000164-hardening-and-backlog-skill |
+| [ADR-0169](adr/0169-gate-write-scopes-to-the-project-by-real-path.md) | gate-write scopes to the project by real path | accepted | gate-write exits 0 when the target's real path lies outside the project's real root. A symlink inside the project that points outside counts as outside. | 0000164-hardening-and-backlog-skill |
+| [ADR-0170](adr/0170-retire-telemetry-cleanup-keep-retired-hooks-list.md) | Retire the telemetry cleanup and keep the retired-hooks list | accepted | Setup drops the legacy telemetry cleanup in both shells. The module list stays as RETIRED_HOOK_NAMES and $RetiredHookNames for retired-hook pruning. | 0000164-hardening-and-backlog-skill |
+| [ADR-0171](adr/0171-file-backlog-skill-never-touches-target-git.md) | The file-backlog skill never touches the target repo's git state | accepted | The skill writes one uncommitted entry folder in the target repo. It never commits, pushes, switches branches, stashes, or opens a pull request there. | 0000164-hardening-and-backlog-skill |
+| [ADR-0172](adr/0172-relabel-rename-release-as-0-12-0.md) | Relabel the rename release as 0.12.0 | accepted | 0000160 shipped as 1.0.0 without a separate version decision. It becomes 0.12.0, this release is 0.13.0, and the legacy fallbacks go at 1.0.0. | 0000164-hardening-and-backlog-skill |
+| [ADR-0173](adr/0173-stack-unchanged.md) | The stack stays as declared | accepted | This release adds two Node.js scripts and a CI job, inside the declared stack. | 0000169-release-hygiene |
+| [ADR-0174](adr/0174-ci-tags-the-merge-commit-on-main.md) | CI tags the merge commit on main | accepted | Ship stops tagging before the merge. A CI job on a push to main tags the pushed commit with the product version. | 0000169-release-hygiene |
+| [ADR-0175](adr/0175-one-attribution-check-for-ship-and-ci.md) | One attribution check serves ship and CI | accepted | A single script holds the attribution patterns for PR bodies. Ship and CI both run it, and the commit-msg hook gains the host-line patterns. | 0000169-release-hygiene |
+| [ADR-0176](adr/0176-setup-turns-off-host-attribution.md) | Setup turns off host attribution when unset | accepted | Setup writes empty commit and pr attribution strings to .claude/settings.json only when the key is absent. | 0000169-release-hygiene |
+| [ADR-0177](adr/0177-stack-unchanged.md) | The stack stays as declared | accepted | This release changes Node.js scripts and Markdown only, inside the declared stack. | 0000170-story-mapping-and-gherkin |
+| [ADR-0178](adr/0178-p1-owns-the-story-map.md) | P1 owns the story mapping pass | accepted | The plan phase writes the story map before it writes requirements. | 0000170-story-mapping-and-gherkin |
+| [ADR-0179](adr/0179-criterion-stays-one-checkbox.md) | A criterion stays one checkbox line with Gherkin steps under it | accepted | Each acceptance criterion keeps its checkbox line and gains indented Given, When, and Then lines. | 0000170-story-mapping-and-gherkin |
+| [ADR-0180](adr/0180-ratchet-guards-step-lines.md) | The ratchet guards Gherkin step lines | accepted | While a loop is active, the ratchet blocks removal of a Gherkin step line as well as a checkbox line. | 0000170-story-mapping-and-gherkin |
+| [ADR-0181](adr/0181-stack-unchanged.md) | The stack stays as declared | accepted | This release changes PowerShell scripts and Markdown only, inside the declared stack. | 0000171-faster-setup-ps1-tests |
+| [ADR-0182](adr/0182-system-io-copy.md) | setup.ps1 copies files with System.IO calls | accepted | The skill and hook copies call System.IO in place of per-file cmdlets, and the SKILL.md rewrite keeps its cmdlets. | 0000171-faster-setup-ps1-tests |
+| [ADR-0183](adr/0183-timing-total-file.md) | Suites report setup time through a file the runner names | accepted | Invoke-Setup appends each setup.ps1 time to RAVINTIO_TIMING_FILE, and run-tests.ps1 prints the total. | 0000171-faster-setup-ps1-tests |
+| [ADR-0184](adr/0184-no-skill-bundling.md) | skills read one central copy of each pack file | accepted | Setup stops bundling pack templates, standards, and schemas into each skill, and skills name each pack file by its full path. | 0000171-faster-setup-ps1-tests |
+| [ADR-0185](adr/0185-stack-unchanged.md) | The stack stays as declared | accepted | The release changes Markdown skills, standards, and templates, and adds Bash text suites, with no new dependency. | 0000172-subagent-acceleration |
+| [ADR-0186](adr/0186-run-speed-sentinel.md) | The run speed lives in its own sentinel file | accepted | plan/.run-speed holds fast or standard, and plan/.run-mode keeps its two values. | 0000172-subagent-acceleration |
+| [ADR-0187](adr/0187-fast-batch-per-phase.md) | Each phase skill lists its own fast batch | accepted | The dispatch standard defines fast batch rules, and each phase skill lists the units it dispatches in one message. | 0000172-subagent-acceleration |
+| [ADR-0188](adr/0188-stack-unchanged.md) | The stack stays as declared | accepted | The metrics script uses Node built-in modules only, and the pack gains no dependency. | 0000173-workflow-governance-gates |
+| [ADR-0189](adr/0189-marker-lines-as-metric-source.md) | Fixed marker lines are the only metric source | accepted | The script counts four fixed line forms in the build log and loop-state files, and never reads free text. | 0000173-workflow-governance-gates |
+| [ADR-0190](adr/0190-report-only-thresholds-in-a-standard.md) | Thresholds live in a pack standard, and the gate only reports | accepted | A Markdown thresholds table in the governance standard sets each limit, and a breach never stops ship. | 0000173-workflow-governance-gates |
+| [ADR-0191](adr/0191-rewrite-the-existing-section.md) | Rewrite the existing strict mode section | accepted | The run rewrites the strict mode section in place, adds no dependency, and keeps the stack as declared. | 0000185-explain-strict-mode |
+| [ADR-0192](adr/0192-stack-choice.md) | Stack choice | accepted | The feature keeps the pack's declared stack and adds no dependency. | 0000189-name-the-roadmap-initiative |
+| [ADR-0193](adr/0193-clean-break-with-migration.md) | Clean break with a migration | accepted | The rename ships with no aliases. Migration 0005 moves consumer files, and the driver stops on any old variable. | 0000189-name-the-roadmap-initiative |
+| [ADR-0194](adr/0194-move-on-activation.md) | Move the initiative on activation | accepted | I-B Activate keeps moving the initiative to plan/current-initiative/initiative.md, a fixed path that carries state across sessions. | 0000189-name-the-roadmap-initiative |
+| [ADR-0195](adr/0195-short-initiative-names.md) | Short initiative names | accepted | Names use the short form initiative, with I-A to I-E prefixes. Fixed names and history keep their old spelling. | 0000189-name-the-roadmap-initiative |
+| [ADR-0196](adr/0196-old-name-guard-allowlist.md) | Old-name guard with a file allowlist | accepted | A Bash search test fails when an old name appears in a tracked file outside an allowlist of exact paths. | 0000189-name-the-roadmap-initiative |
+| [ADR-0197](adr/0197-stack-choice.md) | Stack choice | accepted | The feature keeps the pack's declared stack and adds no dependency. | 0000192-rename-runner-lock-and-archive |
+| [ADR-0198](adr/0198-read-both-archive-forms.md) | Read both archive folder forms | accepted | New deliveries archive to an -initiative- folder, and the driver's delivery check reads both forms. | 0000192-rename-runner-lock-and-archive |
+| [ADR-0199](adr/0199-stack-choice.md) | Stack choice | accepted | The feature stays in Bash and PowerShell with the pack's own test suites, and adds no dependency. | 0000196-setup-argument-checks |
+| [ADR-0200](adr/0200-retired-flags-fail.md) | Retired flags fail setup | accepted | A retired flag exits 1 during argument parsing instead of printing a warning, which reverses ADR-0118. | 0000196-setup-argument-checks |
+| [ADR-0201](adr/0201-stack-choice.md) | Stack choice | accepted | The feature stays in Node.js and Bash with the pack's own test suites, and adds no dependency. | 0000197-merge-guard-block-message |
+| [ADR-0202](adr/0202-stack-choice.md) | Stack choice | accepted | The feature stays in Node.js and Bash with the pack's own test suites, and adds no dependency. | 0000198-cap-echoed-plan-text |
+| [ADR-0203](adr/0203-cap-helper-per-program.md) | A cap helper in each program | accepted | Each program holds its own small cap function, because the hook installs as a single file. | 0000198-cap-echoed-plan-text |
+| [ADR-0204](adr/0204-stack-choice.md) | Stack choice | accepted |  | 0000199-reserve-ids-from-counter |
+| [ADR-0205](adr/0205-counter-file-over-ref-scan.md) | A counter file in place of a scan of every ref | accepted |  | 0000199-reserve-ids-from-counter |
+| [ADR-0206](adr/0206-stack-choice.md) | Stack choice | accepted |  | 0000200-reply-conventions |
+| [ADR-0207](adr/0207-warn-only-stop-hook.md) | A warn-only Stop hook | accepted |  | 0000200-reply-conventions |
+| [ADR-0208](adr/0208-stack-choice.md) | Stack choice | accepted |  | 0000201-plan-concurrent-work |
+| [ADR-0209](adr/0209-concurrency-table-in-execution-plan.md) | The concurrency table lives in the execution plan | accepted |  | 0000201-plan-concurrent-work |
+| [ADR-0210](adr/0210-stack-choice.md) | Stack choice | accepted |  | 0000202-improvement-loops |
+| [ADR-0211](adr/0211-reviewer-and-refactor-split.md) | A fresh reviewer proposes and the refactor skill applies | accepted |  | 0000202-improvement-loops |
+| [ADR-0212](adr/0212-stack-choice.md) | Stack choice | accepted |  | 0000203-blameless-postmortems |
+| [ADR-0213](adr/0213-record-location.md) | Postmortem records live in plan/postmortems | accepted |  | 0000203-blameless-postmortems |
+| [ADR-0214](adr/0214-stack-choice.md) | Stack choice | accepted |  | 0000204-run-and-initiative-retrospectives |
+| [ADR-0215](adr/0215-one-skill-two-modes.md) | One retrospective skill with two modes, records in plan/retrospectives | accepted |  | 0000204-run-and-initiative-retrospectives |
+| [ADR-0216](adr/0216-stack-choice.md) | Stack choice | accepted |  | 0000205-initiative-skill |
+| [ADR-0217](adr/0217-position-from-branch-ref.md) | Read position from the initiative branch ref | accepted |  | 0000205-initiative-skill |
+| [ADR-0218](adr/0218-stack-choice.md) | Stack choice | accepted |  | 0000206-chart-time-decisions |
+| [ADR-0219](adr/0219-tables-in-initiative-md.md) | Keep the decision tables in initiative.md | accepted |  | 0000206-chart-time-decisions |
+| [ADR-0220](adr/0220-stack-choice.md) | Stack choice | accepted |  | 0000207-codex-support |
+| [ADR-0221](adr/0221-codex-hook-mapping.md) | Wire only hooks with a confirmed Codex contract | accepted |  | 0000207-codex-support |
+| [ADR-0222](adr/0222-record-undefined-asserts-in-a-file.md) | scan the suite for undefined asserts | accepted | `print_summary` scans the running suite for undefined `assert_*` calls because macOS Bash 3.2 has no not-found handler. | 0000239-test-suite-reliability |
+| [ADR-0223](adr/0223-read-the-stream-in-the-watcher.md) | Read the stream in the watcher | accepted | The watcher turns the step log into activity lines. The driver only switches the output format. | 0000240-stream-step-session-activity |
+| [ADR-0224](adr/0224-track-commits-by-ancestry.md) | Track commits by ancestry and stale by key | accepted | The watcher decides new commits with git ancestry and prints each stale state once. | 0000241-watcher-false-events |
+| [ADR-0225](adr/0225-measure-claude-md-without-overrides.md) | Measure CLAUDE.md without the override block | accepted | The size cap test strips the override block from the repo CLAUDE.md instead of reading the boot template. | 0000242-size-cap-excludes-overrides |
+| [ADR-0226](adr/0226-resume-signals-by-script.md) | Report resume signals with a script run by the session start hook | accepted | A tested Node script reports the mechanical Resume Detection signals, and the hook injects them. | 0000243-session-start-detection |
+| [ADR-0227](adr/0227-split-by-moment-of-use.md) | Split the orchestrator skill by moment of use | accepted | Move the six task-bound sections to reference files grouped by the moment a session needs them. | 0000244-split-orchestrator-skill |
+| [ADR-0228](adr/0228-targeted-overrides-append-to-skills.md) | targeted overrides append to the named skill | accepted | An override names its target skill in frontmatter, and setup appends it to that installed skill. | 0000245-boot-rules-into-skills |
+| [ADR-0229](adr/0229-hook-enforcement-reference-file.md) | Hook Enforcement lives in a reference file | accepted | The hook list moves from the boot templates to a standards file that block messages name. | 0000245-boot-rules-into-skills |
+| [ADR-0230](adr/0230-scan-by-grep-in-plan-skill.md) | The plan skill scans tests by grep | accepted | The plan agent greps the tests by hand under a skill section, with no new script. | 0000246-plan-checks-count-and-cap-tests |
+| [ADR-0231](adr/0231-commit-counter-by-path.md) | reserve-id commits the counter by path | accepted | reserve-id.mjs --commit runs git commit with the counter path after a double dash, so the commit holds that file alone. | 0000247-git-state-hygiene |
+| [ADR-0232](adr/0232-separate-build-log-check-script.md) | the build log check is its own script | accepted | build-log-check.mjs checks the build log at ship, apart from consistency-check.mjs, which checks the plan at P1. | 0000248-ship-merge-and-wall-clocks |
+| [ADR-0233](adr/0233-one-line-for-both-stops.md) | One stop line for both stops | accepted | A step that triggers Restart and Setup gets one line, and the Restart-only line stays unchanged. | 0000313-driver-setup-stop |
+| [ADR-0234](adr/0234-skip-step-logs-in-guard.md) | Skip the step log folder in the guard | active | The phase guard skips plan/.initiative-logs and keeps scanning everything else. | 0000314-step-logs-stay-in-place |
+| [ADR-0235](adr/0235-clear-environment-in-runner.md) | Clear the environment in the runner | active | The runners clear RAVINTIO_ variables for each suite and check the tree at the end. | 0000315-isolated-test-state |
+| [ADR-0236](adr/0236-hook-launcher-project-root.md) | Run every hook through a launcher from the project root | active | Hooks resolve from the project root and guards fail closed through guard-run.mjs. | 0000316-hooks-fail-closed |
+| [ADR-0237](adr/0237-block-forced-adds.md) | Block forced adds with a guard and a CI check | active | A Bash guard plus a CI check stop ignored files reaching a commit. | 0000317-block-forced-adds |
+| [ADR-0238](adr/0238-coordinator-prs-in-the-carve-out.md) | Coordinator PRs ride the existing merge-guard | active | Coordinator work reaches the initiative branch as titled PRs that the agent squashes under the current hook. | 0000318-titled-coordinator-prs |
+| [ADR-0239](adr/0239-two-stateless-git-scripts.md) | Check history with two stateless git scripts | active | Two Node scripts read git and CI runs them. | 0000319-initiative-history-checks |
+| [ADR-0240](adr/0240-migration-ledger-outside-the-pack.md) | migration ledger outside the pack | accepted | Migration state lives in plan/state/migrations.md, and a Detect line lets the script see a condition turn true. | 0000320-quiet-session-start |
+| [ADR-0241](adr/0241-generated-backlog-index.md) | generated backlog index checked in CI | accepted | The backlog index is a tracked file that a script generates and CI compares with a fresh run. | 0000321-backlog-triage |
+| [ADR-0242](adr/0242-check-pr-into-main-in-ci.md) | CI checks the branch and commit count of a PR into main | accepted | A script that CI runs on every PR into main enforces the prefix and single-commit rule. | 0000327-squash-before-main |
+| [ADR-0243](adr/0243-check-reads-chart-titles.md) | the history check reads titles from the chart | accepted | The history script takes expected step titles from the initiative chart and finds the archived chart by initiative id. | 0000351-step-titles-and-history-shape |
+| [ADR-0244](adr/0244-queue-item-contract.md) | queue items name their step in item.md | accepted | A queue item is a folder whose item.md names the step and the destination, and the step commits it. | 0000352-coordinator-admin-in-step-prs |
+| [ADR-0245](adr/0245-refuse-commit-on-initiative.md) | reserve-id.mjs refuses --commit on initiative/* | accepted | The script refuses to commit the counter on an initiative branch and names the feat/ route. | 0000352-coordinator-admin-in-step-prs |
+| [ADR-0246](adr/0246-replay-with-merge-tree.md) | Replay with git merge-tree, not a working tree | accepted | The script replays commits with git merge-tree and commit-tree so it never touches a working tree. | 0000353-reshape-at-delivery |
+| [ADR-0247](adr/0247-step-tags-by-version.md) | Find step commits by version tag and move tags by delete | accepted | The script finds each step commit through its v{Version} tag and moves tags by delete and recreate. | 0000353-reshape-at-delivery |
+| [ADR-0248](adr/0248-ship-replacement-route.md) | Ship uses the replacement branch route for chore | accepted | The ship skill drops the chore force-with-lease and uses the replacement branch route. | 0000353-reshape-at-delivery |
+| [ADR-0249](adr/0249-resume-with-session-id.md) | Resume with the session id from the stream | active | The driver reads the session id from stream events and resumes at most twice. | 0000354-steps-run-to-the-end |
+| [ADR-0250](adr/0250-setup-compares-tool-and-flags.md) | Compare tool and flags, not the timestamp | active | Setup rewrites the tracked record only when tool or flags differ. | 0000354-steps-run-to-the-end |
+| [ADR-0251](adr/0251-stack-choice.md) | Stack choice | accepted | The step adds no language, library, or service. It edits YAML, Bash tests, and Markdown skills. | 0000355-codeql-and-branch-cleanup |
+| [ADR-0252](adr/0252-codeql-advanced-setup.md) | Run CodeQL from a workflow file | accepted | Advanced setup scans PRs into initiative branches. Default setup cannot. | 0000355-codeql-and-branch-cleanup |
+| [ADR-0253](adr/0253-branch-cleanup-job.md) | Delete merged head branches from a scoped CI job | accepted | A cleanup-branch job in ravintio.yml holds contents write on that job only. | 0000355-codeql-and-branch-cleanup |
+| [ADR-0254](adr/0254-stack-choice.md) | Stack choice | accepted | The step adds no language, library, or service. It edits Node hooks, Bash and PowerShell setup, and Bash tests. | 0000357-guard-gaps-closed |
+| [ADR-0255](adr/0255-launcher-fails-closed.md) | A guard command exits 2 when the launcher fails | accepted | Setup appends \|\| exit 2 to each guard-mode hook command, so a missing launcher blocks the call. | 0000357-guard-gaps-closed |
+| [ADR-0256](adr/0256-forced-add-blocks-what-it-cannot-read.md) | The forced-add guard blocks what it cannot read | accepted | block-forced-add.mjs adds git stage, splits on subshell characters, and blocks a variable in a git add segment. Codex gets the guard. | 0000357-guard-gaps-closed |
+| [ADR-0257](adr/0257-stack-choice.md) | Stack choice | active | The step adds no language, library, or service. It edits skills, Node scripts, and Bash and PowerShell runners. | 0000358-clean-step-stops-and-logs |
+| [ADR-0258](adr/0258-stack-choice.md) | Stack choice | active | The step adds no language, library, or service. It edits Markdown rules and Bash tests. | 0000359-safe-parallel-commits |
+| [ADR-0259](adr/0259-stack.md) | Stack and approach | accepted | Keep Node ESM scripts and shell tests. Move Context Hygiene to a reference file. | 0000377-driver-stops-and-headroom |
+| [ADR-0260](adr/0260-merge-queue-merges-not-rebases.md) | The merge queue merges the initiative branch into the PR branch | accepted | The queue updates a step PR by merging the initiative branch into it, because the step rules forbid force-pushes. | 0000378-merge-time-versioning |
+| [ADR-0261](adr/0261-merge-order-from-version-column.md) | Merge order comes from the chart Version column | accepted | The reshape and history check sort steps by the Version the queue wrote, not by chart row. | 0000378-merge-time-versioning |
+| [ADR-0262](adr/0262-running-and-ready-live-in-the-control-area.md) | The driver keeps running and ready in the control area | accepted | The driver keeps running and ready in the control area | 0000379-parallel-steps-on-worktrees |
+| [ADR-0263](adr/0263-serial-path-without-concurrency-field.md) | A chart without a Concurrency field keeps the serial path | accepted | A chart without a Concurrency field keeps the serial path | 0000379-parallel-steps-on-worktrees |
+| [ADR-0264](adr/0264-steps-end-at-ready-the-queue-merges.md) | A step ends at ready and the driver runs the merge queue | accepted | A step ends at ready and the driver runs the merge queue | 0000379-parallel-steps-on-worktrees |
+| [ADR-0265](adr/0265-worktrees-copy-setup-output.md) | The driver copies git-ignored setup output into each worktree | accepted | The driver copies git-ignored setup output into each worktree | 0000379-parallel-steps-on-worktrees |
+| [ADR-0266](adr/0266-rule-anchor-format.md) | Rule anchor format and lookup | accepted | Rules carry an HTML comment anchor and tests read them through helpers in assert.sh. | 0000380-test-helpers-and-rule-anchors |
+| [ADR-0267](adr/0267-portable-timeout.md) | Portable timeout through perl alarm | accepted | with_timeout uses perl alarm and falls back to a Bash watchdog. | 0000380-test-helpers-and-rule-anchors |
+| [ADR-0268](adr/0268-manifest-confinement.md) | Confine manifest removal | accepted | Setup removes a manifest entry only if it is a direct child of the skills directory. | 0000381-setup-safety |
+| [ADR-0269](adr/0269-boot-file-and-commands.md) | Keep developer files at install | accepted | Setup moves a developer CLAUDE.md aside, copies whole skill folders, and prunes retired commands by manifest. | 0000381-setup-safety |
+| [ADR-0270](adr/0270-scan-stays-skill-text.md) | The scan stays a skill instruction | active | The scan is skill text and adds no script. | 0000383-test-impact-scan |
+| [ADR-0271](adr/0271-adr-home-and-migration.md) | ADR home in docs/adr and migration 0009 | accepted | Every ADR lives in docs/adr under a four-digit repo-wide number. A script-backed migration moves and renumbers the archived ADRs. | 0000384-plan-checks |
+| [ADR-0272](adr/0272-consistency-check-additions.md) | Consistency check additions | accepted | Checks 9 and 10 are new, check 8 gains an optional column, and reference resolution reads docs/adr. | 0000384-plan-checks |
+| [ADR-0273](adr/0273-human-settings-check.md) | Human-only settings check | accepted | A script reads allowlisted repository settings with GET and blocks P1 on a mismatch. | 0000384-plan-checks |
+| [ADR-0274](adr/0274-gate-write-takes-bash.md) | gate-write takes Bash calls | accepted | gate-write reads Bash redirects, tee, and sed -i, and setup wires it on the Bash matcher. | 0000393-session-integrity-and-guards |
+| [ADR-0275](adr/0275-postmortem-coverage-by-line.md) | Postmortem coverage by line | accepted | Ship matches stops and reworks to Postmortem lines, and a record check runs on each named file. | 0000392-ship-postmortems |
+| [ADR-0276](adr/0276-queue-polls-checks-json.md) | Queue polls checks as JSON | accepted | The merge queue polls gh pr checks as JSON until every check passes, and names a failed check. | 0000392-ship-postmortems |

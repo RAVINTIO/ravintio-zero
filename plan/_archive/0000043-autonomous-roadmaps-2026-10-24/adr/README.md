@@ -1,0 +1,1 @@
+ADRs moved to docs/adr/. See 0149-stack-unchanged.md, 0150-roadmap-storage-and-lifecycle.md, 0151-agent-squash-merge-into-roadmap-branches.md, 0152-driver-script-fresh-session-per-step.md, 0153-tag-after-squash-merge.md, 0154-self-confirmed-roadmap-steps-and-stage-prefixes.md, 0155-progress-markers-and-interrupted-unit-resume.md.
