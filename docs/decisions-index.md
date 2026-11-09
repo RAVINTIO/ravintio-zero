@@ -3,7 +3,7 @@
 > Change record. Index of all ADRs across all features. Updated after every pipeline run.
 > Do not archive this file. Update it in place.
 
-Last updated: 0000409-ci-shards
+Last updated: 0000386-unit-dispatch
 
 ---
 
@@ -303,3 +303,4 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 | [ADR-0282](adr/0282-workflow-lint-tooling-and-scope.md) | Workflow lint tooling and scope | accepted | A pinned actionlint and zizmor job in the repo's own workflow, not mirrored to consumers. | 0000394-github-security-and-ci-lint |
 | [ADR-0283](adr/0283-settings-check-and-human-stop.md) | Settings check script and the human stop | accepted | A script lists and checks the admin-only settings, and the step stops once for the human at P3. | 0000394-github-security-and-ci-lint |
 | [ADR-0284](adr/0284-ci-runs-suites-in-shards.md) | CI runs the suites in shards | accepted | CI runs 4 bash shards and 4 Windows PowerShell 5.1 shards behind summary jobs with the required names, and drops pwsh on Windows. Supersedes ADR-0126. | 0000409-ci-shards |
+| [ADR-0285](adr/0285-unit-class-tier-effort-table.md) | Unit class, tier, and effort table | accepted | A table in the dispatch standards gives each unit a class, tier, and effort, and a content unit may run inline. | 0000386-unit-dispatch |
