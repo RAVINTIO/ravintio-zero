@@ -30,7 +30,7 @@ SCOPE=(
 # step logs, which echo the step's own test output (0000314). Only that folder
 # is skipped, so a new untracked skill file is still scanned.
 EXCLUDE=(
-  plan/_archive plan/changelog plan/current plan/backlog
+  plan/_archive plan/changelog plan/current plan/backlog docs/adr docs/decisions-index.md
   ravintio-zero/migrations/_done plan/.initiative-logs
 )
 # P5 to P9, "Phase <n>", or a retired letter prefix (D:, PL:, IM:, VA:, SH:).
@@ -136,7 +136,7 @@ if [ -f "$INSTR/custom-004-ship-push-and-raise-pr.md" ]; then
 fi
 
 OLD_REFS="$(cd "$REPO_ROOT" && git grep -n 'custom-004-p9' -- . \
-  ':!plan/_archive' ':!plan/changelog' ':!plan/current' ':!plan/backlog' \
+  ':!plan/_archive' ':!plan/changelog' ':!docs/adr' ':!plan/current' ':!plan/backlog' \
   ':!ravintio-zero/migrations/_done' \
   ':!ravintio-zero/tests/test-0000042-req-006-phase-guard-and-stale-cites.sh' 2>/dev/null)"
 assert_equals "" "$OLD_REFS" "req-006 (c): no live file names custom-004-p9"

@@ -23,10 +23,13 @@ OLD_NAMES='roadmap-runner\.lock|\{slug\}-roadmap-\{date\}|current-roadmap|roadma
 
 # Folders that hold history.
 ALLOW_DIRS='plan/_archive/
-plan/changelog/'
+plan/changelog/
+docs/adr/'
+
 
 # Files that must name an old name to do their job.
-ALLOW_FILES='ravintio-zero/scripts/initiative-run.mjs
+ALLOW_FILES='docs/decisions-index.md
+ravintio-zero/scripts/initiative-run.mjs
 ravintio-zero/component.yml
 ravintio-zero/migrations/0005-initiative-rename.md
 ravintio-zero/migrations/migrate-initiative-rename.sh

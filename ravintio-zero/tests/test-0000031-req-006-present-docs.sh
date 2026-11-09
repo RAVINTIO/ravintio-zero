@@ -10,7 +10,7 @@ echo "=== (a) no narrative history in living docs ==="
 # Exempt: decisions-index.md (change record), about.md feature field.
 HITS=$(grep -rl "Removed at 0000030\|introduced in feature\|Left as-is by decision" \
   "$REPO/docs" "$REPO/README.md" "$ZERO_DIR"/*.md "$ZERO_DIR/standards" 2>/dev/null \
-  | grep -v "decisions-index.md" | wc -l | tr -d ' ')
+  | grep -v "decisions-index.md\|$REPO/docs/adr/" | wc -l | tr -d ' ')
 assert_equals "0" "$HITS" "living docs free of narrative history"
 
 echo "=== (b) folded backlog fixes ==="

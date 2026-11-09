@@ -23,7 +23,7 @@ UP="FRAME""WORK"; LO="frame"; CAP="Frame"
 # current plan, which quotes the old names to describe the rename.
 in_scope_files() {
   git -C "$REPO_ROOT" ls-files \
-    | grep -v -e '^plan/_archive/' -e '^plan/changelog/' -e '^plan/current/' \
+    | grep -v -e '^plan/_archive/' -e '^plan/changelog/' -e '^plan/current/' -e '^docs/adr/' -e '^docs/decisions-index\.md$' \
               -e '^ravintio-zero/migrations/_done/' \
     | grep -vxF "$SELF"
 }
