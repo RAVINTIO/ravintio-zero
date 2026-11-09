@@ -4,6 +4,7 @@
 # and a fake `gh` shim that performs real git merges on the bare remote.
 
 set -uo pipefail
+export MQ_POLL_MS=20
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
@@ -28,13 +29,23 @@ case "$sub" in
   view)
     if [[ "$*" == *mergeCommit* ]]; then
       printf '{"mergeCommit":{"oid":"%s"}}\n' "$(cat "$D/pr-$k.merge")"
+    elif [[ "$*" == *headRefOid* ]]; then
+      # 0000411: the queue waits for GitHub to show the pushed head and a mergeable PR.
+      printf '{"headRefOid":"%s","mergeable":"MERGEABLE","mergeStateStatus":"CLEAN"}\n' \
+        "$(git --git-dir "$FAKE_REMOTE" rev-parse "refs/heads/$(cat "$D/pr-$k.head")" 2>/dev/null)"
     else
       printf '{"title":"%s","headRefName":"%s","baseRefName":"%s"}\n' \
         "$(cat "$D/pr-$k.title")" "$(cat "$D/pr-$k.head")" "$(cat "$D/pr-$k.base")"
     fi ;;
   checks)
-    [ -f "$D/pr-$k.red" ] && exit 1
-    exit 0 ;;
+    if [ -f "$D/pr-$k.red" ]; then
+      echo '[{"name":"unit-tests","bucket":"fail"}]'; exit 1
+    fi
+    if [ -f "$D/pr-$k.pending" ] && [ "$(cat "$D/pr-$k.pending")" -gt 0 ]; then
+      echo $(( $(cat "$D/pr-$k.pending") - 1 )) > "$D/pr-$k.pending"
+      echo '[{"name":"unit-tests","bucket":"pending"}]'; exit 8
+    fi
+    echo '[{"name":"unit-tests","bucket":"pass"}]'; exit 0 ;;
   merge)
     head="$(cat "$D/pr-$k.head")"; base="$(cat "$D/pr-$k.base")"
     t="$(mktemp -d)"
@@ -204,7 +215,7 @@ make_world args
 run_mq run --step 2 --pr 12 --root "$CLONE"
 assert_equals "0" "$CODE" "REQ-003: run exits 0 ($OUT)"
 assert_contains "pr merge 12 --squash --delete-branch" "$(cat "$FAKE_GH_DIR/calls.log")" "REQ-003: the PR number is one argument to gh pr merge"
-assert_contains "pr checks 12 --watch --fail-fast" "$(cat "$FAKE_GH_DIR/calls.log")" "REQ-003: CI is watched with fail-fast"
+assert_contains "pr checks 12 --json name,bucket" "$(cat "$FAKE_GH_DIR/calls.log")" "REQ-003: CI is polled as JSON"
 assert_equals "" "$(grep -n -e '--force' -e '"-f"' "$TOOL" | grep -v '^[0-9]*: *//\|^[0-9]*: *\*')" "REQ-003: the script holds no force push"
 
 print_summary

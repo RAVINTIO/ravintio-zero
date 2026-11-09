@@ -1,16 +1,16 @@
 ---
-title: "ADR 0287: Prose baseline ratchet"
+title: "ADR 0289: Prose baseline ratchet"
 summary: "A per-file count of breaches by rule, kept in git, may fall and never rise."
 status: "accepted"
 component: "ravintio-zero"
 version: "0.1.0"
 ---
-# ADR-0287 - Prose baseline ratchet
+# ADR-0289 - Prose baseline ratchet
 
 **Skill:** [plan](../skills/ravintio-plan/SKILL.md)
 **Feature:** 0000390-prose-checks
 **Component:** ravintio-zero
-**File:** `docs/adr/0287-prose-baseline-ratchet.md`
+**File:** `docs/adr/0289-prose-baseline-ratchet.md`
 **Date:** 2026-11-09T15:01:20Z
 
 ## Context
@@ -49,8 +49,8 @@ Store counts in `plan/state/prose-baseline.json` as `{"version": 1, "files": {"p
 
 ## Related ADRs
 
-- ADR-0286 - depends-on
-- ADR-0288 - related-to
+- ADR-0288 - depends-on
+- ADR-0290 - related-to
 
 ## Supersedes
 

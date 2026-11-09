@@ -1,16 +1,16 @@
 ---
-title: "ADR 0288: Prose scope and enforcement points"
+title: "ADR 0290: Prose scope and enforcement points"
 summary: "The linter reads a fixed set of Markdown paths and runs in commit-msg, pre-commit, and CI."
 status: "accepted"
 component: "ravintio-zero"
 version: "0.1.0"
 ---
-# ADR-0288 - Prose scope and enforcement points
+# ADR-0290 - Prose scope and enforcement points
 
 **Skill:** [plan](../skills/ravintio-plan/SKILL.md)
 **Feature:** 0000390-prose-checks
 **Component:** ravintio-zero
-**File:** `docs/adr/0288-prose-scope-and-enforcement-points.md`
+**File:** `docs/adr/0290-prose-scope-and-enforcement-points.md`
 **Date:** 2026-11-09T15:01:20Z
 
 ## Context
@@ -47,8 +47,8 @@ The scope is Markdown under `docs/`, `ravintio-zero/`, `ravintio-overrides/`, `p
 
 ## Related ADRs
 
-- ADR-0286 - depends-on
-- ADR-0287 - depends-on
+- ADR-0288 - depends-on
+- ADR-0289 - depends-on
 
 ## Supersedes
 

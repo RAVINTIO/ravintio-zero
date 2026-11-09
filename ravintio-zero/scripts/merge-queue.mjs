@@ -13,6 +13,16 @@
  * differs. It never rewrites pushed history. Every git and gh call takes an
  * argument array. Set GH_BIN and GIT_BIN to override the binaries.
  *
+ * The queue waits for CI before the version push and again after it, because
+ * the push restarts CI on the new head (feature 0000392, REQ-003, ADR-002).
+ * It polls `gh pr checks --json name,bucket` every MQ_POLL_MS ms (default
+ * 10000) until MQ_TIMEOUT_MS ms (default 1800000) have passed.
+ *
+ * Before each CI wait it polls `gh pr view --json headRefOid` until GitHub
+ * shows the pushed head. Before the merge it waits until GitHub reports the
+ * PR MERGEABLE with a clean state, and it retries a "not mergeable" or "Base
+ * branch was modified" refusal once (feature 0000411).
+ *
  * The chart `Merge commit` cell holds `tag v{version}`. The queue never commits
  * after the squash, so the sha lives in the tag and in the printed output.
  */
@@ -42,6 +52,88 @@ function gh(root, args, opts = {}) {
 
 function failText(e) {
   return `${e.stderr || ""}${e.stdout || ""}`.trim() || e.message;
+}
+
+function sleepSync(ms) {
+  Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
+}
+
+/** Poll PR checks until all pass. Stop on a failed check or a timeout. */
+function waitForChecks(root, pr) {
+  const poll = Number(process.env.MQ_POLL_MS) || 10000;
+  const timeout = Number(process.env.MQ_TIMEOUT_MS) || 1800000;
+  const start = Date.now();
+  for (;;) {
+    let out = "";
+    try {
+      out = gh(root, ["pr", "checks", pr, "--json", "name,bucket"]);
+    } catch (e) {
+      out = e.stdout || "";
+    }
+    let list = null;
+    try {
+      list = JSON.parse(out);
+    } catch {
+      list = null;
+    }
+    if (Array.isArray(list) && list.length > 0) {
+      const bad = list.filter((c) => c.bucket === "fail" || c.bucket === "cancel");
+      if (bad.length) throw new Stop(`CI failed on PR #${pr}: ${bad.map((c) => c.name).join(", ")}`);
+      if (list.every((c) => c.bucket === "pass" || c.bucket === "skipping")) return;
+    }
+    if (Date.now() - start >= timeout) throw new Stop(`timed out waiting for CI on PR #${pr}`);
+    sleepSync(poll);
+  }
+}
+
+// GitHub checks a pushed head and works out mergeability some seconds after the push. Until then,
+// `gh pr checks` can report the previous head and `gh pr merge` answers "not mergeable" (0000411).
+const MERGE_READY = new Set(["CLEAN", "HAS_HOOKS", "UNSTABLE"]);
+
+function prState(root, pr) {
+  try {
+    return JSON.parse(gh(root, ["pr", "view", pr, "--json", "headRefOid,mergeable,mergeStateStatus"]));
+  } catch {
+    return {};
+  }
+}
+
+/** Poll the PR state until `ok` holds. Stop on a timeout, naming what the queue waited for. */
+function waitForState(root, pr, what, ok) {
+  const poll = Number(process.env.MQ_POLL_MS) || 10000;
+  const timeout = Number(process.env.MQ_TIMEOUT_MS) || 1800000;
+  const start = Date.now();
+  for (;;) {
+    if (ok(prState(root, pr))) return;
+    if (Date.now() - start >= timeout) throw new Stop(`timed out waiting for PR #${pr}: ${what}`);
+    sleepSync(poll);
+  }
+}
+
+/** Wait until GitHub shows `sha` as the PR head, then wait for CI on it. */
+function waitForHeadChecks(root, pr, sha) {
+  waitForState(root, pr, `head ${sha.slice(0, 8)}`, (s) => s.headRefOid === sha);
+  waitForChecks(root, pr);
+}
+
+function waitForMergeable(root, pr) {
+  waitForState(root, pr, "mergeable", (s) => s.mergeable === "MERGEABLE" && MERGE_READY.has(s.mergeStateStatus));
+}
+
+/** Squash-merge once GitHub reports the PR mergeable. Retry once on a transient refusal. */
+function mergeWhenReady(root, pr) {
+  for (let attempt = 1; ; attempt++) {
+    waitForMergeable(root, pr);
+    try {
+      gh(root, ["pr", "merge", pr, "--squash", "--delete-branch"]);
+      return;
+    } catch (e) {
+      const text = failText(e);
+      if (attempt >= 2 || !/not mergeable|Base branch was modified/i.test(text)) {
+        throw new Stop(`gh pr merge failed: ${text}`);
+      }
+    }
+  }
 }
 
 // ---------------------------------------------------------------- chart
@@ -283,9 +375,8 @@ function cmdRun(a) {
     git(root, ["push", "origin", `${head}:${head}`]);
   }
 
-  // 3. Wait for CI.
-  const checks = spawnSync(GH, ["pr", "checks", pr, "--watch", "--fail-fast"], { cwd: root, stdio: "inherit" });
-  if (checks.status !== 0) throw new Stop(`CI failed on PR #${pr}`);
+  // 3. Wait for GitHub to see the head, then for CI on it.
+  waitForHeadChecks(root, pr, mergedHead);
 
   // 4. Next version from the base branch.
   const current = versionsOnRef(root, `origin/${base}`, list);
@@ -311,16 +402,15 @@ function cmdRun(a) {
     git(root, ["add", "--", ...paths]);
     git(root, ["commit", "-m", `chore(${featureId.slice(0, 7)}): set version ${next} for step ${step}`, "--", ...paths]);
     git(root, ["push", "origin", `${head}:${head}`]);
+    // The push restarts CI on the new head. Wait for GitHub to see it, then for CI.
+    waitForHeadChecks(root, pr, git(root, ["rev-parse", "HEAD"]).trim());
   } else {
     cmdVersions({ root, list });
   }
 
-  // 6. Squash-merge, then tag the merge commit. Nothing is committed after this.
-  try {
-    gh(root, ["pr", "merge", pr, "--squash", "--delete-branch"]);
-  } catch (e) {
-    throw new Stop(`gh pr merge failed: ${failText(e)}`);
-  }
+  // 6. Squash-merge once GitHub reports the PR mergeable, then tag the merge commit. Nothing is
+  // committed after this.
+  mergeWhenReady(root, pr);
   git(root, ["fetch", "origin", base]);
   let sha;
   try {

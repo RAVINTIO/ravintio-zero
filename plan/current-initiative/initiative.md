@@ -166,7 +166,7 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 13 | 0000389-writing-standard | Writing standard | 0000300 | minor | 0.68.0 | merged | writing | 4 |
 | 14 | 0000390-prose-checks | Prose checks | 0000301, 0000303, 0000304 | minor | | pending | writing | 6, 13 |
 | 15 | 0000391-standards-archetypes | Standards archetypes | 0000305 | minor | | pending | writing | 6, 14 |
-| 16 | 0000392-ship-postmortems | Ship postmortems | 0000285 | minor | | pending | ship | 4 |
+| 16 | 0000392-ship-postmortems | Ship postmortems | 0000285 | minor | 0.72.0 | merged | ship | 4 |
 | 17 | 0000393-session-integrity-and-guards | Session integrity and guards | 0000271, 0000367, 0000272, 0000260 | minor | 0.66.0 | merged | guards | 6 |
 | 18 | 0000394-github-security-and-ci-lint | GitHub security and CI lint | 0000323, 0000324, 0000325 | minor | 0.69.0 | merged | github | 4 |
 | 19 | 0000395-pack-prose-to-the-standard | Pack prose to the standard | 0000302 | minor | | pending | writing | 5-18 |
@@ -190,3 +190,4 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 18 | #137 | tag v0.69.0 | 0.69.0 | 2026-11-09T13:15:22Z |
 | 11 | #143 | tag v0.70.0 | 0.70.0 | 2026-11-09T14:27:49Z |
 | 10 | #145 | tag v0.71.0 | 0.71.0 | 2026-11-09T15:42:35Z |
+| 16 | #134 | tag v0.72.0 | 0.72.0 | 2026-11-09T16:44:31Z |

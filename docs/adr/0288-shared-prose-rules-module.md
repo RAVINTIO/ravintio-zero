@@ -1,16 +1,16 @@
 ---
-title: "ADR 0286: Shared prose rules module"
+title: "ADR 0288: Shared prose rules module"
 summary: "One module in hooks/enforcement/ holds the prose rules. The linter script and the Stop hook both import it."
 status: "accepted"
 component: "ravintio-zero"
 version: "0.1.0"
 ---
-# ADR-0286 - Shared prose rules module
+# ADR-0288 - Shared prose rules module
 
 **Skill:** [plan](../skills/ravintio-plan/SKILL.md)
 **Feature:** 0000390-prose-checks
 **Component:** ravintio-zero
-**File:** `docs/adr/0286-shared-prose-rules-module.md`
+**File:** `docs/adr/0288-shared-prose-rules-module.md`
 **Date:** 2026-11-09T15:01:20Z
 
 ## Context
@@ -47,8 +47,8 @@ Put the rules in `hooks/enforcement/prose-rules.mjs`. The module has no dependen
 
 ## Related ADRs
 
-- ADR-0287 - related-to
-- ADR-0288 - related-to
+- ADR-0289 - related-to
+- ADR-0290 - related-to
 
 ## Supersedes
 

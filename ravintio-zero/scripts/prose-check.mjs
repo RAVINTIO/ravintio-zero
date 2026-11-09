@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Checks Markdown and commit messages against the writing standard, with a
-// per-file baseline (0000390 REQ-001, REQ-002, ADR-0285, ADR-0286, ADR-0287).
+// per-file baseline (0000390 REQ-001, REQ-002, ADR-0285, ADR-0288, ADR-0289).
 //
 // Usage:
 //   node prose-check.mjs check [--files f...] [--staged] [--message file] [--baseline path]
