@@ -71,4 +71,4 @@ src/
 
 This repository's single component is the pack itself. Its source and manifest
 live at `src/ravintio-zero/`, and the root `ravintio-zero/` is a plain installed
-copy that `scripts/sync-installed.mjs` refreshes.
+copy that `src/ravintio-zero/scripts/sync-installed.mjs` refreshes.

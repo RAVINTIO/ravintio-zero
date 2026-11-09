@@ -15,7 +15,7 @@ This repo holds the pack twice. `src/ravintio-zero/` is the source. `ravintio-ze
 | `src/ravintio-zero/` | The pack source | You and the agents edit it |
 | `ravintio-zero/` | The installed copy that hooks, the driver, and skills run | The sync script writes it. Nobody edits it by hand |
 
-A source edit changes nothing that runs until you refresh the copy. A change to a hook or a skill takes effect after the refresh commit.
+A source edit changes nothing that runs until you refresh the copy. A hook or skill change takes effect after the refresh commit.
 
 ## Refresh route
 
@@ -34,4 +34,4 @@ A consumer repo installs the pack at `ravintio-zero/` and keeps that path. Skill
 
 ## Guards
 
-Every guard that covers `ravintio-zero/` also covers `src/ravintio-zero/`. The move adds no new allowed form.
+Every guard that covers `ravintio-zero/` also covers `src/ravintio-zero/`. The move adds no exception to any guard.

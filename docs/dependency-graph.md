@@ -14,7 +14,7 @@ graph TD
         ENFORCE["hooks/enforcement/\n(gate-write, check-design, ratchet-check,\nem-dash-guard, merge-guard,\nauto-trigger-orchestrator, check-orchestrator-presence,\ncheck-reply-prefix,\ncheck-reply-writing)"]
         ENFSHARED["hooks/enforcement/read-stdin.mjs\nshared module, always installed"]
         VERSION["scripts/product-version.mjs"]
-        SYNC["scripts/sync-installed.mjs"]
+        SYNC["src/ravintio-zero/scripts/sync-installed.mjs"]
         INSTALLED["ravintio-zero/ (installed copy)"]
         DRIVER["scripts/initiative-run.mjs"]
         CHART["scripts/initiative-chart.mjs"]

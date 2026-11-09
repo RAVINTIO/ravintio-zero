@@ -13,7 +13,7 @@ RAVINTIO Zero is not a service. It has no runtime of its own. It ships these thi
 3. **Standards, templates, and schemas.** The reference material that skills read from `ravintio-zero/` by full path.
 4. **Setup scripts.** `setup.sh` and `setup.ps1` copy the above into a target project and wire `.claude/settings.json`.
 
-The pack source lives in `src/ravintio-zero/`. The root `ravintio-zero/` is a plain installed copy, and hooks, the driver, and skills run that copy. `node src/ravintio-zero/scripts/sync-installed.mjs` refreshes it from the source, and `--check` compares the two byte for byte. Consumer repos install the pack at `ravintio-zero/` and keep that path. See `src/ravintio-zero/docs/layout.md` and ADR 0295.
+The pack source lives in `src/ravintio-zero/`. The root `ravintio-zero/` is a plain installed copy. Hooks, the driver, and skills run that copy. Run `node src/ravintio-zero/scripts/sync-installed.mjs` to refresh it from the source. Add `--check` to compare the two byte for byte. Consumer repos install the pack at `ravintio-zero/` and keep that path. See `src/ravintio-zero/docs/layout.md` and ADR 0295.
 
 The repo runs its own pipeline on the installed `ravintio-zero/`. Git reads its hooks from `ravintio-zero/hooks` through `core.hooksPath`.
 
