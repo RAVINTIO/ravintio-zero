@@ -45,7 +45,8 @@
 //   1. Reads plan/current-initiative/initiative.md and stops unless status is "active".
 //   2. Takes plan/.initiative-runner.lock. If the lock exists, it refuses to start
 //      and leaves the lock alone.
-//   3. Runs `claude -p --output-format stream-json --verbose --permission-mode auto --model {model} [--max-turns {n}]
+//   3. Runs `claude -p --output-format stream-json --verbose --permission-mode auto
+//      --append-system-prompt "Write all prose to ravintio-zero/standards/writing-standards.md." --model {model} [--max-turns {n}]
 //      "Run initiative step {position}"`
 //      and waits. Each step starts a fresh session. The position goes to claude as one
 //      argument, never through a shell. The driver never passes --continue. It passes --resume
@@ -474,13 +475,16 @@ function delivered(root, id, slug) {
   return readdirSync(dir).some((n) => prefixes.some((p) => n.startsWith(p)));
 }
 
+// Names the writing standard in each step session's system prompt (0000389 ADR-004).
+const WRITING_LINE = 'Write all prose to ravintio-zero/standards/writing-standards.md.';
+
 // Runs one claude -p session for the step. With a session id it adds --resume and the continue
 // prompt. Returns the exit status and the last session_id the child printed, or '' if none.
 // The concurrent driver passes opts.cwd, the step worktree, and opts.env, the extra variables.
 function runStep(root, position, cfg, fd, labels, resumeId, opts = {}) {
   return new Promise((resolveStep) => {
     const bin = process.env.CLAUDE_BIN || 'claude';
-    const args = ['-p', '--output-format', 'stream-json', '--verbose', '--permission-mode', 'auto', '--model', cfg.model];
+    const args = ['-p', '--output-format', 'stream-json', '--verbose', '--permission-mode', 'auto', '--append-system-prompt', WRITING_LINE, '--model', cfg.model];
     if (cfg.turns) args.push('--max-turns', cfg.turns);
     if (resumeId) args.push('--resume', resumeId, CONTINUE_PROMPT(position));
     else args.push(`Run initiative step ${position}`);
