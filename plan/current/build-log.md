@@ -28,8 +28,8 @@ Run mode: autonomous (2026-11-09T18:15:38Z, initiative 0000360 step 15)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-09T18:15:38Z` |
-| End | `2026-11-09T18:23:17Z` |
-| Wall clock | 0 |
+| End | `2026-11-09T18:18:21Z` |
+| Wall clock | 2 |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -47,6 +47,7 @@ Run mode: autonomous (2026-11-09T18:15:38Z, initiative 0000360 step 15)
 - Design confirmed: draft-accepted (initiative) (2026-11-09T18:17:52Z)
 
 - Baseline: the clean-clone suite runs in the background (/tmp/step15-baseline.out). plan/current/baseline-failures.md follows when it ends.
+- Complete: P0 (Discovery)
 
 ### P1: Plan
 
@@ -54,7 +55,7 @@ Run mode: autonomous (2026-11-09T18:15:38Z, initiative 0000360 step 15)
 |-------|-------|
 | Start | `2026-11-09T18:18:21Z` |
 | End | `2026-11-09T18:23:17Z` |
-| Wall clock | 0 |
+| Wall clock | 4 |
 | Model tier | primary |
 | Skills loaded | ravintio-plan |
 | Agents spawned | 1 |
@@ -62,6 +63,7 @@ Run mode: autonomous (2026-11-09T18:15:38Z, initiative 0000360 step 15)
 | Parallel task batches | 0 |
 | Notes | One primary-tier subagent wrote the artifact set. Consistency check clean. Human settings check passed. |
 - Done: P1 artifact set (content, primary, medium, 2026-11-09T18:23:17Z)
+- Complete: P1 (Plan)
 
 ### P2: Implement
 
@@ -69,7 +71,7 @@ Run mode: autonomous (2026-11-09T18:15:38Z, initiative 0000360 step 15)
 |-------|-------|
 | Start | `2026-11-09T18:23:25Z` |
 | End | `2026-11-09T19:15:53Z` |
-| Wall clock | 0 |
+| Wall clock | 52 |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 7 |
@@ -103,6 +105,7 @@ Run mode: autonomous (2026-11-09T18:15:38Z, initiative 0000360 step 15)
 - Done: U8 tests and U9 living docs (test, config, primary, low, 2026-11-09T19:15:53Z)
 - Rework: REQ-005: sample stack allowlist used a banned word, reworded (2026-11-09T19:15:53Z)
 - Rework: REQ-008: standard text test diffed against HEAD and passed without testing, now checks absolute values (2026-11-09T19:15:53Z)
+- Complete: P2 (Implement)
 
 ### P3: Validate and Accept
 
@@ -110,10 +113,44 @@ Run mode: autonomous (2026-11-09T18:15:38Z, initiative 0000360 step 15)
 |-------|-------|
 | Start | `2026-11-09T19:16:03Z` |
 | End | `2026-11-09T19:37:46Z` |
-| Wall clock | 0 |
+| Wall clock | 21 |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | 0 |
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | Clean clone: OS gap local macos, CI ubuntu, windows. Baseline check: 2 inherited suites, 0 new. |
+- Complete: P3 (Validate and Accept)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-09T19:37:53Z` |
+| End | `2026-11-09T19:38:03Z` |
+| Wall clock | 0 |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | none |
+- Complete: P4 (Ship)
+- Postmortem: plan/postmortems/2026-11-09-archetype-content-banned-word.md REQ-005 (2026-11-09T19:39:13Z)
+- Postmortem: plan/postmortems/2026-11-09-test-diffed-against-head.md REQ-008 (2026-11-09T19:39:13Z)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `82` |
+| Total agents spawned | `8` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `1` |
+| Primary tier agent calls | `8` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `2` |
+| Phases skipped | `none` |
