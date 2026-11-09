@@ -49,6 +49,10 @@ Use `Supervise:` for out-of-phase work. Examples are supervising a driver, filin
 
 A human session works on a `feat/` branch in the main working tree, with no worktrees. The driver may use `plan/.initiative-worktrees/`.
 
+## Commit Granularly, Continuously
+
+Commit each real artifact at once. Coaching records group by topic. See `references/orchestrator-discovery-records.md` in the orchestrator skill.
+
 ## Escalation
 
 If you are blocked, unable to resolve tests after 5 attempts, or confused by conflicting requirements, **STOP**. Do not guess. State clearly what is blocking you and ask the human for direction.
