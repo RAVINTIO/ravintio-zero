@@ -1,7 +1,7 @@
 # RAVINTIO Component Manifest
 id: "ravintio-zero"
 name: "RAVINTIO Zero"
-feature: "0000391-standards-archetypes"
+feature: "0000397-pack-source-in-src"
 version: "0.75.0"
 status: "active"
 type: "component-pack"
@@ -78,6 +78,8 @@ responsibilities:
   - "List the files that hooks enforce in archetypes/protected.json, so the resolver always returns the pack copy of those"
   - "Ship a catalogue of four starter archetypes in archetypes/, and install one with the archetype list and archetype use commands of scripts/archetype.mjs"
   - "Check the gates of each installed archetype at P3 with scripts/archetype-gates.mjs, and exit 1 on a failed gate"
+  - "Keep the pack source in src/ravintio-zero/ and a plain installed copy in ravintio-zero/, which hooks, the driver, and skills run, while consumer installs keep ravintio-zero/"
+  - "Refresh the installed copy from the source with scripts/sync-installed.mjs, and check byte parity with its --check flag"
 
 exceptions:
   - "Does not generate application code. That is the implement phase's job in consumer projects."
@@ -120,6 +122,7 @@ data:
 
 scope:
   inScope:
+    - "Layout: src/ravintio-zero/ is the source, ravintio-zero/ is the installed copy, and scripts/sync-installed.mjs refreshes it. See docs/layout.md"
     - "Archetypes: archetypes/ catalogue and protected.json, scripts/archetype.mjs, scripts/resolve-override.mjs, scripts/archetype-gates.mjs"
     - "Library standards docs for TypeScript, Python, Go, Java, databases"
     - "Formatting standards: date format, locale, verbosity"
