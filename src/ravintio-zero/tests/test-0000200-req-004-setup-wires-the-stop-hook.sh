@@ -9,7 +9,8 @@ set -uo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
-ZERO_DIR="$SCRIPT_DIR/.."
+ZERO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+REPO_ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
 
 stop_commands() {
   node -e '
@@ -67,7 +68,7 @@ assert_contains "check-reply-prefix" "$(cat "$ZERO_DIR/pipeline-reference.md")" 
   "req-004 AC-3: the pipeline reference names the hook"
 assert_contains "check-reply-prefix" "$(cat "$ZERO_DIR/project-operations.md")" \
   "req-004 AC-3: the project operations guide names the hook"
-assert_contains "check-reply-prefix" "$(cat "$ZERO_DIR/../docs/dependency-graph.md")" \
+assert_contains "check-reply-prefix" "$(cat "$REPO_ROOT/docs/dependency-graph.md")" \
   "req-004 AC-3: the dependency graph names the hook"
 
 print_summary
