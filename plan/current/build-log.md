@@ -47,7 +47,7 @@ Run mode: autonomous (2026-11-09T14:55:33Z, initiative step 10)
 |-------|-------|
 | Start | `2026-11-09T14:57:13Z` |
 | End | `2026-11-09T15:00:23Z` |
-| Wall clock | `7` |
+| Wall clock | `3` |
 | Model tier | primary |
 | Skills loaded | ravintio-plan |
 | Agents spawned | 0 |
