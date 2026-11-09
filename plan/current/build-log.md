@@ -68,13 +68,13 @@ Run mode: autonomous (2026-11-09T18:15:38Z, initiative 0000360 step 15)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-09T18:23:25Z` |
-| End | |
-| Wall clock | |
+| End | `2026-11-09T19:15:53Z` |
+| Wall clock | 0 |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
-| Agents spawned | 0 |
+| Agents spawned | 7 |
 | MCP calls | 0 |
-| Parallel task batches | 0 |
+| Parallel task batches | 2 |
 | Notes | Batches follow the concurrency plan: batch 1 is U1, U4, U5. Batch 2 is U2, U6, U7. Batch 3 is U3. Batch 4 is U8 and U9. Each unit writes its test first and confirms RED before the code. |
 
 - In progress: batch 1 U1 U4 U5 (2026-11-09T18:23:25Z)
@@ -99,3 +99,7 @@ Run mode: autonomous (2026-11-09T18:15:38Z, initiative 0000360 step 15)
 - Done: U6 writing outputs (code, primary, low, 2026-11-09T18:31:48Z)
 - Done: U7 standard text and skill pointers (content, primary, low, 2026-11-09T18:31:48Z)
 - In progress: batch 4 U8 U9 (2026-11-09T18:31:48Z)
+- Tests run: full suite: 390 passed, 0 failed (2026-11-09T19:15:53Z)
+- Done: U8 tests and U9 living docs (test, config, primary, low, 2026-11-09T19:15:53Z)
+- Rework: REQ-005: sample stack allowlist used a banned word, reworded (2026-11-09T19:15:53Z)
+- Rework: REQ-008: standard text test diffed against HEAD and passed without testing, now checks absolute values (2026-11-09T19:15:53Z)
