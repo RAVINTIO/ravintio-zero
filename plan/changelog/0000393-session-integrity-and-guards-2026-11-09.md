@@ -2,7 +2,7 @@
 
 **Feature:** Session integrity and guards
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** #142
 
 ## What changed
 
