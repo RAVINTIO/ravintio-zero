@@ -68,8 +68,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-09T06:51:28Z` |
-| End | `TBD` |
-| Wall clock | `TBD` |
+| End | `2026-11-09T07:35:20Z` |
+| Wall clock | `44` |
 | Model tier | cheaper |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 4 |
@@ -81,3 +81,12 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - In progress: U2 (2026-11-09T06:51:28Z)
 - In progress: U3 (2026-11-09T06:51:28Z)
 - In progress: U4 (2026-11-09T06:51:28Z)
+- Done: U1 (2026-11-09T07:35:20Z)
+- Done: U2 (2026-11-09T07:35:20Z)
+- Done: U3 (2026-11-09T07:35:20Z)
+- Done: U4 (2026-11-09T07:35:20Z)
+- Done: U5 (2026-11-09T07:35:20Z)
+- Rework: REQ-002: the boot template had no commit section, so U2 added one and raised its cap from 3,600 to 3,800 bytes (2026-11-09T07:35:20Z)
+- Rework: REQ-001: test-0000377 capped SKILL.md at 8,700 bytes, so the cap rose to 9,000, and run-tests.sh lists the new fixture files (2026-11-09T07:35:20Z)
+- Full suite: 337 feature suites and 19 regression suites passed, 0 failed (2026-11-09T07:35:20Z)
+- Complete: P2 (2026-11-09T07:35:20Z)
