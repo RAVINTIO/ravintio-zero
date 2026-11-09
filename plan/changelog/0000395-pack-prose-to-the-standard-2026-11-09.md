@@ -2,7 +2,7 @@
 
 **Feature:** Pack prose to the standard
 **Version:** set by the merge queue at merge
-**PR:** pending, updated at Step 9
+**PR:** #149
 
 ## What changed
 
