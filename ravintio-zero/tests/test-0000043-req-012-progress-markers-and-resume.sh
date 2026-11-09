@@ -20,7 +20,7 @@ RES="$(orch_section "## Resume Detection")$'\n'$(orch_section "## Findings and c
 echo "=== req-012 (a): each dispatched unit writes progress markers ==="
 assert_contains '- In progress: {unit} ({ISO-8601 timestamp})' "$PM" "req-012 (a): standard defines the In progress: line"
 assert_contains 'commit it before the unit starts' "$PM" "req-012 (a): the In progress: line is committed before the unit starts"
-assert_contains '- Done: {unit} ({ISO-8601 timestamp})' "$PM" "req-012 (a): standard defines the Done: line"
+assert_contains '- Done: {unit} ({class}, {tier}, {effort}, {ISO-8601 timestamp})' "$PM" "req-012 (a): standard defines the Done: line"
 assert_contains 'same commit as the unit' "$PM" "req-012 (a): the Done: line lands with the unit's work"
 assert_contains 'REQ-001 test-writer' "$PM" "req-012 (a): standard gives a unit name example"
 assert_contains 'Progress Markers and Interrupted Units' "$(cat "$IMPL")" "req-012 (a): implement skill points to the standard"
