@@ -168,7 +168,7 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 15 | 0000391-standards-archetypes | Standards archetypes | 0000305 | minor | | pending | writing | 6, 14 |
 | 16 | 0000392-ship-postmortems | Ship postmortems | 0000285 | minor | | pending | ship | 4 |
 | 17 | 0000393-session-integrity-and-guards | Session integrity and guards | 0000271, 0000367, 0000272, 0000260 | minor | 0.66.0 | merged | guards | 6 |
-| 18 | 0000394-github-security-and-ci-lint | GitHub security and CI lint | 0000323, 0000324, 0000325 | minor | | pending | github | 4 |
+| 18 | 0000394-github-security-and-ci-lint | GitHub security and CI lint | 0000323, 0000324, 0000325 | minor | 0.69.0 | merged | github | 4 |
 | 19 | 0000395-pack-prose-to-the-standard | Pack prose to the standard | 0000302 | minor | | pending | writing | 5-18 |
 | 20 | 0000397-pack-source-in-src | Pack source in src | 0000396 | minor | | pending | layout | 19 |
 | 21 | 0000399-smoother-activation | Smoother activation | 0000398 | minor | | pending | initiative | 20 |
@@ -187,3 +187,4 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 17 | #142 | tag v0.66.0 | 0.66.0 | 2026-11-09T02:56:13Z |
 | 9 | #130 | tag v0.67.0 | 0.67.0 | 2026-11-09T06:47:22Z |
 | 13 | #135 | tag v0.68.0 | 0.68.0 | 2026-11-09T09:10:30Z |
+| 18 | #137 | tag v0.69.0 | 0.69.0 | 2026-11-09T13:15:22Z |
