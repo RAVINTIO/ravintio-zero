@@ -69,13 +69,13 @@ This preserves the decision history.
 
 ## Numbering
 
-Sequential, never renumbered. `ADR-001`, `ADR-002`, etc. Gaps are acceptable (if an ADR is abandoned before acceptance, its number is retired).
+Repo-wide and never renumbered. Reserve each number with `node ravintio-zero/scripts/reserve-id.mjs --file docs/adr/.next-id`. Gaps are acceptable (if an ADR is abandoned before acceptance, its number is retired).
 
 ---
 
 ## File Location
 
-`plan/current/adr/ADR-{NNN}-{kebab-case-title}.md`
+`docs/adr/{NNNN}-{kebab-case-title}.md`
 
 ---
 

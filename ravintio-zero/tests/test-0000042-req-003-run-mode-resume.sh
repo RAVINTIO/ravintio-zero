@@ -81,6 +81,8 @@ echo "=== req-001 (b) backstop: no live file uses a retired run-mode value ==="
 hits="$(cd "$REPO_ROOT" && grep -rniwE 'continuous|interactive' \
     ravintio-zero README.md docs ravintio-overrides 2>/dev/null \
   | grep -v '^ravintio-zero/migrations/_done/' \
+  | grep -v '^docs/adr/' \
+  | grep -v '^docs/decisions-index.md:' \
   | grep -v '^ravintio-zero/standards/reference/frontend-stack-evaluation.md:' \
   | grep -v '^ravintio-zero/tests/test-0000042-' \
   | grep -v 'test-0000023-req-001-continuous-run-p1-p3' || true)"

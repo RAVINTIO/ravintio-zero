@@ -68,8 +68,8 @@ assert_equals "1" "$(count_lines "$LINES" "Write $GATE")" \
   "req-007 (a): gate-write appears once for Write"
 assert_equals "1" "$(count_lines "$LINES" "Edit $GATE")" \
   "req-007 (a): gate-write appears once for Edit"
-assert_equals "2" "$(printf '%s\n' "$LINES" | grep -c 'guard gate-write.mjs || exit 2' || true)" \
-  "req-007 (a): gate-write appears twice in all"
+assert_equals "3" "$(printf '%s\n' "$LINES" | grep -c 'guard gate-write.mjs || exit 2' || true)" \
+  "req-007 (a): gate-write appears three times in all (Write, Edit, Bash)"
 assert_equals "0" "$(count_lines "$LINES" "Write|Edit node .claude/hooks/enforcement/gate-write.mjs")" \
   "req-007 (a): no Write|Edit gate-write entry remains"
 assert_equals "0" "$(count_lines "$LINES" "Bash node \".claude/hooks/enforcement/ratchet-check.mjs\"")" \
@@ -80,8 +80,8 @@ assert_equals "1" "$(count_lines "$LINES" "Write|Edit node tools/my-gate-write.m
   "req-007 (a): a module name not at a path boundary stays"
 assert_equals "1" "$(count_lines "$LINES" "Edit node tools/Gate-Write.mjs")" \
   "req-007 (a): the match is case-sensitive"
-assert_equals "11" "$(printf '%s\n' "$LINES" | grep -c .)" \
-  "req-007 (a): PreToolUse holds the eight RAVINTIO entries and three user entries"
+assert_equals "12" "$(printf '%s\n' "$LINES" | grep -c .)" \
+  "req-007 (a): PreToolUse holds the nine RAVINTIO entries and three user entries"
 
 echo ""
 echo "=== req-007 (b): a second run leaves settings.json unchanged ==="

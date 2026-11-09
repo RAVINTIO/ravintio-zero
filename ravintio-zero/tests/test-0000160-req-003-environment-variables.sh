@@ -26,7 +26,7 @@ assert_not_contains() {
 echo ""
 echo "=== req-003 (a): no PLANIFEST_ string remains ==="
 LEFT="$(cd "$REPO" && git ls-files -z \
-  | grep -zv -e '^plan/_archive/' -e '^plan/changelog/' -e '^ravintio-zero/migrations/_done/' \
+  | grep -zv -e '^plan/_archive/' -e '^plan/changelog/' -e '^docs/adr/' -e '^ravintio-zero/migrations/_done/' \
       -e '^plan/current/' -e '^ravintio-zero/migrations/0004-ravintio-rename.md$' \
       -e '^ravintio-zero/migrations/migrate-ravintio-rename\.' \
       -e '^ravintio-zero/tests/test-.*ravintio-rename' \

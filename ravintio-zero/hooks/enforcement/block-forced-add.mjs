@@ -15,6 +15,12 @@
  * Otherwise a segment is blocked when it carries one of:
  *   - `--force`, or any abbreviation git accepts (`--f`, `--fo`, `--forc`)
  *   - a short flag group that contains `f`, such as `-f` or `-fA`
+ * Two bypasses are closed (feature 0000393). The global options --git-dir,
+ * --work-tree, --namespace, --config-env, --super-prefix, and --attr-source
+ * take a separate value, so the subcommand lookup skips that value as it does
+ * for -C and -c. A git add or git stage whose command holds a brace expansion,
+ * as in `git add {-f,x}`, is blocked, because the split on braces would put the
+ * flag in a segment without git. A `{ git add x; }` group is not an expansion.
  * Flags after a bare `--` are paths and are ignored. This covers the
  * `git -C {dir} add -f` form, because the check does not assume `add` is the
  * first word after `git`.
@@ -53,12 +59,19 @@ function addsFiles(segment) {
   return tokens.includes("git") && (tokens.includes("add") || tokens.includes("stage"));
 }
 
-// The git subcommand: the first word after `git` that is not an option. The
-// options -C and -c take a value, so the value is skipped too.
+// Global git options that take the next word as a value. The attached form,
+// as in `--git-dir=.git`, has no separate value and needs no skip.
+const OPTIONS_WITH_VALUE = new Set([
+  "-C", "-c", "--git-dir", "--work-tree", "--namespace",
+  "--config-env", "--super-prefix", "--attr-source",
+]);
+
+// The git subcommand: the first word after `git` that is not an option. An
+// option that takes a value has that value skipped too.
 function subcommandOf(tokens) {
   let i = tokens.indexOf("git") + 1;
   while (i > 0 && i < tokens.length) {
-    if (tokens[i] === "-C" || tokens[i] === "-c") i += 2;
+    if (OPTIONS_WITH_VALUE.has(tokens[i])) i += 2;
     else if (tokens[i].startsWith("-")) i += 1;
     else return tokens[i];
   }
@@ -101,6 +114,18 @@ try {
     // A variable glued to git, as in git${IFS}add, hides the subcommand.
     if (/\bgit\$/.test(outer.replace(/["'\\]/g, ""))) {
       block("A git command built from a variable is blocked, because the guard can't read it. Write the command out. ");
+    }
+    // A brace expansion, as in git add {-f,x}, hides a flag from the segment
+    // split below. A shell group such as `{ git add x; }` has a space after the
+    // brace and is not an expansion. A `${` variable is handled elsewhere.
+    if (/(^|[^$])\{[^\s}]/.test(outer)) {
+      const tokens = wordsOf(outer);
+      if (tokens.includes("git")) {
+        const sub = subcommandOf(tokens);
+        if (sub === "add" || sub === "stage") {
+          block("A git add or git stage with a brace group is blocked, because the braces can hide a flag. Write each path out. ");
+        }
+      }
     }
     for (const segment of outer.split(/[(){}`]/)) {
       if (expandsVariable(segment)) {

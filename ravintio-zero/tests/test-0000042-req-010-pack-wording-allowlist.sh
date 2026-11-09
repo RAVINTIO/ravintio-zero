@@ -21,6 +21,7 @@ REPO_ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
 # Paths that start with these prefixes are history or past records.
 EXCLUDED_PREFIXES=(
   "plan/_archive/"                    # archived features: history
+  "docs/adr/"                         # ADRs moved out of the archive: history (0000384)
   "plan/changelog/"                   # release notes: history
   "ravintio-zero/migrations/_done/"  # applied migrations: past records
   "plan/current/"                     # this feature quotes the old words to describe the rename, until ship archives it
@@ -71,6 +72,8 @@ ALLOWLIST=(
   "^ravintio-zero/tests/regression/regression-manifest\\.json\$${TAB}\"sourceFeature\": \"[0-9]{7}-framework-"
   # The 0000030 feature id framework-cut-down in the decisions index.
   "^docs/decisions-index\\.md\$${TAB}framework-cut-down"
+  # Index rows quote the title and summary of an ADR from history (0000384).
+  "^docs/decisions-index\\.md\$${TAB}^\\| \\[ADR-[0-9]{4}\\]"
   # The 0000160 brand guard allowlist names the old folder pattern.
   "^ravintio-zero/tests/test-0000160-req-006-brand-guard\\.sh\$${TAB}planifest.{1,8}framework"
   # This test and its regression copy, which must name the word to match it.

@@ -7,7 +7,7 @@
 $global:ZeroDir = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
 $global:HostExe = (Get-Process -Id $PID).Path
 
-# The eleven entries setup.sh writes, in order (0000035 ADR-001, 0000043 req-006).
+# The twelve entries setup.sh writes, in order (0000035 ADR-001, 0000043 req-006).
 $global:ExpectedEntries = @(
     'PreToolUse Write gate-write',
     'PreToolUse Edit gate-write',
@@ -17,6 +17,7 @@ $global:ExpectedEntries = @(
     'PreToolUse Edit em-dash-guard',
     'PreToolUse Bash merge-guard',
     'PreToolUse Bash block-forced-add',
+    'PreToolUse Bash gate-write',
     'UserPromptSubmit .* auto-trigger-orchestrator',
     'UserPromptSubmit .* check-orchestrator-presence',
     'UserPromptSubmit .* check-design'

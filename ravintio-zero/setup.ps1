@@ -595,7 +595,7 @@ function Read-SettingsObject {
 
 function Merge-EnforcementHookSettings {
     # Merge the eight enforcement hooks into settings.json: gate-write,
-    # ratchet-check, em-dash-guard, and merge-guard (PreToolUse), then
+    # ratchet-check, em-dash-guard, merge-guard, and block-forced-add (PreToolUse), plus gate-write on Bash, then
     # auto-trigger-orchestrator, check-orchestrator-presence, and check-design
     # (UserPromptSubmit), then check-reply-prefix (Stop). Idempotent. The entries match setup.sh in event,
     # matcher, and order (0000035 ADR-001), and a parity suite checks it.
@@ -613,7 +613,8 @@ function Merge-EnforcementHookSettings {
         (New-HookEntry 'Write' 'em-dash-guard' $HooksDir),
         (New-HookEntry 'Edit' 'em-dash-guard' $HooksDir),
         (New-HookEntry 'Bash' 'merge-guard' $HooksDir),
-        (New-HookEntry 'Bash' 'block-forced-add' $HooksDir)
+        (New-HookEntry 'Bash' 'block-forced-add' $HooksDir),
+        (New-HookEntry 'Bash' 'gate-write' $HooksDir)
     )
     $userPromptEntries = @(
         (New-HookEntry '.*' 'auto-trigger-orchestrator' $HooksDir),

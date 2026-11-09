@@ -8,7 +8,7 @@ status: "active"  # proposed | charted | active | delivered | blocked
 **Goal:** Close every open backlog entry except the four that need paid services. The first three steps make the driver run independent steps at once, each in its own worktree, with each version set as its step merges. Step 20 moves the pack source to `src/ravintio-zero/`. The last step, step 21, makes activation smoother for the human.
 **Branch:** initiative/0000360-backlog-sweep
 **Status:** active
-**Position:** 8
+**Position:** 9
 **Speed:** standard
 **Step CI fixes:** allowed
 **Concurrency:** 3
@@ -158,7 +158,7 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 5 | 0000381-setup-safety | Setup safety | 0000262, 0000289, 0000293, 0000290 | minor | 0.61.0 | merged | setup | 4 |
 | 6 | 0000382-install-lifecycle | Install lifecycle | 0000283, 0000299, 0000292, 0000291, 0000298, 0000286 | minor | 0.63.0 | merged | setup | 5 |
 | 7 | 0000383-test-impact-scan | Test impact scan | 0000361, 0000362, 0000363, 0000369, 0000297 | minor | 0.62.0 | merged | plan | 4 |
-| 8 | 0000384-plan-checks | Plan checks | 0000255, 0000263, 0000333, 0000347, 0000280, 0000364 | minor | | pending | plan | 7 |
+| 8 | 0000384-plan-checks | Plan checks | 0000255, 0000263, 0000333, 0000347, 0000280, 0000364 | minor | 0.65.0 | merged | plan | 7 |
 | 9 | 0000385-faster-test-runs | Faster test runs | 0000294, 0000295, 0000296 | minor | | pending | run | 4 |
 | 10 | 0000386-unit-dispatch | Unit dispatch | 0000330, 0000366 | minor | | pending | run | 9 |
 | 11 | 0000387-light-discovery-and-audits | Light discovery and audits | 0000281, 0000284, 0000348, 0000328, 0000329 | minor | | pending | orchestrator | 8 |
@@ -167,7 +167,7 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 14 | 0000390-prose-checks | Prose checks | 0000301, 0000303, 0000304 | minor | | pending | writing | 6, 13 |
 | 15 | 0000391-standards-archetypes | Standards archetypes | 0000305 | minor | | pending | writing | 6, 14 |
 | 16 | 0000392-ship-postmortems | Ship postmortems | 0000285 | minor | | pending | ship | 4 |
-| 17 | 0000393-session-integrity-and-guards | Session integrity and guards | 0000271, 0000367, 0000272, 0000260 | minor | | pending | guards | 6 |
+| 17 | 0000393-session-integrity-and-guards | Session integrity and guards | 0000271, 0000367, 0000272, 0000260 | minor | 0.66.0 | merged | guards | 6 |
 | 18 | 0000394-github-security-and-ci-lint | GitHub security and CI lint | 0000323, 0000324, 0000325 | minor | | pending | github | 4 |
 | 19 | 0000395-pack-prose-to-the-standard | Pack prose to the standard | 0000302 | minor | | pending | writing | 5-18 |
 | 20 | 0000397-pack-source-in-src | Pack source in src | 0000396 | minor | | pending | layout | 19 |
@@ -183,3 +183,5 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 7 | #132 | tag v0.62.0 | 0.62.0 | 2026-11-08T02:38:25Z |
 | 6 | #136 | tag v0.63.0 | 0.63.0 | 2026-11-08T15:23:07Z |
 | 12 | #133 | tag v0.64.0 | 0.64.0 | 2026-11-08T16:55:17Z |
+| 8 | #138 | tag v0.65.0 | 0.65.0 | 2026-11-09T00:27:39Z |
+| 17 | #142 | tag v0.66.0 | 0.66.0 | 2026-11-09T02:56:13Z |
