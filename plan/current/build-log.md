@@ -38,3 +38,19 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Adoption mode: standard-iterative (signal: plan/_archive/ holds prior runs)
 
 - Design confirmed by the human (2026-11-09T14:10:20Z). Run mode: autonomous. Run speed: fast.
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-09T14:10:20Z` |
+| End | `2026-11-09T14:13:09Z` |
+| Wall clock | `3` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `1` |
+| Notes | Two requirements and ADR-0284, which supersedes ADR-0126. Consistency check clean. Autonomous run, so the plan gate does not stop. |
+
+- P1 Plan: Complete: 2 requirements, 1 ADR (2026-11-09T14:13:09Z)
