@@ -15,7 +15,7 @@ version: "0.1.0"
 
 | ID | Category | Description | Likelihood | Impact | Mitigation | Status |
 |----|----------|------------|------------|--------|-----------|--------|
-| R-001 | operational | GitHub reports `BLOCKED` for a reason other than checks, so the queue waits to its limit | low | medium | The queue stops with a named error after 20 minutes | open |
+| R-001 | operational | GitHub reports `BLOCKED` for a reason other than checks, so the queue waits to its limit | low | medium | The queue stops with a named error after 30 minutes | open |
 | R-002 | technical | A running driver keeps the old script | medium | low | The coordinator restarts the driver after the merge | open |
 
 ## Assumptions Logged as Risks

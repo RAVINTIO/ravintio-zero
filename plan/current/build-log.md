@@ -58,3 +58,22 @@ Complete: P0 (2026-11-09T16:51:19Z)
 - Consistency check: 1 finding, no living docs unit. U-001 now writes `docs/architecture-overview.md`, and the rerun is clean (2026-11-09T16:52:43Z). Autonomous run: the plan gate passes with no human stop.
 
 Complete: P1 (2026-11-09T16:52:43Z)
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-09T16:52:43Z` |
+| End | `2026-11-09T16:58:27Z` |
+| Wall clock | `14` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `1` |
+| Notes | Inline, one unit. Step 16 (0000392) had merged a CI wait into the script, found when the first test run sat in that wait. The fix builds on it and uses its `MQ_POLL_MS` and `MQ_TIMEOUT_MS`. The plan docs now name those settings. RED: 7 failures on the old script. GREEN: 9 of 9. |
+
+- Rework: REQ-001: the test fake answered `gh pr checks` with no JSON, so it waited in the 0000392 CI loop. The fake now answers with a passing check (2026-11-09T16:58:27Z)
+- Done: U-001 REQ-001 queue waits for GitHub. The 0000378, 0000392, 0000405, 0000043, and two 0000379 suites pass (2026-11-09T16:58:27Z)
+
+Complete: P2 (2026-11-09T16:58:27Z)

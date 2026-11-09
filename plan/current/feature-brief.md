@@ -56,7 +56,7 @@ The GitHub CLI `gh`, through `pr view`, `pr checks`, and `pr merge`.
 ### In Scope
 - A wait for the pushed head, CI, and mergeability in `cmdRun`.
 - One retry of `gh pr merge` on the two transient errors.
-- The fake `gh` in tests 0000378 and 0000405 answers the new query.
+- The fake `gh` in tests 0000378, 0000392, and 0000405 answers the new query.
 - A new test where GitHub first reports the head stale and the PR `UNKNOWN`.
 
 ### Out of Scope
@@ -70,7 +70,7 @@ The GitHub CLI `gh`, through `pr view`, `pr checks`, and `pr merge`.
 
 | NFR | Target | Measurement |
 |-----|--------|-------------|
-| Wait bound | The queue stops with a named error after 20 minutes of waiting | The new test, with a short limit |
+| Wait bound | The queue stops with a named error after 30 minutes of waiting | The new test, with a short limit |
 
 ## Constraints and Assumptions
 

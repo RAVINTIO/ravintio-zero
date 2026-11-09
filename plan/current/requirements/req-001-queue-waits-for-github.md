@@ -16,11 +16,11 @@ version: "0.1.0"
 As the coordinator of an initiative, I see the queue merge a green, clean step PR without a "not mergeable" stop, so that steps merge with no manual retry.
 
 ## Functional Requirements
-- After each push, `cmdRun` polls `gh pr view {pr} --json headRefOid,mergeable,mergeStateStatus` until `headRefOid` equals the pushed commit. Then it runs `gh pr checks {pr} --watch --fail-fast`.
+- After each push, `cmdRun` polls `gh pr view {pr} --json headRefOid,mergeable,mergeStateStatus` until `headRefOid` equals the pushed commit. Then it polls CI through the `waitForChecks` helper that 0000392 added.
 - After the version commit, the queue waits for the head and CI the same way.
 - Before `gh pr merge`, the queue polls until `mergeable` is `MERGEABLE` and `mergeStateStatus` is `CLEAN`, `HAS_HOOKS`, or `UNSTABLE`.
 - If `gh pr merge` fails with "not mergeable" or "Base branch was modified", the queue waits for mergeability again and retries once.
-- `RAVINTIO_QUEUE_POLL_MS` (default 5000) and `RAVINTIO_QUEUE_WAIT_MS` (default 1200000) set the poll interval and the limit. Past the limit, the queue stops with `timed out waiting for PR #{pr}: {what}`.
+- Step 16 (0000392) added `MQ_POLL_MS` (default 10000) and `MQ_TIMEOUT_MS` (default 1800000) for its CI wait. The new waits use the same two settings. Past the limit, the queue stops with `timed out waiting for PR #{pr}: {what}`.
 
 ## Acceptance Criteria
 - [ ] AC-1: a slow GitHub
@@ -32,7 +32,7 @@ As the coordinator of an initiative, I see the queue merge a green, clean step P
   - When the queue runs
   - Then no `pr merge` call comes before a `MERGEABLE` answer, and a first merge failure of "not mergeable" gets one retry
 - [ ] AC-3: the existing suites pass
-  - Given the 0000378 and 0000405 queue suites with an updated fake `gh`
+  - Given the 0000378, 0000392, and 0000405 queue suites with an updated fake `gh`
   - When they run
   - Then each one exits 0
 

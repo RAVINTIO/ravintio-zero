@@ -14,7 +14,7 @@ version: "0.1.0"
 
 - The head, CI, and mergeability waits in `cmdRun` of `merge-queue.mjs`.
 - One retry of `gh pr merge` on a transient error.
-- The fake `gh` in the 0000378 and 0000405 suites.
+- The fake `gh` in the 0000378, 0000392, and 0000405 suites.
 - One new suite, `test-0000411-req-001-queue-waits.sh`.
 - A changelog entry. No version bump, because this PR is not a chart step.
 

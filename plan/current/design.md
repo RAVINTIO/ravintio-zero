@@ -33,7 +33,7 @@
 - API versioning: not applicable
 
 ## Scope
-- In: a `waitForPr` helper that polls `gh pr view --json headRefOid,mergeable,mergeStateStatus`. The queue calls it after each push and before the merge. One merge retry. `RAVINTIO_QUEUE_POLL_MS` and `RAVINTIO_QUEUE_WAIT_MS` set the poll interval and limit, so tests run fast. Updated fake `gh` in the 0000378 and 0000405 suites. A new suite.
+- In: a `waitForState` helper that polls `gh pr view --json headRefOid,mergeable,mergeStateStatus`. The queue calls it after each push and before the merge. One merge retry. `MQ_POLL_MS` and `MQ_TIMEOUT_MS`, from 0000392, set the poll interval and limit, so tests run fast. Updated fake `gh` in the 0000378, 0000392, and 0000405 suites. A new suite.
 - Out: regenerating shared files on a conflict.
 - Deferred: none
 
