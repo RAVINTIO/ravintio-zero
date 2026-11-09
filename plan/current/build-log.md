@@ -39,3 +39,11 @@ Run mode: autonomous (2026-11-09T19:55:09Z)
 Run speed: standard (2026-11-09T19:55:09Z)
 Migration check: 0004, 0005, and 0008 stay pending because their Applies when line is false here. 0009 already took effect, because docs/adr/ exists.
 Queue: acted on ci-gate-step-19. Skipped narrow-brand-guard-self-entry because it names step 18.
+Scope Lock (happy path): Agents rewrite the files, the baseline reaches zero, and the suite passes. [source: draft-accepted (initiative)]
+Scope Lock (first-run path): Not applicable. The pack already has a linter and a baseline. [source: draft-accepted (initiative)]
+Scope Lock (error path): A rewrite breaks a wording pin. The step updates the pin and logs a Rework line. [source: draft-accepted (initiative)]
+Scope Lock (cross-session continuity): Each batch commits with its baseline change, so a resume starts from the baseline. [source: draft-accepted (initiative)]
+Scope Lock complete. All four scenario paths captured.
+Decision applied (initiative chart): The pack prose rewrite breaks wording-pinned tests
+Version: plan 0.75.0 (minor bump on 0.74.0). The merge queue sets the released version.
+Complete: P0 (2026-11-09T19:56:18Z)
