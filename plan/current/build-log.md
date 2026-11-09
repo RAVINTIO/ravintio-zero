@@ -62,3 +62,22 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 
 - Decision applied (initiative chart): P1 runs, no skip row.
 - Complete: P1 (2026-11-09T06:51:18Z)
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-09T06:51:28Z` |
+| End | `TBD` |
+| Wall clock | `TBD` |
+| Model tier | cheaper |
+| Skills loaded | ravintio-implement |
+| Agents spawned | 4 |
+| MCP calls | 0 |
+| Parallel task batches | 1 |
+| Notes | one sonnet agent per unit U1 to U4, then U5 docs inline |
+
+- In progress: U1 (2026-11-09T06:51:28Z)
+- In progress: U2 (2026-11-09T06:51:28Z)
+- In progress: U3 (2026-11-09T06:51:28Z)
+- In progress: U4 (2026-11-09T06:51:28Z)
