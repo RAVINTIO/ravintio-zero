@@ -19,7 +19,7 @@ Planifest Zero is the cut-down pack that 0000030 split from Planifest Framework.
 
 A search on 2026-10-23 found 618 lines with "framework" in 150 tracked files outside the archive, the changelog, and `plan/current/`. About 50 lines are prose. About 350 lines are identifiers. About 220 lines are generic uses.
 
-The human rejected a prose-only fix. They want the identifiers to change too. REQ-008 to REQ-010 leaves the new names to this ADR, and P2 must not start renames until it is accepted.
+The human rejected a prose-only fix. They want the identifiers to change too. REQ-008 to REQ-010 leaves the new names to this ADR, and P2 must not start renames until the human accepts it.
 
 ## Decision
 
@@ -67,7 +67,7 @@ Four points about the map:
 
 ### The `stack.framework` field
 
-`stack.framework` is generic. In `templates/component.template.yml` it holds `"fastify | express | hono | gin | flask"`. In `templates/component-guide.md` it is documented as "Web framework (or `none`)". `planifest-zero/component.yml` sets it to `"none"`, because the pack has no web layer. The field names a web framework in the user's stack, so it stays. The sibling lines for `stack.frontend` and `stack.testing` stay for the same reason.
+`stack.framework` is generic. In `templates/component.template.yml` it holds `"fastify | express | hono | gin | flask"`. `templates/component-guide.md` documents it as "Web framework (or `none`)". `planifest-zero/component.yml` sets it to `"none"`, because the pack has no web layer. The field names a web framework in the user's stack, so it stays. The sibling lines for `stack.frontend` and `stack.testing` stay for the same reason.
 
 The line in `planifest-zero/component.yml` that says "the framework's own behaviour" describes Planifest Zero. It becomes "the pack's own behaviour".
 
@@ -101,7 +101,7 @@ The em dashes in the `setup.sh` echo strings are out of scope for this ADR. Wher
 
 ### No migration
 
-This repo is the only install of Planifest Zero, so no migration file is written. If another install exists, the renamed `planifest-zero/standards/pack-update-policy.md` and the test paths break it.
+This repo is the only install of Planifest Zero, so this change writes no migration file. If another install exists, the renamed `planifest-zero/standards/pack-update-policy.md` and the test paths break it.
 
 ## Alternatives Considered
 

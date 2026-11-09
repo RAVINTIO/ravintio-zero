@@ -17,7 +17,7 @@ The brand guard allowlist sits inside `test-0000160-req-006-brand-guard.sh`. A h
 
 ## Decision
 
-The allowlist moves to `ravintio-zero/tests/brand-guard-allowlist.txt`. Blank lines and lines that start with `#` are ignored. A line that starts with `!` names an excluded path prefix. Any other line holds a path regex, a tab, and a line regex. `ravintio-zero/scripts/brand-guard.sh` and the test both read it. `pre-push` runs the script only when `product.yml` declares the id `ravintio-zero`, because a consumer repo has no reason to ban the old name.
+The allowlist moves to `ravintio-zero/tests/brand-guard-allowlist.txt`. The reader ignores blank lines and lines that start with `#`. A line that starts with `!` names an excluded path prefix. Any other line holds a path regex, a tab, and a line regex. `ravintio-zero/scripts/brand-guard.sh` and the test both read it. `pre-push` runs the script only when `product.yml` declares the id `ravintio-zero`, because a consumer repo has no reason to ban the old name.
 
 ## Alternatives Considered
 

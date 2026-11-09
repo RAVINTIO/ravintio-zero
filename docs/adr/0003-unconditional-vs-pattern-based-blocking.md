@@ -6,7 +6,7 @@ version: "0.1.0"
 component: "ravintio-zero"
 feature: "0000001-context-mode-enforcement-hooks"
 ---
-# ADR-0003 - Blocking Strategy — Unconditional vs Pattern-Based
+# ADR-0003 - Blocking Strategy: Unconditional vs Pattern-Based
 
 **Skill:** adr-agent
 **Tool:** claude-code
@@ -20,16 +20,16 @@ feature: "0000001-context-mode-enforcement-hooks"
 
 ## Context
 
-Three Claude Code tools are targeted by the enforcement hooks: `Grep`, `WebFetch`, and `Bash`. The question is whether each tool should be blocked:
+The enforcement hooks target three Claude Code tools: `Grep`, `WebFetch`, and `Bash`. The question is whether to block each tool:
 
-- **Unconditionally** — every invocation of the tool is denied, regardless of input
-- **Pattern-based** — only invocations whose input matches a blocked pattern are denied; others are allowed
+- **Unconditionally**: the hook denies every invocation of the tool, regardless of input
+- **Pattern-based**: the hook denies only invocations whose input matches a blocked pattern and allows the rest
 
 This is not a uniform decision across the three tools. Each tool has a different usage profile:
 
-- **Grep**: exists solely to search file content. In a context-mode environment, `ctx_execute(language:"shell", code:"grep ...")` is the correct replacement. There is no invocation of Grep that is acceptable — even a "quick" grep floods the context window if the file is large.
+- **Grep**: exists solely to search file content. In a context-mode environment, `ctx_execute(language:"shell", code:"grep ...")` is the correct replacement. No invocation of Grep is acceptable. Even a "quick" grep floods the context window if the file is large.
 - **WebFetch**: fetches a URL and returns the full response body into context. In a context-mode environment, `ctx_fetch_and_index` + `ctx_search` is always the replacement. There is no safe subset of WebFetch usage.
-- **Bash**: a general-purpose shell. The majority of Bash invocations are legitimate (git operations, file creation, package installation). Only a specific subset — commands that produce large output or make network calls — need redirection. Blocking all Bash would break normal agent operation entirely.
+- **Bash**: a general-purpose shell. The majority of Bash invocations are legitimate (git operations, file creation, package installation). Only a specific subset needs redirection: commands that produce large output or make network calls. Blocking all Bash would break normal agent operation entirely.
 
 ---
 
@@ -41,9 +41,9 @@ This asymmetric strategy reflects the functional reality:
 - Grep and WebFetch are context-flooding by definition in every invocation
 - Bash has a safe majority (short-output filesystem and process commands) and an unsafe minority (search, fetch, large-output pipelines)
 
-For Bash, pattern matching is applied to `tool_input.command` from the hook stdin JSON. The blocked tokens are: `grep`, `rg`, `curl`, `wget`, `http://`, `https://`.
+For Bash, the hook applies pattern matching to `tool_input.command` from the hook stdin JSON. The blocked tokens are: `grep`, `rg`, `curl`, `wget`, `http://`, `https://`.
 
-An optional `if` field in the `settings.json` hook entry for Bash can be used as a coarse pre-filter to avoid spawning the script for clearly safe commands, but the script itself is the authoritative allowlist check.
+An optional `if` field in the `settings.json` hook entry for Bash can act as a coarse pre-filter. It avoids spawning the script for clearly safe commands. The script itself remains the authoritative allowlist check.
 
 ---
 
@@ -70,18 +70,18 @@ An optional `if` field in the `settings.json` hook entry for Bash can be used as
 ## Consequences
 
 **Positive:**
-- Grep and WebFetch scripts are minimal — no input parsing, no branching; extremely fast and easy to test
-- Bash script logic is scoped to a well-defined set of patterns; allowlist is explicit and auditable
+- Grep and WebFetch scripts are minimal, with no input parsing and no branching. They run extremely fast and are quick to test
+- Bash script logic covers a well-defined set of patterns. The allowlist is explicit and auditable
 - Agents can continue all normal Bash operations (git, file ops, installs) without interruption
 
 **Negative:**
-- Agents cannot use Grep at all — even single-file, small-output searches must go through `ctx_execute`. This is intentional but may feel restrictive on small codebases.
-- Pattern-based Bash blocking can be circumvented by invoking `grep` via an alias or wrapper script not in the blocked-token list. This is an acceptable limitation for v1 — the hooks enforce routing rules for cooperative agents, not adversarial ones.
-- `block-bash.sh` is more complex than the other two scripts; it is the highest-maintenance hook.
+- Agents cannot use Grep at all. Even single-file, small-output searches must go through `ctx_execute`. This is intentional but may feel restrictive on small codebases.
+- Pattern-based Bash blocking can be circumvented by invoking `grep` via an alias or wrapper script not in the blocked-token list. This is an acceptable limitation for v1. The hooks enforce routing rules for cooperative agents, not adversarial ones.
+- `block-bash.sh` is more complex than the other two scripts, so it is the highest-maintenance hook.
 
 **Risks:**
-- A blocked Bash pattern appears as a substring inside a string argument (e.g. `echo "run grep to find"`) → false positive block. Mitigated by: pattern matching is applied to the leading command structure, not arbitrary substrings. Document this edge case in the script.
-- New context-flooding tools emerge (e.g. a future `GlobalSearch` tool) and are not covered by this hook set. Mitigated by: hooks are additive — new hook scripts can be added in a follow-up feature.
+- A blocked Bash pattern appears as a substring inside a string argument (e.g. `echo "run grep to find"`) → false positive block. Mitigated by: pattern matching targets the leading command structure, not arbitrary substrings. Document this edge case in the script.
+- New context-flooding tools emerge (e.g. a future `GlobalSearch` tool) and this hook set does not cover them. Mitigated by: hooks are additive, so a follow-up feature can add new hook scripts.
 
 ---
 

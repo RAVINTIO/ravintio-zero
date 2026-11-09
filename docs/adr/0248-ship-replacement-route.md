@@ -19,7 +19,7 @@ Ship let `chore/*` squash in place and push with `--force-with-lease`. The human
 
 ## Decision
 
-`## PRs into main` applies the replacement route to `chore/*` and `hotfix/*`: cut a new branch from `origin/main`, build one squashed commit, raise a replacement PR, close the old PR with a link, and delete the old branch. The section no longer names `--force-with-lease`.
+`## PRs into main` applies the replacement route to `chore/*` and `hotfix/*`. Cut a new branch from `origin/main` and build one squashed commit. Raise a replacement PR, close the old PR with a link, and delete the old branch. The section no longer names `--force-with-lease`.
 
 ## Alternatives Considered
 

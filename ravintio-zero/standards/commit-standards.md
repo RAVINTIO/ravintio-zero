@@ -25,7 +25,7 @@ fix(auth-service): correct token expiry calculation
 
 ### 1. Subject line ≤72 characters, entire `type(scope): description` line.
 
-### 2. Imperative mood, present tense: "add X", "fix Y", "remove Z"; not "added X", "fixed Y", "removes Z".
+### 2. Imperative mood, present tense: "add X", "fix Y", "remove Z". Not "added X", "fixed Y", "removes Z".
 
 ### 3. No AI attribution
 
@@ -38,7 +38,7 @@ Commit messages and PR descriptions MUST NOT attribute authorship or co-developm
 - `AI-assisted`, `LLM-generated`, `with the help of [tool name]`
 - Any model name (Claude, GPT, Gemini, etc.) in an authorship context
 
-The commit or PR is owned by the **human practitioner**. The AI tool is an instrument, not a contributor of record.
+The **human practitioner** owns the commit or PR. The AI tool is an instrument, not a contributor of record.
 
 ### 4. No affirmatory or confirmatory language
 

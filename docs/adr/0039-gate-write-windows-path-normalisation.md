@@ -29,17 +29,17 @@ const relTarget = absTarget.startsWith(cwdWithSep)
   : rawTarget;
 ```
 
-On Windows, `path.resolve()` returns backslash-separated paths (`C:\d\planifest\plan\archive\...`) while `cwd` may be a forward-slash string or mixed. The `startsWith` comparison fails silently — `relTarget` falls back to the raw target, which is an absolute path, not a relative one. The subsequent always-permitted prefix checks (`plan/`, `plan/archive/`, etc.) test for relative prefixes and fail. When `design.md` is absent (e.g., after P7 clears `plan/current/`), Check 2 then blocks the write entirely.
+On Windows, `path.resolve()` returns backslash-separated paths (`C:\d\planifest\plan\archive\...`) while `cwd` may be a forward-slash string or mixed. The `startsWith` comparison fails silently. `relTarget` falls back to the raw target, which is an absolute path, not a relative one. The subsequent always-permitted prefix checks (`plan/`, `plan/archive/`, etc.) test for relative prefixes and fail. When `design.md` is absent (e.g., after P7 clears `plan/current/`), Check 2 then blocks the write entirely.
 
-The bug manifests specifically during P7 when `design.md` is deleted before archive writes complete, making it a ship-blocker for all Windows users.
+The bug manifests specifically during P7 when the hook deletes `design.md` before archive writes complete, making it a ship-blocker for all Windows users.
 
-A decision is needed on the normalisation approach.
+You must decide on the normalisation approach.
 
 ---
 
 ## Decision
 
-Both `cwd` and `absTarget` are normalised to forward-slash form using `path.posix`-style replacement before the `startsWith` comparison:
+The hook normalises both `cwd` and `absTarget` to forward-slash form using `path.posix`-style replacement before the `startsWith` comparison:
 
 ```js
 const norm = (p) => p.replace(/\\/g, "/");
@@ -52,9 +52,9 @@ const relTarget = normAbs.startsWith(cwdPrefix)
   : norm(rawTarget);
 ```
 
-The `norm()` helper is a one-liner that replaces all backslashes with forward slashes. This is safe for path comparison purposes on Windows because Windows accepts forward slashes in path operations, and the normalised string is used only for prefix comparison — never passed to a native I/O call.
+The `norm()` helper is a one-liner that replaces all backslashes with forward slashes. This is safe for path comparison on Windows because Windows accepts forward slashes in path operations. The hook uses the normalised string only for prefix comparison and never passes it to a native I/O call.
 
-The fix is applied to both the deployed hook (`.claude/hooks/enforcement/gate-write.mjs`) and the source copy (`planifest-framework/hooks/enforcement/gate-write.mjs`) so future setup runs deploy the fixed version.
+The fix applies to both the deployed hook (`.claude/hooks/enforcement/gate-write.mjs`) and the source copy (`planifest-framework/hooks/enforcement/gate-write.mjs`) so future setup runs deploy the fixed version.
 
 ---
 
@@ -83,14 +83,14 @@ The fix is applied to both the deployed hook (`.claude/hooks/enforcement/gate-wr
 **Positive:**
 - P7 archive writes succeed on Windows regardless of `design.md` state
 - Always-permitted path checks work correctly on both Windows and POSIX without platform branching
-- Fix is minimal — 5 lines changed; easy to review and audit
-- No new dependencies; `norm()` is a pure string operation
+- Fix is minimal: 5 lines changed, which keeps review and audit short
+- No new dependencies. `norm()` is a pure string operation.
 
 **Negative:**
-- Two copies of `gate-write.mjs` must be kept in sync (source and deployed); mitigated by setup copying the source to the deployed location
+- Two copies of `gate-write.mjs` must be kept in sync (source and deployed). Setup mitigates this by copying the source to the deployed location.
 
 **Risks:**
-- If a future contributor modifies only one copy and not the other, the bug could reappear in the source while the fix is live (or vice versa); mitigated by a comment in both files noting the dual-copy relationship
+- If a future contributor modifies only one copy, the bug could reappear in the source while the fix is live (or vice versa). A comment in both files noting the dual-copy relationship mitigates this.
 
 ---
 

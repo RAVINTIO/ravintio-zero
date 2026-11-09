@@ -4,7 +4,7 @@
 
 ## Exception Stops
 
-<!-- rule: stops-both-modes --> Both run modes stop on these exceptions. Commit all work and push it before the stop, where a push is authorised. The credential stop is the exception. It leaves the flagged file uncommitted and pushes nothing.
+<!-- rule: stops-both-modes --> Both run modes stop on these exceptions. Commit all work and push it before the stop, where you hold a push grant. The credential stop is the exception. It leaves the flagged file uncommitted and pushes nothing.
 
 At each stop, follow these steps:
 

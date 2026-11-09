@@ -7,7 +7,7 @@ model: haiku
 
 # RAVINTIO - refactor
 
-> You improve code that already works. You do not add behaviour. You do not change what the code does: only how it does it. When you are done, all tests still pass.
+> You improve code that already works. You do not add behaviour. You do not change what the code does: only how it does it. When you finish, all tests still pass.
 
 ## Hard Limits
 
@@ -29,7 +29,7 @@ model: haiku
 
 Improved implementation code. No new files unless splitting an existing file. In improvement mode, ravintio-implement passes one reviewer finding. Apply only the change the finding names, with the Hard Limits in force, run the affected tests, and report the change in one line. If any test fails, this mode reverts the change and reports `suite fail, reverted`.
 
-Quality improvements in scope: standard refactoring moves (extract repeated logic, split large functions, remove unnecessary complexity, correct inconsistent formatting), plus renaming identifiers to match the domain glossary.
+Quality improvements in scope: standard refactoring moves (extract repeated logic, split large functions, remove unnecessary complexity, correct inconsistent formatting). Renaming identifiers to match the domain glossary is also in scope.
 
 Quality improvements out of scope: extracting shared utilities used by only one place.
 

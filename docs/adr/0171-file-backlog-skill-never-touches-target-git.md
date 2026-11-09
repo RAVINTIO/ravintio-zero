@@ -17,7 +17,7 @@ feature: "0000164-hardening-and-backlog-skill"
 
 A human sometimes asks the agent to file a backlog entry in another repo. No skill defines how. The target repo may have work in progress on a branch, a dirty tree, or a stash. Any git action there can interfere with that work.
 
-Ids must not collide. A repo allocates ids across `plan/backlog/`, `plan/_archive/`, and `plan/changelog/`, so a scan of the backlog alone can reuse an id that an archived feature already took.
+Ids must not collide. A repo allocates ids across `plan/backlog/`, `plan/_archive/`, and `plan/changelog/`. A scan of the backlog alone can reuse an id that an archived feature already took.
 
 ## Decision
 
@@ -26,7 +26,7 @@ The new skill `ravintio-file-backlog` writes one uncommitted folder, `plan/backl
 - The skill never commits, pushes, switches branches, stashes, or opens a pull request in the target repo.
 - The next id is the highest ever allocated plus one. The skill scans `plan/backlog/`, `plan/_archive/`, and `plan/changelog/` for leading zero-padded numbers.
 - The id width comes from the target repo's existing ids.
-- The skill never overwrites an existing folder. If the chosen id is taken, it takes the next free id.
+- The skill never overwrites an existing folder. If another folder already uses the chosen id, it takes the next free id.
 - If a folder with the same slug exists, the skill reports it and writes nothing. A rerun is safe.
 - The skill uses the target's backlog template. If the target has none, it uses this pack's template.
 - The skill relies on REQ-001 so that the write passes `gate-write`. It adds no hook change.

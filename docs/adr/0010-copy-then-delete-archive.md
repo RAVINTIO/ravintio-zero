@@ -25,8 +25,8 @@ At the end of Phase 7 (Ship), the ship-agent must archive `plan/current/` to `pl
 Two strategies exist: copy-then-delete (two operations) or atomic rename/move (one operation). On most operating systems, `fs.rename` is atomic within the same filesystem but not across filesystems or volumes. In cloud-synced or containerised environments (common in agentic tool setups), `plan/current/` and `plan/archive/` may not be on the same underlying filesystem.
 
 The failure modes differ significantly:
-- **Failed copy:** source is intact; archive may be partial or absent. Fully recoverable — re-run ship.
-- **Failed atomic move / partial rename:** if the OS renames a directory entry but fails mid-way on nested files (cross-filesystem case), `plan/current/` may be partially deleted with no archive to recover from.
+- **Failed copy:** source is intact. The archive may be partial or absent. Fully recoverable: re-run ship.
+- **Failed atomic move / partial rename:** the OS may rename a directory entry but fail mid-way on nested files (cross-filesystem case). Then `plan/current/` may be partially deleted with no archive to recover from.
 
 ---
 
@@ -36,7 +36,7 @@ Use copy-then-delete:
 1. Write `plan/current/.feature-id` with the feature ID (marker for resume detection)
 2. Recursively copy all files from `plan/current/` to `plan/archive/{feature-id}-{YYYY-MM-DD}/`
 3. If the target archive path already exists, use `{feature-id}-{YYYY-MM-DD}-{n}` (n=2,3,…) to avoid collision
-4. Only after the copy is fully confirmed: delete `plan/current/` contents
+4. Only after you fully confirm the copy: delete `plan/current/` contents
 5. Confirm empty `plan/current/` before declaring Ship complete
 
 **Idempotency:** If step 4 fails mid-delete, `plan/current/` still contains artefacts. On re-run, ship-agent detects the archive already exists (via `.feature-id`), adds a `-{n}` suffix, and proceeds with a fresh copy-then-delete. The duplicate archive is harmless.
@@ -67,13 +67,13 @@ Use copy-then-delete:
 ## Consequences
 
 **Positive:**
-- Any failure leaves either the source or the archive (or both) fully intact — no data loss scenario
+- Any failure leaves either the source or the archive (or both) fully intact, so no data loss scenario exists
 - Idempotent: re-running ship after a failed archive always produces a clean result
 - `.feature-id` marker enables resume detection to identify stale artefacts without false positives
 
 **Negative:**
-- Two filesystem operations instead of one; on large `plan/current/` directories (unlikely but possible), copy is slower
-- After a partial failure, `plan/current/` and the partial archive both contain files — a human may be confused by the duplicate state
+- Two filesystem operations instead of one. On large `plan/current/` directories (unlikely but possible), copy is slower
+- After a partial failure, `plan/current/` and the partial archive both contain files, so the duplicate state may confuse a human
 
 **Risks:**
 - The collision suffix logic (`-{n}`) must handle the case where the archive at suffix `-1` was from a failed run (partial). The ship-agent should always append a new suffix rather than attempting to reuse an existing archive directory.

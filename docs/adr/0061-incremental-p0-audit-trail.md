@@ -20,15 +20,15 @@ feature: "0000014-improve-adoption-mode-selection"
 
 ## Context
 
-REQ-011 requires a structured P0 audit trail in the build log recording questions asked, answers given, and items deferred. Two write strategies are possible: accumulate all entries and write them as a batch when P0 closes, or write each entry immediately after the question-answer exchange completes.
+REQ-011 requires a structured P0 audit trail in the build log recording questions asked, answers given, and items deferred. Two write strategies are possible. One accumulates all entries and writes them as a batch when P0 closes. The other writes each entry immediately after the question-answer exchange completes.
 
-P0 coaching often spans multiple turns and occasionally multiple sessions (resumed via pause file). A batch write at P0 close risks losing entries if the session is interrupted before close.
+P0 coaching often spans multiple turns and occasionally multiple sessions (resumed via pause file). A batch write at P0 close risks losing entries if something interrupts the session before close.
 
 ---
 
 ## Decision
 
-**Write each audit trail entry immediately after the question-answer exchange completes.** The build log is appended after each turn where a coaching question was asked and answered. This means the audit trail is always up to date regardless of session state.
+**Write each audit trail entry immediately after the question-answer exchange completes.** The orchestrator appends to the build log after each turn where the human answered a coaching question. This means the audit trail is always up to date regardless of session state.
 
 Each entry follows a fixed structure:
 ```
@@ -70,13 +70,13 @@ Each entry follows a fixed structure:
 - Build log grows incrementally during P0 rather than in a single append
 
 **Risks:**
-- If the build log write itself fails (unlikely — docs/ is always-permitted), the coaching exchange succeeded but the record was lost; this is acceptable given the low probability
+- If the build log write itself fails (unlikely, because docs/ is always-permitted), the coaching exchange succeeded but the build log lost the record. This is acceptable given the low probability
 
 ---
 
 ## Related ADRs
 
-- ADR-0060 — depends-on (one-question rule creates discrete exchanges that map 1:1 to audit trail entries)
+- ADR-0060: depends-on (one-question rule creates discrete exchanges that map 1:1 to audit trail entries)
 
 ---
 

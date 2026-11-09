@@ -49,11 +49,17 @@ status: "proposed"  # proposed | charted | active | delivered | blocked
 > and `merged`. The driver derives `running` and `ready`.
 
 **Goal:** {{What the whole chain delivers, in one or two sentences.}}
+
 **Branch:** initiative/{{id}}-{{slug}}
+
 **Status:** {{proposed | charted | active | delivered | blocked}}
+
 **Position:** {{number of the next step to run, for example 1}}
+
 **Speed:** {{standard | fast, optional, a missing field means standard}}
+
 **Step CI fixes:** {{allowed | stop, optional, a missing field means stop}}
+
 **Concurrency:** {{1 to 9, default 3}}
 
 ## Stop conditions

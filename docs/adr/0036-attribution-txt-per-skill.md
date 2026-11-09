@@ -20,7 +20,7 @@ feature: "0000009-framework-rail-tightening"
 
 ## Context
 
-Every skill in `planifest-framework/external-skills/` is sourced from a third-party repository under a third-party licence. Planifest must record licence and attribution information so that:
+Every skill in `planifest-framework/external-skills/` comes from a third-party repository under a third-party licence. Planifest must record licence and attribution information so that:
 1. Users who copy these skills know the licence terms
 2. Framework maintainers can verify compliance before adding a skill
 3. The full licence text travels with the skill even if the source URL becomes unavailable
@@ -37,11 +37,11 @@ Three questions needed answering:
 Each external skill directory contains an `attribution.txt` file. The file holds:
 - **Licence type** (e.g. MIT, Apache 2.0)
 - **Copyright holder** (as stated in the original licence)
-- **Source URL** (the GitHub repo or file URL the skill was sourced from)
+- **Source URL** (the GitHub repo or file URL the skill came from)
 - **Required attribution text** (any text the licence requires to appear in redistributions)
 - **Full licence text** appended at the bottom (the complete, unmodified licence as retrieved from the source)
 
-The file is plain text, not YAML or JSON, because its primary consumers are humans reading it directly — not machines parsing it. The full licence text is included so the terms survive even if the upstream repo changes or disappears.
+The file is plain text, not YAML or JSON, because its primary consumers are humans reading it directly, not machines parsing it. The file includes the full licence text so the terms survive even if the upstream repo changes or disappears.
 
 ---
 
@@ -67,17 +67,17 @@ The file is plain text, not YAML or JSON, because its primary consumers are huma
 ## Consequences
 
 **Positive:**
-- Licence terms and full text travel with the skill wherever it is copied
+- Licence terms and full text travel with the skill wherever someone copies it
 - Human-readable format requires no tooling to inspect
 - Framework maintainers have a clear checklist item when adding a new skill: "does attribution.txt exist and is it complete?"
-- Legal compliance for permissive licences is straightforward — the full text is present
+- Legal compliance for permissive licences is straightforward: the full text is present
 
 **Negative:**
-- Every skill requires a manually-created `attribution.txt`; no automation verifies completeness until a test is written
+- Every skill requires a manually-created `attribution.txt`. No automation verifies completeness until someone writes a test
 - Full licence text adds a few KB per skill directory (negligible but non-zero)
 
 **Risks:**
-- Attribution.txt is incomplete or inaccurate if the person adding the skill copies it carelessly; mitigated by a validation test that checks for required fields
+- Attribution.txt is incomplete or inaccurate if the person adding the skill copies it carelessly. A validation test that checks for required fields mitigates this
 
 ---
 

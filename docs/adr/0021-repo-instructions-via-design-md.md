@@ -17,7 +17,7 @@ feature: "0000005-framework-governance"
 
 ## Context
 
-Humans need a way to declare repo-specific constraints that all agents must follow — for example, "no git push or pull; local operations only". These instructions must reach every agent in every phase without the human repeating them. Two viable propagation mechanisms exist: inject on every turn via the `check-design.mjs` hook, or write to `design.md` once at P0 so all agents read them as part of their normal phase-start context load.
+Humans need a way to declare repo-specific constraints that all agents must follow, for example "no git push or pull, local operations only". These instructions must reach every agent in every phase without the human repeating them. Two viable propagation mechanisms exist. One injects them on every turn via the `check-design.mjs` hook. The other writes them to `design.md` once at P0, so all agents read them in their normal phase-start context load.
 
 ---
 
@@ -51,19 +51,19 @@ The orchestrator reads all `.md` files in `planifest-overrides/instructions/` at
 
 **Positive:**
 - Instructions written once, available to all agents for the entire pipeline run via the existing design.md read
-- No per-turn overhead — hook is not involved in instruction propagation
-- Human-readable and auditable — instructions are visible in design.md
+- No per-turn overhead: the hook plays no part in instruction propagation
+- Human-readable and auditable: instructions appear in design.md
 
 **Negative:**
-- Instructions are only refreshed at P0 — a human who adds an instruction mid-pipeline must restart from P0 for it to take effect
-- Agents must actively read design.md at phase start — if a phase agent skips this, instructions are not applied
+- Instructions refresh only at P0. A human who adds an instruction mid-pipeline must restart from P0 for it to take effect
+- Agents must actively read design.md at phase start. If a phase agent skips this, the instructions do not apply
 
 **Risks:**
-- An instruction file with ambiguous scope (e.g. "be careful with git") may be interpreted inconsistently by different agents — mitigated by documenting that instructions must be specific and actionable
+- An instruction file with ambiguous scope (e.g. "be careful with git") may be interpreted inconsistently by different agents. Documenting that instructions must be specific and actionable mitigates this
 
 ---
 
 ## Related ADRs
 
-- ADR-0020 — related-to (both use design.md as shared session state written at P0)
-- ADR-0019 — depends-on (instructions live in planifest-overrides/)
+- ADR-0020 - related-to (both use design.md as shared session state written at P0)
+- ADR-0019 - depends-on (instructions live in planifest-overrides/)

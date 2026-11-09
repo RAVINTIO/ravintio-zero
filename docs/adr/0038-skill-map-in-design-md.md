@@ -26,17 +26,17 @@ REQ-004 requires the orchestrator to produce a skill-to-requirement mapping show
 - Visible to the human for confirmation before each phase proceeds
 - Persistent across session boundaries (so it can be re-evaluated on resume)
 
-A decision is needed about where to store this mapping.
+You must decide where to store this mapping.
 
 ---
 
 ## Decision
 
-The skill map is stored as a `## Skill Map` section appended to `plan/current/design.md`. Design.md is already the single confirmed-design document read by all agents at phase start. Adding the skill map there means:
-- All agents already read design.md; no additional file load is needed
+The skill map lives in a `## Skill Map` section appended to `plan/current/design.md`. Design.md is already the single confirmed-design document that all agents read at phase start. Adding the skill map there means:
+- All agents already read design.md, so they need no additional file load
 - The map is co-located with the design it derives from
 - Gate-write already permits writes to design.md (it is in `plan/`)
-- Resume detection already reads design.md; the skill map is automatically restored on resume
+- Resume detection already reads design.md, so resume restores the skill map automatically
 
 ---
 
@@ -62,16 +62,16 @@ The skill map is stored as a `## Skill Map` section appended to `plan/current/de
 ## Consequences
 
 **Positive:**
-- Zero additional files; human has one document to review for both design and skill routing
-- Agents already read design.md — skill map is free context
+- Zero additional files. The human has one document to review for both design and skill routing
+- Agents already read design.md, so the skill map is free context
 - Map survives session boundaries without additional resume logic
 
 **Negative:**
 - Design.md grows slightly with each feature (skill map section added to a document that is otherwise concise)
-- Skill map may become stale if requirements change mid-pipeline and the orchestrator misses a re-evaluation; mitigated by gate protocol
+- Skill map may become stale if requirements change mid-pipeline and the orchestrator misses a re-evaluation. The gate protocol mitigates this.
 
 **Risks:**
-- If design.md grows large (many requirements, large skill map), agents reading it in full may consume notable context; mitigated by Planifest's existing guidance to keep features small and phased
+- If design.md grows large (many requirements, large skill map), agents that read it in full may consume notable context. Planifest's existing guidance to keep features small and phased mitigates this.
 
 ---
 

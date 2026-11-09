@@ -40,7 +40,7 @@ Add `plan/.initiative-logs` to the `EXCLUDE` list. The guard keeps scanning trac
 - Step sessions run the suite with no workaround.
 
 **Negative:**
-- A stale cite in a step log goes unseen, which is harmless because the log is not shipped.
+- A stale cite in a step log goes unseen, which is harmless because the pack does not ship the log.
 
 **Risks:**
 - Another suite may read the folder. P2 checks the full run.

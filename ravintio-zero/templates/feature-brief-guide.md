@@ -59,7 +59,7 @@ This is where you make the architectural decisions. The agent implements within 
 
 **Components:** Name them, type them, say what each one does. If modifying existing components, say so.
 
-**Data Ownership:** Each data store is owned by exactly one component. This is a hard limit. If two components need the same data, one owns it and the other reads it via an API or event.
+**Data Ownership:** Exactly one component owns each data store. This is a hard limit. If two components need the same data, one owns it and the other reads it via an API or event.
 
 **Integration Points:** How components talk to each other. REST, gRPC, events, queues - be explicit.
 
@@ -75,7 +75,7 @@ The [Backend Stack Evaluation](../standards/backend-stack-evaluation.md) and [Fr
 
 **Out of Scope** - what it does NOT deliver. This is equally important. Without it, the agent may build features you didn't ask for. Explicit exclusions save cycles.
 
-**Deferred** - what might be delivered later but not now. Note what's blocked until deferred items are resolved.
+**Deferred** - what might be delivered later but not now. Note what the deferred items block until you resolve them.
 
 ### Non-Functional Requirements
 
@@ -85,7 +85,7 @@ If you don't have a target, leave it blank. The orchestrator will ask. Better to
 
 ### Acceptance Criteria
 
-How you know the feature is done. These become the orchestrator's exit criteria. Be specific - the agent will test against them.
+How you know you have finished the feature. These become the orchestrator's exit criteria. Be specific - the agent will test against them.
 
 ---
 
@@ -106,7 +106,7 @@ How you know the feature is done. These become the orchestrator's exit criteria.
 3. The orchestrator assesses it against the three layers:
    - **Product**: Functional Requirements. What the system must do and why.
    - **Architecture**: Standards. The cross-cutting rules and non-functional requirements.
-   - **Engineering**: Implementation. How the system was actually built.
+   - **Engineering**: Implementation. How the team actually built the system.
    The orchestrator coaches you through any gaps - one question at a time.
 4. Once complete, the orchestrator produces the **confirmed design** and begins the pipeline
 

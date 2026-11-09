@@ -22,15 +22,15 @@ feature: "0000014-improve-adoption-mode-selection"
 
 Analysis of prior pipeline runs showed that scope creep consistently entered the pipeline at P3 (codegen), not at P0. The root cause: the current P0 coaching asks gap-filling questions (what's missing from the brief?) but not scenario-probing questions (what happens when X fails?). The 0000009 feature added REQ-008 mid-P3 because nobody asked "what happens if the session resets mid-pipeline?" at P0.
 
-To address this, a Scope Lock Challenge was designed to run at P0 before design confirmation. Two approaches were considered for generating the scenarios: a fixed checklist of category prompts (first-run, cross-session, error states, upgrade) applied to every feature, or agent-derived scenarios that are specific to what is being built.
+To address this, the design adds a Scope Lock Challenge that runs at P0 before design confirmation. The design weighed two approaches to generate the scenarios. One is a fixed checklist of category prompts (first-run, cross-session, error states, upgrade) applied to every feature. The other is agent-derived scenarios that are specific to what is being built.
 
 ---
 
 ## Decision
 
-**The Scope Lock Challenge uses agent-derived scenarios.** The orchestrator reads the confirmed requirements and generates scenario questions specific to the feature — not a generic list. For example, a migration feature gets questions about partial failure and archive ordering; a skill file feature gets questions about what happens when the human doesn't load the skill.
+**The Scope Lock Challenge uses agent-derived scenarios.** The orchestrator reads the confirmed requirements and generates scenario questions specific to the feature, not a generic list. For example, a migration feature gets questions about partial failure and archive ordering. A skill file feature gets questions about what happens when the human doesn't load the skill.
 
-A fixed checklist is provided as a fallback guide for the agent (ensuring scenario categories are not systematically skipped) but is not presented verbatim to the human. The agent synthesises the relevant scenarios from that guide and the feature context.
+The design gives the agent a fixed checklist as a fallback guide, so the agent does not systematically skip scenario categories. The agent does not present the checklist verbatim to the human. The agent synthesises the relevant scenarios from that guide and the feature context.
 
 ---
 
@@ -65,13 +65,13 @@ A fixed checklist is provided as a fallback guide for the agent (ensuring scenar
 - Quality of the challenge depends on agent reasoning quality
 
 **Risks:**
-- The Feature Brief Scenario Paths section (REQ-017) and the Scope Lock Challenge are complementary; if the Feature Brief is skipped, the Scope Lock Challenge is the only gate — its quality becomes more critical
+- The Feature Brief Scenario Paths section (REQ-017) and the Scope Lock Challenge are complementary. If the human skips the Feature Brief, the Scope Lock Challenge is the only gate and its quality becomes more critical
 
 ---
 
 ## Related ADRs
 
-- ADR-0060 — related-to (one-question rule applies throughout the challenge)
+- ADR-0060: related-to (one-question rule applies throughout the challenge)
 
 ---
 

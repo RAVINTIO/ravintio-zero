@@ -5,7 +5,7 @@ date: "04 May 2026"
 feature: "0000007-agent-optimisation"
 component: "ravintio-zero"
 ---
-# ADR-0032 — Locale-tagged language quirks files for multilingual readiness
+# ADR-0032 - Locale-tagged language quirks files for multilingual readiness
 
 ## Context
 
@@ -13,7 +13,7 @@ The framework needed to document deliberate spelling and terminology decisions (
 
 ## Decision
 
-Name the file `language-quirks-{locale}.md` using the ISO 639-1 + ISO 3166-1 locale code (e.g. `language-quirks-en-gb.md`). Include `locale: en-GB` in the YAML frontmatter. This is the only such file created in this feature; the naming convention positions future locales to add their own files.
+Name the file `language-quirks-{locale}.md` using the ISO 639-1 + ISO 3166-1 locale code (e.g. `language-quirks-en-gb.md`). Include `locale: en-GB` in the YAML frontmatter. This feature creates only this one such file. The naming convention positions future locales to add their own files.
 
 ## Alternatives Considered
 
@@ -25,7 +25,7 @@ Name the file `language-quirks-{locale}.md` using the ISO 639-1 + ISO 3166-1 loc
 
 ## Affected Components
 
-- `planifest-framework/standards/language-quirks-en-gb.md` — new file
+- `planifest-framework/standards/language-quirks-en-gb.md`: new file
 
 ## Consequences
 
@@ -35,10 +35,10 @@ Name the file `language-quirks-{locale}.md` using the ISO 639-1 + ISO 3166-1 loc
 - ISO locale code in frontmatter enables programmatic filtering
 
 **Negative:**
-- Locale declaration is slightly redundant (in both filename and frontmatter) — acceptable: filename enables discovery, frontmatter enables programmatic access
+- Locale declaration is slightly redundant (in both filename and frontmatter). This is acceptable: the filename enables discovery and the frontmatter enables programmatic access
 
 **Risks:**
-- No mechanism currently exists to tell agents which locale file to load — agents default to `en-GB` unless the project declares otherwise. A future feature can add a locale field to `feature-brief.template.md` if multilingual support is needed.
+- No mechanism currently exists to tell agents which locale file to load. Agents default to `en-GB` unless the project declares otherwise. A future feature can add a locale field to `feature-brief.template.md` if the project needs multilingual support.
 
 ## Related ADRs
 

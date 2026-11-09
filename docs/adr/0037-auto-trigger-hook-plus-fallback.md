@@ -20,7 +20,7 @@ feature: "0000009-framework-rail-tightening"
 
 ## Context
 
-Currently, users must explicitly invoke the orchestrator at the start of every session in a planifest project. This is a friction point — experienced users remember, new users do not, and sessions started without the orchestrator bypass the framework's discipline entirely.
+Currently, users must explicitly invoke the orchestrator at the start of every session in a planifest project. This is a friction point: experienced users remember, new users do not, and sessions that start without the orchestrator bypass the framework's discipline entirely.
 
 Planifest already has a `UserPromptSubmit` hook mechanism (used by `check-design.mjs`) that fires on every user prompt in Claude Code. A similar hook could fire on the first prompt of a session and check whether the orchestrator should be loaded.
 
@@ -32,14 +32,14 @@ A secondary challenge: the hook must not fire repeatedly within the same session
 
 ## Decision
 
-A new hook script (`auto-trigger-orchestrator.mjs`) is installed by setup alongside existing enforcement hooks. It is registered as a `UserPromptSubmit` handler in `.claude/settings.json`. On each fire, it:
+Setup installs a new hook script (`auto-trigger-orchestrator.mjs`) alongside existing enforcement hooks and registers it as a `UserPromptSubmit` handler in `.claude/settings.json`. On each fire, it:
 1. Checks whether `planifest-framework/` exists in the current working directory (planifest project detection)
-2. Checks whether `plan/.orchestrator-active` exists (already active — exit 0 silently)
+2. Checks whether `plan/.orchestrator-active` exists (already active, so exit 0 silently)
 3. If both conditions are met (planifest project, not yet active), outputs an instruction to the model to load the `planifest-orchestrator` skill
 
-In parallel, a CLAUDE.md instruction is added as a fallback for tools without `UserPromptSubmit` support: "At the start of every session in a planifest project (planifest-framework/ present), load the planifest-orchestrator skill."
+In parallel, the change adds a CLAUDE.md instruction as a fallback. It covers tools without `UserPromptSubmit` support. The instruction reads: "At the start of every session in a planifest project (planifest-framework/ present), load the planifest-orchestrator skill."
 
-The hook is installed by both `setup.sh` and `setup.ps1` as part of standard Claude Code setup (no new flag).
+Both `setup.sh` and `setup.ps1` install the hook as part of standard Claude Code setup (no new flag).
 
 ---
 
@@ -72,11 +72,11 @@ The hook is installed by both `setup.sh` and `setup.ps1` as part of standard Cla
 - Consistent session start behaviour regardless of whether the user remembers to load the orchestrator
 
 **Negative:**
-- An additional `UserPromptSubmit` hook fires on every prompt, adding marginal latency (hook is a fast file-existence check — sub-millisecond)
-- CLAUDE.md instruction grows slightly; advisory instructions are weaker than hooks
+- An additional `UserPromptSubmit` hook fires on every prompt, adding marginal latency (the hook is a fast file-existence check, sub-millisecond)
+- CLAUDE.md instruction grows slightly, and advisory instructions are weaker than hooks
 
 **Risks:**
-- If `plan/.orchestrator-active` is left stale (not deleted by P7), the hook fires on every session in an already-shipped project; mitigated by P7 cleanup deleting the sentinel
+- If `plan/.orchestrator-active` stays stale (P7 does not delete it), the hook fires on every session in an already-shipped project. P7 cleanup deleting the sentinel mitigates this
 
 ---
 

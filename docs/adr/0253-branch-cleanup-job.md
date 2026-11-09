@@ -18,7 +18,7 @@ Merged head branches pile up on `origin`. Entry 0000323 asks each developer to t
 
 ## Decision
 
-Add a `cleanup-branch` job to `ravintio.yml`, in the pack template and in this repo. It runs when a PR into `main` or `initiative/**` closes as merged. It holds `contents: write` on that job only. It skips a fork head, refuses `main` and `master`, reads the ref from `env`, checks it against an allowed pattern, and exits 0 if the branch is gone. Every pull request job gains `github.event.action != 'closed'` in its `if`. An `initiative/*` head is deleted when its PR into `main` merges.
+Add a `cleanup-branch` job to `ravintio.yml`, in the pack template and in this repo. It runs when a PR into `main` or `initiative/**` closes as merged. It holds `contents: write` on that job only. It skips a fork head, refuses `main` and `master`, and reads the ref from `env`. It checks the ref against an allowed pattern and exits 0 if the branch is gone. Every pull request job gains `github.event.action != 'closed'` in its `if`. The job deletes an `initiative/*` head when its PR into `main` merges.
 
 ## Alternatives Considered
 

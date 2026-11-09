@@ -1,16 +1,16 @@
 ---
-version: "0.74.0"
+version: "0.75.0"
 feature: "0000378-merge-time-versioning"
 updated: "7 Nov 2026"
 ---
 # About
 
 > This file is the canonical version record for this project.
-> Do not edit manually. Version changes are confirmed during discovery.
+> Do not edit manually. Discovery confirms version changes.
 
 | Field | Value |
 |-------|-------|
-| Version | `0.74.0` |
+| Version | `0.75.0` |
 | Last feature | `0000378-merge-time-versioning` |
 | Updated | `7 Nov 2026` |
 

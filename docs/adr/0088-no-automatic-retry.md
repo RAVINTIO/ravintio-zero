@@ -20,11 +20,11 @@ feature: "0000020-setup-refresh-skill"
 
 ## Context
 
-REQ-006 defines what happens when the re-invoked `setup.sh`/`setup.ps1` fails partway through, after `CLAUDE.md`/`AGENTS.md` have already been deleted (ADR-0084). At this point the repo is in a degraded state (boot files missing) until setup completes successfully. A retry could plausibly be attempted automatically, since the confirmed flags and attempted command are already cached (ADR-0085), and the failure may be transient (a momentary file lock).
+REQ-006 defines what happens when the re-invoked `setup.sh`/`setup.ps1` fails partway through, after `CLAUDE.md`/`AGENTS.md` have already been deleted (ADR-0084). At this point the repo is in a degraded state (boot files missing) until setup completes successfully. The skill could plausibly retry automatically. The confirmed flags and attempted command are already cached (ADR-0085), and the failure may be transient (a momentary file lock).
 
 ## Decision
 
-The skill never retries automatically. On failure, it stops immediately, investigates what it can about the cause (lock, permission, held-by-process), reports the setup script's own output, the step reached, and the exact attempted command as a copyable code block, and leaves the cached flags/command in `.claude/.planifest-setup-flags` (ADR-0085) for a human-initiated retry.
+The skill never retries automatically. On failure, it stops immediately and investigates what it can about the cause (lock, permission, held-by-process). It reports the setup script's own output, the step reached, and the exact attempted command as a copyable code block. It leaves the cached flags/command in `.claude/.planifest-setup-flags` (ADR-0085) for a human-initiated retry.
 
 ## Alternatives Considered
 
@@ -43,14 +43,14 @@ The skill never retries automatically. On failure, it stops immediately, investi
 ## Consequences
 
 **Positive:**
-- The human on the loop always sees exactly what happened before anything is attempted again, no state changes occur silently between a failure and a retry
+- The human on the loop always sees exactly what happened before the skill attempts anything again. No state changes occur silently between a failure and a retry
 - Simpler failure handling: no retry-count state, no backoff logic, no partial-success bookkeeping across attempts
 
 **Negative:**
-- A genuinely transient failure (e.g. a lock released a second later) still requires the human on the loop to re-invoke the skill manually rather than resolving itself
+- A genuinely transient failure (e.g. a lock released a second later) still requires the human on the loop to re-invoke the skill manually. It does not resolve itself
 
 **Risks:**
-- None beyond the inconvenience already accepted above; the cached marker file (ADR-0085) means a manual retry does not repeat detection, keeping the cost of manual retry low
+- None beyond the inconvenience already accepted above. The cached marker file (ADR-0085) means a manual retry does not repeat detection, which keeps the cost of manual retry low
 
 ---
 

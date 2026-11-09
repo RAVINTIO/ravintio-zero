@@ -26,4 +26,4 @@ One entry per exchange, never batched, so an interrupted session still holds eve
 
 ### Skill Map
 
-After the design is drafted and before presenting it, write a `## Skill Map` section in `design.md`: one row per requirement mapping it to the best-fit skill in `ravintio-zero/skills/` with a one-line rationale. Re-evaluate the map at each phase gate.
+After you draft the design and before you present it, write a `## Skill Map` section in `design.md` with one row per requirement. Each row maps the requirement to the best-fit skill in `ravintio-zero/skills/` with a one-line rationale. Re-evaluate the map at each phase gate.

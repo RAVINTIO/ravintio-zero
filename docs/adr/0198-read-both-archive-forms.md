@@ -15,7 +15,7 @@ feature: "0000192-rename-runner-lock-and-archive"
 
 ## Context
 
-I-E Delivery archives an initiative to the old `-roadmap-` archive folder form. The driver's delivery check looks for that prefix to decide a run is finished. ADR-0193 chose a clean break with a migration for its renames. The archive folder holds history, and 0000189 kept `plan/_archive/` out of scope for edits. `0000168-backlog-clearance-roadmap-2026-10-25` already uses the old form.
+I-E Delivery archives an initiative to the old `-roadmap-` archive folder form. The driver's delivery check looks for that prefix to decide a run has finished. ADR-0193 chose a clean break with a migration for its renames. The archive folder holds history, and 0000189 kept `plan/_archive/` out of scope for edits. `0000168-backlog-clearance-roadmap-2026-10-25` already uses the old form.
 
 ## Decision
 
@@ -38,7 +38,7 @@ I-E Delivery archives to `plan/_archive/{id}-{slug}-initiative-{date}/`. The del
 
 **Positive:**
 - No consumer needs a migration.
-- History stays as it was written.
+- History stays as the author wrote it.
 
 **Negative:**
 - `plan/_archive/` holds two folder forms for delivered initiatives.

@@ -20,7 +20,7 @@ feature: "0000012-docs-restructure-commit-directives"
 
 ## Context
 
-The original `planifest-framework/getting-started.md` served as the sole entry point for all framework documentation — onboarding steps, pipeline phase details, commit policy, migration management, and customisation guidance. As the framework grew, this file became too large for a single purpose: new users needed a quick setup path, while experienced users needed detailed operational reference. Mixing both audiences in one file made neither well-served.
+The original `planifest-framework/getting-started.md` served as the sole entry point for all framework documentation: onboarding steps, pipeline phase details, commit policy, migration management, and customisation guidance. As the framework grew, this file became too large for a single purpose. New users needed a quick setup path, while experienced users needed detailed operational reference. Mixing both audiences in one file served neither well.
 
 ---
 
@@ -28,11 +28,11 @@ The original `planifest-framework/getting-started.md` served as the sole entry p
 
 Split framework documentation into three files with distinct, non-overlapping purposes:
 
-1. **`getting-started.md`** — steps 1–5 only (copy framework, create structure, run setup, start orchestrator, quick-reference index). Target audience: new users setting up for the first time.
-2. **`pipeline-reference.md`** — comprehensive step-by-step guidance for every pipeline phase, gate criteria, artifact paths, commit conventions, and troubleshooting. Target audience: users running the pipeline.
-3. **`project-operations.md`** — concise reference for ongoing project management: git commit policy, updating the framework, running migrations, customising with planifest-overrides, what to commit. Target audience: experienced users managing live projects.
+1. **`getting-started.md`**: steps 1–5 only (copy framework, create structure, run setup, start orchestrator, quick-reference index). Target audience: new users setting up for the first time.
+2. **`pipeline-reference.md`**: comprehensive step-by-step guidance for every pipeline phase, gate criteria, artifact paths, commit conventions, and troubleshooting. Target audience: users running the pipeline.
+3. **`project-operations.md`**: concise reference for ongoing project management: git commit policy, updating the framework, running migrations, customising with planifest-overrides, what to commit. Target audience: experienced users managing live projects.
 
-Cross-references between files are preferred over duplication.
+Prefer cross-references between files over duplication.
 
 ---
 
@@ -58,16 +58,16 @@ Cross-references between files are preferred over duplication.
 ## Consequences
 
 **Positive:**
-- New users reach setup completion faster — getting-started.md is short and focused
+- New users reach setup completion faster because getting-started.md is short and focused
 - Agents reading pipeline-reference.md for phase guidance load only relevant content
 - Operational reference is findable without scanning the full pipeline doc
 
 **Negative:**
-- Three files to maintain instead of one — content drift between files is now possible
-- Cross-references must be kept in sync; a renamed section breaks links
+- Three files to maintain instead of one, so content can now drift between files
+- You must keep cross-references in sync because a renamed section breaks links
 
 **Risks:**
-- If project-operations.md and pipeline-reference.md develop overlapping content, the split becomes confusing — mitigated by the rule that project-operations.md links to pipeline-reference.md for depth rather than duplicating it
+- If project-operations.md and pipeline-reference.md develop overlapping content, the split becomes confusing. A rule mitigates this: project-operations.md links to pipeline-reference.md for depth rather than duplicating it.
 
 ---
 

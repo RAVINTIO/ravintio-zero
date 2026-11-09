@@ -20,7 +20,7 @@ feature: "0000012-docs-restructure-commit-directives"
 
 ## Context
 
-The orchestrator asks the human at P0 whether to run continuously or to stop at each phase gate. Previously this choice was held only in session memory (`continuous_run: true/false`). If the session was interrupted and resumed, the orchestrator had no record of the original choice and had to re-ask — or assumed a default. This created inconsistency across resumed sessions and left no audit trail of how a pipeline run was configured.
+The orchestrator asks the human at P0 whether to run continuously or to stop at each phase gate. Previously the orchestrator held this choice only in session memory (`continuous_run: true/false`). If an interruption ended the session and the human resumed it, the orchestrator had no record of the original choice. It had to re-ask or assume a default. This created inconsistency across resumed sessions and left no audit trail of how the human configured a pipeline run.
 
 ---
 
@@ -29,8 +29,8 @@ The orchestrator asks the human at P0 whether to run continuously or to stop at 
 Write the run-mode choice to `plan/.run-mode` immediately after the human answers at P0. The file contains a single value: `continuous` or `interactive`.
 
 - On **resume**, the orchestrator reads `plan/.run-mode` to restore the run mode without re-asking.
-- In **interactive** mode, gate acceptance is recorded in `plan/current/build-log.md` as: `Gate accepted: P{N} — {ISO-8601 timestamp}`.
-- `plan/.run-mode` is included in the P0 commit so it survives branch switches.
+- In **interactive** mode, the orchestrator records gate acceptance in `plan/current/build-log.md` as: `Gate accepted: P{N} — {ISO-8601 timestamp}`.
+- The P0 commit includes `plan/.run-mode` so it survives branch switches.
 - Input validation: any value other than `continuous` defaults to `interactive`.
 
 ---
@@ -56,21 +56,21 @@ Write the run-mode choice to `plan/.run-mode` immediately after the human answer
 ## Consequences
 
 **Positive:**
-- Run mode survives session interruptions — resumed sessions behave identically to the original
-- Gate acceptance is on-record in the build log — P8 can report whether the run was interactive or continuous
+- Run mode survives session interruptions, so resumed sessions behave identically to the original
+- Gate acceptance is on record in the build log, so P8 can report whether the run was interactive or continuous
 - Audit trail of human decisions at phase gates
 
 **Negative:**
-- One additional file to manage in plan/ — included in P0 commit, cleaned up at P7 archive
+- One additional file to manage in plan/. The P0 commit includes it and the P7 archive cleans it up.
 
 **Risks:**
-- If `plan/.run-mode` is manually edited to an invalid value between sessions, the orchestrator defaults to `interactive` — safe fallback, minor inconvenience
+- If someone manually edits `plan/.run-mode` to an invalid value between sessions, the orchestrator defaults to `interactive`. This is a safe fallback and a minor inconvenience.
 
 ---
 
 ## Related ADRs
 
-- ADR-0048 — related-to (run-mode affects phase gate behaviour in the P7–P9 sequence)
+- ADR-0048: related-to (run-mode affects phase gate behaviour in the P7–P9 sequence)
 
 ---
 

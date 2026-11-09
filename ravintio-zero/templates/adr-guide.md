@@ -8,7 +8,7 @@
 
 ## Purpose
 
-An ADR captures a single architectural decision - the context that demanded it, the decision itself, the alternatives considered, and the consequences. ADRs are the institutional memory of WHY the system is shaped the way it is. Without them, the next agent (or human) making a change has no idea why the current design was chosen, and may undo a deliberate trade-off.
+An ADR captures a single architectural decision - the context that demanded it, the decision itself, the alternatives considered, and the consequences. ADRs are the institutional memory of WHY the system has its shape. Without them, the next agent (or human) making a change has no idea why someone chose the current design, and may undo a deliberate trade-off.
 
 ---
 
@@ -36,15 +36,15 @@ A decision does NOT need an ADR if:
 
 ### Context
 
-State the question clearly. Not "we need a database" but "the auth-service needs to persist user sessions across server restarts, with sub-10ms read latency for session validation and automatic expiry after 7 days."
+State the question clearly. Not "we need a database". Write "the auth-service needs to persist user sessions across server restarts, with sub-10ms read latency for session validation and automatic expiry after 7 days."
 
 ### Decision
 
-State what was decided and why. Be specific enough that someone reading this in 6 months understands the reasoning without needing to ask you.
+State what you decided and why. Be specific enough that someone reading this in 6 months understands the reasoning without needing to ask you.
 
 ### Alternatives Considered
 
-At least 2 alternatives for every ADR. For each: pros, cons, and why it was rejected. This is the evidence that the decision was deliberate.
+At least 2 alternatives for every ADR. For each: pros, cons, and why you rejected it. This is the evidence that the decision was deliberate.
 
 | âŒ Bad | ✅ Good |
 |--------|---------|
@@ -52,7 +52,7 @@ At least 2 alternatives for every ADR. For each: pros, cons, and why it was reje
 
 ### Consequences
 
-What follows from this decision - both positive and negative. Be honest about the trade-offs.
+What follows from this decision - both positive and negative. State the trade-offs plainly.
 
 ---
 
@@ -60,7 +60,7 @@ What follows from this decision - both positive and negative. Be honest about th
 
 ADRs are **immutable once accepted**. If a decision changes:
 1. The old ADR gets `status: superseded` and a `Superseded By: ADR-NNN` link
-2. A new ADR is written with the new decision, referencing the old one
+2. A new ADR records the new decision and references the old one
 3. The old ADR is never deleted or modified
 
 This preserves the decision history.
@@ -69,7 +69,7 @@ This preserves the decision history.
 
 ## Numbering
 
-Repo-wide and never renumbered. Reserve each number with `node ravintio-zero/scripts/reserve-id.mjs --file docs/adr/.next-id`. Gaps are acceptable (if an ADR is abandoned before acceptance, its number is retired).
+Repo-wide and never renumbered. Reserve each number with `node ravintio-zero/scripts/reserve-id.mjs --file docs/adr/.next-id`. Gaps are acceptable (an ADR abandoned before acceptance retires its number).
 
 ---
 

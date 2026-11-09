@@ -29,8 +29,8 @@ After P9 completes, context window pressure from the completed pipeline run may 
 The orchestrator issues a recommendation after P9 final confirmation but does not block. The message is clear and prominent but the human retains control.
 
 A hard block is not appropriate because:
-- The orchestrator cannot prevent a human from continuing — any "block" can be bypassed by simply re-prompting
-- Context pressure is real but not catastrophic — P0 coaching quality degrades gracefully
+- The orchestrator cannot prevent a human from continuing. A human can bypass any "block" by re-prompting
+- Context pressure is real but not catastrophic, and P0 coaching quality degrades gracefully
 - Blocking would be surprising and frustrating in cases where the human genuinely wants to continue
 
 ---
@@ -56,14 +56,14 @@ A hard block is not appropriate because:
 ## Consequences
 
 **Positive:**
-- Human is informed of the trade-off without being blocked
-- Simple to implement — one message appended to existing P9 output
+- The human learns of the trade-off without the orchestrator blocking them
+- Little to implement: one message appended to existing P9 output
 
 **Negative:**
 - Humans may ignore the recommendation, leading to degraded P0 quality in the same session
 
 **Risks:**
-- Low: the recommendation may be overlooked if the P9 output is long — mitigated by placing it last and making it visually distinct (⚡ prefix)
+- Low: the human may overlook the recommendation if the P9 output is long. Placing it last and making it visually distinct (⚡ prefix) mitigates this
 
 ---
 

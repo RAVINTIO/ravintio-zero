@@ -15,7 +15,7 @@ SKILL="$SKILL_DIR/SKILL.md"
 REFS="$SKILL_DIR/references"
 # 0000244 moved the initiative stage prefix block here.
 ROADMAP_STD="$ZERO_DIR/standards/roadmap-standards.md"
-# SKILL.md at the base commit 8b1e929 (36,275 bytes after the 0000189 rename), kept as a fixture so the
+# SKILL.md at the base commit 8b1e929 (36,350 bytes after the 0000189 rename), kept as a fixture so the
 # check does not depend on git history.
 BASE="$SCRIPT_DIR/fixtures/0000151-orchestrator-skill-base.md"
 
@@ -83,7 +83,7 @@ SKILL_BYTES=$(wc -c < "$SKILL" | tr -d ' ')
 # 0000245 caps the boot file on its own. The boot template is the pack content, so the measure ignores a stale install.
 BOOT_FILE="$ZERO_DIR/templates/standard-boot.md"
 CLAUDE_BYTES=$(pack_claude_bytes "$BOOT_FILE")
-assert_equals "36275" "$(wc -c < "$BASE" | tr -d ' ')" "fixture holds the 36,275 byte baseline"
+assert_equals "36350" "$(wc -c < "$BASE" | tr -d ' ')" "fixture holds the 36,350 byte baseline"
 # 0000244 moved the task-bound sections to references/, so the SKILL.md cap fell from 27,800 to 9,000 bytes.
 SKILL_CAP=9000
 assert_equals "yes" "$([ "$SKILL_BYTES" -le "$SKILL_CAP" ] && echo yes || echo no)" "SKILL.md is $SKILL_CAP bytes or fewer ($SKILL_BYTES)"

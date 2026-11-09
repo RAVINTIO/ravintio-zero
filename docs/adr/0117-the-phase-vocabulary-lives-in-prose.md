@@ -16,34 +16,34 @@ feature: "0000033-remove-telemetry-mcp"
 ## Context
 
 Two artifacts in Zero exist to serve telemetry but do not look like telemetry, so ADR-0115 does not
-obviously cover them. Both need a stated decision.
+clearly cover them. Both need a stated decision.
 
 **`hooks/enforcement/phase-enum.mjs`** exports four values: `PHASE_ENUM`, `KNOWN_PHASES`,
-`PHASE_NUMBER_TO_ENUM`, and `PHASE_SKILLS`. It was extracted so telemetry hooks could agree on phase
+`PHASE_NUMBER_TO_ENUM`, and `PHASE_SKILLS`. Its purpose was to let telemetry hooks agree on phase
 names without duplicating a list. Its three importers are `emit-event-receipt.mjs`,
 `resolve-phase.mjs`, and `check-telemetry-receipts.mjs`. ADR-0115 deletes all three. The file lives in
 `hooks/enforcement/` rather than `hooks/telemetry/` only because one of its importers did, and its
 header comment is an argument about install tiers. Meanwhile `pipeline-reference.md` calls it the
 canonical enum, and a test asserts its contents.
 
-**`product.yml`'s top-level `id` field** was added by feature 0000024 so telemetry events stayed
+Feature 0000024 added **`product.yml`'s top-level `id` field** so telemetry events stayed
 attributable to one product across clones and machines. The orchestrator hard-stops at discovery
 when the field is missing, and the prompt it shows cites telemetry as the reason. The only code that
 reads it is the telemetry hooks. The version script reads `components[].id`, which is a different field.
 
 ## Decision
 
-1. Delete `hooks/enforcement/phase-enum.mjs`. Every one of its four exports is consumed only by files
-   ADR-0115 deletes.
+1. Delete `hooks/enforcement/phase-enum.mjs`. Only files that
+   ADR-0115 deletes consume its four exports.
 2. `pipeline-reference.md` states the five phase names directly in prose: `discovery`, `plan`,
    `implement`, `validate-and-accept`, `ship`. It no longer names a module as their source.
-3. The pipeline contract itself is unchanged. The five phases are defined by the twelve skills and
-   the pipeline documentation, which is where a reader looks for them.
+3. The pipeline contract itself does not change. The twelve skills and
+   the pipeline documentation define the five phases, and a reader looks there for them.
 4. Keep the top-level `id` field in `product.yml` and in `templates/product.template.yml`.
 5. Keep the orchestrator's product-id hard stop. Rewrite its prompt so the reason is versioning and
-   attribution of archived runs, wherever the repo is cloned. This matches framework 0000030 ADR 007.
+   attribution of archived runs, wherever someone clones the repo. This matches framework 0000030 ADR 007.
 6. `components[].id` stays. `scripts/product-version.mjs` reads it to resolve each component's
-   manifest, and versioning is unaffected.
+   manifest, and versioning does not change.
 
 ## Alternatives Considered
 
@@ -101,4 +101,4 @@ reasons:
 - The id may be useful later.
 - `planifest-framework` removed telemetry in its feature 0000030 and kept both, per its ADR 007.
 
-Decisions 1 to 3 and 6 are unchanged.
+Decisions 1 to 3 and 6 stay as they were.

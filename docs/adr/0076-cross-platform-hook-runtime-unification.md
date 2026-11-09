@@ -20,15 +20,15 @@ feature: "0000017-ratchet-forgery-detection-and-telemetry-schema-spec"
 
 ## Context
 
-`block-bash.sh`, `block-grep.sh`, and `block-webfetch.sh` are the last three hooks in the framework still implemented in bash; every other hook (`gate-write.mjs`, `ratchet-check.mjs`, `check-design.mjs`, etc.) is already `.mjs`. These 3 scripts already contain an inline Node fallback for environments lacking `jq` (documented as quirk Q-002 in `src/context-mode-hooks/component.yml`), but still require a Unix-compatible shell (Git Bash or WSL) to invoke the script itself on Windows (quirk Q-005). Confirmed with the human: Windows users sometimes have neither Git Bash nor WSL, so this is a real, unaddressed portability gap, not a documentation gap.
+`block-bash.sh`, `block-grep.sh`, and `block-webfetch.sh` are the last three hooks in the framework still implemented in bash. Every other hook (`gate-write.mjs`, `ratchet-check.mjs`, `check-design.mjs`, etc.) is already `.mjs`. These 3 scripts already contain an inline Node fallback for environments lacking `jq` (documented as quirk Q-002 in `src/context-mode-hooks/component.yml`). On Windows they still require a Unix-compatible shell (Git Bash or WSL) to invoke the script itself (quirk Q-005). Confirmed with the human: Windows users sometimes have neither Git Bash nor WSL, so this is a real, unaddressed portability gap, not a documentation gap.
 
 ---
 
 ## Decision
 
-Port all 3 hook scripts to `.mjs`, extracting the existing inline node-fallback logic as the sole implementation — no bash entry point retained. This removes both the `jq` dependency (Q-002) and the Unix-shell requirement (Q-005) simultaneously, since the fallback logic was already dependency-free. Update `setup.sh`/`setup.ps1` wiring to install and register the `.mjs` hooks identically on every platform.
+Port all 3 hook scripts to `.mjs`, extracting the existing inline node-fallback logic as the sole implementation, with no bash entry point retained. This removes both the `jq` dependency (Q-002) and the Unix-shell requirement (Q-005) simultaneously, since the fallback logic was already dependency-free. Update `setup.sh`/`setup.ps1` wiring to install and register the `.mjs` hooks identically on every platform.
 
-If the Node runtime itself is missing, surface a clear fail message at setup time (before anything is wired up) and at runtime (explaining enforcement did not fire because the runtime was missing). The tool call itself still proceeds either way (fails open, per existing framework convention) — fail-open governs whether the call is blocked, not whether the human is told what happened.
+If the Node runtime itself is missing, surface a clear fail message at setup time (before setup wires anything up). Surface a second message at runtime that explains enforcement did not fire because the runtime was missing. The tool call itself still proceeds either way (fails open, per existing framework convention). Fail-open decides whether the hook blocks the call, not whether the human learns what happened.
 
 ---
 
@@ -59,10 +59,10 @@ If the Node runtime itself is missing, surface a clear fail message at setup tim
 - Brings the component's implementation language in line with the rest of the framework
 
 **Negative:**
-- The component now has a hard Node-runtime dependency where it previously had an implicit one (via the fallback path) — if Node is missing, all 3 hooks fail open with no enforcement, same as today's fallback path, but now the only path
+- The component now has a hard Node-runtime dependency where it previously had an implicit one (via the fallback path). If Node is missing, all 3 hooks fail open with no enforcement, same as today's fallback path, but now the only path
 
 **Risks:**
-- A consumer project running in an environment with no working Node runtime is left with silently-reduced enforcement unless the new setup-time/runtime messaging is implemented correctly — mitigated by requiring both messages as explicit acceptance criteria in req-004, verified at P4
+- A consumer project running in an environment with no working Node runtime has silently-reduced enforcement unless the new setup-time/runtime messaging works correctly. The decision mitigates this by requiring both messages as explicit acceptance criteria in req-004, which P4 verifies
 
 ---
 
@@ -74,7 +74,7 @@ If the Node runtime itself is missing, surface a clear fail message at setup tim
 
 ## Supersedes
 
-- None — no prior ADR fixed these 3 scripts' language; bash was the default at initial build (0000001), not a deliberate architectural decision recorded in an ADR.
+- None. No prior ADR fixed these 3 scripts' language. Bash was the default at initial build (0000001), not a deliberate architectural decision recorded in an ADR.
 
 ## Superseded By
 

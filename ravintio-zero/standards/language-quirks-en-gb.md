@@ -62,14 +62,14 @@ Always uppercase in running prose, regardless of surrounding text:
 
 `data` and `metadata` are uncountable in RAVINTIO Zero.
 
-- ✓ "the data is stored"
-- ✗ "the data are stored"
+- ✓ "`the data is stored`"
+- ✗ "`the data are stored`"
 
 ---
 
 ## Category 7: Prohibited punctuation
 
-**Em dashes (U+2014) must not be used** in any RAVINTIO Zero prose, headings, or documentation unless the syntax of the output format strictly requires one. They carry no meaning that a colon, comma, or full stop cannot convey more cleanly, and are strongly associated with AI-generated text. Enforced at write time by `em-dash-guard.mjs`; see `formatting-standards.md` Section 4.
+**Em dashes (U+2014) must not be used** in any RAVINTIO Zero prose, headings, or documentation unless the syntax of the output format strictly requires one. They carry no meaning that a colon, comma, or full stop cannot convey more cleanly, and readers strongly associate them with AI-generated text. `em-dash-guard.mjs` enforces this at write time. See `formatting-standards.md` Section 4.
 
 - ✓ "Build Assessment: results and findings"
 - ✗ "Build Assessment" joined to "results and findings" by U+2014

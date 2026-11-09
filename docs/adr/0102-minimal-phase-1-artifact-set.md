@@ -15,11 +15,11 @@ feature: "0000027-backlog-batch-governance-tooling-fixes"
 
 ## Context
 
-Backlog `0000021` (this feature's req-008) reported that `planifest-framework/workflows/feature-pipeline.md`'s Phase 1 step mandates "execution plan, OpenAPI spec (if applicable), scope, risk register, domain glossary, operational model, SLO definitions, cost model" for every feature regardless of size — only the OpenAPI spec carries a condition. A trivial feature therefore produces a cost model and SLO definitions because the pipeline says so, not because anything about the feature warrants them, risking documentation theatre that causes reviewers to disengage — the review named this the main barrier to adoption by anyone who is not the framework's own author. This feature (`0000027`) already exercised the target judgment call at its own P0/P1: cost model, SLO definitions, and operational model were all marked N/A because the feature has zero deployed runtime footprint, and that determination is recorded in `plan/current/design.md`'s Architecture Layer and `plan/current/execution-plan.md`'s omitted sections — this ADR formalises that judgment call as a named, repeatable rule rather than a one-off exception.
+Backlog `0000021` (this feature's req-008) reported a problem with `planifest-framework/workflows/feature-pipeline.md`. Its Phase 1 step mandates eight artifacts for every feature regardless of size. The list reads "execution plan, OpenAPI spec (if applicable), scope, risk register, domain glossary, operational model, SLO definitions, cost model". Only the OpenAPI spec carries a condition. A trivial feature therefore produces a cost model and SLO definitions because the pipeline says so. Nothing about the feature warrants them. This risks documentation theatre that causes reviewers to disengage. The review named this the main barrier to adoption by anyone who is not the framework's own author. This feature (`0000027`) already exercised the target judgment call at its own P0/P1. Cost model, SLO definitions, and operational model were all marked N/A because the feature has zero deployed runtime footprint. `plan/current/design.md`'s Architecture Layer and `plan/current/execution-plan.md`'s omitted sections record that determination. This ADR formalises that judgment call as a named, repeatable rule rather than a one-off exception.
 
 ## Decision
 
-Name the minimal default Phase 1 artifact set, produced for every feature regardless of size: **execution plan, functional requirements (`plan/current/requirements/`), scope, risk register, domain glossary** — five artifacts. Every other Phase 1 artifact gets an explicit trigger condition, checkable from the confirmed design or feature brief:
+Name the minimal default Phase 1 artifact set, produced for every feature regardless of size: **execution plan, functional requirements (`plan/current/requirements/`), scope, risk register, domain glossary**. That makes five artifacts. Every other Phase 1 artifact gets an explicit trigger condition, checkable from the confirmed design or feature brief:
 
 | Artifact | Trigger condition |
 |----------|-------------------|
@@ -28,7 +28,7 @@ Name the minimal default Phase 1 artifact set, produced for every feature regard
 | SLO Definitions | Same trigger as Operational Model — a deployed runtime service with a latency/availability/throughput target stated in the confirmed design's Architecture Layer |
 | Cost Model | The feature introduces new compute, storage, third-party service spend, or materially changes existing spend (stated in the feature brief's NFRs or Constraints) |
 
-Reflect this conditional set in both `planifest-framework/workflows/feature-pipeline.md` (replacing the current unconditional mandate) and `planifest-spec-agent/SKILL.md`'s own artifact table, so the workflow document and the agent that implements it agree. The orchestrator (via the spec-agent) produces only the minimal five absent a stated trigger; state the default artifact count (five, for a typical feature) in the project README.
+Reflect this conditional set in `planifest-framework/workflows/feature-pipeline.md` (replacing the current unconditional mandate). Reflect it also in `planifest-spec-agent/SKILL.md`'s own artifact table, so the workflow document and the agent that implements it agree. Absent a stated trigger, the orchestrator (via the spec-agent) produces only the minimal five. State the default artifact count (five, for a typical feature) in the project README.
 
 ## Alternatives Considered
 
@@ -51,14 +51,14 @@ Reflect this conditional set in both `planifest-framework/workflows/feature-pipe
 - The trigger conditions are checkable from artifacts that already exist (confirmed design, feature brief) rather than requiring new judgment infrastructure.
 
 **Negative:**
-- A feature that's borderline (e.g. a component with `ownsData: true` but no explicit deployed-service claim) requires the orchestrator to make a judgment call at the trigger boundary rather than a purely mechanical check — mitigated by requiring that call to be stated and justified in the design, as this feature's own P0 did for its N/A determination.
+- A borderline feature (e.g. a component with `ownsData: true` but no explicit deployed-service claim) requires the orchestrator to make a judgment call at the trigger boundary. The check is no longer purely mechanical there. Mitigate this by requiring the design to state and justify that call, as this feature's own P0 did for its N/A determination.
 
 **Risks:**
-- A feature that skips an artifact under the new conditional rule, then later turns out to have needed it (e.g. a "no deployed service" feature quietly grows a compute dependency mid-pipeline), could ship without an operational model it should have had — mitigated by the existing Mid-Pipeline Requirement Change protocol, which already re-triggers earlier-phase artifacts when scope changes materially.
+- A feature that skips an artifact under the new conditional rule could later turn out to have needed it. For example, a "no deployed service" feature quietly grows a compute dependency mid-pipeline. It could then ship without an operational model it should have had. The existing Mid-Pipeline Requirement Change protocol mitigates this, because it already re-triggers earlier-phase artifacts when scope changes materially.
 
 ## Related ADRs
 
-- None directly — this is the first ADR governing Phase 1 artifact scope.
+- None directly. This is the first ADR governing Phase 1 artifact scope.
 
 ## Supersedes
 

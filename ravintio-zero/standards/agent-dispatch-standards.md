@@ -126,7 +126,7 @@ Dispatch follows the batches in the `## Concurrency plan` of `plan/current/execu
 
 - Two units with no dependency and no shared write target share a batch.
 - A unit alone in its batch gives its reason in the `Sequential reason` column.
-- A departure from the plan's batches is recorded in the build log with its reason.
+- Record any departure from the plan's batches in the build log with its reason.
 - Check 8 of `consistency-check.mjs` validates the table.
 
 ---
@@ -169,7 +169,7 @@ At `standard`, each phase keeps the parallelism rules above. Each phase skill li
 
 ## Agent Dispatch Template
 
-Agent spawning is level-2 parallelism (the Agent tool for independent sub-tasks that each need their own tool access and context); level-1 (multiple native tool calls in one message) is covered by Parallelism Rules above. Spawn when a task is self-contained enough to brief to a colleague in one paragraph; stay inline when it needs ongoing dialogue, shared mutable state, or is too small to justify the overhead.
+Agent spawning is level-2 parallelism. It uses the Agent tool for independent sub-tasks that each need their own tool access and context. The Parallelism Rules above cover level-1 (multiple native tool calls in one message). Spawn when the task is self-contained enough to brief to a colleague in one paragraph. Stay inline when the task needs ongoing dialogue or shared mutable state, or when it is too small to justify the overhead.
 
 **Concrete parallel dispatch skeleton** (send both `Agent()` calls in a single message so they execute concurrently):
 
@@ -183,15 +183,15 @@ Agent({ description: "Implement REQ-002: {one-liner}", subagent_type: "general-p
 
 **Commit subject limit:** a commit subject has at most 72 characters. The commit-msg hook rejects longer ones, so state the limit in every prompt that commits.
 
-**Self-contained prompt rule:** include the requirement file path, relevant ADR paths, stack declaration or relevant constraint, the backlog ID to use if filing an out-of-scope discovery, a line that names `ravintio-zero/standards/writing-standards.md` for prose, and what "done" looks like. Do NOT rely on shared conversation history: the spawned agent has no memory of this session.
+**Self-contained prompt rule:** include the requirement file path and the relevant ADR paths. Add the stack declaration or relevant constraint and the backlog ID to use if filing an out-of-scope discovery. Add a line that names `ravintio-zero/standards/writing-standards.md` for prose. Add what "done" looks like. Do NOT rely on shared conversation history. The spawned agent has no memory of this session.
 
 **Model tier for spawned agents:** see the Model Tier Decision Table above.
 
-**Out-of-scope discovery filing:** if a dispatched subagent discovers an out-of-scope bug or gap while doing its task, it MUST file `plan/backlog/{id}-{slug}/entry.md` directly, per `templates/backlog-entry.template.md`, with `Deferral source: discovered mid-flight`, `Source feature` set to the active feature ID, and `Source phase` set to the phase active at discovery. It must NOT report the discovery back for the dispatching agent to relay through a host-tool side channel (e.g. a task-spawning tool), and must NOT silently drop it.
+**Out-of-scope discovery filing:** if a dispatched subagent discovers an out-of-scope bug or gap, it MUST file `plan/backlog/{id}-{slug}/entry.md` directly, per `templates/backlog-entry.template.md`. The entry has `Deferral source: discovered mid-flight`, `Source feature` set to the active feature ID, and `Source phase` set to the phase active at discovery. It must NOT report the discovery back for the dispatching agent to relay through a host-tool side channel (for example a task-spawning tool). It must NOT silently drop the discovery.
 
-The **dispatching agent** (orchestrator or phase skill placing the `Agent()` call) pre-computes the next available backlog ID before dispatch by reserving it with `node ravintio-zero/scripts/reserve-id.mjs`, which takes it from the counter file `plan/backlog/.next-id`, and passes it explicitly in the subagent's prompt as the ID to use if a discovery needs filing. Subagent self-lookup of `plan/backlog/` at file-time is rejected: picked-up entries are deleted from `plan/backlog/` once folded into a design, so a subagent scanning only that directory would systematically undercount the true high-water mark and risk reusing a retired ID.
+The **dispatching agent** (orchestrator or phase skill placing the `Agent()` call) pre-computes the next available backlog ID before dispatch. It reserves the ID with `node ravintio-zero/scripts/reserve-id.mjs`, which reads the counter file `plan/backlog/.next-id`. It passes the ID explicitly in the subagent's prompt for use if a discovery needs filing. Subagent self-lookup of `plan/backlog/` at file-time is unsafe, so the pipeline rejects it. The pipeline deletes picked-up entries from `plan/backlog/` once it folds them into a design. A subagent scanning only that directory would undercount the true high-water mark and risk reusing a retired ID.
 
-When dispatching multiple subagents in a single parallel batch, each MUST receive a distinct pre-assigned backlog ID (or a reserved contiguous block, one per subagent); no two subagents may independently file under the same ID.
+When dispatching multiple subagents in a single parallel batch, each MUST receive a distinct pre-assigned backlog ID (or a reserved contiguous block, one per subagent). No two subagents may independently file under the same ID.
 
 ---
 

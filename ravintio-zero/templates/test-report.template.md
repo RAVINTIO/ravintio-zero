@@ -45,4 +45,4 @@ Promoted during this run's ship phase (P4).
 
 ## 4. Summary
 
-**Overall test health:** ✅ Healthy / ⚠ Failures present; see sections above.
+**Overall test health:** ✅ Healthy / ⚠ Failures present. See sections above.

@@ -27,7 +27,7 @@ Rename with no aliases. Migration `0005-initiative-rename.md` moves what setup d
 
 The helper refuses to run while `plan/current-roadmap/` exists. A rerun changes nothing.
 
-The driver reads only `RAVINTIO_INITIATIVE_MODEL` and `RAVINTIO_INITIATIVE_MAX_TURNS`. If an old `RAVINTIO_ROADMAP_*` variable is set, the driver stops and names the replacement. This feature also removes the `PLANIFEST_ROADMAP_*` fallback. Those variables stop the driver in the same way.
+The driver reads only `RAVINTIO_INITIATIVE_MODEL` and `RAVINTIO_INITIATIVE_MAX_TURNS`. If the environment sets an old `RAVINTIO_ROADMAP_*` variable, the driver stops and names the replacement. This feature also removes the `PLANIFEST_ROADMAP_*` fallback. Those variables stop the driver in the same way.
 
 ## Alternatives Considered
 

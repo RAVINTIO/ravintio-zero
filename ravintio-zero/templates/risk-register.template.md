@@ -21,7 +21,7 @@ version: "0.1.0"
 
 ## Assumptions Logged as Risks
 
-Documented assumptions from the specification are logged here with likelihood: medium.
+This section logs documented assumptions from the specification with likelihood: medium.
 
 | ID | Assumption | Impact if Wrong | Status |
 |----|-----------|----------------|--------|

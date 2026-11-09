@@ -22,7 +22,7 @@ different route.
 ## Phases
 
 The pipeline has five phases. The orchestrator owns discovery and drives the
-run. Each later phase is owned by its own skill, which the orchestrator
+run. Each later phase has its own skill, which the orchestrator
 invokes in order.
 
 | # | Phase | Owner | Produces |
@@ -47,8 +47,8 @@ ravintio-plan produces one artifact set: the execution plan, functional
 requirements, scope, risk register, glossary, and an ADR for every
 significant decision.
 
-**Gate: the plan gate.** One gate for the whole artifact set. Requirements
-and ADRs are confirmed together, not separately.
+**Gate: the plan gate.** One gate for the whole artifact set. You confirm requirements
+and ADRs together, not separately.
 
 ### P2: Implement
 
@@ -103,5 +103,5 @@ the action the human needs to take. The five escalations are:
 - A push or `gh pr create` fails.
 - A possible credential appears in a file the run will commit, or in the PR body.
 
-Design confirmation always involves the human, because the run mode is chosen
+Design confirmation always involves the human, because the human chooses the run mode
 in that conversation. Merging the PR is human-only in every mode.

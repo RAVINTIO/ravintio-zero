@@ -20,11 +20,15 @@ feature: "0000020-setup-refresh-skill"
 
 ## Context
 
-Two distinct needs emerged during P0: (1) `setup.sh`/`setup.ps1` should record the flags used at install time so future refreshes don't need to infer them from hook wiring (REQ-008), and (2) the refresh skill needs a way to recover if its own process is killed between confirming flags and completing setup, so an interrupted run doesn't strand the human on the loop with missing boot files and no cached state (REQ-009, REQ-010). This crosses two components (`setup-hook-integration` owns the install-time write; `planifest-refresh-setup` owns the refresh flow), so the data ownership and file-format decision needs to be recorded.
+Two distinct needs emerged during P0:
+1. `setup.sh`/`setup.ps1` should record the flags used at install time so future refreshes don't need to infer them from hook wiring (REQ-008).
+2. The refresh skill needs a way to recover if its own process stops between confirming flags and completing setup. An interrupted run must not strand the human on the loop with missing boot files and no cached state (REQ-009, REQ-010).
+
+This crosses two components. `setup-hook-integration` owns the install-time write, and `planifest-refresh-setup` owns the refresh flow. The data ownership and file-format decision therefore needs recording.
 
 ## Decision
 
-Both needs are served by one file, `.claude/.planifest-setup-flags`, owned by `setup-hook-integration`. `setup.sh`/`setup.ps1` write it on successful install with `attemptStatus: completed`. `planifest-refresh-setup` writes to the same file (updating `attemptStatus: pending` plus the confirmed flags and attempted command) immediately before deleting `CLAUDE.md`/`AGENTS.md`, and a successful re-invocation flips it back to `completed`. No second cache file is created. The full schema is defined in `src/setup-hook-integration/docs/data-contract.md`.
+One file serves both needs: `.claude/.planifest-setup-flags`, owned by `setup-hook-integration`. `setup.sh`/`setup.ps1` write it on successful install with `attemptStatus: completed`. `planifest-refresh-setup` writes to the same file (updating `attemptStatus: pending` plus the confirmed flags and attempted command) immediately before deleting `CLAUDE.md`/`AGENTS.md`. A successful re-invocation flips it back to `completed`. The decision creates no second cache file. `src/setup-hook-integration/docs/data-contract.md` defines the full schema.
 
 ## Alternatives Considered
 
@@ -45,19 +49,19 @@ Both needs are served by one file, `.claude/.planifest-setup-flags`, owned by `s
 
 **Positive:**
 - One schema, one file, one source of truth, no synchronization problem between an install marker and a retry cache
-- The recovery flow (REQ-010) is simple: read one file, check `attemptStatus`
+- The recovery flow (REQ-010) is short: read one file, check `attemptStatus`
 
 **Negative:**
-- `setup-hook-integration` and `planifest-refresh-setup` are now coupled through a shared file schema; a schema change to one requires updating both
+- `setup-hook-integration` and `planifest-refresh-setup` are now coupled through a shared file schema. A schema change to one requires updating both
 
 **Risks:**
-- If `setup.sh` and `setup.ps1` drift in how they write this file, reconstruction confidence degrades inconsistently between platforms; mitigated by R-003 in the risk register and REQ-008's parity acceptance criteria
+- If `setup.sh` and `setup.ps1` drift in how they write this file, reconstruction confidence degrades inconsistently between platforms. R-003 in the risk register and REQ-008's parity acceptance criteria mitigate this
 
 ---
 
 ## Related ADRs
 
-- ADR-0084 - related-to (this file is written before ADR-0084's deletion step runs, enabling recovery from an interrupted deletion)
+- ADR-0084 - related-to (the refresh skill writes this file before ADR-0084's deletion step runs, enabling recovery from an interrupted deletion)
 
 ---
 

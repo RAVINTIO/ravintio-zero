@@ -20,26 +20,26 @@ feature: "0000008-context-mode-plugin-routing-rules"
 
 ## Context
 
-ADR-0033 delegates routing rules to the context-mode plugin's system prompt. This works cleanly for Claude Code, which supports the plugin system. However, Planifest also supports Cursor, Windsurf, GitHub Copilot, Cline, and Codex — tools for which plugin system-prompt injection is unconfirmed or unsupported.
+ADR-0033 delegates routing rules to the context-mode plugin's system prompt. This works cleanly for Claude Code, which supports the plugin system. However, Planifest also supports Cursor, Windsurf, GitHub Copilot, Cline, and Codex. For these tools, nobody has confirmed plugin system-prompt injection, or the tool does not support it.
 
 Previously, all tools received routing rules via the `AGENTS.md` file copied by setup. Removing this step means non-Claude Code tools receive no routing rules from any source. Their agents will use native tools (Grep, Bash, WebFetch) by default, potentially flooding their context windows.
 
-Three options exist: build per-tool fallback routing rules files, maintain a single shared routing rules file for non-plugin tools, or defer the problem and document it explicitly.
+Three options exist. The first builds per-tool fallback routing rules files. The second maintains a single shared routing rules file for non-plugin tools. The third defers the problem and documents it explicitly.
 
 ---
 
 ## Decision
 
-No per-tool routing rules fallback is introduced in this change. The gap is explicitly deferred and tracked in:
+This change introduces no per-tool routing rules fallback. It explicitly defers the gap and tracks it in:
 - `plan/current/scope.md` under Deferred
 - `plan/current/risk-register.md` as R-001 (Cursor/Windsurf/Copilot/Cline) and R-002 (Codex)
 - `docs/context-mode.md` Supported Tools table, which now distinguishes "plugin" as the routing rules source
 
-A future change will address per-tool routing rules if and when plugin compatibility is confirmed or ruled out for each tool.
+A future change will address per-tool routing rules if and when someone confirms or rules out plugin compatibility for each tool.
 
 **Rationale:**
-- Building per-tool fallback files now would require confirming which tools receive plugin system prompts — information not currently available. Building against an unknown creates the same drift problem ADR-0033 resolves.
-- The previous routing rules were advisory only. Enforcement hooks (Claude Code only) remain the hard guarantee. Non-Claude Code tools never had enforcement hooks; they also never had hard context-window protection. The change in their routing rules status is a reduction in advisory guidance, not a reduction in hard safety.
+- Building per-tool fallback files now would require confirming which tools receive plugin system prompts, which is information not currently available. Building against an unknown creates the same drift problem ADR-0033 resolves.
+- The previous routing rules were advisory only. Enforcement hooks (Claude Code only) remain the hard guarantee. Non-Claude Code tools never had enforcement hooks. They also never had hard context-window protection. The change in their routing rules status is a reduction in advisory guidance, not a reduction in hard safety.
 - Deferring with explicit documentation is better than silently accepting the gap or building a solution against unconfirmed assumptions.
 
 ---
@@ -70,16 +70,16 @@ A future change will address per-tool routing rules if and when plugin compatibi
 
 **Positive:**
 - No new maintenance burden introduced
-- Clean separation: plugin owns routing rules for tools that support it; the gap for other tools is documented and trackable
+- Clean separation: the plugin owns routing rules for tools that support it, and the team documents and tracks the gap for other tools
 - Future change can address per-tool fallback with full information about plugin compatibility
 
 **Negative:**
 - Cursor, Windsurf, GitHub Copilot, Cline, and Codex users who relied on advisory routing rules via `AGENTS.md` no longer receive them after re-running setup
-- Non-Claude Code tools are silently degraded in context-window management until the deferred item is resolved
+- Non-Claude Code tools silently degrade in context-window management until the team resolves the deferred item
 
 **Risks:**
 - The deferred item may never be prioritised, leaving non-Claude Code tool users permanently without routing rules guidance
-- Context window flooding on non-Claude Code tools may go unnoticed without enforcement hooks or routing rules — harder to detect than an explicit failure
+- Context window flooding on non-Claude Code tools may go unnoticed without enforcement hooks or routing rules. It is harder to detect than an explicit failure
 
 ---
 

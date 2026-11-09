@@ -42,7 +42,7 @@ A boot file without the line `# RAVINTIO Zero - Mandatory Pipeline Rules` is the
 
 **Negative:**
 - Two more files in the install.
-- A developer file named like a retired command and holding that name line is removed.
+- Setup removes a developer file named like a retired command and holding that name line.
 
 **Risks:**
 - See the risk register.

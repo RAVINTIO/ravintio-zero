@@ -20,13 +20,13 @@ feature: "0000003-hook-based-enforcement"
 
 ## Context
 
-Hook scripts run in the critical path of every agent tool call. If a hook script crashes, throws an unhandled exception, or exits non-zero for an unexpected reason, the agentic tool may surface an error to the human, refuse to continue, or enter a degraded state. This is a worse outcome than the hook silently failing.
+Hook scripts run in the critical path of every agent tool call. If a hook script crashes, throws an unhandled exception, or exits non-zero unexpectedly, the agentic tool can fail in several ways. It may surface an error to the human, refuse to continue, or enter a degraded state. This is a worse outcome than the hook silently failing.
 
 There is a tension between:
 - **Observability:** surfacing hook errors so developers can diagnose and fix them
 - **Continuity:** never letting hook failures interrupt a working session
 
-The telemetry hooks (`emit-phase-start.mjs`, `emit-phase-end.mjs`) are entirely optional — their failure should never be visible. The enforcement hooks (`gate-write.mjs`, `check-design.mjs`) use non-zero exit codes intentionally (exit code 2 for blocks) but must still exit 0 for all unexpected failure paths.
+The telemetry hooks (`emit-phase-start.mjs`, `emit-phase-end.mjs`) are entirely optional, so their failure should never be visible. The enforcement hooks (`gate-write.mjs`, `check-design.mjs`) use non-zero exit codes intentionally (exit code 2 for blocks) but must still exit 0 for all unexpected failure paths.
 
 ---
 
@@ -35,7 +35,7 @@ The telemetry hooks (`emit-phase-start.mjs`, `emit-phase-end.mjs`) are entirely 
 All Planifest hook scripts follow this failure policy:
 
 1. **Expected blocks** (enforcement hooks only): exit code 2 with a human-readable message. This is intentional behaviour, not a failure.
-2. **All other errors** (network timeout, file read failure, JSON parse error, unexpected exception, missing env vars, read-only tmpdir): catch at the top level, exit 0 silently. No output to stdout or stderr.
+2. **All other errors** (network timeout, file read failure, JSON parse error, unexpected exception, missing env vars, read-only tmpdir): catch at the top level. Exit 0 silently with no output to stdout or stderr.
 3. **3-second HTTP timeout** (telemetry scripts): AbortController fires → silent exit 0.
 4. **Missing sentinel** (`PLANIFEST_TELEMETRY_URL` unset): early return, exit 0.
 
@@ -71,11 +71,11 @@ The only non-zero exit codes any hook script produces are the intentional exit-2
 **Positive:**
 - Agent sessions are never blocked by hook infrastructure failures
 - Enforcement hooks can be deployed to existing projects without risk of disruption
-- CI environments without telemetry configured are silently unaffected
+- CI environments without telemetry configured stay silently unaffected
 
 **Negative:**
-- Silent errors make debugging difficult; a misconfigured hook may appear to work (returns 0) while doing nothing
-- Enforcement hooks failing silently means the gate is effectively disabled during the failure period — scope drift is undetected
+- Silent errors make debugging difficult. A misconfigured hook may appear to work (returns 0) while doing nothing
+- Enforcement hooks failing silently means the gate is effectively off during the failure period, so scope drift goes undetected
 
 **Risks:**
 - An adapter that incorrectly converts exit-2 blocks to exit-0 silently disables enforcement. This is the most dangerous failure mode of the policy (see ADR-0005, adapter correctness risk).

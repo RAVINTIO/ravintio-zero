@@ -20,7 +20,7 @@ feature: "0000009-framework-rail-tightening"
 
 ## Context
 
-REQ-006 requires the orchestrator to support a pause/resume command. When the human issues a pause command, the orchestrator must snapshot the current pipeline state so that a future session can resume from exactly the same point without re-coaching or re-running completed phases.
+REQ-006 requires the orchestrator to support a pause/resume command. When the human issues a pause command, the orchestrator must snapshot the current pipeline state. A future session can then resume from exactly the same point without re-coaching or re-running completed phases.
 
 Several questions needed answering:
 - What state must be captured to enable exact-point resume?
@@ -34,18 +34,18 @@ The existing resume detection in the orchestrator checks `plan/current/` for art
 
 ## Decision
 
-A file `plan/current/pause.md` is written when the human issues a pause command. The file contains:
+The orchestrator writes a file `plan/current/pause.md` when the human issues a pause command. The file contains:
 
-- **phase** — the current phase identifier (e.g. `P3`)
-- **active_task** — the task in progress at pause time (e.g. "implementing REQ-003 subagent decomposition")
-- **last_artifact** — the last file written or action completed before pause
-- **in_progress_state** — a free-text description of what was partially completed and what remains, sufficient for the orchestrator to reconstruct the execution context
+- **phase**: the current phase identifier (e.g. `P3`)
+- **active_task**: the task in progress at pause time (e.g. "implementing REQ-003 subagent decomposition")
+- **last_artifact**: the last file written or action completed before pause
+- **in_progress_state**: a free-text description of what the session partially completed and what remains, sufficient for the orchestrator to reconstruct the execution context
 
-The file is YAML frontmatter plus a Markdown body. The frontmatter carries machine-readable fields (phase, active_task, last_artifact); the body carries the human-readable in-progress state narrative.
+The file is YAML frontmatter plus a Markdown body. The frontmatter carries machine-readable fields (phase, active_task, last_artifact). The body carries the human-readable in-progress state narrative.
 
-On resume, the orchestrator's existing `plan/current/` scan detects `pause.md`. If found, it opens with `Px: Resuming — {active_task}` and reads the in-progress state to restore context. After the session is fully resumed and the interrupted task is re-engaged, `pause.md` is deleted.
+On resume, the orchestrator's existing `plan/current/` scan detects `pause.md`. If found, it opens with `Px: Resuming — {active_task}` and reads the in-progress state to restore context. After the session fully resumes and re-engages the interrupted task, the orchestrator deletes `pause.md`.
 
-`pause.md` is added to `ALWAYS_PERMITTED_FILES` in `gate-write.mjs` so it can be written at any pipeline phase, including phases where `design.md` may not yet exist or has been cleared.
+The ADR adds `pause.md` to `ALWAYS_PERMITTED_FILES` in `gate-write.mjs`. The orchestrator can then write it at any pipeline phase, including phases where `design.md` may not yet exist or has been cleared.
 
 ---
 
@@ -72,23 +72,23 @@ On resume, the orchestrator's existing `plan/current/` scan detects `pause.md`. 
 ## Consequences
 
 **Positive:**
-- Pause state survives session boundaries — human can close the tool, reopen, and resume exactly
-- Resume detection reuses the existing `plan/current/` scan — no new detection logic needed
-- `pause.md` is self-documenting: the human can read it directly to understand where the session was paused
-- Deleted on resume — no stale state accumulates
+- Pause state survives session boundaries. The human can close the tool, reopen, and resume exactly.
+- Resume detection reuses the existing `plan/current/` scan, so it needs no new detection logic
+- `pause.md` is self-documenting: the human can read it directly to understand where the session paused
+- The resume handler deletes it, so no stale state accumulates
 
 **Negative:**
-- If the session ends ungracefully (crash, kill) without writing `pause.md`, resume falls back to the standard artifact-scan resume (phase re-detection from artifacts) — slightly less precise but still functional
-- `pause.md` must be added to `ALWAYS_PERMITTED_FILES` in gate-write; this is a mechanical change but must not be forgotten
+- If the session ends ungracefully (crash, forced stop) without writing `pause.md`, resume falls back to the standard artifact-scan resume (phase re-detection from artifacts). This is slightly less precise but still functional.
+- You must add `pause.md` to `ALWAYS_PERMITTED_FILES` in gate-write. This is a mechanical change but you must not forget it.
 
 **Risks:**
-- If `pause.md` is not deleted after resume and the pipeline completes, P7 will archive it alongside other `plan/current/` artifacts — harmless but slightly noisy; mitigated by explicit deletion in the resume handler
+- If the resume handler does not delete `pause.md` and the pipeline completes, P7 will archive it alongside other `plan/current/` artifacts. This is harmless but slightly noisy. Explicit deletion in the resume handler mitigates it.
 
 ---
 
 ## Related ADRs
 
-- ADR-0039 — gate-write always-permitted list is the mechanism that allows `pause.md` to be written at any phase
+- ADR-0039: the gate-write always-permitted list is the mechanism that lets the orchestrator write `pause.md` at any phase
 
 ---
 

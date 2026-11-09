@@ -20,17 +20,23 @@ feature: "0000017-ratchet-forgery-detection-and-telemetry-schema-spec"
 
 ## Context
 
-Today, each adoption mode's P0 start gathers a different amount of contextual information before coaching begins: Retrofit has a fully-specified 6-step scan; Standard Iterative informally "reads `plan/` before coaching"; Greenfield does nothing beyond the shared Phase 0 Start Actions; External Anchor only reads `external-versioning.md`. None of these write their findings to a dedicated artifact — they are either presented inline in chat or folded into `build-log.md`'s Q&A audit trail or `design.md`'s curated output, both the wrong home for raw findings.
+Today, each adoption mode's P0 start gathers a different amount of contextual information before coaching begins:
+- Retrofit has a fully-specified 6-step scan.
+- Standard Iterative informally "reads `plan/` before coaching".
+- Greenfield does nothing beyond the shared Phase 0 Start Actions.
+- External Anchor only reads `external-versioning.md`.
 
-This item started narrower — giving Retrofit's existing discovery step its own file — but was broadened mid-session once the human observed that the reasoning applied equally to all four adoption modes, not just Retrofit.
+None of these write their findings to a dedicated artifact. Each either presents the findings inline in chat or folds them into `build-log.md`'s Q&A audit trail or `design.md`'s curated output. Both are the wrong home for raw findings.
+
+This item started narrower, giving Retrofit's existing discovery step its own file. The scope broadened mid-session once the human observed that the reasoning applied equally to all four adoption modes, not only Retrofit.
 
 ---
 
 ## Decision
 
-Every adoption mode performs a structured discovery pass at the start of P0, before coaching begins, writing its findings to a new `plan/current/discovery.md` — separate from `build-log.md` and `design.md`. This is a relocation and structuring exercise, not new scanning capability: each mode's content is what that mode's P0 already gathers today (Greenfield's baseline signals, Standard Iterative's `plan/`-history read, Retrofit's existing 6-step scan, External Anchor's `external-versioning.md` read), now given a common shared header (mode signal, git pre-flight, skills-inbox scan) and a dedicated file.
+Every adoption mode performs a structured discovery pass at the start of P0, before coaching begins. It writes its findings to a new `plan/current/discovery.md`, separate from `build-log.md` and `design.md`. This is a relocation and structuring exercise, not new scanning capability. Each mode's content is what that mode's P0 already gathers today. That means Greenfield's baseline signals, Standard Iterative's `plan/`-history read, Retrofit's existing 6-step scan, and External Anchor's `external-versioning.md` read. Each mode now gets a common shared header (mode signal, git pre-flight, skills-inbox scan) and a dedicated file.
 
-`discovery.md` follows the same fresh-each-run lifecycle as `build-log.md`/`design.md`: archived to `plan/_archive/{feature-id}-{date}/` at P7, recreated at the next P0. A partial discovery-pass failure states plainly, in the affected section, that it couldn't be determined, and coaching proceeds on the rest — never a hard block, consistent with the framework's existing fail-open-but-communicative convention. On resume within a still-in-progress pipeline run, the existing `discovery.md` is trusted as-is; a missing or incomplete file is regenerated fresh rather than patched, since discovery is a read-only scan with no human dialogue to preserve.
+`discovery.md` follows the same fresh-each-run lifecycle as `build-log.md`/`design.md`: archived to `plan/_archive/{feature-id}-{date}/` at P7, recreated at the next P0. A partial discovery-pass failure states plainly, in the affected section, that it couldn't be determined, and coaching proceeds on the rest. It never blocks hard, consistent with the framework's existing fail-open-but-communicative convention. On resume within a still-in-progress pipeline run, the agent trusts the existing `discovery.md` as-is. It regenerates a missing or incomplete file fresh rather than patching it, since discovery is a read-only scan with no human dialogue to preserve.
 
 ---
 
@@ -61,16 +67,16 @@ Every adoption mode performs a structured discovery pass at the start of P0, bef
 - Consistent behavior across all 4 adoption modes instead of 4 different informal conventions
 
 **Negative:**
-- Greenfield, Standard Iterative, and External Anchor modes gain a new formal step where previously they had an informal or nonexistent one — slightly more process for the simplest adoption mode (Greenfield), where there is rarely anything interesting to discover
+- Greenfield, Standard Iterative, and External Anchor modes gain a new formal step where previously they had an informal or nonexistent one. This adds slightly more process for the lightest adoption mode (Greenfield), where there is rarely anything interesting to discover
 
 **Risks:**
-- This item grew mid-session from a Retrofit-only file relocation to a 4-mode requirement (logged in `build-log.md`) — the Greenfield/Standard Iterative/External Anchor sections are relocations of existing *informal* behavior, not yet proven complete; if a mode's real P0 behavior includes steps not captured in req-006's specification, the discovery pass will silently omit them until corrected
+- This item grew mid-session from a Retrofit-only file relocation to a 4-mode requirement (logged in `build-log.md`). The Greenfield/Standard Iterative/External Anchor sections relocate existing *informal* behavior and are not yet proven complete. If a mode's real P0 behavior includes steps outside req-006's specification, the discovery pass will silently omit them until corrected
 
 ---
 
 ## Related ADRs
 
-- None directly — this is a new artifact type, not an extension of a prior discovery-related decision
+- None directly. This is a new artifact type, not an extension of a prior discovery-related decision
 
 ---
 

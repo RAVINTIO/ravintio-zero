@@ -20,13 +20,13 @@ feature: "0000016-pipeline-governance-and-loop-engineering"
 
 ## Context
 
-Resolves execution-plan Q-003. REQ-019 mandates a human gate on "large invalidation cascades" but the threshold was undefined. The threshold must be deterministic (orchestrator control flow reads it, no judgement call) and small enough that a runaway correction cannot silently redo half the pipeline under continuous run.
+Resolves execution-plan Q-003. REQ-019 mandates a human gate on "large invalidation cascades" but left the threshold undefined. The threshold must be deterministic (orchestrator control flow reads it, no judgement call). It must also be small enough that a runaway correction cannot silently redo half the pipeline under continuous run.
 
 ---
 
 ## Decision
 
-**Threshold: more than 3 invalidated artifacts** (requirement files, ADRs, or implementation units on the cascade list — the revised artifact itself does not count). Cascade size is computed from traceability and written into the verdict record *before* any re-work begins; if the list exceeds 3, the orchestrator stops for human approval regardless of run mode. The rationale for 3: it matches the framework's existing decomposition rule-of-thumb ("more than 3 user stories is too big") — a correction invalidating more than 3 artifacts is no longer a scoped delta, it is approaching a phase re-run, which is exactly what a human should sanction.
+**Threshold: more than 3 invalidated artifacts.** The count covers requirement files, ADRs, or implementation units on the cascade list. The revised artifact itself does not count. The orchestrator computes cascade size from traceability and writes it into the verdict record *before* any re-work begins. If the list exceeds 3, the orchestrator stops for human approval regardless of run mode. The rationale for 3: it matches the framework's existing decomposition rule-of-thumb ("more than 3 user stories is too big"). A correction that invalidates more than 3 artifacts is no longer a scoped delta. It approaches a phase re-run, which is exactly what a human should sanction.
 
 ---
 
@@ -51,14 +51,14 @@ Resolves execution-plan Q-003. REQ-019 mandates a human gate on "large invalidat
 ## Consequences
 
 **Positive:**
-- "Large cascade" is now a number, not a vibe — enforceable by counting
-- Worst-case silent rework under continuous run is bounded at 3 artifacts
+- "Large cascade" is now a number, not a vibe, so counting can enforce it
+- Worst-case silent rework under continuous run never exceeds 3 artifacts
 
 **Negative:**
 - A genuinely safe 4-artifact cascade still stops the run (accepted: erring toward the human)
 
 **Risks:**
-- Gaming by coarse cascade entries (bundling several revisions as one "artifact") — mitigated: cascade entries are file paths, and the ratchet hook still guards each individual write
+- Gaming by coarse cascade entries (bundling several revisions as one "artifact"). The mitigation: cascade entries are file paths, and the ratchet hook still guards each individual write
 
 ---
 

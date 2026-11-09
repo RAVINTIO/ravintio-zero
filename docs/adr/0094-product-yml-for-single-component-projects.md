@@ -20,15 +20,15 @@ feature: "0000024-declared-product-id-for-telemetry"
 
 ## Context
 
-req-001 requires telemetry's `product_id` to be sourced from a durable, human-declared identifier instead of a machine-local filesystem path (`git rev-parse --show-toplevel`). The natural home is `product.yml`'s existing `id` field. But 0000016's ADR-002 (accepted, still in force) explicitly states: *"Projects with exactly one component need no `product.yml` — the existing `component.yml` path is the fallback, keeping this repo's own tagging unchanged."* Most Planifest-managed projects are single-component, so applying req-001 as designed would leave the majority of adopters without a durable `product_id` home — the exact gap req-001 exists to close.
+req-001 requires telemetry to source its `product_id` from a durable, human-declared identifier instead of a machine-local filesystem path (`git rev-parse --show-toplevel`). The natural home is `product.yml`'s existing `id` field. But 0000016's ADR-002 (accepted, still in force) explicitly states `Projects with exactly one component need no product.yml — the existing component.yml path is the fallback, keeping this repo's own tagging unchanged`. Most Planifest-managed projects are single-component. Applying req-001 as designed would therefore leave the majority of adopters without a durable `product_id` home. That is the exact gap req-001 exists to close.
 
-Two options were considered: store `product_id` in `component.yml` instead (avoiding any change to ADR-002's boundary), or extend `product.yml`'s role to cover single-component projects too, for this one purpose only. The human on the loop confirmed the latter during this feature's P0 discovery pass, after the conflict was surfaced.
+This ADR considered two options. The first stores `product_id` in `component.yml` instead, avoiding any change to ADR-002's boundary. The second extends `product.yml`'s role to cover single-component projects too, for this one purpose only. The human on the loop confirmed the second option during this feature's P0 discovery pass, after the conflict surfaced.
 
 ---
 
 ## Decision
 
-`product.yml`'s `id` field is the canonical declared `product_id` for telemetry, for single-component projects as well as multi-component ones. This extends ADR-0068 rather than superseding it: ADR-002's core decision (root `product.yml` schema, `versionPolicy` enum, ship-agent P9 ownership for version tagging) is unchanged and remains in force for multi-component projects exactly as before. The single addition: single-component projects, which ADR-002 said need no `product.yml` for *versioning* purposes, now get a minimal `product.yml` (containing only `id`, no `version`/`versionPolicy`/`components`) when telemetry needs a declared product identity — created by the orchestrator's P0 step 3b (req-001) on first prompt, not by ship-agent at P9. `component.yml`'s own versioning behaviour for single-component projects is untouched; `product.yml`'s role for those projects is scoped strictly to `id`, never version tagging.
+`product.yml`'s `id` field is the canonical declared `product_id` for telemetry, for single-component projects as well as multi-component ones. This extends ADR-0068 rather than superseding it. ADR-002's core decision stays in force for multi-component projects exactly as before. That core decision covers the root `product.yml` schema, the `versionPolicy` enum, and ship-agent P9 ownership for version tagging. The single addition concerns single-component projects, which ADR-002 said need no `product.yml` for *versioning* purposes. They now get a minimal `product.yml` (containing only `id`, no `version`/`versionPolicy`/`components`) when telemetry needs a declared product identity. The orchestrator's P0 step 3b (req-001) creates it on first prompt, not ship-agent at P9. `component.yml`'s own versioning behaviour for single-component projects stays untouched. `product.yml`'s role for those projects covers strictly `id`, never version tagging.
 
 ---
 
@@ -52,20 +52,20 @@ Two options were considered: store `product_id` in `component.yml` instead (avoi
 ## Consequences
 
 **Positive:**
-- Every Planifest-managed project, single- or multi-component, gets a durable declared `product_id` — closing req-001's gap for the majority (single-component) case, not just multi-component projects
-- `component.yml`'s existing versioning behaviour for single-component projects is provably unchanged — this ADR touches only the telemetry-identity concern, not tagging
+- Every Planifest-managed project, single- or multi-component, gets a durable declared `product_id`. This closes req-001's gap for the majority (single-component) case, not only multi-component projects
+- `component.yml`'s existing versioning behaviour for single-component projects provably stays the same. This ADR touches only the telemetry-identity concern, not tagging
 
 **Negative:**
-- A second root-level manifest (`product.yml`) now exists even for the simplest single-component project, where previously only `component.yml` existed — one more file for a human to notice and understand, even in its minimal `id`-only form
+- A second root-level manifest (`product.yml`) now exists even for the simplest single-component project, where previously only `component.yml` existed. That is one more file for a human to notice and understand, even in its minimal `id`-only form
 
 **Risks:**
-- A future agent or human, seeing `product.yml` present on a single-component project, could mistakenly assume it also governs versioning for that project (as it does for multi-component projects) — mitigated by the minimal file containing only `id`, with no `version`/`versionPolicy`/`components` fields to invite that assumption
+- A future agent or human could see `product.yml` on a single-component project and mistakenly assume it also governs versioning there. It does govern versioning for multi-component projects. The minimal file mitigates this. It contains only `id`, with no `version`/`versionPolicy`/`components` fields to invite that assumption
 
 ---
 
 ## Related ADRs
 
-- ADR-0068 (product.yml with versionPolicy) - extends: this ADR narrows and extends ADR-002's "single-component projects need no product.yml" statement for the telemetry-identity case specifically, while leaving ADR-002's versioning decision fully in force
+- ADR-0068 (product.yml with versionPolicy) - extends: this ADR narrows and extends ADR-002's "single-component projects need no product.yml" statement for the telemetry-identity case specifically. ADR-002's versioning decision stays fully in force
 
 ---
 

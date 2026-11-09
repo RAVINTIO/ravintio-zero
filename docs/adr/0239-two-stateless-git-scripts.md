@@ -39,7 +39,7 @@ Two Node scripts with built-in modules only read git. `check-initiative-history.
 
 **Positive:**
 - A bad history fails the PR before it reaches `main`.
-- A squash of an initiative PR is flagged at once.
+- CI flags a squash of an initiative PR at once.
 
 **Negative:**
 - The main check reads the message, so a renamed squash title slips past it.

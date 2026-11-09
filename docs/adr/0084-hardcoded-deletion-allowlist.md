@@ -24,7 +24,7 @@ feature: "0000020-setup-refresh-skill"
 
 ## Decision
 
-The deletion allowlist is a hardcoded constant listing exactly `CLAUDE.md` and `AGENTS.md`. It is not read from configuration, not derived from a glob pattern, and not extensible by a flag, environment variable, or user input at runtime. If a future feature needs to delete a different or additional file, that requires a new ADR and a code change to the constant itself, not a configuration change.
+The deletion allowlist is a hardcoded constant listing exactly `CLAUDE.md` and `AGENTS.md`. The skill does not read it from configuration or derive it from a glob pattern. A flag, environment variable, or user input cannot extend it at runtime. If a future feature needs to delete a different or additional file, that requires a new ADR. It also requires a code change to the constant itself, not a configuration change.
 
 ## Alternatives Considered
 
@@ -47,10 +47,10 @@ The deletion allowlist is a hardcoded constant listing exactly `CLAUDE.md` and `
 - Removes an entire class of misconfiguration risk (a human or agent accidentally widening the deletion set)
 
 **Negative:**
-- Adding a new boot file type in a future feature requires a code change and a new ADR, not just a config update, this is a deliberate cost, not an oversight
+- Adding a new boot file type in a future feature requires a code change and a new ADR, not only a config update. This is a deliberate cost, not an oversight
 
 **Risks:**
-- If a future contributor "fixes" this by making the list configurable without re-reading this ADR, the safety property is lost silently; mitigated by R-001 in the risk register and a dedicated validate-agent test (per REQ-004's acceptance criteria) that fails if the allowlist is ever parameterised
+- If a future contributor "fixes" this by making the list configurable without re-reading this ADR, the safety property disappears silently. R-001 in the risk register mitigates this, as does a dedicated validate-agent test (per REQ-004's acceptance criteria) that fails if anyone parameterises the allowlist
 
 ---
 

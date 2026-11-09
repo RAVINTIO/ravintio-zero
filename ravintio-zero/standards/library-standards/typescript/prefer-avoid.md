@@ -1,6 +1,6 @@
 # TypeScript: Library Standards
 
-> See `_version-policy.md` for pinning rules. Check `ravintio-overrides/library-standards/typescript/prefer-avoid.md` first; overrides take precedence.
+> See `_version-policy.md` for pinning rules. Check `ravintio-overrides/library-standards/typescript/prefer-avoid.md` first. Overrides take precedence.
 
 ---
 
@@ -10,7 +10,7 @@
 |---------|--------|-------|--------|
 | Schema validation | `zod` | `joi`, `yup`, `ajv` (direct) | Zod provides TypeScript-first type inference; joi/yup lack native TS type generation |
 
-React form validation pairing (`zod` + `react-hook-form`) is covered in `javascript/react/prefer-avoid.md`.
+React form validation pairing (`zod` + `react-hook-form`) appears in `javascript/react/prefer-avoid.md`.
 
 ## HTTP Client & Logging
 

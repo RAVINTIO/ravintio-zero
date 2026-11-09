@@ -15,11 +15,11 @@ feature: "0000026-context-hook-and-telemetry-backstop-fixes"
 
 ## Context
 
-ADR-0068 introduced `product.yml` to aggregate one release version across a project's components, with `components[]` holding a cached `{id, version}` per component under `versionPolicy: max-component-version`. That cache went stale the moment a component's own `component.yml` bumped its version outside a P9 ship: `context-mode-hooks` bumped 0.2.0 → 0.2.1 mid-PC during this feature's own 0000042 fix, and `product.yml` never got the update, only surfacing when this feature reached its own ship-review version-bump question. ADR-002's own alternatives analysis weighed "each component.yml claims the product version" (rejected: no single owner) against "always derive max, no manifest" (rejected: no support for `explicit`/`external` policies) — it never considered a third option that keeps single ownership without ever needing a cached copy.
+ADR-0068 introduced `product.yml` to aggregate one release version across a project's components. Under `versionPolicy: max-component-version`, `components[]` held a cached `{id, version}` per component. That cache went stale the moment a component's own `component.yml` bumped its version outside a P9 ship. `context-mode-hooks` bumped 0.2.0 → 0.2.1 mid-PC during this feature's own 0000042 fix. `product.yml` never got the update. The gap surfaced only when this feature reached its own ship-review version-bump question. ADR-002's own alternatives analysis weighed "each component.yml claims the product version" (rejected: no single owner). It also weighed "always derive max, no manifest" (rejected: no support for `explicit`/`external` policies). It never considered a third option that keeps single ownership without a cached copy.
 
 ## Decision
 
-Under `versionPolicy: max-component-version`, `components[]` entries hold `{id, path}` — a pointer to that component's own `component.yml` — instead of `{id, version}`. `product-version.mjs` reads each referenced `component.yml`'s live `version:` field at derivation time and takes the highest. `components[]` now only needs editing when a component is added or removed, never on a version bump. The `explicit` and `external` policies are unaffected — they never read `components[]` for version derivation. `product.yml`'s own top-level `version` field remains informational under `max-component-version` (last value ship-agent tagged) and stays authoritative only under `explicit`.
+Under `versionPolicy: max-component-version`, `components[]` entries hold `{id, path}` instead of `{id, version}`. The path points to that component's own `component.yml`. `product-version.mjs` reads each referenced `component.yml`'s live `version:` field at derivation time and takes the highest. `components[]` needs editing only when a component joins or leaves, never on a version bump. The `explicit` and `external` policies do not change. They never read `components[]` for version derivation. `product.yml`'s own top-level `version` field remains informational under `max-component-version` (the last value ship-agent tagged). It stays authoritative only under `explicit`.
 
 ## Alternatives Considered
 
@@ -38,23 +38,23 @@ Under `versionPolicy: max-component-version`, `components[]` entries hold `{id, 
 ## Consequences
 
 **Positive:**
-- Eliminates the class of defect that prompted this ADR — nothing in `product.yml` can go stale relative to a component's own version, because nothing is cached
+- Eliminates the class of defect that prompted this ADR. Nothing in `product.yml` can go stale relative to a component's own version, because the file caches nothing
 - `components[]` maintenance burden drops to exactly when it should change: component added or removed
 
 **Negative:**
-- `product-version.mjs` now does file I/O per component (reads each referenced `component.yml`) instead of pure string parsing of one file — negligible at this scale (single-digit components), noted for completeness
-- Existing adopter projects with an old-shape `product.yml` hit a hard failure (exit 2) at their next P9 tag under `max-component-version` until they run the new migration — not silent breakage, but a blocking one
+- `product-version.mjs` now does file I/O per component (reads each referenced `component.yml`) instead of pure string parsing of one file. The cost is negligible at this scale (single-digit components) and noted for completeness
+- Existing adopter projects with an old-shape `product.yml` hit a hard failure (exit 2) at their next P9 tag under `max-component-version`. The failure lasts until they run the new migration. The breakage is not silent, but it blocks
 
 **Risks:**
-- A `components[]` entry with a `path` pointing at a moved/renamed/deleted `component.yml` fails loudly (exit 2, named path in the error) rather than silently — treated as a positive (fail loud, not stale-silent) but noted as a new failure mode that didn't exist before this change
+- A `components[]` entry with a `path` pointing at a moved, renamed, or deleted `component.yml` fails loudly (exit 2, named path in the error). The failure is loud, not silent. Treat that as a positive (fail loud, not stale-silent). It is also a new failure mode that did not exist before
 
 ## Related ADRs
 
-- ADR-0068 - amends (this ADR is the amendment; see that ADR's own "Superseded By" note)
+- ADR-0068 - amends (this ADR is the amendment, see that ADR's own "Superseded By" note)
 
 ## Supersedes
 
-- None (amends ADR-0068's `components[]` shape specifically; the rest of ADR-002 — the `product.yml` file's existence, `versionPolicy` enum, single-ownership model — is unchanged)
+- None (amends ADR-0068's `components[]` shape specifically. The rest of ADR-002 keeps its form: the `product.yml` file's existence, `versionPolicy` enum, and single-ownership model)
 
 ## Superseded By
 

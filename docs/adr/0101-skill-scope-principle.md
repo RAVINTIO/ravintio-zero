@@ -6,7 +6,7 @@ version: "0.1.0"
 component: "ravintio-zero"
 feature: "0000027-backlog-batch-governance-tooling-fixes"
 ---
-# ADR-0101 - Skill-scope principle — does this skill earn its place
+# ADR-0101 - Skill-scope principle: does this skill earn its place
 
 **Skill:** [adr-agent](../skills/adr-agent-SKILL.md)
 **Feature:** 0000027-backlog-batch-governance-tooling-fixes
@@ -15,11 +15,11 @@ feature: "0000027-backlog-batch-governance-tooling-fixes"
 
 ## Context
 
-Backlog `0000024` (this feature's req-007) originated from an independent framework review whose first edition proposed deprecating `planifest-test-writer`, `planifest-implementer`, `planifest-refactor`, and `planifest-verify-by-execution` as duplicating host-tool (Claude Code) behaviour. That review proposed the right test — does this skill provide governance or traceability the host tool cannot — but did not apply it before recommending deprecation. Applying the test to all four retains them, with one marginal case. Left unrecorded, the same duplication argument could resurface against these or future skills without the counter-test being applied again, and nothing today stops the skills corpus accreting re-specifications of host behaviour as host tools improve.
+Backlog `0000024` (this feature's req-007) originated from an independent framework review. Its first edition proposed deprecating `planifest-test-writer`, `planifest-implementer`, `planifest-refactor`, and `planifest-verify-by-execution` as duplicating host-tool (Claude Code) behaviour. That review proposed the right test: does this skill provide governance or traceability the host tool cannot? It did not apply the test before recommending deprecation. Applying the test to all four retains them, with one marginal case. If the test stays unrecorded, the same duplication argument could resurface against these or future skills without the counter-test. Nothing today stops the skills corpus accreting re-specifications of host behaviour as host tools improve.
 
 ## Decision
 
-Adopt the following test for any skill's continued inclusion in the framework, and for any newly-proposed skill: **does this skill provide governance or traceability the host tool cannot?** A skill that merely restates host-tool default behaviour without adding an enforced constraint, an audit trail, or a structural guarantee does not earn its place. Applied to the four skills in question:
+Adopt the following test for any skill's continued inclusion in the framework, and for any newly-proposed skill. The test asks: **does this skill provide governance or traceability the host tool cannot?** A skill that restates host-tool default behaviour without adding an enforced constraint, an audit trail, or a structural guarantee does not earn its place. Applied to the four skills in question:
 
 | Skill | Words | Verdict | Rationale |
 |-------|-------|---------|-----------|
@@ -28,7 +28,7 @@ Adopt the following test for any skill's continued inclusion in the framework, a
 | `planifest-refactor` | 528 | Retain, marginal | Thinnest of the four; its governance content is close to host-tool default behaviour. Retained on the current evidence, not on the same footing as the other three. |
 | `planifest-verify-by-execution` | 481 | Retain | Encodes "do not accept test output as proof — run the software," the opposite of host-tool default behaviour (which stops at green tests). |
 
-Together these total 2,152 words, roughly 7% of the skills corpus at the time of the original review — the maintenance-liability argument for removing them does not survive the sizes involved. Reference this ADR from the process that adds a new skill (`planifest-orchestrator/SKILL.md`'s Capability Skills / skill-scope guidance) so the test is applied at the point of addition, not only retrospectively when a future review raises the question again.
+Together these total 2,152 words, roughly 7% of the skills corpus at the time of the original review. The maintenance-liability argument for removing them does not survive the sizes involved. Reference this ADR from the process that adds a new skill (`planifest-orchestrator/SKILL.md`'s Capability Skills / skill-scope guidance). The test then applies at the point of addition, not only retrospectively when a future review raises the question again.
 
 ## Alternatives Considered
 
@@ -51,14 +51,14 @@ Together these total 2,152 words, roughly 7% of the skills corpus at the time of
 - `planifest-refactor`'s marginal status is explicitly on record, so a future removal decision has to produce build-assessment evidence rather than re-litigate the duplication argument.
 
 **Negative:**
-- One more ADR for future contributors to be aware of before proposing skill changes — a small ongoing reading cost.
+- One more ADR for future contributors to know about before proposing skill changes. This is a small ongoing reading cost.
 
 **Risks:**
-- The test itself ("governance or traceability the host tool cannot") could be applied inconsistently by different reviewers without concrete worked examples to anchor it — mitigated by this ADR recording all four current worked examples, including the marginal one, as calibration points.
+- The test itself ("governance or traceability the host tool cannot") could be applied inconsistently by different reviewers without concrete worked examples to anchor it. This ADR mitigates that by recording all four current worked examples, including the marginal one, as calibration points.
 
 ## Related ADRs
 
-- None — this is the first ADR recording this specific governance test.
+- None. This is the first ADR recording this specific governance test.
 
 ## Supersedes
 

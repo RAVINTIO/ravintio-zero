@@ -20,13 +20,13 @@ feature: "0000014-improve-adoption-mode-selection"
 
 ## Context
 
-With `docs/about.md` established as the version source (ADR-0055), a policy is needed for how the version is bumped at each pipeline run. The policy should be derivable from information already available at P0 (the pipeline track) and should produce a meaningful version history without requiring the human to reason about semver from scratch each time.
+With `docs/about.md` established as the version source (ADR-0055), the pipeline needs a policy for how to bump the version at each run. The policy should derive from information already available at P0 (the pipeline track). It should also produce a meaningful version history without requiring the human to reason about semver from scratch each time.
 
 ---
 
 ## Decision
 
-**Version bump rules are keyed to the pipeline track:**
+**Version bump rules key off the pipeline track:**
 
 | Track | Bump type | Example |
 |-------|-----------|---------|
@@ -37,7 +37,7 @@ With `docs/about.md` established as the version source (ADR-0055), a policy is n
 | Greenfield (first run) | n/a | 0.1.0 (fixed start) |
 | External Anchor | n/a | human-provided |
 
-The agent suggests the bump; the human always confirms. For major bumps, the agent must cite the specific rationale (breaking change, architectural reset, etc.) before asking for confirmation.
+The agent suggests the bump. The human always confirms. For major bumps, the agent must cite the specific rationale (breaking change, architectural reset, etc.) before asking for confirmation.
 
 ---
 
@@ -63,23 +63,23 @@ The agent suggests the bump; the human always confirms. For major bumps, the age
 ## Consequences
 
 **Positive:**
-- Version history is semantically meaningful — minor versions correspond to features, patches to fixes
+- Version history is semantically meaningful: minor versions correspond to features, patches to fixes
 - Human only needs to confirm or override, not reason from scratch
-- Policy is simple enough to explain in one sentence
+- You can explain the policy in one sentence
 
 **Negative:**
-- The agent doesn't inspect the actual change content — a large Change Pipeline run (many components) still gets a patch bump
-- Major version suggestion relies on the human (or agent) recognising "major breaking" — this is subjective
+- The agent doesn't inspect the actual change content. A large Change Pipeline run (many components) still gets a patch bump
+- Major version suggestion relies on the human (or agent) recognising "major breaking". This is subjective
 
 **Risks:**
-- Version inflation if Feature Pipeline runs are frequent and the human always accepts minor bumps; mitigated by the human confirmation step and the regression guard
+- Version inflation if Feature Pipeline runs are frequent and the human always accepts minor bumps. The human confirmation step and the regression guard mitigate this.
 
 ---
 
 ## Related ADRs
 
-- ADR-0055 — depends-on (version source must exist for bump rules to apply)
-- ADR-0057 — extends (regression guard protects the version produced by these rules)
+- ADR-0055: depends-on (version source must exist for bump rules to apply)
+- ADR-0057: extends (regression guard protects the version produced by these rules)
 
 ---
 

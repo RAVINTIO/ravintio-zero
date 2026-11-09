@@ -14,6 +14,6 @@
 
 ## Notes
 
-- `testify/mock` for mocking interfaces; avoid hand-rolled mocks unless the interface is trivial
-- Table-driven tests are idiomatic Go; use them for unit tests with multiple input cases
+- `testify/mock` for mocking interfaces. Avoid hand-rolled mocks unless the interface is trivial
+- Table-driven tests are idiomatic Go. Use them for unit tests with multiple input cases
 - `golangci-lint` in CI for static analysis

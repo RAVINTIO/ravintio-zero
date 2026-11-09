@@ -15,14 +15,14 @@ feature: "0000028-telemetry-hardening-and-enforcement-fixes"
 
 ## Context
 
-`context-pressure.mjs`, `emit-phase-start.mjs`, and `emit-phase-end.mjs` each POST an event with a single, unretried `fetch`. Two failure shapes reach the same catch block today and are treated identically:
+`context-pressure.mjs`, `emit-phase-start.mjs`, and `emit-phase-end.mjs` each POST an event with a single, unretried `fetch`. Two failure shapes reach the same catch block today, and the code treats them identically:
 
 - A network-level `fetch` rejection (`TypeError`, no listener bound). This is the signature of a listener gap, not a real failure. It is frequently transient.
 - An HTTP error status (4xx/5xx). A listener answered and deliberately rejected the event. This is a real failure.
 
-The current code cannot tell these apart because it does not try. Both paths write a durable marker under `plan/.telemetry-failures/`, which the orchestrator (and `check-telemetry-failures.mjs`, added in 0000026) surfaces as a block-or-proceed interrupt to the human on the loop.
+The current code cannot tell these apart because it does not try. Both paths write a durable marker under `plan/.telemetry-failures/`. The orchestrator (and `check-telemetry-failures.mjs`, added in 0000026) surfaces that marker as a block-or-proceed interrupt to the human on the loop.
 
-This produced 4 spurious durable markers in this repo on 2026-08-08 between 09:10:28Z and 09:11:55Z, and 10 in the downstream repo `structured-telemetry-mcp` in the same window, all from routine `npm run deploy` restarts of the telemetry daemon. Between the old daemon exiting and the new one binding the port, there is a ~1-2s window with no listener. Any hook firing in that window sees a network-level failure, and the framework records something that was never actually wrong.
+This produced 4 spurious durable markers in this repo on 2026-08-08 between 09:10:28Z and 09:11:55Z. It produced 10 in the downstream repo `structured-telemetry-mcp` in the same window. All came from routine `npm run deploy` restarts of the telemetry daemon. Between the old daemon exiting and the new one binding the port, there is a ~1-2s window with no listener. Any hook firing in that window sees a network-level failure, and the framework records something that was never actually wrong.
 
 ## Decision
 
@@ -56,11 +56,11 @@ Budget: 2 retries, 3 attempts total, fixed 300ms gaps between attempts. This sit
 - A genuinely-down backend is still reported: retry exhaustion still writes the durable marker exactly as before.
 
 **Negative:**
-- Retry makes a genuinely degraded backend less visible. A backend that is slow-flapping (intermittently up just long enough to accept a retried attempt) now gets absorbed into a successful emission instead of surfacing a marker.
+- Retry makes a genuinely degraded backend less visible. A backend that is slow-flapping (intermittently up long enough to accept a retried attempt) now succeeds on emission instead of surfacing a marker.
 - Worst-case hook latency rises by ~600ms on the failure path only (2 gaps of 300ms), on top of the existing 3s per-attempt abort budget.
 
 **Risks:**
-- If a future change stops setting the synthetic `err.name` of `http_<status>` on a non-ok response, the retry check silently falls back to treating HTTP errors as network failures and retries them. Mitigation: the acceptance criteria for req-001 assert this behaviour directly against a backend that answers 4xx/5xx.
+- If a future change stops setting the synthetic `err.name` of `http_<status>` on a non-ok response, the retry check silently treats HTTP errors as network failures. It then retries them. The acceptance criteria for req-001 mitigate this: they assert this behaviour directly against a backend that answers 4xx/5xx.
 
 ## Related ADRs
 

@@ -1,12 +1,12 @@
 ---
-title: "ADR 007: Caps, Budgets, and the Ratchet Are Enforced Deterministically"
+title: "ADR 007: Caps, Budgets, and the Ratchet Run Deterministically"
 summary: "Iteration caps (3 default, P4 keeps 5), the reversal budget (2/feature), and the ratchet rule are enforced by orchestrator control flow reading persisted state plus hooks — never by skill prose alone."
 status: "accepted"
 version: "0.1.0"
 component: "ravintio-zero"
 feature: "0000016-pipeline-governance-and-loop-engineering"
 ---
-# ADR-0073 - Caps, Budgets, and the Ratchet Are Enforced Deterministically
+# ADR-0073 - Caps, Budgets, and the Ratchet Run Deterministically
 
 **Skill:** [adr-agent](../../../planifest-framework/skills/planifest-adr-agent/SKILL.md)
 **Tool:** claude-code
@@ -20,13 +20,13 @@ feature: "0000016-pipeline-governance-and-loop-engineering"
 
 ## Context
 
-Every limit in this feature (loop iteration caps, no-progress halts, reversal budget, weakening blocks) restrains an agent precisely when it is most motivated to rationalize past it. The design constraint gives the test: *if the model ignored the skill text, would anything stop it?* Where the answer must be yes, instruction text is insufficient.
+This feature sets several limits: loop iteration caps, no-progress halts, the reversal budget, and weakening blocks. Each limit restrains an agent precisely when it is most motivated to rationalize past it. The design constraint gives the test: *if the model ignored the skill text, would anything stop it?* Where the answer must be yes, instruction text is insufficient.
 
 ---
 
 ## Decision
 
-Three enforcement layers, chosen per limit by that test: (1) **Hooks** (`ratchet-check.mjs`, family of `gate-write.mjs`) for anything triggerable on a tool call — weakening writes exit 2 deterministically. (2) **Orchestrator control flow over persisted state** for run-shaped limits — iteration counters, the 2/feature reversal budget, and cascade size live in the git-tracked loop-state file (REQ-010); the orchestrator compares numbers, and interrupt/resume cannot reset them because the state survives in git. (3) **Skill text** only for guidance with no enforcement need. Cap values: default 3 per loop; P4 validate keeps its existing 5 (behaviour-compatibility, REQ-009); no-progress halt at 2 identical consecutive findings; reversal budget 2 per feature. Unexpected hook errors exit 0, preserving the existing "hooks never block a session unexpectedly" contract.
+Three enforcement layers apply, chosen per limit by that test. (1) **Hooks** (`ratchet-check.mjs`, family of `gate-write.mjs`) cover anything triggerable on a tool call, and weakening writes exit 2 deterministically. (2) **Orchestrator control flow over persisted state** covers run-shaped limits. Iteration counters, the 2/feature reversal budget, and cascade size live in the git-tracked loop-state file (REQ-010). The orchestrator compares numbers, and interrupt/resume cannot reset them because the state survives in git. (3) **Skill text** covers only guidance with no enforcement need. Cap values: default 3 per loop, with P4 validate keeping its existing 5 (behaviour-compatibility, REQ-009). The no-progress halt triggers at 2 identical consecutive findings. The reversal budget is 2 per feature. Unexpected hook errors exit 0, preserving the existing "hooks never block a session unexpectedly" contract.
 
 ---
 
@@ -52,20 +52,22 @@ Three enforcement layers, chosen per limit by that test: (1) **Hooks** (`ratchet
 ## Consequences
 
 **Positive:**
-- Limits hold even against a rationalizing agent; every enforcement event is observable (exit-2 messages, run-log entries, telemetry)
+- Limits hold even against a rationalizing agent. Every enforcement event is observable (exit-2 messages, run-log entries, telemetry)
 - Budget/caps survive session interrupts by construction (git-tracked state)
 
 **Negative:**
 - More moving parts: a hook, a state schema, and control-flow logic must stay consistent with each other
 
 **Risks:**
-- State-file corruption stalls loops — mitigated: unreadable state is treated as loop-inactive (hook disarms, exit 0) and surfaced to the human rather than guessed at
+- State-file corruption stalls loops. The mitigation: unreadable state counts as loop-inactive (hook disarms, exit 0) and the framework surfaces it to the human rather than guessing at it
 
 ---
 
 ## Related ADRs
 
-- ADR-0069 - depends-on (toggles gate whether loops arm at all); ADR-0070 - extends; ADR-0071 - depends-on
+- ADR-0069 - depends-on (toggles gate whether loops arm at all)
+- ADR-0070 - extends
+- ADR-0071 - depends-on
 
 ---
 

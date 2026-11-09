@@ -17,13 +17,13 @@ feature: "0000005-framework-governance"
 
 ## Context
 
-As framework standards evolve, existing artefacts drift out of compliance — date formats, British English spellings, template structures. A mechanism is needed to detect and correct non-compliant artefacts across `plan/`, `docs/`, and `planifest-framework/`. The mechanism must be interactive (human confirms changes) and self-archiving (completed migrations do not re-run).
+As framework standards evolve, existing artefacts drift out of compliance in date formats, British English spellings, and template structures. The framework needs a mechanism to detect and correct non-compliant artefacts across `plan/`, `docs/`, and `planifest-framework/`. The mechanism must be interactive (human confirms changes) and self-archiving (completed migrations do not re-run).
 
 ---
 
 ## Decision
 
-Migrations are Markdown files in `planifest-framework/migrations/`. Each file describes what to scan for and what to correct. The `planifest-migrator` skill reads the file, executes the migration interactively (presenting each finding to the human for confirmation), and moves the file to `migrations/_done/` on completion. The orchestrator scans for pending migrations at every session start and invokes the migrator before proceeding.
+Migrations are Markdown files in `planifest-framework/migrations/`. Each file describes what to scan for and what to correct. The `planifest-migrator` skill reads the file and executes the migration interactively, presenting each finding to the human for confirmation. It moves the file to `migrations/_done/` on completion. The orchestrator scans for pending migrations at every session start and invokes the migrator before proceeding.
 
 ---
 
@@ -50,19 +50,19 @@ Migrations are Markdown files in `planifest-framework/migrations/`. Each file de
 ## Consequences
 
 **Positive:**
-- Human remains in control — every change is confirmed before application
-- Self-archiving — `_done/` ensures migrations never re-run; ordering by filename prefix (e.g. `0001-`, `0002-`) is deterministic
-- Extensible — any human can add a migration by dropping a `.md` file; no framework release required
+- Human remains in control: the human confirms every change before the migrator applies it
+- Self-archiving: `_done/` ensures migrations never re-run. Ordering by filename prefix (e.g. `0001-`, `0002-`) is deterministic
+- Extensible: any human can add a migration by dropping a `.md` file, with no framework release required
 
 **Negative:**
-- Interactive migrations cannot run in fully automated CI — they require a human session
+- Interactive migrations cannot run in fully automated CI because they require a human session
 - Migration quality depends on the migrator skill's ability to correctly identify and skip non-prose content (e.g. code identifiers)
 
 **Risks:**
-- A poorly written migration file could cause the migrator to over-correct (e.g. rename code identifiers) — mitigated by requiring human confirmation per finding and by R-005 in the risk register
+- A poorly written migration file could cause the migrator to over-correct (e.g. rename code identifiers). Human confirmation per finding and R-005 in the risk register mitigate this
 
 ---
 
 ## Related ADRs
 
-- ADR-0020 — related-to (orchestrator session-start scan mirrors sentinel check pattern)
+- ADR-0020 - related-to (orchestrator session-start scan mirrors sentinel check pattern)

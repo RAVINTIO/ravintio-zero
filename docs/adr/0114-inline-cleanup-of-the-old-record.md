@@ -15,7 +15,7 @@ feature: "0000032-relocate-setup-config-to-plan-state"
 
 ## Context
 
-Every repo that ran setup before this feature has a `planifest-overrides/setup-config/{tool}.md`. ADR-0112 moves the record, so something has to deal with the old file. The framework has a migration mechanism: a pending `.md` in `planifest-zero/migrations/` that the migrator skill walks the human through at the next session start, as `migrate-archive-dirname.sh` did for the archive folder rename.
+Every repo that ran setup before this feature has a `planifest-overrides/setup-config/{tool}.md`. ADR-0112 moves the record, so something has to deal with the old file. The framework has a migration mechanism. At the next session start, the migrator skill walks the human through a pending `.md` in `planifest-zero/migrations/`. `migrate-archive-dirname.sh` did this for the archive folder rename.
 
 The old file differs from that case. Its path is exact, the setup script wrote it, and the same setup run regenerates its contents from the command-line flags. There is nothing in it to preserve.
 
@@ -23,10 +23,10 @@ The old file differs from that case. Its path is exact, the setup script wrote i
 
 1. After `write_setup_config_override` (bash) or `Write-SetupConfigOverride` (PowerShell) succeeds, the script deletes `planifest-overrides/setup-config/{tool}.md` if it exists, and prints one line naming the removed path.
 2. If `planifest-overrides/setup-config/` is then empty, the script removes the folder and prints one line. If the folder holds any other file, the folder and that file stay untouched.
-3. If the write to `plan/state/` failed, the old file is left alone. Cleanup runs only after the new record exists.
+3. If the write to `plan/state/` failed, the old file stays. Cleanup runs only after the new record exists.
 4. If removal fails, the script prints one warning and continues. Setup still exits `0`. A leftover old file is harmless because nothing reads it (ADR-0113).
 5. When there is nothing to remove, the script prints nothing. Repeat runs are silent.
-6. No migration file is written for this change.
+6. This change writes no migration file.
 
 ## Alternatives Considered
 

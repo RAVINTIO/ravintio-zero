@@ -5,11 +5,11 @@ date: "04 May 2026"
 feature: "0000007-agent-optimisation"
 component: "ravintio-zero"
 ---
-# ADR-0031 — Setup manifest file tracks installed directories for clean re-runs
+# ADR-0031 - Setup manifest file tracks installed directories for clean re-runs
 
 ## Context
 
-When `setup.sh` / `setup.ps1` is re-run (e.g. after updating framework skills), it needs to remove the previously installed skill directories before reinstalling. Without tracking what was installed, the script must either delete a hardcoded list of directories (brittle — breaks if names change) or delete the entire target directory (dangerous — may remove user-added files).
+When `setup.sh` / `setup.ps1` is re-run (e.g. after updating framework skills), it needs to remove the previously installed skill directories before reinstalling. Without a record of what it installed, the script must do one of two things. It can delete a hardcoded list of directories, which is brittle and breaks if names change. It can also delete the entire target directory, which is dangerous because it may remove user-added files.
 
 ## Decision
 
@@ -34,14 +34,14 @@ After each install run, write a `.planifest-manifest` file listing every directo
 
 **Positive:**
 - Re-runs are safe: only framework-managed directories are ever removed
-- Skill renames are handled correctly on the next run
+- The next run handles skill renames correctly
 - User-added files in the same parent directory are never touched
 
 **Negative:**
-- If setup is interrupted before the manifest is written, the next run may not clean up correctly — mitigated by writing the manifest as the final step after all copies succeed
+- If setup stops before it writes the manifest, the next run may not clean up correctly. Writing the manifest as the final step after all copies succeed mitigates this
 
 **Risks:**
-- Manifest written to wrong location could cause the cleanup to target wrong directories — mitigated by writing the manifest to the same directory that contains the installed skills, using a relative path
+- A manifest in the wrong location could cause the cleanup to target the wrong directories. Writing the manifest to the same directory as the installed skills, using a relative path, mitigates this
 
 ## Related ADRs
 

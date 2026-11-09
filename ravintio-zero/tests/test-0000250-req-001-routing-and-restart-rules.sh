@@ -21,7 +21,7 @@ ROUTE=$(awk '/^## Repo instructions during a run/{f=1;next} /^## /{f=0} f' "$SKI
 assert_contains "plan/current-initiative/initiative.md" "$ROUTE" "req-001 AC-1: the rule names initiative.md as the target"
 assert_contains "current or next pending step" "$ROUTE" "req-001 AC-1: the rule names the current or next pending step as the scope"
 assert_contains "never writes" "$ROUTE" "req-001 AC-1: the rule says the skill never writes the override"
-assert_contains "driver lock" "$ROUTE" "req-001 AC-1: the rule covers the held lock"
+assert_contains "driver holds the lock" "$ROUTE" "req-001 AC-1: the rule covers the held lock"
 
 echo ""
 echo "=== req-001 AC-2: the skill holds the restart rule ==="

@@ -20,17 +20,22 @@ feature: "0000021-framework-context-bloat-audit"
 
 ## Context
 
-This feature edits the live instruction content that every future Planifest pipeline run loads and follows — `SKILL.md` files, `standards/`, `templates/`, and `CLAUDE.md`. Getting a trim wrong has two distinct, independently-detectable failure modes (both surfaced during the P0 Scope Lock Challenge): (1) an edit technically removes content a hook or gate depends on only through prose, not code, and (2) an edit removes no enforcement content but leaves the remaining wording ambiguous enough to increase future agent confusion, retries, or escalations — a "doom loop" the framework exists to prevent, not cause. Neither failure mode is acceptable, and the second is easy to miss with a content-loss check alone since nothing is technically "lost." The decision affects every file this feature touches (multiple components' worth of instruction surface within `planifest-framework`) and sets the process precedent for any future context-reduction pass on this framework, making it costly to reverse informally once files are already trimmed under a different process.
+This feature edits the live instruction content that every future Planifest pipeline run loads and follows: `SKILL.md` files, `standards/`, `templates/`, and `CLAUDE.md`. Getting a trim wrong has two distinct, independently-detectable failure modes (both surfaced during the P0 Scope Lock Challenge):
+
+1. An edit technically removes content a hook or gate depends on only through prose, not code.
+2. An edit removes no enforcement content but leaves the remaining wording ambiguous enough to increase future agent confusion, retries, or escalations. This is a "doom loop" the framework exists to prevent, not cause.
+
+Neither failure mode is acceptable. A content-loss check alone can miss the second, since nothing is technically "lost." The decision affects every file this feature touches. That is multiple components' worth of instruction surface within `planifest-framework`. It also sets the process precedent for any future context-reduction pass on this framework. Reversing the trim informally is costly once files have gone through a different process.
 
 ## Decision
 
 Adopt a three-part process, sequenced and gated as follows:
 
-1. **Baseline before touching anything.** The regression pack (`tests/regression/`) is populated and run once, before any audit or trim work begins, recording pass/fail and this pipeline run's own self-correction/escalation count. No comparison is possible without a "before" state recorded first.
-2. **Two independent guardrails, not one.** Every trimmed file is reviewed by a fresh-context reviewer (distinct dispatch from the editor) checking: (a) zero loss of Hard-Limit/STOP-gate/enforcement-referenced content against the req-002 findings report, and (b) no ambiguity regression likely to increase future agent confusion or doom loops. A content-loss check alone does not catch guardrail (b); both are required independently.
-3. **Failure-informed retry, capped, then revert — never force-commit, never silently discard.** If either guardrail fails, the specific failure (which guardrail, what broke) feeds into the next attempt, which retries with a more conservative reduction. Up to 5 attempts per file, matching the existing self-correction cap convention already used elsewhere in the framework (P4 validate-agent). If all 5 fail, the file reverts to its original wording and a report names the file, guardrail, and attempts — the human always sees what happened, nothing is silently abandoned or silently forced through.
+1. **Baseline before touching anything.** The team populates the regression pack (`tests/regression/`) and runs it once, before any audit or trim work begins. The run records pass/fail and this pipeline run's own self-correction/escalation count. No comparison is possible without a "before" state recorded first.
+2. **Two independent guardrails, not one.** A fresh-context reviewer (distinct dispatch from the editor) reviews every trimmed file. The reviewer checks two things. Guardrail (a) is zero loss of Hard-Limit/STOP-gate/enforcement-referenced content against the req-002 findings report. Guardrail (b) is no ambiguity regression likely to increase future agent confusion or doom loops. A content-loss check alone does not catch guardrail (b). Both guardrails apply independently.
+3. **Failure-informed retry, capped, then revert. Never force-commit, never silently discard.** If either guardrail fails, the specific failure (which guardrail, what broke) feeds into the next attempt. That attempt retries with a more conservative reduction. Each file gets up to 5 attempts. This matches the self-correction cap convention used elsewhere in the framework (P4 validate-agent). If all 5 fail, the file reverts to its original wording and a report names the file, guardrail, and attempts. The human always sees what happened. The pipeline never abandons a file silently and never forces one through silently.
 
-This whole run's own remaining P1-P9 phases dogfood the trimmed orchestrator and phase skills in real time (this pipeline literally uses `planifest-orchestrator/SKILL.md` for its own remaining phases after that file is trimmed), providing a live functional check beyond the regression pack alone.
+This whole run's own remaining P1-P9 phases dogfood the trimmed orchestrator and phase skills in real time. After the trim of that file, this pipeline uses `planifest-orchestrator/SKILL.md` for its own remaining phases. That provides a live functional check beyond the regression pack alone.
 
 ## Alternatives Considered
 
@@ -50,16 +55,16 @@ This whole run's own remaining P1-P9 phases dogfood the trimmed orchestrator and
 ## Consequences
 
 **Positive:**
-- Two independent failure modes are each explicitly checked, not just the more obvious content-loss case
+- Two independent failure modes are each explicitly checked, not only the more obvious content-loss case
 - A documented, capped retry process avoids both premature abandonment and unbounded looping
 - The baseline makes "did this help or hurt" an objective, recorded comparison rather than a subjective read of the diff
 
 **Negative:**
-- Slower than a single-pass trim-and-commit approach — every file requires at minimum a findings-report entry, a trim, and a second-reviewer check, sometimes multiple retry rounds
+- Slower than a single-pass trim-and-commit approach. Every file requires at minimum a findings-report entry, a trim, and a second-reviewer check, sometimes multiple retry rounds
 - Adds process overhead (regression-pack promotion, baseline recording) as a hard prerequisite before any visible progress on the actual bloat problem
 
 **Risks:**
-- A file that genuinely cannot be trimmed safely without restructuring may exhaust all 5 attempts and simply revert, leaving the 20% floor target unmet in aggregate if too many files fall into this category — flagged to the human per design.md assumption A-003, not treated as a silent shortfall
+- A file that genuinely cannot be trimmed safely without restructuring may exhaust all 5 attempts and revert. If too many files fall into this category, the aggregate misses the 20% floor target. The pipeline flags this to the human per design.md assumption A-003 and does not treat it as a silent shortfall
 
 ---
 

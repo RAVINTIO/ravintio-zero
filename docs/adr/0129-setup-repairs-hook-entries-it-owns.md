@@ -56,7 +56,7 @@ ADR-0118 set the precedent that setup warns and continues on input it can't use.
 
 **Negative:**
 - Setup discards a hand-written non-array `PreToolUse` or `UserPromptSubmit` value from `settings.json`. Setup keeps no backup file. The value survives only in the stderr warning, so a human who misses the warning loses it.
-- A non-Planifest hook whose command names one of the three modules at a path boundary now goes on any matcher, not only on `Write` or `Edit`.
+- A non-Planifest hook now goes on any matcher, not only on `Write` or `Edit`. This applies when its command names one of the three modules at a path boundary.
 
 **Risks:**
 - Windows PowerShell 5.1 and PowerShell 7 can differ in how `ConvertFrom-Json` returns a one-element or empty array. A wrong test would warn on a valid array. The per-script suite runs on both hosts in CI to catch it.

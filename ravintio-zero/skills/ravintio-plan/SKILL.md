@@ -51,7 +51,7 @@ Write each artifact to disk as you complete it. Do not accumulate artifacts in m
 | Domain glossary | `plan/current/domain-glossary.md` |
 | ADRs | `docs/adr/{NNNN}-{slug}.md` - one per significant decision, status `proposed` |
 
-**Conditional set - produced only when its trigger holds.** A trigger is declared in the feature brief or inferred from a stated property of the confirmed design, never from feature size or story count. Absent a trigger, omit the artifact entirely. No empty or N/A placeholder files.
+**Conditional set - produced only when its trigger holds.** The feature brief declares a trigger, or you infer one from a stated property of the confirmed design, never from feature size or story count. Absent a trigger, omit the artifact entirely. No empty or N/A placeholder files.
 
 | Artifact | Path | Trigger |
 |---|---|---|
@@ -102,8 +102,8 @@ If a grep matches nothing, write `none found` in the row.
 - The OpenAPI spec covers every endpoint implied by the requirements. No more, no less. Use OpenAPI 3.1 with JSON Schema bodies. Produce it early, since everything downstream implements against it.
 - Never invent domain language. If a concept has no clear name, flag it for the human. In a retrofit, include terms the codebase already uses.
 - Every risk has a category (technical, operational, security, compliance), a likelihood, and an impact. No generic risks.
-- Deferred scope items note what is blocked until they resolve.
-- Documented assumptions are allowed for genuinely minor gaps. Record each in the risk register at likelihood medium. Do not assume away material ambiguity. Report it back instead.
+- Deferred scope items note what they block until they resolve.
+- You may document assumptions for genuinely minor gaps. Record each in the risk register at likelihood medium. Do not assume away material ambiguity. Report it back instead.
 
 ## ADR rules
 

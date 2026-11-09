@@ -56,7 +56,7 @@ Setup keeps the match case-sensitive at a path boundary (0000035 S-004). This re
 
 - ADR-0132 - extends (it refines the non-array rule)
 - ADR-0134 - related-to (the same hook install step)
-- ADR-0133 - related-to (the stack is unchanged)
+- ADR-0133 - related-to (the stack stays the same)
 
 ## Supersedes
 

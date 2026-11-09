@@ -54,4 +54,4 @@ Every service exposes:
 
 ## 6. Alerting
 
-Alerts are defined in the operational model. The codegen-agent implements the metric emission; the human configures the alerting thresholds and channels.
+The operational model defines alerts. The codegen-agent implements the metric emission. The human configures the alerting thresholds and channels.

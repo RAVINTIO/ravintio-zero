@@ -52,7 +52,7 @@ For an advisory-fix story, ask whether a major bump of an existing dependency is
 <!-- rule: major-bump-record -->
 Record the answer in the `Approved dependencies` field of `design.md`.
 
-**Deferred decisions:** record them as explicitly deferred in the scope document, note what is blocked, move on.
+**Deferred decisions:** record them as explicitly deferred in the scope document, note what the deferral blocks, move on.
 
 **A complete brief:** confirm it and proceed. Do not coach for the sake of coaching.
 

@@ -20,13 +20,13 @@ feature: "0000016-pipeline-governance-and-loop-engineering"
 
 ## Context
 
-Phases regularly discover work that is real but out of scope for the active feature. Today it gets scope-crept in, silently dropped, or forces a same-run correction. The reviewed bug-bounty-hunter PR #4 solved this by keeping `plan/current/` editable through P7–P9 so late findings could be looped back into the shipping feature — which requires weakening the post-archive lock, the framework's strongest integrity guarantee.
+Phases regularly discover work that is real but out of scope for the active feature. Today it gets scope-crept in, silently dropped, or forces a same-run correction. The reviewed bug-bounty-hunter PR #4 solved this by keeping `plan/current/` editable through P7–P9 so late findings could loop back into the shipping feature. This approach requires weakening the post-archive lock, the framework's strongest integrity guarantee.
 
 ---
 
 ## Decision
 
-Adopt a `plan/backlog/{id}-{slug}/` folder: any phase agent may file a discovered-but-out-of-scope entry (problem, source feature/phase, date filed) without touching the active feature's scope. The orchestrator scans the backlog at every subsequent P0 and offers each entry to the human one at a time (pull-in / leave / discard). P7 remains the lock line — nothing archived is ever editable, and all loop/reversal machinery in this feature operates strictly within P0–P6 or as a gate immediately before P7.
+Adopt a `plan/backlog/{id}-{slug}/` folder. Any phase agent may file a discovered-but-out-of-scope entry (problem, source feature/phase, date filed) without touching the active feature's scope. The orchestrator scans the backlog at every subsequent P0 and offers each entry to the human one at a time (pull-in / leave / discard). P7 remains the lock line. Nothing archived is ever editable, and all loop/reversal machinery in this feature operates strictly within P0–P6 or as a gate immediately before P7.
 
 ---
 
@@ -51,14 +51,14 @@ Adopt a `plan/backlog/{id}-{slug}/` folder: any phase agent may file a discovere
 ## Consequences
 
 **Positive:**
-- Non-blocking findings get a durable, human-reviewed home; archived state stays immutable
-- Deferred work resurfaces automatically — forgetting requires an explicit human "leave/discard"
+- Non-blocking findings get a durable, human-reviewed home. Archived state stays immutable
+- Deferred work resurfaces automatically. Forgetting requires an explicit human "leave/discard"
 
 **Negative:**
 - Fix latency: a backlog item waits at least until the next feature's P0
 
 **Risks:**
-- Backlog rot if the human habitually answers "leave" — mitigated by one-at-a-time presentation forcing a per-entry decision
+- Backlog rot if the human habitually answers "leave". One-at-a-time presentation mitigates this by forcing a per-entry decision
 
 ---
 

@@ -33,7 +33,7 @@ In a roadmap step, P4 follows this order:
 
 **Version source.** The step's `Bump` column in `roadmap.md` sets the version. P0 applies the bump to the roadmap branch's version, read from `product.yml`, or from `docs/about.md` when `product.yml` is absent. The existing downgrade block still applies. The tag takes that version.
 
-**Outside a roadmap.** A run with no active roadmap keeps tag-before-PR. The human still merges, and the ship skill is unchanged for that case.
+**Outside a roadmap.** A run with no active roadmap keeps tag-before-PR. The human still merges, and the ship skill stays the same for that case.
 
 **Roadmap PR.** R-E Delivery raises the roadmap PR to `main`. Its body asks the human for a merge commit, not a squash, so the step tags stay reachable from `main`.
 

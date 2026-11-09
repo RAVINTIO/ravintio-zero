@@ -20,17 +20,17 @@ feature: "0000010-framework-quality-improvements"
 
 ## Context
 
-The Planifest orchestrator SKILL.md includes a Subagent Decomposition Directive instructing phase agents to dispatch independent tasks as parallel Agent tool calls. In feature 0000009, the P8 build report confirmed that 0 Agent calls were made across all 8 phases. Investigation revealed the root cause: the `Agent` tool was not listed in `allowedTools` in `.claude/settings.json`. In Claude Code's default permission mode, any tool not in `allowedTools` requires explicit user confirmation per invocation. Since no confirmation prompt appeared in the pipeline and no approval was recorded, the Agent tool was silently bypassed — all phase work ran inline.
+The Planifest orchestrator SKILL.md includes a Subagent Decomposition Directive instructing phase agents to dispatch independent tasks as parallel Agent tool calls. In feature 0000009, the P8 build report confirmed that the phase agents made 0 Agent calls across all 8 phases. Investigation revealed the root cause: `.claude/settings.json` did not list the `Agent` tool in `allowedTools`. In Claude Code's default permission mode, any tool not in `allowedTools` requires explicit user confirmation per invocation. No confirmation prompt appeared in the pipeline and nobody recorded an approval. The pipeline silently bypassed the Agent tool, and all phase work ran inline.
 
-The question: should `Agent` be added to `allowedTools` (removing per-use confirmation) or should the directive be changed to accept that Agent calls require user approval each time?
+The question: should the setup script add `Agent` to `allowedTools` and remove per-use confirmation? Or should the directive change to accept that Agent calls need user approval each time?
 
 ---
 
 ## Decision
 
-Add `"Agent"` to the `allowedTools` array written by `setup.sh` and `setup.ps1` when configuring for Claude Code. The addition is project-scoped (written to `.claude/settings.json`, not the global Claude Code settings) and is idempotent.
+Add `"Agent"` to the `allowedTools` array that `setup.sh` and `setup.ps1` write when configuring for Claude Code. The addition is project-scoped (the scripts write it to `.claude/settings.json`, not the global Claude Code settings) and is idempotent.
 
-The directive requires Agent dispatch. The only reason it was not followed was a missing permission entry. The fix is the missing entry, not the directive.
+The directive requires Agent dispatch. The only reason the agents did not follow it was a missing permission entry. The fix is the missing entry, not the directive.
 
 ---
 
@@ -62,11 +62,11 @@ The directive requires Agent dispatch. The only reason it was not followed was a
 - Phase agents can dispatch parallel Agent calls in continuous_run without blocking
 
 **Negative:**
-- Agent invocations in Planifest projects no longer require per-use human confirmation — an agent acting outside the skill directives could spawn subagents unexpectedly
+- Agent invocations in Planifest projects no longer require per-use human confirmation. An agent acting outside the skill directives could spawn subagents unexpectedly.
 - Setup must merge allowedTools entries rather than overwrite, adding complexity to the setup script logic
 
 **Risks:**
-- A buggy or misloaded skill could trigger unintended Agent spawning; mitigated by the fact that Agent calls still require a deliberate `Agent(...)` invocation in the skill code, not a passive hook
+- A buggy or misloaded skill could trigger unintended Agent spawning. Agent calls still require a deliberate `Agent(...)` invocation in the skill code, not a passive hook, which mitigates this.
 
 ---
 

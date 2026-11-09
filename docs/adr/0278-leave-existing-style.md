@@ -15,7 +15,7 @@ version: "0.1.0"
 
 ## Context
 
-A developer may already pick an output style in the project `.claude/settings.json`. The Claude Code docs confirm that project output styles load from `.claude/output-styles/`, that `outputStyle` takes the style name, and that a project settings file beats the user value. Overwriting a chosen style would remove the developer's choice.
+A developer may already pick an output style in the project `.claude/settings.json`. The Claude Code docs confirm that project output styles load from `.claude/output-styles/` and that `outputStyle` takes the style name. They also confirm that a project settings file beats the user value. Overwriting a chosen style would remove the developer's choice.
 
 ## Decision
 

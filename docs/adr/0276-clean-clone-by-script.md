@@ -37,7 +37,7 @@ P3 runs the suite in the working tree, so untracked files, ignored caches, and l
 - P3 matches CI for committed code.
 
 **Negative:**
-- Uncommitted work is not tested, so P3 needs a committed tree.
+- The script does not test uncommitted work, so P3 needs a committed tree.
 
 **Risks:**
 - A crash can leave a temporary folder. The script removes it in a `finally` block and on signals.

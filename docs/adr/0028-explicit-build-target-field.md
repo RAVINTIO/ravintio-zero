@@ -5,11 +5,11 @@ date: "04 May 2026"
 feature: "0000007-agent-optimisation"
 component: "ravintio-zero"
 ---
-# ADR-0028 — Explicit Build target field over stack inference
+# ADR-0028 - Explicit Build target field over stack inference
 
 ## Context
 
-When a project builds in Docker, agents were checking host-installed runtimes (e.g. `dotnet`, `node`, `python`) during code generation and validation. This produces irrelevant or misleading results. The stack declaration already includes `compute` and `iac` fields that imply Docker, so the question was whether agents should infer the build target from those fields or whether humans should declare it explicitly.
+When a project builds in Docker, agents were checking host-installed runtimes (e.g. `dotnet`, `node`, `python`) during code generation and validation. This produces irrelevant or misleading results. The stack declaration already includes `compute` and `iac` fields that imply Docker. The question was whether agents should infer the build target from those fields or whether humans should declare it explicitly.
 
 ## Decision
 
@@ -25,25 +25,25 @@ Add an explicit `Build target: local | docker | ci-only` row to the feature-brie
 
 ## Affected Components
 
-- `planifest-framework/templates/feature-brief.template.md` — new row added
-- `planifest-framework/standards/build-target-standards.md` — defines all three tiers
-- `planifest-orchestrator/SKILL.md` — coaches human to set field at P0
-- `planifest-codegen-agent/SKILL.md` — reads field and adjusts behaviour
-- `planifest-validate-agent/SKILL.md` — reads field and adjusts behaviour
+- `planifest-framework/templates/feature-brief.template.md`: new row added
+- `planifest-framework/standards/build-target-standards.md`: defines all three tiers
+- `planifest-orchestrator/SKILL.md`: coaches human to set field at P0
+- `planifest-codegen-agent/SKILL.md`: reads field and adjusts behaviour
+- `planifest-validate-agent/SKILL.md`: reads field and adjusts behaviour
 
 ## Consequences
 
 **Positive:**
-- Agent behaviour is deterministic — no inference ambiguity
+- Agent behaviour is deterministic, with no inference ambiguity
 - New tiers (`ci-only`) can be added to the standard without changing any inference logic
 - Orchestrator can coach the human to set it when it detects Docker-related stack choices
 
 **Negative:**
 - Humans must fill in one more field in the feature brief
-- Existing feature briefs do not have the field — retrofit briefs may default to `local` implicitly
+- Existing feature briefs do not have the field. Retrofit briefs may default to `local` implicitly
 
 **Risks:**
-- Humans may leave the field at the default (`local`) even when building in Docker — mitigated by orchestrator P0 coaching
+- Humans may leave the field at the default (`local`) even when building in Docker. Orchestrator P0 coaching mitigates this
 
 ## Related ADRs
 

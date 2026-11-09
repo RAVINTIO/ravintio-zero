@@ -19,7 +19,7 @@ Entry 0000232 offers two places for the check: a new section in `consistency-che
 
 ## Decision
 
-Add `ravintio-zero/scripts/build-log-check.mjs`. Ship Step 3 runs it after the P4 `End` and `Wall clock` are filled and before Archive. It takes the build log path as its one argument.
+Add `ravintio-zero/scripts/build-log-check.mjs`. Ship Step 3 runs it after the P4 `End` and `Wall clock` have values and before Archive. It takes the build log path as its one argument.
 
 ## Alternatives Considered
 

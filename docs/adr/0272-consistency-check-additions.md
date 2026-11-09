@@ -15,7 +15,12 @@ feature: "0000384-plan-checks"
 
 ## Context
 
-Four backlog entries ask `consistency-check.mjs` to catch a plan gap: a shell feature absent from Bash 3.2, a missing living docs unit, a shared resource in one batch, and ADR references that no longer sit in `plan/current/adr/`.
+Four backlog entries ask `consistency-check.mjs` to catch a plan gap. The gaps are:
+
+- A shell feature absent from Bash 3.2.
+- A missing living docs unit.
+- A shared resource in one batch.
+- ADR references that no longer sit in `plan/current/adr/`.
 
 ## Decision
 

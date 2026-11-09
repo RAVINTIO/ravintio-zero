@@ -11,7 +11,7 @@
 
 ## What this migration does
 
-The pipeline has one route, so the commands for the old routes are retired. An earlier release installed `fast-path.md`, `change-pipeline.md`, and `retrofit.md` in `.claude/commands/`. The `fast-path` command says it bypasses the full pipeline, which contradicts the confirmed-design rule.
+The pipeline has one route, so this migration retires the commands for the old routes. An earlier release installed `fast-path.md`, `change-pipeline.md`, and `retrofit.md` in `.claude/commands/`. The `fast-path` command says it bypasses the full pipeline, which contradicts the confirmed-design rule.
 
 The helper removes each of the three files if its front matter holds the matching `name:` line. It skips a file with no such line, because that file is the developer's own. It skips a symlink. It changes nothing else.
 

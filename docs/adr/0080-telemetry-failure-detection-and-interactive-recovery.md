@@ -20,15 +20,15 @@ feature: "0000018-telemetry-emission-consistency"
 
 ## Context
 
-Telemetry emission currently fails in two structurally different ways with no consistent human-facing response. Hook-driven emission (`phase_start`/`phase_end`/`context_pressure`, fired automatically per ADR-005's exit-zero convention, 0000003) swallows failures completely silently. Agent-driven emission (`emit_event` calls made inline by phase skills for `adr_decision`, `security_finding`, etc.) is instructed to "skip silently if unavailable" with no enforcement. This session's own 0000017 pipeline run demonstrated the consequence directly: zero telemetry events were emitted across an entire P0-P9 run, and nothing surfaced that fact to the human.
+Telemetry emission currently fails in two structurally different ways with no consistent human-facing response. Hook-driven emission (`phase_start`/`phase_end`/`context_pressure`, fired automatically per ADR-005's exit-zero convention, 0000003) swallows failures completely silently. Agent-driven emission (`emit_event` calls made inline by phase skills for `adr_decision`, `security_finding`, etc.) carries the instruction to "skip silently if unavailable" with no enforcement. This session's own 0000017 pipeline run demonstrated the consequence directly. It emitted zero telemetry events across an entire P0-P9 run, and nothing surfaced that fact to the human.
 
 ---
 
 ## Decision
 
-Two different mechanisms for two structurally different emission paths, unified by a shared human-facing outcome. Hook-driven emission remains fire-and-forget and exit-zero (ADR-005, 0000003, unchanged — hooks must never block or throw), but now writes a durable failure marker on error instead of swallowing it; the orchestrator checks this marker at each phase-start checkpoint and surfaces an interactive block-or-proceed question to the human. Agent-driven emission, which happens live in conversation, stops immediately on failure, states the exact error, and asks the same block-or-proceed question inline — no marker needed since the agent is already present to ask.
+Two different mechanisms for two structurally different emission paths, unified by a shared human-facing outcome. Hook-driven emission remains fire-and-forget and exit-zero (ADR-005, 0000003, unchanged, because hooks must never block or throw). It now writes a durable failure marker on error instead of swallowing it. The orchestrator checks this marker at each phase-start checkpoint and surfaces an interactive block-or-proceed question to the human. Agent-driven emission, which happens live in conversation, stops immediately on failure, states the exact error, and asks the same block-or-proceed question inline. It needs no marker since the agent is already present to ask.
 
-Either path: the human is asked once per distinct failure root cause per pipeline run (not once per every underlying attempt, which could be dozens for hook-driven failures given hooks fire on every Write/Edit), and that answer is recorded in `build-log.md` and honored for the rest of the run.
+On either path, the orchestrator asks the human once per distinct failure root cause per pipeline run. It does not ask once per underlying attempt, which could be dozens for hook-driven failures given hooks fire on every Write/Edit. The orchestrator records that answer in `build-log.md` and honours it for the rest of the run.
 
 ---
 
@@ -60,10 +60,10 @@ Either path: the human is asked once per distinct failure root cause per pipelin
 - Every failure results in an explicit, recorded human decision rather than a silent default
 
 **Negative:**
-- Hook-driven failures have a small detection lag (surfaced at the next phase-start checkpoint, not the instant the hook fails) — an acceptable trade-off for preserving hook non-interactivity, but a real, small gap compared to true real-time detection
+- Hook-driven failures have a small detection lag (surfaced at the next phase-start checkpoint, not the instant the hook fails). This is an acceptable trade-off for preserving hook non-interactivity, but a real, small gap compared to true real-time detection
 
 **Risks:**
-- The failure marker itself could fail to write (disk full, permissions), and its absence after a known-attempted emission could be misread as success (risk-register R-001). This ADR does not fully close that residual gap; req-003's implementation must explicitly account for it or document why it can't be fully closed.
+- The failure marker itself could fail to write (disk full, permissions), and its absence after a known-attempted emission could be misread as success (risk-register R-001). This ADR does not fully close that residual gap. Req-003's implementation must explicitly account for it or document why it can't close fully.
 
 ---
 
