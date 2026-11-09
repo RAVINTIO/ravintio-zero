@@ -1,0 +1,1 @@
+ADRs moved to docs/adr/. See 0156-stack-unchanged.md, 0157-hook-block-reasons-dual-write.md, 0158-ship-clears-sentinels-before-pr.md, 0159-dependency-exception-stop.md, 0160-roadmap-driver-child-contract.md, 0161-orchestrator-references-split.md, 0162-prune-retired-hooks-by-list.md, 0163-park-refuses-symlinked-entry-paths.md.

@@ -1,6 +1,6 @@
 # Dependency Graph
 
-Last updated: 0000379-parallel-steps-on-worktrees
+Last updated: 0000384-plan-checks
 
 ## Component dependency diagram
 
