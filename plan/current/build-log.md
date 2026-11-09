@@ -1,0 +1,40 @@
+---
+title: "Build Log - 0000409-ci-shards"
+summary: "Working record of the pipeline run, maintained by the orchestrator."
+---
+# Build Log - 0000409-ci-shards
+
+> Created at discovery (P0). Appended by the orchestrator at each phase boundary. Survives session changes.
+
+## Header
+
+| Field | Value |
+|-------|-------|
+| Feature ID | `0000409-ci-shards` |
+| Pipeline start | `2026-11-09T14:10:20Z` |
+| Tool | `claude-code` |
+| Primary model | `claude-opus-5-5` |
+| Cheaper model | `claude-sonnet-5-5` |
+| Run speed | `fast` |
+
+---
+
+## Phase Log
+
+### P0: Discovery
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-09T14:10:20Z` |
+| End | `2026-11-09T14:10:20Z` |
+| Wall clock | `0` |
+| Model tier | primary |
+| Skills loaded | ravintio-orchestrator |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Hotfix in the coordinator session of initiative 0000360, while the driver is stopped. The human chose the route in three questions. Departure: no `plan/.orchestrator-ack`, because the initiative skill forbids it and the strict hook accepts `plan/.initiative-ack`. |
+
+- Adoption mode: standard-iterative (signal: plan/_archive/ holds prior runs)
+
+- Design confirmed by the human (2026-11-09T14:10:20Z). Run mode: autonomous. Run speed: fast.
