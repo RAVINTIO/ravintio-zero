@@ -10,8 +10,9 @@ set -uo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
-ZERO_DIR="$SCRIPT_DIR/.."
-OVR="$ZERO_DIR/../ravintio-overrides/instructions"
+ZERO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+REPO_ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
+OVR="$REPO_ROOT/ravintio-overrides/instructions"
 STD="$ZERO_DIR/standards/roadmap-standards.md"
 ORCH="$(orch_combined "$ZERO_DIR/skills/ravintio-orchestrator")"
 SHIP="$ZERO_DIR/skills/ravintio-ship/SKILL.md"
