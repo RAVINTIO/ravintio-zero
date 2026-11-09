@@ -62,11 +62,11 @@ Run mode: autonomous (2026-11-09T14:55:33Z, initiative step 10)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-09T15:00:23Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-09T15:34:28Z` |
+| Wall clock | `34` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
-| Agents spawned | 0 |
+| Agents spawned | 3 |
 | MCP calls | 0 |
 | Parallel task batches | 1 |
 | Notes | Batch 1 runs U-001, U-002, and U-003 in parallel, one track subagent each. Each track runs RED then GREEN itself, because the inline rule and the Done form that this step defines do not exist yet. U-004 runs inline after them. |
@@ -77,4 +77,9 @@ Run mode: autonomous (2026-11-09T14:55:33Z, initiative step 10)
 - Done: U-001 (code, primary, high, 2026-11-09T15:03:25Z)
 - Done: U-002 (code, primary, high, 2026-11-09T15:03:25Z)
 - Done: U-003 (code, primary, high, 2026-11-09T15:03:25Z)
-- Done: U-004 (content, inline, none, 2026-11-09T15:03:25Z)
+- Done: U-004 (2026-11-09T15:03:25Z)
+- Tests run: REQ-001: test-0000386-req-001-inline-tdd-path.sh (2026-11-09T15:34:28Z)
+- Tests run: REQ-002: test-0000386-req-002-unit-class-tier-effort.sh (2026-11-09T15:34:28Z)
+- Tests run: REQ-003: test-0000386-req-003-metrics-by-class-and-tier.sh (2026-11-09T15:34:28Z)
+- Tests run: full suite: 0 new failures against the baseline, in 4 local shards (2026-11-09T15:34:28Z)
+- Complete: P2 (2026-11-09T15:34:28Z)
