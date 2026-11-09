@@ -96,6 +96,8 @@ Discovery sizes each release against a budget. The optional `releaseSize` field 
 
 **Human-only settings.** A chart names a setting as a `Human setting:` row in `## Decisions`. Before P2, the plan skill runs `scripts/human-settings-check.mjs`. It reads each row with `gh api -X GET` against an endpoint allowlist, and prints a `Blocked:` line on a mismatch. It never writes a setting (0000384 ADR-003).
 
+**Light discovery and audits.** A fix or small change can take the light P0 track. The orchestrator offers it, and `discovery.md` records `Track: light` or `Track: full`. A light run still writes `discovery.md`, `design.md`, and the build log, and it switches to the full track and logs `Track switched: light to full` if the change grows. Coaching records group into one commit per topic, while a requirement, an ADR, and `design.md` commit at once. P0 coaching checks that a criterion's tested content exists and asks whether a major bump is pre-approved for an advisory fix. The plan skill re-runs the dependency audit before the plan gate and logs `Audit: re-run at P1 ({result})` (0000387).
+
 ### Install lifecycle
 
 `setup.sh` and `setup.ps1` carry three lifecycle flags. `--doctor` checks the install and exits 1 on a problem. `--update {source}` copies the pack from a local folder, commits it, and reruns setup with the flags in `plan/state/{tool}.md`. `--uninstall` reverses the setup changes, keeps the developer's own entries and every `plan/` record, and refuses while `plan/.orchestrator-active` or `plan/.initiative-runner.lock` exists. All three run through `scripts/install-lifecycle.mjs`, so both shells share one implementation (0000382 ADR-001, ADR-003).

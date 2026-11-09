@@ -71,6 +71,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Resumed after interruption: {unit} rerun, {stash note}
 - Tests run: REQ-{nnn}: {test files} ({ISO-8601 timestamp})
 - Tests run: full suite: {n} passed, {m} failed ({ISO-8601 timestamp})
+- Audit: re-run at P1 ({result})
 
 -->
 
