@@ -96,11 +96,13 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-09T07:35:44Z` |
-| End | `TBD` |
-| Wall clock | `TBD` |
+| End | `2026-11-09T07:36:08Z` |
+| Wall clock | `0` |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | 0 |
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | none |
+
+- Complete: P3 (2026-11-09T07:36:08Z)
