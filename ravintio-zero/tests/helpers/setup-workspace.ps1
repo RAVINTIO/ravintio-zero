@@ -7,7 +7,7 @@
 $global:ZeroDir = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
 $global:HostExe = (Get-Process -Id $PID).Path
 
-# The eleven entries setup.sh writes, in order (0000035 ADR-001, 0000043 req-006).
+# The twelve entries setup.sh writes, in order (0000035 ADR-001, 0000043 req-006).
 $global:ExpectedEntries = @(
     'PreToolUse Write gate-write',
     'PreToolUse Edit gate-write',
@@ -17,6 +17,7 @@ $global:ExpectedEntries = @(
     'PreToolUse Edit em-dash-guard',
     'PreToolUse Bash merge-guard',
     'PreToolUse Bash block-forced-add',
+    'PreToolUse Bash gate-write',
     'UserPromptSubmit .* auto-trigger-orchestrator',
     'UserPromptSubmit .* check-orchestrator-presence',
     'UserPromptSubmit .* check-design'
@@ -42,8 +43,18 @@ function New-SetupWorkspace {
     # Without its own repo, setup's git config would reach a parent repo
     # (0000036 S-001).
     if ($LASTEXITCODE -ne 0) { throw "git init failed in $ws" }
+    Save-WorkspacePack $ws
     $global:Workspaces += $ws
     return $ws
+}
+
+# Commits a workspace's pack and override folders (0000382 ADR-002). Setup
+# refuses uncommitted pack files, so a suite calls this after it copies the
+# pack and after it plants any file in ravintio-zero/ or ravintio-overrides/.
+function Save-WorkspacePack {
+    param([string]$Workspace)
+    & git -C $Workspace add -A . 2>&1 | Out-Null
+    & git -C $Workspace -c user.email=test@example.com -c user.name=test -c commit.gpgsign=false -c core.hooksPath=/dev/null commit -q --allow-empty -m "Commit the test pack" 2>&1 | Out-Null
 }
 
 function Remove-SetupWorkspace {
@@ -62,6 +73,8 @@ function Remove-AllWorkspaces {
 # and the combined output.
 function Invoke-Setup {
     param([string]$Workspace, [string[]]$SetupArgs)
+    # A suite may plant a file in the pack or overrides first, so commit before each run.
+    Save-WorkspacePack $Workspace
     $setup = Join-Path $Workspace 'ravintio-zero\setup.ps1'
     Push-Location $Workspace
     # Stop git searching above the workspace's parent folder.

@@ -195,7 +195,12 @@ const SETUP_OUTPUT = ['.claude', 'CLAUDE.md', 'AGENTS.md', '.codex'];
 
 class Stop extends Error {}
 
-const out = (line) => writeSync(1, `${line}\n`);
+// Local time as hh:mm, 24-hour and zero padded. Every printed line starts with it (0000388).
+const clock = () => {
+  const d = new Date();
+  return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+};
+const out = (line) => writeSync(1, `${clock()} ${line}\n`);
 
 function parseArgs(argv) {
   let root = process.cwd();

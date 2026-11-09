@@ -30,7 +30,7 @@ promises() {
 }
 
 live_files() {
-  git -C "$ROOT_DIR" ls-files -- . ':!plan/_archive' ':!plan/changelog' ':!plan/current' ":!$SELF_REL" \
+  git -C "$ROOT_DIR" ls-files -- . ':!plan/_archive' ':!plan/changelog' ':!docs/adr' ':!docs/decisions-index.md' ':!plan/current' ":!$SELF_REL" \
     | sed "s|^|$ROOT_DIR/|"
 }
 

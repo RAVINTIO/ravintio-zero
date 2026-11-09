@@ -14,12 +14,14 @@ trap 'rm -rf "$TMP"' EXIT
 WS=$(mktemp -d "$TMP/ws_XXXXXX")
 cp -r "$ZERO_DIR" "$WS/ravintio-zero"
 git init "$WS" >/dev/null 2>&1
+commit_workspace_pack "$WS"
 CAP="$WS/ravintio-overrides/capability-skills"
 mkdir -p "$CAP/my-skill/references" "$CAP/my-skill/scripts" "$CAP/no-skill-md/references"
 printf -- '---\nname: my-skill\ndescription: A test skill.\n---\n# My skill\n' >"$CAP/my-skill/SKILL.md"
 echo ref >"$CAP/my-skill/references/guide.md"
 echo run >"$CAP/my-skill/scripts/run.sh"
 echo orphan >"$CAP/no-skill-md/references/orphan.md"
+commit_workspace_pack "$WS"
 (cd "$WS" && GIT_CEILING_DIRECTORIES="$(dirname "$WS")" bash ravintio-zero/setup.sh claude-code >"$WS/setup.out" 2>"$WS/setup.err")
 
 SK="$WS/.claude/skills"

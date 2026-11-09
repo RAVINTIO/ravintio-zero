@@ -59,7 +59,7 @@ Strict mode makes every session prove that it loaded the orchestrator. By defaul
 .\ravintio-zero\setup.ps1 claude-code --strict-orchestrator
 ```
 
-Setup then writes `plan/.orchestrator-strict`.
+Setup then writes `plan/.orchestrator-strict`. A later run without a strict flag keeps the file. To turn strict mode off, run setup with `--no-strict-orchestrator`. Setup removes the file and prints that it did.
 
 ### Strict mode and the session acknowledgement
 
@@ -137,7 +137,15 @@ The tracked record of setup flags per tool lives at `plan/state/{tool}.md`, not 
 
 ## Updating the pack
 
-After pulling new files into `ravintio-zero/`, re-run the setup script to propagate changes. Pass the same flags used during initial setup. Re-running is idempotent, and it prunes skills the new version has retired.
+To update from a newer copy of the pack, run the update command. It copies the pack from a local folder, commits the new pack files, and runs setup again with the flags in `plan/state/{tool}.md`:
+
+```bash
+./ravintio-zero/setup.sh claude-code --update ../zero/ravintio-zero
+```
+
+Update refuses if `ravintio-zero/` holds uncommitted files. To check the result, run `./ravintio-zero/setup.sh claude-code --doctor`. Doctor exits 1 and names each problem.
+
+If you copy the pack by hand, commit it first. Setup copies only committed files in `ravintio-zero/` and `ravintio-overrides/`. It lists each uncommitted file and copies nothing. It has no flag to skip this check. Then re-run the setup script to propagate changes. Pass the same flags used during initial setup. Re-running is idempotent, and it prunes skills the new version has retired.
 
 ```bash
 # macOS / Linux
@@ -152,6 +160,12 @@ After pulling new files into `ravintio-zero/`, re-run the setup script to propag
 After updating, check `ravintio-zero/migrations/` for any pending `.md` files. The orchestrator handles them automatically at next session start via the `ravintio-migrator` skill.
 
 → [Full update protocol and migration handling](pipeline-reference.md#updating-the-pack)
+
+### Removing the pack
+
+To reverse the setup changes, run `./ravintio-zero/setup.sh claude-code --uninstall`. Uninstall unsets `core.hooksPath` and removes the RAVINTIO hook entries from `.claude/settings.json`. It also removes the skills, commands, and hook scripts that setup installed, and the workflow and `.gitattributes` when they match the pack copies. It prints each change.
+
+Uninstall keeps your own `settings.json` entries and files. It deletes no record under `plan/` and lists the records. It also keeps `CLAUDE.md`, `ravintio-zero/`, and `ravintio-overrides/`. It refuses while `plan/.orchestrator-active` or `plan/.initiative-runner.lock` exists.
 
 ---
 

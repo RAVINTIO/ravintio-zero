@@ -29,6 +29,10 @@
 - Deployment: {topology summary}
 - API versioning: {strategy or "not applicable"}
 
+## Component Paths
+<!-- List every folder the plan writes. gate-write blocks writes outside this list. -->
+- {folder the plan writes}/
+
 ## Scope
 - In: {list}
 - Out: {list}

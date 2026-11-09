@@ -47,7 +47,7 @@ Write each artifact to disk as you complete it. Do not accumulate artifacts in m
 | Scope | `plan/current/scope.md` - in, out, and deferred all stated explicitly |
 | Risk register | `plan/current/risk-register.md` |
 | Domain glossary | `plan/current/domain-glossary.md` |
-| ADRs | `plan/current/adr/ADR-{NNN}-{title}.md` - one per significant decision |
+| ADRs | `docs/adr/{NNNN}-{slug}.md` - one per significant decision, status `proposed` |
 
 **Conditional set - produced only when its trigger holds.** A trigger is declared in the feature brief or inferred from a stated property of the confirmed design, never from feature size or story count. Absent a trigger, omit the artifact entirely. No empty or N/A placeholder files.
 
@@ -117,9 +117,11 @@ A decision needs an ADR when it meets any of these criteria:
 No ADR for decisions already mandated by the requirements, direct consequences of the stack declaration, or single-component implementation details. Write one ADR recording the stack choice itself, referencing the design.
 
 - Follow `ravintio-zero/templates/adr.template.md`. Be specific. Vague ADRs are useless.
-- Number sequentially from ADR-001.
+- Reserve each number with `node ravintio-zero/scripts/reserve-id.mjs --file docs/adr/.next-id`. Commit the counter on its own, before the ADR.
+- Write the ADR to `docs/adr/{NNNN}-{slug}.md` with status `proposed`. Ship sets it to `accepted`. Name its component in the `Component` field.
+- If an ADR picks a shell feature, add a line `Oldest shell: {shell and version}` and check that the feature exists there. Check 9 enforces it.
 - Consequences include at least one positive and one negative.
-- If a decision supersedes a prior ADR, mark the prior one `Superseded by ADR-{NNN}` and reference it in the new ADR's context.
+- If a decision supersedes a prior ADR, the new ADR names the one it replaces. Mark the prior one `Superseded by {number}`. Nobody deletes an ADR.
 
 ## Gate
 
@@ -127,14 +129,17 @@ The plan phase ends at one human gate. Before presenting the gate summary:
 
 1. Run `node ravintio-zero/scripts/consistency-check.mjs` over the artifact set.
 2. Fix what it flags and re-run until clean. This mechanical check is mandatory.
+3. If `plan/current-initiative/initiative.md` exists, run `node ravintio-zero/scripts/human-settings-check.mjs`. On exit 1, print its `Blocked` line and stop before P2.
 
-Then present the artifact set summary and stop for human confirmation.
+Then present the artifact set summary and stop for human confirmation. Agreement follows rule `agree-explicit` in `ravintio-orchestrator/references/orchestrator-p0-coaching.md`.
 
 ## Concurrency plan
 
 Write a `## Concurrency plan` section in each execution plan, per `ravintio-zero/templates/execution-plan.template.md`. Rewrite it in any re-plan after a reopened phase.
 
 - Place two units with no dependency and no shared write target in one batch.
+- Fill the `Shared resources` column with build output, ports, and lock files. Two units in one batch may not share one.
+- Add a living docs unit that writes the files under `docs/` that the run changes. Check 10 requires it.
 - Give a `Sequential reason` for each unit that runs alone in its batch.
 - Name only units from earlier batches in `Depends on`.
 

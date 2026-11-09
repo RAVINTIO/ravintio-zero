@@ -48,6 +48,6 @@ EOT
 OUT="$(cd "$R" && node "$DRIVER" --root "$R" 2>&1)"
 CODE=$?
 assert_equals "1" "$CODE" "req-003 AC-2: non-active status exits 1"
-assert_equals "1" "$(printf '%s\n' "$OUT" | grep -c '^I-C Run: Blocked:')" "req-003 AC-2: line starts I-C Run: Blocked:"
+assert_equals "1" "$(printf '%s\n' "$OUT" | grep -c '^[0-9:]* I-C Run: Blocked:')" "req-003 AC-2: line starts I-C Run: Blocked:"
 
 print_summary

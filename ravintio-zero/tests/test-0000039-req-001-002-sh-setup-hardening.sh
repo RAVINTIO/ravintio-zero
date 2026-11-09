@@ -22,6 +22,7 @@ new_workspace() {
   ws=$(mktemp -d -t ravintio_0000039_req001_test_XXXXXX)
   cp -r "$ZERO_DIR" "$ws/ravintio-zero"
   git init "$ws" >/dev/null 2>&1
+  commit_workspace_pack "$ws"
   mkdir -p "$ws/.claude"
   printf '%s\n' "$ws"
 }
@@ -110,8 +111,8 @@ for line in \
   assert_equals "1" "$(count_lines "$RENDER" "$line")" \
     "req-002 (a): fresh RAVINTIO command appears once: $line"
 done
-assert_equals "2" "$(printf '%s\n' "$RENDER" | grep -c 'gate-write\.mjs' || true)" \
-  "req-002 (a): gate-write runs once per matcher, twice in all"
+assert_equals "3" "$(printf '%s\n' "$RENDER" | grep -c 'gate-write\.mjs' || true)" \
+  "req-002 (a): gate-write runs once per matcher, three times in all"
 
 echo ""
 echo "=== req-002 (b): single-object user hooks stay as they were ==="

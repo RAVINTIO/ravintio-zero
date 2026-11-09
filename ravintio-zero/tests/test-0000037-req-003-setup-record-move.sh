@@ -89,6 +89,7 @@ mkdir -p "$WS/plan/state"
 [ -f "$RECORD" ] && cp "$RECORD" "$WS/$RECORD"
 [ -d ravintio-overrides ] && cp -r ravintio-overrides "$WS/ravintio-overrides"
 git init "$WS" >/dev/null 2>&1
+commit_workspace_pack "$WS"
 
 cd "$WS"
 # Setup runs with the tracked flags, so the copy's record keeps them.

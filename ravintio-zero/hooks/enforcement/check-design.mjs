@@ -7,7 +7,9 @@
  * start of every turn (REQ-005, ADR-004).
  *
  * Receives: JSON on stdin (Claude Code UserPromptSubmit hook input or common envelope)
- * Outputs: JSON { additionalContext: "<string>" } on stdout, or nothing on skip.
+ * Outputs: JSON { additionalContext: "<string>" } on stdout. Every context
+ * starts with the local time as hh:mm, so replies can lead with it (feature
+ * 0000388, REQ-001). The hook prints nothing only when it fails.
  *
  * Always exits 0 — never blocks a turn (ADR-005).
  */
@@ -19,6 +21,22 @@ import { readStdin } from "./read-stdin.mjs";
 
 // Headings that introduce the scope section in design.md
 const SCOPE_SECTION_RE = /^##\s+(Component Paths|Scope)\s*$/im;
+
+// Local time as hh:mm, 24-hour and zero padded.
+function timeLine() {
+  const now = new Date();
+  const pad = (n) => String(n).padStart(2, "0");
+  return (
+    `[RAVINTIO] Local time: ${pad(now.getHours())}:${pad(now.getMinutes())}. ` +
+    "Start every reply with this time before the prefix."
+  );
+}
+
+function emit(body) {
+  const additionalContext = body ? `${timeLine()}\n${body}` : timeLine();
+  process.stdout.write(JSON.stringify({ additionalContext }));
+  process.exit(0);
+}
 
 function extractScope(content) {
   const match = SCOPE_SECTION_RE.exec(content);
@@ -46,32 +64,27 @@ try {
   const featureBriefPath = join(cwd, "plan", "current", "feature-brief.md");
   const sentinelPath = join(cwd, "plan", ".orchestrator-active");
   if (!existsSync(featureBriefPath) && !existsSync(sentinelPath)) {
-    const additionalContext =
+    emit(
       "[RAVINTIO] STOP — No feature brief and no orchestrator sentinel detected. " +
-      "Before writing any code or plan artefacts, load the ravintio-orchestrator " +
-      "skill and complete P0 Discovery.";
-    process.stdout.write(JSON.stringify({ additionalContext }));
-    process.exit(0);
+        "Before writing any code or plan artefacts, load the ravintio-orchestrator " +
+        "skill and complete P0 Discovery.",
+    );
   }
 
   const designPath = join(cwd, "plan", "current", "design.md");
-  if (!existsSync(designPath)) process.exit(0);
+  if (!existsSync(designPath)) emit("");
 
   let designContent;
   try {
     designContent = readFileSync(designPath, "utf-8");
   } catch {
-    process.exit(0);
+    emit("");
   }
 
   const scopeSection = extractScope(designContent);
-  if (!scopeSection) process.exit(0);
+  if (!scopeSection) emit("");
 
-  const additionalContext =
-    "[RAVINTIO] Confirmed scope from plan/current/design.md:\n\n" + scopeSection;
-
-  process.stdout.write(JSON.stringify({ additionalContext }));
-  process.exit(0);
+  emit("[RAVINTIO] Confirmed scope from plan/current/design.md:\n\n" + scopeSection);
 } catch {
   // UserPromptSubmit must never block a turn — silent fallback (ADR-005).
   process.exit(0);

@@ -85,6 +85,7 @@ KNOWN_NON_SUITES=(
   "test-0000164-req-001-gate-write-outside-project.mjs"  # called by the req-001 .sh suite
   "test-0000164-req-002-gate-write-documented-scope.mjs" # called by the req-002 .sh suite
   "test-0000164-req-006-gate-write-symlink-cases.mjs"    # called by the req-006 .sh suite
+  "test-0000393-req-001-gate-write-shell.mjs"            # called by the 0000393 req-001 .sh suite
   "regression/test-gate-write-windows.mjs" # the regression copy of the same
   "regression/regression-manifest.json"    # the promoted-suite list
   "regression/.gitkeep"                    # keeps the folder in git

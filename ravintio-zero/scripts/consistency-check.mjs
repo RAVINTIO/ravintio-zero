@@ -11,8 +11,9 @@
  *   1. Story traceability — every requirement file names a Source user story
  *   2. Acceptance criteria — no requirement exceeds 3 criteria in its
  *      "## Acceptance Criteria" section
- *   3. ADR references — every ADR-NNN referenced anywhere resolves to a file
- *      in adr/
+ *   3. ADR references — every ADR-NNN or ADR-NNNN referenced anywhere
+ *      resolves to a file in adr/, or to a NNNN-*.md file in ../../docs/adr
+ *      (feature 0000384)
  *   4. Risk mitigations — every R-NNN row in risk-register.md has a non-empty
  *      Mitigation column
  *   5. Design scope — design.md declares a Scope (or Component Paths) section
@@ -31,7 +32,15 @@
  *      row. Each Batch is a positive whole number. A unit alone in its batch
  *      has a Sequential reason. Two units in one batch share no Writes path.
  *      Each Depends on names a unit in an earlier batch. A missing
- *      execution-plan.md skips the check.
+ *      execution-plan.md skips the check. An optional "Shared resources"
+ *      column (feature 0000384) lists build output, ports, and lock files. Two
+ *      units in one batch that name the same resource are a finding. A plan
+ *      without the column adds no finding.
+ *   9. Shell version (feature 0000384, ADR-002) — an ADR in adr/ that names a
+ *      Bash 4 or later feature needs a line that starts "Oldest shell:".
+ *  10. Living docs unit (feature 0000384, ADR-002) — a Concurrency plan holds
+ *      a unit that writes a path under docs/. A missing execution-plan.md, or
+ *      one with no Concurrency plan table, skips the check.
  *
  * A finding that echoes a story map row label prints at most 200 characters of
  * it, with a trailing marker if it cut the label (feature 0000198).
@@ -171,6 +180,7 @@ if (planText !== null) {
     .filter((s) => s !== "" && s.toLowerCase() !== "none" && s !== "-");
   const units = [];
   let idx = null;
+  let resCol = -1;
   if (body === null) {
     findings.push("execution-plan.md: no '## Concurrency plan' section — plan has no batches");
   } else {
@@ -180,7 +190,10 @@ if (planText !== null) {
       if (cells.every((c) => /^:?-{3,}:?$/.test(c))) continue; // separator row, a lone "-" is data
       if (idx === null) {
         const found = cols.map((n) => cells.findIndex((c) => c.toLowerCase() === n));
-        if (found.every((i) => i !== -1)) idx = found;
+        if (found.every((i) => i !== -1)) {
+          idx = found;
+          resCol = cells.findIndex((c) => c.toLowerCase() === "shared resources");
+        }
         continue;
       }
       units.push({
@@ -189,6 +202,7 @@ if (planText !== null) {
         writes: list(cells[idx[2]] ?? ""),
         batchRaw: (cells[idx[3]] ?? "").replace(/`/g, "").trim(),
         reason: (cells[idx[4]] ?? "").replace(/`/g, "").trim(),
+        resources: resCol === -1 ? [] : list(cells[resCol] ?? ""),
       });
     }
     if (idx === null) {
@@ -196,6 +210,10 @@ if (planText !== null) {
     } else if (units.length === 0) {
       findings.push("execution-plan.md: Concurrency plan table has no unit row");
     }
+  }
+  // 10: living docs unit (feature 0000384)
+  if (idx !== null && !units.some((u) => u.writes.some((w) => /^(\.\/)?docs\//.test(w)))) {
+    findings.push("execution-plan.md: Concurrency plan has no living docs unit that writes a path under docs/");
   }
   for (const u of units) {
     u.label = cap(u.name || "(unnamed unit)");
@@ -224,6 +242,9 @@ if (planText !== null) {
       for (const p of u.writes.filter((w) => o.writes.includes(w))) {
         findings.push(`execution-plan.md: units ${u.label} and ${cap(o.name)} both write ${cap(p)} in batch ${u.batch}`);
       }
+      for (const r of u.resources.filter((x) => o.resources.includes(x))) {
+        findings.push(`execution-plan.md: units ${u.label} and ${cap(o.name)} both use shared resource ${cap(r)} in batch ${u.batch}`);
+      }
     }
   }
 }
@@ -235,10 +256,18 @@ const adrIds = new Set(
     .map((f) => f.match(/^(ADR-\d{3})/)?.[1])
     .filter(Boolean),
 );
+// Shipped ADRs live in docs/adr/NNNN-*.md, two levels above plan/current (feature 0000384).
+const docsAdrDir = join(dir, "..", "..", "docs", "adr");
+const docsAdrNums = new Set(
+  (existsSync(docsAdrDir) ? readdirSync(docsAdrDir) : [])
+    .map((f) => f.match(/^(\d{4})-.*\.md$/)?.[1])
+    .filter(Boolean),
+);
 
 function scanAdrRefs(relPath, text) {
-  for (const ref of new Set(text.match(/ADR-\d{3}/g) ?? [])) {
-    if (!adrIds.has(ref)) {
+  for (const ref of new Set(text.match(/ADR-\d{3,4}(?!\d)/g) ?? [])) {
+    const num = ref.slice(4).padStart(4, "0");
+    if (!adrIds.has(ref) && !docsAdrNums.has(num)) {
       findings.push(`${relPath}: references ${ref} but no such file exists in adr/`);
     }
   }
@@ -251,6 +280,28 @@ for (const f of ["design.md", "execution-plan.md", "scope.md"]) {
 // ADRs may reference each other too
 for (const f of existsSync(adrDir) ? readdirSync(adrDir).filter((x) => x.endsWith(".md")) : []) {
   scanAdrRefs(`adr/${f}`, read(join(adrDir, f)) ?? "");
+}
+
+// ---- 9: shell version (feature 0000384, ADR-002) ----------------------------
+const BASH4 = [
+  ["command_not_found_handle", /command_not_found_handle/],
+  ["declare -A", /declare\s+-A\b/],
+  ["mapfile", /\bmapfile\b/],
+  ["readarray", /\breadarray\b/],
+  ["coproc", /\bcoproc\b/],
+  ["globstar", /\bglobstar\b/],
+  ["wait -n", /\bwait\s+-n\b/],
+  ["${var,,}", /\$\{\w+,,\}/],
+  ["${var^^}", /\$\{\w+\^\^\}/],
+  ["&>>", /&>>/],
+  ["|&", /\|&/],
+];
+for (const f of existsSync(adrDir) ? readdirSync(adrDir).filter((x) => x.endsWith(".md")) : []) {
+  const t = read(join(adrDir, f)) ?? "";
+  if (/^\s*(?:[-*]\s+)?Oldest shell:/m.test(t)) continue;
+  for (const [name, re] of BASH4) {
+    if (re.test(t)) findings.push(`adr/${f}: names Bash 4 feature ${name} but has no 'Oldest shell:' line`);
+  }
 }
 
 // ---- 4: risks have mitigations ---------------------------------------------

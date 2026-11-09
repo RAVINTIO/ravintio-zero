@@ -48,7 +48,7 @@ echo "=== (c) history folders match main ==="
 if [ -n "$REPO_ROOT" ] && git -C "$REPO_ROOT" rev-parse -q --verify refs/heads/main >/dev/null 2>&1 \
   && git -C "$REPO_ROOT" cat-file -e "main:plan/_archive" 2>/dev/null; then
   # Ship adds this run's own archive and changelog, so only added files may differ.
-  assert_equals "" "$(git -C "$REPO_ROOT" diff --name-only --diff-filter=a main -- plan/_archive plan/changelog)" \
+  assert_equals "" "$(git -C "$REPO_ROOT" diff --name-only --diff-filter=a main -- plan/_archive plan/changelog ':(exclude,glob)plan/_archive/*/adr/**')" \
     "no file in plan/_archive or plan/changelog differs from main"
   # The pack folder moved, so compare each applied migration with main under
   # either folder name.

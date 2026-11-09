@@ -1,0 +1,1 @@
+ADRs moved to docs/adr/. See 0168-stack-unchanged.md, 0169-gate-write-scopes-to-the-project-by-real-path.md, 0170-retire-telemetry-cleanup-keep-retired-hooks-list.md, 0171-file-backlog-skill-never-touches-target-git.md, 0172-relabel-rename-release-as-0-12-0.md.

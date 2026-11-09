@@ -36,6 +36,7 @@ echo "=== req-005 (a): a setup.sh run removes a planted leftover ==="
 WS=$(mktemp -d -t ravintio_0000035_req005_test_XXXXXX)
 cp -r "$ZERO_DIR" "$WS/ravintio-zero"
 git init "$WS" >/dev/null 2>&1
+commit_workspace_pack "$WS"
 mkdir -p "$WS/.claude"
 echo 'partial' > "$WS/$LEFTOVER"
 (cd "$WS" && bash ravintio-zero/setup.sh claude-code >/dev/null 2>&1)

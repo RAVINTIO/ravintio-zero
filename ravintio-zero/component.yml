@@ -2,7 +2,7 @@
 id: "ravintio-zero"
 name: "RAVINTIO Zero"
 feature: "0000378-merge-time-versioning"
-version: "0.62.0"
+version: "0.66.0"
 status: "active"
 type: "component-pack"
 domain: "developer-tooling"
@@ -27,6 +27,7 @@ responsibilities:
   - "Fail setup on a retired flag during argument parsing, naming the flag and leaving the repo unchanged, and check the tool before any other processing"
   - "Write settings.json through a same-folder temporary file and a rename, so a failed write never truncates it"
   - "Wire the same six enforcement hooks from setup.sh and setup.ps1, and check the match with a parity suite"
+  - "Check shell writes (redirects, tee, and sed -i) in gate-write on the Bash matcher, close option-value and brace-group bypasses in block-forced-add, compare the pack version with plan/state/pack-version.md in resume detection, and run the wording check at backlog filing"
   - "Run every test suite, Bash and PowerShell, and fail the run on any test file it would otherwise skip without a word"
   - "Fail a Bash suite that calls an undefined assert function, and skip the installed-copies check while an initiative is active and the install lags the pack"
   - "Repair the hook entries setup owns: remove RAVINTIO PreToolUse entries on any matcher, and replace a non-array hook event value with a warning"
@@ -68,6 +69,10 @@ responsibilities:
   - "Reshape and check an initiative branch in merge order, and fold the admin commits that clear a replay conflict"
   - "Run up to the chart's Concurrency of initiative steps at once, each in its own worktree, and merge each ready step PR through merge-queue.mjs in ready order"
   - "Parse the initiative chart Steps table by header name, with its Lane and After columns and the Concurrency field, with initiative-chart.mjs"
+  - "Install only committed pack and override files: setup lists each uncommitted file and copies nothing, and has no bypass flag"
+  - "Check an install with --doctor, update the pack from a local folder with --update, and reverse setup with --uninstall, through scripts/install-lifecycle.mjs for setup.sh and setup.ps1"
+  - "Keep strict mode as it is across re-runs, and turn it off only with --no-strict-orchestrator"
+  - "Generate ravintio-zero/pack-facts.json from the pack with scripts/pack-facts.mjs, and fail CI when the committed file is stale"
 
 exceptions:
   - "Does not generate application code. That is the implement phase's job in consumer projects."
