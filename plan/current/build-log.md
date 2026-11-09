@@ -39,6 +39,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 
 - Design confirmed by the human (2026-11-09T14:10:20Z). Run mode: autonomous. Run speed: fast.
 
+Complete: P0 (2026-11-09T14:10:20Z)
+
 ### P1: Plan
 
 | Field | Value |
@@ -53,7 +55,9 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Parallel task batches | `1` |
 | Notes | Two requirements and ADR-0284, which supersedes ADR-0126. Consistency check clean. Autonomous run, so the plan gate does not stop. |
 
-- P1 Plan: Complete: 2 requirements, 1 ADR (2026-11-09T14:13:09Z)
+- Consistency check: clean (2026-11-09T14:13:09Z). Autonomous run: the plan gate passes with no human stop.
+
+Complete: P1 (2026-11-09T14:13:09Z)
 
 ### P2: Implement
 
@@ -70,4 +74,6 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Notes | Inline, because U-002 depends on U-001 and both are small. REQ-001 RED with 19 failures, then GREEN. One test expectation was wrong (shard 3 of 3 runs one suite of five), so the test now checks shard 2 of 3. REQ-002 updated the three CI-shape tests to read the shard jobs, and the summary jobs carry the job-guard marker because their `if` adds `always()`. |
 
 - Rework: REQ-001: the test expected two suites in shard 3 of 3, where five suites give one (2026-11-09T14:15:40Z)
-- P2 Implement: Complete: REQ-001 and REQ-002 GREEN (2026-11-09T14:18:34Z)
+- Done: U-001 REQ-001 runner shards, GREEN at `64544398`. U-002 REQ-002 workflow shards, GREEN at `11f02108` (2026-11-09T14:18:34Z)
+
+Complete: P2 (2026-11-09T14:18:34Z)
