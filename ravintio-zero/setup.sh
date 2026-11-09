@@ -16,6 +16,12 @@ SKILLS_SRC="$SCRIPT_DIR/skills"
 WORKFLOWS_SRC="$SCRIPT_DIR/workflows"
 SETUP_DIR="$SCRIPT_DIR/setup"
 
+# The archetype verb runs before argument parsing and only dispatches (0000391 ADR-0293).
+if [ "${1:-}" = "archetype" ]; then
+  shift
+  exec node "$SCRIPT_DIR/scripts/archetype.mjs" "$@" --root "$PROJECT_ROOT"
+fi
+
 VALID_TOOLS="claude-code codex"
 STRICT_ORCHESTRATOR=false
 NO_WRITING_STYLE=false
