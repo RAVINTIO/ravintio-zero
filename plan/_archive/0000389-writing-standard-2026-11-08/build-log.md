@@ -76,6 +76,7 @@ Complete: P1 (2026-11-08T01:08:06Z)
 | Notes | U1 and U2 inline. U3, U4, U5 in one parallel batch on sonnet. U1 and U2 departed from the TDD trio: inline, because each is small and U2 reads U1 output. |
 - Rework: REQ-003: generator printed nothing through a symlinked path, fixed with realpath (2026-11-08T02:17:44Z)
 - Rework: REQ-005: regression copy of the v0.4.0 pin lacked outputStyle (2026-11-08T02:17:44Z)
+- Rework: merge of initiative/0000360-backlog-sweep into PR #135: kept both sides in setup.sh, setup.ps1, the dispatch standard, and the v0.4.0 pins, renumbered backlog 0000403 and 0000404 to 0000407 and 0000408, and moved the four ADRs to docs/adr/0277 to 0280 (2026-11-09T07:54:46Z)
 Complete: P2 (2026-11-08T02:17:44Z)
 
 ### P3: Validate and Accept
