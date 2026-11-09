@@ -45,3 +45,19 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Scope Lock complete. All four scenario paths captured.
 - Version: 0.66.0 plus minor bump gives 0.67.0. The merge queue sets the released version.
 - Complete: P0 (2026-11-09T06:49:55Z)
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-09T06:50:50Z` |
+| End | `TBD` |
+| Wall clock | `TBD` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | none |
+
+- Decision applied (initiative chart): P1 runs, no skip row.
