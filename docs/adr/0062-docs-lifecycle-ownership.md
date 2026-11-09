@@ -20,15 +20,15 @@ feature: "0000014-improve-adoption-mode-selection"
 
 ## Context
 
-With `docs/about.md` introduced as a living artifact (ADR-0055) and `docs/` established as the living state layer, a clear ownership model is needed for when `docs/` is created, who is responsible for it at each phase, and what happens when it is absent at P6.
+ADR-0055 introduced `docs/about.md` as a living artifact and `docs/` as the living state layer. The pipeline needs a clear ownership model. The model covers when the pipeline creates `docs/`, who is responsible for it at each phase, and what happens when it is absent at P6.
 
-Previously, `docs/` creation was implicit — it happened whenever the docs-agent ran and happened to write something. This created a failure mode where the docs-agent (P6) or ship-agent (P7) would fail silently if `docs/` was absent.
+Previously, `docs/` creation was implicit. It happened whenever the docs-agent ran and happened to write something. This created a failure mode where the docs-agent (P6) or ship-agent (P7) would fail silently if `docs/` was absent.
 
 ---
 
 ## Decision
 
-**`docs/` lifecycle is owned as follows:**
+**`docs/` lifecycle ownership works as follows:**
 
 | Phase | Action | Owner |
 |-------|--------|-------|
@@ -36,9 +36,9 @@ Previously, `docs/` creation was implicit — it happened whenever the docs-agen
 | P6 | Gate fails if `docs/` absent; docs-agent writes to `docs/` | planifest-docs-agent |
 | P7 | Create `docs/` defensively if absent (should never be needed); write `docs/about.md` as blocking step | planifest-ship-agent |
 
-P0 is the creation point because it is the earliest phase and ensures `docs/` is available throughout the pipeline. The P6 gate failure (not a silent create) is intentional: if P0 ran and `docs/` is missing at P6, something unexpected happened, and the agent should surface it rather than silently repair it.
+P0 is the creation point because it is the earliest phase and ensures `docs/` is available throughout the pipeline. The P6 gate failure (not a silent create) is intentional. If P0 ran and `docs/` is missing at P6, something unexpected happened. The agent should surface it rather than silently repair it.
 
-The ship-agent creates `docs/` defensively at P7 as a last-resort guard against the case where `docs/` was deleted between P6 and P7. This should never be needed in normal operation.
+The ship-agent creates `docs/` defensively at P7 as a last-resort guard against the case where something deleted `docs/` between P6 and P7. This should never be needed in normal operation.
 
 ---
 
@@ -68,20 +68,20 @@ The ship-agent creates `docs/` defensively at P7 as a last-resort guard against 
 **Positive:**
 - `docs/` is always available when needed throughout the pipeline
 - P6 gate failure surfaces unexpected state rather than silently repairing it
-- `docs/about.md` write at P7 is guaranteed a valid target directory
+- `docs/about.md` write at P7 always has a valid target directory
 
 **Negative:**
 - P0 now has a filesystem side effect (directory creation) beyond writing plan/ artifacts
-- P6 gate failure requires human diagnosis; it cannot self-heal
+- P6 gate failure requires human diagnosis. It cannot self-heal
 
 **Risks:**
-- If P0 creates `docs/` and a later process deletes it before P6, the gate fails; this scenario is unlikely but the defensive P7 create handles the P7 case
+- If P0 creates `docs/` and a later process deletes it before P6, the gate fails. This scenario is unlikely, but the defensive P7 create handles the P7 case
 
 ---
 
 ## Related ADRs
 
-- ADR-0055 — depends-on (docs/about.md is the artifact that drives this lifecycle decision)
+- ADR-0055: depends-on (docs/about.md is the artifact that drives this lifecycle decision)
 
 ---
 

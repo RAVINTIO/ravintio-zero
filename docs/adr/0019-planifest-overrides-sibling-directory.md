@@ -17,13 +17,13 @@ feature: "0000005-framework-governance"
 
 ## Context
 
-Human customisations (library overrides, capability skills, repo-specific instructions) currently have no designated home. If they live inside `planifest-framework/`, they are lost when a team upgrades the framework by replacing that directory. A durable location is needed that survives framework upgrades.
+Human customisations (library overrides, capability skills, repo-specific instructions) currently have no designated home. If they live inside `planifest-framework/`, a team loses them when it upgrades the framework by replacing that directory. The team needs a durable location that survives framework upgrades.
 
 ---
 
 ## Decision
 
-A `planifest-overrides/` directory at the repo root, sibling to `planifest-framework/`. It contains: `library-standards/`, `capability-skills/`, and `instructions/` subdirs. Setup scripts read from it but never write to it. Absence of the directory is a valid no-op — all customisation is optional.
+A `planifest-overrides/` directory at the repo root, sibling to `planifest-framework/`. It contains: `library-standards/`, `capability-skills/`, and `instructions/` subdirs. Setup scripts read from it but never write to it. Absence of the directory is a valid no-op because all customisation is optional.
 
 ---
 
@@ -51,20 +51,20 @@ A `planifest-overrides/` directory at the repo root, sibling to `planifest-frame
 ## Consequences
 
 **Positive:**
-- Framework upgrades are safe — replacing `planifest-framework/` cannot affect `planifest-overrides/`
-- Clear ownership: `planifest-framework/` is framework-managed; `planifest-overrides/` is human-managed
-- Absence is a no-op — teams that don't need overrides don't need the directory
+- Framework upgrades are safe: replacing `planifest-framework/` cannot affect `planifest-overrides/`
+- Clear ownership: the framework manages `planifest-framework/` and humans manage `planifest-overrides/`
+- Absence is a no-op: teams that don't need overrides don't need the directory
 
 **Negative:**
 - Two directories at repo root to explain to new team members
-- Agents must check two paths for every lookup — minor overhead, mitigated by graceful fallback
+- Agents must check two paths for every lookup. This is minor overhead, and graceful fallback mitigates it
 
 **Risks:**
-- A future setup script change could accidentally write to `planifest-overrides/` — mitigated by explicit test in acceptance criteria
+- A future setup script change could accidentally write to `planifest-overrides/`. An explicit test in the acceptance criteria mitigates this
 
 ---
 
 ## Related ADRs
 
-- ADR-0018 — extends (library-standards overrides live in this directory)
-- ADR-0023 — extends (permanent capability skills live in this directory)
+- ADR-0018 - extends (library-standards overrides live in this directory)
+- ADR-0023 - extends (permanent capability skills live in this directory)

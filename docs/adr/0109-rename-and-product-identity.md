@@ -27,11 +27,11 @@ Rename the folder to `planifest-zero/` with `git mv`, so file history follows th
 
 Historical records in `plan/_archive/` and `plan/changelog/` are not rewritten. They describe the past accurately, and the past used the old name.
 
-`product.yml` id becomes `"planifest-zero"`. Telemetry attribution restarts under the new id. This is accepted knowingly. The telemetry stream started on 2026-08-22, so continuity spans six days of events. If continuity is wanted later, the backend can alias the two ids.
+`product.yml` id becomes `"planifest-zero"`. Telemetry attribution restarts under the new id. The human accepts this knowingly. The telemetry stream started on 2026-08-22, so continuity spans six days of events. If anyone wants continuity later, the backend can alias the two ids.
 
-The refresh script is renamed to `refresh-planifest-zero-dir.ps1` and derives its path from `$PSScriptRoot` instead of a hardcoded literal.
+Rename the refresh script to `refresh-planifest-zero-dir.ps1`. It derives its path from `$PSScriptRoot` instead of a hardcoded literal.
 
-The installed `.claude/` tree is untouched until setup re-runs. It contains no references to the source folder path.
+The installed `.claude/` tree stays as it is until setup re-runs. It contains no references to the source folder path.
 
 ## Alternatives Considered
 
@@ -53,7 +53,7 @@ The installed `.claude/` tree is untouched until setup re-runs. It contains no r
 
 **Positive:**
 - Folder, product, and repository names agree, so a reference to any one of them is unambiguous.
-- The refresh script works on any machine, not only the one it was written on.
+- The refresh script works on any machine, not only the one where someone wrote it.
 - File history survives the rename intact, since `git mv` preserves it.
 
 **Negative:**
@@ -62,7 +62,7 @@ The installed `.claude/` tree is untouched until setup re-runs. It contains no r
 
 **Risks:**
 - A missed live reference could break a script or a test. The grep-sweep acceptance criterion plus the full test suite cover this, but grep coverage is not proof.
-- Telemetry dashboards built against `product_id: planifest-framework` see a new id going forward. The event history involved is small, and this is accepted.
+- Telemetry dashboards built against `product_id: planifest-framework` see a new id going forward. The event history involved is small, and the human accepts this.
 
 ## Related ADRs
 

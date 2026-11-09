@@ -1,636 +1,6 @@
 {
   "version": 1,
   "files": {
-    "README.md": {
-      "passive": 11
-    },
-    "docs/about.md": {
-      "passive": 1
-    },
-    "docs/adr/0001-pretooluse-block-mechanism.md": {
-      "blocklist": 2,
-      "em-dash": 7,
-      "passive": 3,
-      "semicolon": 2,
-      "sentence-length": 1
-    },
-    "docs/adr/0002-allowlist-hardcoded-vs-configurable.md": {
-      "blocklist": 1,
-      "em-dash": 5,
-      "passive": 5,
-      "semicolon": 4,
-      "sentence-length": 3
-    },
-    "docs/adr/0003-unconditional-vs-pattern-based-blocking.md": {
-      "blocklist": 1,
-      "em-dash": 9,
-      "passive": 8,
-      "semicolon": 4,
-      "sentence-length": 1
-    },
-    "docs/adr/0004-hook-script-ownership-split.md": {
-      "em-dash": 6,
-      "passive": 2,
-      "semicolon": 2,
-      "sentence-length": 1
-    },
-    "docs/adr/0005-three-tier-enforcement-model.md": {
-      "em-dash": 5,
-      "passive": 4,
-      "semicolon": 5,
-      "sentence-length": 2
-    },
-    "docs/adr/0006-common-envelope-shape.md": {
-      "em-dash": 3,
-      "passive": 1,
-      "semicolon": 3,
-      "sentence-length": 2
-    },
-    "docs/adr/0007-flag-file-deduplication.md": {
-      "em-dash": 3,
-      "passive": 1,
-      "semicolon": 2
-    },
-    "docs/adr/0008-two-check-gate-model.md": {
-      "blocklist": 1,
-      "em-dash": 5,
-      "passive": 5,
-      "semicolon": 1,
-      "sentence-length": 1
-    },
-    "docs/adr/0009-exit-zero-failure-mode.md": {
-      "em-dash": 2,
-      "passive": 3,
-      "semicolon": 1,
-      "sentence-length": 2
-    },
-    "docs/adr/0010-copy-then-delete-archive.md": {
-      "em-dash": 3,
-      "passive": 1,
-      "semicolon": 2,
-      "sentence-length": 1
-    },
-    "docs/adr/0011-px-prefix-convention.md": {
-      "em-dash": 3,
-      "passive": 5,
-      "semicolon": 1,
-      "sentence-length": 1
-    },
-    "docs/adr/0012-advisory-commit-msg-hook.md": {
-      "em-dash": 5,
-      "passive": 3,
-      "semicolon": 3
-    },
-    "docs/adr/0013-anthropic-first-skill-trust-model.md": {
-      "blocklist": 1,
-      "em-dash": 5,
-      "passive": 5,
-      "semicolon": 2
-    },
-    "docs/adr/0014-plan-scoped-skill-lifecycle.md": {
-      "em-dash": 5,
-      "passive": 6,
-      "semicolon": 1
-    },
-    "docs/adr/0015-tdd-inner-loop-as-codegen-subloop.md": {
-      "em-dash": 9,
-      "passive": 6,
-      "semicolon": 1
-    },
-    "docs/adr/0016-subagent-model-tier-convention.md": {
-      "blocklist": 1,
-      "em-dash": 6,
-      "passive": 5,
-      "semicolon": 1,
-      "sentence-length": 2
-    },
-    "docs/adr/0017-regression-promotion-criteria.md": {
-      "em-dash": 9,
-      "passive": 7,
-      "semicolon": 1
-    },
-    "docs/adr/0018-library-standards-directory-tree.md": {
-      "em-dash": 6,
-      "passive": 1
-    },
-    "docs/adr/0019-planifest-overrides-sibling-directory.md": {
-      "em-dash": 7,
-      "passive": 2,
-      "semicolon": 1
-    },
-    "docs/adr/0020-sentinel-file-orchestrator-enforcement.md": {
-      "em-dash": 6,
-      "passive": 1,
-      "semicolon": 2,
-      "sentence-length": 1
-    },
-    "docs/adr/0021-repo-instructions-via-design-md.md": {
-      "em-dash": 8,
-      "passive": 3,
-      "semicolon": 1,
-      "sentence-length": 1
-    },
-    "docs/adr/0022-markdown-migration-files.md": {
-      "em-dash": 7,
-      "passive": 2,
-      "semicolon": 2,
-      "sentence-length": 2
-    },
-    "docs/adr/0023-two-registry-capability-skills.md": {
-      "em-dash": 8,
-      "passive": 6,
-      "semicolon": 1,
-      "sentence-length": 1
-    },
-    "docs/adr/0024-build-log-as-markdown.md": {
-      "semicolon": 2
-    },
-    "docs/adr/0025-model-tier-abstraction.md": {
-      "em-dash": 1,
-      "passive": 1,
-      "semicolon": 5
-    },
-    "docs/adr/0026-parallelism-as-skill-instructions.md": {
-      "semicolon": 2
-    },
-    "docs/adr/0027-p8-as-separate-phase.md": {
-      "semicolon": 3
-    },
-    "docs/adr/0028-explicit-build-target-field.md": {
-      "em-dash": 9,
-      "sentence-length": 1
-    },
-    "docs/adr/0029-telemetry-guidance-centralised.md": {
-      "em-dash": 4,
-      "passive": 3
-    },
-    "docs/adr/0030-optimise-agent-suggestion-only.md": {
-      "em-dash": 3,
-      "passive": 2,
-      "semicolon": 1
-    },
-    "docs/adr/0031-setup-manifest-for-managed-directories.md": {
-      "em-dash": 4,
-      "passive": 4,
-      "sentence-length": 3
-    },
-    "docs/adr/0032-locale-tagged-language-quirks-files.md": {
-      "em-dash": 4,
-      "passive": 1,
-      "semicolon": 1
-    },
-    "docs/adr/0033-plugin-as-canonical-source-for-routing-rules.md": {
-      "em-dash": 7,
-      "passive": 7,
-      "semicolon": 1,
-      "sentence-length": 6
-    },
-    "docs/adr/0034-no-per-tool-routing-rules-fallback.md": {
-      "em-dash": 3,
-      "passive": 7,
-      "semicolon": 2,
-      "sentence-length": 1
-    },
-    "docs/adr/0035-external-skills-opt-in-flag.md": {
-      "em-dash": 2,
-      "passive": 7,
-      "semicolon": 2,
-      "sentence-length": 1
-    },
-    "docs/adr/0036-attribution-txt-per-skill.md": {
-      "em-dash": 2,
-      "passive": 5,
-      "semicolon": 2
-    },
-    "docs/adr/0037-auto-trigger-hook-plus-fallback.md": {
-      "em-dash": 3,
-      "passive": 5,
-      "semicolon": 2,
-      "sentence-length": 2
-    },
-    "docs/adr/0038-skill-map-in-design-md.md": {
-      "em-dash": 1,
-      "passive": 4,
-      "semicolon": 5,
-      "sentence-length": 1
-    },
-    "docs/adr/0039-gate-write-windows-path-normalisation.md": {
-      "blocklist": 1,
-      "em-dash": 3,
-      "passive": 4,
-      "semicolon": 4,
-      "sentence-length": 2
-    },
-    "docs/adr/0040-pause-resume-via-pause-md.md": {
-      "em-dash": 10,
-      "passive": 7,
-      "semicolon": 3,
-      "sentence-length": 4
-    },
-    "docs/adr/0041-agent-tool-in-allowedtools.md": {
-      "em-dash": 2,
-      "passive": 5,
-      "semicolon": 1,
-      "sentence-length": 2
-    },
-    "docs/adr/0042-skill-name-field-as-canonical-identifier.md": {
-      "em-dash": 6,
-      "passive": 6,
-      "sentence-length": 1
-    },
-    "docs/adr/0043-input-validation-section-conditional.md": {
-      "em-dash": 1,
-      "passive": 3,
-      "semicolon": 1,
-      "sentence-length": 4
-    },
-    "docs/adr/0044-hook-deny-response-format.md": {
-      "blocklist": 1,
-      "em-dash": 5,
-      "passive": 1,
-      "semicolon": 3,
-      "sentence-length": 4
-    },
-    "docs/adr/0045-workspace-hook-config-write-strategy.md": {
-      "blocklist": 1,
-      "em-dash": 5,
-      "passive": 9,
-      "sentence-length": 2
-    },
-    "docs/adr/0046-hook-adapter-architecture.md": {
-      "em-dash": 10,
-      "passive": 2,
-      "semicolon": 2,
-      "sentence-length": 4
-    },
-    "docs/adr/0047-three-file-documentation-architecture.md": {
-      "em-dash": 7,
-      "passive": 1,
-      "semicolon": 1,
-      "sentence-length": 2
-    },
-    "docs/adr/0048-formal-p9-ship-phase.md": {
-      "em-dash": 7,
-      "passive": 4,
-      "semicolon": 2,
-      "sentence-length": 1
-    },
-    "docs/adr/0049-ship-agent-orchestrates-p7-p8-p9.md": {
-      "em-dash": 5,
-      "passive": 1,
-      "semicolon": 3,
-      "sentence-length": 1
-    },
-    "docs/adr/0050-p9-human-push-pr-decision-protocol.md": {
-      "em-dash": 9,
-      "passive": 4,
-      "sentence-length": 1
-    },
-    "docs/adr/0051-run-mode-sentinel-file.md": {
-      "em-dash": 6,
-      "passive": 6
-    },
-    "docs/adr/0052-retroactive-tags-via-migration.md": {
-      "em-dash": 3,
-      "passive": 3,
-      "semicolon": 1,
-      "sentence-length": 1
-    },
-    "docs/adr/0053-four-adoption-mode-taxonomy.md": {
-      "em-dash": 7,
-      "passive": 6,
-      "semicolon": 1,
-      "sentence-length": 3
-    },
-    "docs/adr/0054-signal-conflict-priority-order.md": {
-      "em-dash": 3,
-      "passive": 1,
-      "semicolon": 2,
-      "sentence-length": 4
-    },
-    "docs/adr/0055-docs-about-md-as-version-source.md": {
-      "em-dash": 4,
-      "passive": 6,
-      "semicolon": 1,
-      "sentence-length": 1
-    },
-    "docs/adr/0056-version-bump-rules-by-track.md": {
-      "blocklist": 1,
-      "em-dash": 5,
-      "passive": 3,
-      "semicolon": 2,
-      "sentence-length": 1
-    },
-    "docs/adr/0057-version-regression-hard-block.md": {
-      "em-dash": 5,
-      "passive": 1,
-      "semicolon": 2,
-      "sentence-length": 5
-    },
-    "docs/adr/0058-resumable-migration.md": {
-      "em-dash": 1,
-      "passive": 5,
-      "semicolon": 1,
-      "sentence-length": 2
-    },
-    "docs/adr/0059-derived-scope-lock-scenarios.md": {
-      "em-dash": 3,
-      "passive": 6,
-      "semicolon": 2,
-      "sentence-length": 4
-    },
-    "docs/adr/0060-one-question-at-a-time.md": {
-      "blocklist": 1,
-      "em-dash": 5,
-      "passive": 5,
-      "semicolon": 2,
-      "sentence-length": 3
-    },
-    "docs/adr/0061-incremental-p0-audit-trail.md": {
-      "em-dash": 2,
-      "passive": 4,
-      "semicolon": 1,
-      "sentence-length": 2
-    },
-    "docs/adr/0062-docs-lifecycle-ownership.md": {
-      "em-dash": 2,
-      "passive": 5,
-      "semicolon": 2,
-      "sentence-length": 3
-    },
-    "docs/adr/0063-interrupted-p9-detection-signal.md": {
-      "em-dash": 1,
-      "passive": 2
-    },
-    "docs/adr/0064-new-session-recommendation-not-block.md": {
-      "blocklist": 2,
-      "em-dash": 4,
-      "passive": 1
-    },
-    "docs/adr/0065-stale-run-mode-warn-and-clear.md": {
-      "em-dash": 3,
-      "passive": 1,
-      "semicolon": 1
-    },
-    "docs/adr/0066-run-mode-deletion-at-p9.md": {
-      "em-dash": 3,
-      "passive": 5,
-      "semicolon": 1
-    },
-    "docs/adr/0067-backlog-folder-not-editable-lifecycle.md": {
-      "em-dash": 4,
-      "semicolon": 1,
-      "sentence-length": 2
-    },
-    "docs/adr/0068-product-yml-version-policy.md": {
-      "em-dash": 4,
-      "passive": 2,
-      "semicolon": 2,
-      "sentence-length": 1
-    },
-    "docs/adr/0069-loop-toggles-in-planifest-overrides.md": {
-      "em-dash": 4,
-      "passive": 1,
-      "semicolon": 2,
-      "sentence-length": 2
-    },
-    "docs/adr/0070-ratchet-approval-marker-file.md": {
-      "em-dash": 4,
-      "passive": 6,
-      "sentence-length": 5
-    },
-    "docs/adr/0071-cascade-threshold-three-artifacts.md": {
-      "em-dash": 4,
-      "passive": 3,
-      "semicolon": 1,
-      "sentence-length": 4
-    },
-    "docs/adr/0072-maker-checker-fresh-context.md": {
-      "blocklist": 1,
-      "em-dash": 2,
-      "passive": 2,
-      "semicolon": 5,
-      "sentence-length": 2
-    },
-    "docs/adr/0073-deterministic-caps-budget-enforcement.md": {
-      "em-dash": 3,
-      "passive": 2,
-      "semicolon": 4,
-      "sentence-length": 4
-    },
-    "docs/adr/0074-cross-model-gate-pre-p7.md": {
-      "em-dash": 2,
-      "passive": 1,
-      "semicolon": 4,
-      "sentence-length": 2
-    },
-    "docs/adr/0075-ratchet-approve-agent-write-on-instruction.md": {
-      "blocklist": 1,
-      "em-dash": 9,
-      "passive": 8,
-      "sentence-length": 8
-    },
-    "docs/adr/0076-cross-platform-hook-runtime-unification.md": {
-      "em-dash": 5,
-      "passive": 5,
-      "semicolon": 2,
-      "sentence-length": 7
-    },
-    "docs/adr/0077-scope-lock-suggested-answers-on-demand-subagent.md": {
-      "em-dash": 8,
-      "passive": 3,
-      "semicolon": 2,
-      "sentence-length": 8
-    },
-    "docs/adr/0078-structured-p0-discovery-pass-and-discovery-md-lifecycle.md": {
-      "blocklist": 1,
-      "em-dash": 7,
-      "passive": 3,
-      "semicolon": 3,
-      "sentence-length": 9
-    },
-    "docs/adr/0079-unify-telemetry-gating-remove-context-mode-mcp-coupling.md": {
-      "blocklist": 1,
-      "em-dash": 4,
-      "passive": 3,
-      "sentence-length": 4
-    },
-    "docs/adr/0080-telemetry-failure-detection-and-interactive-recovery.md": {
-      "em-dash": 3,
-      "passive": 4,
-      "semicolon": 2,
-      "sentence-length": 5
-    },
-    "docs/adr/0081-discovery-md-elevated-to-hard-limit-status.md": {
-      "em-dash": 4,
-      "passive": 1,
-      "sentence-length": 2
-    },
-    "docs/adr/0082-self-description-check-as-separate-script.md": {
-      "blocklist": 1,
-      "em-dash": 7,
-      "passive": 3,
-      "semicolon": 3,
-      "sentence-length": 6
-    },
-    "docs/adr/0083-context-pressure-phase-mapping.md": {
-      "em-dash": 7,
-      "passive": 2,
-      "sentence-length": 8
-    },
-    "docs/adr/0084-hardcoded-deletion-allowlist.md": {
-      "blocklist": 1,
-      "passive": 2,
-      "semicolon": 1,
-      "sentence-length": 3
-    },
-    "docs/adr/0085-single-marker-file-dual-purpose.md": {
-      "blocklist": 1,
-      "passive": 5,
-      "semicolon": 3,
-      "sentence-length": 3
-    },
-    "docs/adr/0086-mandatory-confirmation-gate.md": {
-      "blocklist": 1,
-      "passive": 1,
-      "semicolon": 1,
-      "sentence-length": 4
-    },
-    "docs/adr/0087-explicit-tool-selection.md": {
-      "blocklist": 1,
-      "passive": 5,
-      "sentence-length": 4
-    },
-    "docs/adr/0088-no-automatic-retry.md": {
-      "passive": 1,
-      "semicolon": 1,
-      "sentence-length": 5
-    },
-    "docs/adr/0089-opus5-model-tier-override-for-audit.md": {
-      "blocklist": 1,
-      "em-dash": 4,
-      "passive": 2,
-      "semicolon": 1,
-      "sentence-length": 6
-    },
-    "docs/adr/0090-guardrailed-baseline-gated-trim-process.md": {
-      "blocklist": 4,
-      "em-dash": 6,
-      "passive": 5,
-      "semicolon": 1,
-      "sentence-length": 6
-    },
-    "docs/adr/0091-agent-dispatch-standards-file.md": {
-      "passive": 3,
-      "sentence-length": 6
-    },
-    "docs/adr/0092-dual-detector-content-loss-verification.md": {
-      "blocklist": 1,
-      "passive": 8,
-      "semicolon": 3,
-      "sentence-length": 10
-    },
-    "docs/adr/0093-restore-continuous-run-p1-p3.md": {
-      "blocklist": 2,
-      "em-dash": 9,
-      "passive": 9,
-      "semicolon": 4,
-      "sentence-length": 15
-    },
-    "docs/adr/0094-product-yml-for-single-component-projects.md": {
-      "blocklist": 1,
-      "em-dash": 6,
-      "passive": 6,
-      "semicolon": 1,
-      "sentence-length": 7
-    },
-    "docs/adr/0095-ship-agent-pr-footer-default-off.md": {
-      "blocklist": 1,
-      "em-dash": 8,
-      "passive": 11,
-      "semicolon": 2,
-      "sentence-length": 12
-    },
-    "docs/adr/0096-setup-config-overrides-precedence.md": {
-      "em-dash": 5,
-      "passive": 5,
-      "semicolon": 3,
-      "sentence-length": 11
-    },
-    "docs/adr/0097-scope-lock-default-drafted-batch-presented.md": {
-      "blocklist": 1,
-      "em-dash": 12,
-      "passive": 10,
-      "semicolon": 7,
-      "sentence-length": 19
-    },
-    "docs/adr/0098-product-yml-live-component-versions.md": {
-      "em-dash": 8,
-      "passive": 4,
-      "semicolon": 2,
-      "sentence-length": 5
-    },
-    "docs/adr/0099-telemetry-emit-event-receipt-backstop.md": {
-      "em-dash": 4,
-      "semicolon": 1,
-      "sentence-length": 7
-    },
-    "docs/adr/0100-framework-update-policy-p0-step.md": {
-      "em-dash": 5,
-      "passive": 1,
-      "sentence-length": 6
-    },
-    "docs/adr/0101-skill-scope-principle.md": {
-      "em-dash": 6,
-      "passive": 1,
-      "sentence-length": 6
-    },
-    "docs/adr/0102-minimal-phase-1-artifact-set.md": {
-      "em-dash": 7,
-      "passive": 1,
-      "semicolon": 1,
-      "sentence-length": 8
-    },
-    "docs/adr/0103-network-level-retry-semantics.md": {
-      "blocklist": 1,
-      "passive": 1,
-      "sentence-length": 4
-    },
-    "docs/adr/0104-shared-module-placement-and-install-topology.md": {
-      "passive": 24,
-      "semicolon": 7,
-      "sentence-length": 23
-    },
-    "docs/adr/0105-em-dash-guard-attachment-point-and-bypass.md": {
-      "passive": 8,
-      "semicolon": 3,
-      "sentence-length": 15
-    },
-    "docs/adr/0106-self-modification-sequencing.md": {
-      "passive": 7,
-      "semicolon": 5,
-      "sentence-length": 10
-    },
-    "docs/adr/0107-claude-code-only-target.md": {
-      "passive": 2,
-      "sentence-length": 1
-    },
-    "docs/adr/0108-five-phase-contract.md": {
-      "passive": 4,
-      "semicolon": 1,
-      "sentence-length": 1
-    },
-    "docs/adr/0109-rename-and-product-identity.md": {
-      "passive": 6
-    },
-    "docs/adr/0110-single-route.md": {
-      "passive": 3,
-      "sentence-length": 1
-    },
-    "docs/adr/0111-present-state-docs.md": {
-      "passive": 4,
-      "sentence-length": 1
-    },
     "docs/adr/0112-setup-config-record-lives-in-plan-state.md": {
       "passive": 4,
       "sentence-length": 1
@@ -842,17 +212,8 @@
       "passive": 6,
       "sentence-length": 22
     },
-    "docs/dependency-graph.md": {
-      "passive": 2
-    },
     "plan/backlog/0000220-verify-codex-merge-guard-after-trust/entry.md": {
       "passive": 2,
-      "sentence-length": 1
-    },
-    "plan/backlog/0000285-enforce-postmortems-with-capa/entry.md": {
-      "passive": 2
-    },
-    "plan/backlog/0000305-archetypes-for-standards-and-templates/entry.md": {
       "sentence-length": 1
     },
     "plan/backlog/0000396-pack-source-in-src/entry.md": {
@@ -1180,29 +541,10 @@
     "plan/state/migrations.md": {
       "passive": 1
     },
-    "ravintio-overrides/instructions/custom-001-local-git-only.md": {
-      "em-dash": 2,
-      "semicolon": 1
-    },
     "ravintio-overrides/instructions/custom-002-prefer-subagent-decomposition.md": {
       "passive": 1,
       "semicolon": 1,
       "sentence-length": 3
-    },
-    "ravintio-zero/getting-started.md": {
-      "passive": 2
-    },
-    "ravintio-zero/migrations/0006-migration-ledger.md": {
-      "sentence-length": 1
-    },
-    "ravintio-zero/migrations/0007-backlog-priority-and-theme.md": {
-      "blocklist": 1
-    },
-    "ravintio-zero/migrations/0008-retired-commands.md": {
-      "passive": 1
-    },
-    "ravintio-zero/migrations/0009-adrs-in-docs-adr.md": {
-      "sentence-length": 1
     },
     "ravintio-zero/migrations/_done/0001-date-format.md": {
       "em-dash": 5,
@@ -1234,14 +576,6 @@
       "blocklist": 1,
       "em-dash": 9,
       "passive": 3
-    },
-    "ravintio-zero/pipeline-reference.md": {
-      "passive": 18,
-      "sentence-length": 3
-    },
-    "ravintio-zero/project-operations.md": {
-      "passive": 6,
-      "sentence-length": 1
     },
     "ravintio-zero/skills/ravintio-file-backlog/SKILL.md": {
       "passive": 2,
@@ -1328,39 +662,15 @@
       "passive": 10,
       "sentence-length": 1
     },
-    "ravintio-zero/standards/agent-dispatch-standards.md": {
-      "passive": 4,
-      "semicolon": 3,
-      "sentence-length": 8
-    },
-    "ravintio-zero/standards/api-design-standards.md": {
-      "passive": 2
-    },
-    "ravintio-zero/standards/build-target-standards.md": {
-      "passive": 1,
-      "semicolon": 3
-    },
     "ravintio-zero/standards/code-quality-standards.md": {
       "passive": 7,
       "semicolon": 12,
       "sentence-length": 11
     },
-    "ravintio-zero/standards/commit-standards.md": {
-      "passive": 1,
-      "semicolon": 1
-    },
-    "ravintio-zero/standards/formatting-standards.md": {
-      "blocklist": 1,
-      "passive": 4,
-      "sentence-length": 1
-    },
     "ravintio-zero/standards/hook-enforcement.md": {
       "passive": 5,
       "semicolon": 2,
       "sentence-length": 3
-    },
-    "ravintio-zero/standards/infrastructure-standards.md": {
-      "passive": 1
     },
     "ravintio-zero/standards/language-quirks-en-gb.md": {
       "passive": 3,
@@ -1424,14 +734,6 @@
     "ravintio-zero/standards/roadmap-standards.md": {
       "passive": 13,
       "sentence-length": 8
-    },
-    "ravintio-zero/standards/testing-standards.md": {
-      "passive": 2,
-      "semicolon": 1,
-      "sentence-length": 1
-    },
-    "ravintio-zero/standards/writing-standards.md": {
-      "blocklist": 36
     },
     "ravintio-zero/templates/about.template.md": {
       "passive": 1,
@@ -1535,6 +837,80 @@
     },
     "ravintio-zero/templates/test-report.template.md": {
       "semicolon": 1
+    },
+    "README.md": {
+      "passive": 11
+    },
+    "docs/about.md": {
+      "passive": 1
+    },
+    "docs/dependency-graph.md": {
+      "passive": 2
+    },
+    "plan/backlog/0000285-enforce-postmortems-with-capa/entry.md": {
+      "passive": 2
+    },
+    "plan/backlog/0000305-archetypes-for-standards-and-templates/entry.md": {
+      "sentence-length": 1
+    },
+    "ravintio-overrides/instructions/custom-001-local-git-only.md": {
+      "em-dash": 2,
+      "semicolon": 1
+    },
+    "ravintio-zero/getting-started.md": {
+      "passive": 2
+    },
+    "ravintio-zero/migrations/0006-migration-ledger.md": {
+      "sentence-length": 1
+    },
+    "ravintio-zero/migrations/0007-backlog-priority-and-theme.md": {
+      "blocklist": 1
+    },
+    "ravintio-zero/migrations/0008-retired-commands.md": {
+      "passive": 1
+    },
+    "ravintio-zero/migrations/0009-adrs-in-docs-adr.md": {
+      "sentence-length": 1
+    },
+    "ravintio-zero/pipeline-reference.md": {
+      "passive": 18,
+      "sentence-length": 3
+    },
+    "ravintio-zero/project-operations.md": {
+      "passive": 6,
+      "sentence-length": 1
+    },
+    "ravintio-zero/standards/agent-dispatch-standards.md": {
+      "passive": 4,
+      "semicolon": 3,
+      "sentence-length": 8
+    },
+    "ravintio-zero/standards/api-design-standards.md": {
+      "passive": 2
+    },
+    "ravintio-zero/standards/build-target-standards.md": {
+      "passive": 1,
+      "semicolon": 3
+    },
+    "ravintio-zero/standards/commit-standards.md": {
+      "passive": 1,
+      "semicolon": 1
+    },
+    "ravintio-zero/standards/formatting-standards.md": {
+      "blocklist": 1,
+      "passive": 4,
+      "sentence-length": 1
+    },
+    "ravintio-zero/standards/infrastructure-standards.md": {
+      "passive": 1
+    },
+    "ravintio-zero/standards/testing-standards.md": {
+      "passive": 2,
+      "semicolon": 1,
+      "sentence-length": 1
+    },
+    "ravintio-zero/standards/writing-standards.md": {
+      "blocklist": 36
     },
     "ravintio-zero/workflows/feature-pipeline.md": {
       "passive": 3

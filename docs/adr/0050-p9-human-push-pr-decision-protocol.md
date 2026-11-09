@@ -22,8 +22,8 @@ feature: "0000012-docs-restructure-commit-directives"
 
 At P9 Ship, the pipeline must handle the final act of raising a PR. Two distinct user contexts exist:
 
-1. **Agent has remote access** — the agent can `git push` and run `gh pr create` directly.
-2. **Human handles push/PR** — the agent cannot push (e.g. SSH passphrase required, `local-git-only` instruction active). The agent must output a PR description for the human to use.
+1. **Agent has remote access:** the agent can `git push` and run `gh pr create` directly.
+2. **Human handles push/PR:** the agent cannot push (e.g. SSH passphrase required, `local-git-only` instruction active). The agent must output a PR description for the human to use.
 
 Hardcoding either path excludes a class of users. The PR description is always needed as a fallback (and is useful even when the agent pushes, as a record). The `local-git-only` repo instruction is the concrete signal for the second context.
 
@@ -37,11 +37,11 @@ P9 (ship-agent) uses the following protocol:
 2. Otherwise, ask the human:
    > P9: Ready to ship. Should I push the branch and raise the PR, or will you do it yourself?
    > [1] Agent pushes + creates PR (`gh pr create`)
-   > [2] I'll do it — give me the PR title and description
+   > [2] I'll do it: give me the PR title and description
 3. **Option [1]:** `git push`, `git push --tags`, `gh pr create --title "{title}" --body "{description}"`
 4. **Option [2]:** Output PR title and description as a fenced markdown code block for copy-paste
 
-In all cases, the git tag is created locally before the prompt (independent of which option is chosen).
+In all cases, the agent creates the git tag locally before the prompt, whichever option the human chooses.
 
 ---
 
@@ -67,22 +67,22 @@ In all cases, the git tag is created locally before the prompt (independent of w
 
 **Positive:**
 - Works correctly for both agent-push and human-push users without manual configuration
-- local-git-only users get a smooth path — no prompt with an obvious forced answer
-- PR description is always produced (either as the primary output or embedded in `gh pr create`) — provides a record
+- local-git-only users get a smooth path with no prompt that has a forced answer
+- The agent always produces the PR description (either as the primary output or embedded in `gh pr create`), which provides a record
 
 **Negative:**
-- Ship-agent must read and interpret the `local-git-only` instruction — if the instruction is worded differently in a repo, detection may fail
+- Ship-agent must read and interpret the `local-git-only` instruction. If a repo words the instruction differently, detection may fail.
 - Two code paths to maintain in the P9 section
 
 **Risks:**
-- If `local-git-only` detection uses string matching on instruction file names and the file is renamed, the agent defaults to asking — safe fallback (it asks rather than blindly pushing)
+- If `local-git-only` detection uses string matching on instruction file names and someone renames the file, the agent defaults to asking. This is a safe fallback because it asks rather than blindly pushing.
 
 ---
 
 ## Related ADRs
 
-- ADR-0048 — depends-on (P9 as a formal phase is the prerequisite)
-- ADR-0049 — depends-on (ship-agent owning P9 is the prerequisite for this protocol being in ship-agent)
+- ADR-0048: depends-on (P9 as a formal phase is the prerequisite)
+- ADR-0049: depends-on (ship-agent owning P9 is the prerequisite for this protocol being in ship-agent)
 
 ---
 

@@ -22,8 +22,8 @@ dependency bumps.
 
 Three routes needed a triage decision tree, per-route gate criteria, a
 change-agent skill, and three workflow docs. Fast Path also carried a CI
-exemption branch that applied a weaker parity check to fast-path commits,
-checking only `component.yml` or `plan/changelog/` instead of `plan/`, `docs/`,
+exemption branch. That branch applied a weaker parity check to fast-path
+commits. The check looked only at `component.yml` or `plan/changelog/` instead of `plan/`, `docs/`,
 or `component.yml`.
 
 The human decided that everything is a feature change going forward, with no
@@ -39,11 +39,11 @@ different route.
 The retrofit codebase-scan content survives as a short subsection of the
 orchestrator's discovery text. Adoption modes remain, in reduced form.
 
-`skills/planifest-change-agent` is deleted.
+The framework deletes `skills/planifest-change-agent`.
 
-The CI fast-path exemption branch is deleted, so one parity check applies to
+The framework deletes the CI fast-path exemption branch, so one parity check applies to
 every diff. That check requires `plan/`, `docs/`, or `component.yml` on every
-change, with no weaker path. The change is mirrored into the shipped
+change, with no weaker path. The framework mirrors the change into the shipped
 `hooks/planifest.yml` consumer copy.
 
 ## Alternatives Considered

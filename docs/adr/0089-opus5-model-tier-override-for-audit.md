@@ -20,11 +20,13 @@ feature: "0000021-framework-context-bloat-audit"
 
 ## Context
 
-The Model Tier Decision Table in `planifest-orchestrator/SKILL.md` maps "Primary" tier to Sonnet for Claude Code, reserved for tasks needing multi-file reasoning and correctness (code generation, security review, ADR writing). The req-002 audit task — reading every `SKILL.md`, `standards/*.md`, `templates/*.md`, and `CLAUDE.md`, then classifying each section as load-bearing (Hard Limits, STOP gates, enforcement-referenced instructions, non-obvious conventions) versus redundant/model-implicit — is a judgement call across the entire framework's instructional surface at once, with a real cost of getting it wrong in either direction: under-trimming leaves the bloat problem unsolved, over-trimming risks the R-001/R-003 failure modes in the risk register (silent enforcement-content loss, ambiguity-induced doom loops). The human running this pipeline explicitly requested Opus 5 for this specific task when scoping the feature.
+The Model Tier Decision Table in `planifest-orchestrator/SKILL.md` maps "Primary" tier to Sonnet for Claude Code. The table reserves that tier for tasks needing multi-file reasoning and correctness (code generation, security review, ADR writing).
+
+The req-002 audit task reads every `SKILL.md`, `standards/*.md`, `templates/*.md`, and `CLAUDE.md`. It then classifies each section as essential (Hard Limits, STOP gates, enforcement-referenced instructions, non-obvious conventions) or as redundant/model-implicit. This is a judgement call across the entire framework's instructional surface at once. Getting it wrong in either direction has a real cost. Under-trimming leaves the bloat problem unsolved. Over-trimming risks the R-001/R-003 failure modes in the risk register (silent enforcement-content loss, ambiguity-induced doom loops). The human running this pipeline explicitly requested Opus 5 for this specific task when scoping the feature.
 
 ## Decision
 
-Dispatch the req-002 audit as a fresh-context subagent on `claude-opus-5`, overriding the Model Tier Decision Table's default primary-tier (Sonnet) mapping for this one requirement only. This is a feature-scoped override, not a change to the table itself — it does not alter the default tier for any other requirement in this feature or any other feature. The override and its rationale are recorded here rather than silently deviating from the table, so future audits of this feature (or future features referencing the table) can see why the deviation happened. If `claude-opus-5` is unavailable at dispatch time (per design.md assumption A-002), degrade to the default primary tier and record a build-log note — do not block the pipeline on model availability.
+Dispatch the req-002 audit as a fresh-context subagent on `claude-opus-5`, overriding the Model Tier Decision Table's default primary-tier (Sonnet) mapping for this one requirement only. This is a feature-scoped override, not a change to the table itself. It does not alter the default tier for any other requirement in this feature or any other feature. This ADR records the override and its rationale rather than deviating silently from the table. Future audits of this feature (or future features referencing the table) can then see why the deviation happened. If `claude-opus-5` is unavailable at dispatch time (per design.md assumption A-002), degrade to the default primary tier and record a build-log note. Do not block the pipeline on model availability.
 
 ## Alternatives Considered
 
@@ -44,14 +46,14 @@ Dispatch the req-002 audit as a fresh-context subagent on `claude-opus-5`, overr
 
 **Positive:**
 - Highest-capability judgement applied to the highest-risk classification task in the feature (asymmetric downside: silent enforcement-content loss)
-- Deviation is documented rather than silent, so it doesn't read as an unexplained inconsistency against the Model Tier Decision Table in a later audit
+- This ADR documents the deviation rather than leaving it silent. A later audit won't read it as an unexplained inconsistency against the Model Tier Decision Table
 
 **Negative:**
 - Higher per-call cost than the default primary tier for this one dispatch
-- Establishes a precedent that individual features may request tier overrides; if this happens frequently without ADRs, the Model Tier Decision Table's authority erodes
+- Establishes a precedent that individual features may request tier overrides. If this happens frequently without ADRs, the Model Tier Decision Table's authority erodes
 
 **Risks:**
-- If `claude-opus-5` becomes unavailable mid-pipeline (e.g. a later resumed session), the audit must degrade gracefully per assumption A-002 rather than block — implemented as a build-log note, not a hard failure
+- If `claude-opus-5` becomes unavailable mid-pipeline (e.g. a later resumed session), the audit must degrade gracefully per assumption A-002 rather than block. The skill implements this as a build-log note, not a hard failure
 
 ---
 

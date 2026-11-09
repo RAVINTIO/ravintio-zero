@@ -20,9 +20,9 @@ feature: "0000014-improve-adoption-mode-selection"
 
 ## Context
 
-The adoption mode migration (REQ-008) is interactive: the human confirms each archive's adoption mode correction one at a time. A typical project may have 10–15 archived features. This migration will naturally span time and may span sessions. If the migration fails or is interrupted after processing 8 of 13 archives, the human should not have to repeat the 8 confirmed corrections from scratch.
+The adoption mode migration (REQ-008) is interactive: the human confirms each archive's adoption mode correction one at a time. A typical project may have 10–15 archived features. This migration will naturally span time and may span sessions. If the migration fails or stops after 8 of 13 archives, the human should not have to repeat those 8 confirmed corrections.
 
-Two strategies were considered: atomic (all archives corrected or none) and resumable (progress tracked, partial runs continue from last checkpoint).
+The design weighed two strategies: atomic (all archives corrected or none) and resumable (progress tracked, partial runs continue from last checkpoint).
 
 ---
 
@@ -34,7 +34,7 @@ The progress file records:
 - `completedArchives`: array of archive paths already processed, with old value, new value, and human decision
 - `aboutMdWritten`: boolean indicating whether `docs/about.md` has been initialised
 
-On each resume, the migration reads the progress file and skips completed archives. The file is deleted on successful completion (moved to `_done/` alongside the migration file).
+On each resume, the migration reads the progress file and skips completed archives. On successful completion, the migration deletes the file by moving it to `_done/` alongside the migration file.
 
 ---
 
@@ -60,22 +60,22 @@ On each resume, the migration reads the progress file and skips completed archiv
 ## Consequences
 
 **Positive:**
-- Human confirmed decisions are preserved across session interruptions
+- Human confirmed decisions survive session interruptions
 - Migration can be run incrementally without time pressure
-- Progress file provides an audit trail of what was changed and why
+- Progress file provides an audit trail of what changed and why
 
 **Negative:**
 - Progress file is a new artefact type that must be cleaned up on completion
 - If the progress file becomes corrupted, the migration may skip archives or re-process them incorrectly
 
 **Risks:**
-- A bug in progress file write (e.g., partial write) could cause the migration to re-process an archive and overwrite a human-confirmed correction; mitigated by writing the full progress file atomically after each confirmation
+- A bug in progress file write (e.g., partial write) could cause the migration to re-process an archive and overwrite a human-confirmed correction. The migration mitigates this by writing the full progress file atomically after each confirmation
 
 ---
 
 ## Related ADRs
 
-- ADR-0053 — related-to (migration exists to correct records from the old three-mode taxonomy)
+- ADR-0053: related-to (migration exists to correct records from the old three-mode taxonomy)
 
 ---
 

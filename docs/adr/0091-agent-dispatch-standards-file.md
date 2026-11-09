@@ -15,11 +15,16 @@ feature: "0000022-orchestrator-redundancy-removal"
 
 ## Context
 
-`planifest-framework/skills/planifest-orchestrator/SKILL.md` currently contains two blocks of pure reference data with no canonical home elsewhere: the Model Tier Decision Table (which task types map to which model tier, plus a tier-to-model mapping by tool) and the Parallelism Rules + Agent Dispatch Template (MUST/Cannot-parallelise tables and the concrete dispatch skeleton). This content is duplicated in `planifest-framework/skills/planifest-ship-agent/SKILL.md` (its own copy of the model tier table) and cited by `planifest-framework/skills/planifest-codegen-agent/SKILL.md` ("Follows the orchestrator's canonical Parallelism Directive"). Because the orchestrator is loaded in full every session, this reference data adds roughly 766 words to every session regardless of whether a phase needs it yet, and model-id staleness (for example `claude-sonnet-4-6`) has to be fixed in two places instead of one.
+`planifest-framework/skills/planifest-orchestrator/SKILL.md` currently contains two blocks of pure reference data with no canonical home elsewhere:
+
+- The Model Tier Decision Table (which task types map to which model tier, plus a tier-to-model mapping by tool).
+- The Parallelism Rules + Agent Dispatch Template (MUST/Cannot-parallelise tables and the concrete dispatch skeleton).
+
+`planifest-framework/skills/planifest-ship-agent/SKILL.md` duplicates this content with its own copy of the model tier table. `planifest-framework/skills/planifest-codegen-agent/SKILL.md` cites it ("Follows the orchestrator's canonical Parallelism Directive"). Every session loads the orchestrator in full. This reference data therefore adds roughly 766 words to every session, whether or not a phase needs it yet. Model-id staleness (for example `claude-sonnet-4-6`) also needs a fix in two places instead of one.
 
 ## Decision
 
-Create a new standards file, `planifest-framework/standards/agent-dispatch-standards.md`, as the canonical home for both the Model Tier Decision Table and the Parallelism Rules + Agent Dispatch Template, relocated byte-for-byte (not reworded) from the orchestrator. The orchestrator, `planifest-ship-agent`, and `planifest-codegen-agent` each keep a one-line pointer to this file instead of restating or citing the orchestrator for it.
+Create a new standards file, `planifest-framework/standards/agent-dispatch-standards.md`, as the canonical home for both the Model Tier Decision Table and the Parallelism Rules + Agent Dispatch Template. Relocate both byte-for-byte (not reworded) from the orchestrator. The orchestrator, `planifest-ship-agent`, and `planifest-codegen-agent` each keep a one-line pointer to this file instead of restating or citing the orchestrator for it.
 
 ## Alternatives Considered
 
@@ -42,11 +47,11 @@ Create a new standards file, `planifest-framework/standards/agent-dispatch-stand
 - Model-id and parallelism-rule maintenance happens in exactly one file instead of two-plus, removing the class of bug where ship-agent's copy drifts from the orchestrator's.
 
 **Negative:**
-- Any phase skill that needs this data now requires an explicit load-on-need step rather than having it inline already, adding one extra lookup to those code paths.
-- A skill author who adds a new phase skill and forgets to add the pointer could silently lose access to the model-tier or parallelism guidance, with no enforcement mechanism catching the omission.
+- Any phase skill that needs this data now requires an explicit load-on-need step rather than having it inline already. This adds one extra lookup to those code paths.
+- A skill author who adds a new phase skill and forgets the pointer could silently lose access to the model-tier or parallelism guidance. No enforcement mechanism catches the omission.
 
 **Risks:**
-- If the standards file is not loaded at the exact moment a subagent is about to be spawned, model-tier guidance could be skipped for that spawn, producing a dispatch that does not follow the intended tier or parallelism rules.
+- If the session does not load the standards file at the exact moment it spawns a subagent, that spawn could skip model-tier guidance. The dispatch then does not follow the intended tier or parallelism rules.
 
 ## Related ADRs
 

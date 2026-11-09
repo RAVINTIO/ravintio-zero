@@ -16,7 +16,7 @@ feature: "0000004-tdd-regression-test-quality"
 
 ## Context
 
-The Planifest P3 codegen phase currently uses an all-at-once approach: tests and implementation are written together per requirement without a structured red-green-refactor discipline. The design calls for introducing TDD as a per-requirement sub-loop.
+The Planifest P3 codegen phase currently uses an all-at-once approach: the phase writes tests and implementation together per requirement without a structured red-green-refactor discipline. The design calls for introducing TDD as a per-requirement sub-loop.
 
 The question is where to place the TDD loop in the pipeline architecture. Options range from adding a new standalone pipeline phase, to restructuring P3 internally, to introducing the loop as sub-agents orchestrated by the existing codegen-agent.
 
@@ -30,19 +30,19 @@ The decision must:
 
 ## Decision
 
-The TDD loop is implemented as an **inner loop protocol inside the codegen-agent** (P3), not as a new pipeline phase. For each requirement, the codegen-agent orchestrates three sub-agents in sequence:
+The design implements the TDD loop as an **inner loop protocol inside the codegen-agent** (P3), not as a new pipeline phase. For each requirement, the codegen-agent orchestrates three sub-agents in sequence:
 
-1. `planifest-test-writer` — writes one failing test, confirms RED
-2. `planifest-implementer` — writes minimum passing code, confirms GREEN
-3. `planifest-refactor` — improves quality, confirms all GREEN
+1. `planifest-test-writer`: writes one failing test, confirms RED
+2. `planifest-implementer`: writes minimum passing code, confirms GREEN
+3. `planifest-refactor`: improves quality, confirms all GREEN
 
 The codegen-agent retains full orchestration responsibility: it tracks the current requirement, manages sub-agent invocations, enforces the 3-attempt escalation limit, and synthesises the overall implementation. Sub-agents are narrow, focused, and stateless between requirements.
 
-This approach was chosen because:
-- It keeps the pipeline phase count stable — operators do not need to learn a new phase.
+Reasons for this approach:
+- It keeps the pipeline phase count stable, so operators do not need to learn a new phase.
 - The codegen-agent already has the orchestration machinery (multi-component sequencing, escalation, capability skill loading).
 - Sub-agents' narrow scope is a natural fit for cheaper model tiers (see ADR-0016).
-- The protocol is additive — existing codegen-agent behaviour is extended, not replaced.
+- The protocol is additive: it extends existing codegen-agent behaviour and does not replace it.
 
 ---
 
@@ -70,22 +70,22 @@ This approach was chosen because:
 ## Consequences
 
 **Positive:**
-- TDD discipline is enforced per requirement without adding pipeline phases.
+- The loop enforces TDD discipline per requirement without adding pipeline phases.
 - Sub-agents are narrow enough to use cheaper model tiers, reducing cost per loop.
 - Codegen-agent retains orchestration context across the full feature, enabling cross-requirement coherence.
-- Additive — existing codegen-agent users are unaffected if they do not invoke sub-agents.
+- Additive: existing codegen-agent users see no change if they do not invoke sub-agents.
 
 **Negative:**
 - Three sub-agent invocations per requirement multiplies invocation overhead (latency and token cost) compared to the current single-pass approach.
 - Codegen-agent SKILL.md becomes more complex, increasing the chance of agent misinterpretation.
 
 **Risks:**
-- If the Agent SDK does not support nested sub-agent invocation from within a skill, the protocol cannot be executed. Mitigation: documented as risk R-004; advisory if not supported.
-- Sub-agent coordination failure (test-writer produces untestable test) escalates to human after 3 attempts — the pipeline stalls rather than auto-skipping.
+- If the Agent SDK does not support nested sub-agent invocation from within a skill, the protocol cannot be executed. Mitigation: documented as risk R-004. Advisory if not supported.
+- Sub-agent coordination failure (test-writer produces untestable test) escalates to human after 3 attempts. The pipeline stalls rather than auto-skipping.
 
 ---
 
 ## Related ADRs
 
-- ADR-0016 — depends-on (model tier selection for sub-agents)
-- ADR-0017 — related-to (regression promotion criteria, which depend on tests produced by this loop)
+- ADR-0016 - depends-on (model tier selection for sub-agents)
+- ADR-0017 - related-to (regression promotion criteria, which depend on tests produced by this loop)

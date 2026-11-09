@@ -6,7 +6,7 @@ version: "0.1.0"
 component: "ravintio-zero"
 feature: "0000011-setup-parity-and-consistency"
 ---
-# ADR-0046 - Hook adapter architecture — delegating to shared enforcement scripts
+# ADR-0046 - Hook adapter architecture: delegating to shared enforcement scripts
 
 **Skill:** adr-agent
 **Tool:** Claude Code
@@ -21,13 +21,13 @@ feature: "0000011-setup-parity-and-consistency"
 
 Planifest has two patterns for hook adapters:
 
-**Pattern A — Delegating** (Cursor, Windsurf, Codex adapters): The adapter translates the tool's native envelope into a Planifest common envelope, then invokes a shared enforcement script (`gate-write.mjs` or `check-design.mjs`) via `spawnSync`, passing the common envelope on stdin. The enforcement script contains all enforcement logic. The adapter passes through the exit code (and for some tools, constructs a JSON response per ADR-0044).
+**Pattern A: Delegating** (Cursor, Windsurf, Codex adapters): The adapter translates the tool's native envelope into a Planifest common envelope. It then invokes a shared enforcement script (`gate-write.mjs` or `check-design.mjs`) via `spawnSync` and passes the common envelope on stdin. The enforcement script contains all enforcement logic. The adapter passes through the exit code (and for some tools, constructs a JSON response per ADR-0044).
 
-**Pattern B — Self-contained** (Copilot adapter): The adapter contains the full enforcement logic inline — path checking, sentinel checking, design.md reading — with no dependency on shared enforcement scripts.
+**Pattern B: Self-contained** (Copilot adapter): The adapter contains the full enforcement logic inline, covering path checking, sentinel checking, and design.md reading. It has no dependency on shared enforcement scripts.
 
 Pattern B emerged because the Copilot adapter predates the formalisation of the common envelope and the shared enforcement script architecture. All other adapters follow Pattern A.
 
-This feature updates all four adapters. The architecture must be formalised to ensure consistency.
+This feature updates all four adapters. You must formalise the architecture to ensure consistency.
 
 ---
 
@@ -35,9 +35,9 @@ This feature updates all four adapters. The architecture must be formalised to e
 
 **All hook adapters must use Pattern A (delegating).** Adapters translate the tool envelope and delegate enforcement to shared scripts. No adapter contains enforcement logic inline.
 
-The Copilot adapter (`copilot.mjs`) must be refactored to follow Pattern A: remove inline enforcement logic and delegate to `gate-write.mjs` (for preToolUse) and `check-design.mjs` (for userPromptSubmitted), constructing the Copilot-specific JSON deny response from the enforcement script's exit code and stdout per ADR-0044.
+You must refactor the Copilot adapter (`copilot.mjs`) to follow Pattern A. Remove the inline enforcement logic and delegate to `gate-write.mjs` (for preToolUse) and `check-design.mjs` (for userPromptSubmitted). The adapter constructs the Copilot-specific JSON deny response from the enforcement script's exit code and stdout per ADR-0044.
 
-**Rationale:** The enforcement logic (what constitutes a permitted write, what the design scope is, what the sentinel file means) must have a single authoritative implementation. Pattern B creates a second copy that will inevitably drift from the shared scripts as enforcement evolves. Every enforcement enhancement (new sentinel checks, new always-permitted paths, new scope rules) must be applied to all self-contained adapters separately — a maintenance hazard.
+**Rationale:** The enforcement logic (what constitutes a permitted write, what the design scope is, what the sentinel file means) must have a single authoritative implementation. Pattern B creates a second copy that will inevitably drift from the shared scripts as enforcement evolves. Every enforcement enhancement (new sentinel checks, new always-permitted paths, new scope rules) would need a separate change in each self-contained adapter. This is a maintenance hazard.
 
 **Common envelope contract** (for reference):
 ```json
@@ -79,23 +79,23 @@ Adapters must produce this shape before invoking the enforcement script.
 
 **Positive:**
 - Enforcement logic has exactly one implementation. A fix to `gate-write.mjs` automatically improves enforcement in all tools.
-- Adding support for a new tool requires only writing a new adapter — enforcement scripts are untouched.
+- Adding support for a new tool requires only a new adapter. Enforcement scripts stay unchanged.
 - Each adapter and each enforcement script can be unit-tested independently.
-- The common envelope contract is the only interface; adapters do not need to know each other's formats.
+- The common envelope contract is the only interface. Adapters do not need to know each other's formats.
 
 **Negative:**
-- Refactoring the Copilot adapter introduces risk — inline logic that was working must be translated to the delegating pattern without regression.
-- `spawnSync` introduces a subprocess for every hook invocation — minor performance cost (typically <50ms) but non-zero.
+- Refactoring the Copilot adapter introduces risk. You must translate inline logic that works today to the delegating pattern without regression.
+- `spawnSync` introduces a subprocess for every hook invocation. The performance cost is minor (typically <50ms) but non-zero.
 
 **Risks:**
-- The Copilot refactor may reveal edge cases in the inline logic that were not captured in the common envelope contract — e.g. Copilot-specific context fields the inline adapter used that the common envelope does not carry.
+- The Copilot refactor may reveal edge cases in the inline logic that the common envelope contract does not capture. An example is a Copilot-specific context field that the inline adapter used and the common envelope does not carry.
 
 ---
 
 ## Related ADRs
 
-- ADR-0044 — extends (ADR-0044 defines how adapters translate the enforcement script's exit code into tool-specific deny responses; that decision assumes the delegating architecture defined here)
-- ADR-0045 — related-to
+- ADR-0044: extends (ADR-0044 defines how adapters translate the enforcement script's exit code into tool-specific deny responses, and that decision assumes the delegating architecture defined here)
+- ADR-0045: related-to
 
 ---
 

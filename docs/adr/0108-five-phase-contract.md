@@ -15,10 +15,10 @@ feature: "0000031-five-phase-planifest-zero"
 
 ## Context
 
-The framework ran a ten-phase pipeline: P0 assess and coach, P1 spec, P2 ADRs, P3
-codegen, P4 validate, P5 security, P6 docs, P7 archive, P8 build assessment, and
-P9 ship. That pipeline used 21 skills and was built when the framework targeted
-nine tools.
+The framework ran a ten-phase pipeline. Its first five phases were P0 assess and
+coach, P1 spec, P2 ADRs, P3 codegen, and P4 validate. The last five were P5
+security, P6 docs, P7 archive, P8 build assessment, and P9 ship. That pipeline
+used 21 skills. The team built it when the framework targeted nine tools.
 
 Since feature 0000030, the framework targets Claude Code only, for one
 maintainer. The per-run context cost of loading skill text across ten phases is
@@ -92,7 +92,7 @@ current line count.
 **Risks**
 
 - Merging nine skills into five can lose a binding rule during compression.
-  Mitigation: a section-to-destination map is made at plan phase, before
+  Mitigation: the plan phase produces a section-to-destination map before
   implement starts.
 - The external telemetry backend must accept the five new enum values.
   Mitigation: CI extends to post all five phases and fails loudly if the
@@ -105,11 +105,11 @@ current line count.
 
 ## Supersedes
 
-This ADR supersedes the ten-phase orchestration decisions in aggregate. Those
-decisions were established across features 0000001 through 0000029. Their ADR
-files were cleared from the working tree at feature 0000030 and no longer exist
-as live documents. They remain readable in git history; this ADR supersedes
-them by pointer to that history rather than by pointer to a live file.
+This ADR supersedes the ten-phase orchestration decisions in aggregate. Features
+0000001 through 0000029 established those decisions. Feature 0000030 cleared
+their ADR files from the working tree, so they no longer exist as live
+documents. They remain readable in git history. This ADR supersedes them by
+pointer to that history rather than by pointer to a live file.
 
 ## Superseded By
 

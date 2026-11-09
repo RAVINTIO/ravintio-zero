@@ -20,7 +20,7 @@ feature: "0000001-context-mode-enforcement-hooks"
 
 ## Context
 
-The enforcement hook scripts (`block-grep.sh`, `block-bash.sh`, `block-webfetch.sh`) implement context-mode routing enforcement for Claude Code. Conceptually, these scripts are part of the context-mode project (`mksglu/context-mode`) — they enforce its routing rules. However:
+The enforcement hook scripts (`block-grep.sh`, `block-bash.sh`, `block-webfetch.sh`) implement context-mode routing enforcement for Claude Code. Conceptually, these scripts are part of the context-mode project (`mksglu/context-mode`), because they enforce its routing rules. However:
 
 - The context-mode repo is an upstream dependency, not under planifest-framework control
 - Contributing to upstream requires a PR and review process that is out of scope for this pipeline
@@ -33,9 +33,9 @@ The question is: where do the scripts live, and who owns them?
 
 ## Decision
 
-**Scripts are authored in `planifest-framework/hooks/context-mode/` for this pipeline run.** After the pipeline completes, they will be contributed upstream to `mksglu/context-mode` as a separate PR. Long-term, `mksglu/context-mode` is the canonical owner.
+**This pipeline run authors the scripts in `planifest-framework/hooks/context-mode/`.** After the pipeline completes, the scripts go upstream to `mksglu/context-mode` as a separate PR. Long-term, `mksglu/context-mode` is the canonical owner.
 
-During the transition period (before upstream accepts the contribution), planifest-framework is the source of truth. If the scripts diverge after upstream acceptance, planifest-framework's copy takes precedence for planifest users — sync with upstream is a manual operational step tracked in the roadmap.
+During the transition period (before upstream accepts the contribution), planifest-framework is the source of truth. If the scripts diverge after upstream acceptance, planifest-framework's copy takes precedence for planifest users. Syncing with upstream is a manual operational step that the roadmap tracks.
 
 The `planifest-framework/hooks/context-mode/` directory is the install source. Setup copies scripts from there to `.claude/hooks/context-mode/` in the target project.
 
@@ -64,17 +64,17 @@ The `planifest-framework/hooks/context-mode/` directory is the install source. S
 ## Consequences
 
 **Positive:**
-- Scripts ship with this pipeline — no external dependency, no blocked delivery
-- planifest-framework setup is self-contained; users do not need to separately install context-mode scripts
+- Scripts ship with this pipeline, with no external dependency and no blocked delivery
+- planifest-framework setup is self-contained, so users do not need to separately install context-mode scripts
 - Upstream contribution is a clean, bounded follow-up task
 
 **Negative:**
 - Two copies exist during the transition: `planifest-framework/hooks/context-mode/` and (eventually) `mksglu/context-mode`. Manual sync required if either diverges after the upstream PR.
-- If upstream modifies the scripts (e.g. changes the output schema), planifest-framework users are not automatically updated
+- If upstream modifies the scripts (e.g. changes the output schema), planifest-framework users do not receive the update automatically
 
 **Risks:**
-- Upstream rejects or substantially modifies the scripts before accepting the PR — planifest-framework copy becomes the de-facto fork. Impact: low — scripts are small and self-contained; planifest-framework can maintain them indefinitely if needed.
-- Upstream contribution is never made — planifest-framework permanently owns scripts that conceptually belong elsewhere. Mitigation: track the contribution in the roadmap with an explicit owner.
+- Upstream rejects or substantially modifies the scripts before accepting the PR, so the planifest-framework copy becomes the de-facto fork. Impact: low. The scripts are small and self-contained, and planifest-framework can maintain them indefinitely if needed.
+- Upstream contribution never happens, so planifest-framework permanently owns scripts that conceptually belong elsewhere. Mitigation: track the contribution in the roadmap with an explicit owner.
 
 ---
 

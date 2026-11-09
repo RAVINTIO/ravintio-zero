@@ -20,19 +20,19 @@ feature: "0000010-framework-quality-improvements"
 
 ## Context
 
-The external-skills library (`planifest-framework/external-skills/`) has 200 skill directories. Each directory contains a `SKILL.md` with a `name` frontmatter field. During feature 0000009, skills were extracted from upstream repos and placed in directories named by the implementer. No normalisation rule was applied — some directory names match the kebab-case of the `name` field, others do not.
+The external-skills library (`planifest-framework/external-skills/`) has 200 skill directories. Each directory contains a `SKILL.md` with a `name` frontmatter field. During feature 0000009, the implementer extracted skills from upstream repos and placed them in directories the implementer named. Nobody applied a normalisation rule, so some directory names match the kebab-case of the `name` field and others do not.
 
-This creates a discoverability gap: if the Skill Map in `design.md` references a skill by its `name` field (e.g., `api-design`) and the directory is named differently (e.g., `api-designer`), setup scripts and agents cannot reliably locate the skill.
+This creates a discoverability gap. Suppose the Skill Map in `design.md` references a skill by its `name` field (e.g., `api-design`). If the directory has a different name (e.g., `api-designer`), setup scripts and agents cannot reliably locate the skill.
 
-The question: which should be treated as canonical — the directory name or the `name` field?
+The question: which is canonical, the directory name or the `name` field?
 
 ---
 
 ## Decision
 
-The `name` frontmatter field in `SKILL.md` is the canonical identifier. Directory names are derived identifiers and must equal the kebab-case of the `name` field. When a mismatch exists, the directory is renamed to match — the `name` field is not changed.
+The `name` frontmatter field in `SKILL.md` is the canonical identifier. Directory names derive from it and must equal the kebab-case of the `name` field. When a mismatch exists, you rename the directory to match and leave the `name` field unchanged.
 
-Rationale: the `name` field is human-authored, readable, and semantically meaningful. Directory names are filesystem artifacts that should be derived from the name, not the reverse. The `name` field is also what appears in the Skill Map and in skill documentation — it is the value humans and agents reason about.
+Rationale: the `name` field is human-authored, readable, and semantically meaningful. Directory names are filesystem artifacts that you should derive from the name, not the reverse. The `name` field also appears in the Skill Map and in skill documentation, so it is the value humans and agents reason about.
 
 Kebab-case conversion rule: lowercase all characters, replace spaces with hyphens, strip all non-alphanumeric characters except hyphens, collapse consecutive hyphens to one.
 
@@ -63,14 +63,14 @@ Kebab-case conversion rule: lowercase all characters, replace spaces with hyphen
 **Positive:**
 - Consistent discoverability: Skill Map references always resolve to the correct directory
 - Setup scripts can reliably copy skills by name
-- New skills added in future must follow the rule — enforced by this ADR
+- New skills added in future must follow the rule, which this ADR enforces
 
 **Negative:**
 - Git history shows renames, which may confuse `git log --follow` for renamed files
 - Any external documentation or tooling referencing old directory names breaks
 
 **Risks:**
-- A skill whose `name` field, after kebab-case conversion, collides with another skill's converted name — handled by collision detection in REQ-003 (duplicate left unrenamed, documented)
+- A skill whose `name` field collides with another skill's converted name after kebab-case conversion. Collision detection in REQ-003 handles this (the duplicate stays unrenamed and the ADR documents it).
 
 ---
 

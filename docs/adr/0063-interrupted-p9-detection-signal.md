@@ -20,13 +20,13 @@ feature: "0000015-pipeline-session-cleanup"
 
 ## Context
 
-P9 cleanup involves two stages: (1) archiving plan/current/ (which empties the directory) and (2) deleting sentinel files (.orchestrator-active, .run-mode, .orchestrator-ack). If a session is interrupted between these two stages, the next session starts with an ambiguous state: .orchestrator-active is present but plan/current/ is empty. The resume detection logic must distinguish this from a fresh start or a normal mid-pipeline resume.
+P9 cleanup involves two stages: (1) archiving plan/current/ (which empties the directory) and (2) deleting sentinel files (.orchestrator-active, .run-mode, .orchestrator-ack). If something interrupts a session between these two stages, the next session starts with an ambiguous state: .orchestrator-active is present but plan/current/ is empty. The resume detection logic must distinguish this from a fresh start or a normal mid-pipeline resume.
 
 ---
 
 ## Decision
 
-Use the combination of `.orchestrator-active` present AND `plan/current/` empty (no design.md, no requirements/, no adr/) as the interrupted P9 signal. No dedicated flag file is introduced.
+Use the combination of `.orchestrator-active` present AND `plan/current/` empty (no design.md, no requirements/, no adr/) as the interrupted P9 signal. The decision introduces no dedicated flag file.
 
 This signal is reliable because:
 - A fresh start has no `.orchestrator-active`
@@ -56,7 +56,7 @@ This signal is reliable because:
 ## Consequences
 
 **Positive:**
-- No new files or state introduced — uses existing signals
+- The design introduces no new files or state and uses existing signals
 - False positive (manual plan/current/ deletion) results in a harmless extra cleanup, not data loss
 
 **Negative:**

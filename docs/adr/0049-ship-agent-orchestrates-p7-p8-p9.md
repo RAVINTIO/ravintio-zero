@@ -20,7 +20,7 @@ feature: "0000012-docs-restructure-commit-directives"
 
 ## Context
 
-With the introduction of P9 (ADR-0048), the orchestrator needs a strategy for invoking the close-out phases (P7, P8, P9). Three options exist: the orchestrator calls each phase skill directly in sequence; the ship-agent owns all three; or a new dedicated close-out agent is introduced. The choice affects how many top-level orchestrator calls the close-out requires, and which skill is responsible for sequencing the assessment and shipping steps.
+With the introduction of P9 (ADR-0048), the orchestrator needs a strategy for invoking the close-out phases (P7, P8, P9). Three options exist. The orchestrator calls each phase skill directly in sequence. The ship-agent owns all three phases. Or the team introduces a new dedicated close-out agent. The choice affects how many top-level orchestrator calls the close-out requires, and which skill is responsible for sequencing the assessment and shipping steps.
 
 ---
 
@@ -29,7 +29,7 @@ With the introduction of P9 (ADR-0048), the orchestrator needs a strategy for in
 The ship-agent owns the complete close-out sequence. The orchestrator makes a single call to the ship-agent, which:
 
 1. Executes **P7 Archive**: changelog, skips, `plan/current/` archive, `.feature-id`, commit
-2. Spawns **build-assessment-agent** as a sub-agent for **P8**, passing the archived build-log path; waits for the report
+2. Spawns **build-assessment-agent** as a sub-agent for **P8**, passing the archived build-log path, then waits for the report
 3. Executes **P9 Ship**: git tag, push/PR decision, PR description or `gh pr create`
 
 The ship-agent emits the correct phase prefix (`P7:`, `P8:`, `P9:`) as it moves through each step, so the human sees clear phase transitions.
@@ -59,23 +59,23 @@ The ship-agent emits the correct phase prefix (`P7:`, `P8:`, `P9:`) as it moves 
 ## Consequences
 
 **Positive:**
-- Single orchestrator call for the entire close-out — less complexity at the orchestrator level
-- Phase transitions (P7→P8→P9) are visible to the human via prefixes without requiring three separate orchestrator invocations
-- build-assessment-agent retains its focused responsibility; ship-agent owns the sequencing
+- Single orchestrator call for the entire close-out, which means less complexity at the orchestrator level
+- Phase transitions (P7→P8→P9) are visible to the human via prefixes and need no three separate orchestrator invocations
+- build-assessment-agent retains its focused responsibility. Ship-agent owns the sequencing.
 
 **Negative:**
-- The ship-agent skill file is now more complex — it describes three phases rather than one
+- The ship-agent skill file is now more complex because it describes three phases rather than one
 - A bug in the ship-agent's P7 section could prevent P8 and P9 from running
 
 **Risks:**
-- If the ship-agent fails mid-sequence (e.g. after P7 but before P8), the orchestrator has no automatic recovery path — the human must manually invoke the remaining phases
+- If the ship-agent fails mid-sequence (e.g. after P7 but before P8), the orchestrator has no automatic recovery path. The human must manually invoke the remaining phases.
 
 ---
 
 ## Related ADRs
 
-- ADR-0048 — depends-on (P9 as a formal phase is the prerequisite for this orchestration model)
-- ADR-0050 — related-to (P9 PR protocol is the primary content of the P9 section this decision creates)
+- ADR-0048: depends-on (P9 as a formal phase is the prerequisite for this orchestration model)
+- ADR-0050: related-to (P9 PR protocol is the primary content of the P9 section this decision creates)
 
 ---
 

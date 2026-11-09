@@ -20,13 +20,13 @@ feature: "0000016-pipeline-governance-and-loop-engineering"
 
 ## Context
 
-Resolves execution-plan Q-002. The ratchet hook (REQ-018) blocks weakening writes deterministically, but legitimate weakening exists (a criterion was genuinely wrong). The approval mechanism must be: initiated by the human (not the agent), deterministic for the hook to verify, single-use (no standing bypass), and auditable after the fact.
+Resolves execution-plan Q-002. The ratchet hook (REQ-018) blocks weakening writes deterministically, but legitimate weakening exists (a criterion was genuinely wrong). The approval mechanism must meet four conditions. The human initiates it (not the agent). It is deterministic for the hook to verify. It is single-use (no standing bypass). It is auditable after the fact.
 
 ---
 
 ## Decision
 
-A marker file `plan/current/.ratchet-approve` created by the human, containing the repo-relative path of the artifact whose weakening is approved (one path per line, optional trailing comment). On a weakening write, the hook checks the marker: if the target path is listed, the write passes, the used line is removed (file deleted when empty), and the approval is appended to the loop run log. The marker is git-tracked, so the approval act itself is auditable. Agents are prohibited from creating or editing the marker — the hook rejects a weakening whose marker line was added in the same uncommitted change set as the write when detectable, and the prohibition is a Hard Limit in the loop-runner skill.
+Use a marker file `plan/current/.ratchet-approve` that the human creates. It contains the repo-relative path of the artifact whose weakening the human approves (one path per line, optional trailing comment). On a weakening write, the hook checks the marker. If the target path appears in the marker, the write passes. The hook then removes the used line (and deletes the file when empty) and appends the approval to the loop run log. The marker is git-tracked, so the approval act itself is auditable. Agents must not create or edit the marker. The hook rejects a weakening when it can detect that the same uncommitted change set adds both the marker line and the write. The prohibition is also a Hard Limit in the loop-runner skill.
 
 ---
 
@@ -53,13 +53,13 @@ A marker file `plan/current/.ratchet-approve` created by the human, containing t
 
 **Positive:**
 - Weakening is possible but always a deliberate, logged, single-use human act
-- The hook's block message doubles as the approval instructions — no docs hunting mid-block
+- The hook's block message doubles as the approval instructions, so nobody hunts through docs mid-block
 
 **Negative:**
-- Human friction: one file edit per approved weakening (accepted — friction here is the feature)
+- Human friction: one file edit per approved weakening (accepted: friction here is the feature)
 
 **Risks:**
-- An agent instructed to "fix the block" might write the marker itself — mitigated by the Hard Limit prohibition, same-changeset detection where possible, and run-log surfacing of every marker consumption in P8
+- An agent instructed to "fix the block" might write the marker itself. Three things mitigate this: the Hard Limit prohibition, same-changeset detection where possible, and run-log surfacing of every marker consumption in P8
 
 ---
 

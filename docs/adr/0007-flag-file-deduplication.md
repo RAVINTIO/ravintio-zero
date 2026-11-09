@@ -20,7 +20,7 @@ feature: "0000003-hook-based-enforcement"
 
 ## Context
 
-`PreToolUse` fires on every tool call within a phase. Without a guard, `emit-phase-start.mjs` would emit a `phase_start` event for every tool use — potentially dozens per phase. The telemetry backend receives duplicate events and the data is unusable. The hook script must deduplicate emissions to exactly once per session per phase.
+`PreToolUse` fires on every tool call within a phase. Without a guard, `emit-phase-start.mjs` would emit a `phase_start` event for every tool use, potentially dozens per phase. The telemetry backend receives duplicate events and the data is unusable. The hook script must deduplicate emissions to exactly once per session per phase.
 
 The deduplication state must be:
 - Persistent across multiple invocations within the same OS process context (the hook fires in a new child process each time)
@@ -72,14 +72,14 @@ Flag files are OS-temp-managed (cleaned on reboot) and deleted by the ship-agent
 ## Consequences
 
 **Positive:**
-- Zero external dependencies — pure filesystem, Node.js built-ins only
+- Zero external dependencies: pure filesystem, Node.js built-ins only
 - Deduplication is correct across process restarts within a session
 - Start timestamp stored in flag file gives accurate `duration_ms` without any additional IPC
 - OS temp cleanup handles stale files without any active cleanup code
 
 **Negative:**
-- Flag files accumulate in `{tmpdir}` until OS cleanup or ship-agent deletion; on long-running systems without reboots, old files may linger
-- A crash mid-write (between emit and file creation) leaves the event emitted but the flag absent — the next tool use re-emits `phase_start`. This is a known edge case; impact is a single duplicate event in pathological conditions.
+- Flag files accumulate in `{tmpdir}` until OS cleanup or ship-agent deletion. On long-running systems without reboots, old files may linger
+- A crash mid-write (between emit and file creation) leaves the event emitted but the flag absent, so the next tool use re-emits `phase_start`. This is a known edge case. The impact is a single duplicate event in pathological conditions.
 
 **Risks:**
 - If `os.tmpdir()` points to a read-only filesystem (e.g. certain containerised environments), the flag file cannot be written. The script must handle this gracefully: catch the write error, proceed with emission (no deduplication), exit 0.
@@ -89,7 +89,7 @@ Flag files are OS-temp-managed (cleaned on reboot) and deleted by the ship-agent
 ## Related ADRs
 
 - ADR-0005 - related-to (flag file mechanism applies to all tiers that use emit-phase-start.mjs)
-- ADR-0006 - depends-on (session_id is read from common envelope or .planifest-session fallback)
+- ADR-0006 - depends-on (the script reads session_id from the common envelope or the .planifest-session fallback)
 - ADR-0009 - related-to (exit-0 failure mode governs write-error handling)
 
 ---

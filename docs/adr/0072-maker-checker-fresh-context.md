@@ -20,13 +20,13 @@ feature: "0000016-pipeline-governance-and-loop-engineering"
 
 ## Context
 
-Three new verifiers (design-critic, reversal-assessor, cross-model reviewer) judge work produced by other agents. A model re-reading its own output in the same conversation systematically under-finds its own errors (self-consistency bias), and a verifier that "approves unless it objects" converges on rubber-stamping. This is the maker–checker control principle from finance/audit applied to the pipeline.
+Three new verifiers (design-critic, reversal-assessor, cross-model reviewer) judge work produced by other agents. A model re-reading its own output in the same conversation systematically under-finds its own errors (self-consistency bias). A verifier that "approves unless it objects" converges on rubber-stamping. This is the maker–checker control principle from finance/audit applied to the pipeline.
 
 ---
 
 ## Decision
 
-All three verifiers are invoked exclusively as fresh-context subagents (Agent tool): the spawn prompt contains only the verifier's own skill text, the artifact paths under review, and the rubric — never the authoring conversation, and never the maker's reasoning. Default stance is REJECT: each rubric item must be satisfied by explicit evidence cited in the verdict artifact; an item without positive evidence fails. Verdicts are structured artifacts in `plan/current/` (findings, severity, per-item evidence, approve/reject). The cross-model reviewer additionally requires a different model id from the implementer (recorded in the verdict; cross-vendor deferred per scope).
+Invoke all three verifiers exclusively as fresh-context subagents (Agent tool). The spawn prompt contains only the verifier's own skill text, the artifact paths under review, and the rubric. It never contains the authoring conversation or the maker's reasoning. Default stance is REJECT. Each rubric item must have explicit evidence cited in the verdict artifact, and an item without positive evidence fails. Each verdict is a structured artifact in `plan/current/` (findings, severity, per-item evidence, approve/reject). The cross-model reviewer also requires a different model id from the implementer (the verdict records it, and the design defers cross-vendor per scope).
 
 ---
 
@@ -52,20 +52,22 @@ All three verifiers are invoked exclusively as fresh-context subagents (Agent to
 ## Consequences
 
 **Positive:**
-- Verifier findings are independent of maker rationalization; verdicts are auditable artifacts
+- Verifier findings are independent of maker rationalization. Verdicts are auditable artifacts
 - REJECT-default makes a lazy verifier visibly fail (everything rejected) rather than invisibly rubber-stamp
 
 **Negative:**
-- Token cost per verification (fresh context re-reads artifacts); REJECT-default produces some false rejections needing human arbitration
+- Token cost per verification (fresh context re-reads artifacts). REJECT-default produces some false rejections needing human arbitration
 
 **Risks:**
-- Rubric gaming: maker writes to the rubric rather than the intent — mitigated by report-only trial measuring critique precision before any verifier gains blocking power
+- Rubric gaming: maker writes to the rubric rather than the intent. A report-only trial mitigates this by measuring critique precision before any verifier gains blocking power
 
 ---
 
 ## Related ADRs
 
-- ADR-0070 - related-to; ADR-0071 - related-to; ADR-0074 - extends (cross-model gate applies this contract)
+- ADR-0070 - related-to
+- ADR-0071 - related-to
+- ADR-0074 - extends (cross-model gate applies this contract)
 
 ---
 

@@ -1,12 +1,12 @@
 ---
-title: "ADR 001: Ratchet-Approve — Agent Write on Explicit Instruction"
+title: "ADR 001: Ratchet-Approve: Agent Write on Explicit Instruction"
 summary: "Reverses ADR-0070's human-only-write restriction: the agent may write plan/current/.ratchet-approve, but only when the human explicitly instructs it in the moment, removing hand-typing unreliability while keeping the approval single-use, auditable, and structurally separated from the weakening it authorizes."
 status: "accepted"
 version: "0.1.0"
 component: "ravintio-zero"
 feature: "0000017-ratchet-forgery-detection-and-telemetry-schema-spec"
 ---
-# ADR-0075 - Ratchet-Approve — Agent Write on Explicit Instruction
+# ADR-0075 - Ratchet-Approve: Agent Write on Explicit Instruction
 
 **Skill:** [adr-agent](../../../planifest-framework/skills/planifest-adr-agent/SKILL.md)
 **Tool:** claude-code
@@ -20,19 +20,19 @@ feature: "0000017-ratchet-forgery-detection-and-telemetry-schema-spec"
 
 ## Context
 
-0000016's ADR-0078 established `plan/current/.ratchet-approve` as a marker file that only the human may create or edit, containing one repo-relative path per line, to authorize a ratchet weakening. In practice this creates a reliability problem: the human must correctly hand-type the exact path from memory, with no assistance, and the marker captures no record of *why* the weakening was approved — only that it was.
+0000016's ADR-0078 established `plan/current/.ratchet-approve` as a marker file. Only the human may create or edit it. It holds one repo-relative path per line and authorizes a ratchet weakening. In practice this creates a reliability problem. The human must hand-type the exact path from memory, with no assistance. The marker also captures no record of *why* the human approved the weakening, only that they did.
 
-Walking this mechanism through in plain usage language during this session's Scope Lock Challenge (rather than abstract mechanism-talk) surfaced the gap directly: "no way a human will reliably maintain this correctly by hand" was never actually resolved by ADR-0078's original design — the hard prohibition on agent writes solved forgery but not usability, and the two were conflated.
+Walking this mechanism through in plain usage language during this session's Scope Lock Challenge (rather than abstract mechanism-talk) surfaced the gap directly. ADR-0078's original design never resolved "no way a human will reliably maintain this correctly by hand". The hard prohibition on agent writes solved forgery but not usability, and the design conflated the two.
 
 ---
 
 ## Decision
 
-Reverse ADR-0078's core restriction. The agent MAY write `plan/current/.ratchet-approve`, but only when the human explicitly instructs it in the moment — stating the path, the reason, and giving the go-ahead in the same turn. This removes the hand-typing reliability problem: the agent transcribes the human's exact words instead of the human hand-typing a path from memory.
+Reverse ADR-0078's core restriction. The agent MAY write `plan/current/.ratchet-approve`, but only when the human explicitly instructs it in the moment. The human states the path, the reason, and the go-ahead in the same turn. This removes the hand-typing reliability problem: the agent transcribes the human's exact words instead of the human hand-typing a path from memory.
 
-The line format extends ADR-0078's "one path per line, optional trailing comment" to `path | reason | timestamp`, using the human's exact reason text verbatim — never paraphrased. The write must be committed immediately, in its own dedicated commit, before any further work (including the guarded weakening edit) proceeds. This is what makes the added trust in the agent safe: the approval and the weakening it authorizes are structurally forced into separate, independently reviewable commits.
+The line format extends ADR-0078's "one path per line, optional trailing comment" to `path | reason | timestamp`, using the human's exact reason text verbatim and never paraphrased. The agent must commit the write immediately, in its own dedicated commit, before any further work (including the guarded weakening edit) proceeds. This makes the added trust in the agent safe. The process structurally forces the approval and the weakening it authorizes into separate, independently reviewable commits.
 
-ADR-0078's same-uncommitted-changeset detection is KEPT as a hook-level backstop at consumption time, now extended to surface an explicit message to the approver — naming the pending path and instructing them to commit it first — rather than blocking silently. This catches the case where the immediate-commit step was skipped, as intentional defense-in-depth rather than upfront prevention alone.
+The decision keeps ADR-0078's same-uncommitted-changeset detection as a hook-level backstop at consumption time. The backstop now surfaces an explicit message to the approver, naming the pending path and instructing them to commit it first, rather than blocking silently. This catches the case where the agent skipped the immediate-commit step, as intentional defense-in-depth rather than upfront prevention alone.
 
 ---
 
@@ -60,13 +60,13 @@ ADR-0078's same-uncommitted-changeset detection is KEPT as a hook-level backstop
 
 **Positive:**
 - Removes the single biggest usability failure mode in ADR-0078's original design (hand-typing unreliability) without reopening the forgery risk
-- The reason is now captured in the human's own words in the audit trail, not just a bare path
+- The reason is now captured in the human's own words in the audit trail, not only a bare path
 
 **Negative:**
-- The agent now has a code path capable of writing an enforcement-relevant file, which did not exist under ADR-0078's original prohibition — even though gated on explicit instruction, this is more capability than before
+- The agent now has a code path capable of writing an enforcement-relevant file, which did not exist under ADR-0078's original prohibition. Even though explicit instruction gates it, this is more capability than before
 
 **Risks:**
-- An agent could misinterpret an ambiguous chat message as "explicit instruction" and write the marker prematurely — mitigated by requiring path, reason, and go-ahead to all be present in the same turn before the write is permitted, plus the immediate-commit and backstop defense-in-depth
+- An agent could misinterpret an ambiguous chat message as "explicit instruction" and write the marker prematurely. The decision mitigates this by requiring path, reason, and go-ahead in the same turn before it permits the write, plus the immediate-commit and backstop defense-in-depth
 
 ---
 
@@ -78,7 +78,7 @@ ADR-0078's same-uncommitted-changeset detection is KEPT as a hook-level backstop
 
 ## Supersedes
 
-- ADR-0078-ratchet-approval-marker-file (0000016) — specifically its "Agents are prohibited from creating or editing the marker" restriction and its one-path-per-line format. The single-use, path-scoped, git-tracked, hook-consumed nature of the mechanism is retained.
+- ADR-0078-ratchet-approval-marker-file (0000016), specifically its `Agents are prohibited from creating or editing the marker` restriction and its one-path-per-line format. The decision retains the single-use, path-scoped, git-tracked, hook-consumed nature of the mechanism.
 
 ## Superseded By
 

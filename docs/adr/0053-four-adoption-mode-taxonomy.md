@@ -20,7 +20,7 @@ feature: "0000014-improve-adoption-mode-selection"
 
 ## Context
 
-The Planifest orchestrator previously documented three adoption modes: Greenfield, Retrofit, and Agent Interface Layer. In practice, the modes were poorly defined and inconsistently applied. "Agent Interface Layer" was undocumented in the routing reference, the mode was never explicitly surfaced to the human during P0, and the design template always persisted the value as "retrofit" regardless of what the human selected. A fourth real pattern existed but was unnamed: the common case of an ongoing Planifest project building its next feature, which is neither a fresh start (Greenfield) nor an onboarding exercise (Retrofit).
+The Planifest orchestrator previously documented three adoption modes: Greenfield, Retrofit, and Agent Interface Layer. In practice, the team defined the modes poorly and applied them inconsistently. The routing reference did not document "Agent Interface Layer". The orchestrator never surfaced the mode to the human during P0. The design template always persisted the value as "retrofit", whatever the human selected. A fourth real pattern existed but had no name. It is the common case of an ongoing Planifest project building its next feature. This is neither a fresh start (Greenfield) nor an onboarding exercise (Retrofit).
 
 ---
 
@@ -28,12 +28,12 @@ The Planifest orchestrator previously documented three adoption modes: Greenfiel
 
 Replace the three-mode taxonomy with four explicitly defined and signal-driven modes:
 
-- **Greenfield** — new project, no prior codebase, no `docs/about.md`. Starting version: `0.1.0`.
-- **Standard Iterative** — ongoing Planifest project. Signal: `docs/about.md` exists. Version read from file.
-- **Retrofit** — existing codebase without Planifest history. Signal: codebase present, no `docs/about.md`. Human confirms current version.
-- **External Anchor** — an external component dictates versioning. Signal: `planifest-overrides/instructions/external-versioning.md` exists. Human provides version directly.
+- **Greenfield**: new project, no prior codebase, no `docs/about.md`. Starting version: `0.1.0`.
+- **Standard Iterative**: ongoing Planifest project. Signal: `docs/about.md` exists. Version read from file.
+- **Retrofit**: existing codebase without Planifest history. Signal: codebase present, no `docs/about.md`. Human confirms current version.
+- **External Anchor**: an external component dictates versioning. Signal: `planifest-overrides/instructions/external-versioning.md` exists. Human provides version directly.
 
-"Agent Interface Layer" is retired: it was conceptually valid (building against an external spec) but its versioning behaviour is identical to External Anchor, and its naming was confusing. The External Anchor mode subsumes its intent with a clearer trigger mechanism.
+This ADR retires "Agent Interface Layer". It was conceptually valid (building against an external spec), but its versioning behaviour is identical to External Anchor and its name was confusing. The External Anchor mode subsumes its intent with a clearer trigger mechanism.
 
 ---
 
@@ -62,22 +62,22 @@ Replace the three-mode taxonomy with four explicitly defined and signal-driven m
 
 **Positive:**
 - The most common pipeline mode (ongoing project) is now explicitly named and detected
-- Adoption mode is determined by file signals, not guessed from context
-- "Agent Interface Layer" ambiguity is eliminated
+- File signals determine the adoption mode, so the orchestrator no longer guesses from context
+- The ADR eliminates the "Agent Interface Layer" ambiguity
 
 **Negative:**
-- Existing archived design.md files record incorrect or legacy mode values — requires a migration (REQ-008)
+- Existing archived design.md files record incorrect or legacy mode values, which requires a migration (REQ-008)
 - Any documentation or external references to "agent-interface" as a mode value break
 
 **Risks:**
-- The migration's best-guess adoption mode detection for archives may be wrong for ambiguous features; human confirmation mitigates this but adds friction
+- The migration's best-guess adoption mode detection for archives may be wrong for ambiguous features. Human confirmation mitigates this but adds friction.
 
 ---
 
 ## Related ADRs
 
-- ADR-0054 — depends-on (signal priority order depends on four modes being defined)
-- ADR-0055 — depends-on (version source depends on mode taxonomy)
+- ADR-0054: depends-on (signal priority order depends on four modes being defined)
+- ADR-0055: depends-on (version source depends on mode taxonomy)
 
 ---
 

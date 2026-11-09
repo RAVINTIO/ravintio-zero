@@ -20,7 +20,7 @@ feature: "0000003-hook-based-enforcement"
 
 ## Context
 
-Each agentic tool passes a different JSON payload to its hook commands. Claude Code passes `{tool_name, tool_input, session_id, ...}`; Cursor passes a different shape; OpenCode's plugin API exposes event objects via TypeScript interfaces. The shared enforcement scripts (`gate-write.mjs`, `check-design.mjs`, `emit-phase-start.mjs`) need to read `cwd`, `session_id`, and the target file path from the hook input. If each script handles all possible tool payload shapes, the scripts become complex and tool-coupled. Any new tool requires changes to every shared script.
+Each agentic tool passes a different JSON payload to its hook commands. Claude Code passes `{tool_name, tool_input, session_id, ...}`. Cursor passes a different shape. OpenCode's plugin API exposes event objects via TypeScript interfaces. The shared enforcement scripts (`gate-write.mjs`, `check-design.mjs`, `emit-phase-start.mjs`) need to read `cwd`, `session_id`, and the target file path from the hook input. If each script handles all possible tool payload shapes, the scripts become complex and tool-coupled. Any new tool requires changes to every shared script.
 
 ---
 
@@ -37,7 +37,7 @@ Define a canonical common envelope that all shared scripts expect:
 }
 ```
 
-Adapter scripts (one per Tier 1/1b tool, the Tier 2 plugin) are responsible for translating the tool-native payload into this shape before calling the shared scripts. Shared scripts read only from the common envelope — they have no knowledge of tool-specific payload differences.
+Adapter scripts (one per Tier 1/1b tool, the Tier 2 plugin) translate the tool-native payload into this shape before they call the shared scripts. Shared scripts read only from the common envelope and have no knowledge of tool-specific payload differences.
 
 If `cwd` is absent in the common envelope, shared scripts fall back to `process.cwd()`. If `session_id` is absent, shared scripts fall back to the `.planifest-session` file (DD-001).
 
@@ -72,14 +72,14 @@ If `cwd` is absent in the common envelope, shared scripts fall back to `process.
 **Positive:**
 - Adding a new tool requires only a new adapter, not changes to any shared script
 - Shared scripts can be tested with mock common envelope payloads independent of any tool
-- The envelope shape is a public contract — tool adapter authors know exactly what to produce
+- The envelope shape is a public contract, so tool adapter authors know exactly what to produce
 
 **Negative:**
-- Adapters add a translation layer that must be kept correct; a bug in an adapter silently passes wrong data to shared scripts
-- The `cwd` field is critical for path resolution; if an adapter sets it incorrectly, gate-write.mjs will resolve `design.md` from the wrong root — produces false positives or false negatives
+- Adapters add a translation layer that that must stay correct. A bug in an adapter silently passes wrong data to shared scripts
+- The `cwd` field is critical for path resolution. If an adapter sets it incorrectly, gate-write.mjs resolves `design.md` from the wrong root. That produces false positives or false negatives
 
 **Risks:**
-- If a tool changes its native hook payload shape, the adapter must be updated. There is no runtime validation that the common envelope is correctly formed (only the adapter author's correctness). Consider adding a lightweight envelope validation step in shared scripts (log warning, do not block).
+- If a tool changes its native hook payload shape, the adapter must be updated. Nothing validates at runtime that the adapter forms the common envelope correctly (only the adapter author's correctness). Consider adding a lightweight envelope validation step in shared scripts (log warning, do not block).
 
 ---
 
