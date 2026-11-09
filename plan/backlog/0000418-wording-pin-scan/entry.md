@@ -28,3 +28,5 @@ Add a cause to the test impact scan in `ravintio-zero/skills/ravintio-plan/SKILL
 ## Why Deferred
 
 The change edits the plan skill, which is outside the scope of a prose rewrite.
+
+The retrospective for the run is `plan/retrospectives/0000395-pack-prose-to-the-standard-2026-11-09.md`.
