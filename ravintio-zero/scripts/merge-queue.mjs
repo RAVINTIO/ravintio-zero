@@ -306,8 +306,11 @@ function cmdRun(a) {
   } else {
     git(root, ["switch", "-c", head, "--track", `origin/${head}`]);
   }
+  // A short subject of our own (0000405). Git's default names both branches and can pass the
+  // 72-character limit that the blocking commit-msg hook enforces.
+  const mergeSubject = `${featureId.slice(0, 7)}: Merge the initiative branch`;
   try {
-    git(root, ["merge", "--no-edit", `origin/${base}`]);
+    git(root, ["merge", "-m", mergeSubject, `origin/${base}`]);
   } catch (e) {
     spawnSync(GIT, ["-C", root, "merge", "--abort"]);
     throw new Stop(`merge of ${base} into ${head} failed: ${failText(e)}`);

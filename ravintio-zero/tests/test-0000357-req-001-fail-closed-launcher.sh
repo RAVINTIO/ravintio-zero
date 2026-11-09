@@ -17,6 +17,7 @@ new_project() {
   WS=$(mktemp -d -t ravintio_0000357_req001_XXXXXX)
   cp -r "$ZERO_DIR" "$WS/ravintio-zero"
   git init "$WS" >/dev/null 2>&1
+  commit_workspace_pack "$WS"
 }
 
 # hook_commands <settings>: prints every hook command, one per line.

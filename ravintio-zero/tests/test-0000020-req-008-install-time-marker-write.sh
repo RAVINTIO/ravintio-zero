@@ -49,6 +49,7 @@ make_workspace() {
   dir=$(mktemp -d -t ravintio_0000020_req008_test_XXXXXX)
   cp -r "$ZERO_DIR" "$dir/ravintio-zero"
   git init "$dir" >/dev/null 2>&1
+  commit_workspace_pack "$dir"
   git config --global --add safe.directory "$dir" >/dev/null 2>&1 || true
   echo "$dir"
 }

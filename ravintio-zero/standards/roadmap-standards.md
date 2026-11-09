@@ -46,6 +46,9 @@ The driver still requires status `active` before it runs a step.
 
 Initiative stages use five more prefixes. They use the same `{prefix} {Status}: {one-liner}` form.
 
+<!-- rule: reply-time-form -->
+Every reply begins with the local time. The form is `hh:mm {prefix} {Status}: {one-liner}`. The `UserPromptSubmit` hook gives the time. The reply-prefix hook accepts a prefix with or without the time.
+
 | Prefix | Stage |
 |--------|-------|
 | `I-A Chart:` | Chart |
@@ -430,7 +433,7 @@ A step that changes a chart format updates the active `initiative.md` in the sam
 `run` takes these actions in order and stops on the first failure:
 
 1. Check the PR title.
-2. Merge the initiative branch into the PR branch and push, with no force. A conflict stops the queue.
+2. Merge the initiative branch into the PR branch and push, with no force. A conflict stops the queue. The merge commit has the subject `{first 7 digits of Feature id}: Merge the initiative branch`, which the `commit-msg` hook accepts.
 3. Wait for CI with `gh pr checks {k} --watch --fail-fast`.
 4. Apply the row's `Bump` to the initiative branch version and write the result to every file in `version-files.txt`.
 5. Check that every version file holds the same version.

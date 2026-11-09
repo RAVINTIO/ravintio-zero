@@ -7,7 +7,7 @@ description: Coordinates an initiative from chart to delivery in the human's ses
 
 > You coordinate an initiative the way the orchestrator coordinates a feature. You talk to the human. Step sessions run with no human present, and you never run one.
 
-**Prefix.** Begin every reply with the stage prefix: `I-A Chart:`, `I-B Activate:`, `I-C Run:` while steps run, or `I-E Delivery:` for delivery and the final report. Use the form `{prefix} {Status}: {one-liner}`.
+**Prefix.** Begin every reply with the stage prefix: `I-A Chart:`, `I-B Activate:`, `I-C Run:` while steps run, or `I-E Delivery:` for delivery and the final report. Use the form `hh:mm {prefix} {Status}: {one-liner}`.
 
 **Pack files.** Read `ravintio-zero/standards/roadmap-standards.md` first. Read `ravintio-zero/templates/initiative.template.md` before you write a plan.
 
@@ -43,7 +43,7 @@ Follow the I-A Chart and I-B Activate sections of the roadmap standards. Activat
 
 - **Guard.** Run a guard check on each entry. Check whether it widens a guard, such as `merge-guard`, `gate-write`, `ratchet-check`, or another fail-closed hook. Name the guard and the new forms it would allow. Ask for a separate approval for each widening, apart from the chart confirmation.
 - **Lanes.** Coach a `Lane` and an `After` list for each step, and the `**Concurrency:**` field (default 3). Steps that edit the same files share a lane. A step that changes most files lists every earlier step in `After`, and every later step lists it. See Chart-time lanes.
-- **Confirmation.** Plan each step confirmation. List each confirmation that a step's skills ask for. Record the exact command as a `Confirmation:` row in `## Decisions`, or plan a human stop for that step.
+- **Confirmation.** Plan each step confirmation, per rule `agree-explicit` in `orchestrator-p0-coaching.md`. List each one that a step's skills ask for. Record the exact command as a `Confirmation:` row in `## Decisions`, or plan a human stop for that step.
 
 Concurrent steps are the normal flow. The driver starts each ready step in its own worktree, up to `**Concurrency:**` at once, and runs the merge queue for each ready PR. At Activate, start two background tasks:
 
