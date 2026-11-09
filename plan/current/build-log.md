@@ -109,11 +109,11 @@ Run mode: autonomous (2026-11-09T18:15:38Z, initiative 0000360 step 15)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-09T19:16:03Z` |
-| End | |
-| Wall clock | |
+| End | `2026-11-09T19:37:46Z` |
+| Wall clock | 0 |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | 0 |
 | MCP calls | 0 |
 | Parallel task batches | 0 |
-| Notes | none |
+| Notes | Clean clone: OS gap local macos, CI ubuntu, windows. Baseline check: 2 inherited suites, 0 new. |
