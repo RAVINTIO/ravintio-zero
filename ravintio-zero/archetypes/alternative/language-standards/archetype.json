@@ -1,0 +1,8 @@
+{
+  "name": "language-standards",
+  "kind": "alternative",
+  "summary": "Swaps the language standards that the pipeline reads for your own linter and formatter rules.",
+  "slots": ["language-standards"],
+  "thresholds": {},
+  "gates": []
+}
