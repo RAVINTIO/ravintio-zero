@@ -65,7 +65,7 @@ Complete: P0 (2026-11-09T14:57:47Z)
 
 - Decision: the edit pass follows loop-runner mechanics (state file, cap 3, escalation) with no toggle, as the CI loop in the same skill does.
 - Decision: the Stop hook runs only when `.claude/output-styles/ravintio-writing.md` exists. No setup flag changes.
-- Decision: ADR-0286, ADR-0287, ADR-0288 proposed.
+- Decision: ADR-0288, ADR-0289, ADR-0290 proposed.
 - Consistency check: clean.
 Complete: P1 (2026-11-09T15:02:06Z)
 
@@ -148,3 +148,7 @@ Complete: P4 (2026-11-09T16:27:12Z)
 Rework: PR conflicted with the initiative branch after step 10 merged. I merged the branch and renumbered my ADRs to 0286 to 0288. I removed the plan/current files that step 10 left. I fixed three prose breaches from the merge (2026-11-09T16:34:13Z)
 
 Rework: CodeQL flagged the HTML comment regexp in prose-rules.mjs as bad HTML filtering. I replaced it with an indexOf loop (2026-11-09T16:41:27Z)
+
+Rework: PR conflicted with the initiative branch after steps 16 and 11 merged. I merged the branch, renumbered my ADRs to 0288 to 0290, rebuilt the decisions and backlog indexes, and kept each archived baseline-failures.md at its own path (2026-11-09T17:16:57Z)
+
+Rework: shard 3 of bash-suites failed because I reworded the pinned phrase "outside this session" in the resume reference. I restored the phrase and shortened the sentence elsewhere (2026-11-09T18:01:39Z)
