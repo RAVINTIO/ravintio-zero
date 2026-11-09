@@ -100,3 +100,11 @@ A test that asserts what a skill, standard, or template says reads the text thro
 `with_timeout` lives in `helpers/timeout.sh`, so source that file first. It works on macOS, which has no `timeout` command. It runs external commands only.
 
 To anchor a rule, put `<!-- rule: <id> -->` at the start of its line or item. Use lowercase letters, digits, and hyphens, and keep each id unique across `skills/`, `standards/`, and `templates/`. The rule is the anchor line and the lines after it, up to a blank line, a heading, or the next anchor. Tests assert key terms, not whole sentences. If you delete an anchor, the test that reads it fails and names the id.
+
+## 9. Test scope per phase
+
+A TDD cycle runs the new test and the tests that cover the files the unit changed. The agent starts one full suite run in the background after the last requirement turns green, and fixes any failure before P2 completes. Each cycle appends a `Tests run:` line to the build log.
+
+At P0, the run records the suites that fail on the base commit in `plan/current/baseline-failures.md`, with `scripts/baseline-failures.mjs record`. At P3, `scripts/baseline-failures.mjs check` prints each failed suite as `inherited:` or `new:` and exits 1 on a new one. P3 stops only on a new suite and lists the inherited ones in the build report.
+
+P3 runs the suite in a clean clone of `HEAD` with `scripts/clean-clone-test.mjs`. Untracked files, ignored caches, and local state then cannot change the result. The script prints an `OS gap:` line when the local OS is not among the `runs-on` values of the CI workflow. After a fix, P3 reruns the failed suites first and then runs the full suite once before acceptance.
