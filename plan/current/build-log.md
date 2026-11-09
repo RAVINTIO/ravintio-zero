@@ -24,8 +24,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-09T06:49:19Z` |
-| End | `TBD` |
-| Wall clock | `TBD` |
+| End | `2026-11-09T06:49:55Z` |
+| Wall clock | `4` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -37,3 +37,11 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Run speed: standard (2026-11-09T06:49:19Z)
 - Decision applied (initiative chart): Migrations 0004, 0005, 0008, 0009 stay pending. Their Applies when conditions are false in the pack source repo.
 - Queue: read `ci-gate-step-11`. Written to `plan/current/coordinator-instruction-ci-gate.md`.
+- P0 backlog pull-in: 0000281, 0000284, 0000348, 0000328, 0000329 folded into the brief and deleted.
+- Scope Lock (happy path): A fix gets the light track, and each rule reads from a reference [source: draft-accepted (initiative)]
+- Scope Lock (first-run path): A repo with no track marker reads as full track [source: draft-accepted (initiative)]
+- Scope Lock (error path): A light run that grows switches to full and logs the switch [source: draft-accepted (initiative)]
+- Scope Lock (cross-session continuity): The track marker in \`discovery.md\` survives a session change [source: draft-accepted (initiative)]
+- Scope Lock complete. All four scenario paths captured.
+- Version: 0.66.0 plus minor bump gives 0.67.0. The merge queue sets the released version.
+- Complete: P0 (2026-11-09T06:49:55Z)
