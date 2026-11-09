@@ -26,8 +26,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-09T19:55:09Z` |
-| End | |
-| Wall clock | |
+| End | `2026-11-09T19:56:18Z` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -53,8 +53,8 @@ Complete: P0 (2026-11-09T19:56:18Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-09T19:58:04Z` |
-| End | |
-| Wall clock | |
+| End | `2026-11-09T19:58:30Z` |
+| Wall clock | `0` |
 | Model tier | primary |
 | Skills loaded | ravintio-plan |
 | Agents spawned | 0 |
@@ -70,13 +70,13 @@ Complete: P1 (2026-11-09T19:58:30Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-09T19:58:37Z` |
-| End | |
-| Wall clock | |
+| End | `2026-11-09T20:59:43Z` |
+| Wall clock | `61` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
-| Agents spawned | 0 |
+| Agents spawned | 15 |
 | MCP calls | 0 |
-| Parallel task batches | 0 |
+| Parallel task batches | 3 |
 | Notes | none |
 
 - In progress: U1 (2026-11-09T19:59:00Z)
@@ -123,13 +123,13 @@ Complete: P2 (2026-11-09T20:59:43Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-09T20:59:43Z` |
-| End | |
-| Wall clock | |
+| End | `2026-11-09T21:21:16Z` |
+| Wall clock | `21` |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
-| Agents spawned | 0 |
+| Agents spawned | 1 |
 | MCP calls | 0 |
-| Parallel task batches | 0 |
+| Parallel task batches | 1 |
 | Notes | none |
 
 Docs edit pass: reviewed docs/about.md, docs/architecture-overview.md, docs/dependency-graph.md, README.md, and three pack root docs. Fixed 4 spots in architecture-overview.md. Cycle count 1. prose-check exit 0. The 176 ADRs are historical records, and the pass skipped them because the linter covers their sentences (2026-11-09T21:01:09Z)
@@ -140,8 +140,8 @@ Complete: P3 (2026-11-09T21:21:16Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-09T21:21:25Z` |
-| End | |
-| Wall clock | |
+| End | `2026-11-09T21:21:37Z` |
+| Wall clock | `0` |
 | Model tier | primary |
 | Skills loaded | ravintio-ship |
 | Agents spawned | 0 |
@@ -149,3 +149,22 @@ Complete: P3 (2026-11-09T21:21:16Z)
 | Parallel task batches | 0 |
 | Notes | none |
 
+
+Complete: P4 (2026-11-09T21:21:37Z)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `86` |
+| Total agents spawned | `16` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `2` |
+| Primary tier agent calls | `16` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `7` |
+| Phases skipped | `none` |
+Postmortem: plan/postmortems/2026-11-09-prose-rewrite-wording-pins.md REQ-002 (2026-11-09T21:22:28Z)
