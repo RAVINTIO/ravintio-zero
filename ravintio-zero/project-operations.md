@@ -129,6 +129,10 @@ An initiative runs in this sequence:
 | `instructions/` | Project-specific instructions appended to the `CLAUDE.md` boot file on every setup run. Files sorted alphabetically and injected between HTML comment markers. |
 | `capability-skills/` | Permanent agent skills installed alongside built-in RAVINTIO skills on every setup run. Each skill is a directory containing a `SKILL.md`. Setup copies the whole directory, with its `references/`, `scripts/`, and `assets/` folders. A directory with no `SKILL.md` prints a warning and installs nothing. |
 | `library-standards/` | Override the pack's library preferences per language. Agents check here before the pack defaults. Structure mirrors `ravintio-zero/standards/library-standards/`. |
+| `standards/` | Replaces a pack standard by file name. Hook-enforced files listed in `ravintio-zero/archetypes/protected.json` stay fixed. |
+| `templates/` | Replaces a pack template by file name, with the same protection. |
+
+Run `setup.sh archetype list` to see the starter archetypes. Run `setup.sh archetype use {kind}/{name}` to install one into `ravintio-overrides/`. See [archetypes/README.md](archetypes/README.md).
 
 The tracked record of setup flags per tool lives at `plan/state/{tool}.md`, not under `ravintio-overrides/`. The setup script writes it, and the `ravintio-refresh-setup` skill reads it.
 
