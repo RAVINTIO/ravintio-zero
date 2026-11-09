@@ -3,7 +3,7 @@
 > Change record. Index of all ADRs across all features. Updated after every pipeline run.
 > Do not archive this file. Update it in place.
 
-Last updated: 0000384-plan-checks
+Last updated: 0000385-faster-test-runs
 
 ---
 
@@ -293,3 +293,5 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 | [ADR-0272](adr/0272-consistency-check-additions.md) | Consistency check additions | accepted | Checks 9 and 10 are new, check 8 gains an optional column, and reference resolution reads docs/adr. | 0000384-plan-checks |
 | [ADR-0273](adr/0273-human-settings-check.md) | Human-only settings check | accepted | A script reads allowlisted repository settings with GET and blocks P1 on a mismatch. | 0000384-plan-checks |
 | [ADR-0274](adr/0274-gate-write-takes-bash.md) | gate-write takes Bash calls | accepted | gate-write reads Bash redirects, tee, and sed -i, and setup wires it on the Bash matcher. | 0000393-session-integrity-and-guards |
+| [ADR-0275](adr/0275-baseline-by-suite-name.md) | Baseline failures match by suite name | accepted | The baseline records and compares failed suite file names, because the runner prints no stable test ids. | 0000385-faster-test-runs |
+| [ADR-0276](adr/0276-clean-clone-by-script.md) | Clean clone through a script | accepted | P3 runs the suite through clean-clone-test.mjs, which clones HEAD and removes the clone on every exit. | 0000385-faster-test-runs |

@@ -69,7 +69,7 @@ for each requirement:
     1. dispatch ravintio-test-writer  -> wait for RED (non-zero exit)
     2. dispatch ravintio-implementer  -> wait for GREEN (zero exit)
     if GREEN:
-      3. dispatch ravintio-refactor   -> wait for all-suite GREEN
+      3. dispatch ravintio-refactor   -> wait for affected-tests GREEN
       4. run the improvement loop     -> up to 2 cycles
       break
     else if attempt >= 5:
@@ -84,9 +84,20 @@ For each attempt on a requirement after the first, append `Rework: REQ-{nnn}: {r
 
 Every requirement must have a mapped test whose name includes the requirement ID (for example `describe('req-001-auth: login flow', ...)`). Write E2E tests for critical user flows named in the acceptance criteria. Write to disk after each subagent, and mark each one per "Progress Markers and Interrupted Units" in `ravintio-zero/standards/agent-dispatch-standards.md`. Do not accumulate work in memory across requirements.
 
+## Test scope
+
+<!-- rule: implement-affected-tests -->
+- **Each cycle runs the affected tests.** A cycle runs the new test and the tests that cover the changed files of the unit. It does not run the full suite.
+
+<!-- rule: implement-full-suite-once -->
+- **One full suite run before P2 completes.** After the last requirement is GREEN, start one full suite run in the background while you write docs. Fix any failure before you close P2.
+
+<!-- rule: implement-tests-run-line -->
+- **Record the tests.** After each cycle, append `Tests run: REQ-{nnn}: {test files} ({ISO-8601 timestamp})` to the build log. After the full run, append `Tests run: full suite: {n} passed, {m} failed ({ISO-8601 timestamp})`.
+
 ## Improvement loop
 
-After refactor confirms all-suite GREEN, run up to 2 cycles per requirement, as `## Improvement loop` in `ravintio-zero/standards/agent-dispatch-standards.md` describes. Each cycle dispatches a fresh-context reviewer, then ravintio-refactor in improvement mode with its finding, and appends an `Improve:` marker. The loop stops early on `no change worth making`.
+After refactor confirms affected-tests GREEN, run up to 2 cycles per requirement, as `## Improvement loop` in `ravintio-zero/standards/agent-dispatch-standards.md` describes. Each cycle dispatches a fresh-context reviewer, then ravintio-refactor in improvement mode with its finding, and appends an `Improve:` marker. The loop stops early on `no change worth making`.
 
 ## Rules
 
