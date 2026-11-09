@@ -1,7 +1,7 @@
 # Design - 0000390-prose-checks
 
 ## Feature
-- Problem: Only the em dash has a prose check, so sentence length, banned words, semicolons, and passive voice grow unchecked, and nothing reviews changed docs or replies.
+- Problem: Only the em dash has a prose check. Sentence length, banned words, semicolons, and passive voice grow unchecked. Nothing reviews changed docs or replies.
 - Adoption mode: standard-iterative
 - Feature ID: 0000390-prose-checks
 - Discovery: see `plan/current/discovery.md`
@@ -11,8 +11,8 @@
   - US-001: As a maintainer, I see a script check Markdown and commit messages against the writing standard, so that new breaches fail the check.
   - US-002: As a maintainer, I see old breaches recorded per file, so that only new or raised counts fail and the baseline only shrinks.
   - US-003: As a maintainer, I see the linter run in pre-commit, CI, and `commit-msg`, so that breaches stop at commit time.
-  - US-004: As a maintainer, I see a fresh-context subagent review changed user-facing docs at P3, so that the problems a script misses get fixed before ship.
-  - US-005: As a developer, I get a short note when a reply drifts from the standard, so that I can see the drift without a block.
+  - US-004: As a maintainer, I see a fresh-context subagent review changed docs at P3, so that I fix what a script misses.
+  - US-005: As a developer, I get a short note when a reply drifts from the standard, so that I see the drift without a block.
 - Acceptance criteria confirmed: 6
 - Constraints: Node with no packages. Hooks install as one file beside `read-stdin.mjs`. The Stop hook never blocks. No guard changes.
 - Integrations: none
@@ -41,7 +41,7 @@
 - .claude/
 
 ## Scope
-- In: shared rules module, linter script with `check`, `update`, and `diff`, per-file baseline, pre-commit, CI, and `commit-msg` wiring, P3 edit pass text, advisory Stop hook with setup wiring in both setup scripts, docs
+- In: the rules module, the linter, the baseline, hook and CI wiring, the P3 edit pass text, the Stop hook with setup wiring, and docs
 - Out: rewriting existing pack prose (step 19), archetype overrides (step 15), any guard change
 - Deferred: baseline path handling for the pack source move (step 20)
 

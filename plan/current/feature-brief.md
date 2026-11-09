@@ -104,7 +104,7 @@ New prose in a Zero repo stops adding breaches of the writing standard, and the 
 
 **Cross-session continuity:** The baseline lives in git. A rerun reads the same file.
 
-> No session state is kept.
+> The session keeps no state.
 
 ## Acceptance Criteria
 

@@ -42,7 +42,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Scope Lock (happy path): A staged doc with no new breach passes pre-commit and CI [source: draft-accepted (initiative)]
 - Scope Lock (first-run path): A repo with no baseline file treats it as empty, and `update --init` writes one [source: draft-accepted (initiative)]
 - Scope Lock (error path): A 26-word sentence fails with file and line. A raised baseline fails `diff` [source: draft-accepted (initiative)]
-- Scope Lock (cross-session continuity): The baseline lives in git and no session state is kept [source: draft-accepted (initiative)]
+- Scope Lock (cross-session continuity): The baseline lives in git and the session keeps no state [source: draft-accepted (initiative)]
 - Scope Lock complete. All four scenario paths captured.
 - Version: 0.70.0 to a minor bump (chart row). The merge queue sets the released version.
 - Backlog 0000301, 0000303, 0000304 pulled into the brief (2026-11-09T14:57:47Z)

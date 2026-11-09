@@ -27,12 +27,12 @@ As a maintainer, I see a script check Markdown and commit messages against the w
   - Given a Markdown file in `docs/` with a 26-word sentence
   - When `prose-check.mjs check --files` runs on it
   - Then the script exits 1 and prints the file, the line, and `sentence-length`
-- [ ] AC-2: code is skipped
+- [ ] AC-2: code lines pass
   - Given a 40-word sentence inside a fenced code block, inline code, and a table row
   - When the script checks the file
   - Then it reports no breach
 - [ ] AC-3: other rules fire
-  - Given a file with a semicolon, an em dash, the word "simply", and "is required"
+  - Given a file that holds a semicolon, an em dash, a blocklist word, and a passive phrase
   - When the script checks the file
   - Then it reports `semicolon`, `em-dash`, `blocklist`, and `passive`
 
