@@ -65,7 +65,7 @@ Complete: P0 (2026-11-09T14:57:47Z)
 
 - Decision: the edit pass follows loop-runner mechanics (state file, cap 3, escalation) with no toggle, as the CI loop in the same skill does.
 - Decision: the Stop hook runs only when `.claude/output-styles/ravintio-writing.md` exists. No setup flag changes.
-- Decision: ADR-0285, ADR-0286, ADR-0287 proposed.
+- Decision: ADR-0286, ADR-0287, ADR-0288 proposed.
 - Consistency check: clean.
 Complete: P1 (2026-11-09T15:02:06Z)
 

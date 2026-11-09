@@ -38,6 +38,45 @@ Canonical home for model tier selection and parallelism/dispatch mechanics, shar
 
 ---
 
+## Unit class, tier, and effort
+
+This table applies to implementation units. The task-type table above covers every other dispatch.
+
+Give each unit one class.
+
+<!-- rule: dispatch-unit-classes -->
+A unit has one of four classes:
+- `content`: prose, docs, templates, and agreed text.
+- `code`: application and script code.
+- `test`: test files and fixtures.
+- `config`: manifests, workflow files, and settings.
+
+Score the unit from 0 to 3.
+
+<!-- rule: dispatch-unit-signals -->
+Each of three signals adds one point to the score. A unit touches three or more files. A hook or standard constrains the output. The unit follows a `Rework:` line or an open question.
+
+### Tier and effort table
+
+Look up the unit's class and score.
+
+| Class | Score 0 | Score 1 | Score 2 | Score 3 |
+|-------|---------|---------|---------|---------|
+| content | cheaper, low | cheaper, medium | primary, high | primary, high |
+| config | cheaper, low | cheaper, medium | primary, high | primary, high |
+| test | cheaper, medium | cheaper, high | primary, high | primary, high |
+| code | primary, medium | primary, high | primary, high | primary, high |
+
+<!-- rule: dispatch-unit-tier-replaces -->
+The table's tier replaces the skill's `recommended_model` for that dispatch. The Agent call passes `model` from the tier and, on Claude Code, `effort`. The retry on the primary tier after two cheaper-tier failures stays.
+
+A human does not override a tier. Effort maps to the Agent tool `effort` value on Claude Code. A host with no effort control records the effort and passes nothing.
+
+<!-- rule: dispatch-done-line -->
+The unit's `Done:` line takes the form `- Done: {unit} ({class}, {tier}, {effort}, {ISO-8601 timestamp})`. An inline unit logs tier `inline` and effort `none`.
+
+---
+
 ## WebFetch of a reference page
 
 Run a `WebFetch` of a full reference page in a subagent on `sonnet` or `haiku`. The page then stays out of the main session, so later turns do not re-read it.
@@ -173,8 +212,10 @@ A unit is one piece of dispatched work: a TDD subagent in P2, a self-correct cyc
 2. When the unit finishes, append this line in the same commit as the unit's work:
 
    ```
-   - Done: {unit} ({ISO-8601 timestamp})
+   - Done: {unit} ({class}, {tier}, {effort}, {ISO-8601 timestamp})
    ```
+
+   An older `Done:` line without the class fields stays valid.
 
 In a parallel batch, write one `In progress:` line per unit in a single commit before the batch starts. Each unit's `Done:` line lands with that unit's work.
 
