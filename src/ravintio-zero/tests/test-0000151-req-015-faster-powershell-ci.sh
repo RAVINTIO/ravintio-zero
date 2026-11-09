@@ -9,7 +9,7 @@ set -uo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
-WORKFLOW="$SCRIPT_DIR/../../.github/workflows/ravintio.yml"
+WORKFLOW="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel 2>/dev/null)/.github/workflows/ravintio.yml"
 HELPER="$SCRIPT_DIR/helpers/setup-workspace.ps1"
 
 if [ -f "$WORKFLOW" ]; then
@@ -23,7 +23,7 @@ if [ -f "$WORKFLOW" ]; then
   assert_contains "shard: [1, 2, 3, 4]" "$JOB" "req-015: the matrix has four shards"
   assert_contains "$(printf 'defaults:\n      run:\n        shell: powershell')" "$JOB" "req-015: Windows PowerShell 5.1 is the job's default run shell"
   assert_equals "0" "$(printf '%s\n' "$JOB" | grep -cE 'shell: \$\{\{' || true)" "req-015: no step sets an expression shell"
-  assert_equals "1" "$(printf '%s\n' "$JOB" | grep -c 'ravintio-zero/tests/run-tests.ps1' || true)" \
+  assert_equals "1" "$(printf '%s\n' "$JOB" | grep -c 'src/ravintio-zero/tests/run-tests.ps1' || true)" \
     "req-015: one run-tests.ps1 invocation per matrix entry"
   assert_contains "runs-on: windows-latest" "$JOB" "req-015: the job keeps windows-latest"
   assert_contains "contents: read" "$JOB" "req-015: the job keeps read-only contents"

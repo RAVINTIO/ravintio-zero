@@ -4,7 +4,7 @@
 set -uo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 ZERO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-ROOT="$(cd "$ZERO_DIR/.." && pwd)"
+ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
 SHIP="$ZERO_DIR/skills/ravintio-ship/SKILL.md"
@@ -41,7 +41,7 @@ if command -v ruby >/dev/null 2>&1; then
         s = rt["steps"]
         r << "depth" unless s.any? { |x| x.dig("with", "fetch-depth") == 0 }
         r << "bot" unless s.to_s.include?("41898282+github-actions[bot]@users.noreply.github.com")
-        r << "cmd" unless s.any? { |x| x["run"].to_s.include?("node ravintio-zero/scripts/release-tag.mjs") }
+        r << "cmd" unless s.any? { |x| x["run"].to_s.include?((ARGV[0].include?("/hooks/") ? "node ravintio-zero" : "node src/ravintio-zero") + "/scripts/release-tag.mjs") }
       end
       jobs.each do |k, j|
         next if k == "release-tag"
