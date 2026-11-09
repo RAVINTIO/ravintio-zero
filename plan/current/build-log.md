@@ -51,8 +51,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-09T06:50:50Z` |
-| End | `TBD` |
-| Wall clock | `TBD` |
+| End | `2026-11-09T06:51:18Z` |
+| Wall clock | `7` |
 | Model tier | primary |
 | Skills loaded | ravintio-plan |
 | Agents spawned | 0 |
@@ -61,3 +61,4 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Notes | none |
 
 - Decision applied (initiative chart): P1 runs, no skip row.
+- Complete: P1 (2026-11-09T06:51:18Z)
