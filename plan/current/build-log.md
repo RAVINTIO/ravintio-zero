@@ -47,3 +47,20 @@ Scope Lock complete. All four scenario paths captured.
 Decision applied (initiative chart): The pack prose rewrite breaks wording-pinned tests
 Version: plan 0.75.0 (minor bump on 0.74.0). The merge queue sets the released version.
 Complete: P0 (2026-11-09T19:56:18Z)
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-09T19:58:04Z` |
+| End | |
+| Wall clock | |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | none |
+
+
+Complete: P1 (2026-11-09T19:58:30Z)
