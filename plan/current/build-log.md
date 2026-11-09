@@ -25,15 +25,19 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 
 | Field | Value |
 |-------|-------|
-| Start | `{{timestamp}}` |
-| End | `{{timestamp, filled when the phase completes}}` |
-| Wall clock | `{{whole minutes from Start to End}}` |
-| Model tier | primary / cheaper |
+| Start | `2026-11-09T21:38:20Z` |
+| End | `2026-11-09T21:40:03Z` |
+| Wall clock | `2` |
+| Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
-| Agents spawned | `{{count}}` |
-| MCP calls | `{{count}}` |
-| Parallel task batches | `{{count}}` |
-| Notes | `{{free text or "none"}}` |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | `Decisions applied (initiative chart): how the pack source moves, consumer paths, divergence, guards. Run mode autonomous, speed standard, version plan 0.75.0 to minor bump.` |
+
+---
+
+Complete: P0 (2026-11-09T21:40:03Z)
 
 ---
 
