@@ -1,7 +1,7 @@
 ---
 title: "ADR 0292: Override resolver and protected rules"
 summary: "A resolver returns an override before the pack copy, unless protected.json says the file is hook-enforced."
-status: "proposed"
+status: "accepted"
 component: "ravintio-zero"
 version: "0.1.0"
 ---

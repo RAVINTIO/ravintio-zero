@@ -1,7 +1,7 @@
 ---
 title: "ADR 0291: Archetype manifest format"
 summary: "Each archetype is a JSON manifest plus a files folder that mirrors ravintio-overrides."
-status: "proposed"
+status: "accepted"
 component: "ravintio-zero"
 version: "0.1.0"
 ---

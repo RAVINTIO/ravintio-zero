@@ -1,7 +1,7 @@
 ---
 title: "ADR 0294: P3 archetype gates"
 summary: "A script reads gates from installed archetypes and exits 1 on a failed gate. The validate skill reads its output."
-status: "proposed"
+status: "accepted"
 component: "ravintio-zero"
 version: "0.1.0"
 ---

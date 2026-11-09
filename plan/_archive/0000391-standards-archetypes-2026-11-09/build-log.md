@@ -127,8 +127,8 @@ Run mode: autonomous (2026-11-09T18:15:38Z, initiative 0000360 step 15)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-09T19:37:53Z` |
-| End | `2026-11-09T19:38:03Z` |
-| Wall clock | 0 |
+| End | `2026-11-09T19:40:17Z` |
+| Wall clock | 2 |
 | Model tier | primary |
 | Skills loaded | ravintio-ship |
 | Agents spawned | 0 |
@@ -146,7 +146,7 @@ Run mode: autonomous (2026-11-09T18:15:38Z, initiative 0000360 step 15)
 | Metric | Value |
 |--------|-------|
 | Total phases completed | `5` |
-| Total wall clock | `82` |
+| Total wall clock | `84` |
 | Total agents spawned | `8` |
 | Total MCP calls | `0` |
 | Phases using parallelism | `1` |

@@ -1,7 +1,7 @@
 ---
 title: "ADR 0293: Archetype command"
 summary: "One Node script implements archetype list and use. Setup scripts only dispatch to it."
-status: "proposed"
+status: "accepted"
 component: "ravintio-zero"
 version: "0.1.0"
 ---
