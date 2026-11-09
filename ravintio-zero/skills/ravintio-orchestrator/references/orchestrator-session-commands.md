@@ -44,5 +44,5 @@ Rules:
 - The parked entry reaches `main` only when the human merges the chore PR. Until then, a session on `main` does not see it.
 - If any push or `gh` call fails, report the exact error and stop. The working tree stays on the feature branch, and `park.md` stays committed locally.
 - Park never merges a pull request, never commits to `main`, and never force-pushes.
-- `park.mjs` refuses `main`, an option or full ref name as a branch, a backlog id that is not seven digits, and a slug that is not kebab-case. If it refuses, report the error and stop.
+- `park.mjs` refuses `main`, an option or full ref name as a branch, and a backlog id that is not seven digits. It also refuses a slug that is not kebab-case. If it refuses, report the error and stop.
 - Allow one park per working tree. If another feature's `chore/park-*` branch exists, do not open a second park. Ask the human to finish that one first.

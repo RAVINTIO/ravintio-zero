@@ -9,7 +9,7 @@ Conventions for every downstream phase:
 - <!-- rule: phase-build-log-first --> **Build log first:** append a `### P<n>: {Phase Name}` block before any phase work (Hard Limit 9).
 - <!-- rule: phase-load-skill --> **Load the phase skill before acting.** Read it in full first.
 - <!-- rule: phase-commit-artifacts --> **Commit** all new artifacts before presenting the gate summary.
-- <!-- rule: phase-push-cadence --> **Push cadence:** after each gate commit, if remote push is authorised by a standing override in `ravintio-overrides/instructions/` or a per-session grant in the build log, push the feature branch. A failed push is an exception stop (see Exception Stops).
+- <!-- rule: phase-push-cadence --> **Push cadence:** after each gate commit, push the feature branch if you hold a remote push grant. A standing override in `ravintio-overrides/instructions/` or a per-session entry in the build log gives that grant. A failed push is an exception stop (see Exception Stops).
 - <!-- rule: phase-skills-inbox --> **Skills inbox:** re-check at each transition.
 - <!-- rule: phase-run-mode --> **Run mode:** read `plan/.run-mode` at each transition and apply that phase's STOP rule below.
 - <!-- rule: phase-run-speed --> **Run speed:** read `plan/.run-speed`. At `fast`, dispatch the phase's fast batch.
@@ -30,7 +30,7 @@ Conventions for every downstream phase:
 - <!-- rule: phase-context-advisory --> The statement is advisory. It never blocks, delays, or skips a gate.
 - <!-- rule: phase-context-autonomous --> An autonomous run or an initiative step does not report context size. Each initiative step already starts a fresh session.
 
-<!-- rule: phase-before-p2 --> **Before P2:** check the declared stack against installed capability skills and recommend loading relevant ones. Then apply subagent decomposition for every requirement: consult `## Skill Map` in `design.md` for the best-fit skill, select the model tier, and dispatch per the dispatch standards below.
+<!-- rule: phase-before-p2 --> **Before P2:** check the declared stack against installed capability skills and recommend loading relevant ones. Then apply subagent decomposition for every requirement. Consult `## Skill Map` in `design.md` for the best-fit skill, select the model tier, and dispatch per the dispatch standards below.
 
 <!-- rule: phase-after-p4 --> **After P4:** apply the Context Hygiene reset so the next session starts cold.
 

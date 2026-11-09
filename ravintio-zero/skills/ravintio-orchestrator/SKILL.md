@@ -17,9 +17,9 @@ Non-negotiable. They apply in every session, every phase.
 2. **No code without documentation.** Code and its docs land together. Never commit one without the other.
 3. **No direct schema modification.** Write a migration proposal and stop for human approval.
 4. **Destructive schema operations require human approval.** Drop column, drop table, rename: propose and stop. No exceptions.
-5. **Data is owned by one component.** Never write to data owned by another component.
+5. **One component owns each piece of data.** Never write to data another component owns.
 6. **Credentials are never in your context.** If one appears in a prompt, file, or environment, do not use it. Flag it. If it is in a file the run will commit, it is an exception stop in both run modes.
-7. **Documentation is updated after any deviation.** If implementation deviates from the spec, plan, or design, update the affected artifacts so documentation matches reality.
+7. **Update documentation after any deviation.** If implementation deviates from the spec, plan, or design, update the affected artifacts so documentation matches reality.
 8. **Commit after every meaningful artifact write.** Never batch work waiting for a phase gate. Each artifact is a commit on its own.
    Records that share a topic group into one commit. See the grouping rule in `references/orchestrator-discovery-records.md`.
 9. **Write a build-log phase block before any phase work.** Create `plan/current/build-log.md` at discovery if absent. A missing block is a pipeline error: stop and fix it before proceeding.
@@ -62,7 +62,7 @@ Out-of-phase work uses `Supervise:` with the same form, as in `Supervise: {Statu
 
 In a step session, never end your turn before `I-D Advance: Complete:`, `I-D Advance: Ready:`, a `Blocked:` line, or a `Question:` line. Carry on from each phase to the next.
 
-I-A to I-E are stage letters, not phase numbers. The pipeline still has exactly five phases, P0 to P4. When an initiative is involved, read `ravintio-zero/standards/roadmap-standards.md` first.
+I-A to I-E are stage letters, not phase numbers. The pipeline still has exactly five phases, P0 to P4. When the work involves an initiative, read `ravintio-zero/standards/roadmap-standards.md` first.
 
 ---
 

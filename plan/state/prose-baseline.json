@@ -361,47 +361,6 @@
       "em-dash": 9,
       "passive": 3
     },
-    "ravintio-zero/skills/ravintio-orchestrator/SKILL.md": {
-      "passive": 3
-    },
-    "ravintio-zero/skills/ravintio-orchestrator/references/orchestrator-adoption-modes.md": {
-      "passive": 1,
-      "sentence-length": 1
-    },
-    "ravintio-zero/skills/ravintio-orchestrator/references/orchestrator-discovery-records.md": {
-      "passive": 1,
-      "sentence-length": 1
-    },
-    "ravintio-zero/skills/ravintio-orchestrator/references/orchestrator-exception-stops.md": {
-      "passive": 1
-    },
-    "ravintio-zero/skills/ravintio-orchestrator/references/orchestrator-p0-coaching.md": {
-      "passive": 1
-    },
-    "ravintio-zero/skills/ravintio-orchestrator/references/orchestrator-p0-start-actions.md": {
-      "passive": 4,
-      "semicolon": 1,
-      "sentence-length": 2
-    },
-    "ravintio-zero/skills/ravintio-orchestrator/references/orchestrator-phase-invocation.md": {
-      "passive": 1,
-      "sentence-length": 2
-    },
-    "ravintio-zero/skills/ravintio-orchestrator/references/orchestrator-resume-detection.md": {
-      "passive": 1,
-      "sentence-length": 1
-    },
-    "ravintio-zero/skills/ravintio-orchestrator/references/orchestrator-scope-lock.md": {
-      "blocklist": 1,
-      "passive": 4,
-      "sentence-length": 1
-    },
-    "ravintio-zero/skills/ravintio-orchestrator/references/orchestrator-session-commands.md": {
-      "sentence-length": 1
-    },
-    "ravintio-zero/skills/ravintio-orchestrator/references/orchestrator-skills-catalogue.md": {
-      "passive": 1
-    },
     "plan/backlog/0000285-enforce-postmortems-with-capa/entry.md": {
       "passive": 2
     },

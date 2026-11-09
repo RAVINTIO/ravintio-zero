@@ -29,6 +29,6 @@ version: "1.0.0"
 Capability skills encode craft knowledge. RAVINTIO skills encode discipline. Two triggers share one intake:
 
 - **Arrival:** a `SKILL.md` appears in `ravintio-zero/skills-inbox/`, checked at discovery start action 14 and every phase transition.
-- **Proposal:** after the gate checklist passes and before design confirmation, assess the declared stack against known capability skills. If relevant ones are not installed, ask once, without pressure.
+- **Proposal:** after the gate checklist passes and before design confirmation, assess the declared stack against known capability skills. If relevant ones are missing, ask once, without pressure.
 
 **Intake:** read the skill's frontmatter and summarise it in one sentence. Ask: `Use for this plan only, or add permanently? (plan / permanent)`. Plan: move to `plan/current/capability-skills/{name}/`. Permanent: move to `ravintio-overrides/capability-skills/{name}/` and re-run setup. Clear the inbox if that was the trigger, update `## Active Skills` in `design.md`, report the result. Declines proceed silently. A deferred arrival re-presents at the next transition. Before adding any skill, apply the skill-scope test: does it provide governance or traceability the host tool cannot provide on its own.

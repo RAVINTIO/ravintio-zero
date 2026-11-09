@@ -142,7 +142,7 @@ Rollbacks are human-initiated, never automatic.
 
 ## Parallelism
 
-Batch 1 (parallel): lint + typecheck, library audit + semantic check. Batch 2 (after Batch 1 passes): tests. Batch 3: build. Security analyses (dependency audit, secrets scan, input validation scan) run in parallel with each other. Never run tests before typecheck passes, the summary risk rating before all findings are in, or cycle N+1 before you verify N's fix. File out-of-scope discoveries to `plan/backlog/` per `ravintio-zero/standards/agent-dispatch-standards.md`.
+Batch 1 (parallel): lint + typecheck, library audit + semantic check. Batch 2 (after Batch 1 passes): tests. Batch 3: build. Security analyses (dependency audit, secrets scan, input validation scan) run in parallel with each other. Never run tests before typecheck passes, the summary risk rating before all findings are in, or cycle N+1 before N's fix passes verification. File out-of-scope discoveries to `plan/backlog/` per `ravintio-zero/standards/agent-dispatch-standards.md`.
 
 ### Fast batch
 

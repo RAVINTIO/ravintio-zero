@@ -107,3 +107,8 @@ Complete: P1 (2026-11-09T19:58:30Z)
 - Done: U13 (content, primary, high, 2026-11-09T20:11:11Z), six migrations/_done files kept as they were, because a test pins them to main
 - Done: U9 (content, primary, high, 2026-11-09T20:30:55Z)
 - Done: U11 part 1 (content, primary, high, 2026-11-09T20:30:55Z), 19 breaches left on lines that fixtures pin
+- Done: U11 part 2 (content, primary, high, 2026-11-09T20:35:45Z)
+- Rework: REQ-002: fixtures 0000151-orchestrator-skill-base.md and 0000243-resume-detection-base.md pinned the old orchestrator wording, so I updated both to the rewritten lines (2026-11-09T20:35:45Z)
+- Rework: REQ-002: test-0000151-req-011 byte baseline 36,275 became 36,350 after the fixture rewrite (2026-11-09T20:35:45Z)
+- Rework: REQ-002: test-0000151-req-007 now checks the phrase "stays the same". The old phrase broke the passive rule. (2026-11-09T20:35:45Z)
+Decision applied (initiative chart): A test pins text that the step edits
