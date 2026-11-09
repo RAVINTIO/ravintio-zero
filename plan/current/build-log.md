@@ -74,6 +74,16 @@ Complete: P1 (2026-11-09T21:42:32Z)
 | Notes | none |
 
 - In progress: U1 move (2026-11-09T21:42:43Z)
+- Done: U1 move (code, inline, none, 2026-11-09T21:42:49Z)
+- Done: U2 copy (code, inline, none, 2026-11-09T21:42:58Z)
+- Done: U4 guards (code, sonnet, standard, 2026-11-09T22:16:54Z)
+- Done: U5 ci-and-sync (code, sonnet, standard, 2026-11-09T22:16:54Z)
+- Done: U6 docs (content, sonnet, standard, 2026-11-09T22:16:54Z)
+- Done: U3 tests (test, sonnet, standard, 2026-11-09T22:16:54Z)
+- Done: U7 refresh (2026-11-09T22:16:54Z)
+- Rework: REQ-003: the first suite run from the source failed 43 suites on repo-root paths. U3 split them into four tracks (2026-11-09T22:16:54Z)
+- Rework: REQ-005: prose baseline keys for migrations/_done moved with the path. prose-check diff now lets src/ravintio-zero keep the old count (2026-11-09T22:16:54Z)
+- Deviation: U3 ran as four tracks (U3a to U3d), not one unit, after the first suite run showed the failing set. Plan batch 3 held U3 beside U4, U5, and U6, so the four tracks ran after them (2026-11-09T22:16:54Z)
 
 ---
 
