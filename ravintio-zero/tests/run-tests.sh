@@ -7,6 +7,7 @@
 #   RAVINTIO_REQUIRE_PWSH=1     fail the run when pwsh is missing (0000036 ADR-002)
 #   RAVINTIO_PREFLIGHT_ONLY=1   check for stray files, run no suite, and exit
 #   RAVINTIO_TEST_QUIET=1       hide PASS lines and banners, keep every failure and the summary
+#   RAVINTIO_SHARD=i/n          run only shard i of n of the suites (0000409 ADR-0284)
 #
 # Under the totals the runner lists each failed suite by file name, in quiet mode too (0000358).
 #
@@ -89,6 +90,7 @@ KNOWN_NON_SUITES=(
   "regression/test-gate-write-windows.mjs" # the regression copy of the same
   "regression/regression-manifest.json"    # the promoted-suite list
   "regression/.gitkeep"                    # keeps the folder in git
+  "brand-guard-allowlist.txt"              # the brand guard allowlist, read by pre-push and the CI brand test (0000394)
   "helpers/assert.sh"                      # Bash assert helpers
   "helpers/timeout.sh"                     # with_timeout, the portable time limit (0000380)
   "helpers/version.sh"                     # version comparison for the 0000160 req-004 and 0000164 req-011 suites
@@ -106,6 +108,8 @@ KNOWN_NON_SUITES=(
   "fixtures/0000039-setup-hardening/deep-settings.json"       # a value nested 15 levels deep (0000039 req-003)
   "fixtures/0000151-orchestrator-skill-base.md"               # orchestrator SKILL.md at the base commit (0000151 req-011)
   "fixtures/0000243-resume-detection-base.md"                 # the Resume Detection section before 0000243 (0000243 req-005)
+  "fixtures/0000387-mermaid-no-diagram/README.md"             # what the 0000387 fixture holds
+  "fixtures/0000387-mermaid-no-diagram/criteria.md"           # a Mermaid criterion in a repo with no diagram (0000387 req-003)
 )
 
 is_known_file() {
@@ -136,6 +140,33 @@ if [ "${RAVINTIO_PREFLIGHT_ONLY:-0}" = "1" ]; then
   [ "$UNDISCOVERED" -eq 0 ]
   exit $?
 fi
+
+# ── Shard (0000409) ───────────────────────────────────────────────────────────
+#
+# RAVINTIO_SHARD=i/n runs only shard i of n. Suites are numbered from 0 in run
+# order, feature suites then regression suites, and suite k runs when k mod n
+# is i - 1. CI runs each shard as its own job. Unset, every suite runs.
+SHARD_I=1
+SHARD_N=1
+if [ -n "${RAVINTIO_SHARD:-}" ]; then
+  if [[ "$RAVINTIO_SHARD" =~ ^([0-9]+)/([0-9]+)$ ]] && [ "${BASH_REMATCH[2]}" -ge 1 ] \
+    && [ "${BASH_REMATCH[1]}" -ge 1 ] && [ "${BASH_REMATCH[1]}" -le "${BASH_REMATCH[2]}" ]; then
+    SHARD_I="${BASH_REMATCH[1]}"
+    SHARD_N="${BASH_REMATCH[2]}"
+    echo "Shard $SHARD_I of $SHARD_N"
+  else
+    echo "RAVINTIO_SHARD must be i/n with 1 <= i <= n, not '$RAVINTIO_SHARD'"
+    exit 2
+  fi
+fi
+SUITE_INDEX=0
+
+# Returns 0 when the next suite in run order belongs to this shard.
+in_shard() {
+  local k=$SUITE_INDEX
+  SUITE_INDEX=$((SUITE_INDEX + 1))
+  [ $((k % SHARD_N)) -eq $((SHARD_I - 1)) ]
+}
 
 HAVE_PWSH=0
 command -v "$PWSH" >/dev/null 2>&1 && HAVE_PWSH=1
@@ -196,6 +227,7 @@ run_suite() {
 # hardcoded list silently skipped 5 of 14 suites, including this feature's own).
 for suite in "$SCRIPT_DIR"/test-*.sh "$SCRIPT_DIR"/test-*.ps1; do
   [ -e "$suite" ] || continue
+  in_shard || continue
   run_suite "$suite"
 done
 
@@ -216,6 +248,7 @@ if [ "${#REGRESSION_TESTS[@]}" -eq 0 ]; then
   echo "  No regression tests yet."
 else
   for regression_test in "${REGRESSION_TESTS[@]}"; do
+    in_shard || continue
     run_one "$regression_test"
     case $? in
       0) REGRESSION_PASS=$((REGRESSION_PASS + 1)) ;;

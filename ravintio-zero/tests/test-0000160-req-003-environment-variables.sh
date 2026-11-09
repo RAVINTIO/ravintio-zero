@@ -32,6 +32,7 @@ LEFT="$(cd "$REPO" && git ls-files -z \
       -e '^ravintio-zero/tests/test-.*ravintio-rename' \
       -e '^docs/decisions-index\.md$' \
       -e '^ravintio-zero/tests/test-0000160-req-006-brand-guard.sh$' \
+      -e '^ravintio-zero/tests/brand-guard-allowlist.txt$' \
       -e '^ravintio-zero/tests/test-0000160-req-003-environment-variables.sh$' \
   | xargs -0 grep -I -n 'PLANIFEST_' 2>/dev/null \
   | grep -Ev 'PLANIFEST_ROADMAP_(MODEL|MAX_TURNS)' )"
