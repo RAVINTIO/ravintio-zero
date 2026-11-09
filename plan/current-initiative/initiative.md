@@ -163,7 +163,7 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 10 | 0000386-unit-dispatch | Unit dispatch | 0000330, 0000366 | minor | | pending | run | 9 |
 | 11 | 0000387-light-discovery-and-audits | Light discovery and audits | 0000281, 0000284, 0000348, 0000328, 0000329 | minor | | pending | orchestrator | 8 |
 | 12 | 0000388-replies-and-questions | Replies and questions | 0000257, 0000258, 0000259, 0000306 | minor | 0.64.0 | merged | orchestrator | 4 |
-| 13 | 0000389-writing-standard | Writing standard | 0000300 | minor | | pending | writing | 4 |
+| 13 | 0000389-writing-standard | Writing standard | 0000300 | minor | 0.68.0 | merged | writing | 4 |
 | 14 | 0000390-prose-checks | Prose checks | 0000301, 0000303, 0000304 | minor | | pending | writing | 6, 13 |
 | 15 | 0000391-standards-archetypes | Standards archetypes | 0000305 | minor | | pending | writing | 6, 14 |
 | 16 | 0000392-ship-postmortems | Ship postmortems | 0000285 | minor | | pending | ship | 4 |
@@ -186,3 +186,4 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 8 | #138 | tag v0.65.0 | 0.65.0 | 2026-11-09T00:27:39Z |
 | 17 | #142 | tag v0.66.0 | 0.66.0 | 2026-11-09T02:56:13Z |
 | 9 | #130 | tag v0.67.0 | 0.67.0 | 2026-11-09T06:47:22Z |
+| 13 | #135 | tag v0.68.0 | 0.68.0 | 2026-11-09T09:10:30Z |

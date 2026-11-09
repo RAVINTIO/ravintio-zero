@@ -4,17 +4,19 @@
 
 ## 1. Date Format
 
-Two formats are used across all RAVINTIO artifacts. No others are permitted in document body text.
+Body text and filenames use different formats. The prose rules are in [writing standards](writing-standards.md).
 
-### Body text: DD MMM YYYY
+### Body text: ISO or long form
 
-All human-readable dates in document body text, changelogs, ADRs, plans, comments, and templates use **DD MMM YYYY**.
+Human-readable dates in document body text, changelogs, ADRs, plans, comments, and templates use **2026-08-18** or **"August 18, 2026"**. Pick one form for a document and keep it.
 
 | Correct | Incorrect |
 |---------|-----------|
-| 02 May 2026 | 2026-05-02 |
-| 14 Jan 2025 | 01/14/2025 |
-| 07 Dec 2024 | 07/12/2024 |
+| 2026-05-02 | 02 May 2026 |
+| January 14, 2025 | 01/14/2025 |
+| 2024-12-07 | 07/12/2024 |
+
+Existing artifacts and templates that hold `DD MMM YYYY` stay as they are until a rewrite reaches them. New sentences follow this section.
 
 ### Filename prefixes: YYYY-MM-DD
 
@@ -28,7 +30,7 @@ Frontmatter `date:` fields and JSON date values use **YYYY-MM-DD**.
 
 ### Forbidden in body text
 
-`MM/DD/YYYY`, `DD/MM/YYYY`, `YYYY/MM/DD`, ISO 8601 (`2026-05-02`), and any other format not listed above are forbidden in document body text.
+`MM/DD/YYYY`, `DD/MM/YYYY`, `YYYY/MM/DD`, and any other format not listed above are forbidden in document body text.
 
 ---
 
@@ -75,7 +77,7 @@ RAVINTIO agents default to the **shortest response that fully communicates the o
 
 ## 4. Em Dash Prohibition
 
-The em dash character (U+2014) is not permitted in RAVINTIO artifacts. Use a comma, colon, semicolon, full stop and new sentence, or parentheses instead, depending on the sentence.
+The em dash character (U+2014) is not permitted in RAVINTIO artifacts. Use a comma, colon, full stop and new sentence, or parentheses instead, depending on the sentence. The writing standard bans semicolons.
 
 ### Enforcement (req-006, ADR-003, feature 0000028)
 
