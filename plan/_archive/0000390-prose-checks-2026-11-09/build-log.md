@@ -146,3 +146,5 @@ Complete: P4 (2026-11-09T16:27:12Z)
 | Phases skipped | none |
 
 Rework: PR conflicted with the initiative branch after step 10 merged. I merged the branch and renumbered my ADRs to 0286 to 0288. I removed the plan/current files that step 10 left. I fixed three prose breaches from the merge (2026-11-09T16:34:13Z)
+
+Rework: CodeQL flagged the HTML comment regexp in prose-rules.mjs as bad HTML filtering. I replaced it with an indexOf loop (2026-11-09T16:41:27Z)

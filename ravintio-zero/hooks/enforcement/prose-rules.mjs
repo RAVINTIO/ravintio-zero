@@ -45,10 +45,24 @@ const PASSIVE_RE = /(?<![\w-])(?:is|are|was|were)\s+(?:not\s+)?(?:[a-z]+ly\s+)?(
 
 const ABBREVIATIONS = new Set(["e.g", "i.e", "etc", "vs", "cf", "approx", "fig", "eg", "ie"]);
 
+// Removes each <!-- ... --> pair on one line. An unclosed opener drops the rest.
+function stripComments(line) {
+  let out = "";
+  let from = 0;
+  for (;;) {
+    const open = line.indexOf("<!--", from);
+    if (open === -1) return out + line.slice(from);
+    out += line.slice(from, open) + " ";
+    const close = line.indexOf("-->", open + 4);
+    if (close === -1) return out;
+    from = close + 3;
+  }
+}
+
 // Turns one Markdown line into plain words. Inline code becomes CODE.
-function cleanInline(line) {
+function cleanInline(raw) {
+  const line = stripComments(raw);
   return line
-    .replace(/<!--.*?-->/g, " ")
     .replace(/(`{1,3})(?:(?!\1).)+?\1/g, "CODE")
     .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
     .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
