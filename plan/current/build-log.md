@@ -24,8 +24,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-09T01:24:17Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-09T01:24:58Z` |
+| Wall clock | `10 min` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -37,3 +37,11 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Run speed: standard (2026-11-09T01:24:17Z)
 - Decision applied (initiative chart): Migrations 0004, 0005, 0008 stay pending. Their Applies when conditions are false in the pack source repo.
 - Queue: read `ci-gate-step-17`. Written to `plan/current/coordinator-instruction-ci-gate.md`.
+- P0 backlog pull-in: 0000271, 0000367, 0000272, 0000260 folded into the brief and deleted.
+- Scope Lock (happy path): A gated shell write blocks and a clean one passes [source: draft-accepted (initiative)]
+- Scope Lock (first-run path): No pack record means no finding is raised from `docs/about.md` [source: draft-accepted (initiative)]
+- Scope Lock (error path): Malformed hook input exits 0, and the forced-add guard stays fail-closed [source: draft-accepted (initiative)]
+- Scope Lock (cross-session continuity): The `plan/state/` record is tracked, so no state is lost [source: draft-accepted (initiative)]
+- Scope Lock complete. All four scenario paths captured.
+- Version: 0.64.0 plus minor bump. The merge queue sets the released version.
+- Complete: P0 (2026-11-09T01:24:58Z)
