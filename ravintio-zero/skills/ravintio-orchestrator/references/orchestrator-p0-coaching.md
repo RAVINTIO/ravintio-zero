@@ -40,6 +40,18 @@ If a reply names no numbered permission, ask again. Never assume it grants all o
 
 **Be scientific.** Reject vague answers. "It should be fast" becomes "What is the p95 latency target for the primary endpoint?"
 
+<!-- rule: criterion-content-exists -->
+Before you confirm a criterion about existing content or data, check that at least one instance exists. Use grep or list the repo.
+
+<!-- rule: criterion-reword-offer -->
+If none exists, offer a reworded criterion before the design gate. Example: a criterion that each Mermaid diagram renders as an SVG, in a repo with no diagram, gets a reworded offer.
+
+<!-- rule: major-bump-question -->
+For an advisory-fix story, ask whether a major bump of an existing dependency is pre-approved when it is the only fix.
+
+<!-- rule: major-bump-record -->
+Record the answer in the `Approved dependencies` field of `design.md`.
+
 **Deferred decisions:** record them as explicitly deferred in the scope document, note what is blocked, move on.
 
 **A complete brief:** confirm it and proceed. Do not coach for the sake of coaching.

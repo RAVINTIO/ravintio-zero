@@ -1,6 +1,6 @@
 # Architecture Overview
 
-Last updated: 0000389-writing-standard
+Last updated: 0000387-light-discovery-and-audits
 
 ## What this repo is
 
@@ -95,6 +95,8 @@ Discovery sizes each release against a budget. The optional `releaseSize` field 
 **ADR home.** Every ADR is a file at `docs/adr/{NNNN}-{slug}.md` with a repo-wide four-digit number. The counter is `docs/adr/.next-id`, and the plan skill reserves from it with `reserve-id.mjs --file`. An ADR names its component in its front matter. Plan writes it with status `proposed`, and ship sets `accepted` and adds a row to `docs/decisions-index.md`. The archive links to `docs/adr/` and holds no copy. Migration 0009 runs `migrations/migrate-adr-home.mjs` through `.sh` and `.ps1` wrappers. It restores the ADRs of features 0000001 to 0000029 from git history, numbers all ADRs in feature order, rewrites references with `docs/adr/.migration-map.json`, and rebuilds the index. A second run changes nothing (0000384 ADR-001).
 
 **Human-only settings.** A chart names a setting as a `Human setting:` row in `## Decisions`. Before P2, the plan skill runs `scripts/human-settings-check.mjs`. It reads each row with `gh api -X GET` against an endpoint allowlist, and prints a `Blocked:` line on a mismatch. It never writes a setting (0000384 ADR-003).
+
+**Light discovery and audits.** A fix or small change can take the light P0 track. The orchestrator offers it, and `discovery.md` records `Track: light` or `Track: full`. A light run still writes `discovery.md`, `design.md`, and the build log, and it switches to the full track and logs `Track switched: light to full` if the change grows. Coaching records group into one commit per topic, while a requirement, an ADR, and `design.md` commit at once. P0 coaching checks that a criterion's tested content exists and asks whether a major bump is pre-approved for an advisory fix. The plan skill re-runs the dependency audit before the plan gate and logs `Audit: re-run at P1 ({result})` (0000387).
 
 ### Install lifecycle
 
