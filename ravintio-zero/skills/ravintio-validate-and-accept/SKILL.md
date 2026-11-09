@@ -47,6 +47,7 @@ Run the stack's declared checks in this order:
    - <!-- rule: p3-rerun-failed --> **Rerun.** After a fix, rerun only the failed suites first.
    - <!-- rule: p3-full-suite --> **Full suite.** Run the full suite once, green apart from inherited suites, before acceptance.
 5. **Build**
+6. **Archetype gates**: run `node ravintio-zero/scripts/archetype-gates.mjs`. Exit 1 fails the check. Self-correct it like any other.
 
 If a check fails, self-correct: read the error, find the root cause, fix it, re-run. Record each cycle (check, error, root cause, fix, result). For each cycle whose fix touches a requirement's code or test, append `Rework: REQ-{nnn}: {reason} ({ISO-8601 timestamp})` to the build log, as `ravintio-zero/standards/workflow-governance-standards.md` defines. Maximum **5 cycles**. Loop mechanics (state file, run-log records, stop rules, escalation format) follow `ravintio-loop-runner`, with a cap of 5. After 5 failed cycles, STOP and escalate in both run modes:
 
