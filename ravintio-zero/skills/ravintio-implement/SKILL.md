@@ -84,6 +84,14 @@ For each attempt on a requirement after the first, append `Rework: REQ-{nnn}: {r
 
 Every requirement must have a mapped test whose name includes the requirement ID (for example `describe('req-001-auth: login flow', ...)`). Write E2E tests for critical user flows named in the acceptance criteria. Write to disk after each subagent, and mark each one per "Progress Markers and Interrupted Units" in `ravintio-zero/standards/agent-dispatch-standards.md`. Do not accumulate work in memory across requirements.
 
+## Inline units
+
+<!-- rule: implement-inline-unit -->
+- **An inline unit runs the TDD loop in your own context.** It is a unit of class `content` that applies agreed text or changes one file. Write its failing test, append `- RED: {unit} ({ISO-8601 timestamp})`, make the change, run the test, and append `- GREEN: {unit} ({ISO-8601 timestamp})`. Then append the `Done:` line with tier `inline` and effort `none`. It dispatches no subagent and skips the refactor step and the improvement loop.
+
+<!-- rule: implement-non-inline-subagents -->
+- **A unit that is not inline still runs the test-writer, implementer, and refactor subagents.** The loop above applies to it unchanged.
+
 ## Test scope
 
 <!-- rule: implement-affected-tests -->

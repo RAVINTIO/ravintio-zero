@@ -25,6 +25,10 @@ Read this file when you write a marker line or read a workflow governance sectio
 - `Gate revised: P{N} ({ISO-8601 timestamp}, {what changed})`
 - `Improve: REQ-{nnn}: cycle {n}: {finding}: {change}: suite {pass | fail, reverted} ({ISO-8601 timestamp})`
 - `Improve: REQ-{nnn}: cycle {n}: no change worth making ({ISO-8601 timestamp})`
+- `RED: {unit} ({ISO-8601 timestamp})`
+- `GREEN: {unit} ({ISO-8601 timestamp})`
+
+The implement skill writes the `RED:` and `GREEN:` markers for an inline unit. `workflow-metrics.mjs` does not count them. `build-log-check.mjs` checks that each `GREEN:` follows a `RED:` for the same unit.
 
 The implement skill writes the `Improve:` markers, one per improvement cycle. `workflow-metrics.mjs` does not count them, and no threshold applies. They record the gain for a human to read.
 
