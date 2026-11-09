@@ -134,3 +134,5 @@ Complete: P4 (2026-11-08T01:41:16Z)
 Rework: merged origin/initiative/0000360-backlog-sweep into PR #134 (2026-11-09T03:38:46Z). Resolved docs/architecture-overview.md and plan/backlog/index.md, moved ADR-001 and ADR-002 to docs/adr/0275 and 0276. Suites: 337 passed, 0 failed. Regression: 19 passed.
 
 Rework: merged origin/initiative/0000360-backlog-sweep into PR #134 again (2026-11-09T09:37:28Z). Resolved docs/decisions-index.md and plan/backlog/index.md. Step 9 took ADR-0275 and ADR-0276, so ADR-001 and ADR-002 moved to docs/adr/0277 and 0278, and docs/adr/.next-id is 0279. All CI checks passed. The local suite did not finish.
+
+Rework: merged origin/initiative/0000360-backlog-sweep into PR #134 a third time (2026-11-09T10:05:00Z) after step 13 merged. Step 13 took ADR-0277 to ADR-0280, so ADR-001 and ADR-002 moved to docs/adr/0281 and 0282, and docs/adr/.next-id is 0283. Resolved docs/decisions-index.md and plan/backlog/index.md.
