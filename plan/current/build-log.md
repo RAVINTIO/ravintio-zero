@@ -79,3 +79,46 @@ Complete: P1 (2026-11-09T14:13:09Z)
 Complete: P2 (2026-11-09T14:18:34Z)
 
 - Rework: REQ-002: CI on PR #144 took 7m23s on Windows shard 3, over the 7-minute AC-3 target. The Windows matrix grows from 3 shards to 4, and the design, brief, requirement, ADR, tests, and docs now say 4 (2026-11-09T14:38:14Z)
+
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-09T14:18:34Z` |
+| End | `2026-11-09T14:43:26Z` |
+| Wall clock | `25` |
+| Model tier | primary |
+| Skills loaded | none |
+| Agents spawned | `0` |
+| Notes | Tests run: 364 suites in a clean clone in 4 shards, 362 passed. The two failures match `baseline-failures.md`. CI on `e3786225` passed in 4m40s. Security: no critical or high finding. Autonomous run: the acceptance evidence goes in the PR. |
+
+Complete: P3 (2026-11-09T14:43:26Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-09T14:43:26Z` |
+| End | `2026-11-09T14:43:26Z` |
+| Wall clock | `0` |
+| Model tier | primary |
+| Skills loaded | none |
+| Agents spawned | `0` |
+| Notes | No version bump: this PR is not a chart step. The coordinator squash-merges it into the initiative branch after green CI, then removes `windows-powershell (pwsh)` from the main ruleset. |
+
+Complete: P4 (2026-11-09T14:43:26Z)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `33` |
+| Total agents spawned | `0` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `0` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `2` |
