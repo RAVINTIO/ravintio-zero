@@ -8,6 +8,7 @@
 repo/
 +-- ravintio-zero/          <- The pack: skills, templates, schemas,
 |                               standards, hooks, setup scripts.
+|                               In this repo, a copy of src/ravintio-zero/.
 |
 +-- plan/                    <- The specifications and records.
 |
@@ -68,5 +69,6 @@ src/
     +-- {source}
 ```
 
-This repository's single component is the pack itself, so its manifest
-lives at `ravintio-zero/component.yml` and `src/` holds only the scaffold.
+This repository's single component is the pack itself. Its source and manifest
+live at `src/ravintio-zero/`, and the root `ravintio-zero/` is a plain installed
+copy that `scripts/sync-installed.mjs` refreshes.

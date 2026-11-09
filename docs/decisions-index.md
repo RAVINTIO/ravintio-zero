@@ -3,7 +3,7 @@
 > Change record. Index of all ADRs across all features. Updated after every pipeline run.
 > Do not archive this file. Update it in place.
 
-Last updated: 0000391-standards-archetypes
+Last updated: 0000397-pack-source-in-src
 
 ---
 
@@ -313,3 +313,4 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 | [ADR-0292](adr/0292-override-resolver-and-protected-rules.md) | Override resolver and protected rules | accepted | A resolver returns an override before the pack copy, unless protected.json says the file is hook-enforced. | 0000391-standards-archetypes |
 | [ADR-0293](adr/0293-archetype-command.md) | Archetype command | accepted | One Node script implements archetype list and use. Setup scripts only dispatch to it. | 0000391-standards-archetypes |
 | [ADR-0294](adr/0294-p3-archetype-gates.md) | P3 archetype gates | accepted | A script reads gates from installed archetypes and exits 1 on a failed gate. The validate skill reads its output. | 0000391-standards-archetypes |
+| [ADR-0295](adr/0295-pack-source-in-src.md) | Pack source in src | proposed | The pack source lives at src/ravintio-zero/. The root ravintio-zero/ is a plain installed copy with a sync script. | 0000397-pack-source-in-src |

@@ -1,6 +1,6 @@
 # Dependency Graph
 
-Last updated: 0000389-writing-standard
+Last updated: 0000397-pack-source-in-src
 
 ## Component dependency diagram
 
@@ -14,6 +14,8 @@ graph TD
         ENFORCE["hooks/enforcement/\n(gate-write, check-design, ratchet-check,\nem-dash-guard, merge-guard,\nauto-trigger-orchestrator, check-orchestrator-presence,\ncheck-reply-prefix,\ncheck-reply-writing)"]
         ENFSHARED["hooks/enforcement/read-stdin.mjs\nshared module, always installed"]
         VERSION["scripts/product-version.mjs"]
+        SYNC["scripts/sync-installed.mjs"]
+        INSTALLED["ravintio-zero/ (installed copy)"]
         DRIVER["scripts/initiative-run.mjs"]
         CHART["scripts/initiative-chart.mjs"]
         QUEUE["scripts/merge-queue.mjs"]
@@ -27,7 +29,7 @@ graph TD
 
     subgraph "Project root"
         PRODUCT["product.yml"]
-        MANIFEST["ravintio-zero/component.yml"]
+        MANIFEST["src/ravintio-zero/component.yml"]
     end
 
     subgraph "Claude Code runtime"
@@ -44,6 +46,7 @@ graph TD
     SETUP -->|"copies + wires"| ENFORCE
     SETUP -->|"wires via core.hooksPath"| GITHOOKS
     SKILLS -->|"reads by full path"| STANDARDS
+    SYNC -->|"copies the source to"| INSTALLED
 
     CC -->|"plans a tool call"| HookRunner
     HookRunner -->|"stdin JSON"| ENFORCE
