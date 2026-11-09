@@ -74,6 +74,7 @@ Complete: P1 (2026-11-09T16:52:43Z)
 | Notes | Inline, one unit. Step 16 (0000392) had merged a CI wait into the script, found when the first test run sat in that wait. The fix builds on it and uses its `MQ_POLL_MS` and `MQ_TIMEOUT_MS`. The plan docs now name those settings. RED: 7 failures on the old script. GREEN: 9 of 9. |
 
 - Rework: REQ-001: the test fake answered `gh pr checks` with no JSON, so it waited in the 0000392 CI loop. The fake now answers with a passing check (2026-11-09T16:58:27Z)
+- Postmortem: plan/postmortems/2026-11-09-queue-test-fake-missed-ci-wait.md REQ-001 (2026-11-09T16:58:54Z)
 - Done: U-001 REQ-001 queue waits for GitHub. The 0000378, 0000392, 0000405, 0000043, and two 0000379 suites pass (2026-11-09T16:58:27Z)
 
 Complete: P2 (2026-11-09T16:58:27Z)
