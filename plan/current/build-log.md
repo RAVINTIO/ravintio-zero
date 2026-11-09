@@ -55,6 +55,6 @@ Complete: P0 (2026-11-09T16:51:19Z)
 | Parallel task batches | `0` |
 | Notes | One requirement. No ADR: the change follows 0000378 ADR-001 and adds waits inside the same flow. |
 
-- Consistency check: clean (2026-11-09T16:52:43Z). Autonomous run: the plan gate passes with no human stop.
+- Consistency check: 1 finding, no living docs unit. U-001 now writes `docs/architecture-overview.md`, and the rerun is clean (2026-11-09T16:52:43Z). Autonomous run: the plan gate passes with no human stop.
 
 Complete: P1 (2026-11-09T16:52:43Z)

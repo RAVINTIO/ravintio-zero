@@ -50,7 +50,7 @@ The change edits one script in one component, `ravintio-zero`. It adds `gh pr vi
 
 | Unit | Depends on | Writes | Batch | Sequential reason |
 |------|-----------|--------|-------|-------------------|
-| U-001 | none | `ravintio-zero/scripts/merge-queue.mjs`, `ravintio-zero/tests/test-0000411-req-001-queue-waits.sh`, the fake `gh` in two suites | 1 | One requirement in one script, so a single unit in one context |
+| U-001 | none | `ravintio-zero/scripts/merge-queue.mjs`, `ravintio-zero/tests/test-0000411-req-001-queue-waits.sh`, the fake `gh` in two suites, `docs/architecture-overview.md` | 1 | One requirement in one script, so a single unit in one context |
 
 ## Assumptions
 
