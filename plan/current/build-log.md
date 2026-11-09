@@ -39,3 +39,9 @@ Run mode: autonomous (2026-11-09T18:15:38Z, initiative 0000360 step 15)
 
 - Queue: read ci-gate-step-15 (CI before ready, restore route, block lines in the build log). This step skips the item narrow-brand-guard-self-entry, which names step 18.
 - Migrations 0004, 0005, 0008, 0009: not run. A step session has no human to answer the migrator. Their Applies-when conditions are false here, or Safe to skip is Yes (0009, 0008). Tracked in backlog 0000403.
+- Scope Lock (happy path): archetype use copies files into overrides, prints what it replaced, and the resolver then returns the override [source: draft-accepted (initiative)]
+- Scope Lock (first-run path): the command creates ravintio-overrides/archetypes.json with the first pick [source: draft-accepted (initiative)]
+- Scope Lock (error path): a clash or a lowered threshold prints the cause, exits 1, and copies nothing [source: draft-accepted (initiative)]
+- Scope Lock (cross-session continuity): the command checks first, then writes the files and the record, and a rerun changes nothing [source: draft-accepted (initiative)]
+- Scope Lock complete. All four scenario paths captured.
+- Design confirmed: draft-accepted (initiative) (2026-11-09T18:17:52Z)
