@@ -2,7 +2,7 @@
 
 **Feature:** Standards archetypes
 **Version:** set by the merge queue from the step Bump.
-**PR:** pending
+**PR:** 148
 
 ## What changed
 
