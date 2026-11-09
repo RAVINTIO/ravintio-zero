@@ -41,6 +41,24 @@ Complete: P0 (2026-11-09T21:40:03Z)
 
 ---
 
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-09T21:40:30Z` |
+| End | `2026-11-09T21:42:32Z` |
+| Wall clock | `3` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Inline. ADR 0295 proposed. Consistency check clean. Gate self-confirmed for the initiative. |
+
+Complete: P1 (2026-11-09T21:42:32Z)
+
+---
+
 <!-- Copy and fill in this block at each phase boundary. Headings use the form
      "### P<n>: {Phase Name}" with n from 1 to 4 and the phase names
      P1: Plan, P2: Implement, P3: Validate and Accept, P4: Ship.
