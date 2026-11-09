@@ -78,3 +78,11 @@ Run mode: autonomous (2026-11-09T18:15:38Z, initiative 0000360 step 15)
 | Notes | Batches follow the concurrency plan: batch 1 is U1, U4, U5. Batch 2 is U2, U6, U7. Batch 3 is U3. Batch 4 is U8 and U9. Each unit writes its test first and confirms RED before the code. |
 
 - In progress: batch 1 U1 U4 U5 (2026-11-09T18:23:25Z)
+- RED: U1 REQ-001 REQ-002 resolver (2026-11-09T18:25:26Z)
+- GREEN: U1 REQ-001 REQ-002 resolver (2026-11-09T18:25:26Z)
+- Done: U1 resolver and protected list (code, primary, medium, 2026-11-09T18:25:26Z)
+- Tests run: REQ-001, REQ-002: test-0000391-req-001-002-resolver.sh (2026-11-09T18:25:26Z)
+- RED: U4 REQ-006 gate check (2026-11-09T18:25:26Z)
+- GREEN: U4 REQ-006 gate check (2026-11-09T18:25:26Z)
+- Done: U4 gate check (code, primary, medium, 2026-11-09T18:25:26Z)
+- Tests run: REQ-006: test-0000391-req-006-gates.sh (2026-11-09T18:25:26Z)
