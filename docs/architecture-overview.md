@@ -161,6 +161,14 @@ Boot files are disposable build outputs. Every run regenerates `CLAUDE.md` from 
 
 `ravintio-zero/standards/writing-standards.md` holds the pack's prose rules in two marked regions. `scripts/writing-style.mjs` prints each tool's output from those regions. For Claude Code, `setup.sh` and `setup.ps1` write `.claude/output-styles/ravintio-writing.md` and set `outputStyle` to `ravintio-writing` when the key is absent. They leave any other value. For Codex, they keep one writing block in `AGENTS.md`. `--no-writing-style` skips both outputs, and the setup record and `ravintio-refresh-setup` carry the flag. An output style reaches only the main session, so the Agent Dispatch Template and the driver's `--append-system-prompt` name the standard for subagents and step sessions (0000389).
 
+## Prose checks
+
+`ravintio-zero/hooks/enforcement/prose-rules.mjs` holds the prose rules. They are `sentence-length` (over 25 words), `blocklist`, `semicolon`, `em-dash`, and `passive`. The rules skip front matter, fenced code, inline code, tables, and HTML comments. Both `scripts/prose-check.mjs` and the `check-reply-writing` Stop hook import the module, because a hook installs as one file beside `read-stdin.mjs`.
+
+`prose-check.mjs` has three commands. `check` reads the in-scope Markdown files, or the staged files, or one commit message. `update` lowers the baseline. `diff --base <ref>` fails when the baseline holds a higher count than it does at `<ref>`. The scope is Markdown under `docs/`, `ravintio-zero/`, `ravintio-overrides/`, `plan/`, `src/`, `.github/`, and the repo root. `plan/_archive/`, `ravintio-zero/tests/`, `CLAUDE.md`, and `AGENTS.md` sit outside it.
+
+`plan/state/prose-baseline.json` records the breach count for each file and rule. A count may fall and may not rise. The `commit-msg` hook checks the message. The pre-commit hook checks staged files and runs `diff` against `HEAD`. The CI `prose` job checks every file and runs `diff` against the base branch. The P3 docs edit pass in `ravintio-validate-and-accept` ends only when `check` passes on the changed user-facing docs. The advisory `check-reply-writing` hook reports long sentences and blocklist words in a reply, and only when `.claude/output-styles/ravintio-writing.md` exists.
+
 ## Setup-config record
 
 `setup.sh` and `setup.ps1` write the tracked record of active setup flags to `plan/state/{tool}.md`, creating the folder when it is absent. The record and the gitignored flags marker hold `tool`, `flags`, and `writtenAt`. The `ravintio-refresh-setup` skill reads and validates that record before falling back to the gitignored marker and hook inference.
