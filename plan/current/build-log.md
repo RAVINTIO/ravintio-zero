@@ -45,3 +45,19 @@ Run mode: autonomous (2026-11-09T18:15:38Z, initiative 0000360 step 15)
 - Scope Lock (cross-session continuity): the command checks first, then writes the files and the record, and a rerun changes nothing [source: draft-accepted (initiative)]
 - Scope Lock complete. All four scenario paths captured.
 - Design confirmed: draft-accepted (initiative) (2026-11-09T18:17:52Z)
+
+- Baseline: the clean-clone suite runs in the background (/tmp/step15-baseline.out). plan/current/baseline-failures.md follows when it ends.
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-09T18:18:21Z` |
+| End | |
+| Wall clock | |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | none |
