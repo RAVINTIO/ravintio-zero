@@ -15,7 +15,7 @@ make_workspace() {
   local dir
   dir=$(mktemp -d -t ravintio_0000389_setup_test_XXXXXX)
   cp -r "$ZERO_DIR" "$dir/ravintio-zero"
-  git init "$dir" >/dev/null 2>&1
+  commit_workspace_pack "$dir"
   echo "$dir"
 }
 
@@ -72,6 +72,7 @@ echo "=== req-004: codex AGENTS.md holds one writing block ==="
 WS=$(make_workspace); cd "$WS"
 mkdir -p ravintio-overrides/instructions
 echo "Local rule for the test." > ravintio-overrides/instructions/custom-001-test.md
+commit_workspace_pack "$WS"
 OUT="$(bash ravintio-zero/setup.sh codex 2>&1)"
 assert_equals "1" "$(block_count AGENTS.md)" "req-004 AC-1: one writing block after the first run"
 assert_contains "+ AGENTS.md (writing section added)" "$OUT" "req-004 AC-1: the added line is printed"
