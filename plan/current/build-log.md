@@ -90,3 +90,17 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Rework: REQ-001: test-0000377 capped SKILL.md at 8,700 bytes, so the cap rose to 9,000, and run-tests.sh lists the new fixture files (2026-11-09T07:35:20Z)
 - Full suite: 337 feature suites and 19 regression suites passed, 0 failed (2026-11-09T07:35:20Z)
 - Complete: P2 (2026-11-09T07:35:20Z)
+
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-09T07:35:44Z` |
+| End | `TBD` |
+| Wall clock | `TBD` |
+| Model tier | primary |
+| Skills loaded | ravintio-validate-and-accept |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | none |
