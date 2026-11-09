@@ -1,0 +1,8 @@
+{
+  "name": "us-writing",
+  "kind": "alternative",
+  "summary": "Swaps the British English spelling rule for American English spelling.",
+  "slots": ["writing-style"],
+  "thresholds": {},
+  "gates": []
+}
