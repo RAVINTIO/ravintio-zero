@@ -34,6 +34,14 @@ The implement skill writes the `Improve:` markers, one per improvement cycle. `w
 
 Write each marker line to `build-log.md`. A loop may also write markers to its `loop-state-*.md` file.
 
+## Dispatch by class and tier
+
+`workflow-metrics.mjs` also prints a `## Dispatch by class and tier` section after the governance table. It reads the `Done:` lines described in `agent-dispatch-standards.md` and lists the unit count and the rework count for each class and tier pair.
+
+- A `Rework: REQ-{nnn}:` marker counts toward the class and tier of the last classified `Done:` line before it that names that requirement. With none, it counts as `unclassified`.
+- A `Done:` line without class fields counts as `unclassified`.
+- The section reports and never blocks. No threshold applies. Later runs use it to tune the tier and effort table.
+
 ## Counting rule
 
 A line counts as a marker when it starts with the marker text. Leading whitespace and one list marker (`- `, `* `, or `1. `) may come first. The script skips lines inside fenced code blocks (``` or ~~~). A mention in prose does not count.
