@@ -1,7 +1,7 @@
 ---
 title: "ADR 0286: Prose baseline ratchet"
 summary: "A per-file count of breaches by rule, kept in git, may fall and never rise."
-status: "proposed"
+status: "accepted"
 component: "ravintio-zero"
 version: "0.1.0"
 ---

@@ -1074,12 +1074,6 @@
     "plan/changelog/0000394-github-security-and-ci-lint-2026-11-08.md": {
       "passive": 1
     },
-    "plan/current/design.md": {
-      "em-dash": 2,
-      "passive": 1,
-      "semicolon": 2,
-      "sentence-length": 3
-    },
     "plan/postmortems/2026-10-31-step-6-forced-add-committed-driver-files.md": {
       "passive": 1
     },

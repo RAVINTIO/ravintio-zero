@@ -1,7 +1,7 @@
 ---
 title: "ADR 0285: Shared prose rules module"
 summary: "One module in hooks/enforcement/ holds the prose rules. The linter script and the Stop hook both import it."
-status: "proposed"
+status: "accepted"
 component: "ravintio-zero"
 version: "0.1.0"
 ---

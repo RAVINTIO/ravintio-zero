@@ -1,7 +1,7 @@
 ---
 title: "ADR 0287: Prose scope and enforcement points"
 summary: "The linter reads a fixed set of Markdown paths and runs in commit-msg, pre-commit, and CI."
-status: "proposed"
+status: "accepted"
 component: "ravintio-zero"
 version: "0.1.0"
 ---
