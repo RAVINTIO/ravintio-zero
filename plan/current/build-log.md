@@ -140,3 +140,4 @@ Complete: P4
 | Self-corrections | 0 |
 | Phases skipped | none |
 Rework: REQ-001: the mode check read the filesystem on Linux, fixed to try GNU stat first (2026-11-10T17:40:01Z)
+Postmortem: plan/postmortems/2026-11-10-stat-mode-differs-on-linux.md REQ-001 (2026-11-10T17:40:41Z)
