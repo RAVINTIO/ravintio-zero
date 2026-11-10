@@ -59,10 +59,33 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-10T00:51:03Z` |
+| End | `2026-11-10T01:18:07Z` |
+| Wall clock | 31 |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | 5 |
+| MCP calls | 0 |
+| Parallel task batches | 1 |
+| Notes | none |
+
+- Done: U-001 (code, sonnet, standard, 2026-11-10T01:18:07Z)
+- Done: U-002 (code, sonnet, standard, 2026-11-10T01:18:07Z)
+- Done: U-005 (code, sonnet, standard, 2026-11-10T01:18:07Z)
+- Done: U-006 (code, sonnet, standard, 2026-11-10T01:18:07Z)
+- Done: U-007 (code, sonnet, standard, 2026-11-10T01:18:07Z)
+- Done: U-003 (content, inline, none, 2026-11-10T01:18:07Z)
+- Rework: REQ-006: stale ledger rows for 0004 and 0005 still printed, so the Detect rule now applies to any row (2026-11-10T01:18:07Z)
+- Tests run: full suite: 382 passed, 0 failed (2026-11-10T01:18:07Z)
+
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T01:18:07Z` |
 | End | |
 | Wall clock | |
 | Model tier | primary |
-| Skills loaded | ravintio-implement |
+| Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | 0 |
 | MCP calls | 0 |
 | Parallel task batches | 0 |
