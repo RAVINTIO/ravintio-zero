@@ -35,6 +35,8 @@ Times are UTC. "Coordinator" marks a mistake by the coordinator session. A blame
 | 25 | 2026-11-08 | 18 | The brand guard self-entry instruction for step 18 stayed in the queue | `plan/.initiative-queue/narrow-brand-guard-self-entry/` | Unknown. Step 22 checks |
 | 26 | 2026-11-08 to 10 | all | The human could not oversee the run easily: many stops, long reports, and decisions mixed with routine fixes. The human called it "a mess" and asked for easier oversight | human messages | Open: one status view, fewer stops |
 | 27 | 2026-11-10 | 21 | `initiative-add-step.mjs` wrote the bare id `0000421` as the step's `Feature id`, with no slug. The driver then stopped with "step 22 has an invalid feature id" | driver output 02:18, PR #153 | Chart row fixed by hand. Script fix open |
+| 28 | 2026-11-10 | 36 | PR #166 conflicted with the initiative branch after other steps merged, so GitHub ran no CI on it. The step waited on checks that could never register | PR #166, watcher activity from 20:07 to 21:16 | The step saw it and resolved the conflict. Open: the step and the queue check mergeability before a CI wait |
+| 29 | 2026-11-10 | driver | The driver fills free slots with any startable step and does not favour the longest chain. The driver lane, steps 24 to 29 then 41, waited while other lanes ran | driver output 13:28 to 21:28 | Open: rank steps by the chain behind them |
 
 ## Interim workarounds still in use
 

@@ -124,6 +124,7 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | Step | Fork | Pre-approved answer | Bump effect |
 |------|------|---------------------|-------------|
 | 1-21 | Confirmation: setup rerun at each `Setup:` stop | Run the exact command `ravintio-zero/setup.sh claude-code --strict-orchestrator`. If the command differs in any way, stop for the human. | none |
+| 25-41 | Local suite runs | Approved by the human on 2026-11-10. Run the local suite in 4 parallel shards with `RAVINTIO_SHARD=1/4` to `4/4`, and read every shard's summary. Reuse the known baseline: `test-0000037-req-004-remove-old-folder.sh` and `test-0000318-req-004-merge-guard-pinned.sh` fail in a clean clone on the base. Record them with `baseline-failures.mjs` without a base run. If any other suite fails, run that suite on the base commit to tell an inherited failure from a new one. CI still runs every suite. | none |
 | 1 | The orchestrator skill has 118 bytes left under its 9000 byte cap | Move the Context Hygiene section to `references/orchestrator-context-hygiene.md` with a Pack Index row, and update the cap tests (0000371), before the `Question:` edit | none |
 | 1 | The driver changes while it runs | The coordinator takes the `Restart:` stop and starts a new driver and watcher | none |
 | 2 | Steps 1 and 2 still bump in P4 | Steps 1 and 2 use today's P4 bump. The merge queue sets versions from step 3 on. | none |
