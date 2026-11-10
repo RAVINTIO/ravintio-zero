@@ -107,13 +107,18 @@ const idFile = path.join(opts.root, 'plan', 'backlog', '.next-id');
 const reserved = run('reserve-id.mjs', ['2', '--file', idFile], opts.root).trim().split('\n');
 const [featureId, backlogId] = reserved;
 
+// Escape backslashes first, then quotes, for a double-quoted YAML scalar.
+function yamlQuote(text) {
+  return text.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+}
+
 const folder = path.join(opts.root, 'plan', 'backlog', `${backlogId}-${opts.slug}`);
 fs.mkdirSync(folder, { recursive: true });
 const today = new Date().toISOString().slice(0, 10);
 fs.writeFileSync(path.join(folder, 'entry.md'), [
   '---',
-  `title: "Backlog Entry: ${backlogId} - ${opts.title.replace(/"/g, '\\"')}"`,
-  `summary: "${opts.title.replace(/"/g, '\\"')}"`,
+  `title: "Backlog Entry: ${backlogId} - ${yamlQuote(opts.title)}"`,
+  `summary: "${yamlQuote(opts.title)}"`,
   'status: "open"',
   'priority: "medium"',
   'theme: "initiative"',
