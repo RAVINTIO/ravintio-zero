@@ -92,11 +92,16 @@ Complete: P2 (2026-11-10T19:58:59Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-10T19:58:59Z` |
-| End | `PENDING` |
-| Wall clock | `PENDING` |
+| End | `2026-11-10T20:36:21Z` |
+| Wall clock | `55` |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
-| Notes | PENDING |
+| Notes | OS gap: local macos, CI ubuntu, windows. Full suite in a clean clone: 394 passed, 2 failed, both inherited. Regression: 19 passed. The initiative branch moved, so I merged it and renumbered the ADR from 0305 to 0306, then reran the related suites. Docs edit pass: 1 cycle, run inline, `prose-check.mjs` exit 0. Security: no critical or high findings. |
+- Tests run: full suite: 394 passed, 2 failed (2026-11-10T20:36:21Z)
+- Audit: not applicable, no dependency requirement.
+- Skipped: docs edit pass subagent (changed docs are short, so the pass ran inline)
+
+Complete: P3 (2026-11-10T20:36:21Z)
