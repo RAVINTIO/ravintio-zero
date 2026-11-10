@@ -40,3 +40,5 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Run speed: standard
 - Queue: `plan/.initiative-queue/` holds only `rebase-step-25`, which names another step. No item names step 40.
 - Backlog pickup: 0000436 pulled in, folder deleted, index regenerated.
+- Scope Lock Challenge: in scope, out of scope, deferred, and assumptions all taken from the charted step and backlog entry 0000436 [source: draft-accepted (initiative)].
+- Design confirmed: draft-accepted (initiative) (2026-11-10T21:45:02Z)
