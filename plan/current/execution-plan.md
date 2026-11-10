@@ -53,13 +53,15 @@ The plan skill reads the execution plan template. `sync-installed.mjs` copies `s
 
 ## Branch-point reads
 
-The plan reread these files at the tip of `origin/initiative/0000360-backlog-sweep` on 2026-11-10 (tip `79e47ef9`).
+The plan reread these files at the tip of `origin/initiative/0000360-backlog-sweep` on 2026-11-10. The base tip moved from `79e47ef9` to `99c72a24` during the run, so the reread repeated at P3.
 
 | File | Commit read | Unit |
 |------|-------------|------|
 | `src/ravintio-zero/skills/ravintio-plan/SKILL.md` | c952df2c | U-001 |
 | `src/ravintio-zero/templates/execution-plan.template.md` | c952df2c | U-001 |
 | `src/ravintio-zero/tests/test-0000470-req-001-branch-point-reread.sh` | new | U-001 |
+| `docs/architecture-overview.md` | 99c72a24 | U-002 |
+| `docs/adr/0305-reread-files-at-the-branch-point.md` | new | U-002 |
 
 ## Concurrency plan
 
