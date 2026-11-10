@@ -29,7 +29,7 @@ Run mode: autonomous (2026-11-10T14:58:02Z, initiative 0000360 step 31)
 |-------|-------|
 | Start | `2026-11-10T14:58:02Z` |
 | End | `2026-11-10T14:59:49Z` |
-| Wall clock | `4` |
+| Wall clock | `2` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -75,7 +75,7 @@ Complete: P1 (2026-11-10T15:01:57Z)
 |-------|-------|
 | Start | `2026-11-10T15:05:01Z` |
 | End | `2026-11-10T15:30:37Z` |
-| Wall clock | `22` |
+| Wall clock | `26` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 0 |
@@ -101,7 +101,7 @@ Complete: P2 (2026-11-10T15:30:37Z)
 |-------|-------|
 | Start | `2026-11-10T15:30:45Z` |
 | End | `2026-11-10T15:31:13Z` |
-| Wall clock | `4` |
+| Wall clock | `0` |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | 1 |
@@ -122,11 +122,29 @@ Complete: P3 (2026-11-10T15:31:13Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-10T15:31:21Z` |
-| End | |
-| Wall clock | |
+| End | `2026-11-10T15:31:39Z` |
+| Wall clock | `0` |
 | Model tier | primary |
 | Skills loaded | ravintio-ship |
 | Agents spawned | 0 |
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | none |
+
+Complete: P4 (2026-11-10T15:31:39Z)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `35` |
+| Total agents spawned | `1` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `1` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `0` |
+| Phases skipped | `none` |
