@@ -39,6 +39,7 @@ Migration 0009 skipped. It is optional and interactive, so a step session leaves
 | Parallel task batches | `0` |
 | Notes | Light track. Backlog entry 0000400 pulled in. |
 
+- Complete: P0 (design self-confirmed)
 - Decision: Scope lock and design self-confirmed [source: draft-accepted (initiative)]. Bump minor, planned 0.84.0.
 - Queue: `$RAVINTIO_INITIATIVE_ROOT/plan/.initiative-queue/` holds one item, for step 25. None names step 36.
 
@@ -48,7 +49,7 @@ Migration 0009 skipped. It is optional and interactive, so a step session leaves
 |-------|-------|
 | Start | `2026-11-10T19:09:00Z` |
 | End | `2026-11-10T19:10:31Z` |
-| Wall clock | `22` |
+| Wall clock | `2` |
 | Model tier | primary |
 | Skills loaded | ravintio-plan |
 | Agents spawned | `0` |
@@ -56,13 +57,15 @@ Migration 0009 skipped. It is optional and interactive, so a step session leaves
 | Parallel task batches | `0` |
 | Notes | Gate auto-accepted (autonomous). No ADR: no decision meets the criteria. |
 
+- Complete: P1 (plan set written, consistency check clean)
+
 ### P2: Implement
 
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-10T19:11:38Z` |
 | End | `2026-11-10T20:04:49Z` |
-| Wall clock | `60` |
+| Wall clock | `53` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | `0` |
@@ -70,9 +73,34 @@ Migration 0009 skipped. It is optional and interactive, so a step session leaves
 | Parallel task batches | `1` |
 | Notes | Units run inline. The change is small and each unit is one file. |
 
+- RED: U-001 REQ-001, REQ-002 (2026-11-10T20:05:34Z). The fixtures test existing code, so they passed at first. Breaking each branch in turn failed the rerun and mismatch checks.
+- GREEN: U-001 REQ-001, REQ-002 (2026-11-10T20:05:34Z)
 - Done: U-001 REQ-001, REQ-002 (test, inline, none, 2026-11-10T19:11:38Z)
 - Tests run: REQ-001, REQ-002: test-0000464-req-001-002-queue-branches.sh (2026-11-10T19:11:38Z)
+- RED: U-002 REQ-003 (2026-11-10T20:05:34Z). 6 checks failed before the guard.
+- GREEN: U-002 REQ-003 (2026-11-10T20:05:34Z)
 - Done: U-002 REQ-003 (code, inline, none, 2026-11-10T19:13:36Z)
 - Tests run: REQ-003: test-0000464-req-003-dash-guard.sh (2026-11-10T19:13:36Z)
+- RED: U-003 docs (2026-11-10T20:05:34Z). The docs unit has no executable check.
+- GREEN: U-003 docs (2026-11-10T20:05:34Z). prose-check exits 0.
 - Done: U-003 docs (content, inline, none, 2026-11-10T19:13:36Z)
 - Tests run: full suite: 395 passed, 2 failed (2026-11-10T20:04:49Z). Both failures are in the baseline.
+- Complete: P2 (three requirements green)
+
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T20:05:00Z` |
+| End | `2026-11-10T20:06:18Z` |
+| Wall clock | `1` |
+| Model tier | primary |
+| Skills loaded | ravintio-validate-and-accept |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Inline. Docs edit pass ran inline on two small docs, with prose-check exit 0. |
+
+- Baseline check: 2 inherited suites, 0 new.
+- OS gap: local macos, CI ubuntu, windows
+- Complete: P3 (acceptance evidence written)
