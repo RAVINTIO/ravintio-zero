@@ -9,6 +9,8 @@
 | `resume-detect.mjs` prints no line for a migration that does not apply | `test-0000399-req-006-detect-applies.sh` | 8 passed, 0 failed |
 | The coordinator start-up names the initiative skill | `test-0000399-req-007-coordinator-hooks.sh` | 11 passed, 0 failed |
 | Full suite on the working tree | `run-tests.sh` | 382 feature suites and 19 regression suites passed |
+| Full suite in a clean clone | `clean-clone-test.mjs` | 380 passed, 2 inherited failures (`test-0000037-req-004`, `test-0000318-req-004`) that also fail at the base commit |
 | Security review | `plan/current/security-report.md` | low risk, no open finding |
 
 Resume detection in this worktree now prints `pending migration: 0009` only. It printed 0004, 0005, 0008, and 0009 before.
+The `OS gap:` line was `local macos, CI ubuntu, windows`.
