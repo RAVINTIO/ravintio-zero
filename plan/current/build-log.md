@@ -40,3 +40,5 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Run speed: standard
 - Backlog pickup: 0000434, named by the step 38 row.
 - Queue: no item names step 38. The item `rebase-step-25` names step 25.
+- Scope Lock Challenge: in scope, out of scope, deferred, and assumptions all taken from the charted step and entry 0000434 [source: draft-accepted (initiative)].
+- Design confirmed: draft-accepted (initiative) (2026-11-10T19:08:35Z)
