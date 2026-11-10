@@ -47,3 +47,19 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Scope Lock complete. All four scenario paths captured.
 
 Complete: P0 Discovery: done (2026-11-10T13:31:18Z)
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T13:32:01Z` |
+| End | `pending` |
+| Wall clock | 6 |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | gate self-confirmed (initiative). Inline, because the two requirements share one skill text and one standards file. |
+
+Complete: P1 Plan: done (2026-11-10T13:33:07Z)
