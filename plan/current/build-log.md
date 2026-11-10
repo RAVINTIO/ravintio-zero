@@ -58,8 +58,8 @@ Design confirmed: draft-accepted (initiative) (2026-11-10T13:31:18Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-10T13:32:11Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-10T13:32:33Z` |
+| Wall clock | `6` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator, ravintio-plan |
 | Agents spawned | `0` |
@@ -68,3 +68,5 @@ Design confirmed: draft-accepted (initiative) (2026-11-10T13:31:18Z)
 | Notes | The plan is small, so the artifacts are written inline. |
 
 Plan decision: the driver file stays untouched. A test pins its pattern to the shared export, which avoids the restart stop.
+
+Complete: P1 (2026-11-10T13:32:33Z)
