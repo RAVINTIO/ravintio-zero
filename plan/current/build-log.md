@@ -88,3 +88,19 @@ Complete: P1 Plan: done (2026-11-10T13:33:07Z)
 - Tests run: full suite: 403 passed, 0 failed (2026-11-10T14:17:00Z)
 
 Complete: P2 Implement: done (2026-11-10T14:17:00Z)
+
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T14:17:23Z` |
+| End | `pending` |
+| Wall clock | pending |
+| Model tier | primary |
+| Skills loaded | ravintio-validate-and-accept |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | autonomous, evidence goes in the PR |
+
+Docs edit pass: changed docs are the architecture overview and ADR-0298. prose-check exits 0 on the first run.
