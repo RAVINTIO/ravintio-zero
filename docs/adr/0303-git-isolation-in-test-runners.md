@@ -1,7 +1,7 @@
 ---
 title: "ADR 303: Git isolation in the test runners"
 summary: "The runners give each suite a temporary global git config that refuses to guess an identity, so a missing identity fails locally."
-status: "proposed"
+status: "accepted"
 component: "ravintio-zero"
 version: "0.1.0"
 feature: "0000462-tests-without-git-identity"
