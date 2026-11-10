@@ -24,8 +24,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-10T00:47:11Z` |
-| End | |
-| Wall clock | |
+| End | `2026-11-10T00:51:03Z` |
+| Wall clock | 17 |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -39,3 +39,31 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Adoption mode: standard-iterative (signal: `plan/_archive/` beside source)
 - Decision applied (initiative chart): Step 21 runs last (0000398). It edits the pack source in `src/ravintio-zero/` and refreshes the installed copy.
 - Queue: copied ci-gate-step-21 to plan/current/coordinator-instruction-ci-gate.md
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T00:51:03Z` |
+| End | `2026-11-10T00:51:03Z` |
+| Wall clock | 3 |
+| Model tier | cheaper |
+| Skills loaded | ravintio-plan |
+| Agents spawned | 1 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | gate self-confirmed (initiative) |
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T00:51:03Z` |
+| End | |
+| Wall clock | |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | none |
