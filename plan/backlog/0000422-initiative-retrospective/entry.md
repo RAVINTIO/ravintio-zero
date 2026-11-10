@@ -7,7 +7,7 @@ theme: "initiative"
 ---
 # Backlog Entry: 0000422 - Initiative retrospective
 
-**Source feature:** 0000421
+**Source feature:** 0000421-initiative-retrospective
 **Source phase:** I-C Run
 **Deferral source:** human request, 2026-11-10
 **Date filed:** 2026-11-10
@@ -21,7 +21,7 @@ Initiative 0000360 ran with many stops. The human called it "a mess" and asked f
 ## What the step does
 
 1. Read every source:
-   - `plan/current-initiative/coordinator-evidence.md`, which lists 26 stops and mistakes with their evidence.
+   - `plan/current-initiative/coordinator-evidence.md`, which lists 27 stops and mistakes with their evidence.
    - Every `plan/postmortems/` record dated from 2026-10-31 onward.
    - The build logs in `plan/_archive/` for the features in the chart's `## Steps` table.
    - The step session logs at `$RAVINTIO_INITIATIVE_ROOT/plan/.initiative-logs/`. Read them only, and never move them.
