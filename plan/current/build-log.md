@@ -39,3 +39,17 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Run speed: standard (2026-11-10T02:34:37Z)
 - Adoption mode: standard-iterative (signal: `plan/_archive/` beside `src/`)
 - Version: last known 0.77.0, step bump patch, planned 0.77.1
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T02:36:24Z` |
+| End | `2026-11-10T02:36:24Z` |
+| Wall clock | 5 |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | No ADR. The step makes no significant decision. Artifacts are small and share terms, so they were written inline. |
