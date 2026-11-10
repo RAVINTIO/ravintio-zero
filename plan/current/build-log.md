@@ -1,0 +1,42 @@
+---
+title: "Build Log - 0000452-ci-wait-before-archive"
+summary: "Working record of the pipeline run, maintained by the orchestrator."
+---
+# Build Log - 0000452-ci-wait-before-archive
+
+## Header
+
+| Field | Value |
+|-------|-------|
+| Feature ID | `0000452-ci-wait-before-archive` |
+| Pipeline start | `2026-11-10T13:30:44Z` |
+| Tool | `claude-code` |
+| Primary model | `claude-sonnet-5-5` |
+| Cheaper model | `claude-haiku-5-5` |
+| Run speed | `standard` |
+
+---
+
+## Phase Log
+
+### P0: Discovery
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T13:30:44Z` |
+| End | `pending` |
+| Wall clock | pending |
+| Model tier | primary |
+| Skills loaded | ravintio-orchestrator |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | initiative 0000360 step 30 |
+
+- Run mode: autonomous (2026-11-10T13:30:44Z, initiative step)
+- Run speed: standard (2026-11-10T13:30:44Z, initiative step)
+- Migrations 0004, 0005, 0008 do not apply here. Migration 0009 asks a human `Proceed? (y/n)`, which a step session cannot answer. Left pending, safe to skip. Backlog 0000403 covers the gap.
+- Adoption mode: standard-iterative (signal: `plan/_archive/` beside source)
+- Decision applied (initiative chart): Step 30 archives after CI. Ship waits for green CI and archives as its last push before `ready`. No reopen route, so `gate-write` stays as it is. (0000412)
+- Queue: item narrow-brand-guard-self-entry names step 18, not this step. No action.
+- Backlog pull-in: 0000412-ci-wait-before-archive folded into the brief and deleted. Index rebuilt.
