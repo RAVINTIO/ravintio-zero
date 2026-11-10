@@ -2,7 +2,7 @@
 
 **Feature:** Smoother activation
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** 152
 
 ## What changed
 
