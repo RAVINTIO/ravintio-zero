@@ -34,6 +34,7 @@ Times are UTC. "Coordinator" marks a mistake by the coordinator session. A blame
 | 24 | 2026-11-09 | 14, 15, 19 | Step replies typed times instead of reading the clock, up to an hour off | watcher activity lines | Open |
 | 25 | 2026-11-08 | 18 | The brand guard self-entry instruction for step 18 stayed in the queue | `plan/.initiative-queue/narrow-brand-guard-self-entry/` | Unknown. Step 22 checks |
 | 26 | 2026-11-08 to 10 | all | The human could not oversee the run easily: many stops, long reports, and decisions mixed with routine fixes. The human called it "a mess" and asked for easier oversight | human messages | Open: one status view, fewer stops |
+| 27 | 2026-11-10 | 21 | `initiative-add-step.mjs` wrote the bare id `0000421` as the step's `Feature id`, with no slug. The driver then stopped with "step 22 has an invalid feature id" | driver output 02:18, PR #153 | Chart row fixed by hand. Script fix open |
 
 ## Interim workarounds still in use
 

@@ -178,7 +178,7 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 19 | 0000395-pack-prose-to-the-standard | Pack prose to the standard | 0000302 | minor | 0.75.0 | merged | writing | 5-18 |
 | 20 | 0000397-pack-source-in-src | Pack source in src | 0000396 | minor | 0.76.0 | merged | layout | 19 |
 | 21 | 0000399-smoother-activation | Smoother activation | 0000398 | minor | 0.77.0 | merged | initiative | 20 |
-| 22 | 0000421 | Initiative retrospective | 0000422 | patch |  | pending | initiative | 21 |
+| 22 | 0000421-initiative-retrospective | Initiative retrospective | 0000422 | patch |  | pending | initiative | 21 |
 
 ## Merges
 
