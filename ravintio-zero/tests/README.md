@@ -48,7 +48,7 @@ bash ravintio-zero/tests/run-tests.sh
 ```
 
 The runner discovers every `test-*.sh` and `test-*.ps1` in this directory by
-glob. No suite is registered by hand. Add a conforming file and it runs on the
+glob. You register no suite by hand. Add a conforming file and it runs on the
 next invocation. After the per-feature suites, the runner executes every suite
 under `regression/` and reports the two sets separately.
 
@@ -138,11 +138,11 @@ The runner picks the file up automatically. Nothing else needs registering.
 
 ### Helper guards
 
-- `print_summary` fails a Bash suite that calls an undefined `assert_*` function. It scans the suite for lines that start with an `assert_*` word and prints `FAIL: undefined assert function: {name}` for each name that is not a function. A call after `&&` or inside `$(...)` is not scanned.
+- `print_summary` fails a Bash suite that calls an undefined `assert_*` function. It scans the suite for lines that start with an `assert_*` word and prints `FAIL: undefined assert function: {name}` for each name that is not a function. The scan skips a call after `&&` or inside `$(...)`.
 - `assert_not_contains needle haystack message` passes when the needle is absent.
 - `stale_install_skip_reason root` returns 0 and prints a reason when an initiative is active and `.claude/skills/.ravintio-manifest` is older than the newest pack skill. A suite that compares installed copies prints `SKIP: {reason}` instead of comparing.
 
 ### Step activity
 
 - `test-0000240-req-001-driver-stream-args.sh` checks the driver passes `--output-format stream-json --verbose`, keeps the log at mode 600, and prints no step content.
-- `test-0000240-req-002-activity-lines.sh` checks that the watcher prints one `I-C Run: activity:` line per event, in order, at 200 characters or fewer, and that the skill and standards describe them. `--since-bytes {n}` treats the first n bytes of the step log as seen.
+- `test-0000240-req-002-activity-lines.sh` checks that the watcher prints one `I-C Run: activity:` line per event, in order, at 200 characters or fewer. It also checks that the skill and standards describe them. The flag `--since-bytes {n}` treats the first n bytes of the step log as seen.

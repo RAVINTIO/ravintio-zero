@@ -78,8 +78,8 @@ Complete: P1 (2026-11-10T15:05:16Z)
 | Notes | Inline, one unit. RED: 6 of 14 checks failed. GREEN: 14 of 14. The source in `src/ravintio-zero/` changed and `sync-installed.mjs` copied it to `ravintio-zero/`. Suites 0000160, 0000394, 0000397, 0000042 pass. |
 
 - In progress: U-001 REQ-001 exact-path skip (2026-11-10T15:05:34Z)
-- RED: U-001 REQ-001 (2026-11-10T15:30:45Z)
-- GREEN: U-001 REQ-001 (2026-11-10T15:30:45Z)
+- RED: U-001 REQ-001 exact-path skip (2026-11-10T15:30:45Z)
+- GREEN: U-001 REQ-001 exact-path skip (2026-11-10T15:30:45Z)
 - Tests run: REQ-001: test-0000460-req-001-exact-path-skip.sh, test-0000160-req-006-brand-guard.sh, test-0000394-req-004-brand-guard-before-push.sh, test-0000397-req-005-guards-cover-both.sh (2026-11-10T15:30:45Z)
 - Done: U-001 REQ-001 exact-path skip (inline, inline, none, 2026-11-10T15:30:45Z)
 - Decision applied (initiative coordinator): narrow the brand guard self-entry
