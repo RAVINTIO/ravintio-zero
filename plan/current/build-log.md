@@ -26,8 +26,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-10T13:30:36Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-10T13:31:18Z` |
+| Wall clock | `15` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | `0` |
@@ -36,5 +36,19 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Notes | initiative 0000360 step 23 |
 
 Run mode: autonomous (2026-11-10T13:30:36Z)
+
 Skipped: pending migration 0009 stays pending. A step session has no human for the Proceed prompt, and the migration is safe to skip (backlog 0000403).
+
 Queue: the one item in the root queue names step 34, so step 23 acts on none.
+
+Scope Lock (happy path): the helper writes {id}-{slug}, the driver pattern accepts it [source: draft-accepted (initiative)]
+
+Scope Lock (first-run path): the first helper-added step gets the full id too [source: draft-accepted (initiative)]
+
+Scope Lock (error path): a bad slug exits 1 before the helper reserves an id [source: draft-accepted (initiative)]
+
+Scope Lock (cross-session continuity): a failed run reserves nothing and leaves the chart unchanged [source: draft-accepted (initiative)]
+
+Scope Lock complete. All four scenario paths captured.
+
+Design confirmed: draft-accepted (initiative) (2026-11-10T13:31:18Z)
