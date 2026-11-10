@@ -26,7 +26,7 @@ The `commit-msg` hook is blocking. It rejects commits that break `commit-standar
 
 ## Reply Conventions
 
-Begin every reply in an active run with the time and a prefix. Use the form `hh:mm {prefix} {Status}: {one-liner}`. Run `date +%H:%M` before each reply and lead with that value. The status is Starting, Resuming, Complete, Question, Blocked, or Skipped.
+Begin every reply in an active run with the time and a prefix. Use the form `hh:mm {prefix} {Status}: {one-liner}`. Take the time from `date +%H:%M`. The status is Starting, Resuming, Complete, Question, Blocked, or Skipped.
 
 | Prefix | Use for |
 |--------|---------|
