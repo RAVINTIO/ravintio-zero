@@ -67,8 +67,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-10T23:26:32Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-10T23:48:32Z` |
+| Wall clock | `27` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 0 |
@@ -84,3 +84,5 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Done: U-004 (content, inline, none, 2026-11-10T23:26:32Z)
 - Tests run: REQ-001: test-0000446-req-001-drain-after-queue-failure.sh, test-0000379-req-004-queue-handoff.sh (2026-11-10T23:26:32Z)
 - Tests run: REQ-002: test-0000446-req-002-drain-rule-in-standards.sh (2026-11-10T23:26:32Z)
+- Tests run: full suite: 427 passed, 0 failed (2026-11-10T23:48:32Z)
+- Complete: P2 (2026-11-10T23:48:32Z)
