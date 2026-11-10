@@ -142,6 +142,8 @@ gh pr create
 
 In option [1], capture the PR number and URL, and update the changelog's `**PR:**` field.
 
+When the CI wait ends, run `gh run view {run-id} --json startedAt,updatedAt`. Append `CI duration: {seconds}s (run {run-id}, {ISO-8601 timestamp})` to the archived `build-log.md` before Step 5. If `gh` returns no run, write no marker.
+
 In option [2], print the PR title and description. The human pushes the branch later. CI tags the merge commit on `main`. In the local-git-only case, print the tag commands for the human to run on the merge commit after merging. You may instead note that the CI `release-tag` job does it:
 
 ```bash

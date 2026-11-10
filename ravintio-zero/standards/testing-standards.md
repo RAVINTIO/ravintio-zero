@@ -107,4 +107,6 @@ A TDD cycle runs the new test and the tests that cover the files the unit change
 
 At P0, the run records the suites that fail on the base commit in `plan/current/baseline-failures.md`, with `scripts/baseline-failures.mjs record`. At P3, `scripts/baseline-failures.mjs check` prints each failed suite as `inherited:` or `new:` and exits 1 on a new one. P3 stops only on a new suite and lists the inherited ones in the build report.
 
+The CI duration target is 420 seconds per run. Ship records each run as a `CI duration:` marker, and the governance report shows the longest one. A run above the target is a breach in the report. It never fails the gate.
+
 P3 runs the suite in a clean clone of `HEAD` with `scripts/clean-clone-test.mjs`. Untracked files, ignored caches, and local state then cannot change the result. The script prints an `OS gap:` line when the local OS is not among the `runs-on` values of the CI workflow. After a fix, P3 reruns the failed suites first and then runs the full suite once before acceptance.
