@@ -22,7 +22,7 @@ run_helper() {
   CODE=$?
 }
 
-mode_of() { stat -f %Lp "$1" 2>/dev/null || stat -c %a "$1"; }
+mode_of() { stat -c %a "$1" 2>/dev/null || stat -f %Lp "$1"; }
 
 echo ""
 echo "=== req-001 AC-1: a valid number writes the file ==="
