@@ -58,3 +58,20 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Notes | Inline: three small artifacts, no independent batch worth a subagent. |
 
 - Complete: P1 (2026-11-10T21:49:11Z)
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T21:50:02Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Inline units U-001 to U-003 run in batch order. |
+
+- In progress: U-001 (2026-11-10T21:50:02Z)
+- RED: U-001 (2026-11-10T21:50:04Z)
