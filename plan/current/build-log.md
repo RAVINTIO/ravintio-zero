@@ -69,8 +69,8 @@ Complete: P1 Plan: done (2026-11-10T13:33:07Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-10T13:33:53Z` |
-| End | `pending` |
-| Wall clock | pending |
+| End | `2026-11-10T14:17:00Z` |
+| Wall clock | 40 |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 0 |
@@ -85,3 +85,6 @@ Complete: P1 Plan: done (2026-11-10T13:33:07Z)
 - Done: U-002 (test, inline, none, 2026-11-10T13:35:05Z)
 - Tests run: REQ-001: test-0000452-req-001-archive-after-ci.sh (2026-11-10T13:35:05Z)
 - Tests run: REQ-002: test-0000452-req-002-ready-needs-green.sh (2026-11-10T13:35:05Z)
+- Tests run: full suite: 403 passed, 0 failed (2026-11-10T14:17:00Z)
+
+Complete: P2 Implement: done (2026-11-10T14:17:00Z)
