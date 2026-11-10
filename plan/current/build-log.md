@@ -40,3 +40,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Run speed: standard
 - Queue item `narrow-brand-guard-self-entry` names step 34. Copied to `plan/current/coordinator-instruction-brand-guard.md`.
 - Decision applied (initiative chart): Scope of the brand guard skip. The exact-path skip covers both `src/ravintio-zero/tests/brand-guard-allowlist.txt` and `ravintio-zero/tests/brand-guard-allowlist.txt`.
+- Scope Lock Challenge: in scope, out of scope, deferred, and assumptions all taken from the charted step and the queued instruction [source: draft-accepted (initiative)].
+- Design confirmed: draft-accepted (initiative) (2026-11-10T15:15:00Z)
+
+Complete: P0 (2026-11-10T15:15:00Z)
