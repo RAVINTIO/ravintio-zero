@@ -28,8 +28,8 @@ Run mode: autonomous (initiative step 37, 2026-11-10T21:44:05Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-10T21:44:05Z` |
-| End | |
-| Wall clock | |
+| End | `2026-11-10T21:44:59Z` |
+| Wall clock | `4` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -38,3 +38,8 @@ Run mode: autonomous (initiative step 37, 2026-11-10T21:44:05Z)
 | Notes | Migration 0009 pending. It needs a human answer, so this step leaves it pending. Standard-iterative mode assumed (archive beside `src/`). |
 
 ---
+
+- Complete: P0 (design self-confirmed)
+- Decision: Scope lock and design self-confirmed [source: draft-accepted (initiative)]. Light track. Bump minor, planned 0.88.0.
+- Queue: `$RAVINTIO_INITIATIVE_ROOT/plan/.initiative-queue/` holds one item, for step 25. None names step 37.
+- Baseline: reused the known two failures from the chart row 25-41 and recorded them without a base run.
