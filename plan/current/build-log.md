@@ -86,8 +86,8 @@ Complete: P2 (2026-11-10T14:44:41Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-10T14:45:07Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-10T15:07:29Z` |
+| Wall clock | `25` |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | 0 |
@@ -95,3 +95,6 @@ Complete: P2 (2026-11-10T14:44:41Z)
 | Parallel task batches | 0 |
 | Notes | Inline. |
 - Docs edit pass: reviewed inline, 0 changes, prose-check exit 0
+- Tests run: full suite: 381 passed, 2 failed, both inherited (clean clone) (2026-11-10T15:07:29Z)
+
+Complete: P3 (2026-11-10T15:07:29Z)
