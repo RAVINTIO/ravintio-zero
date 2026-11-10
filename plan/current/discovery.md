@@ -12,7 +12,7 @@ summary: "Raw discovery-pass findings: what the orchestrator knew before coachin
 | Detection signal | `plan/_archive/ holds prior runs` |
 | Git pre-flight | `feat/0000444-step-reads-its-queue-items`, cut from `initiative/0000360-backlog-sweep` by the driver in the `step-26` worktree. The PR targets the initiative branch. |
 | Skills inbox | `empty` |
-| Track | `full` |
+| Track | `light` |
 
 ## Mode Findings
 

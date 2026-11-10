@@ -38,3 +38,5 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Run mode: autonomous (2026-11-10T21:44:23Z)
 - Run speed: standard (2026-11-10T21:44:23Z)
 - Queue: `plan/.initiative-queue/` holds one item, `rebase-step-25`, which names step 25. No item names step 26.
+- Design self-confirmed: draft-accepted (initiative) (). Track light. Scope Lock Challenge skipped on the light track.
+- Design self-confirmed: draft-accepted (initiative) (2026-11-10T21:45:44Z). Track light. Scope Lock Challenge skipped on the light track.
