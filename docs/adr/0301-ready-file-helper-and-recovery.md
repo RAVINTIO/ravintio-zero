@@ -1,7 +1,7 @@
 ---
 title: "ADR 301: A helper writes the ready file and the driver recovers a bad one"
 summary: "A script writes and checks the ready file. The driver recovers the PR number from the step branch when the file is empty or invalid."
-status: "proposed"
+status: "accepted"
 component: "ravintio-zero"
 version: "0.1.0"
 feature: "0000442-ready-file-helper"
