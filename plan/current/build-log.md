@@ -68,7 +68,7 @@ Complete: P1 (2026-11-10T19:09:55Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-10T19:10:10Z` |
-| End | `PENDING` |
+| End | `22` |
 | Wall clock | `PENDING` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
@@ -88,3 +88,7 @@ Complete: P1 (2026-11-10T19:09:55Z)
 - Tests run: REQ-002: test-0000468-req-002-read-the-clock-rule.sh, test-0000388-req-005-driver-watcher-time.sh, test-0000029-req-001-003-boot-file-regeneration.sh, test-0000200-req-001-002-reply-conventions.sh, test-0000245-req-001-hook-enforcement-reference.sh (2026-11-10T19:12:39Z)
 - Done: U-002 REQ-002 read-the-clock rule (content, inline, none, 2026-11-10T19:12:39Z)
 - In progress: U-003 living docs (2026-11-10T19:12:39Z)
+- Tests run: full suite: 394 passed, 3 failed (2026-11-10T19:45:17Z)
+- Done: U-003 living docs (content, none, none, 2026-11-10T19:45:17Z)
+
+Complete: P2 (2026-11-10T19:45:17Z)
