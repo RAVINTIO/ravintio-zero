@@ -17,8 +17,11 @@
  *   session_id to plan/.orchestrator-ack before processing anything else.
  *   Once plan/.orchestrator-ack or plan/.initiative-ack contains the matching
  *   session_id, exits 0 silently.
- *   If neither matches and an initiative is active, the banner names the
- *   ravintio-initiative skill and plan/.initiative-ack instead.
+ *   If neither matches and the session is a coordinator, the banner names the
+ *   ravintio-initiative skill and plan/.initiative-ack instead. A coordinator
+ *   session has an active initiative or a charted draft in
+ *   plan/roadmap/*\/initiative.md (0000399). The hook still acts only while
+ *   plan/.orchestrator-active exists.
  *
  * The skill that owns the session decides the banner. The driver lock plays no
  * part, because it is free between steps and after the driver exits.
@@ -31,21 +34,51 @@
  * Exit codes: 0 always — this hook informs but never blocks via exit 2.
  */
 
-import { appendFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { appendFileSync, existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 import { readStdin } from "./read-stdin.mjs";
 
-// True when initiative.md holds status active, in frontmatter or as "**Status:** active".
+// True when text holds the given status, in frontmatter or as "**Status:** {status}".
+function hasStatus(text, status) {
+  return new RegExp(`^\\s*status:\\s*["']?${status}["']?\\s*$`, "im").test(text) ||
+    new RegExp(`^\\s*\\*\\*Status:\\*\\*\\s*${status}\\s*$`, "im").test(text);
+}
+
+// True when initiative.md holds status active.
 // Keep in step with initiativeActive in auto-trigger-orchestrator.mjs.
 function initiativeActive(cwd) {
   try {
-    const text = readFileSync(join(cwd, "plan", "current-initiative", "initiative.md"), "utf-8");
-    return /^\s*status:\s*["']?active["']?\s*$/im.test(text) ||
-      /^\s*\*\*Status:\*\*\s*active\s*$/im.test(text);
+    return hasStatus(readFileSync(join(cwd, "plan", "current-initiative", "initiative.md"), "utf-8"), "active");
   } catch {
     return false;
   }
+}
+
+// True when a draft chart, plan/roadmap/*/initiative.md, holds status charted.
+// Other draft statuses, such as proposed, do not count.
+// Keep in step with initiativeCharted in auto-trigger-orchestrator.mjs.
+function initiativeCharted(cwd) {
+  try {
+    const root = join(cwd, "plan", "roadmap");
+    for (const entry of readdirSync(root, { withFileTypes: true })) {
+      if (!entry.isDirectory()) continue;
+      try {
+        if (hasStatus(readFileSync(join(root, entry.name, "initiative.md"), "utf-8"), "charted")) return true;
+      } catch { /* a directory without initiative.md does not count */ }
+    }
+    return false;
+  } catch {
+    return false;
+  }
+}
+
+// A coordinator session is a non-step session with an active initiative or a
+// charted draft. A step session sets RAVINTIO_INITIATIVE_STEP=1 and keeps the orchestrator.
+// Keep in step with coordinatorSession in auto-trigger-orchestrator.mjs.
+function coordinatorSession(cwd) {
+  return process.env.RAVINTIO_INITIATIVE_STEP !== "1" &&
+    (initiativeActive(cwd) || initiativeCharted(cwd));
 }
 
 // Once-per-session record (0000320): plan/.orchestrator-loaded holds the session id
@@ -94,10 +127,10 @@ try {
   const strictPath = join(cwd, "plan", ".orchestrator-strict");
   const isStrict = existsSync(strictPath);
 
-  // An active initiative gives the initiative banner. A step session sets
+  // A coordinator session gives the initiative banner (0000399). That means an
+  // active initiative or a charted draft in plan/roadmap/*/initiative.md. A step session sets
   // RAVINTIO_INITIATIVE_STEP=1 and gets the orchestrator banner instead.
-  const initiativeDriver =
-    process.env.RAVINTIO_INITIATIVE_STEP !== "1" && initiativeActive(cwd);
+  const initiativeDriver = coordinatorSession(cwd);
 
   if (!isStrict) {
     const advisoryId = String(input?.session_id ?? "").trim();
