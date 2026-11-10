@@ -25,7 +25,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 |-------|-------|
 | Start | `2026-11-10T16:30:47Z` |
 | End | `2026-11-10T16:31:48Z` |
-| Wall clock | `12` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -75,6 +75,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Notes | Units run inline in one context: the units share one file set and are small. |
 
 - In progress: U1 shared-files resolver (2026-11-10T16:34:54Z)
+- RED: U1 shared-files resolver (2026-11-10T16:36:04Z)
+- Note: P2 did not log the RED line when it ran. P4 added it from the P2 report, and the time is the resolver commit time.
 - GREEN: U1 shared-files resolver (2026-11-10T17:27:24Z)
 - Done: U1 shared-files resolver (code, primary, inline, 2026-11-10T17:27:24Z)
 - Done: U2 queue hook-in (code, primary, inline, 2026-11-10T17:27:24Z)
@@ -92,7 +94,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 |-------|-------|
 | Start | `2026-11-10T17:27:54Z` |
 | End | `2026-11-10T17:50:06Z` |
-| Wall clock | `60` |
+| Wall clock | `22` |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | 0 |
@@ -102,3 +104,34 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 
 - Tests run: full suite: 389 passed, 2 failed, both inherited (2026-11-10T17:50:06Z)
 - Complete: P3 (2026-11-10T17:50:06Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T17:51:01Z` |
+| End | `2026-11-10T17:51:17Z` |
+| Wall clock | `1` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Initiative step. The merge queue sets the version. |
+- Complete: P4 (2026-11-10T17:51:17Z)
+
+---
+
+## Summary
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `82` |
+| Total agents spawned | `0` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `0` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `0` |
+| Phases skipped | `none` |
