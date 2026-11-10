@@ -1,7 +1,7 @@
 ---
 title: "ADR 305: Reply time clock check"
 summary: "The Stop hook compares a leading hh:mm with the local clock and warns when it differs by more than 5 minutes."
-status: "proposed"
+status: "accepted"
 component: "ravintio-zero"
 version: "0.1.0"
 feature: "0000468-reply-time-matches-the-clock"
