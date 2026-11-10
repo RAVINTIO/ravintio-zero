@@ -63,3 +63,17 @@ Complete: P0 Discovery: done (2026-11-10T13:31:18Z)
 | Notes | gate self-confirmed (initiative). Inline, because the two requirements share one skill text and one standards file. |
 
 Complete: P1 Plan: done (2026-11-10T13:33:07Z)
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T13:33:53Z` |
+| End | `pending` |
+| Wall clock | pending |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Inline units: both units edit pack text and the tests that pin it, and each depends on the one before. No subagent split. |
