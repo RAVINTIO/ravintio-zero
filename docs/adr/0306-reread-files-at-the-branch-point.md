@@ -1,7 +1,7 @@
 ---
 title: "ADR 306: Reread files at the branch point"
 summary: "The plan skill rereads each file a unit edits from the tip of the PR base branch and records the commit it read."
-status: "proposed"
+status: "accepted"
 component: "ravintio-zero"
 version: "0.1.0"
 feature: "0000470-plan-rereads-files-at-the-branch-point"
