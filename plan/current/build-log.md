@@ -98,11 +98,33 @@ Complete: P2 (2026-11-10T19:45:17Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-10T19:45:31Z` |
-| End | `PENDING` |
-| Wall clock | `PENDING` |
+| End | `2026-11-10T20:08:19Z` |
+| Wall clock | `23` |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
-| Notes | PENDING |
+| Notes | OS gap: local macos, CI ubuntu, windows. Full suite in a clean clone: 395 passed, 2 failed, both inherited. Regression: 19 passed. Docs edit pass: 1 cycle, run inline, `prose-check.mjs` exit 0. Security: no critical or high findings. |
+
+- OS gap: local macos, CI ubuntu, windows
+- Tests run: full suite: 395 passed, 2 failed (2026-11-10T20:08:19Z)
+- Audit: not applicable, no dependency requirement.
+- Skipped: docs edit pass subagent (changed docs are short, so the pass ran inline)
+
+Complete: P3 (2026-11-10T20:08:19Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T20:08:19Z` |
+| End | `PENDING` |
+| Wall clock | `PENDING` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Initiative step. No version bump, because the merge queue sets it. |
+
