@@ -1,7 +1,7 @@
 ---
 title: "ADR 0297: Plan-only coordinator PRs skip the full suite"
 summary: "A coordinator PR skips the full suite only when every changed file since the last green run is under plan/. It runs the plan format checks instead."
-status: "proposed"
+status: "accepted"
 component: "ravintio-zero"
 version: "0.1.0"
 ---

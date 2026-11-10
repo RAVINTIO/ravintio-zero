@@ -1,7 +1,7 @@
 ---
 title: "ADR 0296: Activate script runs existing commands only"
 summary: "One script runs I-B Activate with existing git and gh commands, resumes on rerun, and prints the driver and watcher commands."
-status: "proposed"
+status: "accepted"
 component: "ravintio-zero"
 version: "0.1.0"
 ---
