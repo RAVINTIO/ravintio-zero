@@ -26,8 +26,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-10T21:44:23Z` |
-| End | `2026-11-10T21:58:06Z` |
-| Wall clock | `4` |
+| End | `2026-11-10T21:45:44Z` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -38,11 +38,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Run mode: autonomous (2026-11-10T21:44:23Z)
 - Run speed: standard (2026-11-10T21:44:23Z)
 - Queue: `plan/.initiative-queue/` holds one item, `rebase-step-25`, which names step 25. No item names step 26.
-- Design self-confirmed: draft-accepted (initiative) (). Track light. Scope Lock Challenge skipped on the light track.
 - Design self-confirmed: draft-accepted (initiative) (2026-11-10T21:45:44Z). Track light. Scope Lock Challenge skipped on the light track.
-
----
-- Complete: P0 (2026-11-10T21:58:06Z)
+- Complete: P0 (2026-11-10T21:45:44Z)
 
 ---
 
@@ -52,7 +49,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 |-------|-------|
 | Start | `2026-11-10T21:48:36Z` |
 | End | `2026-11-10T21:49:11Z` |
-| Wall clock | `8` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-plan |
 | Agents spawned | 0 |
@@ -68,7 +65,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 |-------|-------|
 | Start | `2026-11-10T21:50:02Z` |
 | End | `2026-11-10T22:06:24Z` |
-| Wall clock | `22` |
+| Wall clock | `16` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 0 |
@@ -81,9 +78,11 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - GREEN: U-001 (2026-11-10T21:51:27Z)
 - Done: U-001 (content, inline, none, 2026-11-10T21:51:27Z)
 - Tests run: REQ-001, REQ-002, REQ-003: test-0000444-req-001-003-queue-items.sh (2026-11-10T21:51:27Z)
+- RED: U-002 (2026-11-10T21:50:04Z)
+- GREEN: U-002 (2026-11-10T21:51:27Z)
 - Done: U-002 (content, inline, none, 2026-11-10T21:51:27Z)
 - In progress: U-003 (2026-11-10T21:51:27Z)
-- Done: U-003 (content, inline, none, 2026-11-10T22:06:24Z)
+- Done: U-003 (docs, primary, none, 2026-11-10T22:06:24Z)
 - Tests run: full suite: 403 passed, 0 failed (2026-11-10T22:06:24Z)
 - Complete: P2 (2026-11-10T22:06:24Z)
 
@@ -95,7 +94,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 |-------|-------|
 | Start | `2026-11-10T22:06:41Z` |
 | End | `2026-11-10T22:07:03Z` |
-| Wall clock | `3` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | 0 |
@@ -105,3 +104,19 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Docs edit pass: inline review, 1 cycle, prose-check exit 0 (2026-11-10T22:07:03Z)
 - Tests run: full suite: 403 passed, 0 failed (2026-11-10T22:07:03Z)
 - Complete: P3 (2026-11-10T22:07:03Z)
+
+---
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T22:07:18Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Initiative step order: PR and CI first, then archive. |
