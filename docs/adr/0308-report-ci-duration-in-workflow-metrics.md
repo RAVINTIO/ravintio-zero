@@ -1,7 +1,7 @@
 ---
 title: "ADR 308: Report CI duration in workflow metrics"
 summary: "Ship records each CI run's duration as a build log marker, and workflow-metrics.mjs compares the longest run with a 420-second threshold."
-status: "proposed"
+status: "accepted"
 component: "ravintio-zero"
 version: "0.1.0"
 feature: "0000472-ci-duration-metric"
