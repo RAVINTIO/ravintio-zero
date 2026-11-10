@@ -26,8 +26,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-10T17:48:02Z` |
-| End | `pending` |
-| Wall clock | `pending` |
+| End | `2026-11-10T17:49:02Z` |
+| Wall clock | `10` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | `0` |
@@ -39,3 +39,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Run mode: autonomous (2026-11-10T17:48:02Z)
 - Run speed: standard
 - Backlog pickup: 0000414, named by the step 35 row.
+- Scope Lock Challenge: in scope, out of scope, deferred, and assumptions all taken from the charted step and entry 0000414 [source: draft-accepted (initiative)].
+- Design confirmed: draft-accepted (initiative) (2026-11-10T17:49:02Z)
+
+Complete: P0 (2026-11-10T17:49:02Z)
