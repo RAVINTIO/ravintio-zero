@@ -2,7 +2,7 @@
 
 **Feature:** Tests catch runner-only failures
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** 165
 
 ## What changed
 
