@@ -112,8 +112,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-10T22:07:18Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-10T22:17:21Z` |
+| Wall clock | `10` |
 | Model tier | primary |
 | Skills loaded | ravintio-ship |
 | Agents spawned | 0 |
@@ -122,3 +122,21 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Notes | Initiative step order: PR and CI first, then archive. |
 - Rework: REQ-001: CodeQL flagged incomplete escaping in initiative-queue.mjs, fixed with escapeRe (2026-11-10T22:10:31Z)
 - Tests run: REQ-001: test-0000444-req-001-003-queue-items.sh (2026-11-10T22:10:31Z)
+- Complete: P4 (2026-11-10T22:17:21Z)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `33` |
+| Total agents spawned | `0` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `0` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `1` |
+| Phases skipped | `none` |
+- Postmortem: plan/postmortems/2026-11-10-incomplete-escape-in-queue-helper.md REQ-001 (2026-11-10T22:17:49Z)
