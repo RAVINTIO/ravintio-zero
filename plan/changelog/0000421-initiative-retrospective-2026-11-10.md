@@ -2,7 +2,7 @@
 
 **Feature:** Initiative retrospective
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** 155
 
 ## What changed
 
