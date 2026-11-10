@@ -25,7 +25,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 |-------|-------|
 | Start | `2026-11-10T16:30:27Z` |
 | End | `2026-11-10T16:32:20Z` |
-| Wall clock | 3 |
+| Wall clock | 2 |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -36,13 +36,15 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 Run mode: autonomous (2026-11-10T16:30:27Z, initiative step)
 Pending migration: 0009 (ADRs in docs/adr). It needs a human confirmation and a step session has none. It stays pending. The migration is safe to skip.
 
+Complete: P0
+
 ### P1: Plan
 
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-10T16:32:20Z` |
 | End | `2026-11-10T16:33:02Z` |
-| Wall clock | 3 |
+| Wall clock | 1 |
 | Model tier | primary |
 | Skills loaded | ravintio-plan |
 | Agents spawned | 0 |
@@ -52,13 +54,15 @@ Pending migration: 0009 (ADRs in docs/adr). It needs a human confirmation and a 
 
 Gate accepted: P1 (2026-11-10T16:33:02Z, autonomous initiative step)
 
+Complete: P1
+
 ### P2: Implement
 
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-10T16:33:02Z` |
 | End | `2026-11-10T16:37:22Z` |
-| Wall clock | 12 |
+| Wall clock | 4 |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 0 |
@@ -81,13 +85,15 @@ Gate accepted: P1 (2026-11-10T16:33:02Z, autonomous initiative step)
 
 Gate accepted: P2 (2026-11-10T16:37:22Z, autonomous initiative step)
 
+Complete: P2
+
 ### P3: Validate and Accept
 
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-10T16:37:22Z` |
 | End | `2026-11-10T17:35:08Z` |
-| Wall clock | 38 |
+| Wall clock | 58 |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | 0 |
@@ -100,16 +106,36 @@ Gate accepted: P2 (2026-11-10T16:37:22Z, autonomous initiative step)
 
 Gate accepted: P3 (2026-11-10T17:35:08Z, autonomous initiative step)
 
+Complete: P3
+
 ### P4: Ship
 
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-10T17:35:08Z` |
-| End | |
-| Wall clock | |
+| End | `2026-11-10T17:35:37Z` |
+| Wall clock | 0 |
 | Model tier | primary |
 | Skills loaded | ravintio-ship |
 | Agents spawned | 0 |
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | none |
+
+Complete: P4
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | 5 |
+| Total wall clock | 65 |
+| Total agents spawned | 0 |
+| Total MCP calls | 0 |
+| Phases using parallelism | 0 |
+| Primary tier agent calls | 0 |
+| Cheaper tier agent calls | 0 |
+| Self-corrections | 0 |
+| Phases skipped | none |
