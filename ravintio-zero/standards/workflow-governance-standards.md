@@ -1,6 +1,6 @@
 ---
 title: "Workflow governance standards"
-summary: "Four workflow metrics, their marker lines, and the thresholds that decide a breach."
+summary: "Five workflow metrics, their marker lines, and the thresholds that decide a breach."
 status: "active"
 version: "0.1.0"
 ---
@@ -16,6 +16,7 @@ Read this file when you write a marker line or read a workflow governance sectio
 | `Blocked:` stops | `blocked-stops` | Exception Stops in the orchestrator |
 | Mid-pipeline design changes | `design-changes` | The mid-pipeline change reference |
 | Human corrections at gates | `gate-corrections` | The orchestrator, at a gate in a gated run |
+| Longest CI run (seconds) | `ci-duration-seconds` | The ship skill, when the CI wait ends |
 
 ## Marker lines
 
@@ -23,6 +24,7 @@ Read this file when you write a marker line or read a workflow governance sectio
 - `Blocked: {exception} ({ISO-8601 timestamp})`
 - `Requirement change: {cosmetic | additive | contradictory}: {what changed} ({ISO-8601 timestamp})`
 - `Gate revised: P{N} ({ISO-8601 timestamp}, {what changed})`
+- `CI duration: {seconds}s (run {run-id}, {ISO-8601 timestamp})`
 - `Improve: REQ-{nnn}: cycle {n}: {finding}: {change}: suite {pass | fail, reverted} ({ISO-8601 timestamp})`
 - `Improve: REQ-{nnn}: cycle {n}: no change worth making ({ISO-8601 timestamp})`
 - `RED: {unit} ({ISO-8601 timestamp})`
@@ -58,6 +60,7 @@ A metric breaches when its value is greater than its threshold. The script reads
 | `Blocked:` stops | blocked-stops | 1 |
 | Mid-pipeline design changes | design-changes | 1 |
 | Human corrections at gates | gate-corrections | 2 |
+| Longest CI run (seconds) | ci-duration-seconds | 420 |
 
 ## Report-only gate
 

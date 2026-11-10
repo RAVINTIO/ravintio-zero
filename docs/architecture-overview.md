@@ -110,7 +110,7 @@ Setup copies only committed files in `ravintio-zero/` and `ravintio-overrides/`,
 
 ### Workflow governance
 
-The pipeline measures its own workflow as well as the product. Phase skills write four fixed marker lines to the build log: `Rework:`, `Blocked:`, `Requirement change:`, and `Gate revised:`. At ship, `scripts/workflow-metrics.mjs` counts them in the archived build log and loop-state files. It compares each count against a threshold in `standards/workflow-governance-standards.md`. It also reports units and rework by class and tier from the `Done:` lines, and never blocks on that report (0000386).
+The pipeline measures its own workflow as well as the product. Phase skills write four fixed marker lines to the build log: `Rework:`, `Blocked:`, `Requirement change:`, and `Gate revised:`. Ship adds a fifth, `CI duration:`, when the CI wait ends, read with `gh run view`. At ship, `scripts/workflow-metrics.mjs` counts them in the archived build log and loop-state files. It reports the longest CI run against the 420-second target. It compares each count against a threshold in `standards/workflow-governance-standards.md` (0000472 ADR-0307). It also reports units and rework by class and tier from the `Done:` lines, and never blocks on that report (0000386).
 
 Ship adds the resulting `## Workflow governance` section to `build-report.md` and the PR description. A breach shows in both places and never stops ship. If the script fails, ship writes `Workflow governance: not measured` with the reason.
 

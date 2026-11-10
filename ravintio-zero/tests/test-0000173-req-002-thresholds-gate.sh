@@ -44,6 +44,7 @@ write_standard() {
     [ -n "$3" ] && echo "| Blocked | blocked-stops | $3 |"
     [ -n "$4" ] && echo "| Design | design-changes | $4 |"
     [ -n "$5" ] && echo "| Gate | gate-corrections | $5 |"
+    echo "| CI | ci-duration-seconds | 420 |"
     true
   } > "$p"
 }
