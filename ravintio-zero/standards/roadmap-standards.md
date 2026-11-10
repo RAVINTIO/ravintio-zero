@@ -340,6 +340,15 @@ The driver appends three labels to `OTEL_RESOURCE_ATTRIBUTES` in the child envir
 
 The driver keeps the old value byte for byte and joins the labels with commas. It percent-encodes each label value (`%` first, then `,`, `=`, and space). The labels hold identifiers only.
 
+#### Block read
+
+The driver looks for an open `Blocked:` or `Question:` line after each session. It checks the build log, the archived build log, and the `result` text of the last `result` stream event. A step that cannot write the build log still stops the driver this way.
+
+- The line may carry an `hh:mm` time and a short prefix, as in `13:41 I-D Advance: Blocked:`.
+- A later `Resolved:` line clears the block.
+- The driver treats reply text as data. It never passes it to a shell or builds a path from it. A line that fails to parse adds no block.
+- If `plan/current/build-log.md` is missing on a resume, the continue prompt names the archived build log, or says none exists.
+
 #### Resume
 
 The driver resumes a step that ends its turn early. A step session exits 0 when the model ends its turn and no background task is pending. If `claude` exits 0, no `Blocked:` line exists, and the position did not move, the driver resumes the session.
