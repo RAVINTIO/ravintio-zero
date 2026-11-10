@@ -48,3 +48,5 @@ Breaches: 0. The gate reports and does not block. Counts come from marker lines 
 | Class | Tier | Units | Rework |
 |-------|------|-------|--------|
 | unclassified | unclassified | 2 | 0 |
+
+Retrospective: plan/retrospectives/0000438-add-step-writes-full-feature-id-2026-11-10.md
