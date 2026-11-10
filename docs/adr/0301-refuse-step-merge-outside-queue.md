@@ -1,7 +1,7 @@
 ---
 title: "ADR 301: merge-guard refuses a merge from a step session"
 summary: "merge-guard blocks a merge command when RAVINTIO_INITIATIVE_QUEUE is 1, so only the merge queue merges a step PR."
-status: "proposed"
+status: "accepted"
 component: "ravintio-zero"
 feature: "0000458-refuse-step-merge-outside-queue"
 version: "0.1.0"
