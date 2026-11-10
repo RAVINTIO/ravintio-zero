@@ -57,3 +57,8 @@ Complete: P0 (2026-11-10T13:30:45Z)
 | Notes | Inline, one requirement. |
 
 Complete: P1 (2026-11-10T13:31:54Z)
+- In progress: U-001 driver reply block (2026-11-10T13:32:26Z)
+- RED: U-001 driver reply block (2026-11-10T13:32:36Z)
+- GREEN: U-001 driver reply block (2026-11-10T13:33:02Z)
+- Done: U-001 driver reply block (code, primary, medium, 2026-11-10T13:33:02Z)
+- Tests run: REQ-001: test-0000440-req-001-reply-block.sh (2026-11-10T13:33:02Z)
