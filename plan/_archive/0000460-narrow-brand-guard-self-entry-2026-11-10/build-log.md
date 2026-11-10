@@ -57,7 +57,7 @@ Complete: P0 (2026-11-10T15:04:17Z)
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
-| Notes | One requirement, one ADR (0298). Inline, because the artifacts are small and share one design. |
+| Notes | One requirement, one ADR (0300). Inline, because the artifacts are small and share one design. |
 
 - Consistency check: clean (2026-11-10T15:05:16Z). Autonomous run: the plan gate passes with no human stop.
 
@@ -118,7 +118,7 @@ Complete: P3 (2026-11-10T15:52:23Z)
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
-| Notes | Initiative step. No version bump, because the merge queue sets it. ADR 0298 set to accepted. |
+| Notes | Initiative step. No version bump, because the merge queue sets it. ADR 0300 set to accepted. |
 
 Complete: P4 (2026-11-10T15:52:39Z)
 

@@ -340,6 +340,15 @@ The driver appends three labels to `OTEL_RESOURCE_ATTRIBUTES` in the child envir
 
 The driver keeps the old value byte for byte and joins the labels with commas. It percent-encodes each label value (`%` first, then `,`, `=`, and space). The labels hold identifiers only.
 
+#### Block read
+
+The driver looks for an open `Blocked:` or `Question:` line after each session. It checks the build log, the archived build log, and the `result` text of the last `result` stream event. A step that cannot write the build log still stops the driver this way.
+
+- The line may carry an `hh:mm` time and a short prefix, as in `13:41 I-D Advance: Blocked:`.
+- A later `Resolved:` line clears the block.
+- The driver treats reply text as data. It never passes it to a shell or builds a path from it. A line that fails to parse adds no block.
+- If `plan/current/build-log.md` is missing on a resume, the continue prompt names the archived build log, or says none exists.
+
 #### Resume
 
 The driver resumes a step that ends its turn early. A step session exits 0 when the model ends its turn and no background task is pending. If `claude` exits 0, no `Blocked:` line exists, and the position did not move, the driver resumes the session.
@@ -444,13 +453,15 @@ A step that changes a chart format updates the active `initiative.md` in the sam
 `run` takes these actions in order and stops on the first failure:
 
 1. Check the PR title.
-2. Merge the initiative branch into the PR branch and push, with no force. A conflict stops the queue. The merge commit has the subject `{first 7 digits of Feature id}: Merge the initiative branch`, which the `commit-msg` hook accepts.
+2. If an earlier failed run left a set-version commit on the PR branch and the base version has moved, revert it in one new commit. Merge the initiative branch into the PR branch and push, with no force. A conflict stops the queue. The merge commit has the subject `{first 7 digits of Feature id}: Merge the initiative branch`, which the `commit-msg` hook accepts.
 3. Wait for CI with `gh pr checks {k} --watch --fail-fast`.
 4. Apply the row's `Bump` to the initiative branch version and write the result to every file in `version-files.txt`.
 5. Check that every version file holds the same version.
 6. Write the row's `Version` and the status `merged`, and add a row to the `## Merges` table. The `Merge commit` cell reads `tag v{version}`. Set `**Position:**` to the lowest step that has not merged.
 7. Commit those files by path, push, and squash-merge with `--delete-branch`.
 8. Tag the merge commit `v{version}` and push the tag.
+
+After every run, whether it merged or stopped, `run` detaches HEAD in its worktree. A restart can then check the PR branch out in a step worktree.
 
 Each version follows merge order. `reshape-initiative.mjs` and `check-initiative-history.mjs` sort the steps by the `Version` column in ascending order. A step with no `Version` follows the versioned steps in chart order.
 
@@ -486,7 +497,7 @@ In an initiative step, Steps 1 to 5 run as written. Step 9 gives way to the two 
 Every message in this stage begins with `I-D Advance:` after the `P4 Ship:` prefix. The step raises the PR and waits for CI. The merge queue then merges it.
 
 1. Leave `plan/current-initiative/initiative.md` alone. The step never sets its Status to `merged`, fills its Version, or moves `position`. The merge queue writes them in the same PR, before the squash. Step 6 bumps no version.
-2. Run ship Step 8 now, then push the branch so the sentinel commit is on the remote. Raise the PR against the initiative branch only after that push and after you commit the queue items that name the step.
+2. Commit the queue items that name the step and push the branch. Raise the PR against the initiative branch while `plan/current/` and the sentinels are still in place.
 
    ```bash
    gh pr create --base initiative/{id}-{slug} --title "{feature-id}: {Feature title}"
@@ -495,7 +506,7 @@ Every message in this stage begins with `I-D Advance:` after the `P4 Ship:` pref
    The title is the step's `Title` column. The squash carries it.
 
 3. Set the changelog `**PR:**` field to the PR number from the `gh pr create` output. Commit the change and push the branch. Never commit after the squash, because the squash carries the number onto the initiative branch.
-4. Wait for CI in two parts.
+4. Wait for CI in two parts. The run is still open, so the step can edit code.
    1. Poll `gh pr checks {n}` until it lists at least one check, for up to 2 minutes. Checks are always pending straight after `gh pr create`, so pending is not a stop. If none appears, push the branch, print the line below, and exit:
 
       ```
@@ -509,7 +520,9 @@ Every message in this stage begins with `I-D Advance:` after the `P4 Ship:` pref
       ```
 
 5. If every check is green, check the PR title. Run `node ravintio-zero/scripts/merge-queue.mjs title --step {step} --title "{PR title}"`. If it exits 1, fix the PR title with `gh pr edit` and run it again.
-6. Hand the PR to the merge queue. Write `{n}` and `{k}` as the literal PR number from the `gh pr create` output.
+6. Archive only now. Run ship Step 4, Step 5, and Step 8 in order, and commit each. Then add the `## Workflow governance` section from `build-report.md` to the PR body with `gh pr edit`. Push once. This is the closing push, the last push before `ready`. After it the step cannot edit code, because `gate-write` rejects a write without `plan/current/design.md`.
+7. Wait for CI on the closing push. Run `gh pr checks {n} --watch --fail-fast` again, after the poll in item 4.1 lists the checks of the new head. If a check fails, push nothing, print the `I-D Advance: Blocked: CI failed on PR #{n}` line from item 4.2, and exit.
+8. Write `ready` only when `gh pr checks {n}` exits 0 for the closing push. Exit code 8 means a check is pending and exit code 1 means a check failed. Never write `ready` on either. Then hand the PR to the merge queue. Write `{n}` and `{k}` as the literal PR number from the `gh pr create` output.
    - **Concurrent driver.** If `RAVINTIO_INITIATIVE_QUEUE` is `1`, write the PR number to `$RAVINTIO_INITIATIVE_CONTROL/ready` and print the line below. Then end the session. The driver removes the worktree and runs the queue.
 
      ```
@@ -524,11 +537,11 @@ Every message in this stage begins with `I-D Advance:` after the `P4 Ship:` pref
 
 The queue sets the version and merges the PR with `gh pr merge --squash --delete-branch {n}`. It then tags the merge commit `v{version}`. The `--delete-branch` flag removes the feature branch from `origin`. The tag comes after the merge because a squash creates a new commit. If a push or merge fails, the queue stops and reports the exact error. Nothing retries with force.
 
-Step 8 runs before the PR because the squash would otherwise carry `plan/.orchestrator-active`, `plan/.orchestrator-ack`, and `plan/.run-mode` onto the initiative branch. The next step's P0 would then see a stale feature id.
+The archive comes after green CI because `gate-write` blocks every code edit once `plan/current/design.md` is gone (0000452, ADR-0298). Step 8 runs in the closing push. The squash carries the net diff, so it holds no `plan/.orchestrator-active`, `plan/.orchestrator-ack`, or `plan/.run-mode`. The next step's P0 sees no stale feature id.
 
 Consumer CI must trigger on pull requests to `initiative/**`. The pack's workflow template `ravintio-zero/hooks/ravintio.yml` includes that branch pattern. A project with its own workflow adds it.
 
-7. With no concurrent driver, hand off to the next session after the queue merges.
+9. With no concurrent driver, hand off to the next session after the queue merges.
    1. Check out the initiative branch and run `git pull --ff-only origin initiative/{id}-{slug}`.
    2. If the local feature branch still exists, delete it with `git branch -D`. It is redundant once squash-merged, and `gh` may already have removed it.
    3. If a step with Status `pending` remains, end the session with the line below. The driver starts the next session.

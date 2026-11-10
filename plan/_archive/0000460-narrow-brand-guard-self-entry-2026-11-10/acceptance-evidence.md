@@ -23,4 +23,4 @@ Running the guard verified all four acceptance criteria. See `plan/current/verif
 
 ## Docs edit pass
 
-Changed docs: `docs/architecture-overview.md`, `src/ravintio-zero/tests/README.md`, the changelog, ADR 0298, and the decisions index. One cycle. `prose-check.mjs` exits 0.
+Changed docs: `docs/architecture-overview.md`, `src/ravintio-zero/tests/README.md`, the changelog, ADR 0300, and the decisions index. One cycle. `prose-check.mjs` exits 0.

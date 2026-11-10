@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Tests for feature 0000460-narrow-brand-guard-self-entry, req-001: the brand
-# guard skips its two allowlist files by exact path (ADR-0298).
+# guard skips its two allowlist files by exact path (ADR-0300).
 #
 # This source never writes the retired word as one token. It joins two halves.
 

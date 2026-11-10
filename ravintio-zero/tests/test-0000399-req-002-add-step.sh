@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # Tests for feature 0000399 REQ-002: initiative-add-step.mjs.
+# 0000438: the Steps row holds the feature id and the slug.
 # AC-1: ids reserved, entry filed, index rebuilt. AC-2: every chart table gains a row.
 # AC-3: the chart still parses.
 
@@ -60,7 +61,7 @@ assert_equals "3|3|Add a sample step|minor|pending|core|2" "$PARSED" "chart pars
 
 # The Steps row names the reserved feature id and backlog id.
 ROW="$(grep '^| 3 |' "$CHART" | tail -1)"
-assert_contains "| 0000500 |" "$ROW" "Steps row holds the feature id"
+assert_contains "| 0000500-sample-step |" "$ROW" "Steps row holds the feature id"
 assert_contains "| 0000501 |" "$ROW" "Steps row holds the backlog id"
 assert_equals "0000502" "$(tr -d '\n' < "$WS/plan/backlog/.next-id")" "counter advanced by two"
 

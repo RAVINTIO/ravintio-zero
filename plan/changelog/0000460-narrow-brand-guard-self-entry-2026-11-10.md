@@ -10,7 +10,7 @@
 - The guard script and the CI test `test-0000160-req-006-brand-guard.sh` both call it, so the hook and CI use one rule.
 - The allowlist row that passed every line of the allowlist file is gone.
 - A new suite, `test-0000460-req-001-exact-path-skip.sh`, shows that look-alike paths still fail. The 0000397 allowlist comparison drops the removed row from its base entries.
-- ADR 0298 records the decision.
+- ADR 0300 records the decision.
 
 ## Why
 

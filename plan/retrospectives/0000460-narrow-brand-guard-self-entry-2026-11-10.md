@@ -36,4 +36,4 @@ The brand guard now skips its two allowlist files by exact path, and the allowli
 
 | Change | Owner | Lives in | Verified by | Filed as |
 |--------|-------|----------|-------------|----------|
-| Start the baseline run first | orchestrator | `orchestrator-p0-start-actions.md` | A test that reads the step order | `plan/backlog/0000476-start-baseline-first/entry.md` |
+| Start the baseline run first | orchestrator | `orchestrator-p0-start-actions.md` | A test that reads the step order | `plan/backlog/0000478-start-baseline-first/entry.md` |

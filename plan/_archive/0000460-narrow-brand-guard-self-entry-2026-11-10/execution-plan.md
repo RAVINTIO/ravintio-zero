@@ -56,7 +56,7 @@ None. The feature owns no data.
 | Unit | Depends on | Writes | Batch | Sequential reason |
 |------|-----------|--------|-------|-------------------|
 | U-001 | none | `src/ravintio-zero/scripts/brand-guard.sh`, `src/ravintio-zero/tests/brand-guard-allowlist.txt`, `src/ravintio-zero/tests/test-0000160-req-006-brand-guard.sh`, `src/ravintio-zero/tests/test-0000397-req-005-guards-cover-both.sh`, `src/ravintio-zero/tests/test-0000460-req-001-exact-path-skip.sh` | 1 | One requirement across a script, its allowlist and their tests, so a single unit |
-| U-002 | U-001 | `src/ravintio-zero/tests/README.md`, `docs/architecture-overview.md`, `docs/adr/0298-exact-path-brand-guard-skip.md` | 2 | Living docs unit. It records what U-001 built |
+| U-002 | U-001 | `src/ravintio-zero/tests/README.md`, `docs/architecture-overview.md`, `docs/adr/0300-exact-path-brand-guard-skip.md` | 2 | Living docs unit. It records what U-001 built |
 
 ## Assumptions
 

@@ -34,7 +34,7 @@ brand_guard_load() {
 }
 
 # brand_guard_skips_path <path>: returns 0 for the two allowlist files, by exact
-# path (ADR-0298). The names are fixed strings, not patterns, and no allowlist
+# path (ADR-0300). The names are fixed strings, not patterns, and no allowlist
 # row can add to them. The hook and the CI test both call this function.
 brand_guard_skips_path() {
   case "$1" in

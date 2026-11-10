@@ -15,7 +15,7 @@ version: "0.1.0"
 - `brand_guard_skips_path` in `brand-guard.sh`, used by the script and the CI test.
 - Removal of the self-entry row from the allowlist.
 - A new suite, and an update to the 0000397 allowlist comparison.
-- ADR-0298, docs, and a changelog entry.
+- ADR-0300, docs, and a changelog entry.
 - The sync of `ravintio-zero/` with `sync-installed.mjs`.
 
 ## Out of Scope

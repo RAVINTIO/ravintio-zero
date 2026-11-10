@@ -83,4 +83,4 @@
 ^(src/)?ravintio-zero/tests/(regression/)?test-0000160-req-006-brand-guard\.sh$	.
 
 # --- The allowlist itself ---
-# brand-guard.sh skips the two allowlist files by exact path (ADR-0298). No row covers them.
+# brand-guard.sh skips the two allowlist files by exact path (ADR-0300). No row covers them.
