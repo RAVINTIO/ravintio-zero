@@ -24,8 +24,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-10T16:30:27Z` |
-| End | |
-| Wall clock | |
+| End | `2026-11-10T16:32:20Z` |
+| Wall clock | 3 |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -35,3 +35,17 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 
 Run mode: autonomous (2026-11-10T16:30:27Z, initiative step)
 Pending migration: 0009 (ADRs in docs/adr). It needs a human confirmation and a step session has none. It stays pending. The migration is safe to skip.
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T16:32:20Z` |
+| End | |
+| Wall clock | |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Inline. The artifacts are small and refer to each other. |
