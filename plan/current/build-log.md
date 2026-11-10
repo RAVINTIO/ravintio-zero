@@ -91,11 +91,14 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-10T17:27:54Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-10T17:50:06Z` |
+| Wall clock | `60` |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | 0 |
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | none |
+
+- Tests run: full suite: 389 passed, 2 failed, both inherited (2026-11-10T17:50:06Z)
+- Complete: P3 (2026-11-10T17:50:06Z)
