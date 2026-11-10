@@ -2,7 +2,7 @@
 
 **Feature:** Ship waits for CI before it archives
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** 157
 
 ## What changed
 
