@@ -26,8 +26,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-10T21:44:29Z` |
-| End | `PENDING` |
-| Wall clock | `PENDING` |
+| End | `2026-11-10T21:46:17Z` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | `0` |
@@ -42,3 +42,19 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Backlog pickup: 0000436 pulled in, folder deleted, index regenerated.
 - Scope Lock Challenge: in scope, out of scope, deferred, and assumptions all taken from the charted step and backlog entry 0000436 [source: draft-accepted (initiative)].
 - Design confirmed: draft-accepted (initiative) (2026-11-10T21:45:02Z)
+
+Complete: P0 (2026-11-10T21:46:17Z)
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T21:46:17Z` |
+| End | `PENDING` |
+| Wall clock | `PENDING` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Two requirements, one ADR. Inline, because the artifacts are small and share one design. |

@@ -67,7 +67,8 @@ None
 ## Skill Map
 | Requirement | Best-fit Skill | Rationale |
 |-------------|----------------|-----------|
-| REQ-001 - CI duration metric | ravintio-implement | One script change, two standards, one skill line, and one suite |
+| REQ-001 - CI duration row in the script | ravintio-implement | One script change and one suite |
+| REQ-002 - marker and target in the standards and the ship skill | ravintio-implement | Two standards, one skill line, and one suite |
 
 ## Repo Instructions
 - `custom-001-local-git-only.md`: fetch, pull, push, and raise PRs without asking. Human-only: committing to `main` and merging into `main`.
