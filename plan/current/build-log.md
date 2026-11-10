@@ -86,10 +86,29 @@ Gate accepted: P2 (2026-11-10T16:37:22Z, autonomous initiative step)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-10T16:37:22Z` |
+| End | `2026-11-10T17:35:08Z` |
+| Wall clock | 38 |
+| Model tier | primary |
+| Skills loaded | ravintio-validate-and-accept |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Docs edit pass ran inline. Clean clone showed only the 2 inherited failures. |
+
+- Tests run: full suite: 390 passed, 0 failed (2026-11-10T17:35:08Z)
+- OS gap: local macos, CI ubuntu, windows
+
+Gate accepted: P3 (2026-11-10T17:35:08Z, autonomous initiative step)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T17:35:08Z` |
 | End | |
 | Wall clock | |
 | Model tier | primary |
-| Skills loaded | ravintio-validate-and-accept |
+| Skills loaded | ravintio-ship |
 | Agents spawned | 0 |
 | MCP calls | 0 |
 | Parallel task batches | 0 |
