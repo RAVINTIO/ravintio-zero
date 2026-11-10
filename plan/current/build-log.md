@@ -76,8 +76,8 @@ Complete: P1 (2026-11-10T13:32:33Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-10T13:32:59Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-10T14:16:07Z` |
+| Wall clock | `45` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator, ravintio-implement |
 | Agents spawned | `0` |
@@ -91,3 +91,6 @@ Complete: P1 (2026-11-10T13:32:33Z)
 - Tests run: REQ-001: test-0000438-req-001-full-feature-id.sh, test-0000399-req-002-add-step.sh, test-0000379-req-001-chart-columns.sh (2026-11-10T13:33:43Z)
 - Done: U-1 (content, primary, inline, 2026-11-10T13:33:43Z)
 - Done: U-2 (content, primary, inline, 2026-11-10T13:33:43Z)
+- Tests run: full suite: 383 passed, 0 failed (2026-11-10T14:16:07Z). The harness exit was 1 because the tree changed during the run: plan/.orchestrator-ack, which the strict-mode hook asked me to write.
+
+Complete: P2 (2026-11-10T14:16:07Z)
