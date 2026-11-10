@@ -52,3 +52,19 @@ Scope Lock (cross-session continuity): a failed run reserves nothing and leaves 
 Scope Lock complete. All four scenario paths captured.
 
 Design confirmed: draft-accepted (initiative) (2026-11-10T13:31:18Z)
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T13:32:11Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-orchestrator, ravintio-plan |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | The plan is small, so the artifacts are written inline. |
+
+Plan decision: the driver file stays untouched. A test pins its pattern to the shared export, which avoids the restart stop.
