@@ -1,7 +1,7 @@
 # Changelog (0000460-narrow-brand-guard-self-entry, 10 Nov 2026)
 
 **Feature:** Narrow the brand guard self-entry
-**Version:** patch, from the chart row. The merge queue sets the number.
+**Version:** set by the merge queue at merge
 **PR:** pending
 
 ## What changed

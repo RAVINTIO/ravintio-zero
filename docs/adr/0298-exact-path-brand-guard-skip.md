@@ -1,7 +1,7 @@
 ---
 title: "ADR 298: Exact-path skip for the brand guard allowlist files"
 summary: "The brand guard skips its two allowlist files by exact path in code, so the allowlist holds no row that widens the guard."
-status: "proposed"
+status: "accepted"
 component: "ravintio-zero"
 version: "0.1.0"
 feature: "0000460-narrow-brand-guard-self-entry"

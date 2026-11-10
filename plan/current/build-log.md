@@ -92,7 +92,7 @@ Complete: P2 (2026-11-10T15:30:49Z)
 |-------|-------|
 | Start | `2026-11-10T15:30:45Z` |
 | End | `2026-11-10T15:52:23Z` |
-| Wall clock | `30` |
+| Wall clock | `22` |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | `0` |
@@ -105,3 +105,35 @@ Complete: P2 (2026-11-10T15:30:49Z)
 - Skipped: docs edit pass subagent (changed docs are short, so the pass ran inline)
 
 Complete: P3 (2026-11-10T15:52:23Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T15:52:34Z` |
+| End | `2026-11-10T15:52:34Z` |
+| Wall clock | `1` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Initiative step. No version bump, because the merge queue sets it. ADR 0298 set to accepted. |
+
+Complete: P4 (2026-11-10T15:52:39Z)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `50` |
+| Total agents spawned | `0` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `0` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `2` |
+| Phases skipped | none |
