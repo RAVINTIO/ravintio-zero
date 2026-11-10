@@ -72,14 +72,15 @@ assert_contains 'Blocked: CI failed on PR #{n}' "$ADV" "req-005 (d): Blocked onl
 assert_equals "0" "$(printf '%s\n' "$ADV" | grep -c 'CI is {red|pending}')" "req-005 (d): pending is no longer a stop"
 
 echo ""
-echo "=== req-005 (e): Step 8 runs and is pushed before the PR ==="
+echo "=== req-005 (e): Step 8 runs in the closing push (0000452) ==="
 assert_contains 'Step 8' "$SEC" "req-005 (e): section names Step 8"
 assert_contains '.run-mode' "$SEC" "req-005 (e): section names the sentinels"
-assert_contains 'before you raise the PR' "$SEC" "req-005 (e): Step 8 precedes the PR"
+assert_contains 'closing push' "$SEC" "req-005 (e): Step 8 runs in the closing push"
 assert_contains 'stale feature id' "$SEC" "req-005 (e): states the stale id risk"
 step9="$(printf '%s\n' "$ADV" | grep -n 'Step 8' | head -1 | cut -d: -f1)"
+ready="$(printf '%s\n' "$ADV" | grep -n 'Write `ready` only' | head -1 | cut -d: -f1)"
 pr="$(printf '%s\n' "$ADV" | grep -n 'gh pr create' | head -1 | cut -d: -f1)"
-assert_equals "yes" "$([ -n "$step9" ] && [ -n "$pr" ] && [ "$step9" -lt "$pr" ] && echo yes || echo no)" "req-005 (e): Step 8 appears before gh pr create in I-D Advance"
+assert_equals "yes" "$([ -n "$step9" ] && [ -n "$pr" ] && [ "$pr" -lt "$step9" ] && [ "$step9" -lt "$ready" ] && echo yes || echo no)" "req-005 (e): Step 8 comes after gh pr create and before ready in I-D Advance"
 
 echo ""
 echo "=== req-005 (f): hand-off after the queue merges ==="
