@@ -3,7 +3,7 @@
 > Change record. Index of all ADRs across all features. Updated after every pipeline run.
 > Do not archive this file. Update it in place.
 
-Last updated: 0000468-reply-time-matches-the-clock
+Last updated: 0000444-step-reads-its-queue-items
 
 ---
 
@@ -325,3 +325,4 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 | [ADR-0304](adr/0304-ready-file-helper-and-recovery.md) | A helper writes the ready file and the driver recovers a bad one | accepted | A script writes and checks the ready file. The driver recovers the PR number from the step branch when the file is empty or invalid. | 0000442-ready-file-helper |
 | [ADR-0305](adr/0305-reply-time-clock-check.md) | Reply time clock check | accepted | The Stop hook compares a leading hh:mm with the local clock and warns when it differs by more than 5 minutes. | 0000468-reply-time-matches-the-clock |
 | [ADR-0306](adr/0306-reread-files-at-the-branch-point.md) | Reread files at the branch point | accepted | The plan skill rereads each file a unit edits from the tip of the PR base branch and records the commit it read. | 0000470-plan-rereads-files-at-the-branch-point |
+| [ADR-0307](adr/0307-steps-read-their-queue-items.md) | Steps read their queue items | accepted | The driver names the queue items that name a step, and a helper checks that each has a commit or report before the PR. | 0000444-step-reads-its-queue-items |
