@@ -18,7 +18,7 @@ Step 6 of initiative 0000360 gave the same block three times in 25 seconds. It h
 
 ## Deviations
 
-None.
+The pack source is `src/ravintio-zero/`. The first push edited only the installed copy `ravintio-zero/`, and CI `validate-branch` failed on `sync-installed.mjs --check`. The fix copies the three files into `src/ravintio-zero/` and `design.md` now lists those paths.
 
 ## Validation results
 

@@ -191,7 +191,9 @@ const DEFAULT_MODEL = 'sonnet';
 const SESSION = /^[A-Za-z0-9_-]{8,128}$/;
 const SESSION_FIELD = /"session_id"\s*:\s*"([^"]*)"/g;
 const MAX_RESUMES = 2;
-const CONTINUE_PROMPT = (n) => `Continue initiative step ${n}. Read plan/current/build-log.md first. Do not end your turn before I-D Advance: Complete:, a Blocked: line, or a Question: line.`;
+const REPLY_MAX = 4 * 1024 * 1024;
+const CONTINUE_PROMPT = (n, log) => `Continue initiative step ${n}. ${log}. Do not end your turn before I-D Advance: Complete:, a Blocked: line, or a Question: line.`;
+const LOG_LINE = 'Read plan/current/build-log.md first';
 
 // The concurrent driver (0000379). It runs only when the chart holds a **Concurrency:** field.
 const WORKTREES = 'plan/.initiative-worktrees';
@@ -406,10 +408,14 @@ function openBlock(root) {
   return blockIn(readFileSync(file, 'utf8'));
 }
 
+// A Blocked: or Question: line. It may carry a list marker, an hh:mm time, and a short prefix,
+// such as "13:41 I-D Advance: " (0000440).
+const BLOCK_LINE = /^\s*(?:[-*+]\s+)?(?:\d{1,2}:\d{2}\s+)?(?:[^:\n]{1,30}:\s+)?(?:Blocked:|Question:)/;
+
 function blockIn(text) {
   let last = null;
   for (const line of text.split(/\r?\n/)) {
-    if (/^\s*(?:[-*+]\s+)?(?:Blocked:|(?:[^:\n]{1,30}:\s+)?Question:)/.test(line)) last = line.trim();
+    if (BLOCK_LINE.test(line)) last = line.trim();
     else if (/^\s*(?:[-*+]\s+)?Resolved:/.test(line)) last = null;
   }
   return last === null ? null : last.slice(0, MAX_LINE);
@@ -483,6 +489,26 @@ function delivered(root, id, slug) {
 }
 
 // Names the writing standard in each step session's system prompt (0000389 ADR-004).
+// Names the file the continue prompt tells a resumed session to read. If the build log is gone,
+// it names the archived log of the feature, or says none exists (0000440).
+function logLine(root, featureId) {
+  if (existsSync(join(root, BUILD_LOG))) return LOG_LINE;
+  try {
+    const dir = join(root, ARCHIVE);
+    if (featureId && !isLink(join(root, 'plan')) && !isLink(dir) && existsSync(dir)) {
+      const names = readdirSync(dir).filter((n) => n.startsWith(featureId)).sort();
+      for (let i = names.length - 1; i >= 0; i--) {
+        const file = join(dir, names[i], 'build-log.md');
+        const st = lstatSync(file, { throwIfNoEntry: false });
+        if (st && st.isFile() && !st.isSymbolicLink()) return `plan/current/build-log.md is gone. Read ${ARCHIVE}/${names[i]}/build-log.md first`;
+      }
+    }
+  } catch {
+    // An unreadable archive means no archived log.
+  }
+  return 'plan/current/build-log.md is gone and there is no build log in the archive, so check git log and the PR';
+}
+
 const WRITING_LINE = 'Write all prose to ravintio-zero/standards/writing-standards.md.';
 
 // Runs one claude -p session for the step. With a session id it adds --resume and the continue
@@ -493,7 +519,7 @@ function runStep(root, position, cfg, fd, labels, resumeId, opts = {}) {
     const bin = process.env.CLAUDE_BIN || 'claude';
     const args = ['-p', '--output-format', 'stream-json', '--verbose', '--permission-mode', 'auto', '--append-system-prompt', WRITING_LINE, '--model', cfg.model];
     if (cfg.turns) args.push('--max-turns', cfg.turns);
-    if (resumeId) args.push('--resume', resumeId, CONTINUE_PROMPT(position));
+    if (resumeId) args.push('--resume', resumeId, CONTINUE_PROMPT(position, logLine(opts.cwd ?? root, opts.featureId)));
     else args.push(`Run initiative step ${position}`);
     const child = spawn(bin, args, {
       cwd: opts.cwd ?? root,
@@ -504,8 +530,28 @@ function runStep(root, position, cfg, fd, labels, resumeId, opts = {}) {
     track(child);
     let session = '';
     let rest = '';
+    let reply = '';
+    let pending = '';
+    // Keeps the text of the last result event. A line that is not JSON, or a result that is not
+    // a string, adds nothing. The text is data and goes to blockIn only (0000440).
+    const readReply = (line) => {
+      if (!line.includes('"result"')) return;
+      try {
+        const ev = JSON.parse(line);
+        if (ev && ev.type === 'result' && typeof ev.result === 'string') reply = ev.result;
+      } catch {
+        // Not an event line.
+      }
+    };
     child.stdout.on('data', (chunk) => {
       writeSync(fd, chunk);
+      pending += chunk.toString('utf8');
+      const nl = pending.lastIndexOf('\n');
+      if (nl >= 0) {
+        for (const line of pending.slice(0, nl).split('\n')) readReply(line);
+        pending = pending.slice(nl + 1);
+      }
+      if (pending.length > REPLY_MAX) pending = '';
       // Events are one JSON object per line. Keep the tail of a split line for the next chunk.
       const text = rest + chunk.toString('utf8');
       const cut = text.lastIndexOf('\n');
@@ -520,7 +566,8 @@ function runStep(root, position, cfg, fd, labels, resumeId, opts = {}) {
     child.on('error', (e) => resolveStep({ error: e.code || 'spawn error', session: '' }));
     child.on('close', (code, signal) => {
       for (const m of rest.matchAll(SESSION_FIELD)) session = m[1];
-      resolveStep({ code, signal, session });
+      readReply(pending);
+      resolveStep({ code, signal, session, reply });
     });
   });
 }
@@ -601,7 +648,7 @@ async function main() {
     let resumes = 0;
     try {
     for (;;) {
-      const res = await runStep(root, position, cfg, log.fd, { id, slug }, resumes > 0 ? session : '');
+      const res = await runStep(root, position, cfg, log.fd, { id, slug }, resumes > 0 ? session : '', { featureId });
       activeChild = null;
       if (res.error) throw new Stop(`I-C Run: Blocked: could not start claude (${res.error})`);
       if (res.code !== 0) {
@@ -615,7 +662,7 @@ async function main() {
         out(`I-E Delivery: Complete: initiative ${id}-${slug} archived, driver done`);
         return;
       }
-      const block = openBlock(root) || archivedBlock(root, featureId, started - 1000);
+      const block = openBlock(root) || archivedBlock(root, featureId, started - 1000) || blockIn(res.reply);
       if (block) throw new Stop(`I-C Run: Blocked: step ${position} stopped. ${block}`);
       rm = readInitiativeFromBranch(root, rm.branch);
       if (rm.position !== position) break;
@@ -920,6 +967,7 @@ async function runScheduledStep(root, rec, cfg, rm) {
     out(`I-C Run: Starting: initiative step ${position} in a fresh session`);
     const opts = {
       cwd: wt,
+      featureId: rec.featureId,
       env: { RAVINTIO_INITIATIVE_QUEUE: '1', RAVINTIO_INITIATIVE_ROOT: root, RAVINTIO_INITIATIVE_CONTROL: ctl },
     };
     const started = Date.now();
@@ -933,7 +981,7 @@ async function runScheduledStep(root, rec, cfg, rm) {
         throw new Stop(`I-C Run: Blocked: claude exited ${res.code ?? res.signal} on step ${position}${cap}`);
       }
       if (res.session) session = res.session;
-      const block = openBlock(wt) || archivedBlock(wt, rec.featureId, started - 1000);
+      const block = openBlock(wt) || archivedBlock(wt, rec.featureId, started - 1000) || blockIn(res.reply);
       if (block) throw new Stop(`I-C Run: Blocked: step ${position} stopped. ${block}`);
       const pr = readControl(root, n).ready;
       if (pr) return pr;

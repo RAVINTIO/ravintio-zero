@@ -34,8 +34,11 @@
 - API versioning: not applicable
 
 ## Component Paths
+- src/ravintio-zero/scripts/
 - ravintio-zero/scripts/
+- src/ravintio-zero/tests/
 - ravintio-zero/tests/
+- src/ravintio-zero/standards/
 - ravintio-zero/standards/
 - plan/current/
 - plan/backlog/
