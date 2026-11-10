@@ -37,3 +37,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Run speed: standard (2026-11-10T16:30:47Z, initiative Speed field)
 - Adoption mode: standard-iterative (signal: plan/_archive beside src/)
 - Pre-flight skipped: the driver cut the branch in its worktree (I-C Run)
+- Scope Lock Challenge: in scope - resolver and overlap check [source: draft-accepted (initiative)]
+- Scope Lock Challenge: out of scope - prose generator, other conflicts [source: draft-accepted (initiative)]
+- Scope Lock Challenge: deferred - nothing [source: draft-accepted (initiative)]
+- Scope Lock Challenge: complete, all four paths covered [source: draft-accepted (initiative)]
+- Version: step Bump minor on 0.80.1, the queue sets the released version
