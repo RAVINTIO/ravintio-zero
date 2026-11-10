@@ -115,14 +115,17 @@ Complete: P3 Validate: done (2026-11-10T14:45:37Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-10T14:45:53Z` |
-| End | `2026-11-10T14:46:01Z` |
-| Wall clock | 2 |
+| End | `2026-11-10T14:53:36Z` |
+| Wall clock | 8 |
 | Model tier | primary |
 | Skills loaded | ravintio-ship |
 | Agents spawned | 0 |
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | This step ships in the new order it introduces: PR and CI first, then the archive as the last push (ADR-0298). |
+- CI: PR #157 green before the archive (2026-11-10T14:53:36Z). Closing push follows.
+
+Complete: P4 Ship: done (2026-11-10T14:53:36Z)
 
 ---
 
@@ -131,7 +134,7 @@ Complete: P3 Validate: done (2026-11-10T14:45:37Z)
 | Metric | Value |
 |--------|-------|
 | Total phases completed | `5` |
-| Total wall clock | `70` |
+| Total wall clock | `83` |
 | Total agents spawned | `0` |
 | Total MCP calls | `0` |
 | Phases using parallelism | `0` |

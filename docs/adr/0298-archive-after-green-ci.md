@@ -1,7 +1,7 @@
 ---
 title: "ADR 0298: An initiative step archives after green CI"
 summary: "An initiative step raises its PR and waits for green CI before it archives. The archive is the last push, and the step writes ready only after the checks on that head pass."
-status: "proposed"
+status: "accepted"
 component: "ravintio-zero"
 version: "0.1.0"
 ---
