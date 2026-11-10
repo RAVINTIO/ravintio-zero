@@ -2,7 +2,7 @@
 
 **Feature:** Version files completeness check
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** 170
 
 ## What changed
 
