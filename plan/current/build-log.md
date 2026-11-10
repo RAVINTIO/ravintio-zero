@@ -75,3 +75,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 
 - In progress: U-001 (2026-11-10T21:50:02Z)
 - RED: U-001 (2026-11-10T21:50:04Z)
+- GREEN: U-001 (2026-11-10T21:51:27Z)
+- Done: U-001 (content, inline, none, 2026-11-10T21:51:27Z)
+- Tests run: REQ-001, REQ-002, REQ-003: test-0000444-req-001-003-queue-items.sh (2026-11-10T21:51:27Z)
+- Done: U-002 (content, inline, none, 2026-11-10T21:51:27Z)
+- In progress: U-003 (2026-11-10T21:51:27Z)
