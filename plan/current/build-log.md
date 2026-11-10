@@ -43,3 +43,17 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Scope Lock Challenge: complete, all four paths covered [source: draft-accepted (initiative)]
 - Version: step Bump minor on 0.80.1, the queue sets the released version
 - Complete: P0 (2026-11-10T16:31:48Z)
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T16:32:06Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | none |
