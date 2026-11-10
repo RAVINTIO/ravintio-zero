@@ -17,7 +17,7 @@ description: Archive, build assessment, changelog, version, and PR, behind the f
 2. Do not modify application code or pack files during this phase.
 3. Never skip the archive step. A populated `plan/current/` breaks resume detection for the next feature.
 4. Read `plan/.run-mode` before Step 8. In `gated`, the final gate stops before the PR. In `autonomous`, raise the PR without a stop. The PR is where the human reviews the run.
-5. Merging into `main` stays human-only in every run mode, and the agent never commits to `main`. The one exception is `gh pr merge --squash` for the agent's own feature PR into `initiative/*`, after a clean P3 and green CI. The `merge-guard` hook enforces it. See `ravintio-zero/standards/roadmap-standards.md` and `## PRs into main`.
+5. Merging into `main` stays human-only in every run mode, and the agent never commits to `main`. The one exception is `gh pr merge --squash` for the agent's own feature PR into `initiative/*`, after a clean P3 and green CI. The `merge-guard` hook enforces it. A step session under the concurrent driver (`RAVINTIO_INITIATIVE_QUEUE=1`) never merges, because only the merge queue merges a step PR. See `ravintio-zero/standards/roadmap-standards.md` and `## PRs into main`.
 6. Credentials are never in your context.
 7. One question at a time.
 

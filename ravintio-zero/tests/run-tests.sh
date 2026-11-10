@@ -38,6 +38,12 @@ while IFS= read -r name; do
   esac
 done <<< "$(compgen -e | grep '^RAVINTIO_' || true)"
 
+# Git isolation (0000462, ADR-0303): each suite sees a global git config that refuses to guess an
+# identity, so a commit with no identity fails here as it does on a CI runner.
+source "$SCRIPT_DIR/helpers/git-isolation.sh"
+isolate_git_env
+trap remove_git_isolation EXIT
+
 # Prints one "path<TAB>hash" line per modified, deleted, or untracked file. Fails outside a git repository.
 snapshot_tree() {
   local top f
@@ -92,7 +98,8 @@ KNOWN_NON_SUITES=(
   "regression/.gitkeep"                    # keeps the folder in git
   "brand-guard-allowlist.txt"              # the brand guard allowlist, read by pre-push and the CI brand test (0000394)
   "helpers/assert.sh"                      # Bash assert helpers
-  "helpers/timeout.sh"                     # with_timeout, the portable time limit (0000380)
+  "helpers/git-isolation.sh"               # isolate_git_env, the runner's git config isolation (0000462)
+  "helpers/timeout.sh"                    # with_timeout, the portable time limit (0000380)
   "helpers/version.sh"                     # version comparison for the 0000160 req-004 and 0000164 req-011 suites
   "helpers/driver-args.sh"                 # claude arguments the driver passes, for the driver suites (0000354 REQ-004)
   "helpers/scheduler-fixture.sh"           # git repo and stub fixtures for the concurrent driver suites (0000379)

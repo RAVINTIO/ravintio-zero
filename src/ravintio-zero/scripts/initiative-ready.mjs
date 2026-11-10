@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Writes and checks the ready file of an initiative step (0000442 REQ-001, ADR-0301).
+// Writes and checks the ready file of an initiative step (0000442 REQ-001, ADR-0304).
 //
 // Usage:
 //   node initiative-ready.mjs --pr {n}   write the PR number to $RAVINTIO_INITIATIVE_CONTROL/ready

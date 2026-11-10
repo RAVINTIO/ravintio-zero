@@ -114,7 +114,7 @@
 //     "ready", the PR number the step writes. A step succeeds when ready exists. The resume rule
 //     applies when it does not. On a driver restart, ready queues the step with no new session.
 //     If ready is empty or invalid, the driver looks up the one open PR for feat/{feature-id} with gh,
-//     rewrites the file, and carries on. With no single PR it stops (0000442, ADR-0301).
+//     rewrites the file, and carries on. With no single PR it stops (0000442, ADR-0304).
 //     A running file without ready restarts the session in the existing worktree.
 //   - The queue takes one ready step at a time, in ready order. It removes the step worktree and
 //     runs "node {merge-queue.mjs} run --step {n} --pr {k} --root {queue worktree}". MERGE_QUEUE_BIN
@@ -864,7 +864,7 @@ function controlDir(root, n) {
   return dir;
 }
 
-// Looks up the one open PR for the step branch (0000442 REQ-002, ADR-0301). Returns its number as a
+// Looks up the one open PR for the step branch (0000442 REQ-002, ADR-0304). Returns its number as a
 // string, or '' if gh fails, answers with anything but one valid number, or finds none or many.
 // The branch goes to gh as one argument and never to a shell.
 function recoverPr(root, featureId) {

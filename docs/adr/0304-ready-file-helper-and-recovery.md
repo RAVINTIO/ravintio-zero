@@ -1,17 +1,17 @@
 ---
-title: "ADR 301: A helper writes the ready file and the driver recovers a bad one"
+title: "ADR 304: A helper writes the ready file and the driver recovers a bad one"
 summary: "A script writes and checks the ready file. The driver recovers the PR number from the step branch when the file is empty or invalid."
 status: "accepted"
 component: "ravintio-zero"
 version: "0.1.0"
 feature: "0000442-ready-file-helper"
 ---
-# ADR-0301 - A helper writes the ready file and the driver recovers a bad one
+# ADR-0304 - A helper writes the ready file and the driver recovers a bad one
 
 **Skill:** [plan](../skills/ravintio-plan/SKILL.md)
 **Feature:** 0000442-ready-file-helper
 **Component:** ravintio-zero
-**File:** `docs/adr/0301-ready-file-helper-and-recovery.md`
+**File:** `docs/adr/0304-ready-file-helper-and-recovery.md`
 **Date:** 2026-11-10
 
 ## Context
