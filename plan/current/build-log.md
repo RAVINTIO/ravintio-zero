@@ -65,8 +65,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-10T16:34:54Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-10T17:27:24Z` |
+| Wall clock | `52` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 0 |
@@ -75,3 +75,13 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Notes | Units run inline in one context: the units share one file set and are small. |
 
 - In progress: U1 shared-files resolver (2026-11-10T16:34:54Z)
+- GREEN: U1 shared-files resolver (2026-11-10T17:27:24Z)
+- Done: U1 shared-files resolver (code, primary, inline, 2026-11-10T17:27:24Z)
+- Done: U2 queue hook-in (code, primary, inline, 2026-11-10T17:27:24Z)
+- Done: U3 overlap check (code, primary, inline, 2026-11-10T17:27:24Z)
+- Done: U4 living docs (content, primary, inline, 2026-11-10T17:27:24Z)
+- Done: U5 sync to ravintio-zero (content, primary, inline, 2026-11-10T17:27:24Z)
+- Tests run: REQ-001: test-0000456-req-001-shared-files.sh, test-0000456-req-001-queue-resolves.sh (2026-11-10T17:27:24Z)
+- Tests run: REQ-002: test-0000456-req-002-overlap-check.sh (2026-11-10T17:27:24Z)
+- Tests run: full suite: 391 passed, 0 failed, regression 19 passed (2026-11-10T17:27:24Z)
+- Complete: P2 (2026-11-10T17:27:24Z)
