@@ -7,6 +7,7 @@
 // It reserves two ids with reserve-id.mjs (the feature id, then the backlog id), files the
 // backlog entry, rebuilds the backlog index, and appends a row for the new step to every chart
 // table: Schema changes, Dependencies, Decisions, Baselines, Criteria, P1 skips, and Steps.
+// The Feature id cell holds {id}-{slug}. The backlog entry keeps the bare ids.
 // The new step number is one past the last row in Steps. Existing rows keep their order.
 // A table the chart lacks is skipped, except Steps, which must exist.
 // Every check runs before the ids are reserved, so a failed run reserves nothing.
@@ -16,6 +17,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
+import { FEATURE_ID } from './initiative-chart.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const BUMPS = ['major', 'minor', 'patch'];
@@ -105,7 +107,10 @@ const stepNo = nextStepNumber(lines, tables.Steps);
 
 const idFile = path.join(opts.root, 'plan', 'backlog', '.next-id');
 const reserved = run('reserve-id.mjs', ['2', '--file', idFile], opts.root).trim().split('\n');
-const [featureId, backlogId] = reserved;
+const [bareId, backlogId] = reserved;
+// The Steps row holds the id and the slug, as the driver requires.
+const featureId = `${bareId}-${opts.slug}`;
+if (!FEATURE_ID.test(featureId)) fail(`the feature id ${featureId} does not match the driver pattern`);
 
 // Escape backslashes first, then quotes, for a double-quoted YAML scalar.
 function yamlQuote(text) {

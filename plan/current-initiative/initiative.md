@@ -8,7 +8,7 @@ status: "active"  # proposed | charted | active | delivered | blocked
 **Goal:** Close every open backlog entry except the four that need paid services. The first three steps make the driver run independent steps at once, each in its own worktree, with each version set as its step merges. Step 20 moves the pack source to `src/ravintio-zero/`. The last step, step 21, makes activation smoother for the human.
 **Branch:** initiative/0000360-backlog-sweep
 **Status:** active
-**Position:** 23
+**Position:** 24
 **Speed:** standard
 **Step CI fixes:** allowed
 **Concurrency:** 3
@@ -293,7 +293,7 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 20 | 0000397-pack-source-in-src | Pack source in src | 0000396 | minor | 0.76.0 | merged | layout | 19 |
 | 21 | 0000399-smoother-activation | Smoother activation | 0000398 | minor | 0.77.0 | merged | initiative | 20 |
 | 22 | 0000421-initiative-retrospective | Initiative retrospective | 0000422 | patch | 0.77.1 | merged | initiative | 21 |
-| 23 | 0000438-add-step-writes-full-feature-id | Add-step writes the full feature id | 0000423 | patch |  | pending | chart-scripts | 22 |
+| 23 | 0000438-add-step-writes-full-feature-id | Add-step writes the full feature id | 0000423 | patch | 0.77.2 | merged | chart-scripts | 22 |
 | 24 | 0000440-driver-reads-reply-blocks | Driver reads blocks from the reply | 0000413 | minor |  | pending | driver | 22 |
 | 25 | 0000442-ready-file-helper | Ready file helper | 0000424 | minor |  | pending | driver | 24 |
 | 26 | 0000444-step-reads-its-queue-items | Steps read their queue items | 0000425 | minor |  | pending | driver | 25 |
@@ -337,3 +337,4 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 20 | #150 | tag v0.76.0 | 0.76.0 | 2026-11-10T00:06:56Z |
 | 21 | #152 | tag v0.77.0 | 0.77.0 | 2026-11-10T01:56:33Z |
 | 22 | #155 | tag v0.77.1 | 0.77.1 | 2026-11-10T03:16:08Z |
+| 23 | #158 | tag v0.77.2 | 0.77.2 | 2026-11-10T14:56:17Z |
