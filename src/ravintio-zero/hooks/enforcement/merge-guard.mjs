@@ -17,6 +17,11 @@
  * Anything else that trips the wire is blocked, including commands over
  * 4096 characters. Commands that do not trip the wire pass.
  *
+ * A step session under the concurrent driver runs with RAVINTIO_INITIATIVE_QUEUE=1.
+ * Every command that trips the wire there is blocked before the parser runs,
+ * because only the merge queue merges a step PR (0000458, ADR-0301). The queue
+ * is a driver process, so it trips no hook.
+ *
  * The hook never runs, evaluates, or shells out the command text.
  * Out of scope: `git push` to main. Branch protection covers it.
  *
@@ -181,6 +186,8 @@ function evaluate(command) {
   if (!base.startsWith("initiative/")) block(`The PR base is '${base}'.`);
 }
 
+const STEP_SESSION = process.env.RAVINTIO_INITIATIVE_QUEUE === "1";
+
 let command = "";
 try {
   const input = JSON.parse(await readStdin());
@@ -192,6 +199,12 @@ try {
 }
 
 if (!trips(command)) process.exit(0);
+
+if (STEP_SESSION) {
+  block(
+    "This is a step session under the concurrent driver (RAVINTIO_INITIATIVE_QUEUE=1). " +
+    "Only the merge queue merges a step PR. Write the PR number to the ready file and end the session.");
+}
 
 try {
   evaluate(command);
