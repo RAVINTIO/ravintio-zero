@@ -2,7 +2,7 @@
 
 **Feature:** Refuse a step merge outside the queue
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** 162
 
 ## What changed
 
