@@ -17,8 +17,8 @@
  * `| {id} | {done or not applicable} | {pack version} |`. A `done` row means no
  * finding. A `not applicable` row at the current pack version (the `version:`
  * line of ravintio-zero/component.yml) means no finding unless the migration's
- * `**Detect:**` line holds a true item. A migration with no ledger row and a
- * `**Detect:**` line that matches nothing also means no finding. A migration
+ * `**Detect:**` line holds a true item. A migration with a `**Detect:**` line
+ * that matches nothing also means no finding, whatever its ledger row says. A migration
  * with no Detect line, or a true Detect item, reports as pending.
  * A missing or unreadable ledger reports every migration. Detect items are
  * joined by ` | `: `exists {path}`, `contains {path} {text}`, and
@@ -113,7 +113,7 @@ try {
     if (row && row.result === "done") continue;
     const text = read(p("ravintio-zero", "migrations", name));
     if (row && current !== null && row.version === current && !detectTrue(text)) continue;
-    if (!row && hasDetect(text) && !detectTrue(text)) continue;
+    if (hasDetect(text) && !detectTrue(text)) continue;
     out.push(`pending migration: ${m ? m[1] : "unreadable"}`);
   }
 
