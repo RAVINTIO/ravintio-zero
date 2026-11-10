@@ -85,3 +85,17 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Tests run: REQ-002: test-0000456-req-002-overlap-check.sh (2026-11-10T17:27:24Z)
 - Tests run: full suite: 391 passed, 0 failed, regression 19 passed (2026-11-10T17:27:24Z)
 - Complete: P2 (2026-11-10T17:27:24Z)
+
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T17:27:54Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-validate-and-accept |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | none |
