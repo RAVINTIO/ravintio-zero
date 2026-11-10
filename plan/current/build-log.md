@@ -1,0 +1,41 @@
+---
+title: "Build Log - 0000399-smoother-activation"
+summary: "Working record of the pipeline run, maintained by the orchestrator."
+---
+# Build Log - 0000399-smoother-activation
+
+## Header
+
+| Field | Value |
+|-------|-------|
+| Feature ID | `0000399-smoother-activation` |
+| Pipeline start | `2026-11-10T00:47:11Z` |
+| Tool | `claude-code` |
+| Primary model | `claude-sonnet-5-5` |
+| Cheaper model | `claude-haiku-5-5` |
+| Run speed | `standard` |
+
+---
+
+## Phase Log
+
+### P0: Discovery
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T00:47:11Z` |
+| End | |
+| Wall clock | |
+| Model tier | primary |
+| Skills loaded | ravintio-orchestrator |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | initiative 0000360 step 21 |
+
+- Run mode: autonomous (2026-11-10T00:47:11Z, initiative step)
+- Run speed: standard (2026-11-10T00:47:11Z, initiative step)
+- Migrations 0004, 0005, 0008 do not apply here (no `planifest-*`, no `plan/roadmap/`, no retired commands). Migration 0009 asks a human `Proceed? (y/n)`, which a step session cannot answer. Left pending, safe to skip. Backlog 0000403 covers the gap.
+- Adoption mode: standard-iterative (signal: `plan/_archive/` beside source)
+- Decision applied (initiative chart): Step 21 runs last (0000398). It edits the pack source in `src/ravintio-zero/` and refreshes the installed copy.
+- Queue: copied ci-gate-step-21 to plan/current/coordinator-instruction-ci-gate.md
