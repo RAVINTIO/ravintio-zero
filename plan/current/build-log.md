@@ -30,8 +30,8 @@ Migration 0009 skipped. It is optional and interactive, so a step session leaves
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-10T19:07:45Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-10T19:08:44Z` |
+| Wall clock | `14` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | `0` |
@@ -39,4 +39,5 @@ Migration 0009 skipped. It is optional and interactive, so a step session leaves
 | Parallel task batches | `0` |
 | Notes | Light track. Backlog entry 0000400 pulled in. |
 
+- Decision: Scope lock and design self-confirmed [source: draft-accepted (initiative)]. Bump minor, planned 0.84.0.
 - Queue: `$RAVINTIO_INITIATIVE_ROOT/plan/.initiative-queue/` holds one item, for step 25. None names step 36.
