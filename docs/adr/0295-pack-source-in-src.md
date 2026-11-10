@@ -1,7 +1,7 @@
 ---
 title: "ADR 0295: Pack source in src"
 summary: "The pack source lives at src/ravintio-zero/. The root ravintio-zero/ is a plain installed copy with a sync script."
-status: "proposed"
+status: "accepted"
 component: "ravintio-zero"
 version: "0.1.0"
 ---
