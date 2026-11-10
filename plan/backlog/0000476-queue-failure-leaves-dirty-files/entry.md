@@ -28,3 +28,5 @@ On a failure after the write and before the commit lands, restore the version fi
 ## Why Deferred
 
 The brief for 0000454 named the version rows and the detach only. The case is rare and needs a decision on how much the queue may reset in a worktree.
+
+Source retrospective: `plan/retrospectives/0000454-queue-failure-recovery-2026-11-10.md`.
