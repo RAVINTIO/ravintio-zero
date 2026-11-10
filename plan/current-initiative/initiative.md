@@ -51,6 +51,25 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 20 | ravintio-zero | none. The pack source moves to `src/ravintio-zero/`, and no file format changes. | none |
 | 21 | ravintio-zero | none | none |
 | 22 | none | none | none |
+| 23 | none | none | none |
+| 24 | none | none | none |
+| 25 | none | none | none |
+| 26 | none | none | none |
+| 27 | none | none | none |
+| 28 | none | none | none |
+| 29 | none | none | none |
+| 30 | none | none | none |
+| 31 | none | none | none |
+| 32 | none | none | none |
+| 33 | none | none | none |
+| 34 | none | none | none |
+| 35 | none | none | none |
+| 36 | none | none | none |
+| 37 | none | none | none |
+| 38 | none | none | none |
+| 39 | none | none | none |
+| 40 | none | none | none |
+| 41 | none | none | none |
 
 ## Dependencies
 
@@ -80,6 +99,25 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 20 | none | none | none |
 | 21 | none | none | none |
 | 22 | none | none | none |
+| 23 | none | none | none |
+| 24 | none | none | none |
+| 25 | none | none | none |
+| 26 | none | none | none |
+| 27 | none | none | none |
+| 28 | none | none | none |
+| 29 | none | none | none |
+| 30 | none | none | none |
+| 31 | none | none | none |
+| 32 | none | none | none |
+| 33 | none | none | none |
+| 34 | none | none | none |
+| 35 | none | none | none |
+| 36 | none | none | none |
+| 37 | none | none | none |
+| 38 | none | none | none |
+| 39 | none | none | none |
+| 40 | none | none | none |
+| 41 | none | none | none |
 
 ## Decisions
 
@@ -125,6 +163,25 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 1-21 | A test pins text that the step edits | Update the pin in the same step and log a `Rework:` line | none |
 | 1-21 | A step changes the tree while its own suite runs | Rerun the suite on a clean tree before closing the phase | none |
 | 22 | none | none | none |
+| 23 | none | none | none |
+| 24 | none | none | none |
+| 25 | none | none | none |
+| 26 | none | none | none |
+| 27 | none | none | none |
+| 28 | The driver runs setup at a `Setup:` stop | Approved by the human on 2026-11-10. The driver runs only the exact command from the `Confirmation:` row, then continues. A missing or different command still stops the run. | none |
+| 29 | none | none | none |
+| 30 | 0000412: archive after CI, or a reopen route | The human chose on 2026-11-10: ship waits for green CI and archives as its last push before `ready`. No reopen route, so `gate-write` stays as it is. | none |
+| 31 | none | none | none |
+| 32 | none | none | none |
+| 33 | Narrow `merge-guard` | Approved by the human on 2026-11-10. `merge-guard` refuses `--squash` when `RAVINTIO_INITIATIVE_QUEUE=1`. A test shows the queue still merges. | none |
+| 34 | Scope of the brand guard skip | The human chose on 2026-11-10: the exact-path skip covers both `src/ravintio-zero/tests/brand-guard-allowlist.txt` and `ravintio-zero/tests/brand-guard-allowlist.txt`. | none |
+| 35 | none | none | none |
+| 36 | none | none | none |
+| 37 | none | none | none |
+| 38 | none | none | none |
+| 39 | none | none | none |
+| 40 | none | none | none |
+| 41 | none | none | none |
 
 ## Baselines
 
@@ -132,6 +189,25 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 |------|--------|----------|--------|
 | 1-21 | none | none | No step sets a speed or size target |
 | 22 | none | none | none |
+| 23 | none | none | none |
+| 24 | none | none | none |
+| 25 | none | none | none |
+| 26 | none | none | none |
+| 27 | none | none | none |
+| 28 | none | none | none |
+| 29 | none | none | none |
+| 30 | none | none | none |
+| 31 | none | none | none |
+| 32 | none | none | none |
+| 33 | none | none | none |
+| 34 | none | none | none |
+| 35 | none | none | none |
+| 36 | none | none | none |
+| 37 | none | none | none |
+| 38 | none | none | none |
+| 39 | none | none | none |
+| 40 | none | none | none |
+| 41 | none | none | none |
 
 ## Criteria
 
@@ -145,6 +221,25 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 20 | `ravintio-zero/` matches `src/ravintio-zero/` byte for byte at the step's end | Deterministic | local |
 | 1-21 | Windows setup tests pass | Deterministic | CI |
 | 22 | none | none | none |
+| 23 | none | none | none |
+| 24 | none | none | none |
+| 25 | none | none | none |
+| 26 | none | none | none |
+| 27 | none | none | none |
+| 28 | none | none | none |
+| 29 | none | none | none |
+| 30 | none | none | none |
+| 31 | none | none | none |
+| 32 | none | none | none |
+| 33 | none | none | none |
+| 34 | none | none | none |
+| 35 | none | none | none |
+| 36 | none | none | none |
+| 37 | none | none | none |
+| 38 | none | none | none |
+| 39 | none | none | none |
+| 40 | none | none | none |
+| 41 | none | none | none |
 
 ## P1 skips
 
@@ -152,6 +247,25 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 |------|---------|--------|
 | 1-21 | no | Every step changes scripts, hooks, skills, or tests |
 | 22 | no | Added after the chart. The human sets this at P1. |
+| 23 | no | Added after the chart. The human sets this at P1. |
+| 24 | no | Added after the chart. The human sets this at P1. |
+| 25 | no | Added after the chart. The human sets this at P1. |
+| 26 | no | Added after the chart. The human sets this at P1. |
+| 27 | no | Added after the chart. The human sets this at P1. |
+| 28 | no | Added after the chart. The human sets this at P1. |
+| 29 | no | Added after the chart. The human sets this at P1. |
+| 30 | no | Added after the chart. The human sets this at P1. |
+| 31 | no | Added after the chart. The human sets this at P1. |
+| 32 | no | Added after the chart. The human sets this at P1. |
+| 33 | no | Added after the chart. The human sets this at P1. |
+| 34 | no | Added after the chart. The human sets this at P1. |
+| 35 | no | Added after the chart. The human sets this at P1. |
+| 36 | no | Added after the chart. The human sets this at P1. |
+| 37 | no | Added after the chart. The human sets this at P1. |
+| 38 | no | Added after the chart. The human sets this at P1. |
+| 39 | no | Added after the chart. The human sets this at P1. |
+| 40 | no | Added after the chart. The human sets this at P1. |
+| 41 | no | Added after the chart. The human sets this at P1. |
 
 ## Steps
 
@@ -179,6 +293,25 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 20 | 0000397-pack-source-in-src | Pack source in src | 0000396 | minor | 0.76.0 | merged | layout | 19 |
 | 21 | 0000399-smoother-activation | Smoother activation | 0000398 | minor | 0.77.0 | merged | initiative | 20 |
 | 22 | 0000421-initiative-retrospective | Initiative retrospective | 0000422 | patch | 0.77.1 | merged | initiative | 21 |
+| 23 | 0000438-add-step-writes-full-feature-id | Add-step writes the full feature id | 0000423 | patch |  | pending | chart-scripts | 22 |
+| 24 | 0000440-driver-reads-reply-blocks | Driver reads blocks from the reply | 0000413 | minor |  | pending | driver | 22 |
+| 25 | 0000442-ready-file-helper | Ready file helper | 0000424 | minor |  | pending | driver | 24 |
+| 26 | 0000444-step-reads-its-queue-items | Steps read their queue items | 0000425 | minor |  | pending | driver | 25 |
+| 27 | 0000446-drain-ready-prs-after-a-stop | Merge ready PRs after a stop | 0000426 | minor |  | pending | driver | 26 |
+| 28 | 0000448-driver-runs-approved-setup-command | Driver runs the approved setup command | 0000427 | minor |  | pending | driver | 27 |
+| 29 | 0000450-coordinator-status-view | Coordinator status view | 0000428 | minor |  | pending | driver | 28 |
+| 30 | 0000452-ci-wait-before-archive | Ship waits for CI before it archives | 0000412 | minor |  | pending | ship | 22 |
+| 31 | 0000454-queue-failure-recovery | Queue failure recovery | 0000429 | minor |  | pending | queue | 22 |
+| 32 | 0000456-regenerate-shared-files-at-merge | Regenerate shared files at merge | 0000430 | minor |  | pending | queue | 31 |
+| 33 | 0000458-refuse-step-merge-outside-queue | Refuse a step merge outside the queue | 0000431 | minor |  | pending | guard | 31 |
+| 34 | 0000460-narrow-brand-guard-self-entry | Narrow the brand guard self-entry | 0000432 | patch |  | pending | tests | 22 |
+| 35 | 0000462-tests-without-git-identity | Tests catch runner-only failures | 0000414 | minor |  | pending | tests | 34 |
+| 36 | 0000464-merge-queue-test-gaps | Merge queue test gaps | 0000400 | minor |  | pending | tests | 31, 35 |
+| 37 | 0000466-version-files-completeness-check | Version files completeness check | 0000433 | minor |  | pending | tests | 36 |
+| 38 | 0000468-reply-time-matches-the-clock | Reply time matches the clock | 0000434 | minor |  | pending | hooks | 22 |
+| 39 | 0000470-plan-rereads-files-at-the-branch-point | Plan rereads files at the branch point | 0000435 | minor |  | pending | plan-skill | 22 |
+| 40 | 0000472-ci-duration-metric | CI duration metric | 0000436 | minor |  | pending | ci | 22 |
+| 41 | 0000474-coordinator-shell-guidance | Coordinator shell guidance | 0000437 | minor |  | pending | initiative-skill | 29 |
 
 ## Merges
 
