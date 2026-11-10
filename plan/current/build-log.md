@@ -119,8 +119,8 @@ Complete: P3 (2026-11-10T20:08:19Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-10T20:08:19Z` |
-| End | `PENDING` |
-| Wall clock | `PENDING` |
+| End | `2026-11-10T20:08:32Z` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-ship |
 | Agents spawned | `0` |
@@ -128,3 +128,20 @@ Complete: P3 (2026-11-10T20:08:19Z)
 | Parallel task batches | `0` |
 | Notes | Initiative step. No version bump, because the merge queue sets it. |
 
+Complete: P4 (2026-11-10T20:08:32Z)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `62` |
+| Total agents spawned | `0` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `0` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `1` |
+| Phases skipped | none |
