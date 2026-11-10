@@ -55,10 +55,11 @@ assert_equals "yes" "$(has 'Read `plan/.run-mode` before Step 8' "$(cat "$SHIP")
 
 RD="$(section '### I-D Advance' "$STD")"
 r_clear="$(printf '%s\n' "$RD" | grep -n 'Step 8' | head -1 | cut -d: -f1)"
+r_ready="$(printf '%s\n' "$RD" | grep -n 'Write `ready` only' | head -1 | cut -d: -f1)"
 r_pr="$(printf '%s\n' "$RD" | grep -n 'gh pr create' | head -1 | cut -d: -f1)"
 rd_ok=no
-[ -n "$r_clear" ] && [ -n "$r_pr" ] && [ "$r_clear" -lt "$r_pr" ] && rd_ok=yes
-assert_equals "yes" "$rd_ok" "req-002 (a): I-D Advance names Step 8 before gh pr create"
+[ -n "$r_clear" ] && [ -n "$r_pr" ] && [ -n "$r_ready" ] && [ "$r_pr" -lt "$r_clear" ] && [ "$r_clear" -lt "$r_ready" ] && rd_ok=yes
+assert_equals "yes" "$rd_ok" "req-002 (a): I-D Advance runs Step 8 after gh pr create and before ready (0000452)"
 assert_equals "no" "$(has 'Step 9' "$RD")" "req-002 (a): I-D Advance no longer cites Step 9"
 
 echo ""
