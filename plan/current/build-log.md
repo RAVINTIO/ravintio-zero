@@ -50,11 +50,40 @@ Complete: P0 (2026-11-10T21:46:17Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-10T21:46:17Z` |
-| End | `PENDING` |
-| Wall clock | `PENDING` |
+| End | `2026-11-10T21:47:52Z` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-plan |
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
 | Notes | Two requirements, one ADR. Inline, because the artifacts are small and share one design. |
+
+- Consistency check: clean (2026-11-10T21:47:52Z). Autonomous run: the plan gate passes with no human stop.
+- Human settings check: none.
+
+Complete: P1 (2026-11-10T21:47:52Z)
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T21:47:52Z` |
+| End | `PENDING` |
+| Wall clock | `PENDING` |
+| Model tier | inline |
+| Skills loaded | ravintio-implement |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Inline, because two small units share one design. RED: 4 and 6 checks failed in the two new suites. GREEN: 7 of 7 and 6 of 6. The source in `src/ravintio-zero/` changed and `sync-installed.mjs` copied it to `ravintio-zero/`. |
+
+- In progress: U-001 REQ-001 CI duration row in the script (2026-11-10T21:47:57Z)
+- RED: U-001 REQ-001 CI duration row in the script (2026-11-10T21:47:57Z)
+- GREEN: U-001 REQ-001 CI duration row in the script (2026-11-10T21:47:57Z)
+- Done: U-001 REQ-001 CI duration row in the script (inline, inline, none, 2026-11-10T21:47:57Z)
+- In progress: U-002 REQ-002 marker and target in the standards and the ship skill (2026-11-10T21:47:57Z)
+- RED: U-002 REQ-002 marker and target in the standards and the ship skill (2026-11-10T21:47:57Z)
+- GREEN: U-002 REQ-002 marker and target in the standards and the ship skill (2026-11-10T21:47:57Z)
+- Done: U-002 REQ-002 marker and target in the standards and the ship skill (inline, inline, none, 2026-11-10T21:47:57Z)
+- Tests run: REQ-001, REQ-002: test-0000472-req-001-ci-duration-metric.sh, test-0000472-req-002-ci-duration-standards.sh, test-0000173-req-001 to 004, test-0000386-req-003, test-0000202-req-002, test-0000384-skill-text.sh (2026-11-10T21:47:57Z)
