@@ -71,11 +71,11 @@ All source edits land under `src/ravintio-zero/`. The last unit syncs them to `r
 
 | Unit | Depends on | Writes | Batch | Sequential reason | Shared resources |
 |------|-----------|--------|-------|-------------------|------------------|
-| U1 resolver | none | src/ravintio-zero/scripts/shared-files.mjs, src/ravintio-zero/tests/test-0000456-req-001-shared-files.sh | 1 | U2 and U3 import its exports | none |
-| U2 queue hook-in | U1 | src/ravintio-zero/scripts/merge-queue.mjs, src/ravintio-zero/tests/test-0000456-req-001-queue-resolves.sh | 2 | none | none |
-| U3 overlap check | U1 | src/ravintio-zero/scripts/coordinator-pr-check.mjs, src/ravintio-zero/tests/test-0000456-req-002-overlap-check.sh | 2 | none | none |
-| U4 living docs | U1 | docs/architecture-overview.md, docs/decisions-index.md, src/ravintio-zero/standards/roadmap-standards.md | 2 | none | none |
-| U5 sync | U2, U3, U4 | ravintio-zero/ | 3 | The copy needs every source edit first | none |
+| U1 | none | src/ravintio-zero/scripts/shared-files.mjs, src/ravintio-zero/tests/test-0000456-req-001-shared-files.sh | 1 | U2 and U3 import its exports | none |
+| U2 | U1 | src/ravintio-zero/scripts/merge-queue.mjs, src/ravintio-zero/tests/test-0000456-req-001-queue-resolves.sh | 2 | none | none |
+| U3 | U1 | src/ravintio-zero/scripts/coordinator-pr-check.mjs, src/ravintio-zero/tests/test-0000456-req-002-overlap-check.sh | 2 | none | none |
+| U4 | U1 | docs/architecture-overview.md, docs/decisions-index.md, src/ravintio-zero/standards/roadmap-standards.md | 2 | none | none |
+| U5 | U2, U3, U4 | ravintio-zero/ | 3 | The copy needs every source edit first | none |
 
 ## Assumptions
 
@@ -86,3 +86,11 @@ All source edits land under `src/ravintio-zero/`. The last unit syncs them to `r
 ## Open Questions
 
 None.
+
+## Units
+
+- U1: the resolver module and its test.
+- U2: the queue hook-in and its test.
+- U3: the overlap check and its test.
+- U4: the living docs.
+- U5: the sync to `ravintio-zero/`.
