@@ -55,3 +55,20 @@ Migration 0009 skipped. It is optional and interactive, so a step session leaves
 | MCP calls | `0` |
 | Parallel task batches | `0` |
 | Notes | Gate auto-accepted (autonomous). No ADR: no decision meets the criteria. |
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T19:11:38Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `1` |
+| Notes | Units run inline. The change is small and each unit is one file. |
+
+- Done: U-001 REQ-001, REQ-002 (test, inline, none, 2026-11-10T19:11:38Z)
+- Tests run: REQ-001, REQ-002: test-0000464-req-001-002-queue-branches.sh (2026-11-10T19:11:38Z)
