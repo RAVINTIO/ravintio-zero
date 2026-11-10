@@ -38,7 +38,7 @@ Codex runs fewer RAVINTIO hooks than Claude Code. Setup wires the two hooks belo
 
 Active hooks, wired in `.codex/hooks.json`:
 
-- **merge-guard** (PreToolUse: Bash): Blocks any pull request merge command unless it squash-merges your own feature PR into an `initiative/*` base. Merging into `main` is human-only.
+- **merge-guard** (PreToolUse: Bash): Blocks any pull request merge command unless it squash-merges your own feature PR into an `initiative/*` base. Merging into `main` is human-only. In a step session with `RAVINTIO_INITIATIVE_QUEUE=1`, it blocks every merge command, because only the merge queue merges a step PR.
 - **block-forced-add** (PreToolUse: Bash): Blocks the forced-add forms described above. It is the same script that Claude Code runs.
 
 Fallback hooks, which Codex does not run for RAVINTIO. Follow each rule as an instruction:

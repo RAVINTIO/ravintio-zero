@@ -34,5 +34,5 @@ Conventions for every downstream phase:
 
 <!-- rule: phase-after-p4 --> **After P4:** apply the Context Hygiene reset so the next session starts cold.
 
-<!-- rule: phase-merge-human-only --> **Merge is human-only.** Merging into `main` stays human-only in every run mode, and the agent never commits to `main`. The one exception is `gh pr merge --squash` for the agent's own feature PR into `initiative/*`, after a clean P3 and green CI. The `merge-guard` hook enforces it. See `ravintio-zero/standards/roadmap-standards.md`.
+<!-- rule: phase-merge-human-only --> **Merge is human-only.** Merging into `main` stays human-only in every run mode, and the agent never commits to `main`. The one exception is `gh pr merge --squash` for the agent's own feature PR into `initiative/*`, after a clean P3 and green CI. The `merge-guard` hook enforces it. A step session with `RAVINTIO_INITIATIVE_QUEUE=1` never merges, because only the merge queue merges a step PR. See `ravintio-zero/standards/roadmap-standards.md`.
 
