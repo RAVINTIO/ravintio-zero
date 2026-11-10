@@ -26,8 +26,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-10T19:56:02Z` |
-| End | `PENDING` |
-| Wall clock | `PENDING` |
+| End | `2026-11-10T19:57:15Z` |
+| Wall clock | `6` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | `0` |
@@ -40,3 +40,21 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Run speed: standard
 - Queue: `plan/.initiative-queue/` holds only `rebase-step-25`, which names another step. No item names step 39.
 - Scope Lock Challenge: in scope, out of scope, deferred, and assumptions all taken from the charted step and backlog entry 0000435 [source: draft-accepted (initiative)].
+- Design confirmed: draft-accepted (initiative) (2026-11-10T19:57:15Z)
+- Backlog pickup: 0000435 pulled in, folder deleted, index regenerated.
+
+Complete: P0 (2026-11-10T19:57:15Z)
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T19:57:15Z` |
+| End | `PENDING` |
+| Wall clock | `PENDING` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | One requirement, one ADR. Inline, because the artifacts are small and share one design. |
