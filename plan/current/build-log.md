@@ -26,8 +26,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-10T23:21:38Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-10T23:23:46Z` |
+| Wall clock | `3` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -43,3 +43,21 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Backlog 0000426 pulled in from the step row and deleted with the index rebuilt.
 - Scope Lock Challenge skipped (light track). Scope lines: in, out, deferred set in design.md [source: draft-accepted (initiative)]
 - Design confirmed: draft-accepted (initiative)
+
+- Complete: P0 (2026-11-10T23:23:46Z)
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T23:23:46Z` |
+| End | `2026-11-10T23:23:46Z` |
+| Wall clock | `1` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Ran inline. The artifacts are small and each depends on the story map. |
+
+- Complete: P1 (2026-11-10T23:23:46Z)
