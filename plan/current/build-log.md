@@ -27,7 +27,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 |-------|-------|
 | Start | `2026-11-10T13:30:36Z` |
 | End | `2026-11-10T13:31:18Z` |
-| Wall clock | `15` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | `0` |
@@ -53,13 +53,15 @@ Scope Lock complete. All four scenario paths captured.
 
 Design confirmed: draft-accepted (initiative) (2026-11-10T13:31:18Z)
 
+Complete: P0 (2026-11-10T13:31:18Z)
+
 ### P1: Plan
 
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-10T13:32:11Z` |
 | End | `2026-11-10T13:32:33Z` |
-| Wall clock | `6` |
+| Wall clock | `0` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator, ravintio-plan |
 | Agents spawned | `0` |
@@ -77,7 +79,7 @@ Complete: P1 (2026-11-10T13:32:33Z)
 |-------|-------|
 | Start | `2026-11-10T13:32:59Z` |
 | End | `2026-11-10T14:16:07Z` |
-| Wall clock | `45` |
+| Wall clock | `43` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator, ravintio-implement |
 | Agents spawned | `0` |
@@ -101,7 +103,7 @@ Complete: P2 (2026-11-10T14:16:07Z)
 |-------|-------|
 | Start | `2026-11-10T14:16:28Z` |
 | End | `2026-11-10T14:45:19Z` |
-| Wall clock | `35` |
+| Wall clock | `29` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator, ravintio-validate-and-accept |
 | Agents spawned | `0` |
@@ -120,11 +122,29 @@ Complete: P3 (2026-11-10T14:45:19Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-10T14:45:51Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-10T14:46:01Z` |
+| Wall clock | `0` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator, ravintio-ship |
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
 | Notes | Initiative step. The merge queue sets the version. |
+
+Complete: P4 (2026-11-10T14:46:01Z)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `75` |
+| Total agents spawned | `0` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `0` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `0` |
+| Phases skipped | `none` |
