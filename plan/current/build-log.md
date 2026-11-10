@@ -35,9 +35,10 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Parallel task batches | `0` |
 | Notes | `Decisions applied (initiative chart): how the pack source moves, consumer paths, divergence, guards. Run mode autonomous, speed standard, version plan 0.75.0 to minor bump.` |
 
+Complete: P0 (2026-11-09T21:40:03Z)
+
 ---
 
-Complete: P0 (2026-11-09T21:40:03Z)
 
 ---
 
@@ -65,7 +66,7 @@ Complete: P1 (2026-11-09T21:42:32Z)
 |-------|-------|
 | Start | `2026-11-09T21:42:43Z` |
 | End | `2026-11-09T23:37:56Z` |
-| Wall clock | `38` |
+| Wall clock | `115` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | `7` |
@@ -74,8 +75,8 @@ Complete: P1 (2026-11-09T21:42:32Z)
 | Notes | Two suites fail in any clone at base and here: 0000037-req-004 needs local git config and 0000318-req-004 needs an origin ref. |
 
 - In progress: U1 move (2026-11-09T21:42:43Z)
-- Done: U1 move (code, inline, none, 2026-11-09T21:42:49Z)
-- Done: U2 copy (code, inline, none, 2026-11-09T21:42:58Z)
+- Done: U1 move (code, primary, none, 2026-11-09T21:42:49Z)
+- Done: U2 copy (code, primary, none, 2026-11-09T21:42:58Z)
 - Done: U4 guards (code, sonnet, standard, 2026-11-09T22:16:54Z)
 - Done: U5 ci-and-sync (code, sonnet, standard, 2026-11-09T22:16:54Z)
 - Done: U6 docs (content, sonnet, standard, 2026-11-09T22:16:54Z)
@@ -97,7 +98,7 @@ Complete: P2 (2026-11-09T23:37:56Z)
 |-------|-------|
 | Start | `2026-11-09T23:38:04Z` |
 | End | `2026-11-09T23:58:27Z` |
-| Wall clock | `22` |
+| Wall clock | `20` |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | `1` |
@@ -117,14 +118,16 @@ Complete: P3 (2026-11-09T23:58:27Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-09T23:58:44Z` |
-| End | `{{timestamp, filled when the phase completes}}` |
-| Wall clock | `0` |
+| End | `2026-11-09T23:58:57Z` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-ship |
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
 | Notes | none |
+
+Complete: P4 (2026-11-09T23:58:57Z)
 
 ---
 
@@ -174,12 +177,14 @@ Complete: P3 (2026-11-09T23:58:27Z)
 
 | Metric | Value |
 |--------|-------|
-| Total phases completed | `{{count}}` |
-| Total wall clock | `{{minutes from pipeline start to the P4 End}}` |
-| Total agents spawned | `{{count}}` |
-| Total MCP calls | `{{count}}` |
-| Phases using parallelism | `{{count}}` |
-| Primary tier agent calls | `{{count}}` |
-| Cheaper tier agent calls | `{{count}}` |
-| Self-corrections | `{{count}}` |
-| Phases skipped | `{{list or "none"}}` |
+| Total phases completed | `5` |
+| Total wall clock | `140` |
+| Total agents spawned | `8` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `2` |
+| Primary tier agent calls | `8` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `3` |
+| Phases skipped | `none` |
+Postmortem: plan/postmortems/2026-11-09-tests-assumed-pack-at-repo-root.md REQ-003 (2026-11-10T00:00:14Z)
+Postmortem: plan/postmortems/2026-11-09-prose-baseline-keyed-by-path.md REQ-005 (2026-11-10T00:00:14Z)
