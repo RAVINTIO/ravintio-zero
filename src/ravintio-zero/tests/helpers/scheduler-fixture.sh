@@ -81,7 +81,7 @@ const d = process.env.STUB_DIR;
 appendFileSync(join(d, 'queue.log'), `${step} ${pr}\n`);
 const wt = join(process.env.STUB_ROOT, 'plan/.initiative-worktrees', `step-${step}`);
 appendFileSync(join(d, 'queue-wt.log'), `${step} ${existsSync(wt) ? 'present' : 'gone'}\n`);
-if (process.env.QUEUE_FAIL_STEP === step) {
+if ((process.env.QUEUE_FAIL_STEP || '').split(',').includes(step)) {
   console.error(`merge-queue: CI failed on PR #${pr}`);
   process.exit(1);
 }
