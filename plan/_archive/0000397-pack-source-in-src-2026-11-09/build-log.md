@@ -107,6 +107,7 @@ Complete: P2 (2026-11-09T23:37:56Z)
 | Notes | Baseline recorded at P3 from targeted runs at 2adff7e3, because P0 skipped the base run. |
 
 - Tests run: full suite: 373 passed, 2 failed (2026-11-09T23:58:27Z)
+- Rework: CI validate-branch: the version bump set 0.76.0 in the installed component.yml only. The source copy now matches, and sync-installed --check passes (2026-11-10T00:10:15Z)
 - Rework: REQ-003: three whole-repo scan tests read the wrong root from the installed folder (2026-11-09T23:58:27Z)
 
 Complete: P3 (2026-11-09T23:58:27Z)
