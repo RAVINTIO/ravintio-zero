@@ -121,7 +121,7 @@ Complete: P3 (2026-11-10T22:36:59Z)
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
-| Notes | Initiative step. No version bump, because the merge queue sets it. ADR 0307 set to accepted. |
+| Notes | Initiative step. No version bump, because the merge queue sets it. ADR 0308 set to accepted. |
 
 Complete: P4 (2026-11-10T22:37:15Z)
 

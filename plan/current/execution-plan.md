@@ -66,7 +66,7 @@ The plan read these files at the tip of `origin/initiative/0000360-backlog-sweep
 | `src/ravintio-zero/tests/test-0000472-req-001-ci-duration-metric.sh` | new | U-001 |
 | `src/ravintio-zero/tests/test-0000472-req-002-ci-duration-standards.sh` | new | U-002 |
 | `docs/architecture-overview.md` | b75d165f | U-003 |
-| `docs/adr/0307-report-ci-duration-in-workflow-metrics.md` | new | U-003 |
+| `docs/adr/0308-report-ci-duration-in-workflow-metrics.md` | new | U-003 |
 
 ## Concurrency plan
 
@@ -74,7 +74,7 @@ The plan read these files at the tip of `origin/initiative/0000360-backlog-sweep
 |------|-----------|--------|-------|-------------------|------------------|
 | U-001 | none | `src/ravintio-zero/scripts/workflow-metrics.mjs`, `src/ravintio-zero/tests/test-0000472-req-001-ci-duration-metric.sh` | 1 | none | none |
 | U-002 | none | `src/ravintio-zero/standards/workflow-governance-standards.md`, `src/ravintio-zero/standards/testing-standards.md`, `src/ravintio-zero/skills/ravintio-ship/SKILL.md`, `src/ravintio-zero/tests/test-0000472-req-002-ci-duration-standards.sh` | 1 | none | none |
-| U-003 | U-001, U-002 | `docs/architecture-overview.md`, `docs/adr/0307-report-ci-duration-in-workflow-metrics.md` | 2 | Living docs unit. It records what U-001 and U-002 built | none |
+| U-003 | U-001, U-002 | `docs/architecture-overview.md`, `docs/adr/0308-report-ci-duration-in-workflow-metrics.md` | 2 | Living docs unit. It records what U-001 and U-002 built | none |
 
 ## Assumptions
 

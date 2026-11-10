@@ -27,4 +27,4 @@ The initiative branch moved during the run, with step 41's merge of 0000466. I m
 
 ## Docs edit pass
 
-Changed docs: `docs/architecture-overview.md`, the two standards, the ship skill, ADR 0307, and the changelog. One cycle, run inline. `prose-check.mjs` exits 0.
+Changed docs: `docs/architecture-overview.md`, the two standards, the ship skill, ADR 0308, and the changelog. One cycle, run inline. `prose-check.mjs` exits 0.

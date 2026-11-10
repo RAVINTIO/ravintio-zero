@@ -12,7 +12,7 @@
 - `testing-standards.md` names the CI duration target of 420 seconds.
 - Two new suites, `test-0000472-req-001-ci-duration-metric.sh` and `test-0000472-req-002-ci-duration-standards.sh`, check the row and the standards.
 - `test-0000173-req-002-thresholds-gate.sh` writes the new key into its custom standards files.
-- ADR 0307 records the decision.
+- ADR 0308 records the decision.
 
 ## Why
 

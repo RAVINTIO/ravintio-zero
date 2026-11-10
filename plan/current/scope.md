@@ -16,7 +16,7 @@ version: "0.1.0"
 - A marker definition and a threshold row in `workflow-governance-standards.md`.
 - A CI target in `testing-standards.md`.
 - A marker line in the ship skill's CI wait.
-- A new suite, ADR-0307, docs, and a changelog entry.
+- A new suite, ADR-0308, docs, and a changelog entry.
 - The sync of `ravintio-zero/` with `sync-installed.mjs`.
 
 ## Out of Scope
