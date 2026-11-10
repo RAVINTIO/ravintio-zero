@@ -369,7 +369,7 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 41 | 0000474-coordinator-shell-guidance | Coordinator shell guidance | 0000437 | minor |  | pending | initiative-skill | 29 |
 | 42 | 0000481-regenerate-after-every-merge | Regenerate shared files after every base merge | 0000482 | minor |  | pending | queue | 22 |
 | 43 | 0000483-mergeability-before-ci-wait | Check mergeability before a CI wait | 0000484 | minor |  | pending | ship | 30 |
-| 44 | 0000485-record-baseline-in-p0 | Parallel steps reserve distinct ADR numbers | 0000479 | minor |  | pending | adr | 22 |
+| 44 | 0000485-adr-number-collision | Parallel steps reserve distinct ids | 0000479 | minor |  | pending | adr | 22 |
 | 45 | 0000487-steps-apply-decision-rows | Steps apply the chart's Decisions rows | 0000488 | minor |  | pending | skills | 22 |
 | 46 | 0000489-question-only-for-questions | Steps use Question only for real questions | 0000490 | minor |  | pending | skills | 45 |
 | 47 | 0000491-driver-favours-critical-path | Driver favours the critical path | 0000492 | minor |  | pending | driver | 41 |

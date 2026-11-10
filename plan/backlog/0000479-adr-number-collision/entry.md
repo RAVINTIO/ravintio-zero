@@ -23,6 +23,10 @@ Step 35 reserved ADR 0301 from `docs/adr/.next-id` on its own branch. Steps 32 a
 
 Retrospective: `plan/retrospectives/0000462-tests-without-git-identity-2026-11-10.md`.
 
+## Added on 2026-11-10
+
+Backlog ids collide the same way. Two parallel steps each filed entry 0000479: `0000479-adr-number-collision` and `0000479-record-baseline-in-p0`. Step 44 makes parallel steps reserve distinct ADR numbers and distinct backlog ids, and renumbers the second 0000479 entry.
+
 ## Suggested Action
 
 - The merge queue renumbers an ADR file whose number another merged step already uses, and updates its index row and references.
