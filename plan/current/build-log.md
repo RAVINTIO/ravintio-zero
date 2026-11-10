@@ -104,3 +104,35 @@ Migration 0009 skipped. It is optional and interactive, so a step session leaves
 - Baseline check: 2 inherited suites, 0 new.
 - OS gap: local macos, CI ubuntu, windows
 - Complete: P3 (acceptance evidence written)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T20:06:40Z` |
+| End | `2026-11-10T20:06:42Z` |
+| Wall clock | `1` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Initiative step. The merge queue sets the version. |
+
+- Complete: P4 (PR raised, archive follows green CI)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `60` |
+| Total agents spawned | `0` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `0` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `0` |
+| Phases skipped | none |
