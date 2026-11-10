@@ -74,8 +74,8 @@ Complete: P1 (2026-11-10T15:01:57Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-10T15:05:01Z` |
-| End | |
-| Wall clock | |
+| End | `2026-11-10T15:30:37Z` |
+| Wall clock | `22` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 0 |
@@ -88,3 +88,7 @@ Complete: P1 (2026-11-10T15:01:57Z)
 - Tests run: REQ-001: test-0000454-req-001-queue-failure-recovery.sh (2026-11-10T15:05:01Z)
 - Tests run: REQ-002: test-0000454-req-001-queue-failure-recovery.sh (2026-11-10T15:05:01Z)
 - Tests run: REQ-003: test-0000454-req-001-queue-failure-recovery.sh (2026-11-10T15:05:01Z)
+- Tests run: full suite: 381 passed, 2 failed (2026-11-10T15:30:37Z)
+- Filed: backlog entry 0000476 (dirty files after a failed run)
+
+Complete: P2 (2026-11-10T15:30:37Z)
