@@ -71,3 +71,27 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - In progress: U1-research-postmortems (2026-11-10T02:37:09Z)
 - In progress: U2-research-logs (2026-11-10T02:37:09Z)
 - In progress: U3-research-buildlogs (2026-11-10T02:37:09Z)
+
+- Done: U1-research-postmortems (analysis, primary, medium, 2026-11-10T03:06:54Z)
+- Done: U2-research-logs (analysis, primary, medium, 2026-11-10T03:06:54Z)
+- Done: U3-research-buildlogs (analysis, primary, medium, 2026-11-10T03:06:54Z)
+- Done: U4-write-record (content, inline, none, 2026-11-10T03:06:54Z)
+- Done: U5-file-entries (content, inline, none, 2026-11-10T03:06:54Z)
+- Skipped: U6-living-docs (no user-facing doc changed)
+- Note: the three research agents could not write findings files. The orchestrator saved one and folded the others into the record.
+- Note: the P0 baseline run did not happen. P3 recorded the baseline from a clean clone of HEAD, whose files outside plan/ equal the base.
+- Tests run: full suite: 380 passed, 2 failed (inherited) (2026-11-10T03:06:54Z)
+
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T03:06:54Z` |
+| End | `2026-11-10T03:06:54Z` |
+| Wall clock | 25 |
+| Model tier | primary |
+| Skills loaded | ravintio-validate-and-accept |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | 0 self-corrections. Docs edit pass skipped (no user-facing doc changed). |
