@@ -1,7 +1,7 @@
 ---
 title: "ADR 0301: The queue resolves shared-file conflicts"
 summary: "A new module resolves a fixed allowlist of conflicted files after the queue's base merge and stops on anything else."
-status: "proposed"
+status: "accepted"
 component: "ravintio-zero"
 feature: "0000456-regenerate-shared-files-at-merge"
 version: "0.1.0"
