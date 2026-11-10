@@ -26,8 +26,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-10T15:02:44Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-10T15:04:17Z` |
+| Wall clock | `2` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | `0` |
@@ -41,6 +41,6 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Queue item `narrow-brand-guard-self-entry` names step 34. Copied to `plan/current/coordinator-instruction-brand-guard.md`.
 - Decision applied (initiative chart): Scope of the brand guard skip. The exact-path skip covers both `src/ravintio-zero/tests/brand-guard-allowlist.txt` and `ravintio-zero/tests/brand-guard-allowlist.txt`.
 - Scope Lock Challenge: in scope, out of scope, deferred, and assumptions all taken from the charted step and the queued instruction [source: draft-accepted (initiative)].
-- Design confirmed: draft-accepted (initiative) (2026-11-10T15:15:00Z)
+- Design confirmed: draft-accepted (initiative) (2026-11-10T15:04:17Z)
 
-Complete: P0 (2026-11-10T15:15:00Z)
+Complete: P0 (2026-11-10T15:04:17Z)

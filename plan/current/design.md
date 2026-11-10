@@ -68,4 +68,4 @@ None
 - `custom-006-standing-setup-refresh-approval.md`: the setup refresh runs with the approved command only.
 
 ## Confirmation
-Human confirmed this design before proceeding: draft-accepted (initiative) // Date and Time confirmed: 2026-11-10T15:15Z. Scope Lock Challenge lines each end with [source: draft-accepted (initiative)].
+Human confirmed this design before proceeding: draft-accepted (initiative) // Date and Time confirmed: 2026-11-10T15:04:17Z. Scope Lock Challenge lines each end with [source: draft-accepted (initiative)].
