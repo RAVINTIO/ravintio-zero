@@ -51,7 +51,7 @@ Complete: P0 (2026-11-10T19:08:50Z)
 |-------|-------|
 | Start | `2026-11-10T19:09:00Z` |
 | End | `2026-11-10T19:09:55Z` |
-| Wall clock | `2` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-plan |
 | Agents spawned | `0` |
