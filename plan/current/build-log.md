@@ -94,3 +94,4 @@ Complete: P2 (2026-11-10T14:44:41Z)
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | Inline. |
+- Docs edit pass: reviewed inline, 0 changes, prose-check exit 0
