@@ -83,5 +83,4 @@
 ^(src/)?ravintio-zero/tests/(regression/)?test-0000160-req-006-brand-guard\.sh$	.
 
 # --- The allowlist itself ---
-# The file names the word in its own entries.
-^(src/)?ravintio-zero/tests/brand-guard-allowlist\.txt$	.
+# brand-guard.sh skips the two allowlist files by exact path (ADR-0300). No row covers them.
