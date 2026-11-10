@@ -2,7 +2,7 @@
 
 **Feature:** Merge queue test gaps
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** 166
 
 ## What changed
 
