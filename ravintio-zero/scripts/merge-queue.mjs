@@ -308,21 +308,22 @@ function versionsOnRef(root, ref, list) {
  */
 function activeVersionCommits(root, base, featureId, step) {
   const id7 = featureId.slice(0, 7);
-  const setRe = new RegExp(`^chore\\(${id7}\\): set version (\\d+\\.\\d+\\.\\d+) for step ${step}$`);
-  const revertRe = new RegExp(`^chore\\(${id7}\\): revert set version ([0-9., ]+) for step ${step}$`);
+  const setRe = /^chore\((\d{7})\): set version (\d+\.\d+\.\d+) for step (\d+)$/;
+  const revertRe = /^chore\((\d{7})\): revert set version ([0-9., ]+) for step (\d+)$/;
   const owed = new Map();
   const active = [];
   for (const line of git(root, ["log", "--format=%H%x09%s", `origin/${base}..HEAD`]).split("\n")) {
     const [sha, subject = ""] = line.split("\t");
+    // Fixed patterns, then a compare of the captured id and step, so no input builds a pattern.
     const undone = revertRe.exec(subject);
-    if (undone) {
-      for (const v of undone[1].split(", ")) owed.set(v, (owed.get(v) ?? 0) + 1);
+    if (undone && undone[1] === id7 && undone[3] === String(step)) {
+      for (const v of undone[2].split(", ")) owed.set(v, (owed.get(v) ?? 0) + 1);
       continue;
     }
     const set = setRe.exec(subject);
-    if (!set) continue;
-    if ((owed.get(set[1]) ?? 0) > 0) owed.set(set[1], owed.get(set[1]) - 1);
-    else active.push({ sha, version: set[1] });
+    if (!set || set[1] !== id7 || set[3] !== String(step)) continue;
+    if ((owed.get(set[2]) ?? 0) > 0) owed.set(set[2], owed.get(set[2]) - 1);
+    else active.push({ sha, version: set[2] });
   }
   return active;
 }

@@ -20,6 +20,8 @@ A failed queue run left a `chore: set version` commit on the step branch, and th
 - P2 ran inline without subagents, because the requirements edit one script and one suite.
 - The brief left out a clean-up of files that a failed run wrote. Backlog entry 0000477 holds it.
 
+- CodeQL flagged the first draft of the commit scan for building patterns from input. The scan now uses fixed patterns and compares the captured values.
+
 ## Validation results
 
 - The new suite failed 9 of 18 checks before the change and passes 18 of 18 after it.
