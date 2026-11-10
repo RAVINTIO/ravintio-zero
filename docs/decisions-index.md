@@ -3,7 +3,7 @@
 > Change record. Index of all ADRs across all features. Updated after every pipeline run.
 > Do not archive this file. Update it in place.
 
-Last updated: 0000454-queue-failure-recovery
+Last updated: 0000462-tests-without-git-identity
 
 ---
 
@@ -319,3 +319,4 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 | [ADR-0298](adr/0298-archive-after-green-ci.md) | An initiative step archives after green CI | accepted | An initiative step raises its PR and waits for green CI before it archives. The archive is the last push, and ready needs green checks on that head. | 0000452-ci-wait-before-archive |
 | [ADR-0299](adr/0299-queue-reverts-stale-version-commit.md) | The queue reverts a stale version commit and detaches after every run | accepted | A rerun reverts an earlier set-version commit when the base version moved, and the queue detaches its worktree when a run ends. | 0000454-queue-failure-recovery |
 | [ADR-0300](adr/0300-exact-path-brand-guard-skip.md) | Exact-path skip for the brand guard allowlist files | accepted | The brand guard skips its two allowlist files by exact path in code, so the allowlist holds no row that widens the guard. | 0000460-narrow-brand-guard-self-entry |
+| [ADR-0301](adr/0301-git-isolation-in-test-runners.md) | Git isolation in the test runners | proposed | The runners give each suite a temporary global git config that refuses to guess an identity, so a missing identity fails locally. | 0000462-tests-without-git-identity |

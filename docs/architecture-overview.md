@@ -1,6 +1,6 @@
 # Architecture Overview
 
-Last updated: 0000460-narrow-brand-guard-self-entry
+Last updated: 0000462-tests-without-git-identity
 
 ## What this repo is
 
@@ -282,7 +282,7 @@ Setup checks the tool straight after argument parsing, ahead of the old-folder c
 
 ## Tests
 
-A wording test greps every tracked file outside history for the retired word that once described RAVINTIO Zero. It passes only lines that match an allowlist of generic uses. A phase guard test fails on a phase number outside P0 to P4 or on a retired letter prefix. A brand guard test fails on any tracked path or line outside history that holds the earlier product name, unless an allowlist entry matches. It also fails on a stale allowlist entry. The guard skips the two allowlist files by exact path in `brand_guard_skips_path`, and the allowlist holds no row for them (ADR 0300).
+A wording test greps every tracked file outside history for the retired word that once described RAVINTIO Zero. It passes only lines that match an allowlist of generic uses. A phase guard test fails on a phase number outside P0 to P4 or on a retired letter prefix. A brand guard test fails on any tracked path or line outside history that holds the earlier product name, unless an allowlist entry matches. It also fails on a stale allowlist entry. The guard skips the two allowlist files by exact path in `brand_guard_skips_path`, and the allowlist holds no row for them (ADR 0300). Both test runners give each suite a temporary global git config with `user.useConfigOnly` set and hide the system config. A suite that commits with no identity then fails on a developer machine, as it does on a CI runner (ADR 0301, 0000462). A BOM suite checks that `doctor` and `setup` read a boot file that starts with a BOM.
 
 `ravintio-zero/tests/run-tests.sh` runs every Bash and PowerShell suite. Before any suite runs, it checks every file under `tests/`. A file that is neither a suite nor on its known list fails the run, and the runner names it. Without `pwsh`, it prints how many PowerShell suites it skipped. Each suite starts without any `RAVINTIO_` variable except `RAVINTIO_PWSH`, `RAVINTIO_TIMING_FILE`, and `RAVINTIO_TEST_QUIET`. The runner compares tracked and untracked files before the first suite and after the last. It fails the run and names each path that changed (0000315). Under the totals it lists each failed suite by file name under `Failed suites:`, in quiet mode too (0000358).
 

@@ -47,6 +47,16 @@ for v in GIT_CONFIG_GLOBAL GIT_CONFIG_NOSYSTEM useConfigOnly; do
 done
 
 echo ""
+echo "=== REQ-001 AC-2: a suite that the runner starts sees the isolated config ==="
+if [ -n "${GIT_ISOLATION_CONFIG:-}" ]; then
+  assert_equals "$GIT_ISOLATION_CONFIG" "${GIT_CONFIG_GLOBAL:-}" "REQ-001 AC-2: GIT_CONFIG_GLOBAL is the isolation file"
+  assert_equals "true" "$(git config --global --get user.useConfigOnly)" "REQ-001 AC-2: git refuses to guess an identity"
+  assert_equals "1" "${GIT_CONFIG_NOSYSTEM:-}" "REQ-001 AC-2: the system config is hidden"
+else
+  echo "  SKIP: run this suite through run-tests.sh to check the runner environment"
+fi
+
+echo ""
 echo "=== REQ-001 AC-3: the PR #136 defect fails under isolation ==="
 FN="$(sed -n '/^commit_workspace_pack()/,/^}/p' "$SCRIPT_DIR/helpers/assert.sh")"
 BROKEN="$(printf '%s\n' "$FN" | sed -e 's/-c user.email=test@example.com -c user.name=test //' -e 's/^commit_workspace_pack()/broken_commit_workspace_pack()/')"
