@@ -50,11 +50,15 @@ Complete: P0 (2026-11-10T19:08:50Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-10T19:09:00Z` |
-| End | `PENDING` |
-| Wall clock | `PENDING` |
+| End | `2026-11-10T19:09:55Z` |
+| Wall clock | `2` |
 | Model tier | primary |
 | Skills loaded | ravintio-plan |
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
 | Notes | Two requirements, one ADR. Inline, because the artifacts are short and share one design. |
+
+- Consistency check: clean (2026-11-10T19:09:55Z). Autonomous run: the plan gate passes with no human stop.
+
+Complete: P1 (2026-11-10T19:09:55Z)
