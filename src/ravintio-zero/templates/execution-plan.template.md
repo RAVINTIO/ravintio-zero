@@ -65,6 +65,14 @@ The plan skill's Test impact scan fills this table. Write `none found` in a row 
 |-------|------|------|
 | {{skill count, skill-text budget, size cap, or backlog entry id}} | {{test file, or none found}} | {{unit-id that edits the file}} |
 
+## Branch-point reads
+
+The plan skill's Branch-point reread step fills this table. Write `new` for a file the unit creates.
+
+| File | Commit read | Unit |
+|------|-------------|------|
+| {{file a unit edits}} | {{last commit on the base branch that changed it, or new}} | {{unit-id}} |
+
 ## Concurrency plan
 
 Units in one batch run at the same time. A unit alone in its batch gives its reason. See the [guide](execution-plan-guide.md). The optional Shared resources column lists build output, ports, and lock files. Two units in one batch must not name the same resource.
