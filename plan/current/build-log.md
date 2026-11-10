@@ -24,8 +24,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-10T13:30:00Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-10T13:30:45Z` |
+| Wall clock | `6` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -38,3 +38,6 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Adoption mode: standard-iterative (signal: `plan/_archive/` beside source)
 - Track: light (chart accepts it)
 - Version: last known 0.77.1, step bump minor, the merge queue sets the released version
+
+- Design confirmed: draft-accepted (initiative) (2026-11-10T13:30:45Z)
+Complete: P0 (2026-11-10T13:30:45Z)
