@@ -308,7 +308,7 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 35 | 0000462-tests-without-git-identity | Tests catch runner-only failures | 0000414 | minor | 0.83.0 | merged | tests | 34 |
 | 36 | 0000464-merge-queue-test-gaps | Merge queue test gaps | 0000400 | minor |  | pending | tests | 31, 35 |
 | 37 | 0000466-version-files-completeness-check | Version files completeness check | 0000433 | minor |  | pending | tests | 36 |
-| 38 | 0000468-reply-time-matches-the-clock | Reply time matches the clock | 0000434 | minor |  | pending | hooks | 22 |
+| 38 | 0000468-reply-time-matches-the-clock | Reply time matches the clock | 0000434 | minor | 0.85.0 | merged | hooks | 22 |
 | 39 | 0000470-plan-rereads-files-at-the-branch-point | Plan rereads files at the branch point | 0000435 | minor |  | pending | plan-skill | 22 |
 | 40 | 0000472-ci-duration-metric | CI duration metric | 0000436 | minor |  | pending | ci | 22 |
 | 41 | 0000474-coordinator-shell-guidance | Coordinator shell guidance | 0000437 | minor |  | pending | initiative-skill | 29 |
@@ -346,3 +346,4 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 32 | #164 | tag v0.82.0 | 0.82.0 | 2026-11-10T18:17:04Z |
 | 35 | #165 | tag v0.83.0 | 0.83.0 | 2026-11-10T18:59:00Z |
 | 25 | #163 | tag v0.84.0 | 0.84.0 | 2026-11-10T19:54:46Z |
+| 38 | #167 | tag v0.85.0 | 0.85.0 | 2026-11-10T20:27:02Z |
