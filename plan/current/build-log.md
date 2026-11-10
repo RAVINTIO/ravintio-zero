@@ -27,7 +27,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 |-------|-------|
 | Start | `2026-11-10T19:56:02Z` |
 | End | `2026-11-10T19:57:15Z` |
-| Wall clock | `6` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | `0` |
@@ -51,7 +51,7 @@ Complete: P0 (2026-11-10T19:57:15Z)
 |-------|-------|
 | Start | `2026-11-10T19:57:15Z` |
 | End | `2026-11-10T19:57:54Z` |
-| Wall clock | `8` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-plan |
 | Agents spawned | `0` |
@@ -70,20 +70,19 @@ Complete: P1 (2026-11-10T19:57:54Z)
 |-------|-------|
 | Start | `2026-11-10T19:57:54Z` |
 | End | `2026-11-10T19:58:59Z` |
-| Wall clock | `10` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
-| Notes | Inline, one unit. RED: 0 of 9 checks passed. GREEN: 9 of 9. The source in `src/ravintio-zero/` changed and `sync-installed.mjs` copied it to `ravintio-zero/`. Seven related suites pass. |
+| Notes | Inline, one unit. The docs edit to `docs/architecture-overview.md` ran after it. RED: 0 of 9 checks passed. GREEN: 9 of 9. The source in `src/ravintio-zero/` changed and `sync-installed.mjs` copied it to `ravintio-zero/`. Seven related suites pass. |
 
 - In progress: U-001 REQ-001 branch-point reread (2026-11-10T19:57:54Z)
 - RED: U-001 REQ-001 branch-point reread (2026-11-10T19:58:59Z)
 - GREEN: U-001 REQ-001 branch-point reread (2026-11-10T19:58:59Z)
 - Tests run: REQ-001: test-0000470-req-001-branch-point-reread.sh, test-0000384-skill-text.sh, test-0000246-req-001-test-impact-scan.sh, test-0000383-req-001-005-test-impact-causes.sh, test-0000201-req-001-concurrency-section.sh, test-0000005-pack-governance.sh, test-0000170-req-001-story-map-pass.sh, test-0000151-req-014-chart-clarity-and-dependency-stop.sh (2026-11-10T19:58:59Z)
 - Done: U-001 REQ-001 branch-point reread (inline, inline, none, 2026-11-10T19:58:59Z)
-- Done: U-002 living docs (inline, inline, none, 2026-11-10T19:58:59Z)
 
 Complete: P2 (2026-11-10T19:58:59Z)
 
@@ -93,7 +92,7 @@ Complete: P2 (2026-11-10T19:58:59Z)
 |-------|-------|
 | Start | `2026-11-10T19:58:59Z` |
 | End | `2026-11-10T20:36:21Z` |
-| Wall clock | `55` |
+| Wall clock | `37` |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | `0` |
@@ -105,3 +104,35 @@ Complete: P2 (2026-11-10T19:58:59Z)
 - Skipped: docs edit pass subagent (changed docs are short, so the pass ran inline)
 
 Complete: P3 (2026-11-10T20:36:21Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T20:36:21Z` |
+| End | `2026-11-10T20:36:43Z` |
+| Wall clock | `1` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Initiative step. No version bump, because the merge queue sets it. ADR 0306 set to accepted. |
+
+Complete: P4 (2026-11-10T20:36:43Z)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `41` |
+| Total agents spawned | `0` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `0` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `0` |
+| Phases skipped | none |
