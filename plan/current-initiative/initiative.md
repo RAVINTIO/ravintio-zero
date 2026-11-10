@@ -306,7 +306,7 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 33 | 0000458-refuse-step-merge-outside-queue | Refuse a step merge outside the queue | 0000431 | minor | 0.81.0 | merged | guard | 31 |
 | 34 | 0000460-narrow-brand-guard-self-entry | Narrow the brand guard self-entry | 0000432 | patch | 0.80.1 | merged | tests | 22 |
 | 35 | 0000462-tests-without-git-identity | Tests catch runner-only failures | 0000414 | minor | 0.83.0 | merged | tests | 34 |
-| 36 | 0000464-merge-queue-test-gaps | Merge queue test gaps | 0000400 | minor |  | pending | tests | 31, 35 |
+| 36 | 0000464-merge-queue-test-gaps | Merge queue test gaps | 0000400 | minor | 0.87.0 | merged | tests | 31, 35 |
 | 37 | 0000466-version-files-completeness-check | Version files completeness check | 0000433 | minor |  | pending | tests | 36 |
 | 38 | 0000468-reply-time-matches-the-clock | Reply time matches the clock | 0000434 | minor | 0.85.0 | merged | hooks | 22 |
 | 39 | 0000470-plan-rereads-files-at-the-branch-point | Plan rereads files at the branch point | 0000435 | minor | 0.86.0 | merged | plan-skill | 22 |
@@ -348,3 +348,4 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 25 | #163 | tag v0.84.0 | 0.84.0 | 2026-11-10T19:54:46Z |
 | 38 | #167 | tag v0.85.0 | 0.85.0 | 2026-11-10T20:27:02Z |
 | 39 | #168 | tag v0.86.0 | 0.86.0 | 2026-11-10T20:51:47Z |
+| 36 | #166 | tag v0.87.0 | 0.87.0 | 2026-11-10T21:22:46Z |
