@@ -79,3 +79,7 @@ Complete: P1 (2026-11-10T19:09:55Z)
 
 - In progress: U-001 REQ-001 clock check (2026-11-10T19:10:10Z)
 - RED: U-001 REQ-001 clock check (2026-11-10T19:10:55Z)
+- GREEN: U-001 REQ-001 clock check (2026-11-10T19:11:44Z)
+- Tests run: REQ-001: test-0000468-req-001-clock-check.sh, test-0000388-req-001-time-before-prefix.sh, test-0000388-req-002-clear-prefix-warning.sh, test-0000200-req-003-stop-hook-warns-and-logs.sh, test-0000320-req-004-final-reply-prefix.sh, test-0000358-req-001-question-status.sh (2026-11-10T19:11:44Z)
+- Done: U-001 REQ-001 clock check (code, inline, none, 2026-11-10T19:11:44Z)
+- In progress: U-002 REQ-002 read-the-clock rule (2026-11-10T19:11:44Z)
