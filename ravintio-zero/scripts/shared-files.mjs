@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Resolves conflicts on shared files during the merge queue's base merge (0000456, ADR-0301).
+// Resolves conflicts on shared files during the merge queue's base merge (0000456, ADR-0302).
 //
 // Usage (module): resolveSharedConflicts({ root }) -> the list of paths it resolved.
 //   root  the repository folder with a merge in progress. Default is the current folder.

@@ -30,7 +30,7 @@
  *
  * If the base merge conflicts only on shared files, the queue resolves them with shared-files.mjs, prints a
  * `resolved:` line for each, and commits the merge. A conflict in any other file aborts the merge and stops
- * the queue (feature 0000456, ADR-0301).
+ * the queue (feature 0000456, ADR-0302).
  *
  * The chart `Merge commit` cell holds `tag v{version}`. The queue never commits
  * after the squash, so the sha lives in the tag and in the printed output.

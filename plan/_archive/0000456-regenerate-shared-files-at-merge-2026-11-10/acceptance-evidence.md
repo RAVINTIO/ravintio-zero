@@ -19,4 +19,4 @@ I ran `resolveSharedConflicts` on a real conflicted `git merge` in a throwaway r
 
 ## Docs edit pass
 
-Changed docs: `docs/architecture-overview.md`, `docs/decisions-index.md`, `docs/adr/0301-queue-resolves-shared-file-conflicts.md`, and `roadmap-standards.md`. Cycles: 0. Final `prose-check.mjs` exit code: 0.
+Changed docs: `docs/architecture-overview.md`, `docs/decisions-index.md`, `docs/adr/0302-queue-resolves-shared-file-conflicts.md`, and `roadmap-standards.md`. Cycles: 0. Final `prose-check.mjs` exit code: 0.

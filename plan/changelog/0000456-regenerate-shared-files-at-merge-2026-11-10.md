@@ -10,7 +10,7 @@
 - Both `.next-id` files keep the higher value. The queue regenerates `plan/backlog/index.md`. `docs/decisions-index.md` and `docs/architecture-overview.md` keep the step's `Last updated:` line and both sides' added table rows.
 - A conflict in any other file aborts the merge and stops the queue as before.
 - `coordinator-pr-check.mjs` gains `--base`. It prints `overlap: #n path` and exits 1 when an open step PR touches a changed file.
-- ADR 0301 records the decision.
+- ADR 0302 records the decision.
 
 ## Why
 

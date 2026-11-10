@@ -415,6 +415,7 @@ The driver writes the child's stdout and stderr to `plan/.initiative-logs/step-{
 
 - <!-- rule: carveout-base --> The PR base matches `initiative/*`.
 - <!-- rule: carveout-own-branch --> The PR is for the agent's own feature branch.
+- <!-- rule: carveout-step-queue-only --> The session is not a step session under the concurrent driver. That session runs with `RAVINTIO_INITIATIVE_QUEUE=1`, never merges, and leaves its PR to the merge queue. `merge-guard` blocks the merge there.
 - <!-- rule: carveout-clean-p3 --> A step PR had a clean P3 and has green CI. A coordinator PR meets the bar in `## Coordinator PRs` instead, with a passing local suite and green CI.
 
 <!-- rule: carveout-initiative-pr --> The initiative PR to `main` stays human-only. The agent never merges it. The `merge-guard` hook enforces this rule. Other skills and instructions point here for the full wording.
@@ -463,7 +464,7 @@ A step that changes a chart format updates the active `initiative.md` in the sam
 
 #### Shared files
 
-Every merged step edits a few files that other open step PRs also edit. `ravintio-zero/scripts/shared-files.mjs` resolves them when the base merge conflicts (0000456 ADR-0301).
+Every merged step edits a few files that other open step PRs also edit. `ravintio-zero/scripts/shared-files.mjs` resolves them when the base merge conflicts (0000456 ADR-0302).
 
 | File | Resolution |
 |------|------------|
