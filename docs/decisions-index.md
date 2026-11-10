@@ -3,7 +3,7 @@
 > Change record. Index of all ADRs across all features. Updated after every pipeline run.
 > Do not archive this file. Update it in place.
 
-Last updated: 0000397-pack-source-in-src
+Last updated: 0000454-queue-failure-recovery
 
 ---
 
@@ -316,3 +316,4 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 | [ADR-0295](adr/0295-pack-source-in-src.md) | Pack source in src | accepted | The pack source lives at src/ravintio-zero/. The root ravintio-zero/ is a plain installed copy with a sync script. | 0000397-pack-source-in-src |
 | [ADR-0296](adr/0296-activate-script-existing-commands.md) | Activate script runs existing commands only | accepted | One script runs I-B Activate with git and gh, resumes on rerun, and prints the driver and watcher commands. | 0000399-smoother-activation |
 | [ADR-0297](adr/0297-plan-only-coordinator-pr-check.md) | Plan-only coordinator PRs skip the full suite | accepted | A script prints plan-only after the plan format checks when only plan/ files changed. | 0000399-smoother-activation |
+| [ADR-0298](adr/0298-queue-reverts-stale-version-commit.md) | The queue reverts a stale version commit and detaches after every run | proposed | A rerun reverts an earlier set-version commit when the base version moved, and the queue detaches its worktree when a run ends. | 0000454-queue-failure-recovery |

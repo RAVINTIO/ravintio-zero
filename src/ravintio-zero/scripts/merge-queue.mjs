@@ -23,6 +23,11 @@
  * PR MERGEABLE with a clean state, and it retries a "not mergeable" or "Base
  * branch was modified" refusal once (feature 0000411).
  *
+ * A failed run can leave a set-version commit on the PR branch. Before the base merge, a rerun reverts
+ * such commits in one new commit when the base version has moved, so the merge has no conflict on the
+ * version rows. Nothing rewrites pushed history. The worktree ends on a detached HEAD after every run,
+ * so a restart can check the PR branch out (feature 0000454, ADR-0298).
+ *
  * The chart `Merge commit` cell holds `tag v{version}`. The queue never commits
  * after the squash, so the sha lives in the tag and in the printed output.
  */
@@ -262,6 +267,11 @@ function cmpVersion(x, y) {
   return 0;
 }
 
+function nextVersion(current, kind) {
+  const next = bump(current, kind);
+  return cmpVersion(next, current) < 0 ? current : next;
+}
+
 function agreed(rows) {
   const first = rows[0]?.version;
   return rows.every((r) => r.version === first) ? first : null;
@@ -290,6 +300,55 @@ function versionsOnRef(root, ref, list) {
   } finally {
     rmSync(tmp, { recursive: true, force: true });
   }
+}
+
+/**
+ * The set-version commits of this step that an earlier run left on the PR branch and no later revert
+ * undid, newest first. A revert commit names the versions it undid, so the scan skips them (0000454).
+ */
+function activeVersionCommits(root, base, featureId, step) {
+  const id7 = featureId.slice(0, 7);
+  const setRe = new RegExp(`^chore\\(${id7}\\): set version (\\d+\\.\\d+\\.\\d+) for step ${step}$`);
+  const revertRe = new RegExp(`^chore\\(${id7}\\): revert set version ([0-9., ]+) for step ${step}$`);
+  const owed = new Map();
+  const active = [];
+  for (const line of git(root, ["log", "--format=%H%x09%s", `origin/${base}..HEAD`]).split("\n")) {
+    const [sha, subject = ""] = line.split("\t");
+    const undone = revertRe.exec(subject);
+    if (undone) {
+      for (const v of undone[1].split(", ")) owed.set(v, (owed.get(v) ?? 0) + 1);
+      continue;
+    }
+    const set = setRe.exec(subject);
+    if (!set) continue;
+    if ((owed.get(set[1]) ?? 0) > 0) owed.set(set[1], owed.get(set[1]) - 1);
+    else active.push({ sha, version: set[1] });
+  }
+  return active;
+}
+
+/**
+ * A failed run can leave a set-version commit on the PR branch. If the base version has moved since, the
+ * merge of the base conflicts on the version rows. Revert those commits in one new commit and push it
+ * without force, so the merge sees the rows as the base left them (0000454, ADR-0298).
+ */
+function revertStaleVersionCommits({ root, list, base, head, featureId, step, bumpKind }) {
+  const active = activeVersionCommits(root, base, featureId, step);
+  if (active.length === 0) return;
+  const next = nextVersion(versionsOnRef(root, `origin/${base}`, list), bumpKind);
+  if (active.every((c) => c.version === next)) return;
+  try {
+    git(root, ["revert", "--no-commit", ...active.map((c) => c.sha)]);
+  } catch (e) {
+    if (spawnSync(GIT, ["-C", root, "revert", "--abort"]).status !== 0) {
+      spawnSync(GIT, ["-C", root, "reset", "--merge"]);
+    }
+    throw new Stop(`revert of the earlier set-version commit failed: ${failText(e)}`);
+  }
+  const versions = [...new Set(active.map((c) => c.version))].join(", ");
+  git(root, ["commit", "-m", `chore(${featureId.slice(0, 7)}): revert set version ${versions} for step ${step}`]);
+  git(root, ["push", "origin", `${head}:${head}`]);
+  console.log(`reverted set version ${versions}: the base moved to ${next}`);
 }
 
 // ---------------------------------------------------------------- subcommands
@@ -367,6 +426,18 @@ function cmdRun(a) {
   } else {
     git(root, ["switch", "-c", head, "--track", `origin/${head}`]);
   }
+  try {
+    mergeAndRelease({ root, list, chartAbs, chartRel, step, pr, base, head, featureId, bumpKind });
+  } finally {
+    // Leave the worktree on no branch, so a restart can check the PR branch out (0000454).
+    spawnSync(GIT, ["-C", root, "switch", "--detach"], { stdio: "ignore" });
+  }
+}
+
+/** Steps 2 to 6 of `run`, on the PR branch that the caller checked out. */
+function mergeAndRelease({ root, list, chartAbs, chartRel, step, pr, base, head, featureId, bumpKind }) {
+  // Take back the version commits of an earlier failed run when the base version has moved (0000454).
+  revertStaleVersionCommits({ root, list, base, head, featureId, step, bumpKind });
   // A short subject of our own (0000405). Git's default names both branches and can pass the
   // 72-character limit that the blocking commit-msg hook enforces.
   const mergeSubject = `${featureId.slice(0, 7)}: Merge the initiative branch`;
@@ -385,9 +456,7 @@ function cmdRun(a) {
   waitForHeadChecks(root, pr, mergedHead);
 
   // 4. Next version from the base branch.
-  const current = versionsOnRef(root, `origin/${base}`, list);
-  let next = bump(current, bumpKind);
-  if (cmpVersion(next, current) < 0) next = current;
+  const next = nextVersion(versionsOnRef(root, `origin/${base}`, list), bumpKind);
 
   // 5. Skip the edits when the PR branch already holds them (rerun).
   const treeChart = findStepRow(readChartText(chartAbs), step);
