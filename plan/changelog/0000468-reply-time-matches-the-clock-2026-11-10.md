@@ -2,7 +2,7 @@
 
 **Feature:** Reply time matches the clock
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** 167
 
 ## What changed
 
