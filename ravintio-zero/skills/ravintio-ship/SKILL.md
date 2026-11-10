@@ -210,7 +210,7 @@ Before the PR, the step commits the items in `plan/.initiative-queue/` that name
 
 After `gh pr create`, the agent sets `**PR:**` to the PR number, commits, and pushes it before it waits on CI and before the squash. It never commits after the squash.
 
-The step never edits the chart and never merges. It writes `ready` only after every check on the closing push passed. A pending or failed check means no `ready`. After green CI, it hands the PR to the merge queue, as I-D Advance describes. If `RAVINTIO_INITIATIVE_QUEUE` is `1`, it writes the PR number to `$RAVINTIO_INITIATIVE_CONTROL/ready`, prints `I-D Advance: Ready: PR #{n}`, and ends. Otherwise it runs `node ravintio-zero/scripts/merge-queue.mjs run --step {step} --pr {n}`.
+The step never edits the chart and never merges. It writes `ready` only after every check on the closing push passed. A pending or failed check means no `ready`. After green CI, it hands the PR to the merge queue, as I-D Advance describes. If `RAVINTIO_INITIATIVE_QUEUE` is `1`, it runs `node ravintio-zero/scripts/initiative-ready.mjs --pr {n}`, which writes the PR number to `$RAVINTIO_INITIATIVE_CONTROL/ready` and prints `I-D Advance: Ready: PR #{n}`, and ends. Otherwise it runs `node ravintio-zero/scripts/merge-queue.mjs run --step {step} --pr {n}`.
 
 The queue merges with this plain line. `{n}` is the literal PR number from the `gh pr create` output. A merge line takes no command substitution, variables, or pipes, or `merge-guard` cannot confirm the squash and blocks it.
 

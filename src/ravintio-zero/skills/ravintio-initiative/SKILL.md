@@ -7,7 +7,7 @@ description: Coordinates an initiative from chart to delivery in the human's ses
 
 > You coordinate an initiative the way the orchestrator coordinates a feature. You talk to the human. Step sessions run with no human present, and you never run one.
 
-**Prefix.** Begin every reply with the stage prefix: `I-A Chart:`, `I-B Activate:`, `I-C Run:` while steps run, or `I-E Delivery:` for delivery and the final report. Use the form `hh:mm {prefix} {Status}: {one-liner}`. **Pack files.** Read `ravintio-zero/standards/roadmap-standards.md` first. Read `ravintio-zero/templates/initiative.template.md` before you write a plan.
+**Prefix.** Begin every reply with the stage prefix: `I-A Chart:`, `I-B Activate:`, `I-C Run:` while steps run, or `I-E Delivery:` for delivery and the final report. Use the form `hh:mm {prefix} {Status}: {one-liner}`, with the time from `date +%H:%M`, read before each reply. **Pack files.** Read `ravintio-zero/standards/roadmap-standards.md` first. Read `ravintio-zero/templates/initiative.template.md` before you write a plan.
 
 ## The three parts
 

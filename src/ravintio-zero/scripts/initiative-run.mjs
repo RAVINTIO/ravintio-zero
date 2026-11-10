@@ -113,6 +113,8 @@
 //   - The control folder plan/.initiative-control/step-{n}/ holds "running", the driver pid, and
 //     "ready", the PR number the step writes. A step succeeds when ready exists. The resume rule
 //     applies when it does not. On a driver restart, ready queues the step with no new session.
+//     If ready is empty or invalid, the driver looks up the one open PR for feat/{feature-id} with gh,
+//     rewrites the file, and carries on. With no single PR it stops (0000442, ADR-0304).
 //     A running file without ready restarts the session in the existing worktree.
 //   - The queue takes one ready step at a time, in ready order. It removes the step worktree and
 //     runs "node {merge-queue.mjs} run --step {n} --pr {k} --root {queue worktree}". MERGE_QUEUE_BIN
@@ -862,8 +864,31 @@ function controlDir(root, n) {
   return dir;
 }
 
+// Looks up the one open PR for the step branch (0000442 REQ-002, ADR-0304). Returns its number as a
+// string, or '' if gh fails, answers with anything but one valid number, or finds none or many.
+// The branch goes to gh as one argument and never to a shell.
+function recoverPr(root, featureId) {
+  if (!FEATURE.test(featureId ?? '')) return '';
+  const gh = process.env.RAVINTIO_GH_BIN || 'gh';
+  const r = spawnSync(gh, ['pr', 'list', '--head', `feat/${featureId}`, '--state', 'open', '--json', 'number'], {
+    cwd: root,
+    encoding: 'utf8',
+  });
+  if (r.error || r.status !== 0) return '';
+  let list;
+  try {
+    list = JSON.parse(r.stdout);
+  } catch {
+    return '';
+  }
+  if (!Array.isArray(list) || list.length !== 1) return '';
+  const n = String(list[0]?.number);
+  return PR.test(n) ? n : '';
+}
+
 // Reads a step's control folder. Returns the PR number in ready, or '', and whether running exists.
-function readControl(root, n) {
+// If ready is empty or invalid, it recovers the number from the step branch and rewrites the file.
+function readControl(root, n, featureId) {
   const dir = areaPath(root, CONTROL, `step-${n}`, controlRefusal);
   const file = (name) => {
     const p = join(dir, name);
@@ -875,7 +900,20 @@ function readControl(root, n) {
   let ready = '';
   if (readyFile) {
     ready = lstatSync(readyFile).isFile() ? readFileSync(readyFile, 'utf8').trim() : '';
-    if (!PR.test(ready)) throw new Stop(`I-C Run: Blocked: step ${n} wrote an invalid ready file`);
+    if (!PR.test(ready)) {
+      const found = lstatSync(readyFile).isFile() ? recoverPr(root, featureId) : '';
+      if (!found) throw new Stop(`I-C Run: Blocked: step ${n} wrote an invalid ready file`);
+      const tmp = join(dir, `.ready.${process.pid}.tmp`);
+      try {
+        writeFileSync(tmp, `${found}\n`, { mode: 0o600, flag: 'wx' });
+        renameSync(tmp, readyFile);
+      } catch {
+        rmSync(tmp, { force: true });
+        throw new Stop(`I-C Run: Blocked: step ${n} wrote an invalid ready file`);
+      }
+      out(`I-D Advance: Ready: step ${n} recovered PR #${found} from the step branch`);
+      ready = found;
+    }
   }
   return { ready, running: file('running') !== '' };
 }
@@ -983,7 +1021,7 @@ async function runScheduledStep(root, rec, cfg, rm) {
       if (res.session) session = res.session;
       const block = openBlock(wt) || archivedBlock(wt, rec.featureId, started - 1000) || blockIn(res.reply);
       if (block) throw new Stop(`I-C Run: Blocked: step ${position} stopped. ${block}`);
-      const pr = readControl(root, n).ready;
+      const pr = readControl(root, n, rec.featureId).ready;
       if (pr) return pr;
       if (!SESSION.test(session)) throw new Stop(`I-C Run: Blocked: step ${position} exited without reaching ready`);
       if (resumes >= MAX_RESUMES) {
@@ -1032,7 +1070,7 @@ async function schedule(root, cfg, rm) {
       rec.state = 'merged';
       continue;
     }
-    const c = readControl(root, s.step);
+    const c = readControl(root, s.step, s.featureId);
     if (c.ready) {
       rec.state = 'ready';
       rec.pr = c.ready;

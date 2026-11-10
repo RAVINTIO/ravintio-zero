@@ -15,6 +15,12 @@
  * A reply may lead with the local time as hh:mm and a space, before the
  * prefix (feature 0000388, REQ-001). A time without a prefix is a miss.
  *
+ * The hook compares that time with the local clock (feature 0000468, ADR-0305).
+ * It takes the shorter way round the day. A difference over 5 minutes is a
+ * miss. RAVINTIO_REPLY_CLOCK (hh:mm) replaces the clock and
+ * RAVINTIO_REPLY_MARGIN_MIN replaces the margin. A value that does not parse
+ * leaves the default.
+ *
  * The hook skips the check, with no log and no warning, when
  * RAVINTIO_INITIATIVE_STEP is not "1" and plan/.initiative-runner.lock exists
  * under the working directory (feature 0000388, ADR-001).
@@ -65,7 +71,35 @@ const VALID_PREFIXES = [
 
 const LOG_SNIPPET_LENGTH = 80;
 const QUOTE_LENGTH = 40;
-const TIME_RE = /^[0-2][0-9]:[0-5][0-9] /;
+const TIME_RE = /^([0-2][0-9]):([0-5][0-9]) /;
+const DEFAULT_MARGIN_MIN = 5;
+const DAY_MIN = 24 * 60;
+const CLOCK_RE = /^([0-2][0-9]):([0-5][0-9])$/;
+
+// Minutes since midnight for the local clock, or the override when it parses.
+function clockMinutes() {
+  const given = CLOCK_RE.exec(process.env.RAVINTIO_REPLY_CLOCK ?? "");
+  if (given) return Number(given[1]) * 60 + Number(given[2]);
+  const now = new Date();
+  return now.getHours() * 60 + now.getMinutes();
+}
+
+function marginMinutes() {
+  const raw = process.env.RAVINTIO_REPLY_MARGIN_MIN ?? "";
+  const parsed = /^[0-9]{1,4}$/.test(raw) ? Number.parseInt(raw, 10) : NaN;
+  return Number.isFinite(parsed) ? parsed : DEFAULT_MARGIN_MIN;
+}
+
+// Returns the clock as hh:mm when the reply time is over the margin, else null.
+function offClock(timeMatch) {
+  const replied = Number(timeMatch[1]) * 60 + Number(timeMatch[2]);
+  const clock = clockMinutes();
+  const gap = Math.abs(replied - clock);
+  const shorter = Math.min(gap, DAY_MIN - gap);
+  if (shorter <= marginMinutes()) return null;
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${pad(Math.floor(clock / 60) % 24)}:${pad(clock % 60)}`;
+}
 
 function textOf(content) {
   if (typeof content === "string") return content;
@@ -147,8 +181,12 @@ try {
   if (reply === null) process.exit(0);
 
   const firstLine = reply.split("\n").find((l) => l.trim() !== "") ?? "";
-  const lead = firstLine.trimStart().replace(TIME_RE, "");
-  if (VALID_PREFIXES.some((p) => lead.startsWith(p))) process.exit(0);
+  const trimmed = firstLine.trimStart();
+  const timeMatch = TIME_RE.exec(trimmed);
+  const lead = trimmed.replace(TIME_RE, "");
+  const prefixOk = VALID_PREFIXES.some((p) => lead.startsWith(p));
+  const clock = prefixOk && timeMatch ? offClock(timeMatch) : null;
+  if (prefixOk && clock === null) process.exit(0);
 
   const snippet = reply.trim().replace(/\s+/g, " ").slice(0, LOG_SNIPPET_LENGTH);
   try {
@@ -171,7 +209,12 @@ try {
   // eslint-disable-next-line no-control-regex
   const quote = snippet.replace(/[\x00-\x1f\x7f]/g, " ").slice(0, QUOTE_LENGTH);
   const who = isStep ? "step session" : "this session";
-  const systemMessage =
+  const systemMessage = clock !== null
+    ? `[RAVINTIO] Reply time check: the last reply in ${who} starts with ${timeMatch[1]}:${timeMatch[2]} ` +
+      `but the clock reads ${clock}. This does not mean a run stopped. ` +
+      "Run date +%H:%M before each reply and start the reply with that time. " +
+      "The miss is logged to plan/.prefix-misses.log."
+    :
     `[RAVINTIO] Reply prefix check: the last reply in ${who} starts "${quote}" ` +
     "and has no valid prefix. This does not mean a run stopped. " +
     "Start every reply in an active run with hh:mm and one of: " + VALID_PREFIXES.join(" ") +
