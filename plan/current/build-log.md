@@ -114,3 +114,17 @@ Complete: P2 (2026-11-10T14:16:07Z)
 OS gap: local macos, CI ubuntu, windows
 
 Complete: P3 (2026-11-10T14:45:19Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T14:45:51Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-orchestrator, ravintio-ship |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Initiative step. The merge queue sets the version. |

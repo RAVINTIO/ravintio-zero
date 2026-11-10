@@ -24,7 +24,10 @@ On 2026-11-10 the driver stopped with "step 22 has an invalid feature id" until 
 
 ## Validation results
 
-Filled in at P3.
+- Clean-clone suite: 381 feature suites passed and 2 failed. Both failures also fail on the base commit. 19 regression suites passed.
+- Worktree suite: 383 passed, 0 failed.
+- The helper ran in a scratch folder and wrote `0000900-check-run`, which the driver pattern accepts.
+- Security review: 0 critical and 0 high findings.
 
 ## Skipped phases
 
