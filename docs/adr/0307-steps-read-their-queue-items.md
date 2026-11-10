@@ -1,7 +1,7 @@
 ---
 title: "ADR 307: Steps read their queue items"
 summary: "The driver names the queue items that name a step, and a helper checks that each has a commit or report before the PR."
-status: "proposed"
+status: "accepted"
 component: "ravintio-zero"
 version: "0.1.0"
 feature: "0000444-step-reads-its-queue-items"
