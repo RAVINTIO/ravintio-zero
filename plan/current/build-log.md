@@ -109,3 +109,17 @@ Docs edit pass: changed docs are the architecture overview and ADR-0298. prose-c
 - OS gap: local macos, CI ubuntu, windows
 
 Complete: P3 Validate: done (2026-11-10T14:45:37Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T14:45:53Z` |
+| End | `pending` |
+| Wall clock | pending |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | This step ships in the new order it introduces: PR and CI first, then the archive as the last push (ADR-0298). |
