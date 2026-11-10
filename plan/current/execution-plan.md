@@ -58,7 +58,7 @@ None. The feature owns no data.
 |------|-----------|--------|-------|------------------|-------------------|
 | U-001 | none | `src/ravintio-zero/tests/helpers/git-isolation.sh`, `src/ravintio-zero/tests/run-tests.sh`, `src/ravintio-zero/tests/run-tests.ps1`, `src/ravintio-zero/tests/test-0000462-req-001-git-identity-isolation.sh`, and each suite that needs an identity | 1 | none | - |
 | U-002 | none | `src/ravintio-zero/tests/test-0000462-req-002-bom-first-line-readers.sh`, `src/ravintio-zero/tests/test-0000462-req-002-bom-first-line-readers.ps1`, and a reader that fails (`src/ravintio-zero/setup.sh`, `src/ravintio-zero/setup.ps1`, `src/ravintio-zero/scripts/install-lifecycle.mjs`) | 1 | none | - |
-| U-003 | U-001, U-002 | `src/ravintio-zero/tests/README.md`, `docs/architecture-overview.md`, `docs/adr/0301-git-isolation-in-test-runners.md` | 2 | none | Living docs unit. It records what U-001 and U-002 built |
+| U-003 | U-001, U-002 | `src/ravintio-zero/tests/README.md`, `docs/architecture-overview.md`, `docs/adr/0303-git-isolation-in-test-runners.md` | 2 | none | Living docs unit. It records what U-001 and U-002 built |
 
 ## Assumptions
 

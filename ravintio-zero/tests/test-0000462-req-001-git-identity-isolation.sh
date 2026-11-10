@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Tests for feature 0000462-tests-without-git-identity, req-001: the runners
-# give each suite a git environment that refuses to guess an identity (ADR-0301).
+# give each suite a git environment that refuses to guess an identity (ADR-0303).
 
 set -uo pipefail
 

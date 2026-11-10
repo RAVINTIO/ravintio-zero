@@ -15,7 +15,7 @@ version: "0.1.0"
 - `helpers/git-isolation.sh`, called by `run-tests.sh`, and the same isolation in `run-tests.ps1`.
 - Identity fixes in each suite that the isolation exposes.
 - A BOM suite for `doctor`, `setup.sh`, and `setup.ps1`, and a fix to any reader that fails.
-- ADR-0301, docs, and a changelog entry.
+- ADR-0303, docs, and a changelog entry.
 - The sync of `ravintio-zero/` with `sync-installed.mjs`.
 
 ## Out of Scope

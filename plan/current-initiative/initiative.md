@@ -302,8 +302,8 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 29 | 0000450-coordinator-status-view | Coordinator status view | 0000428 | minor |  | pending | driver | 28 |
 | 30 | 0000452-ci-wait-before-archive | Ship waits for CI before it archives | 0000412 | minor | 0.78.0 | merged | ship | 22 |
 | 31 | 0000454-queue-failure-recovery | Queue failure recovery | 0000429 | minor | 0.80.0 | merged | queue | 22 |
-| 32 | 0000456-regenerate-shared-files-at-merge | Regenerate shared files at merge | 0000430 | minor |  | pending | queue | 31 |
-| 33 | 0000458-refuse-step-merge-outside-queue | Refuse a step merge outside the queue | 0000431 | minor |  | pending | guard | 31 |
+| 32 | 0000456-regenerate-shared-files-at-merge | Regenerate shared files at merge | 0000430 | minor | 0.82.0 | merged | queue | 31 |
+| 33 | 0000458-refuse-step-merge-outside-queue | Refuse a step merge outside the queue | 0000431 | minor | 0.81.0 | merged | guard | 31 |
 | 34 | 0000460-narrow-brand-guard-self-entry | Narrow the brand guard self-entry | 0000432 | patch | 0.80.1 | merged | tests | 22 |
 | 35 | 0000462-tests-without-git-identity | Tests catch runner-only failures | 0000414 | minor |  | pending | tests | 34 |
 | 36 | 0000464-merge-queue-test-gaps | Merge queue test gaps | 0000400 | minor |  | pending | tests | 31, 35 |
@@ -342,3 +342,5 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 24 | #159 | tag v0.79.0 | 0.79.0 | 2026-11-10T15:31:08Z |
 | 31 | #160 | tag v0.80.0 | 0.80.0 | 2026-11-10T15:51:23Z |
 | 34 | #161 | tag v0.80.1 | 0.80.1 | 2026-11-10T16:16:16Z |
+| 33 | #162 | tag v0.81.0 | 0.81.0 | 2026-11-10T17:46:33Z |
+| 32 | #164 | tag v0.82.0 | 0.82.0 | 2026-11-10T18:17:04Z |

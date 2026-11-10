@@ -10,7 +10,7 @@
 - `helpers/git-isolation.sh` holds `isolate_git_env` and `remove_git_isolation`.
 - `setup.sh` strips a BOM from the first line of a boot file before it compares the pack line. A pack `CLAUDE.md` that Windows PowerShell 5.1 wrote is no longer copied to `ravintio-overrides/instructions/`.
 - Two new suites: `test-0000462-req-001-git-identity-isolation.sh` and `test-0000462-req-002-bom-first-line-readers` in Bash and PowerShell.
-- ADR 0301 records the decision.
+- ADR 0303 records the decision.
 
 ## Why
 

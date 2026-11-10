@@ -38,7 +38,7 @@ while IFS= read -r name; do
   esac
 done <<< "$(compgen -e | grep '^RAVINTIO_' || true)"
 
-# Git isolation (0000462, ADR-0301): each suite sees a global git config that refuses to guess an
+# Git isolation (0000462, ADR-0303): each suite sees a global git config that refuses to guess an
 # identity, so a commit with no identity fails here as it does on a CI runner.
 source "$SCRIPT_DIR/helpers/git-isolation.sh"
 isolate_git_env

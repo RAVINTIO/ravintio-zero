@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Git isolation for the test runners (0000462, ADR-0301).
+# Git isolation for the test runners (0000462, ADR-0303).
 #
 # isolate_git_env gives every git process that the caller starts a global config
 # that holds no identity and refuses to guess one. A suite that commits with no

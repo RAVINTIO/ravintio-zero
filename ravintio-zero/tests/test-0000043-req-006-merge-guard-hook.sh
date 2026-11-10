@@ -6,6 +6,8 @@
 # closed. A stub gh on PATH stands in for the real one.
 
 set -uo pipefail
+# A step session sets RAVINTIO_INITIATIVE_QUEUE=1, which makes merge-guard refuse every merge (0000458).
+unset RAVINTIO_INITIATIVE_QUEUE
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"

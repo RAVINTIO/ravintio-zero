@@ -35,7 +35,7 @@ Setup copies only committed pack and override files, so a suite that runs `setup
 
 ## Git isolation
 
-Both runners give each suite a temporary global git config that holds `user.useConfigOnly = true`. They hide the system config and clear the author, committer, and `EMAIL` variables (0000462, ADR-0301). A commit with no identity then fails on a developer machine, as it does on a CI runner. A suite that commits sets `-c user.name` and `-c user.email` in its own git call. `helpers/git-isolation.sh` holds `isolate_git_env` and `remove_git_isolation` for the Bash runner. `run-tests.ps1` sets the same variables.
+Both runners give each suite a temporary global git config that holds `user.useConfigOnly = true`. They hide the system config and clear the author, committer, and `EMAIL` variables (0000462, ADR-0303). A commit with no identity then fails on a developer machine, as it does on a CI runner. A suite that commits sets `-c user.name` and `-c user.email` in its own git call. `helpers/git-isolation.sh` holds `isolate_git_env` and `remove_git_isolation` for the Bash runner. `run-tests.ps1` sets the same variables.
 
 ## Test scope in a run
 

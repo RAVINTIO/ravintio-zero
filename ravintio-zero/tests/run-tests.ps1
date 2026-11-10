@@ -112,7 +112,7 @@ $timingFile = Join-Path ([System.IO.Path]::GetTempPath()) ("ravintio-timing-" + 
 $savedTimingFile = $env:RAVINTIO_TIMING_FILE
 $env:RAVINTIO_TIMING_FILE = $timingFile
 
-# Git isolation (0000462, ADR-0301). Each suite sees a global git config that refuses to guess an
+# Git isolation (0000462, ADR-0303). Each suite sees a global git config that refuses to guess an
 # identity, so a commit with no identity fails here as it does on a CI runner.
 $gitIsolationFile = Join-Path ([System.IO.Path]::GetTempPath()) ("ravintio-gitconfig-" + [guid]::NewGuid().ToString('N'))
 [System.IO.File]::WriteAllText($gitIsolationFile, "[user]`n`tuseConfigOnly = true`n")

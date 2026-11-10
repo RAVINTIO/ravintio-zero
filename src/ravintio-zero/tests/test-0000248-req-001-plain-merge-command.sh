@@ -4,6 +4,8 @@
 # AC-3 (merge-guard unchanged) is a branch property that P3 checks with git diff.
 
 set -uo pipefail
+# A step session sets RAVINTIO_INITIATIVE_QUEUE=1, which makes merge-guard refuse every merge (0000458).
+unset RAVINTIO_INITIATIVE_QUEUE
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"

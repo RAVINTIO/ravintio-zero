@@ -25,7 +25,7 @@ Reverting each PR #136 fix in a scratch copy made the local suite fail on both d
 
 ## Docs edit pass
 
-Changed docs: `docs/architecture-overview.md`, `docs/decisions-index.md`, `src/ravintio-zero/tests/README.md`, ADR 0301, and the changelog. The pass ran inline in 1 cycle. `prose-check.mjs` exits 0.
+Changed docs: `docs/architecture-overview.md`, `docs/decisions-index.md`, `src/ravintio-zero/tests/README.md`, ADR 0303, and the changelog. The pass ran inline in 1 cycle. `prose-check.mjs` exits 0.
 
 ## Deviation
 
