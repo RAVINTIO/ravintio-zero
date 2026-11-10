@@ -59,3 +59,19 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Notes | none |
 
 - Complete: P1 (2026-11-10T16:33:47Z)
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T16:34:54Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Units run inline in one context: the units share one file set and are small. |
+
+- In progress: U1 shared-files resolver (2026-11-10T16:34:54Z)
