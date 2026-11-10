@@ -77,3 +77,5 @@ Complete: P1 Plan: done (2026-11-10T13:33:07Z)
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | Inline units: both units edit pack text and the tests that pin it, and each depends on the one before. No subagent split. |
+- RED: U-001 (2026-11-10T13:34:11Z)
+- RED: U-002 (2026-11-10T13:34:11Z)
