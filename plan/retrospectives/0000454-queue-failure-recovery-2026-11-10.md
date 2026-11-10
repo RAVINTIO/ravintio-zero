@@ -31,10 +31,10 @@ The queue now reverts a stale set-version commit on a rerun and detaches its wor
 
 ## Change
 
-- Add a way to restore files that a failed queue run wrote and did not commit. Entry 0000476 holds it (`plan/backlog/0000476-queue-failure-leaves-dirty-files/entry.md`).
+- Add a way to restore files that a failed queue run wrote and did not commit. Entry 0000477 holds it (`plan/backlog/0000477-queue-failure-leaves-dirty-files/entry.md`).
 
 ## Actions
 
 | Change | Owner | Lives in | Verified by | Filed as |
 |--------|-------|----------|-------------|----------|
-| Restore files after a failed queue run | initiative 0000360 coordinator | `src/ravintio-zero/scripts/merge-queue.mjs` | A test with a commit that a hook rejects | Backlog entry 0000476, from this retrospective |
+| Restore files after a failed queue run | initiative 0000360 coordinator | `src/ravintio-zero/scripts/merge-queue.mjs` | A test with a commit that a hook rejects | Backlog entry 0000477, from this retrospective |

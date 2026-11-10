@@ -26,7 +26,7 @@
  * A failed run can leave a set-version commit on the PR branch. Before the base merge, a rerun reverts
  * such commits in one new commit when the base version has moved, so the merge has no conflict on the
  * version rows. Nothing rewrites pushed history. The worktree ends on a detached HEAD after every run,
- * so a restart can check the PR branch out (feature 0000454, ADR-0298).
+ * so a restart can check the PR branch out (feature 0000454, ADR-0299).
  *
  * The chart `Merge commit` cell holds `tag v{version}`. The queue never commits
  * after the squash, so the sha lives in the tag and in the printed output.
@@ -330,7 +330,7 @@ function activeVersionCommits(root, base, featureId, step) {
 /**
  * A failed run can leave a set-version commit on the PR branch. If the base version has moved since, the
  * merge of the base conflicts on the version rows. Revert those commits in one new commit and push it
- * without force, so the merge sees the rows as the base left them (0000454, ADR-0298).
+ * without force, so the merge sees the rows as the base left them (0000454, ADR-0299).
  */
 function revertStaleVersionCommits({ root, list, base, head, featureId, step, bumpKind }) {
   const active = activeVersionCommits(root, base, featureId, step);

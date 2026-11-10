@@ -61,7 +61,7 @@ Units in one batch run at the same time. A unit alone in its batch gives its rea
 |------|-----------|--------|-------|-------------------|------------------|
 | U-001 | none | `src/ravintio-zero/scripts/merge-queue.mjs` | 1 | REQ-001 and REQ-002 edit one function in one file | none |
 | U-002 | U-001 | `src/ravintio-zero/tests/test-0000454-req-001-queue-failure-recovery.sh` | 2 | The suite needs the script change to pass | none |
-| U-003 | U-002 | `docs/architecture-overview.md`, `docs/decisions-index.md`, `docs/adr/0298-queue-reverts-stale-version-commit.md`, `plan/changelog/0000454-queue-failure-recovery-2026-11-10.md`, `ravintio-zero/` (synced copy) | 3 | The docs describe the finished behaviour | none |
+| U-003 | U-002 | `docs/architecture-overview.md`, `docs/decisions-index.md`, `docs/adr/0299-queue-reverts-stale-version-commit.md`, `plan/changelog/0000454-queue-failure-recovery-2026-11-10.md`, `ravintio-zero/` (synced copy) | 3 | The docs describe the finished behaviour | none |
 
 ## Assumptions
 

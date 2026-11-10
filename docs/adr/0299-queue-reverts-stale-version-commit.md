@@ -1,17 +1,17 @@
 ---
-title: "ADR 298: The queue reverts a stale version commit and detaches after every run"
+title: "ADR 299: The queue reverts a stale version commit and detaches after every run"
 summary: "A rerun reverts an earlier set-version commit when the base version moved, and the queue detaches its worktree when a run ends."
 status: "accepted"
 component: "ravintio-zero"
 feature: "0000454-queue-failure-recovery"
 version: "0.1.0"
 ---
-# ADR-0298 - The queue reverts a stale version commit and detaches after every run
+# ADR-0299 - The queue reverts a stale version commit and detaches after every run
 
 **Skill:** [plan](../skills/ravintio-plan/SKILL.md)
 **Feature:** 0000454-queue-failure-recovery
 **Component:** ravintio-zero
-**File:** `docs/adr/0298-queue-reverts-stale-version-commit.md`
+**File:** `docs/adr/0299-queue-reverts-stale-version-commit.md`
 **Date:** 2026-11-10
 
 ## Context

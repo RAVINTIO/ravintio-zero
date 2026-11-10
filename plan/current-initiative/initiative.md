@@ -8,7 +8,7 @@ status: "active"  # proposed | charted | active | delivered | blocked
 **Goal:** Close every open backlog entry except the four that need paid services. The first three steps make the driver run independent steps at once, each in its own worktree, with each version set as its step merges. Step 20 moves the pack source to `src/ravintio-zero/`. The last step, step 21, makes activation smoother for the human.
 **Branch:** initiative/0000360-backlog-sweep
 **Status:** active
-**Position:** 23
+**Position:** 24
 **Speed:** standard
 **Step CI fixes:** allowed
 **Concurrency:** 3
@@ -293,14 +293,14 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 20 | 0000397-pack-source-in-src | Pack source in src | 0000396 | minor | 0.76.0 | merged | layout | 19 |
 | 21 | 0000399-smoother-activation | Smoother activation | 0000398 | minor | 0.77.0 | merged | initiative | 20 |
 | 22 | 0000421-initiative-retrospective | Initiative retrospective | 0000422 | patch | 0.77.1 | merged | initiative | 21 |
-| 23 | 0000438-add-step-writes-full-feature-id | Add-step writes the full feature id | 0000423 | patch |  | pending | chart-scripts | 22 |
+| 23 | 0000438-add-step-writes-full-feature-id | Add-step writes the full feature id | 0000423 | patch | 0.77.2 | merged | chart-scripts | 22 |
 | 24 | 0000440-driver-reads-reply-blocks | Driver reads blocks from the reply | 0000413 | minor |  | pending | driver | 22 |
 | 25 | 0000442-ready-file-helper | Ready file helper | 0000424 | minor |  | pending | driver | 24 |
 | 26 | 0000444-step-reads-its-queue-items | Steps read their queue items | 0000425 | minor |  | pending | driver | 25 |
 | 27 | 0000446-drain-ready-prs-after-a-stop | Merge ready PRs after a stop | 0000426 | minor |  | pending | driver | 26 |
 | 28 | 0000448-driver-runs-approved-setup-command | Driver runs the approved setup command | 0000427 | minor |  | pending | driver | 27 |
 | 29 | 0000450-coordinator-status-view | Coordinator status view | 0000428 | minor |  | pending | driver | 28 |
-| 30 | 0000452-ci-wait-before-archive | Ship waits for CI before it archives | 0000412 | minor |  | pending | ship | 22 |
+| 30 | 0000452-ci-wait-before-archive | Ship waits for CI before it archives | 0000412 | minor | 0.78.0 | merged | ship | 22 |
 | 31 | 0000454-queue-failure-recovery | Queue failure recovery | 0000429 | minor |  | pending | queue | 22 |
 | 32 | 0000456-regenerate-shared-files-at-merge | Regenerate shared files at merge | 0000430 | minor |  | pending | queue | 31 |
 | 33 | 0000458-refuse-step-merge-outside-queue | Refuse a step merge outside the queue | 0000431 | minor |  | pending | guard | 31 |
@@ -337,3 +337,5 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 20 | #150 | tag v0.76.0 | 0.76.0 | 2026-11-10T00:06:56Z |
 | 21 | #152 | tag v0.77.0 | 0.77.0 | 2026-11-10T01:56:33Z |
 | 22 | #155 | tag v0.77.1 | 0.77.1 | 2026-11-10T03:16:08Z |
+| 23 | #158 | tag v0.77.2 | 0.77.2 | 2026-11-10T14:56:17Z |
+| 30 | #157 | tag v0.78.0 | 0.78.0 | 2026-11-10T15:09:08Z |

@@ -45,6 +45,10 @@ function stepsSection(text) {
   return out;
 }
 
+// The shape of a Feature id cell: seven digits, a hyphen, and a kebab-case slug.
+// initiative-run.mjs holds a copy, and test-0000438-req-001 fails if the two differ.
+export const FEATURE_ID = /^[0-9]{7}-[a-z0-9]+(-[a-z0-9]+)*$/;
+
 export function parseChart(text) {
   const { concurrency, hasConcurrency } = parseConcurrency(text);
   const steps = [];

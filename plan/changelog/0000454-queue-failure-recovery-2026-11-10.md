@@ -9,7 +9,7 @@
 - A queue rerun reverts the set-version commits that an earlier failed run left on the PR branch. It does this in one new commit before the base merge, when the base version has moved. The merge then has no conflict on the version rows.
 - The queue detaches HEAD in its worktree when a run ends, on success and on every stop. A restart can then check out the step branch.
 - A new suite, `test-0000454-req-001-queue-failure-recovery.sh`, runs a failed run, a base change, a restart check, and a rerun.
-- ADR-0298 records the decision. The architecture overview and `roadmap-standards.md` describe the new behaviour.
+- ADR-0299 records the decision. The architecture overview and `roadmap-standards.md` describe the new behaviour.
 
 ## Why
 
@@ -18,7 +18,7 @@ A failed queue run left a `chore: set version` commit on the step branch, and th
 ## Deviations
 
 - P2 ran inline without subagents, because the requirements edit one script and one suite.
-- The brief left out a clean-up of files that a failed run wrote. Backlog entry 0000476 holds it.
+- The brief left out a clean-up of files that a failed run wrote. Backlog entry 0000477 holds it.
 
 ## Validation results
 

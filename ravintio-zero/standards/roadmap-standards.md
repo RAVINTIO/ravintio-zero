@@ -488,7 +488,7 @@ In an initiative step, Steps 1 to 5 run as written. Step 9 gives way to the two 
 Every message in this stage begins with `I-D Advance:` after the `P4 Ship:` prefix. The step raises the PR and waits for CI. The merge queue then merges it.
 
 1. Leave `plan/current-initiative/initiative.md` alone. The step never sets its Status to `merged`, fills its Version, or moves `position`. The merge queue writes them in the same PR, before the squash. Step 6 bumps no version.
-2. Run ship Step 8 now, then push the branch so the sentinel commit is on the remote. Raise the PR against the initiative branch only after that push and after you commit the queue items that name the step.
+2. Commit the queue items that name the step and push the branch. Raise the PR against the initiative branch while `plan/current/` and the sentinels are still in place.
 
    ```bash
    gh pr create --base initiative/{id}-{slug} --title "{feature-id}: {Feature title}"
@@ -497,7 +497,7 @@ Every message in this stage begins with `I-D Advance:` after the `P4 Ship:` pref
    The title is the step's `Title` column. The squash carries it.
 
 3. Set the changelog `**PR:**` field to the PR number from the `gh pr create` output. Commit the change and push the branch. Never commit after the squash, because the squash carries the number onto the initiative branch.
-4. Wait for CI in two parts.
+4. Wait for CI in two parts. The run is still open, so the step can edit code.
    1. Poll `gh pr checks {n}` until it lists at least one check, for up to 2 minutes. Checks are always pending straight after `gh pr create`, so pending is not a stop. If none appears, push the branch, print the line below, and exit:
 
       ```
@@ -511,7 +511,9 @@ Every message in this stage begins with `I-D Advance:` after the `P4 Ship:` pref
       ```
 
 5. If every check is green, check the PR title. Run `node ravintio-zero/scripts/merge-queue.mjs title --step {step} --title "{PR title}"`. If it exits 1, fix the PR title with `gh pr edit` and run it again.
-6. Hand the PR to the merge queue. Write `{n}` and `{k}` as the literal PR number from the `gh pr create` output.
+6. Archive only now. Run ship Step 4, Step 5, and Step 8 in order, and commit each. Then add the `## Workflow governance` section from `build-report.md` to the PR body with `gh pr edit`. Push once. This is the closing push, the last push before `ready`. After it the step cannot edit code, because `gate-write` rejects a write without `plan/current/design.md`.
+7. Wait for CI on the closing push. Run `gh pr checks {n} --watch --fail-fast` again, after the poll in item 4.1 lists the checks of the new head. If a check fails, push nothing, print the `I-D Advance: Blocked: CI failed on PR #{n}` line from item 4.2, and exit.
+8. Write `ready` only when `gh pr checks {n}` exits 0 for the closing push. Exit code 8 means a check is pending and exit code 1 means a check failed. Never write `ready` on either. Then hand the PR to the merge queue. Write `{n}` and `{k}` as the literal PR number from the `gh pr create` output.
    - **Concurrent driver.** If `RAVINTIO_INITIATIVE_QUEUE` is `1`, write the PR number to `$RAVINTIO_INITIATIVE_CONTROL/ready` and print the line below. Then end the session. The driver removes the worktree and runs the queue.
 
      ```
@@ -526,11 +528,11 @@ Every message in this stage begins with `I-D Advance:` after the `P4 Ship:` pref
 
 The queue sets the version and merges the PR with `gh pr merge --squash --delete-branch {n}`. It then tags the merge commit `v{version}`. The `--delete-branch` flag removes the feature branch from `origin`. The tag comes after the merge because a squash creates a new commit. If a push or merge fails, the queue stops and reports the exact error. Nothing retries with force.
 
-Step 8 runs before the PR because the squash would otherwise carry `plan/.orchestrator-active`, `plan/.orchestrator-ack`, and `plan/.run-mode` onto the initiative branch. The next step's P0 would then see a stale feature id.
+The archive comes after green CI because `gate-write` blocks every code edit once `plan/current/design.md` is gone (0000452, ADR-0298). Step 8 runs in the closing push. The squash carries the net diff, so it holds no `plan/.orchestrator-active`, `plan/.orchestrator-ack`, or `plan/.run-mode`. The next step's P0 sees no stale feature id.
 
 Consumer CI must trigger on pull requests to `initiative/**`. The pack's workflow template `ravintio-zero/hooks/ravintio.yml` includes that branch pattern. A project with its own workflow adds it.
 
-7. With no concurrent driver, hand off to the next session after the queue merges.
+9. With no concurrent driver, hand off to the next session after the queue merges.
    1. Check out the initiative branch and run `git pull --ff-only origin initiative/{id}-{slug}`.
    2. If the local feature branch still exists, delete it with `git branch -D`. It is redundant once squash-merged, and `gh` may already have removed it.
    3. If a step with Status `pending` remains, end the session with the line below. The driver starts the next session.

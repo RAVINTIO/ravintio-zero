@@ -1,11 +1,11 @@
 ---
-title: "Backlog Entry: 0000476 - a failed queue run can leave written files in the queue worktree"
+title: "Backlog Entry: 0000477 - a failed queue run can leave written files in the queue worktree"
 summary: "A queue run that fails after it writes the version files and before it commits leaves a dirty tree, and the next run stops."
 status: "open"
 priority: "low"
 theme: "initiative"
 ---
-# Backlog Entry: 0000476 - a failed queue run can leave written files in the queue worktree
+# Backlog Entry: 0000477 - a failed queue run can leave written files in the queue worktree
 
 **Source feature:** 0000454-queue-failure-recovery
 
