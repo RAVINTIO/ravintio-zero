@@ -59,7 +59,7 @@ None. The feature owns no data.
 |------|-----------|--------|-------|------------------|-------------------|
 | U-001 | none | `src/ravintio-zero/hooks/enforcement/check-reply-prefix.mjs`, `src/ravintio-zero/tests/test-0000468-req-001-clock-check.sh`, `src/ravintio-zero/tests/test-0000388-req-001-time-before-prefix.sh`, `src/ravintio-zero/tests/test-0000388-req-002-clear-prefix-warning.sh` | 1 | none | - |
 | U-002 | none | `src/ravintio-zero/standards/roadmap-standards.md`, `src/ravintio-zero/standards/hook-enforcement.md`, `src/ravintio-zero/skills/ravintio-orchestrator/SKILL.md`, `src/ravintio-zero/skills/ravintio-initiative/SKILL.md`, `src/ravintio-zero/templates/standard-boot.md`, `src/ravintio-zero/templates/codex-boot.md`, `src/ravintio-zero/tests/test-0000468-req-002-read-the-clock-rule.sh` | 1 | none | - |
-| U-003 | U-001, U-002 | `docs/architecture-overview.md`, `docs/decisions-index.md`, `docs/adr/0304-reply-time-clock-check.md` | 2 | none | Living docs unit. It records what U-001 and U-002 built |
+| U-003 | U-001, U-002 | `docs/architecture-overview.md`, `docs/decisions-index.md`, `docs/adr/0305-reply-time-clock-check.md` | 2 | none | Living docs unit. It records what U-001 and U-002 built |
 
 ## Assumptions
 

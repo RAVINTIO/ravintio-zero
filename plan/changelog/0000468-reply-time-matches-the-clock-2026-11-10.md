@@ -10,7 +10,7 @@
 - `RAVINTIO_REPLY_CLOCK` and `RAVINTIO_REPLY_MARGIN_MIN` override the clock and the margin.
 - The reply rule in the roadmap standards, both skills, and the boot templates names `date +%H:%M`. `hook-enforcement.md` states the margin.
 - Two new suites: `test-0000468-req-001-clock-check.sh` and `test-0000468-req-002-read-the-clock-rule.sh`.
-- ADR 0304 records the decision.
+- ADR 0305 records the decision.
 
 ## Why
 

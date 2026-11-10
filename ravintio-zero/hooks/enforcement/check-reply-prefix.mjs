@@ -15,7 +15,7 @@
  * A reply may lead with the local time as hh:mm and a space, before the
  * prefix (feature 0000388, REQ-001). A time without a prefix is a miss.
  *
- * The hook compares that time with the local clock (feature 0000468, ADR-0304).
+ * The hook compares that time with the local clock (feature 0000468, ADR-0305).
  * It takes the shorter way round the day. A difference over 5 minutes is a
  * miss. RAVINTIO_REPLY_CLOCK (hh:mm) replaces the clock and
  * RAVINTIO_REPLY_MARGIN_MIN replaces the margin. A value that does not parse

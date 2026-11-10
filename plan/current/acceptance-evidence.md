@@ -4,4 +4,4 @@
 - Self-corrections: 1.
 - Security: no critical or high findings. Two informational findings in `plan/current/security-report.md`.
 - Execution: five criteria verified by running the hook and the suites (`plan/current/verification-report.md`). None are not-verifiable.
-- Docs edit pass: changed docs `docs/architecture-overview.md`, `docs/adr/0304-reply-time-clock-check.md`, `docs/decisions-index.md`. `prose-check.mjs check` exits 0.
+- Docs edit pass: changed docs `docs/architecture-overview.md`, `docs/adr/0305-reply-time-clock-check.md`, `docs/decisions-index.md`. `prose-check.mjs check` exits 0.

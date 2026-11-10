@@ -15,7 +15,7 @@ version: "0.1.0"
 - The clock comparison in `check-reply-prefix.mjs`, with a 5-minute margin and two override variables.
 - The read-the-clock rule text in the roadmap standards, both skills, the boot templates, and the hook reference.
 - Fixed clocks in the two 0000388 suites.
-- ADR-0304, docs, and a changelog entry.
+- ADR-0305, docs, and a changelog entry.
 - The sync of `ravintio-zero/` and `.claude/` with `sync-installed.mjs` and setup.
 
 ## Out of Scope
