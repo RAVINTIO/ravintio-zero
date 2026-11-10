@@ -141,3 +141,5 @@ Complete: P4
 | Phases skipped | none |
 Rework: REQ-001: the mode check read the filesystem on Linux, fixed to try GNU stat first (2026-11-10T17:40:01Z)
 Postmortem: plan/postmortems/2026-11-10-stat-mode-differs-on-linux.md REQ-001 (2026-11-10T17:40:41Z)
+
+Rework: merged origin/initiative/0000360-backlog-sweep into the step branch. Renumbered ADR-0301 to ADR-0304, kept .next-id at 0305, and kept both Driver and Merge guard overview changes. Full suite passed: 397 feature, 19 regression (2026-11-10T19:42:17Z)
