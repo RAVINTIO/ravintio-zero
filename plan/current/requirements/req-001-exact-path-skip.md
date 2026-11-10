@@ -35,7 +35,7 @@ As a maintainer of the pack, I want the guard to skip its allowlist files by exa
 - [ ] AC-3: one rule
   - Given the guard script, the CI test, and `pre-push`
   - When the test reads their sources
-  - Then the script and the CI test both call `brand_guard_skips_path`, and neither names the allowlist path itself
+  - Then the script, its main function, and the CI test all call `brand_guard_skips_path`
 
 ## Dependencies
 - none

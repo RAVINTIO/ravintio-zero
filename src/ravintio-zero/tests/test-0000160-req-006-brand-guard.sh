@@ -89,6 +89,7 @@ in_scope_files() {
   local path prefix keep
   git -C "$REPO_ROOT" ls-files | while IFS= read -r path; do
     keep=1
+    brand_guard_skips_path "$path" && continue
     for prefix in "${EXCLUDED_PREFIXES[@]}"; do
       case "$path" in "$prefix"*) keep=0; break ;; esac
     done
