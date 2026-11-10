@@ -132,3 +132,6 @@ Complete: P4 Ship: done (2026-11-10T01:39:57Z)
 | Cheaper tier agent calls | 6 |
 | Self-corrections | 1 |
 | Phases skipped | none |
+
+Rework: REQ-002: CodeQL flagged unescaped backslashes in add-step, fixed with yamlQuote (2026-11-10T01:43:57Z)
+- Postmortem: plan/postmortems/2026-11-10-codeql-backslash-escape.md REQ-002 (2026-11-10T01:51:30Z)
