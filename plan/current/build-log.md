@@ -40,3 +40,21 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Design confirmed under the human's standing approval for queue fixes (2026-11-10T00:25:25Z). Run mode: autonomous. Run speed: fast.
 
 Complete: P0 (2026-11-10T00:25:25Z)
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T00:25:25Z` |
+| End | `2026-11-10T00:27:17Z` |
+| Wall clock | `5` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | One requirement. No ADR, because the change extends 0000378 ADR-002 without changing it. |
+
+- Consistency check: clean (2026-11-10T00:27:17Z). Autonomous run: the plan gate passes with no human stop.
+
+Complete: P1 (2026-11-10T00:27:17Z)
