@@ -24,8 +24,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-10T16:30:47Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-10T16:31:48Z` |
+| Wall clock | `12` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -42,3 +42,4 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Scope Lock Challenge: deferred - nothing [source: draft-accepted (initiative)]
 - Scope Lock Challenge: complete, all four paths covered [source: draft-accepted (initiative)]
 - Version: step Bump minor on 0.80.1, the queue sets the released version
+- Complete: P0 (2026-11-10T16:31:48Z)
