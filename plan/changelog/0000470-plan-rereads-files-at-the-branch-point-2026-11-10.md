@@ -2,7 +2,7 @@
 
 **Feature:** Plan rereads files at the branch point
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** 168
 
 ## What changed
 
