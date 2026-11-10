@@ -2,7 +2,7 @@
 
 **Feature:** Narrow the brand guard self-entry
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** 161
 
 ## What changed
 
