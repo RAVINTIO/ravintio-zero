@@ -65,3 +65,9 @@ Gate accepted: P1 (2026-11-10T16:33:02Z, autonomous initiative step)
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | Inline. U-001 to U-003 depend on each other. |
+
+- In progress: U-001 (2026-11-10T16:33:40Z)
+- RED: U-001 (2026-11-10T16:33:40Z)
+- GREEN: U-001 (2026-11-10T16:33:57Z)
+- Tests run: REQ-001: test-0000442-req-001-ready-helper.sh (2026-11-10T16:33:57Z)
+- Done: U-001 (code, primary, none, 2026-11-10T16:33:57Z)
