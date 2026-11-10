@@ -94,8 +94,8 @@ Complete: P2 Implement: done (2026-11-10T14:17:00Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-10T14:17:23Z` |
-| End | `pending` |
-| Wall clock | pending |
+| End | `2026-11-10T14:45:37Z` |
+| Wall clock | 55 |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | 0 |
@@ -104,3 +104,8 @@ Complete: P2 Implement: done (2026-11-10T14:17:00Z)
 | Notes | autonomous, evidence goes in the PR |
 
 Docs edit pass: changed docs are the architecture overview and ADR-0298. prose-check exits 0 on the first run.
+- Tests run: full suite: 403 passed, 0 failed (2026-11-10T14:45:37Z)
+- Tests run: clean clone: 401 passed, 2 inherited (2026-11-10T14:45:37Z)
+- OS gap: local macos, CI ubuntu, windows
+
+Complete: P3 Validate: done (2026-11-10T14:45:37Z)
