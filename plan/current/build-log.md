@@ -67,13 +67,28 @@ Complete: P1 (2026-11-10T17:51:19Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-10T17:52:02Z` |
-| End | `pending` |
-| Wall clock | `pending` |
+| End | `2026-11-10T18:14:31Z` |
+| Wall clock | `22` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
-| Notes | Inline. Two small units share the runners and one new helper, and a subagent would cost more than it saves. |
+| Notes | RED: REQ-001 6 of 6 checks failed, REQ-002 1 of 9. GREEN: 11 of 11 and 9 of 9. The BOM suite found a defect in `setup.sh`, fixed in `preserve_developer_boot_file`. The isolated full run passed 389 of 389. Inline. Two small units share the runners and one new helper, and a subagent would cost more than it saves. |
 
 - In progress: U-001 REQ-001 git identity isolation (2026-11-10T17:52:02Z)
+- RED: U-001 REQ-001 git identity isolation (2026-11-10T18:14:31Z)
+- GREEN: U-001 REQ-001 git identity isolation (2026-11-10T18:14:31Z)
+- Tests run: REQ-001: test-0000462-req-001-git-identity-isolation.sh (2026-11-10T18:14:31Z)
+- Done: U-001 REQ-001 git identity isolation (test, inline, none, 2026-11-10T18:14:31Z)
+- In progress: U-002 REQ-002 BOM first-line readers (2026-11-10T18:14:31Z)
+- RED: U-002 REQ-002 BOM first-line readers (2026-11-10T18:14:31Z)
+- GREEN: U-002 REQ-002 BOM first-line readers (2026-11-10T18:14:31Z)
+- Tests run: REQ-002: test-0000462-req-002-bom-first-line-readers.sh, test-0000462-req-002-bom-first-line-readers.ps1, test-0000382-req-001-update-and-doctor.sh (2026-11-10T18:14:31Z)
+- Done: U-002 REQ-002 BOM first-line readers (code, inline, none, 2026-11-10T18:14:31Z)
+- In progress: U-003 living docs (2026-11-10T18:14:31Z)
+- Done: U-003 living docs (content, inline, none, 2026-11-10T18:14:31Z)
+- Tests run: full suite: 389 passed, 0 failed (2026-11-10T18:14:31Z)
+- Departure from batches: U-001 and U-002 ran one after the other, not in one batch. The runners were being edited and a parallel run would share the working tree for no gain.
+
+Complete: P2 (2026-11-10T18:14:31Z)
