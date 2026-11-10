@@ -1,7 +1,7 @@
 # Changelog (0000454-queue-failure-recovery, 10 Nov 2026)
 
 **Feature:** Queue failure recovery
-**Version:** minor, from 0.77.1. The merge queue sets the released version.
+**Version:** set by the merge queue at merge
 **PR:** pending
 
 ## What changed
@@ -18,11 +18,13 @@ A failed queue run left a `chore: set version` commit on the step branch, and th
 ## Deviations
 
 - P2 ran inline without subagents, because the requirements edit one script and one suite.
+- The brief left out a clean-up of files that a failed run wrote. Backlog entry 0000476 holds it.
 
 ## Validation results
 
 - The new suite failed 9 of 18 checks before the change and passes 18 of 18 after it.
 - The nine suites that name `merge-queue.mjs` pass.
+- The full suite passed 381 suites in a clean clone. Two suites failed, and both also fail on the base commit.
 
 ## Skipped phases
 

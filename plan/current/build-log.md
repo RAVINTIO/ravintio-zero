@@ -114,3 +114,19 @@ Complete: P2 (2026-11-10T15:30:37Z)
 - OS gap: local macos, CI ubuntu, windows
 
 Complete: P3 (2026-11-10T15:31:13Z)
+
+---
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T15:31:21Z` |
+| End | |
+| Wall clock | |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | none |
