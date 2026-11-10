@@ -112,6 +112,18 @@ $timingFile = Join-Path ([System.IO.Path]::GetTempPath()) ("ravintio-timing-" + 
 $savedTimingFile = $env:RAVINTIO_TIMING_FILE
 $env:RAVINTIO_TIMING_FILE = $timingFile
 
+# Git isolation (0000462, ADR-0301). Each suite sees a global git config that refuses to guess an
+# identity, so a commit with no identity fails here as it does on a CI runner.
+$gitIsolationFile = Join-Path ([System.IO.Path]::GetTempPath()) ("ravintio-gitconfig-" + [guid]::NewGuid().ToString('N'))
+[System.IO.File]::WriteAllText($gitIsolationFile, "[user]`n`tuseConfigOnly = true`n")
+$savedGitEnv = @{}
+foreach ($name in @('GIT_CONFIG_GLOBAL', 'GIT_CONFIG_NOSYSTEM', 'GIT_AUTHOR_NAME', 'GIT_AUTHOR_EMAIL', 'GIT_AUTHOR_DATE', 'GIT_COMMITTER_NAME', 'GIT_COMMITTER_EMAIL', 'GIT_COMMITTER_DATE', 'EMAIL')) {
+    $savedGitEnv[$name] = [Environment]::GetEnvironmentVariable($name)
+    if ($name -notin @('GIT_CONFIG_GLOBAL', 'GIT_CONFIG_NOSYSTEM')) { [Environment]::SetEnvironmentVariable($name, $null) }
+}
+$env:GIT_CONFIG_GLOBAL = $gitIsolationFile
+$env:GIT_CONFIG_NOSYSTEM = '1'
+
 $failed = @()
 try {
     foreach ($suite in $suites) {
@@ -144,6 +156,8 @@ finally {
     $env:RAVINTIO_TIMING_FILE = $savedTimingFile
     if ($null -eq $savedTimingFile) { Remove-Item Env:RAVINTIO_TIMING_FILE -ErrorAction SilentlyContinue }
     Remove-Item -LiteralPath $timingFile -Force -ErrorAction SilentlyContinue
+    foreach ($name in $savedGitEnv.Keys) { [Environment]::SetEnvironmentVariable($name, $savedGitEnv[$name]) }
+    Remove-Item -LiteralPath $gitIsolationFile -Force -ErrorAction SilentlyContinue
 }
 
 $treeChanged = @()
