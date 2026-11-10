@@ -102,8 +102,9 @@ done
 
 echo ""
 echo "=== REQ-005 AC-2: the allowlist gains only src/ mirrors of existing entries ==="
+# The base self-entry row for the allowlist file left in 0000460 (ADR-0298), so BEFORE drops it.
 if git -C "$REPO_ROOT" cat-file -e "$BASE_COMMIT:ravintio-zero/tests/brand-guard-allowlist.txt" 2>/dev/null; then
-  BEFORE="$(git -C "$REPO_ROOT" show "$BASE_COMMIT:ravintio-zero/tests/brand-guard-allowlist.txt" | grep -v '^#' | grep -v '^$')"
+  BEFORE="$(git -C "$REPO_ROOT" show "$BASE_COMMIT:ravintio-zero/tests/brand-guard-allowlist.txt" | grep -v '^#' | grep -v '^$' | grep -v '^\^ravintio-zero/tests/brand-guard-allowlist')"
   AFTER="$(grep -v '^#' "$ALLOW" | grep -v '^$' | grep -v '^!src/ravintio-zero/' | sed 's#(src/)?ravintio-zero#ravintio-zero#g')"
   assert_equals "$BEFORE" "$AFTER" "REQ-005 AC-2: removing the src/ mirrors leaves the original entries unchanged"
   MIRRORS="$(grep -c '^!src/ravintio-zero/' "$ALLOW")"
