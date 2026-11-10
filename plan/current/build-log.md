@@ -40,3 +40,19 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Queue: `plan/.initiative-queue/` holds one item, `rebase-step-25`, which names step 25. No item names step 26.
 - Design self-confirmed: draft-accepted (initiative) (). Track light. Scope Lock Challenge skipped on the light track.
 - Design self-confirmed: draft-accepted (initiative) (2026-11-10T21:45:44Z). Track light. Scope Lock Challenge skipped on the light track.
+
+---
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T21:48:36Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Inline: three small artifacts, no independent batch worth a subagent. |
