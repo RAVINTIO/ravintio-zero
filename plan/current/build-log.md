@@ -26,8 +26,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-10T19:08:03Z` |
-| End | `PENDING` |
-| Wall clock | `PENDING` |
+| End | `2026-11-10T19:08:50Z` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | `0` |
@@ -42,3 +42,5 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Queue: no item names step 38. The item `rebase-step-25` names step 25.
 - Scope Lock Challenge: in scope, out of scope, deferred, and assumptions all taken from the charted step and entry 0000434 [source: draft-accepted (initiative)].
 - Design confirmed: draft-accepted (initiative) (2026-11-10T19:08:35Z)
+
+Complete: P0 (2026-11-10T19:08:50Z)
