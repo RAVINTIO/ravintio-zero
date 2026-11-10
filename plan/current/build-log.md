@@ -67,8 +67,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-10T21:50:02Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-10T22:06:24Z` |
+| Wall clock | `22` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 0 |
@@ -83,3 +83,6 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Tests run: REQ-001, REQ-002, REQ-003: test-0000444-req-001-003-queue-items.sh (2026-11-10T21:51:27Z)
 - Done: U-002 (content, inline, none, 2026-11-10T21:51:27Z)
 - In progress: U-003 (2026-11-10T21:51:27Z)
+- Done: U-003 (content, inline, none, 2026-11-10T22:06:24Z)
+- Tests run: full suite: 403 passed, 0 failed (2026-11-10T22:06:24Z)
+- Complete: P2 (2026-11-10T22:06:24Z)
