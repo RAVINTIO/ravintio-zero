@@ -70,3 +70,24 @@ Design confirmed: draft-accepted (initiative) (2026-11-10T13:31:18Z)
 Plan decision: the driver file stays untouched. A test pins its pattern to the shared export, which avoids the restart stop.
 
 Complete: P1 (2026-11-10T13:32:33Z)
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T13:32:59Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-orchestrator, ravintio-implement |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Both units run inline. The change is too small to justify subagent overhead. |
+
+- In progress: U-1 (2026-11-10T13:32:59Z)
+- RED: U-1 (2026-11-10T13:33:43Z)
+- GREEN: U-1 (2026-11-10T13:33:43Z)
+- Tests run: REQ-001: test-0000438-req-001-full-feature-id.sh, test-0000399-req-002-add-step.sh, test-0000379-req-001-chart-columns.sh (2026-11-10T13:33:43Z)
+- Done: U-1 (content, primary, inline, 2026-11-10T13:33:43Z)
+- Done: U-2 (content, primary, inline, 2026-11-10T13:33:43Z)
