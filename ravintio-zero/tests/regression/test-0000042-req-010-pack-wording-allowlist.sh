@@ -86,6 +86,8 @@ ALLOWLIST=(
 
 allowed() {
   local path="$1" text="$2" entry path_re line_re
+  # The pack source lives under src/ and the installed copy at the root. Both use one rule set.
+  case "$path" in src/ravintio-zero/*) path="${path#src/}" ;; esac
   for entry in "${ALLOWLIST[@]}"; do
     path_re="${entry%%"$TAB"*}"
     line_re="${entry#*"$TAB"}"
@@ -115,8 +117,10 @@ in_scope_files() {
   local path prefix keep
   git -C "$REPO_ROOT" ls-files | while IFS= read -r path; do
     keep=1
+    local rel="$path"
+    case "$rel" in src/ravintio-zero/*) rel="${rel#src/}" ;; esac
     for prefix in "${EXCLUDED_PREFIXES[@]}"; do
-      case "$path" in "$prefix"*) keep=0; break ;; esac
+      case "$rel" in "$prefix"*) keep=0; break ;; esac
     done
     [ "$keep" -eq 1 ] && echo "$path"
   done

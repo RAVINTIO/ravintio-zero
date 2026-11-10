@@ -1,0 +1,131 @@
+#!/usr/bin/env bash
+# Tests for feature 0000379, REQ-002, REQ-003, and REQ-005: the concurrent driver schedules steps
+# in worktrees and stops new starts on a block or a restart.
+#
+# Each case builds a real git repo with a bare origin. A stub claude stands in for each step and a
+# stub merge queue merges by committing the chart row to merged on origin. Overlap is proved
+# without timing: each stub of a pair waits for the other to start before it writes ready.
+
+set -uo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+source "$SCRIPT_DIR/helpers/assert.sh"
+
+DRIVER="$SCRIPT_DIR/../scripts/initiative-run.mjs"
+WORK="$(mktemp -d)"
+trap 'rm -rf "$WORK"' EXIT
+source "$SCRIPT_DIR/helpers/scheduler-fixture.sh"
+
+yes_no() { [ -e "$1" ] && echo yes || echo no; }
+
+echo ""
+echo "=== REQ-002 AC-1: different lanes run at once ==="
+R="$(make_repo lanes 2 '1||' '2||')"
+STUB_MODE_1=pair:2 STUB_MODE_2=pair:1 run_sched "$R"
+S="$(dirname "$R")/stub"
+assert_equals "0" "$CODE" "REQ-002 AC-1: driver exits 0 when every step merged"
+assert_equals "yes" "$(yes_no "$S/1.overlap")" "REQ-002 AC-1: step 1 saw step 2 running"
+assert_equals "yes" "$(yes_no "$S/2.overlap")" "REQ-002 AC-1: step 2 saw step 1 running"
+assert_equals "merged" "$(origin_status "$R" 1)" "REQ-002 AC-1: step 1 merged on origin"
+assert_equals "merged" "$(origin_status "$R" 2)" "REQ-002 AC-1: step 2 merged on origin"
+assert_contains "I-E Delivery: Complete: step 1 merged" "$OUT" "REQ-002 AC-1: final report names step 1"
+assert_contains "I-E Delivery: Complete: step 2 merged" "$OUT" "REQ-002 AC-1: final report names step 2"
+assert_contains "I-E Delivery: Pending: all 2 steps merged, initiative delivery runs from the initiative skill" "$OUT" "REQ-002 AC-1: prints the Pending line"
+assert_equals "no" "$(yes_no "$R/plan/.initiative-runner.lock")" "REQ-002 AC-1: lock released"
+assert_equals "" "$(git -C "$R" status --porcelain)" "REQ-002 AC-1: the main working tree stays clean"
+
+echo ""
+echo "=== REQ-002 AC-2: one lane runs in order ==="
+R="$(make_repo lane 2 '1|x|' '2|x|')"
+run_sched "$R"
+assert_equals "0" "$CODE" "REQ-002 AC-2 (lane): driver exits 0"
+assert_equals "1," "$(stub_env "$R" 2 queued_before)" "REQ-002 AC-2 (lane): step 2 starts only after step 1 went through the queue"
+assert_equals "merged" "$(origin_status "$R" 2)" "REQ-002 AC-2 (lane): step 2 merged"
+
+echo ""
+echo "=== REQ-002 AC-2: an After link runs in order ==="
+R="$(make_repo after 2 '1||' '2||1')"
+run_sched "$R"
+assert_equals "0" "$CODE" "REQ-002 AC-2 (After): driver exits 0"
+assert_equals "1," "$(stub_env "$R" 2 queued_before)" "REQ-002 AC-2 (After): step 2 starts only after step 1 merged"
+
+echo ""
+echo "=== REQ-002 AC-3: the cap holds ==="
+R="$(make_repo cap 2 '1||' '2||' '3||')"
+STUB_MODE_1=pair:2 STUB_MODE_2=pair:1 run_sched "$R"
+S="$(dirname "$R")/stub"
+assert_equals "0" "$CODE" "REQ-002 AC-3: driver exits 0"
+assert_equals "2" "$(sort -n "$S/live.counts" | tail -1)" "REQ-002 AC-3: never more than two sessions at once"
+assert_equals "yes" "$([ "$(stub_env "$R" 3 done_before)" -ge 1 ] && echo yes || echo no)" "REQ-002 AC-3: step 3 starts only after a slot frees"
+assert_equals "merged" "$(origin_status "$R" 3)" "REQ-002 AC-3: step 3 merged"
+
+echo ""
+echo "=== REQ-003 AC-1 to AC-3: worktree, environment, setup copy, cleanup ==="
+R="$(make_repo wt 1 '1||')"
+run_sched "$R"
+REAL="$(cd "$R" && pwd -P)"
+assert_equals "0" "$CODE" "REQ-003: driver exits 0"
+assert_equals "$REAL/plan/.initiative-worktrees/step-1" "$(stub_env "$R" 1 cwd)" "REQ-003 AC-1: cwd is the step worktree"
+assert_equals "feat/0000051-s1" "$(stub_env "$R" 1 branch)" "REQ-003 AC-1: the worktree is on feat/{feature-id}"
+assert_equals "1" "$(stub_env "$R" 1 STEP)" "REQ-003 AC-1: RAVINTIO_INITIATIVE_STEP is 1"
+assert_equals "1" "$(stub_env "$R" 1 QUEUE)" "REQ-003 AC-1: RAVINTIO_INITIATIVE_QUEUE is 1"
+assert_equals "$R" "$(stub_env "$R" 1 ROOT)" "REQ-003 AC-1: RAVINTIO_INITIATIVE_ROOT is the main root"
+assert_equals "$R/plan/.initiative-control/step-1" "$(stub_env "$R" 1 CONTROL)" "REQ-003 AC-1: RAVINTIO_INITIATIVE_CONTROL is the step control folder"
+assert_equals "yes" "$(stub_env "$R" 1 claude_dir)" "REQ-003 AC-2: .claude reached the worktree"
+assert_equals "yes" "$(stub_env "$R" 1 claude_md)" "REQ-003 AC-2: CLAUDE.md reached the worktree"
+assert_equals "no" "$(yes_no "$R/plan/.initiative-worktrees/step-1")" "REQ-003 AC-3: the merged step's worktree is gone"
+assert_equals "yes" "$(yes_no "$R/plan/.initiative-logs/step-1.log")" "REQ-003 AC-3: the step log remains"
+assert_equals "no" "$(yes_no "$R/plan/.initiative-control/step-1")" "REQ-003 AC-3: the control folder is gone"
+assert_contains "plan/.initiative-worktrees/" "$(cat "$R/.git/info/exclude")" "REQ-003: the worktree folder is excluded"
+assert_contains "plan/.initiative-control/" "$(cat "$R/.git/info/exclude")" "REQ-003: the control folder is excluded"
+assert_equals "" "$(git -C "$R" status --porcelain)" "REQ-003: the main working tree stays clean"
+
+echo ""
+echo "=== REQ-003: a symlinked worktree folder is refused ==="
+R="$(make_repo link 1 '1||')"
+mkdir -p "$WORK/elsewhere"
+ln -s "$WORK/elsewhere" "$R/plan/.initiative-worktrees"
+run_sched "$R"
+assert_equals "1" "$CODE" "REQ-003 (symlink): driver exits 1"
+assert_contains "I-C Run: Blocked: refused a symlinked step worktree path" "$OUT" "REQ-003 (symlink): names the refusal"
+assert_equals "" "$(ls "$WORK/elsewhere")" "REQ-003 (symlink): nothing written through the link"
+assert_equals "no" "$(yes_no "$(dirname "$R")/stub/claude.log")" "REQ-003 (symlink): no step started"
+
+echo ""
+echo "=== REQ-005 AC-1 and AC-2: a block stops new starts and the other step finishes ==="
+R="$(make_repo block 2 '1||' '2||' '3||')"
+STUB_MODE_1=block STUB_MODE_2=waitstop run_sched "$R"
+S="$(dirname "$R")/stub"
+assert_equals "1" "$CODE" "REQ-005 AC-1: driver exits 1"
+assert_equals "no" "$(yes_no "$S/step-3.env")" "REQ-005 AC-1: step 3 never starts"
+assert_contains "I-C Run: Stopping:" "$OUT" "REQ-005 AC-1: the driver says no new step starts"
+assert_contains "I-C Run: Step 1: stopped" "$OUT" "REQ-005 AC-1: report names step 1 stopped"
+assert_contains "I-C Run: Step 2: merged" "$OUT" "REQ-005 AC-2: report names step 2 merged"
+assert_contains "I-C Run: Step 3: pending" "$OUT" "REQ-005 AC-1: report names step 3 pending"
+assert_equals "merged" "$(origin_status "$R" 2)" "REQ-005 AC-2: the driver merged step 2 before it stopped"
+LAST="$(tail -1 "$(dirname "$R")/out.txt")"
+assert_contains "I-C Run: Blocked: step 1 stopped. Blocked: step 1 cannot go on" "$LAST" "REQ-005 AC-1: the last line is the first stop"
+assert_contains "Log: plan/.initiative-logs/step-1.log" "$LAST" "REQ-005 AC-1: the stop line names the log of step 1"
+assert_equals "yes" "$(yes_no "$R/plan/.initiative-worktrees/step-1")" "REQ-005 AC-1: the stopped step keeps its worktree"
+assert_equals "no" "$(yes_no "$R/plan/.initiative-runner.lock")" "REQ-005 AC-1: lock released"
+
+echo ""
+echo "=== REQ-005 AC-3: a restart file stops new starts ==="
+R="$(make_repo restart 2 '1||' '2||1')"
+QUEUE_RESTART_STEP=1 run_sched "$R"
+S="$(dirname "$R")/stub"
+assert_equals "1" "$CODE" "REQ-005 AC-3: driver exits 1"
+assert_contains "I-D Advance: Restart: step 1 changed ravintio-zero/scripts/initiative-run.mjs. Start a new driver so the next step runs the new code." "$OUT" "REQ-005 AC-3: prints Restart:"
+assert_equals "no" "$(yes_no "$S/step-2.env")" "REQ-005 AC-3: step 2 never starts"
+assert_contains "I-C Run: Step 1: merged" "$OUT" "REQ-005 AC-3: report names step 1 merged"
+assert_contains "I-C Run: Step 2: pending" "$OUT" "REQ-005 AC-3: report names step 2 pending"
+
+echo ""
+echo "=== REQ-005: a step without ready follows the resume rule ==="
+R="$(make_repo noready 1 '1||')"
+STUB_MODE_1=none run_sched "$R"
+assert_equals "1" "$CODE" "REQ-005 (no ready): driver exits 1"
+assert_contains "I-C Run: Blocked: step 1 exited without reaching ready" "$OUT" "REQ-005 (no ready): names the missing ready file"
+assert_contains "I-C Run: Step 1: stopped" "$OUT" "REQ-005 (no ready): report names step 1 stopped"
+
+print_summary

@@ -16,8 +16,8 @@ set -uo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
-ZERO_DIR="$SCRIPT_DIR/.."
-REPO_ROOT="$(cd "$ZERO_DIR/.." && pwd)"
+ZERO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+REPO_ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
 
 file_exists() { [ -f "$1" ] && echo "yes" || echo "no"; }
 grep_has() { grep -q "$1" "$2" 2>/dev/null && echo "yes" || echo "no"; }

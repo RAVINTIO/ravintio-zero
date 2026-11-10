@@ -1,0 +1,5 @@
+# Files that carry the product version. One repo-relative path per line.
+# version-files.mjs check and set both read this list.
+docs/about.md
+product.yml
+ravintio-zero/component.yml

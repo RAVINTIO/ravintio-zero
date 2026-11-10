@@ -9,7 +9,7 @@ source "$SCRIPT_DIR/helpers/assert.sh"
 
 REF="$ZERO_DIR/skills/ravintio-orchestrator/references/orchestrator-p0-start-actions.md"
 TEMPLATE="$ZERO_DIR/templates/product.template.yml"
-PRODUCT="$ZERO_DIR/../product.yml"
+PRODUCT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)/product.yml"
 
 STEP=$(grep -A6 -E "^10\. " "$REF")
 

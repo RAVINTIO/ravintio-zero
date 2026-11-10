@@ -9,7 +9,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
 ZERO_DIR="$SCRIPT_DIR/.."
-REPO_DIR="$ZERO_DIR/.."
+REPO_DIR="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
 WORKFLOW="$(cat "$REPO_DIR/.github/workflows/ravintio.yml")"
 
 echo ""

@@ -1,0 +1,49 @@
+#!/bin/bash
+# RAVINTIO Pre-Commit
+# Tier 1: Local advisory for the plan/docs check. The hook blocks on prose
+# breaches only (0000390 REQ-003).
+
+STAGED_FILES=$(git diff --cached --name-only)
+
+if echo "$STAGED_FILES" | grep -q "^src/"; then
+    if ! echo "$STAGED_FILES" | grep -qE "^(plan/|docs/|.*component\.yml)"; then
+        echo "⚠️  RAVINTIO ADVISORY: no plan/, docs/, or component.yml touched."
+        echo "This commit is allowed locally (presence check only, not verified"
+        echo "against your change), but your final branch must include updates"
+        echo "to plan/, docs/, or the relevant component.yml before pushing."
+    fi
+fi
+
+# Prose check: staged Markdown against the baseline, and the baseline itself
+# against HEAD. A missing node or script skips the check.
+REPO_TOP=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+PROSE_SCRIPT=""
+for candidate in "$REPO_TOP/ravintio-zero/scripts/prose-check.mjs" "$REPO_TOP/src/ravintio-zero/scripts/prose-check.mjs"; do
+    if [ -f "$candidate" ]; then
+        PROSE_SCRIPT="$candidate"
+        break
+    fi
+done
+
+if [ -n "$PROSE_SCRIPT" ] && command -v node >/dev/null 2>&1; then
+    BLOCK=0
+    OUT=$(cd "$REPO_TOP" && node "$PROSE_SCRIPT" check --staged 2>&1)
+    if [ $? -eq 1 ]; then
+        echo "$OUT"
+        BLOCK=1
+    fi
+    if git cat-file -e HEAD:plan/state/prose-baseline.json 2>/dev/null \
+        || git cat-file -e :plan/state/prose-baseline.json 2>/dev/null; then
+        OUT=$(cd "$REPO_TOP" && node "$PROSE_SCRIPT" diff --base HEAD 2>&1)
+        if [ $? -eq 1 ]; then
+            echo "$OUT"
+            BLOCK=1
+        fi
+    fi
+    if [ "$BLOCK" -eq 1 ]; then
+        echo "RAVINTIO: prose breach. Fix it, or use git commit --no-verify to bypass."
+        exit 1
+    fi
+fi
+
+exit 0

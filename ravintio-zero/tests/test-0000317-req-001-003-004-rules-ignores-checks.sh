@@ -8,7 +8,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
 ZERO_DIR="$SCRIPT_DIR/.."
-ROOT="$ZERO_DIR/.."
+ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
 ORCH="$(cat "$ZERO_DIR/skills/ravintio-orchestrator/SKILL.md")"
 SHIP="$(cat "$ZERO_DIR/skills/ravintio-ship/SKILL.md")"
 

@@ -10,7 +10,7 @@ set -uo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
-WORKFLOW="$SCRIPT_DIR/../../.github/workflows/ravintio.yml"
+WORKFLOW="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel 2>/dev/null)/.github/workflows/ravintio.yml"
 
 if [ ! -f "$WORKFLOW" ]; then
   echo "  SKIP: no repo workflow next to ravintio-zero/, so this is a consumer copy"
@@ -27,7 +27,7 @@ assert_contains "runs-on: ubuntu-latest" "$JOB" "req-006: the job runs on ubuntu
 assert_contains "contents: read" "$JOB" "req-006: the job has read-only contents permission"
 assert_equals "0" "$(printf '%s\n' "$JOB" | grep -c 'secrets\.' || true)" "req-006: the job uses no secrets"
 assert_contains "RAVINTIO_REQUIRE_PWSH: \"1\"" "$JOB" "req-006: the job requires pwsh"
-assert_contains "bash ravintio-zero/tests/run-tests.sh" "$JOB" "req-006: the job runs run-tests.sh"
+assert_contains "bash src/ravintio-zero/tests/run-tests.sh" "$JOB" "req-006: the job runs run-tests.sh"
 assert_equals "1" "$(printf '%s\n' "$JOB" | grep -cE 'uses: actions/checkout@[0-9a-f]{40}' || true)" \
   "req-006: the job pins actions/checkout to a commit"
 assert_contains "persist-credentials: false" "$JOB" "req-006: the job leaves no token in .git/config"

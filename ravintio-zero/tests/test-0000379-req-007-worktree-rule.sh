@@ -9,8 +9,9 @@ set -uo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
-ZERO_DIR="$SCRIPT_DIR/.."
-OVERRIDE="$ZERO_DIR/../ravintio-overrides/instructions/custom-001-local-git-only.md"
+ZERO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+REPO_ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
+OVERRIDE="$REPO_ROOT/ravintio-overrides/instructions/custom-001-local-git-only.md"
 
 echo "=== REQ-007 AC-1: boot templates scope the worktree rule ==="
 for name in standard-boot codex-boot; do
