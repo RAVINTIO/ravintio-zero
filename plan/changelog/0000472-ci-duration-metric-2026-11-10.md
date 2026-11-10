@@ -2,7 +2,7 @@
 
 **Feature:** CI duration metric
 **Version:** set by the merge queue at merge
-**PR:** pending, updated at Step 9
+**PR:** 172
 
 ## What changed
 
