@@ -120,3 +120,5 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | Initiative step order: PR and CI first, then archive. |
+- Rework: REQ-001: CodeQL flagged incomplete escaping in initiative-queue.mjs, fixed with escapeRe (2026-11-10T22:10:31Z)
+- Tests run: REQ-001: test-0000444-req-001-003-queue-items.sh (2026-11-10T22:10:31Z)

@@ -126,8 +126,13 @@ function defaultBase(root) {
   return '';
 }
 
+// Escapes every regular expression metacharacter, including the backslash.
+function escapeRe(text) {
+  return text.replace(/[\\^$.*+?()[\]{}|]/g, '\\$&');
+}
+
 function matcher(dest) {
-  const escaped = dest.replace(/[.*+?^$()|[\]\\]/g, '\\$&').replace(/\{id\}/g, '[0-9]{7}');
+  const escaped = escapeRe(dest).replace(/\\\{id\\\}/g, '[0-9]{7}');
   return new RegExp(`^${escaped}(/.*)?$`);
 }
 
@@ -156,7 +161,7 @@ function main() {
   const missing = items.filter((it) => {
     const re = matcher(it.dest);
     if (changed.some((f) => re.test(f))) return false;
-    const report = new RegExp(`^[-* ]*Queue item ${it.name.replace(/[.]/g, '\\.')}:`, 'm');
+    const report = new RegExp(`^[-* ]*Queue item ${escapeRe(it.name)}:`, 'm');
     return !report.test(log);
   });
   if (missing.length === 0) return;

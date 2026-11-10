@@ -9,12 +9,12 @@ summary: "Results of P3 for the PR description."
 - New suite: 26 of 26 checks pass. It passed 7 of 26 before the change.
 - Full suite in 4 shards: 403 feature suites and 19 regression suites pass, 0 fail.
 - Baseline check: no new failing suite.
-- Self-corrections: 0.
+- Self-corrections: 1, the CodeQL escape fix.
 - Consistency check and `sync-installed.mjs --check`: clean.
 
 ## Security
 
-No critical, high, or medium finding. Five low findings, each mitigated. See `plan/current/security-report.md`.
+One high finding, from CodeQL: an escape that missed the backslash. The fix is in `initiative-queue.mjs` and the suite still passes. Four low findings, each mitigated. See `plan/current/security-report.md`.
 
 ## Execution evidence
 
