@@ -43,3 +43,19 @@ Run mode: autonomous (initiative step 37, 2026-11-10T21:44:05Z)
 - Decision: Scope lock and design self-confirmed [source: draft-accepted (initiative)]. Light track. Bump minor, planned 0.88.0.
 - Queue: `$RAVINTIO_INITIATIVE_ROOT/plan/.initiative-queue/` holds one item, for step 25. None names step 37.
 - Baseline: reused the known two failures from the chart row 25-41 and recorded them without a base run.
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T21:44:59Z` |
+| End | `2026-11-10T21:46:00Z` |
+| Wall clock | `1` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Gate auto-accepted (autonomous). No ADR: no decision meets the criteria. |
+
+- Complete: P1 (plan set written, consistency check clean)
