@@ -27,7 +27,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 |-------|-------|
 | Start | `2026-11-10T17:48:02Z` |
 | End | `2026-11-10T17:49:02Z` |
-| Wall clock | `10` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | `0` |
@@ -50,7 +50,7 @@ Complete: P0 (2026-11-10T17:49:02Z)
 |-------|-------|
 | Start | `2026-11-10T17:49:26Z` |
 | End | `2026-11-10T17:51:19Z` |
-| Wall clock | `5` |
+| Wall clock | `2` |
 | Model tier | primary |
 | Skills loaded | ravintio-plan |
 | Agents spawned | `0` |
@@ -74,7 +74,7 @@ Complete: P1 (2026-11-10T17:51:19Z)
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
-| Notes | RED: REQ-001 6 of 6 checks failed, REQ-002 1 of 9. GREEN: 11 of 11 and 9 of 9. The BOM suite found a defect in `setup.sh`, fixed in `preserve_developer_boot_file`. The isolated full run passed 389 of 389. Inline. Two small units share the runners and one new helper, and a subagent would cost more than it saves. |
+| Notes | RED: REQ-001 6 of 6 checks failed, REQ-002 1 of 9. GREEN: 11 of 11 and 9 of 9. The BOM suite found a defect in `setup.sh`, fixed in `preserve_developer_boot_file`. The isolated full run passed 389 of 389. Inline. U-003 is a docs unit with no test, so it carries no RED or GREEN marker. Two small units share the runners and one new helper, and a subagent would cost more than it saves. |
 
 - In progress: U-001 REQ-001 git identity isolation (2026-11-10T17:52:02Z)
 - RED: U-001 REQ-001 git identity isolation (2026-11-10T18:14:31Z)
@@ -87,7 +87,7 @@ Complete: P1 (2026-11-10T17:51:19Z)
 - Tests run: REQ-002: test-0000462-req-002-bom-first-line-readers.sh, test-0000462-req-002-bom-first-line-readers.ps1, test-0000382-req-001-update-and-doctor.sh (2026-11-10T18:14:31Z)
 - Done: U-002 REQ-002 BOM first-line readers (code, inline, none, 2026-11-10T18:14:31Z)
 - In progress: U-003 living docs (2026-11-10T18:14:31Z)
-- Done: U-003 living docs (content, inline, none, 2026-11-10T18:14:31Z)
+- Done: U-003 living docs (content, none, none, 2026-11-10T18:14:31Z)
 - Tests run: full suite: 389 passed, 0 failed (2026-11-10T18:14:31Z)
 - Departure from batches: U-001 and U-002 ran one after the other, not in one batch. The runners were being edited and a parallel run would share the working tree for no gain.
 
@@ -113,3 +113,35 @@ Complete: P2 (2026-11-10T18:14:31Z)
 - Skipped: docs edit pass subagent (changed docs are short, so the pass ran inline)
 
 Complete: P3 (2026-11-10T18:33:42Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T18:33:42Z` |
+| End | `2026-11-10T18:33:56Z` |
+| Wall clock | `1` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Initiative step. No version bump, because the merge queue sets it. ADR 0301 set to accepted at archive. |
+
+Complete: P4 (2026-11-10T18:33:56Z)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `46` |
+| Total agents spawned | `0` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `0` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `0` |
+| Phases skipped | none |
