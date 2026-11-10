@@ -23,7 +23,8 @@ None.
 ## Validation results
 
 - New suite `test-0000440-req-001-reply-block.sh`: 16 passed.
-- Driver suites: all pass.
+- Full suite in a clean clone: 381 passed and 2 failed. Both failures exist on the base commit.
+- Security review: 0 critical and 0 high findings.
 
 ## Skipped phases
 

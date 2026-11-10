@@ -25,7 +25,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 |-------|-------|
 | Start | `2026-11-10T13:30:00Z` |
 | End | `2026-11-10T13:30:45Z` |
-| Wall clock | `6` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -48,7 +48,7 @@ Complete: P0 (2026-11-10T13:30:45Z)
 |-------|-------|
 | Start | `2026-11-10T13:31:15Z` |
 | End | `2026-11-10T13:31:54Z` |
-| Wall clock | `4` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-plan |
 | Agents spawned | 0 |
@@ -62,16 +62,16 @@ Complete: P1 (2026-11-10T13:31:54Z)
 - GREEN: U-001 driver reply block (2026-11-10T13:33:02Z)
 - Done: U-001 driver reply block (code, primary, medium, 2026-11-10T13:33:02Z)
 - Tests run: REQ-001: test-0000440-req-001-reply-block.sh (2026-11-10T13:33:02Z)
-- Done: U-002 docs (content, inline, none, 2026-11-10T13:34:33Z)
+- Done: U-002 docs (docs, primary, low, 2026-11-10T13:34:33Z)
 - Tests run: full suite: 383 passed, 0 failed (2026-11-10T14:44:41Z)
 
 ### P2: Implement
 
 | Field | Value |
 |-------|-------|
-| Start | `2026-11-10T14:44:41Z` |
+| Start | `2026-11-10T13:31:54Z` |
 | End | `2026-11-10T14:44:41Z` |
-| Wall clock | `30` |
+| Wall clock | `73` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 0 |
@@ -87,7 +87,7 @@ Complete: P2 (2026-11-10T14:44:41Z)
 |-------|-------|
 | Start | `2026-11-10T14:45:07Z` |
 | End | `2026-11-10T15:07:29Z` |
-| Wall clock | `25` |
+| Wall clock | `22` |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | 0 |
@@ -98,3 +98,35 @@ Complete: P2 (2026-11-10T14:44:41Z)
 - Tests run: full suite: 381 passed, 2 failed, both inherited (clean clone) (2026-11-10T15:07:29Z)
 
 Complete: P3 (2026-11-10T15:07:29Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T15:07:29Z` |
+| End | `2026-11-10T15:07:44Z` |
+| Wall clock | `0` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Initiative step. The merge queue sets the version. No retrospective, the initiative retrospective covers it. |
+
+Complete: P4 (2026-11-10T15:07:44Z)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | 5 |
+| Total wall clock | 98 |
+| Total agents spawned | 0 |
+| Total MCP calls | 0 |
+| Phases using parallelism | 0 |
+| Primary tier agent calls | 0 |
+| Cheaper tier agent calls | 0 |
+| Self-corrections | 0 |
+| Phases skipped | none |
