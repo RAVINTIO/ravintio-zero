@@ -28,8 +28,8 @@ Run mode: autonomous (2026-11-10T14:58:02Z, initiative 0000360 step 31)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-10T14:58:02Z` |
-| End | |
-| Wall clock | |
+| End | `2026-11-10T14:59:49Z` |
+| Wall clock | `4` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -47,3 +47,4 @@ Run mode: autonomous (2026-11-10T14:58:02Z, initiative 0000360 step 31)
 - Scope Lock complete. All four scenario paths captured.
 - Version: plan with 0.78.0 (minor from 0.77.1). The queue sets the released version.
 - Baseline suite started in the background, output at /tmp/step31-baseline.txt.
+Complete: P0 (2026-11-10T14:59:49Z)
