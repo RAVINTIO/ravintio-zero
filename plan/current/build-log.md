@@ -68,14 +68,14 @@ Complete: P1 (2026-11-10T19:09:55Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-10T19:10:10Z` |
-| End | `22` |
-| Wall clock | `PENDING` |
+| End | `2026-11-10T19:45:22Z` |
+| Wall clock | `22` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
-| Notes | PENDING |
+| Notes | RED: REQ-001 8 of 27 checks failed, REQ-002 8 of 8. GREEN: 27 of 27 and 8 of 8. The first full run found the boot template cap exceeded by 27 bytes, fixed with a shorter sentence. Inline, because the two units are small and touch separate files. |
 
 - In progress: U-001 REQ-001 clock check (2026-11-10T19:10:10Z)
 - RED: U-001 REQ-001 clock check (2026-11-10T19:10:55Z)
