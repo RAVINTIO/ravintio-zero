@@ -61,8 +61,8 @@ Migration 0009 skipped. It is optional and interactive, so a step session leaves
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-10T19:11:38Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-10T20:04:49Z` |
+| Wall clock | `60` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | `0` |
@@ -75,3 +75,4 @@ Migration 0009 skipped. It is optional and interactive, so a step session leaves
 - Done: U-002 REQ-003 (code, inline, none, 2026-11-10T19:13:36Z)
 - Tests run: REQ-003: test-0000464-req-003-dash-guard.sh (2026-11-10T19:13:36Z)
 - Done: U-003 docs (content, inline, none, 2026-11-10T19:13:36Z)
+- Tests run: full suite: 395 passed, 2 failed (2026-11-10T20:04:49Z). Both failures are in the baseline.
