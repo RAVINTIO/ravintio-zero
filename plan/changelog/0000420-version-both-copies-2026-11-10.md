@@ -21,7 +21,8 @@ On 2026-11-10 the queue's version bump on PR #150 wrote 0.76.0 to the installed 
 
 ## Validation results
 
-- Recorded at P3.
+- Suites: 393 of 395 passed in a clean clone in 4 shards. The two failures also fail on the base.
+- The new suite fails 8 of 13 before the change and passes 13 of 13 after it.
 
 ## Skipped phases
 

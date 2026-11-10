@@ -65,7 +65,7 @@ Complete: P1 (2026-11-10T00:27:17Z)
 |-------|-------|
 | Start | `2026-11-10T00:27:17Z` |
 | End | `2026-11-10T00:30:25Z` |
-| Wall clock | `6` |
+| Wall clock | `3` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | `0` |
@@ -76,3 +76,48 @@ Complete: P1 (2026-11-10T00:27:17Z)
 - Done: U-001 REQ-001 optional version files (2026-11-10T00:30:25Z)
 
 Complete: P2 (2026-11-10T00:30:25Z)
+
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T00:30:25Z` |
+| End | `2026-11-10T00:39:10Z` |
+| Wall clock | `9` |
+| Model tier | primary |
+| Skills loaded | none |
+| Agents spawned | `0` |
+| Notes | Tests run: 395 suites in a clean clone in 4 shards, 393 passed. The two failures match `baseline-failures.md`. Security: `resolveInRoot` still checks optional paths, and a test covers an optional path outside the root. |
+
+- Tests run: 395 suites, 393 passed, 2 inherited (2026-11-10T00:39:10Z)
+
+Complete: P3 (2026-11-10T00:39:10Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T00:39:10Z` |
+| End | `2026-11-10T00:39:10Z` |
+| Wall clock | `0` |
+| Model tier | primary |
+| Skills loaded | none |
+| Agents spawned | `0` |
+| Notes | No version bump: this PR is not a chart step. |
+
+Complete: P4 (2026-11-10T00:39:10Z)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `13` |
+| Total agents spawned | `0` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `0` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `0` |
