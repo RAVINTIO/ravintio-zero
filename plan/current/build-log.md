@@ -100,11 +100,17 @@ Complete: P2 (2026-11-10T14:16:07Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-10T14:16:28Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-10T14:45:19Z` |
+| Wall clock | `35` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator, ravintio-validate-and-accept |
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
 | Notes | The docs edit pass runs inline through prose-check. |
+
+- Tests run: full suite: 381 passed, 2 failed, both inherited (2026-11-10T14:45:19Z)
+
+OS gap: local macos, CI ubuntu, windows
+
+Complete: P3 (2026-11-10T14:45:19Z)
