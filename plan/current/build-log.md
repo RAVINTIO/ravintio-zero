@@ -72,3 +72,6 @@ Migration 0009 skipped. It is optional and interactive, so a step session leaves
 
 - Done: U-001 REQ-001, REQ-002 (test, inline, none, 2026-11-10T19:11:38Z)
 - Tests run: REQ-001, REQ-002: test-0000464-req-001-002-queue-branches.sh (2026-11-10T19:11:38Z)
+- Done: U-002 REQ-003 (code, inline, none, 2026-11-10T19:13:36Z)
+- Tests run: REQ-003: test-0000464-req-003-dash-guard.sh (2026-11-10T19:13:36Z)
+- Done: U-003 docs (content, inline, none, 2026-11-10T19:13:36Z)
