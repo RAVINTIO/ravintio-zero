@@ -31,7 +31,7 @@ Migration 0009 skipped. It is optional and interactive, so a step session leaves
 |-------|-------|
 | Start | `2026-11-10T19:07:45Z` |
 | End | `2026-11-10T19:08:44Z` |
-| Wall clock | `14` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | `0` |
@@ -41,3 +41,17 @@ Migration 0009 skipped. It is optional and interactive, so a step session leaves
 
 - Decision: Scope lock and design self-confirmed [source: draft-accepted (initiative)]. Bump minor, planned 0.84.0.
 - Queue: `$RAVINTIO_INITIATIVE_ROOT/plan/.initiative-queue/` holds one item, for step 25. None names step 36.
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T19:09:00Z` |
+| End | `2026-11-10T19:10:31Z` |
+| Wall clock | `22` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Gate auto-accepted (autonomous). No ADR: no decision meets the criteria. |
