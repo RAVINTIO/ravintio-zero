@@ -28,6 +28,10 @@
  * version rows. Nothing rewrites pushed history. The worktree ends on a detached HEAD after every run,
  * so a restart can check the PR branch out (feature 0000454, ADR-0299).
  *
+ * If the base merge conflicts only on shared files, the queue resolves them with shared-files.mjs, prints a
+ * `resolved:` line for each, and commits the merge. A conflict in any other file aborts the merge and stops
+ * the queue (feature 0000456, ADR-0301).
+ *
  * The chart `Merge commit` cell holds `tag v{version}`. The queue never commits
  * after the squash, so the sha lives in the tag and in the printed output.
  */
@@ -37,6 +41,7 @@ import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync
 import { tmpdir } from "node:os";
 import { dirname, isAbsolute, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { resolveSharedConflicts } from "./shared-files.mjs";
 import { presentPaths, readEntries, readVersions, setVersions } from "./version-files.mjs";
 
 const GIT = process.env.GIT_BIN || "git";
@@ -435,6 +440,24 @@ function cmdRun(a) {
   }
 }
 
+/**
+ * The base merge reported a conflict. Resolve the shared files the queue owns and commit the merge.
+ * Any other conflict, or a failure that left no merge in progress, aborts the merge and stops (0000456).
+ */
+function resolveBaseMerge({ root, base, head, mergeSubject, mergeError }) {
+  let resolved;
+  try {
+    if (spawnSync(GIT, ["-C", root, "rev-parse", "-q", "--verify", "MERGE_HEAD"]).status !== 0) throw mergeError;
+    resolved = resolveSharedConflicts({ root });
+    git(root, ["commit", "-m", mergeSubject]);
+  } catch (e) {
+    spawnSync(GIT, ["-C", root, "merge", "--abort"]);
+    const detail = e === mergeError ? failText(e) : e.message;
+    throw new Stop(`merge of ${base} into ${head} failed: ${detail}`);
+  }
+  for (const file of resolved) console.log(`resolved: ${file}`);
+}
+
 /** Steps 2 to 6 of `run`, on the PR branch that the caller checked out. */
 function mergeAndRelease({ root, list, chartAbs, chartRel, step, pr, base, head, featureId, bumpKind }) {
   // Take back the version commits of an earlier failed run when the base version has moved (0000454).
@@ -445,8 +468,7 @@ function mergeAndRelease({ root, list, chartAbs, chartRel, step, pr, base, head,
   try {
     git(root, ["merge", "-m", mergeSubject, `origin/${base}`]);
   } catch (e) {
-    spawnSync(GIT, ["-C", root, "merge", "--abort"]);
-    throw new Stop(`merge of ${base} into ${head} failed: ${failText(e)}`);
+    resolveBaseMerge({ root, base, head, mergeSubject, mergeError: e });
   }
   const mergedHead = git(root, ["rev-parse", "HEAD"]).trim();
   if (mergedHead !== git(root, ["rev-parse", `origin/${head}`]).trim()) {
