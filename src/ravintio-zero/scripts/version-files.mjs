@@ -25,11 +25,36 @@ const VERSION_LINE_RE = /^(version:\s*)(["']?)([^"'\s#]*)\2(.*)$/;
 const TABLE_ROW_RE = /^(\|\s*Version\s*\|\s*`)([^`]*)(`\s*\|.*)$/;
 const DEFAULT_LIST = join(dirname(fileURLToPath(import.meta.url)), "..", "version-files.txt");
 
-export function readList(listFile) {
+/**
+ * Return [{ path, optional }] for every list line. A line that starts with "? " names an optional
+ * file, which the scripts skip when it does not exist (0000420). The pack repo lists its source copy
+ * `src/ravintio-zero/component.yml` this way, because a consumer repo has no `src/`.
+ */
+export function readEntries(listFile) {
   return readFileSync(listFile, "utf8")
     .split(/\r?\n/)
     .map((l) => l.replace(/#.*$/, "").trim())
-    .filter(Boolean);
+    .filter(Boolean)
+    .map((l) => (l.startsWith("? ") ? { path: l.slice(2).trim(), optional: true } : { path: l, optional: false }));
+}
+
+/** Return every listed path, optional or not. */
+export function readList(listFile) {
+  return readEntries(listFile).map((e) => e.path);
+}
+
+/** Return the listed paths that exist under root. Throws on a path outside the root. */
+export function presentPaths(root, listFile) {
+  return readEntries(listFile)
+    .filter((e) => existsSync(resolveInRoot(root, e.path)))
+    .map((e) => e.path);
+}
+
+/** The entries to read or write: every required one, and each optional one that exists. */
+function liveEntries(root, listFile) {
+  return readEntries(listFile)
+    .map((e) => ({ ...e, abs: resolveInRoot(root, e.path) }))
+    .filter((e) => !e.optional || existsSync(e.abs));
 }
 
 function insideRoot(root, p) {
@@ -69,8 +94,7 @@ function versionLineIndex(lines) {
 
 /** Return [{ path, version }] for every listed file. Throws on a bad path or file. */
 export function readVersions({ root = process.cwd(), list = DEFAULT_LIST } = {}) {
-  return readList(list).map((path) => {
-    const abs = resolveInRoot(root, path);
+  return liveEntries(root, list).map(({ path, abs }) => {
     if (!existsSync(abs)) throw new Error(`file not found: ${path}`);
     const lines = readFileSync(abs, "utf8").split(/\r?\n/);
     const i = versionLineIndex(lines);
@@ -82,8 +106,7 @@ export function readVersions({ root = process.cwd(), list = DEFAULT_LIST } = {})
 /** Write version into every listed file. Validates everything before writing. */
 export function setVersions(version, { root = process.cwd(), list = DEFAULT_LIST } = {}) {
   if (!SEMVER_RE.test(version)) throw new Error(`not MAJOR.MINOR.PATCH: ${version}`);
-  const edits = readList(list).map((path) => {
-    const abs = resolveInRoot(root, path);
+  const edits = liveEntries(root, list).map(({ path, abs }) => {
     if (!existsSync(abs)) throw new Error(`file not found: ${path}`);
     const lines = readFileSync(abs, "utf8").split("\n");
     const i = versionLineIndex(lines);

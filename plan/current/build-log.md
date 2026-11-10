@@ -47,7 +47,7 @@ Complete: P0 (2026-11-10T00:25:25Z)
 |-------|-------|
 | Start | `2026-11-10T00:25:25Z` |
 | End | `2026-11-10T00:27:17Z` |
-| Wall clock | `5` |
+| Wall clock | `2` |
 | Model tier | primary |
 | Skills loaded | ravintio-plan |
 | Agents spawned | `0` |
@@ -58,3 +58,21 @@ Complete: P0 (2026-11-10T00:25:25Z)
 - Consistency check: clean (2026-11-10T00:27:17Z). Autonomous run: the plan gate passes with no human stop.
 
 Complete: P1 (2026-11-10T00:27:17Z)
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T00:27:17Z` |
+| End | `2026-11-10T00:30:25Z` |
+| Wall clock | `6` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `1` |
+| Notes | Inline, one unit. RED: 8 failures. GREEN: 13 of 13. The source in `src/ravintio-zero/` changed, and `sync-installed.mjs` copied it to `ravintio-zero/`. The queue suites 0000378, 0000392, 0000405, and 0000411 pass. |
+
+- Done: U-001 REQ-001 optional version files (2026-11-10T00:30:25Z)
+
+Complete: P2 (2026-11-10T00:30:25Z)
