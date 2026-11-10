@@ -2,7 +2,7 @@
 
 **Feature:** Queue failure recovery
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** #160
 
 ## What changed
 
