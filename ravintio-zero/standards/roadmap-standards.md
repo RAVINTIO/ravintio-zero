@@ -47,7 +47,7 @@ The driver still requires status `active` before it runs a step.
 Initiative stages use five more prefixes. They use the same `{prefix} {Status}: {one-liner}` form.
 
 <!-- rule: reply-time-form -->
-Every reply begins with the local time. The form is `hh:mm {prefix} {Status}: {one-liner}`. The `UserPromptSubmit` hook gives the time. The reply-prefix hook accepts a prefix with or without the time.
+Every reply begins with the local time. The form is `hh:mm {prefix} {Status}: {one-liner}`. Run `date +%H:%M` before each reply and lead with that value. The `UserPromptSubmit` hook gives the time as context only, and it goes stale in a long turn. The reply-prefix hook accepts a prefix with or without the time. It warns when a given time differs from the clock by more than 5 minutes.
 
 | Prefix | Stage |
 |--------|-------|
@@ -537,7 +537,8 @@ Every message in this stage begins with `I-D Advance:` after the `P4 Ship:` pref
 6. Archive only now. Run ship Step 4, Step 5, and Step 8 in order, and commit each. Then add the `## Workflow governance` section from `build-report.md` to the PR body with `gh pr edit`. Push once. This is the closing push, the last push before `ready`. After it the step cannot edit code, because `gate-write` rejects a write without `plan/current/design.md`.
 7. Wait for CI on the closing push. Run `gh pr checks {n} --watch --fail-fast` again, after the poll in item 4.1 lists the checks of the new head. If a check fails, push nothing, print the `I-D Advance: Blocked: CI failed on PR #{n}` line from item 4.2, and exit.
 8. Write `ready` only when `gh pr checks {n}` exits 0 for the closing push. Exit code 8 means a check is pending and exit code 1 means a check failed. Never write `ready` on either. Then hand the PR to the merge queue. Write `{n}` and `{k}` as the literal PR number from the `gh pr create` output.
-   - **Concurrent driver.** If `RAVINTIO_INITIATIVE_QUEUE` is `1`, write the PR number to `$RAVINTIO_INITIATIVE_CONTROL/ready` and print the line below. Then end the session. The driver removes the worktree and runs the queue.
+   - **Concurrent driver.** If `RAVINTIO_INITIATIVE_QUEUE` is `1`, run `node ravintio-zero/scripts/initiative-ready.mjs --pr {k}`. It checks the number, writes it to `$RAVINTIO_INITIATIVE_CONTROL/ready`, and prints the line below. `--check` reports whether the file holds a valid number. Then end the session. The driver removes the worktree and runs the queue.
+   - **A bad ready file.** If `ready` is empty or holds anything but a PR number, the driver asks `gh pr list --head feat/{feature-id} --state open` for the PR. If exactly one PR matches, the driver rewrites the file and queues the step. Otherwise it stops with `I-C Run: Blocked: step {n} wrote an invalid ready file`.
 
      ```
      I-D Advance: Ready: PR #{n}

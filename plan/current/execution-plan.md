@@ -61,14 +61,14 @@ The plan reread these files at the tip of `origin/initiative/0000360-backlog-swe
 | `src/ravintio-zero/templates/execution-plan.template.md` | c952df2c | U-001 |
 | `src/ravintio-zero/tests/test-0000470-req-001-branch-point-reread.sh` | new | U-001 |
 | `docs/architecture-overview.md` | 99c72a24 | U-002 |
-| `docs/adr/0305-reread-files-at-the-branch-point.md` | new | U-002 |
+| `docs/adr/0306-reread-files-at-the-branch-point.md` | new | U-002 |
 
 ## Concurrency plan
 
 | Unit | Depends on | Writes | Batch | Sequential reason | Shared resources |
 |------|-----------|--------|-------|-------------------|------------------|
 | U-001 | none | `src/ravintio-zero/skills/ravintio-plan/SKILL.md`, `src/ravintio-zero/templates/execution-plan.template.md`, `src/ravintio-zero/tests/test-0000470-req-001-branch-point-reread.sh` | 1 | One requirement across a skill, a template, and one suite | none |
-| U-002 | U-001 | `docs/architecture-overview.md`, `docs/adr/0305-reread-files-at-the-branch-point.md` | 2 | Living docs unit. It records what U-001 built | none |
+| U-002 | U-001 | `docs/architecture-overview.md`, `docs/adr/0306-reread-files-at-the-branch-point.md` | 2 | Living docs unit. It records what U-001 built | none |
 
 ## Assumptions
 

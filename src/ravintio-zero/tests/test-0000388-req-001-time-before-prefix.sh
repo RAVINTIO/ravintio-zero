@@ -35,7 +35,8 @@ write_transcript() {
 run_prefix() {
   local payload
   payload=$(node -e 'console.log(JSON.stringify({ hook_event_name: "Stop", cwd: process.argv[1], transcript_path: process.argv[2] }))' "$1" "$2")
-  OUT=$(printf '%s' "$payload" | env -u RAVINTIO_INITIATIVE_STEP node "$PREFIX_HOOK" 2>/dev/null)
+  # A margin of 720 minutes accepts any time, so this suite tests the shape only.
+  OUT=$(printf '%s' "$payload" | env -u RAVINTIO_INITIATIVE_STEP RAVINTIO_REPLY_MARGIN_MIN=720 node "$PREFIX_HOOK" 2>/dev/null)
   CODE=$?
 }
 

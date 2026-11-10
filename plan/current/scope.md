@@ -14,7 +14,7 @@ version: "0.1.0"
 
 - A `## Branch-point reread` section in the plan skill.
 - A `## Branch-point reads` table in the execution plan template.
-- A new suite, ADR-0305, docs, and a changelog entry.
+- A new suite, ADR-0306, docs, and a changelog entry.
 - The sync of `ravintio-zero/` with `sync-installed.mjs`.
 
 ## Out of Scope
