@@ -38,7 +38,8 @@ run() { OUT="$(node "$TOOL" "$@" 2>&1)"; CODE=$?; }
 # The shipped list
 assert_equals "docs/about.md
 product.yml
-ravintio-zero/component.yml" "$(grep -v '^#' "$LIST_REAL" | grep -v '^$')" "REQ-001: shipped list holds the three version files"
+ravintio-zero/component.yml
+? src/ravintio-zero/component.yml" "$(grep -v '^#' "$LIST_REAL" | grep -v '^$')" "REQ-001: shipped list holds the three version files and the optional pack source copy (0000420)"
 
 # AC-1
 make_fixture ac1 0.58.0 0.58.0 0.58.0
