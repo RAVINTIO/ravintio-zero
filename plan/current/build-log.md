@@ -61,3 +61,26 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Notes | Ran inline. The artifacts are small and each depends on the story map. |
 
 - Complete: P1 (2026-11-10T23:23:46Z)
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T23:26:32Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Inline. Both units are small and the code unit edits one function. No batch departure. |
+
+- Done: U-001 (content, inline, none, 2026-11-10T23:26:32Z)
+- RED: U-001 (2026-11-10T23:26:32Z)
+- GREEN: U-001 (2026-11-10T23:26:32Z)
+- Done: U-002 (content, inline, none, 2026-11-10T23:26:32Z)
+- Done: U-003 (content, inline, none, 2026-11-10T23:26:32Z)
+- Done: U-004 (content, inline, none, 2026-11-10T23:26:32Z)
+- Tests run: REQ-001: test-0000446-req-001-drain-after-queue-failure.sh, test-0000379-req-004-queue-handoff.sh (2026-11-10T23:26:32Z)
+- Tests run: REQ-002: test-0000446-req-002-drain-rule-in-standards.sh (2026-11-10T23:26:32Z)
