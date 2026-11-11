@@ -3,7 +3,7 @@
 > Change record. Index of all ADRs across all features. Updated after every pipeline run.
 > Do not archive this file. Update it in place.
 
-Last updated: 0000485-adr-number-collision
+Last updated: 0000487-steps-apply-decision-rows
 
 ---
 
@@ -331,3 +331,4 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 | [ADR-0310](adr/0310-driver-runs-the-approved-setup-command.md) | Driver runs the approved setup command | accepted | The driver runs the setup command from the `Confirmation:` row at a `Setup:` stop, limited to the pack `setup.sh` with flag words and no shell. | 0000448-driver-runs-approved-setup-command |
 | [ADR-0311](adr/0311-stop-ci-waits-on-a-conflicting-pr.md) | Stop CI waits on a conflicting PR | accepted | The merge queue reads `mergeable` while it waits for checks and stops on `CONFLICTING` or when no check appears within `MQ_NOCHECKS_MS`. A step reads it before its CI poll. | 0000483-mergeability-before-ci-wait |
 | [ADR-0312](adr/0312-renumber-colliding-ids-in-the-merge-queue.md) | Renumber colliding ids in the merge queue | accepted | After the base merge, the queue gives a PR's ADR or backlog entry the next free id when the base holds the same id, and commits the change. | 0000485-adr-number-collision |
+| [ADR-0313](adr/0313-check-decision-rows-in-the-build-log.md) | Check the Decisions rows in the build log | accepted | A module lists the Decisions rows for a step, and build-log-check fails a log that has no line for an applicable row. | 0000487-steps-apply-decision-rows |
