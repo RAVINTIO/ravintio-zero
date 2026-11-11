@@ -71,7 +71,7 @@ flowchart LR
 | src/ravintio-zero/skills/ravintio-initiative/SKILL.md | 84690c86 | U-4 |
 | src/ravintio-zero/standards/roadmap-standards.md | 4b19f29a | U-4 |
 | docs/decisions-index.md | 4b19f29a | U-5 |
-| docs/adr/0313-coordinator-status-view-and-events.md | new | U-5 |
+| docs/adr/0314-coordinator-status-view-and-events.md | new | U-5 |
 
 ## Concurrency plan
 

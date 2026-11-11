@@ -12,7 +12,7 @@
 - The initiative skill runs the status script before each report and ends each report with `Decisions for you` and `Routine fixes made`.
 - `roadmap-standards.md` gains a `#### Status view and events` section.
 - Four new suites, `test-0000450-req-001` to `test-0000450-req-004`, cover the script, the watcher, the driver line, and the text.
-- ADR 0313 records the decision.
+- ADR 0314 records the decision.
 
 ## Why
 

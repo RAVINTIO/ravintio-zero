@@ -414,7 +414,7 @@ The driver writes the child's stdout and stderr to `plan/.initiative-logs/step-{
 
 #### Status view and events
 
-`ravintio-zero/scripts/initiative-status.mjs` prints the run state in one view (0000450, ADR-0313). It reads the chart, `plan/.initiative-control/`, the lock, and the step logs. It writes no file.
+`ravintio-zero/scripts/initiative-status.mjs` prints the run state in one view (0000450, ADR-0314). It reads the chart, `plan/.initiative-control/`, the lock, and the step logs. It writes no file.
 
 - The `Status` column of the chart decides which steps have merged. A merged step never shows as ready or running, whatever its control files hold.
 - The script prints the driver state, the counts of merged, ready, running, and pending steps, each ready PR, and each running step.
@@ -489,6 +489,7 @@ Every merged step edits a few files that other open step PRs also edit. `ravinti
 | `docs/decisions-index.md`, `docs/architecture-overview.md` | The PR branch keeps its `Last updated:` line. Rows that either side added stay. |
 
 - The queue prints `resolved: {path}` for each file, then commits the merge with its usual subject.
+- After every base merge, clean or resolved, the queue rebuilds `plan/backlog/index.md`. It also raises each counter to the higher value of the two merge parents (0000481, ADR-0313). If a file changes, the queue commits it before the push. The subject is `{first 7 digits of Feature id}: Regenerate shared files`. The queue prints `regenerated: {path}`. If nothing changes, it adds no commit.
 - A conflict in any other file stops the queue. So does a row that both sides changed, or a hunk the module cannot read. The queue aborts the merge first.
 
 #### Colliding ids

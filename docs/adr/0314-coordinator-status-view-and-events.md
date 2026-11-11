@@ -1,17 +1,17 @@
 ---
-title: "ADR 313: Coordinator status view and event notices"
+title: "ADR 314: Coordinator status view and event notices"
 summary: "A read-only status script, chart-based watcher state, and new watcher and driver events give the coordinator one true view of the run."
 status: "accepted"
 component: "ravintio-zero"
 version: "0.1.0"
 feature: "0000450-coordinator-status-view"
 ---
-# ADR-0313 - Coordinator status view and event notices
+# ADR-0314 - Coordinator status view and event notices
 
 **Skill:** [plan](../skills/ravintio-plan/SKILL.md)
 **Feature:** 0000450-coordinator-status-view
 **Component:** ravintio-zero
-**File:** `docs/adr/0313-coordinator-status-view-and-events.md`
+**File:** `docs/adr/0314-coordinator-status-view-and-events.md`
 **Date:** 2026-11-11
 
 ## Context
