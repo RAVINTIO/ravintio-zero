@@ -91,6 +91,14 @@
   ],
   "hooks": [
     {
+      "module": "clock-context",
+      "event": "PostToolUse",
+      "matcher": ".*",
+      "mode": "advisory",
+      "blocks": false,
+      "does": "Returns the local time as hh:mm in additionalContext after every tool call."
+    },
+    {
       "module": "block-forced-add",
       "event": "PreToolUse",
       "matcher": "Bash",
@@ -177,14 +185,6 @@
       "mode": "advisory",
       "blocks": false,
       "does": "Warns when a reply breaks the sentence-length or blocklist rule of the writing standard."
-    },
-    {
-      "module": "clock-context",
-      "event": "PostToolUse",
-      "matcher": ".*",
-      "mode": "advisory",
-      "blocks": false,
-      "does": "Returns the local time as hh:mm in additionalContext after every tool call."
     },
     {
       "module": "auto-trigger-orchestrator",
