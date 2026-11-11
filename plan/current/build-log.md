@@ -44,6 +44,13 @@ Run mode: autonomous (initiative step 48)
 - Adoption mode: standard-iterative (signal: `plan/_archive/` beside source in `src/`)
 - Last known version: 0.104.0 (`product.yml`, tag `v0.104.0`). Step bump `minor` plans 0.105.0. The merge queue writes the released version.
 - Track: full
+- Backlog: pulled in 0000494-driver-starts-after-restart. Folder deleted and index rebuilt in the same commit.
+- Scope Lock (happy path): a Restart-only merge hands new starts to a successor driver that adopts running and ready steps [source: draft-accepted (initiative)]
+- Scope Lock (first-run path): with no merge that changes a watched file, no handoff happens and the driver behaves as today [source: draft-accepted (initiative)]
+- Scope Lock (error path): a failed spawn, a failed fast-forward, or a Setup hit keeps the existing stop. A handed-over block reaches the successor through a `stopped` file [source: draft-accepted (initiative)]
+- Scope Lock (cross-session continuity): a dead supervisor pid makes the successor restart that step's session in its worktree [source: draft-accepted (initiative)]
+- Scope Lock complete. All four scenario paths captured.
+- Design confirmed: draft-accepted (initiative)
 
 ---
 
