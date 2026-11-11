@@ -3,7 +3,7 @@
 > Change record. Index of all ADRs across all features. Updated after every pipeline run.
 > Do not archive this file. Update it in place.
 
-Last updated: 0000495-driver-clears-dead-lock
+Last updated: 0000497-keep-worktree-entries
 
 ---
 
@@ -340,6 +340,7 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 | [ADR-0322](adr/0322-driver-ranks-startable-steps-by-chain.md) | Driver ranks startable steps by chain length | accepted | `readySteps` lists the startable steps with the longest chain behind them first, and chart order breaks ties. | 0000491-driver-favours-critical-path |
 | [ADR-0323](adr/0323-driver-hands-over-new-starts-after-restart.md) | Driver hands over new starts after a Restart | accepted | After a Restart-only merge, the old driver starts a successor that takes the lock, adopts running steps, and starts new ones. | 0000493-driver-starts-after-restart |
 | [ADR-0324](adr/0324-driver-takes-a-dead-lock.md) | Driver takes a dead lock | accepted | When the driver lock names a process that no longer runs, the driver reports it and takes the lock. A live, unreadable, or symlinked lock still refuses. | 0000495-driver-clears-dead-lock |
+| [ADR-0325](adr/0325-driver-keeps-worktrees-with-untracked-entries.md) | Driver keeps worktrees with untracked entries | proposed | Before the driver removes a step worktree, it lists untracked files under plan/backlog/. If any exist, or git cannot list them, it keeps the worktree and stops the queue for that step. | 0000497-keep-worktree-entries |
 | [ADR-0320](adr/0320-ship-removes-plan-current-with-git-rm.md) | Ship removes plan/current with git rm | accepted | Step 4 runs git rm -r -q plan/current after the copy, and P2 writes docs outside the full suite run. | 0000519-ship-removal-needs-human-approval |
 | [ADR-0319](adr/0319-clock-from-a-post-tool-use-hook.md) | The clock comes from a PostToolUse hook | accepted | A PostToolUse hook gives agents the local time after every tool call. The reply hook warns at a 2 minute gap and on an unknown status. | 0000499-reply-times-match-clock |
 | [ADR-0321](adr/0321-replies-name-actors-by-role.md) | Replies name actors by role | accepted | A reply names each actor by role. The advisory reply hook flags "I" and "you" in a run reply. | 0000521-replies-name-actors-by-role |
