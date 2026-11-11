@@ -38,6 +38,8 @@
 - ravintio-zero/standards/
 - src/ravintio-zero/docs/
 - ravintio-zero/docs/
+- src/ravintio-zero/component.yml
+- ravintio-zero/component.yml
 - docs/
 - plan/current/
 - plan/backlog/

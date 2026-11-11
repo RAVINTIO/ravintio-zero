@@ -3,7 +3,7 @@
 > Change record. Index of all ADRs across all features. Updated after every pipeline run.
 > Do not archive this file. Update it in place.
 
-Last updated: 0000481-regenerate-after-every-merge
+Last updated: 0000505-coordinator-branch-regenerate
 
 ---
 
