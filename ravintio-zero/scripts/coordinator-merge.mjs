@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Merges the initiative branch into a coordinator branch and regenerates the shared files (0000505, ADR-0314).
+// Merges the initiative branch into a coordinator branch and regenerates the shared files (0000505, ADR-0315).
 //
 // Usage: node coordinator-merge.mjs --base <ref> [--id <initiative-id>] [--root dir]
 //   --base  the ref to merge, such as origin/initiative/0000360-backlog-sweep. Run `git fetch` first.

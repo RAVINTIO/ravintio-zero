@@ -5,12 +5,12 @@ status: "proposed"
 component: "ravintio-zero"
 version: "0.1.0"
 ---
-# ADR-0314 - A coordinator merge command
+# ADR-0315 - A coordinator merge command
 
 **Skill:** [plan](../skills/ravintio-plan/SKILL.md)
 **Feature:** 0000505-coordinator-branch-regenerate
 **Component:** ravintio-zero
-**File:** `docs/adr/0314-coordinator-merge-command.md`
+**File:** `docs/adr/0315-coordinator-merge-command.md`
 **Date:** 2026-11-11
 
 ## Context
