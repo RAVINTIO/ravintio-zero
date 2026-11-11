@@ -40,7 +40,7 @@ A `Setup:` hit and a combined `Restart: Setup:` hit keep the existing stop, beca
 | Alternative | Pros | Cons | Why Rejected |
 |-------------|------|------|-------------|
 | Reload the driver code in place | No second process | Node has no exec. The running state lives in closures of the old module. | A reload needs a rewrite of the scheduler state. |
-| Exit at once and orphan the sessions | Simple | The sessions lose their resume rule and their block read. | A block would go unseen. |
+| Exit at once and orphan the sessions | Fewest parts | The sessions lose their resume rule and their block read. | A block would go unseen. |
 | Keep the stop and wait | No change | Costs the delay that the backlog entry reports. | It is the defect. |
 | Successor takes over sessions by pid | One owner | Needs a session pid in the control folder and a new resume path. | Too much new state for one step. |
 
