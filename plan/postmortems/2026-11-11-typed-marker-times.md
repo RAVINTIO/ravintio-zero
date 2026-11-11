@@ -39,6 +39,6 @@ First missed chance to catch it: the P2 marker step. No tool writes a marker wit
 
 | Type | Action | Status | Owner | Lives in | Verified by | Ref |
 |------|--------|--------|-------|----------|-------------|-----|
-| corrective | Record the departure in a Rework line and keep the approximate times | done | step 51 | `plan/current/build-log.md` | `build-log-check.mjs` | 6c6f7e2a |
+| corrective | Record the departure in a Rework line and keep the approximate times | done | step 51 | `plan/current/build-log.md` | `build-log-check.mjs` | d93c65c6 |
 | preventive | Add a script that writes RED, GREEN, and Done lines from the clock | filed | pack maintainer | `ravintio-zero/scripts/` | a P2 run that uses it | 0000524 |
 | detective | none, because the build log check already fails a time later than its commit | none | none | none | none | none |
