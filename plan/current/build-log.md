@@ -26,8 +26,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-11T02:57:12Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-11T02:58:42Z` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -44,3 +44,35 @@ Scope Lock (cross-session continuity): The script and watcher keep no state on d
 Scope Lock complete. All four scenario paths captured.
 Design confirmed: draft-accepted (initiative) (2026-11-11T02:57:50Z)
 Baseline: running in the background, output at /tmp/step29-baseline.txt
+
+Complete: P0 (2026-11-11T02:58:42Z)
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-11T02:58:42Z` |
+| End | `2026-11-11T02:59:59Z` |
+| Wall clock | `5` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Four requirements, one ADR (0313). Inline, because the units are small. |
+
+Complete: P1 (2026-11-11T02:59:59Z)
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-11T02:59:59Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | |
