@@ -19,7 +19,7 @@ On 2026-11-10 step 31 ended its turn with `I-C Run: Question: step 31 is partway
 
 ## Decision
 
-A `Question:` line asks the human something and ends with a question mark. A step that waits for its suites, CI, or a background task keeps working. The text lives in rule `icrun-question-real` of `roadmap-standards.md`, with a short pointer in `SKILL.md` and `pipeline-reference.md`. The `check-reply-prefix.mjs` Stop hook warns when a final reply has a `Question:` status line with no question mark. It logs one line to `plan/.prefix-misses.log`, blocks nothing, and still exits 0 (0000200 ADR-002).
+A `Question:` line asks the human something and ends with a question mark. A step that waits for its suites, CI, or a background task keeps working. The text lives in rule `icrun-question-real` of `roadmap-standards.md`, with a short pointer in `SKILL.md` and `pipeline-reference.md`. The `check-reply-prefix.mjs` Stop hook warns when a final reply has a `Question:` status line with no question mark. It logs one line to `plan/.prefix-misses.log`. It blocks nothing and still exits 0 (0000200 ADR-002).
 
 ## Alternatives Considered
 
