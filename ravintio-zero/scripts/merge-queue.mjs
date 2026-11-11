@@ -104,7 +104,7 @@ function waitForChecks(root, pr) {
         throw new Stop(`PR #${pr} conflicts with its base branch, so GitHub runs no checks. Merge the base into the PR branch and rerun.`);
       }
       if (Date.now() - start >= noChecks) {
-        throw new Stop(`no CI checks appeared on PR #${pr} within ${Math.round(noChecks / 1000)}s`);
+        throw new Stop(`no CI checks appeared on PR #${pr} within ${noChecks / 1000}s`);
       }
     }
     if (Date.now() - start >= timeout) throw new Stop(`timed out waiting for CI on PR #${pr}`);
