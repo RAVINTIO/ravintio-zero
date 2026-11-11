@@ -88,9 +88,9 @@ Complete: P1 (2026-11-11T20:19:04Z)
 | Wall clock | `51` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator, ravintio-implement |
-| Agents spawned | `0` |
+| Agents spawned | `1` |
 | MCP calls | `0` |
-| Parallel task batches | `0` |
+| Parallel task batches | `1` |
 | Notes | none |
 
 - Batch 1: U-1 (driver) ran inline in the main context. U-2 (text) ran as a subagent (sonnet, content class) in parallel. Departure from the plan: U-2 mirrored its own files into `ravintio-zero/`.
@@ -136,14 +136,18 @@ Complete: P3 (2026-11-11T21:33:14Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-11T21:33:14Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-11T21:33:44Z` |
+| Wall clock | `1` |
 | Model tier | primary |
-| Skills loaded | ravintio-orchestrator, ravintio-ship |
+| Skills loaded | ravintio-orchestrator, ravintio-ship, ravintio-postmortem |
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
-| Notes | none |
+| Notes | The agent typed the RED and GREEN marker times in P2 from the test runs and did not read the clock for each. Compare the 2026-11-11 typed-marker-times postmortem. |
+
+- Postmortem: plan/postmortems/2026-11-11-tree-comparison-path.md REQ-004 (2026-11-11T21:34:05Z)
+
+Complete: P4 (2026-11-11T21:33:44Z)
 
 ---
 
@@ -151,12 +155,12 @@ Complete: P3 (2026-11-11T21:33:14Z)
 
 | Metric | Value |
 |--------|-------|
-| Total phases completed | `` |
-| Total wall clock | `` |
-| Total agents spawned | `` |
-| Total MCP calls | `` |
-| Phases using parallelism | `` |
-| Primary tier agent calls | `` |
-| Cheaper tier agent calls | `` |
-| Self-corrections | `` |
-| Phases skipped | `` |
+| Total phases completed | `5` |
+| Total wall clock | `79` |
+| Total agents spawned | `2` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `2` |
+| Primary tier agent calls | `0` |
+| Cheaper tier agent calls | `2` |
+| Self-corrections | `1` |
+| Phases skipped | `none` |
