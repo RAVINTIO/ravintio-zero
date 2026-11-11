@@ -74,14 +74,14 @@ Complete: P1 (2026-11-11T08:45:15Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-11T08:45:15Z` |
-| End | `2026-11-11T08:50:23Z` |
-| Wall clock | `5` |
+| End | `2026-11-11T09:17:39Z` |
+| Wall clock | `32` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
-| Notes | Four units ran inline. They share the clock rule. The watcher already stamped every line (0000388), so U-4 added a test override and a pin only. |
+| Notes | Four units ran inline. The full suite ran in 4 parallel shards while the baseline ran in the background. They share the clock rule. The watcher already stamped every line (0000388), so U-4 added a test override and a pin only. |
 
 - RED: U-1 (2026-11-11T08:47:18Z)
 - RED: U-2 (2026-11-11T08:47:18Z)
@@ -101,3 +101,7 @@ Complete: P1 (2026-11-11T08:45:15Z)
 - Tests run: REQ-004: src/ravintio-zero/tests/test-0000499-req-004-stamped-activity-lines.sh (2026-11-11T08:49:20Z)
 - Rework: REQ-003: test-0000468-req-001-clock-check.sh pinned the 5 minute margin, so the margin cases moved to 2 minutes (2026-11-11T08:50:23Z)
 - Note: the GREEN times are approximate, written after the runs.
+- Tests run: full suite: 425 passed, 10 failed, then 9 of the 10 fixed by pin updates and 1 inherited (2026-11-11T09:17:39Z)
+- Baseline: the one remaining failure, \`test-0000450-req-004-report-format.sh\`, also fails in earlier baselines.
+
+Complete: P2 (2026-11-11T09:17:39Z)
