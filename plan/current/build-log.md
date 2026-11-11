@@ -59,7 +59,7 @@ Complete: P0 (2026-11-11T02:57:54Z)
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
-| Notes | Three requirements, one ADR (0313). Inline, because the units share one module. |
+| Notes | Three requirements, one ADR (0314). Inline, because the units share one module. |
 
 Complete: P1 (2026-11-11T03:00:21Z)
 
@@ -107,7 +107,7 @@ Complete: P2 (2026-11-11T03:40:24Z)
 
 - Tests run: full suite: 416 passed, 2 failed (clean clone, 2026-11-11T04:05:06Z)
 - Baseline: 2 inherited suites, 0 new.
-- Docs edit pass: 1 cycle, 1 change (ADR-0313 index row split into two sentences), prose-check exit 0.
+- Docs edit pass: 1 cycle, 1 change (ADR-0314 index row split into two sentences), prose-check exit 0.
 - Security: 0 critical or high findings.
 
 Complete: P3 (2026-11-11T04:05:06Z)

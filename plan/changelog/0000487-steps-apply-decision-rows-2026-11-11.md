@@ -11,7 +11,7 @@
 - The P0 start actions gain step 16 with rule anchor `p0-start-decisions`. A step lists its rows at the start of P0 and logs one line for each.
 - Rule `icrun-decision-row` in `roadmap-standards.md` names the lookup and the check.
 - Three new suites, `test-0000487-req-001-decision-rows.sh`, `test-0000487-req-002-check-decisions.sh`, and `test-0000487-req-003-p0-text.sh`, cover the module, the check, and the text.
-- ADR 0313 records the decision.
+- ADR 0314 records the decision.
 
 ## Why
 

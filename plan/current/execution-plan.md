@@ -62,7 +62,7 @@ flowchart LR
 | src/ravintio-zero/skills/ravintio-orchestrator/references/orchestrator-p0-start-actions.md | 5dd28ede local | U-3 |
 | src/ravintio-zero/standards/roadmap-standards.md | 4b19f29a local | U-3 |
 | docs/decisions-index.md | 4b19f29a local | U-4 |
-| docs/adr/0313-check-decision-rows-in-the-build-log.md | new | U-4 |
+| docs/adr/0314-check-decision-rows-in-the-build-log.md | new | U-4 |
 
 ## Concurrency plan
 
