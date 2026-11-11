@@ -9,7 +9,11 @@
 - `readySteps` in `initiative-chart.mjs` lists the startable steps longest chain first. Chart order breaks ties.
 - The chain of a step is 1 plus the longest chain among its unmerged dependants. A dependant lists the step in `After`, or is the next unmerged step in the same lane.
 - Item 2 of `## Concurrent steps` in `roadmap-standards.md` states the order.
-- A new suite, `test-0000491-req-001-chain-ranking.sh`, covers the order, ties, lanes, a cycle, and the time on 60 steps.
+- A new suite, `test-0000491-req-001-chain-ranking.sh`, covers these cases:
+  - The order and ties.
+  - Lanes.
+  - A cycle.
+  - The run time on 60 steps.
 - ADR 0319 records the decision.
 
 ## Why
