@@ -97,11 +97,29 @@ Complete: P2 (2026-11-11T22:28:12Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-11T22:28:12Z` |
-| End | |
-| Wall clock | |
+| End | `2026-11-11T22:29:07Z` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
 | Notes | Autonomous run. |
+- Docs edit pass: 0 cycles, no edit, prose-check exit 0.
+- Security review: no critical or high findings.
+
+Complete: P3 (2026-11-11T22:29:07Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-11T22:29:07Z` |
+| End | |
+| Wall clock | |
+| Model tier | primary |
+| Skills loaded | ravintio-orchestrator, ravintio-ship |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | none |
