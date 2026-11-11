@@ -123,6 +123,10 @@
 //     If ready is empty or invalid, the driver looks up the one open PR for feat/{feature-id} with gh,
 //     rewrites the file, and carries on. With no single PR it stops (0000442, ADR-0304).
 //     A running file without ready restarts the session in the existing worktree.
+//   - Before the queue removes a step worktree, the driver lists the untracked files under
+//     plan/backlog/ in it. If it finds any, or git cannot list them, it keeps the worktree and stops
+//     the queue for the step with a line that names up to five files. The ready file stays, so a new
+//     driver queues the step again. The removal would delete untracked backlog entries (0000497).
 //   - The queue takes one ready step at a time, in ready order. It removes the step worktree and
 //     runs "node {merge-queue.mjs} run --step {n} --pr {k} --root {queue worktree}". MERGE_QUEUE_BIN
 //     overrides the script. The queue worktree is plan/.initiative-worktrees/queue, detached at the
@@ -940,9 +944,22 @@ function prepareQueue(root, ref) {
   return q;
 }
 
+// Stops before the removal if the step worktree holds an untracked file under plan/backlog/, or if
+// git cannot list the files. The removal deletes untracked files (0000497 ADR-0325).
+function keepUntrackedEntries(wt, n) {
+  const r = gitIn(wt, ['ls-files', '--others', '--exclude-standard', '-z', '--', 'plan/backlog']);
+  if (!ran0(r)) throw new Stop(`could not list untracked backlog entries in ${WORKTREES}/step-${n}. ${lastLine(r.stderr)}`);
+  const files = r.stdout.split('\0').filter(Boolean);
+  if (files.length === 0) return;
+  const shown = files.slice(0, 5).join(', ');
+  const rest = files.length > 5 ? ` and ${files.length - 5} more` : '';
+  throw new Stop(`${WORKTREES}/step-${n} holds untracked backlog entries: ${shown}${rest}. Commit them in the worktree, then start a new driver.`);
+}
+
 function removeWorktree(root, n) {
   const wt = areaPath(root, WORKTREES, `step-${n}`, worktreeRefusal);
   if (!present(wt)) return;
+  keepUntrackedEntries(wt, n);
   const r = gitIn(root, ['worktree', 'remove', '--force', wt]);
   if (!ran0(r)) throw new Stop(`could not remove ${WORKTREES}/step-${n}. ${lastLine(r.stderr)}`);
 }
