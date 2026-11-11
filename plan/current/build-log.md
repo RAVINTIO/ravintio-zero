@@ -42,3 +42,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Run speed: standard (2026-11-11T21:57:34Z, initiative step)
 - Adoption mode: standard-iterative (signal: `plan/_archive/` and `src/` both exist)
 - Version: last known 0.105.0, step bump minor, planned 0.106.0 (the merge queue sets the released version)
+- Scope Lock (happy path): a dead pid in the lock gets a reported take-over and the driver runs [source: draft-accepted (initiative)]
+- Scope Lock (first-run path): no lock exists and the driver writes it as before [source: draft-accepted (initiative)]
+- Scope Lock (error path): a live pid, non-numeric text, or a symlink refuses and leaves the lock [source: draft-accepted (initiative)]
+- Scope Lock (cross-session continuity): the `wx` write decides a race between two drivers [source: draft-accepted (initiative)]
+- Design confirmation: draft-accepted (initiative)
