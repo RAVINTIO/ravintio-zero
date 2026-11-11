@@ -100,7 +100,7 @@ Every requirement must have a mapped test whose name includes the requirement ID
 - **Each cycle runs the affected tests.** A cycle runs the new test and the tests that cover the changed files of the unit. It does not run the full suite.
 
 <!-- rule: implement-full-suite-once -->
-- **One full suite run before P2 completes.** After the last requirement is GREEN, start one full suite run in the background while you write docs. Fix any failure before you close P2.
+- **One full suite run before P2 completes.** After the last requirement is GREEN, write docs before the suite starts. Then start one full suite run in the background and change no file until it ends. The runner fails on a changed tree. Fix any failure before you close P2.
 
 <!-- rule: implement-tests-run-line -->
 - **Record the tests.** After each cycle, append `Tests run: REQ-{nnn}: {test files} ({ISO-8601 timestamp})` to the build log. After the full run, append `Tests run: full suite: {n} passed, {m} failed ({ISO-8601 timestamp})`.
@@ -173,7 +173,7 @@ When `plan/.run-speed` holds `fast`, dispatch these batches in order, each in on
 
 1. One TDD track per leaf requirement whose files no other track writes. Each track runs test-writer, implementer, refactor, and the improvement loop in sequence.
 2. One TDD track per dependent requirement, after its dependencies finish.
-3. One unit per independent living doc and per-component doc set, while the full test suite runs in the background.
+3. One unit per independent living doc and per-component doc set, before the full test suite starts.
 4. Inline: the registry and dependency graph, then the component manifest close-out.
 
 At `standard`, the steps above apply. The five-attempt escalation stays the same.
