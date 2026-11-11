@@ -1,7 +1,7 @@
 ---
 title: "ADR 0310: Regenerate in a separate commit after every base merge"
 summary: "The queue regenerates shared files after every base merge and commits any change in its own commit before the push."
-status: "proposed"
+status: "accepted"
 component: "ravintio-zero"
 version: "0.1.0"
 ---
