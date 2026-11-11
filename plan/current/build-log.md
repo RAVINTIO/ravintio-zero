@@ -26,8 +26,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-11T07:10:53Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-11T07:13:00Z` |
+| Wall clock | `2` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | `0` |
@@ -48,6 +48,24 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Scope Lock (cross-session continuity): the hook holds no state. A resumed session meets the same rule again from the skill text [source: draft-accepted (initiative)].
 - Scope Lock complete. All four scenario paths captured.
 - Design confirmed: draft-accepted (initiative) (2026-11-11T07:13:00Z)
+
+Complete: P0 (2026-11-11T07:13:00Z)
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-11T07:13:30Z` |
+| End | `2026-11-11T07:14:23Z` |
+| Wall clock | `1` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Two requirements, one ADR (0317). Inline, because the units share the Question wording. |
+
+Complete: P1 (2026-11-11T07:14:23Z)
 
 ---
 
