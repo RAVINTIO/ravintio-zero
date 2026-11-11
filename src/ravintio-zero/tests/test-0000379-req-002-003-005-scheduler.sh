@@ -110,8 +110,11 @@ assert_equals "yes" "$(yes_no "$R/plan/.initiative-worktrees/step-1")" "REQ-005 
 assert_equals "no" "$(yes_no "$R/plan/.initiative-runner.lock")" "REQ-005 AC-1: lock released"
 
 echo ""
-echo "=== REQ-005 AC-3: a restart file stops new starts ==="
+echo "=== REQ-005 AC-3: a restart file stops new starts when the handoff fails ==="
 R="$(make_repo restart 2 '1||' '2||1')"
+# A local file at the changed path stops the fast-forward, so the driver keeps the stop (0000493).
+mkdir -p "$R/ravintio-zero/scripts"
+printf '// local\n' > "$R/ravintio-zero/scripts/initiative-run.mjs"
 QUEUE_RESTART_STEP=1 run_sched "$R"
 S="$(dirname "$R")/stub"
 assert_equals "1" "$CODE" "REQ-005 AC-3: driver exits 1"
