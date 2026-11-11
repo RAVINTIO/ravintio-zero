@@ -123,6 +123,7 @@ Run mode: autonomous (2026-11-11T01:03:16Z, initiative step 42)
 | Notes | Initiative step: steps 4, 5, and 8 run after green CI. |
 
 - Resolved: the earlier Blocked line. The cause was a PR conflict with the initiative branch, which stopped CI from starting. The CI triggers were not at fault. The coordinator cleared the block on 2026-11-11 (2026-11-11T03:08:01Z)
+- Rework: merged initiative/0000360-backlog-sweep after step 44 and kept renumberIds and regenerateAfterMerge in both merge-queue.mjs copies. Renumbered this step's ADR-0310 to ADR-0313. Added test-0000481-req-002-renumber-then-regenerate.sh. Full suite: 418 feature and 19 regression suites passed (2026-11-11T03:50:00Z)
 - Complete: P4 Ship
 
 ---
