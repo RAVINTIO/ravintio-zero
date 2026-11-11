@@ -2,7 +2,7 @@
 
 **Feature:** Driver clears a dead lock
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** 190
 
 ## What changed
 
