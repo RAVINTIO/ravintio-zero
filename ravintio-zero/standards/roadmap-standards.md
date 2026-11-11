@@ -413,6 +413,17 @@ The driver writes the child's stdout and stderr to `plan/.initiative-logs/step-{
 - Logs are private to the user. The driver creates the folder with mode 700 and each log with mode 600, and each attempt log keeps mode 600.
 - A log may hold file content the session read. Treat it as private.
 
+#### Status view and events
+
+`ravintio-zero/scripts/initiative-status.mjs` prints the run state in one view (0000450, ADR-0314). It reads the chart, `plan/.initiative-control/`, the lock, and the step logs. It writes no file.
+
+- The `Status` column of the chart decides which steps have merged. A merged step never shows as ready or running, whatever its control files hold.
+- The script prints the driver state, the counts of merged, ready, running, and pending steps, each ready PR, and each running step.
+- A live stop is an open `Blocked:` or `Question:` line in the build log of an unmerged step. A `queue stopped on step {n}` line in its step log also counts. A later `Resolved:` line or a merge clears it.
+- The watcher reads the same chart status. It prints `I-C Run: event: step {n} ready PR #{k}` once for a new `ready` file. It prints a queue stop line from a step log once. When the lock disappears and the initiative file remains, it prints `I-C Run: event: driver exited`.
+- The driver prints `I-D Advance: Blocked: queue stopped on step {n}` and the reason when the queue fails. It also appends the line to the step log.
+- The coordinator ends each report with `Decisions for you` and `Routine fixes made`, as the initiative skill describes.
+
 ## Merge carve-out
 
 <!-- rule: carveout-main-human-only --> Merging into `main` is human-only in every run mode. The agent never commits to `main`.
