@@ -134,7 +134,8 @@ function collect(root) {
   const add = (n, line) => {
     if (merged.has(n)) return;
     if (!stops.has(n)) stops.set(n, []);
-    const text = cut(line, MAX_STOP);
+    // Control characters would let a log line move the cursor or colour the terminal.
+    const text = cut(line.replace(/[\u0000-\u001f\u007f]+/g, ' ').trim(), MAX_STOP);
     if (!stops.get(n).includes(text)) stops.get(n).push(text);
   };
   const known = new Set(chart.steps.map((s) => s.step));

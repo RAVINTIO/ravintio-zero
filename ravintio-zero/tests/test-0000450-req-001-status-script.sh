@@ -136,6 +136,14 @@ assert_equals "1" "$CODE" "missing initiative exits 1"
 assert_contains "Blocked:" "$OUT" "missing initiative Blocked line"
 
 echo ""
+echo "=== Control characters are removed from stop text ==="
+R="$(make_repo ctl 1 running)"
+control "$R" 1 running
+wt_log "$R" 1 "$(printf 'P2 Implement: Blocked: bad\033[31m red\r text')"
+run "$R"
+assert_not_contains "$(printf '\033')" "$OUT" "no escape character in the output"
+assert_contains "bad [31m red  text" "$OUT" "the control characters become spaces"
+
 echo "=== Timing: 60 steps in under 2 seconds ==="
 ST=(); for i in $(seq 1 60); do if [ "$i" -le 30 ]; then ST+=(merged); elif [ "$i" -le 40 ]; then ST+=(running); else ST+=(pending); fi; done
 R="$(make_repo t 31 "${ST[@]}")"
