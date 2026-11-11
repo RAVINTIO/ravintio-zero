@@ -79,6 +79,13 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 48 | none | none | none |
 | 49 | none | none | none |
 | 50 | none | none | none |
+| 51 | none | none | none |
+| 52 | none | none | none |
+| 53 | none | none | none |
+| 54 | none | none | none |
+| 55 | none | none | none |
+| 56 | none | none | none |
+| 57 | none | none | none |
 
 ## Dependencies
 
@@ -136,6 +143,13 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 48 | none | none | none |
 | 49 | none | none | none |
 | 50 | none | none | none |
+| 51 | none | none | none |
+| 52 | none | none | none |
+| 53 | none | none | none |
+| 54 | none | none | none |
+| 55 | none | none | none |
+| 56 | none | none | none |
+| 57 | none | none | none |
 
 ## Decisions
 
@@ -210,6 +224,13 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 48 | none | none | none |
 | 49 | none | none | none |
 | 50 | none | none | none |
+| 51 | none | none | none |
+| 52 | none | none | none |
+| 53 | none | none | none |
+| 54 | none | none | none |
+| 55 | none | none | none |
+| 56 | none | none | none |
+| 57 | none | none | none |
 
 ## Baselines
 
@@ -245,6 +266,13 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 48 | none | none | none |
 | 49 | none | none | none |
 | 50 | none | none | none |
+| 51 | none | none | none |
+| 52 | none | none | none |
+| 53 | none | none | none |
+| 54 | none | none | none |
+| 55 | none | none | none |
+| 56 | none | none | none |
+| 57 | none | none | none |
 
 ## Criteria
 
@@ -286,6 +314,13 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 48 | none | none | none |
 | 49 | none | none | none |
 | 50 | none | none | none |
+| 51 | none | none | none |
+| 52 | none | none | none |
+| 53 | none | none | none |
+| 54 | none | none | none |
+| 55 | none | none | none |
+| 56 | none | none | none |
+| 57 | none | none | none |
 
 ## P1 skips
 
@@ -321,6 +356,13 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 48 | no | Added after the chart. The human sets this at P1. |
 | 49 | no | Added after the chart. The human sets this at P1. |
 | 50 | no | Added after the chart. The human sets this at P1. |
+| 51 | no | Added after the chart. The human sets this at P1. |
+| 52 | no | Added after the chart. The human sets this at P1. |
+| 53 | no | Added after the chart. The human sets this at P1. |
+| 54 | no | Added after the chart. The human sets this at P1. |
+| 55 | no | Added after the chart. The human sets this at P1. |
+| 56 | no | Added after the chart. The human sets this at P1. |
+| 57 | no | Added after the chart. The human sets this at P1. |
 
 ## Steps
 
@@ -376,6 +418,13 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 48 | 0000493-driver-starts-after-restart | Driver keeps starting steps after a Restart | 0000494 | minor |  | pending | driver | 47 |
 | 49 | 0000495-driver-clears-dead-lock | Driver clears a dead lock | 0000496 | minor |  | pending | driver | 48 |
 | 50 | 0000497-keep-worktree-entries | Driver keeps uncommitted entries from a worktree | 0000498 | minor |  | pending | driver | 49 |
+| 51 | 0000499-reply-times-match-clock | Reply times match the clock | 0000500 | minor |  | pending | skills | 46 |
+| 52 | 0000501-remove-merged-worktrees | Driver removes merged step worktrees | 0000502 | minor |  | pending | driver | 50 |
+| 53 | 0000503-planned-restart-exit-code | Planned restart exits with its own code | 0000504 | minor |  | pending | driver | 52 |
+| 54 | 0000505-coordinator-branch-regenerate | Coordinator branches regenerate shared files | 0000506 | minor |  | pending | queue | 42 |
+| 55 | 0000507-hook-check-after-setup | Check every hook after setup | 0000508 | minor |  | pending | driver | 53 |
+| 56 | 0000509-clear-merged-ready-files | Driver clears ready files of merged steps | 0000510 | minor |  | pending | driver | 55 |
+| 57 | 0000511-driver-stop-summary | Driver prints a stop summary | 0000512 | minor |  | pending | driver | 56 |
 
 ## Merges
 
