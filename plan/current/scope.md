@@ -16,7 +16,7 @@ version: "0.1.0"
 - The queue call after the base merge, the `renumbered:` line, and the renumber commit.
 - The `## Merge queue` text in `roadmap-standards.md`.
 - Two test suites, one ADR, docs, a changelog entry, and the sync to `ravintio-zero/`.
-- The renumber of the second 0000479 entry to 0000513, done at P0.
+- The renumber of the second 0000479 entry to 0000515, done at P0.
 
 ## Out of Scope
 

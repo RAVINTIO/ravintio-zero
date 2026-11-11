@@ -59,7 +59,7 @@ flowchart LR
 | src/ravintio-zero/scripts/merge-queue.mjs | b75d165f | U-2 |
 | src/ravintio-zero/standards/roadmap-standards.md | 6c66f4d5 | U-2 |
 | docs/decisions-index.md | 6c66f4d5 | U-3 |
-| docs/adr/0310-renumber-colliding-ids-in-the-merge-queue.md | new | U-3 |
+| docs/adr/0312-renumber-colliding-ids-in-the-merge-queue.md | new | U-3 |
 
 ## Concurrency plan
 

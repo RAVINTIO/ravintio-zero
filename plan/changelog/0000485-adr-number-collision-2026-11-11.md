@@ -11,8 +11,8 @@
 - `roadmap-standards.md` gains a `#### Colliding ids` section under the merge queue.
 - Two new suites, `test-0000485-req-001-id-collisions.sh` and `test-0000485-req-002-queue-renumbers.sh`, cover the module and the queue.
 - `test-0000464-req-001-002-queue-branches.sh` copies the new module beside its stub queue.
-- At P0 the second entry that took id 0000479 became 0000513, and the 0000442 retrospective points at the new id.
-- ADR 0310 records the decision.
+- At P0 the second entry that took id 0000479 became 0000515, and the 0000442 retrospective points at the new id.
+- ADR 0312 records the decision.
 
 ## Why
 

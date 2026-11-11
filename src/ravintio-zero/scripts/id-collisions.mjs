@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Renumbers an ADR or a backlog entry that two merged steps added under one id (0000485, ADR-0310).
+// Renumbers an ADR or a backlog entry that two merged steps added under one id (0000485, ADR-0312).
 //
 // Usage (module): renumberCollisions({ root, ours, theirs }) -> [{ kind, from, to }]
 //   root    the repository folder with the base merge done. Default is the current folder.

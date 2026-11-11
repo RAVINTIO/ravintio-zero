@@ -88,6 +88,11 @@
 //      new driver so step {next} runs the new code." The files list restart files first, names
 //      each once, and shows at most 5, then "and {k} more". After the last step the Setup
 //      check also runs, before the Pending line, and a hit stops the driver with no Pending (0000373).
+//      Before it stops on a Setup hit, the driver reads the setup "Confirmation:" row of the chart
+//      with setup-command.mjs. If the row names the pack setup.sh with flag words, the driver runs
+//      that command with bash and no shell, prints "I-D Advance: Setup: step {n} ran the approved
+//      setup command", and carries on. A missing row, another form, a main tree it cannot bring to
+//      the merged ref, or a non-zero exit keeps the stop (0000448). A Restart hit still stops.
 //   7. It repeats until delivery: initiative.md is gone and
 //      plan/_archive/{id}-{slug}-initiative-*/ exists. It then exits 0.
 //      If every step in the "## Steps" table has merged but the archive is not there yet,
@@ -157,6 +162,7 @@ import { fileURLToPath } from 'node:url';
 import { parseChart, readySteps } from './initiative-chart.mjs';
 import { withInitiativeLabels } from './initiative-labels.mjs';
 import { namedItems } from './initiative-queue.mjs';
+import { findSetupCommand } from './setup-command.mjs';
 
 const INITIATIVE = 'plan/current-initiative/initiative.md';
 const LOCK = 'plan/.initiative-runner.lock';
@@ -702,10 +708,14 @@ async function main() {
     if (total > 0 && Number(rm.position) > total) {
       // The last step may have changed pack files that setup installs. Name them before delivery
       // runs on stale installed copies (0000373). No next step exists, so no Restart label.
-      const lastSetup = changedSetup(root, headBefore, branchHead(root, rm.branch));
+      const lastHead = branchHead(root, rm.branch);
+      const lastSetup = changedSetup(root, headBefore, lastHead);
       if (lastSetup.length > 0) {
-        reportSteps(ran);
-        throw new Stop(`I-D Advance: Setup: step ${position} changed ${nameFiles(lastSetup)}. Rerun setup, then start a new driver.`);
+        const done = approvedSetup(root, rm.branch, rm.text, lastHead, position);
+        if (done !== 'ran') {
+          reportSteps(ran);
+          throw new Stop(`I-D Advance: Setup: step ${position} changed ${nameFiles(lastSetup)}. ${setupNote(done)}Rerun setup, then start a new driver.`);
+        }
       }
       reportSteps(ran);
       out(`I-E Delivery: Pending: all ${total} steps merged, initiative delivery runs from the initiative skill`);
@@ -716,11 +726,14 @@ async function main() {
     const restart = changedWatched(root, headBefore, headAfter);
     const setup = changedSetup(root, headBefore, headAfter);
     if (setup.length > 0) {
-      const files = nameFiles([...restart, ...setup.filter((f) => !restart.includes(f))]);
-      if (restart.length > 0) {
-        throw new Stop(`I-D Advance: Restart: Setup: step ${position} changed ${files}. Rerun setup, then start a new driver so step ${rm.position} runs the new code.`);
+      const done = approvedSetup(root, rm.branch, rm.text, headAfter, position);
+      if (done !== 'ran') {
+        const files = nameFiles([...restart, ...setup.filter((f) => !restart.includes(f))]);
+        if (restart.length > 0) {
+          throw new Stop(`I-D Advance: Restart: Setup: step ${position} changed ${files}. ${setupNote(done)}Rerun setup, then start a new driver so step ${rm.position} runs the new code.`);
+        }
+        throw new Stop(`I-D Advance: Setup: step ${position} changed ${files}. ${setupNote(done)}Rerun setup, then start a new driver.`);
       }
-      throw new Stop(`I-D Advance: Setup: step ${position} changed ${files}. Rerun setup, then start a new driver.`);
     }
     if (restart.length > 0) {
       throw new Stop(`I-D Advance: Restart: step ${position} changed ${restart.join(', ')}. Start a new driver so step ${rm.position} runs the new code.`);
@@ -985,16 +998,59 @@ function runQueue(n, pr, queueDir, fd) {
   });
 }
 
+// Runs the approved setup command at a Setup: hit (0000448, ADR-0310). The command comes from the
+// setup Confirmation: row of the chart text, and setup-command.mjs accepts only the pack setup.sh
+// with flag words. The root must hold the merged ref first. If the root sits on the initiative branch
+// behind the ref, it fast-forwards. The command runs with bash, an argument array, and no shell.
+// Returns 'ran' after a clean exit, 'failed' after any other exit, and 'none' if nothing ran.
+function approvedSetup(root, branch, chartText, target, n) {
+  const cmd = findSetupCommand(chartText);
+  if (!cmd || !target) return 'none';
+  const head = gitIn(root, ['rev-parse', 'HEAD']);
+  if (!ran0(head)) return 'none';
+  if (head.stdout.trim() !== target) {
+    const current = gitIn(root, ['symbolic-ref', '--quiet', '--short', 'HEAD']);
+    if (!ran0(current) || current.stdout.trim() !== branch) return 'none';
+    if (!ran0(gitIn(root, ['merge', '--ff-only', '--quiet', target]))) return 'none';
+  }
+  const script = join(root, cmd.file);
+  if (isLink(script) || !existsSync(script)) return 'none';
+  const r = spawnSync('bash', [script, ...cmd.args], { cwd: root, stdio: ['ignore', 2, 2] });
+  if (r.error || r.status !== 0) return 'failed';
+  out(`I-D Advance: Setup: step ${n} ran the approved setup command`);
+  return 'ran';
+}
+
+// The sentence a Setup: stop line adds when the approved command ran and failed.
+const setupNote = (done) => (done === 'failed' ? 'The approved setup command failed. ' : '');
+
+// Reads the chart text from the ref, or from the working tree when the ref is unreadable.
+function chartText(root, ref) {
+  if (ref) {
+    const shown = gitIn(root, ['show', `${ref}:${INITIATIVE}`]);
+    if (ran0(shown) && shown.stdout.trim() !== '') return shown.stdout;
+  }
+  try {
+    return readFileSync(join(root, INITIATIVE), 'utf8');
+  } catch {
+    return '';
+  }
+}
+
 // Returns the Restart or Setup stop line for a merge that changed watched files, or ''.
-function restartLine(root, n, before, after) {
+// The approved setup command runs first, and a clean run removes the Setup: part of the stop.
+function restartLine(root, n, before, after, branch) {
   const restart = changedWatched(root, before, after);
   const setup = changedSetup(root, before, after);
   if (setup.length > 0) {
-    const files = nameFiles([...restart, ...setup.filter((f) => !restart.includes(f))]);
-    if (restart.length > 0) {
-      return `I-D Advance: Restart: Setup: step ${n} changed ${files}. Rerun setup, then start a new driver so the next step runs the new code.`;
+    const done = approvedSetup(root, branch, chartText(root, initiativeRef(root, branch)), after, n);
+    if (done !== 'ran') {
+      const files = nameFiles([...restart, ...setup.filter((f) => !restart.includes(f))]);
+      if (restart.length > 0) {
+        return `I-D Advance: Restart: Setup: step ${n} changed ${files}. ${setupNote(done)}Rerun setup, then start a new driver so the next step runs the new code.`;
+      }
+      return `I-D Advance: Setup: step ${n} changed ${files}. ${setupNote(done)}Rerun setup, then start a new driver.`;
     }
-    return `I-D Advance: Setup: step ${n} changed ${files}. Rerun setup, then start a new driver.`;
   }
   if (restart.length > 0) {
     return `I-D Advance: Restart: step ${n} changed ${restart.join(', ')}. Start a new driver so the next step runs the new code.`;
@@ -1191,7 +1247,7 @@ async function schedule(root, cfg, rm) {
       lastMerge = { rec, before, after };
       // After the last merge the end runs the Setup check instead, as the serial path does.
       if (!allMerged()) {
-        const line = restartLine(root, n, before, after);
+        const line = restartLine(root, n, before, after, branch);
         if (line) setStop(line, rec);
       }
     } catch (e) {
@@ -1240,8 +1296,11 @@ async function schedule(root, cfg, rm) {
     // The last merge may have changed pack files that setup installs (0000373).
     const lastSetup = changedSetup(root, lastMerge.before, lastMerge.after);
     if (lastSetup.length > 0) {
-      reportSteps(mergeOrder);
-      throw stopWith(`I-D Advance: Setup: step ${lastMerge.rec.n} changed ${nameFiles(lastSetup)}. Rerun setup, then start a new driver.`, lastMerge.rec.log);
+      const done = approvedSetup(root, branch, chartText(root, initiativeRef(root, branch)), lastMerge.after, lastMerge.rec.n);
+      if (done !== 'ran') {
+        reportSteps(mergeOrder);
+        throw stopWith(`I-D Advance: Setup: step ${lastMerge.rec.n} changed ${nameFiles(lastSetup)}. ${setupNote(done)}Rerun setup, then start a new driver.`, lastMerge.rec.log);
+      }
     }
   }
   reportSteps(mergeOrder);

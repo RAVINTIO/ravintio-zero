@@ -61,7 +61,7 @@ No data store.
 - The call in `merge-queue.mjs` and the `renumbered:` output line.
 - The `## Merge queue` section of `roadmap-standards.md`.
 - Tests, an ADR, docs, a changelog entry, and the sync to `ravintio-zero/`.
-- The renumber of the second 0000479 entry to 0000513, done at P0.
+- The renumber of the second 0000479 entry to 0000515, done at P0.
 
 ### Out of Scope
 - Collisions between ids that no merged step shares, such as two branches that have not merged.

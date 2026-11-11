@@ -376,6 +376,11 @@ The driver loads its code once. After a merged step, it compares the initiative 
 
 The installed pack files live outside the repo copy the driver reads. After a merged step, the driver checks whether the step changed `ravintio-zero/skills/`, `ravintio-zero/hooks/`, `ravintio-zero/setup.sh`, or `ravintio-zero/setup/`. If it did, the driver stops.
 
+- Before it stops, the driver runs the approved setup command (0000448, ADR-0310). `setup-command.mjs` reads the `Confirmation:` row for setup in `## Decisions`. It returns the command only if it is the pack `setup.sh` followed by plain words and `--flag` words.
+- The driver runs the command with `bash`, an argument array, and no shell. It prints `I-D Advance: Setup: step {n} ran the approved setup command` and carries on.
+- Before it runs the command, the driver checks that the root holds the merged initiative ref. If the root sits on the initiative branch behind the ref, the driver fast-forwards it.
+- If the row is missing, the form differs, the root can't match the ref, or the command exits non-zero, the driver stops. After a non-zero exit the line adds `The approved setup command failed.` before `Rerun setup`.
+- A `Restart:` hit still stops the driver. The command runs first, and the stop line then drops the `Setup:` part.
 - The stop line is `I-D Advance: Setup: step {n} changed {files}. Rerun setup, then start a new driver.`
 - If the same step also triggers the restart stop, the driver prints one combined line. The line reads: `I-D Advance: Restart: Setup: step {n} changed {files}. Rerun setup, then start a new driver so step {next} runs the new code.` The list holds the restart files first, then the setup-only files, with no repeats.
 - The driver releases the lock and exits 1.
@@ -455,7 +460,7 @@ A step that changes a chart format updates the active `initiative.md` in the sam
 
 1. Check the PR title.
 2. If an earlier failed run left a set-version commit on the PR branch and the base version has moved, revert it in one new commit. Merge the initiative branch into the PR branch and push, with no force. If the merge conflicts only on shared files, the queue resolves them (see Shared files below). Any other conflict stops the queue. The merge commit has the subject `{first 7 digits of Feature id}: Merge the initiative branch`, which the `commit-msg` hook accepts. Then renumber any colliding id (see Colliding ids below).
-3. Wait for CI with `gh pr checks {k} --watch --fail-fast`.
+3. Wait for CI with `gh pr checks {k} --watch --fail-fast`. While `gh pr checks` lists no check, the wait reads `mergeable`. It stops on `CONFLICTING`, and it stops if no check appears within `MQ_NOCHECKS_MS` ms (default 600000).
 4. Apply the row's `Bump` to the initiative branch version and write the result to every file in `version-files.txt`.
 5. Check that every version file holds the same version.
 6. Write the row's `Version` and the status `merged`, and add a row to the `## Merges` table. The `Merge commit` cell reads `tag v{version}`. Set `**Position:**` to the lowest step that has not merged.
@@ -477,7 +482,7 @@ Every merged step edits a few files that other open step PRs also edit. `ravinti
 
 #### Colliding ids
 
-Steps that run at once reserve ADR numbers and backlog ids from the counter on their own branch. Two PRs can then add `docs/adr/0301-a.md` and `docs/adr/0301-b.md`. Git reports no conflict on files with different names. `ravintio-zero/scripts/id-collisions.mjs` finds them after the base merge (0000485 ADR-0310).
+Steps that run at once reserve ADR numbers and backlog ids from the counter on their own branch. Two PRs can then add `docs/adr/0301-a.md` and `docs/adr/0301-b.md`. Git reports no conflict on files with different names. `ravintio-zero/scripts/id-collisions.mjs` finds them after the base merge (0000485 ADR-0312).
 
 - A PR file collides when it holds an ADR number or a backlog id that another file in the merged tree also holds.
 - The module gives the PR's file the next free id. That id is above the highest id in the tree and the counter.
@@ -532,6 +537,12 @@ Every message in this stage begins with `I-D Advance:` after the `P4 Ship:` pref
 
 3. Set the changelog `**PR:**` field to the PR number from the `gh pr create` output. Commit the change and push the branch. Never commit after the squash, because the squash carries the number onto the initiative branch.
 4. Wait for CI in two parts. The run is still open, so the step can edit code.
+   Before part 1, run `gh pr view {n} --json mergeable`. GitHub starts no workflow for a conflicting PR, so no check would ever appear (0000483, ADR-0311). If the value is `CONFLICTING`, merge `origin/initiative/{id}-{slug}` into the branch, resolve shared files with `shared-files.mjs`, push, and read again. `UNKNOWN` is transient, so read again after a few seconds. A conflict in any other file stops the step:
+
+   ```
+   I-D Advance: Blocked: PR #{n} conflicts with the initiative branch.
+   ```
+
    1. Poll `gh pr checks {n}` until it lists at least one check, for up to 2 minutes. Checks are always pending straight after `gh pr create`, so pending is not a stop. If none appears, push the branch, print the line below, and exit:
 
       ```

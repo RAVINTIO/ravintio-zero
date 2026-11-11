@@ -8,7 +8,7 @@ status: "active"  # proposed | charted | active | delivered | blocked
 **Goal:** Close every open backlog entry except the four that need paid services. The first three steps make the driver run independent steps at once, each in its own worktree, with each version set as its step merges. Step 20 moves the pack source to `src/ravintio-zero/`. The last step, step 21, makes activation smoother for the human.
 **Branch:** initiative/0000360-backlog-sweep
 **Status:** active
-**Position:** 28
+**Position:** 29
 **Speed:** standard
 **Step CI fixes:** allowed
 **Concurrency:** 3
@@ -395,7 +395,7 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 25 | 0000442-ready-file-helper | Ready file helper | 0000424 | minor | 0.84.0 | merged | driver | 24 |
 | 26 | 0000444-step-reads-its-queue-items | Steps read their queue items | 0000425 | minor | 0.89.0 | merged | driver | 25 |
 | 27 | 0000446-drain-ready-prs-after-a-stop | Merge ready PRs after a stop | 0000426 | minor | 0.91.0 | merged | driver | 26 |
-| 28 | 0000448-driver-runs-approved-setup-command | Driver runs the approved setup command | 0000427 | minor |  | pending | driver | 27 |
+| 28 | 0000448-driver-runs-approved-setup-command | Driver runs the approved setup command | 0000427 | minor | 0.92.0 | merged | driver | 27 |
 | 29 | 0000450-coordinator-status-view | Coordinator status view | 0000428 | minor |  | pending | driver | 28 |
 | 30 | 0000452-ci-wait-before-archive | Ship waits for CI before it archives | 0000412 | minor | 0.78.0 | merged | ship | 22 |
 | 31 | 0000454-queue-failure-recovery | Queue failure recovery | 0000429 | minor | 0.80.0 | merged | queue | 22 |
@@ -410,7 +410,7 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 40 | 0000472-ci-duration-metric | CI duration metric | 0000436 | minor | 0.90.0 | merged | ci | 22 |
 | 41 | 0000474-coordinator-shell-guidance | Coordinator shell guidance | 0000437 | minor |  | pending | initiative-skill | 29 |
 | 42 | 0000481-regenerate-after-every-merge | Regenerate shared files after every base merge | 0000482 | minor |  | pending | queue | 22 |
-| 43 | 0000483-mergeability-before-ci-wait | Check mergeability before a CI wait | 0000484 | minor |  | pending | ship | 30 |
+| 43 | 0000483-mergeability-before-ci-wait | Check mergeability before a CI wait | 0000484 | minor | 0.93.0 | merged | ship | 30 |
 | 44 | 0000485-adr-number-collision | Parallel steps reserve distinct ids | 0000479 | minor |  | pending | adr | 22 |
 | 45 | 0000487-steps-apply-decision-rows | Steps apply the chart's Decisions rows | 0000488 | minor |  | pending | skills | 22 |
 | 46 | 0000489-question-only-for-questions | Steps use Question only for real questions | 0000490 | minor |  | pending | skills | 45 |
@@ -466,3 +466,5 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 26 | #171 | tag v0.89.0 | 0.89.0 | 2026-11-10T22:31:25Z |
 | 40 | #172 | tag v0.90.0 | 0.90.0 | 2026-11-10T23:13:30Z |
 | 27 | #173 | tag v0.91.0 | 0.91.0 | 2026-11-11T00:22:34Z |
+| 28 | #175 | tag v0.92.0 | 0.92.0 | 2026-11-11T01:45:18Z |
+| 43 | #176 | tag v0.93.0 | 0.93.0 | 2026-11-11T02:09:04Z |

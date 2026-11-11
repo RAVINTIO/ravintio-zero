@@ -1,11 +1,11 @@
 ---
-title: "Backlog Entry: 0000513 - P0 records the baseline failures file"
+title: "Backlog Entry: 0000515 - P0 records the baseline failures file"
 summary: "P0 start action 15 saves the baseline output but a run can skip the record call, so P3 finds no baseline file."
 status: "open"
 priority: "medium"
 theme: "pipeline"
 ---
-# Backlog Entry: 0000513 - P0 records the baseline failures file
+# Backlog Entry: 0000515 - P0 records the baseline failures file
 
 **Source feature:** 0000442-ready-file-helper
 
@@ -15,7 +15,7 @@ theme: "pipeline"
 
 **Date filed:** 2026-11-10
 
-**Renumbered:** filed as 0000479, which a second entry also took. Step 44 (0000485) renumbered it to 0000513.
+**Renumbered:** filed as 0000479, which a second entry also took. Step 44 (0000485) renumbered it to 0000515.
 
 ---
 
