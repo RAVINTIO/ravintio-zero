@@ -27,8 +27,8 @@ Run speed: standard (2026-11-11T04:06:29Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-11T04:06:29Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-11T04:07:07Z` |
+| Wall clock | `4` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | `0` |
@@ -40,3 +40,7 @@ Run speed: standard (2026-11-11T04:06:29Z)
 - Adoption mode: standard-iterative (signal: plan/_archive beside source)
 - Track: light (chart accepts the track)
 - Queue items: none name step 54
+- Scope Lock (all paths): light track skips the Scope Lock Challenge [source: draft-accepted (initiative)]
+- Design confirmed: draft-accepted (initiative)
+- Backlog 0000506 pulled in
+- Complete: P0 Discovery (2026-11-11T04:07:07Z)
