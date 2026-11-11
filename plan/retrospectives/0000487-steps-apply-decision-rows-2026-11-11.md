@@ -30,10 +30,10 @@ The run added a module that lists decision rows for a step. It also added a buil
 
 ## Change
 
-- Name a removal command that the safety check accepts in ship Step 4, and fix the P2 docs timing (backlog entry 0000517).
+- Name a removal command that the safety check accepts in ship Step 4, and fix the P2 docs timing (backlog entry 0000518).
 
 ## Actions
 
 | Change | Owner | Lives in | Verified by | Filed as |
 |--------|-------|----------|-------------|----------|
-| Name `git rm -r` in ship Step 4 and fix the P2 docs timing | pack maintainer | `.claude/skills/ravintio-ship/SKILL.md` | A ship run in a step session | `plan/backlog/0000517-ship-removal-needs-human-approval/entry.md`, from the 0000487 retrospective |
+| Name `git rm -r` in ship Step 4 and fix the P2 docs timing | pack maintainer | `.claude/skills/ravintio-ship/SKILL.md` | A ship run in a step session | `plan/backlog/0000518-ship-removal-needs-human-approval/entry.md`, from the 0000487 retrospective |

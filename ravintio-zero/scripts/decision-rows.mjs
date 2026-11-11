@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * decision-rows.mjs: list the chart's Decisions rows that name a step
- * (feature 0000487, ADR-0314).
+ * (feature 0000487, ADR-0316).
  *
  * Usage: node decision-rows.mjs list --step {n} [--chart {path}]
  *

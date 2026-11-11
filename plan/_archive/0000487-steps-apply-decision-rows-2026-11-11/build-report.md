@@ -22,8 +22,8 @@ None.
 
 ## Improvement suggestions
 
-- P2: Write docs before the full suite starts or after it ends, because the runner fails on a changed tree (backlog entry 0000517).
-- P4: Name `git rm -r` in ship Step 4, because the safety check refused the earlier removal (backlog entry 0000517).
+- P2: Write docs before the full suite starts or after it ends, because the runner fails on a changed tree (backlog entry 0000518).
+- P4: Name `git rm -r` in ship Step 4, because the safety check refused the earlier removal (backlog entry 0000518).
 
 Postmortems: `plan/postmortems/2026-11-11-ship-removal-refused.md`
 

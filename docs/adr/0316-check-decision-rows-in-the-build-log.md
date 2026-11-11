@@ -1,17 +1,17 @@
 ---
-title: "ADR 314: Check the Decisions rows in the build log"
+title: "ADR 316: Check the Decisions rows in the build log"
 summary: "A module lists the Decisions rows for a step, and build-log-check fails a log that has no line for an applicable row."
 status: "accepted"
 component: "ravintio-zero"
 version: "0.1.0"
 feature: "0000487-steps-apply-decision-rows"
 ---
-# ADR-0314 - Check the Decisions rows in the build log
+# ADR-0316 - Check the Decisions rows in the build log
 
 **Skill:** [plan](../skills/ravintio-plan/SKILL.md)
 **Feature:** 0000487-steps-apply-decision-rows
 **Component:** ravintio-zero
-**File:** `docs/adr/0314-check-decision-rows-in-the-build-log.md`
+**File:** `docs/adr/0316-check-decision-rows-in-the-build-log.md`
 **Date:** 2026-11-11
 
 ## Context

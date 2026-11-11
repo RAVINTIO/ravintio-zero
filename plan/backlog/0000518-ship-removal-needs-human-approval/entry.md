@@ -1,11 +1,11 @@
 ---
-title: "Backlog Entry: 0000517 - Ship removal of plan/current stops the step"
+title: "Backlog Entry: 0000518 - Ship removal of plan/current stops the step"
 summary: "Ship Step 4 stops when the Claude Code safety check refuses to delete plan/current, and P2 tells the agent to write docs while the full suite runs."
 status: "open"
 priority: "medium"
 theme: "ship-and-p2-process"
 ---
-# Backlog Entry: 0000517 - Ship removal of plan/current stops the step
+# Backlog Entry: 0000518 - Ship removal of plan/current stops the step
 
 **Source feature:** 0000487-steps-apply-decision-rows
 

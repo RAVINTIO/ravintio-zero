@@ -40,5 +40,5 @@ First missed chance to catch it: the ship skill. Step 4 names no removal command
 | Type | Action | Status | Owner | Lives in | Verified by | Ref |
 |------|--------|--------|-------|----------|-------------|-----|
 | corrective | Remove `plan/current/` with `git rm -rq` and commit the archive | done | coordinator | `plan/_archive/0000487-steps-apply-decision-rows-2026-11-11/` | `git ls-files plan/current` is empty | e8c73a9c |
-| preventive | Name `git rm -r` in ship Step 4 | filed | pack maintainer | `.claude/skills/ravintio-ship/SKILL.md` | a ship run in a step session | 0000517 |
+| preventive | Name `git rm -r` in ship Step 4 | filed | pack maintainer | `.claude/skills/ravintio-ship/SKILL.md` | a ship run in a step session | 0000518 |
 | detective | none, because the Blocked line already surfaces the stop at once | none | none | none | none | none |

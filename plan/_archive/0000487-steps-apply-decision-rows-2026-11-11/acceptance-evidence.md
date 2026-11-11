@@ -25,4 +25,4 @@ I ran the module and the check on the real chart. Step 40 got its `25-41` row an
 
 ## Docs edit pass
 
-Changed docs: `docs/architecture-overview.md`, `docs/decisions-index.md`, and the changelog. One cycle, run by a fresh-context subagent. It made one wording fix in the ADR-0314 index row. `prose-check.mjs` exits 0.
+Changed docs: `docs/architecture-overview.md`, `docs/decisions-index.md`, and the changelog. One cycle, run by a fresh-context subagent. It made one wording fix in the ADR-0316 index row. `prose-check.mjs` exits 0.
