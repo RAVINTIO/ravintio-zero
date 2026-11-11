@@ -93,6 +93,16 @@ Complete: P1 (2026-11-11T20:19:04Z)
 | Parallel task batches | `0` |
 | Notes | none |
 
+- Batch 1: U-1 (driver) ran inline in the main context. U-2 (text) ran as a subagent (sonnet, content class) in parallel. Departure from the plan: U-2 mirrored its own files into `ravintio-zero/`.
+- Reason for inline U-1: three requirements share one 1,400-line script and one fixture, so subagents would each re-read both.
+- RED: U-1 REQ-001 to REQ-003 (2026-11-11T20:24:00Z): 16 of 42 checks failed
+- GREEN: U-1 REQ-001 to REQ-003 (2026-11-11T20:27:00Z): 42 of 42 pass
+- Done: U-1 (code, primary, inline, 2026-11-11T20:27:23Z)
+- Done: U-2 (content, sonnet, subagent, 2026-11-11T20:23:00Z)
+- Tests run: REQ-001 to REQ-003: test-0000493-req-001-003-handoff.sh, test-0000379-req-002-003-005-scheduler.sh, test-0000250-req-002-driver-restart-stop.sh, test-0000448-req-002-driver-runs-setup-command.sh (2026-11-11T20:27:00Z)
+- Tests run: REQ-004: test-0000493-req-004-handoff-text.sh (2026-11-11T20:23:00Z)
+- Done: U-4 (content, primary, inline, 2026-11-11T20:28:28Z)
+
 ---
 
 ## Summary (filled at ship, P4)
