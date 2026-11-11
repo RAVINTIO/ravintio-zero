@@ -1,16 +1,16 @@
 ---
-title: "ADR 0316: Coordinator task scripts and a shell section"
+title: "ADR 0317: Coordinator task scripts and a shell section"
 summary: "The coordinator writes scripts with the Write tool and runs them with bash. A drain subcommand and a bulk-edit script replace improvised shell."
 status: "proposed"
 component: "ravintio-zero"
 version: "0.1.0"
 ---
-# ADR-0316 - Coordinator task scripts and a shell section
+# ADR-0317 - Coordinator task scripts and a shell section
 
 **Skill:** [plan](../skills/ravintio-plan/SKILL.md)
 **Feature:** 0000474-coordinator-shell-guidance
 **Component:** ravintio-zero
-**File:** `docs/adr/0316-coordinator-task-scripts.md`
+**File:** `docs/adr/0317-coordinator-task-scripts.md`
 **Date:** 2026-11-11
 
 ## Context

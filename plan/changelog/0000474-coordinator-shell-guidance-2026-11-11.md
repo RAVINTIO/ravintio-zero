@@ -14,7 +14,7 @@
 - `scripts/bulk-edit.mjs {spec.json}` applies literal edits from a JSON spec file. `--dry-run` previews them.
 - The initiative skill points to the section and to the drain command.
 - Tests: `test-0000474-req-001-004-shell-section-and-guards.sh`, `test-0000474-req-002-queue-drain.sh`, and `test-0000474-req-003-bulk-edit.sh`.
-- ADR 0316 records the decision.
+- ADR 0317 records the decision.
 
 ## Why
 

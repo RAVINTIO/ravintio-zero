@@ -244,7 +244,7 @@ The coordinator session cuts the cost of a decision. It follows these rules at e
 ### Coordinator shell tasks
 
 <!-- rule: coord-shell-tasks -->
-Shell snags cost the coordinator time from 2026-11-08 to 2026-11-10 (0000474 ADR-0316). Write a script for any repeated or compound task. Create it with the Write tool, then run it with `bash {script}`. Name bash in the script's first line, because the host shell may be zsh.
+Shell snags cost the coordinator time from 2026-11-08 to 2026-11-10 (0000474 ADR-0317). Write a script for any repeated or compound task. Create it with the Write tool, then run it with `bash {script}`. Name bash in the script's first line, because the host shell may be zsh.
 
 These snags recur:
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Applies literal text edits listed in a JSON spec file (0000474 REQ-003, ADR-0316).
+// Applies literal text edits listed in a JSON spec file (0000474 REQ-003, ADR-0317).
 //
 // Usage: node bulk-edit.mjs <spec.json> [--root dir] [--dry-run]
 //   The spec is { "edits": [ { "file": "path", "from": "text", "to": "text" } ] }.
