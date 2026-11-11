@@ -2,7 +2,7 @@
 
 **Feature:** Driver favours the critical path
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** 185
 
 ## What changed
 
