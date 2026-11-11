@@ -421,7 +421,7 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 51 | 0000499-reply-times-match-clock | Reply times match the clock | 0000500 | minor |  | pending | skills | 46 |
 | 52 | 0000501-remove-merged-worktrees | Driver removes merged step worktrees | 0000502 | minor |  | pending | driver | 50 |
 | 53 | 0000503-planned-restart-exit-code | Planned restart exits with its own code | 0000504 | minor |  | pending | driver | 52 |
-| 54 | 0000505-coordinator-branch-regenerate | Coordinator branches regenerate shared files | 0000506 | minor |  | pending | queue | 42 |
+| 54 | 0000505-coordinator-branch-regenerate | Coordinator branches regenerate shared files | 0000506 | minor | 0.97.0 | merged | queue | 42 |
 | 55 | 0000507-hook-check-after-setup | Check every hook after setup | 0000508 | minor |  | pending | driver | 53 |
 | 56 | 0000509-clear-merged-ready-files | Driver clears ready files of merged steps | 0000510 | minor |  | pending | driver | 55 |
 | 57 | 0000511-driver-stop-summary | Driver prints a stop summary | 0000512 | minor |  | pending | driver | 56 |
@@ -471,3 +471,4 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 44 | #178 | tag v0.94.0 | 0.94.0 | 2026-11-11T02:46:32Z |
 | 42 | #177 | tag v0.95.0 | 0.95.0 | 2026-11-11T03:58:15Z |
 | 29 | #180 | tag v0.96.0 | 0.96.0 | 2026-11-11T04:33:24Z |
+| 54 | #181 | tag v0.97.0 | 0.97.0 | 2026-11-11T04:48:52Z |
