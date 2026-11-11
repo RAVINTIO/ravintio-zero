@@ -94,8 +94,13 @@ Run speed: standard (2026-11-11T06:55:05Z)
 - RED: U-3 REQ-001, REQ-004 (2026-11-11T07:32:23Z)
 - GREEN: U-3 REQ-001, REQ-004 (2026-11-11T07:32:23Z)
 - Done: U-3 REQ-001, REQ-004 (content, inline, none, 2026-11-11T07:32:23Z)
+- RED: U-4 docs (2026-11-11T07:32:23Z)
+- GREEN: U-4 docs (2026-11-11T07:32:23Z)
 - Done: U-4 docs (content, inline, none, 2026-11-11T07:32:23Z)
+- RED: U-5 sync (2026-11-11T07:32:23Z)
+- GREEN: U-5 sync (2026-11-11T07:32:23Z)
 - Done: U-5 sync (content, inline, none, 2026-11-11T07:32:23Z)
+- Decision applied (initiative chart): Local suite runs (4 shards, read every summary, known baseline reused)
 - Tests run: REQ-002: test-0000474-req-002-queue-drain.sh (2026-11-11T07:32:23Z)
 - Tests run: REQ-003: test-0000474-req-003-bulk-edit.sh (2026-11-11T07:32:23Z)
 - Tests run: REQ-001, REQ-004: test-0000474-req-001-004-shell-section-and-guards.sh (2026-11-11T07:32:23Z)
@@ -122,5 +127,41 @@ Run speed: standard (2026-11-11T06:55:05Z)
 - Docs edit pass: 1 cycle, 4 edits by a fresh-context subagent (sonnet), prose-check exit 0
 - OS gap: local macos, CI ubuntu, windows
 - Complete: P3 Validate and Accept (2026-11-11T07:34:21Z)
+
+---
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-11T07:34:21Z` |
+| End | `2026-11-11T07:42:45Z` |
+| Wall clock | `8` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Initiative step: steps 4, 5, and 8 run after green CI. The PR conflicted with the initiative branch, so the step merged the base, resolved shared files, and renumbered ADR 0316 to 0317. |
+
+- Queue items: none name step 41
+- CI duration: 315s (run 42980839117, 2026-11-11T07:42:45Z)
+- Complete: P4 Ship
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `49` |
+| Total agents spawned | `1` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `1` |
+| Primary tier agent calls | `1` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `2` |
+| Phases skipped | `none` |
 
 ---
