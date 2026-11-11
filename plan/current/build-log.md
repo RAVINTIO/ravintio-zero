@@ -62,3 +62,23 @@ Complete: P0 (2026-11-11T01:48:11Z)
 | Notes | Two requirements, one ADR (0310). Inline, because the units share one module. |
 
 Complete: P1 (2026-11-11T01:49:57Z)
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-11T01:50:11Z` |
+| End | `2026-11-11T01:53:38Z` |
+| Wall clock | `6` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Three units ran in order inline: the module, the queue call and standards, and the docs. Each unit depends on the one before. |
+
+- RED: U-1 (2026-11-11T01:50:11Z)
+- GREEN: U-1 (2026-11-11T01:53:38Z)
+- Tests run: REQ-001: src/ravintio-zero/tests/test-0000485-req-001-id-collisions.sh (2026-11-11T01:53:38Z)
+- Tests run: REQ-002: src/ravintio-zero/tests/test-0000485-req-002-queue-renumbers.sh, test-0000456-req-001-queue-resolves.sh, test-0000378-req-002-003-merge-queue.sh, test-0000464-req-001-002-queue-branches.sh (2026-11-11T01:53:38Z)
+- Deviation: test-0000464-req-001-002-queue-branches.sh copies id-collisions.mjs beside its stub queue, because the queue now imports it.

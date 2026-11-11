@@ -3,7 +3,7 @@
 > Change record. Index of all ADRs across all features. Updated after every pipeline run.
 > Do not archive this file. Update it in place.
 
-Last updated: 0000446-drain-ready-prs-after-a-stop
+Last updated: 0000485-adr-number-collision
 
 ---
 
@@ -328,3 +328,4 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 | [ADR-0307](adr/0307-steps-read-their-queue-items.md) | Steps read their queue items | accepted | The driver names the queue items that name a step, and a helper checks that each has a commit or report before the PR. | 0000444-step-reads-its-queue-items |
 | [ADR-0308](adr/0308-report-ci-duration-in-workflow-metrics.md) | Report CI duration in workflow metrics | accepted | Ship records each CI run's duration as a build log marker, and workflow-metrics.mjs compares the longest run with a 420-second threshold. | 0000472-ci-duration-metric |
 | [ADR-0309](adr/0309-drain-ready-prs-after-a-queue-failure.md) | Drain ready PRs after a queue failure | accepted | The driver keeps queueing other ready PRs after one queue failure, one attempt per step, and starts no new step. | 0000446-drain-ready-prs-after-a-stop |
+| [ADR-0310](adr/0310-renumber-colliding-ids-in-the-merge-queue.md) | Renumber colliding ids in the merge queue | proposed | After the base merge, the queue gives a PR's ADR or backlog entry the next free id when the base holds the same id, and commits the change. | 0000485-adr-number-collision |

@@ -139,7 +139,7 @@ make_world mismatch
 # A copy of the queue beside a version-files.mjs that leaves product.yml different after the set.
 mkdir -p "$WORK/stub/scripts"
 STUB="$(cd "$WORK/stub/scripts" && pwd -P)"
-cp "$SCRIPT_DIR/../scripts/merge-queue.mjs" "$SCRIPT_DIR/../scripts/shared-files.mjs" "$STUB/"
+cp "$SCRIPT_DIR/../scripts/merge-queue.mjs" "$SCRIPT_DIR/../scripts/shared-files.mjs" "$SCRIPT_DIR/../scripts/id-collisions.mjs" "$STUB/"
 REAL_URL="file://$(cd "$SCRIPT_DIR/../scripts" && pwd)/version-files.mjs"
 cat > "$STUB/version-files.mjs" <<STUBJS
 import { join } from "node:path";
