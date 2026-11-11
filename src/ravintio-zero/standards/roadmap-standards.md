@@ -460,7 +460,7 @@ A step that changes a chart format updates the active `initiative.md` in the sam
 
 1. Check the PR title.
 2. If an earlier failed run left a set-version commit on the PR branch and the base version has moved, revert it in one new commit. Merge the initiative branch into the PR branch and push, with no force. If the merge conflicts only on shared files, the queue resolves them (see Shared files below). Any other conflict stops the queue. The merge commit has the subject `{first 7 digits of Feature id}: Merge the initiative branch`, which the `commit-msg` hook accepts.
-3. Wait for CI with `gh pr checks {k} --watch --fail-fast`.
+3. Wait for CI with `gh pr checks {k} --watch --fail-fast`. While `gh pr checks` lists no check, the wait reads `mergeable`. It stops on `CONFLICTING`, and it stops if no check appears within `MQ_NOCHECKS_MS` ms (default 600000).
 4. Apply the row's `Bump` to the initiative branch version and write the result to every file in `version-files.txt`.
 5. Check that every version file holds the same version.
 6. Write the row's `Version` and the status `merged`, and add a row to the `## Merges` table. The `Merge commit` cell reads `tag v{version}`. Set `**Position:**` to the lowest step that has not merged.
@@ -526,6 +526,12 @@ Every message in this stage begins with `I-D Advance:` after the `P4 Ship:` pref
 
 3. Set the changelog `**PR:**` field to the PR number from the `gh pr create` output. Commit the change and push the branch. Never commit after the squash, because the squash carries the number onto the initiative branch.
 4. Wait for CI in two parts. The run is still open, so the step can edit code.
+   Before part 1, run `gh pr view {n} --json mergeable`. GitHub starts no workflow for a conflicting PR, so no check would ever appear (0000483, ADR-0311). If the value is `CONFLICTING`, merge `origin/initiative/{id}-{slug}` into the branch, resolve shared files with `shared-files.mjs`, push, and read again. `UNKNOWN` is transient, so read again after a few seconds. A conflict in any other file stops the step:
+
+   ```
+   I-D Advance: Blocked: PR #{n} conflicts with the initiative branch.
+   ```
+
    1. Poll `gh pr checks {n}` until it lists at least one check, for up to 2 minutes. Checks are always pending straight after `gh pr create`, so pending is not a stop. If none appears, push the branch, print the line below, and exit:
 
       ```
