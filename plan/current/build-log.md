@@ -26,8 +26,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-11T08:41:41Z` |
-| End | `{{timestamp, filled when the phase completes}}` |
-| Wall clock | `{{whole minutes from Start to End}}` |
+| End | `2026-11-11T08:42:30Z` |
+| Wall clock | `5` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | `0` |
@@ -42,6 +42,14 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Backlog pickup: 0000518-ship-removal-needs-human-approval pulled in, folder deleted, index regenerated.
 - Baseline: `clean-clone-test.mjs` started in the background at 2026-11-11T08:40:50Z, output in `/tmp/step58-baseline.txt`.
 - Decisions: none name step 58
+- Scope Lock (happy path): ship copies plan/current/ to the archive, runs git rm -r -q plan/current, and continues [source: draft-accepted (initiative)].
+- Scope Lock (first-run path): a step that never shipped reads the command from the skill text [source: draft-accepted (initiative)].
+- Scope Lock (error path): if the removal fails, the step prints Blocked with the exact error and stops [source: draft-accepted (initiative)].
+- Scope Lock (cross-session continuity): the archive copy exists before the removal, so a resumed session restores plan/current/ from it [source: draft-accepted (initiative)].
+- Scope Lock complete. All four scenario paths captured.
+- Design confirmed: draft-accepted (initiative) (2026-11-11T08:42:30Z)
+
+Complete: P0 (2026-11-11T08:42:30Z)
 
 ---
 
