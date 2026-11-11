@@ -36,5 +36,10 @@ Perform in order, before coaching begins:
 14. <!-- rule: p0-start-skills-inbox --> **Check the skills inbox**: process any `SKILL.md` in `ravintio-zero/skills-inbox/` per Capability Skills below. Repeat this check at every phase transition.
 15. <!-- rule: p0-start-baseline --> **Record baseline failures**: on the base commit, run `RAVINTIO_TEST_QUIET=1 bash ravintio-zero/tests/run-tests.sh` (or the stack's full suite command) in a clean clone, for example `node ravintio-zero/scripts/clean-clone-test.mjs`. Save its output. The suite can take many minutes, so start it in the background and keep going. Record the baseline before P3 starts. Run `node ravintio-zero/scripts/baseline-failures.mjs record {output}` to write `plan/current/baseline-failures.md`. Commit the file on its own. If the suite cannot run, write the file with `None.` and note the reason in the build log. P3 compares against this file.
 
+16. <!-- rule: p0-start-decisions --> **Apply the chart's Decisions rows** (an initiative step only): run `node ravintio-zero/scripts/decision-rows.mjs list --step {n}` at the start of P0, before the baseline run in step 15. The list expands ranges such as `25-41`. A row may change how the baseline or the suite runs, so apply each answer before you start that work.
+   - For each row, log `Decision applied (initiative chart): {fork}` in the build log, or `Decision not applicable (initiative chart): {fork}: {reason}` if the row does not fit the step.
+   - If no row names the step, log `Decisions: none name step {n}`.
+   - `build-log-check.mjs` fails a log that has neither line for an applicable row. Ship runs it.
+
 Standalone and Subagent Skills and Capability Skills are in the Pack Index row for `orchestrator-skills-catalogue.md`. Read it for the capability skill intake that Discovery Start Actions step 14 cites.
 
