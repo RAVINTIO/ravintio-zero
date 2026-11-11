@@ -8,7 +8,7 @@ status: "active"  # proposed | charted | active | delivered | blocked
 **Goal:** Close every open backlog entry except the four that need paid services. The first three steps make the driver run independent steps at once, each in its own worktree, with each version set as its step merges. Step 20 moves the pack source to `src/ravintio-zero/`. The last step, step 21, makes activation smoother for the human.
 **Branch:** initiative/0000360-backlog-sweep
 **Status:** active
-**Position:** 46
+**Position:** 47
 **Speed:** standard
 **Step CI fixes:** allowed
 **Concurrency:** 3
@@ -413,7 +413,7 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 43 | 0000483-mergeability-before-ci-wait | Check mergeability before a CI wait | 0000484 | minor | 0.93.0 | merged | ship | 30 |
 | 44 | 0000485-adr-number-collision | Parallel steps reserve distinct ids | 0000479 | minor | 0.94.0 | merged | adr | 22 |
 | 45 | 0000487-steps-apply-decision-rows | Steps apply the chart's Decisions rows | 0000488 | minor | 0.98.0 | merged | skills | 22 |
-| 46 | 0000489-question-only-for-questions | Steps use Question only for real questions | 0000490 | minor |  | pending | skills | 45 |
+| 46 | 0000489-question-only-for-questions | Steps use Question only for real questions | 0000490 | minor | 0.100.0 | merged | skills | 45 |
 | 47 | 0000491-driver-favours-critical-path | Driver favours the critical path | 0000492 | minor |  | pending | driver | 41 |
 | 48 | 0000493-driver-starts-after-restart | Driver keeps starting steps after a Restart | 0000494 | minor |  | pending | driver | 47 |
 | 49 | 0000495-driver-clears-dead-lock | Driver clears a dead lock | 0000496 | minor |  | pending | driver | 48 |
@@ -474,3 +474,4 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 54 | #181 | tag v0.97.0 | 0.97.0 | 2026-11-11T04:48:52Z |
 | 45 | #179 | tag v0.98.0 | 0.98.0 | 2026-11-11T07:03:07Z |
 | 41 | #182 | tag v0.99.0 | 0.99.0 | 2026-11-11T07:51:16Z |
+| 46 | #183 | tag v0.100.0 | 0.100.0 | 2026-11-11T08:25:33Z |
