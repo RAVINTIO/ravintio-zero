@@ -28,8 +28,8 @@ Run mode: autonomous (initiative step 48)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-11T20:14:30Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-11T20:16:52Z` |
+| Wall clock | `2` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | `0` |
@@ -51,6 +51,25 @@ Run mode: autonomous (initiative step 48)
 - Scope Lock (cross-session continuity): a dead supervisor pid makes the successor restart that step's session in its worktree [source: draft-accepted (initiative)]
 - Scope Lock complete. All four scenario paths captured.
 - Design confirmed: draft-accepted (initiative)
+- Baseline: clean-clone suite started in the background at P0 end. Output saved to `plan/current/baseline-failures.md` when it finishes.
+
+Complete: P0 (2026-11-11T20:16:52Z)
+
+---
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-11T20:16:52Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-orchestrator, ravintio-plan |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | none |
 
 ---
 
