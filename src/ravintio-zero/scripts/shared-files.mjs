@@ -11,7 +11,7 @@
 //   - A living doc keeps the PR branch's `Last updated:` line and the table rows that either side added.
 // Any other conflicted path, or a hunk the module cannot read, throws. The caller aborts the merge.
 //
-// regenerateSharedFiles({ root, subject }) runs after every base merge, clean or resolved (0000481, ADR-0310).
+// regenerateSharedFiles({ root, subject }) runs after every base merge, clean or resolved (0000481, ADR-0313).
 // It rebuilds the backlog index, raises each counter to the higher value of the merge parents, and commits any
 // change with `subject`. It returns the changed paths, or an empty list when it adds no commit.
 // Every git call takes an argument array. The module treats file text as data.
@@ -148,7 +148,7 @@ function textAt(root, rev, file) {
 }
 
 /**
- * Regenerate the shared files after a base merge, clean or resolved (0000481, ADR-0310).
+ * Regenerate the shared files after a base merge, clean or resolved (0000481, ADR-0313).
  * Rebuilds the backlog index and raises each counter to the higher value of the merge parents.
  * If any file changes, commits those files by path with `subject` and returns their paths.
  * Returns an empty list and adds no commit when every file is current.

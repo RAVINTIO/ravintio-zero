@@ -41,7 +41,7 @@
  *
  * After every base merge, clean or resolved, the queue rebuilds the backlog index and checks the two counters
  * with shared-files.mjs. If a file changes, it commits the change before the push and prints a
- * `regenerated:` line for each (feature 0000481, ADR-0310).
+ * `regenerated:` line for each (feature 0000481, ADR-0313).
  *
  * The chart `Merge commit` cell holds `tag v{version}`. The queue never commits
  * after the squash, so the sha lives in the tag and in the printed output.

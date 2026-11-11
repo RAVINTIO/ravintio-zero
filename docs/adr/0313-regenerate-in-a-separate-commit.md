@@ -5,12 +5,12 @@ status: "proposed"
 component: "ravintio-zero"
 version: "0.1.0"
 ---
-# ADR-0310 - Regenerate in a separate commit after every base merge
+# ADR-0313 - Regenerate in a separate commit after every base merge
 
 **Skill:** [plan](../../ravintio-zero/skills/ravintio-plan/SKILL.md)
 **Feature:** 0000481-regenerate-after-every-merge
 **Component:** ravintio-zero
-**File:** `docs/adr/0310-regenerate-in-a-separate-commit.md`
+**File:** `docs/adr/0313-regenerate-in-a-separate-commit.md`
 **Date:** 2026-11-11
 
 ## Context
