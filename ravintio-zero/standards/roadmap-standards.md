@@ -238,6 +238,7 @@ The coordinator session cuts the cost of a decision. It follows these rules at e
 - <!-- rule: coord-activate-command --> **Activate command.** `node ravintio-zero/scripts/initiative-activate.mjs --yes` runs the I-B Activate checks and cuts and pushes the initiative branch. It then lands the coordinator PR, waits for CI, and merges it. It ends by printing the driver and watcher commands. The coordinator starts both as background tasks. `--dry-run` prints the plan and changes nothing. A rerun after a stop resumes at the PR step.
 - <!-- rule: coord-add-step --> **Add-step helper.** `node ravintio-zero/scripts/initiative-add-step.mjs --title "{title}" --slug {slug}` reserves the ids, files the backlog entry, rebuilds the backlog index, and writes the new step's row in every chart table. Never edit the tables by hand to add a step.
 - <!-- rule: coord-plan-only-pr --> **Plan-only coordinator PR.** Before the full suite, run `node ravintio-zero/scripts/coordinator-pr-check.mjs {base}`. If it prints `plan-only`, the plan format checks have passed and the full suite need not rerun. If it prints `full-suite`, run the suite. Add `--base initiative/{id}-{slug}` to list open `feat/` PRs. The script prints `overlap: #{n} {path}` for each file that a step PR and the coordinator PR both change, and exits 1. It ignores the shared files that the queue resolves. If it exits 1, wait for that step PR to merge.
+- <!-- rule: coord-base-merge --> **Base merge command.** `node ravintio-zero/scripts/coordinator-merge.mjs --base origin/initiative/{id}-{slug}` merges the initiative branch into a coordinator branch. Run `git fetch` first and commit your changes. It resolves conflicts on the shared files that the queue resolves, then rebuilds `plan/backlog/index.md` and raises each counter to the higher parent value. It commits any change with the subject `{id}-{slug}: Regenerate shared files`. If a conflict touches any other file, it aborts the merge, names the file, and exits 1. It never pushes (0000505 ADR-0315).
 - <!-- rule: coord-startup-skill --> **Start-up skill.** A session that is not a step session loads the initiative skill when `plan/current-initiative/initiative.md` is `active` or a draft in `plan/roadmap/` is `charted`.
 
 ### I-B Activate
@@ -411,6 +412,17 @@ The driver writes the child's stdout and stderr to `plan/.initiative-logs/step-{
 - The driver refuses a symlink at `plan`, at `plan/.initiative-logs`, at the log file, or at an attempt path. It stops with `I-C Run: Blocked: refused a symlinked step log path`, releases the lock, and launches no `claude`.
 - Logs are private to the user. The driver creates the folder with mode 700 and each log with mode 600, and each attempt log keeps mode 600.
 - A log may hold file content the session read. Treat it as private.
+
+#### Status view and events
+
+`ravintio-zero/scripts/initiative-status.mjs` prints the run state in one view (0000450, ADR-0314). It reads the chart, `plan/.initiative-control/`, the lock, and the step logs. It writes no file.
+
+- The `Status` column of the chart decides which steps have merged. A merged step never shows as ready or running, whatever its control files hold.
+- The script prints the driver state, the counts of merged, ready, running, and pending steps, each ready PR, and each running step.
+- A live stop is an open `Blocked:` or `Question:` line in the build log of an unmerged step. A `queue stopped on step {n}` line in its step log also counts. A later `Resolved:` line or a merge clears it.
+- The watcher reads the same chart status. It prints `I-C Run: event: step {n} ready PR #{k}` once for a new `ready` file. It prints a queue stop line from a step log once. When the lock disappears and the initiative file remains, it prints `I-C Run: event: driver exited`.
+- The driver prints `I-D Advance: Blocked: queue stopped on step {n}` and the reason when the queue fails. It also appends the line to the step log.
+- The coordinator ends each report with `Decisions for you` and `Routine fixes made`, as the initiative skill describes.
 
 ## Merge carve-out
 

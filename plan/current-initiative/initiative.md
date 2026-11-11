@@ -8,7 +8,7 @@ status: "active"  # proposed | charted | active | delivered | blocked
 **Goal:** Close every open backlog entry except the four that need paid services. The first three steps make the driver run independent steps at once, each in its own worktree, with each version set as its step merges. Step 20 moves the pack source to `src/ravintio-zero/`. The last step, step 21, makes activation smoother for the human.
 **Branch:** initiative/0000360-backlog-sweep
 **Status:** active
-**Position:** 29
+**Position:** 41
 **Speed:** standard
 **Step CI fixes:** allowed
 **Concurrency:** 3
@@ -396,7 +396,7 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 26 | 0000444-step-reads-its-queue-items | Steps read their queue items | 0000425 | minor | 0.89.0 | merged | driver | 25 |
 | 27 | 0000446-drain-ready-prs-after-a-stop | Merge ready PRs after a stop | 0000426 | minor | 0.91.0 | merged | driver | 26 |
 | 28 | 0000448-driver-runs-approved-setup-command | Driver runs the approved setup command | 0000427 | minor | 0.92.0 | merged | driver | 27 |
-| 29 | 0000450-coordinator-status-view | Coordinator status view | 0000428 | minor |  | pending | driver | 28 |
+| 29 | 0000450-coordinator-status-view | Coordinator status view | 0000428 | minor | 0.96.0 | merged | driver | 28 |
 | 30 | 0000452-ci-wait-before-archive | Ship waits for CI before it archives | 0000412 | minor | 0.78.0 | merged | ship | 22 |
 | 31 | 0000454-queue-failure-recovery | Queue failure recovery | 0000429 | minor | 0.80.0 | merged | queue | 22 |
 | 32 | 0000456-regenerate-shared-files-at-merge | Regenerate shared files at merge | 0000430 | minor | 0.82.0 | merged | queue | 31 |
@@ -421,7 +421,7 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 51 | 0000499-reply-times-match-clock | Reply times match the clock | 0000500 | minor |  | pending | skills | 46 |
 | 52 | 0000501-remove-merged-worktrees | Driver removes merged step worktrees | 0000502 | minor |  | pending | driver | 50 |
 | 53 | 0000503-planned-restart-exit-code | Planned restart exits with its own code | 0000504 | minor |  | pending | driver | 52 |
-| 54 | 0000505-coordinator-branch-regenerate | Coordinator branches regenerate shared files | 0000506 | minor |  | pending | queue | 42 |
+| 54 | 0000505-coordinator-branch-regenerate | Coordinator branches regenerate shared files | 0000506 | minor | 0.97.0 | merged | queue | 42 |
 | 55 | 0000507-hook-check-after-setup | Check every hook after setup | 0000508 | minor |  | pending | driver | 53 |
 | 56 | 0000509-clear-merged-ready-files | Driver clears ready files of merged steps | 0000510 | minor |  | pending | driver | 55 |
 | 57 | 0000511-driver-stop-summary | Driver prints a stop summary | 0000512 | minor |  | pending | driver | 56 |
@@ -470,3 +470,5 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 43 | #176 | tag v0.93.0 | 0.93.0 | 2026-11-11T02:09:04Z |
 | 44 | #178 | tag v0.94.0 | 0.94.0 | 2026-11-11T02:46:32Z |
 | 42 | #177 | tag v0.95.0 | 0.95.0 | 2026-11-11T03:58:15Z |
+| 29 | #180 | tag v0.96.0 | 0.96.0 | 2026-11-11T04:33:24Z |
+| 54 | #181 | tag v0.97.0 | 0.97.0 | 2026-11-11T04:48:52Z |
