@@ -141,8 +141,11 @@ Complete: P3 (2026-11-11T09:45:16Z)
 | Parallel task batches | `0` |
 | Notes | Initiative step. The PR goes to the initiative branch, the step waits for CI, and the merge queue sets the version. |
 
+- Rework: clock-rule: the agent typed the P2 RED and GREEN times after the runs. That departs from the rule that every time comes from a clock read. The coordinator queue item real-times-step-51 asked for this line. The approximate times stay. Later times come from a clock read (2026-11-11T09:47:30Z)
+- Queue item real-times-step-51: instruction committed at plan/current/coordinator-instruction-real-times.md (2026-11-11T09:47:30Z)
 - Postmortem: plan/postmortems/2026-11-11-hook-change-missed-pinning-suites.md REQ-003 (2026-11-11T09:46:45Z)
 
+- Postmortem: plan/postmortems/2026-11-11-typed-marker-times.md (2026-11-11T09:48:15Z)
 Complete: P4 (2026-11-11T09:45:57Z)
 
 ---
