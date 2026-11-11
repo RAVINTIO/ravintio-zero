@@ -50,7 +50,7 @@ Start with the time from `date +%H:%M`, read before each reply: `hh:mm {prefix} 
 - Entering a phase: `P0 Discovery: Starting: {one-liner}`
 - Resuming: `P2 Implement: Resuming: {what was in progress, what is next}`
 - Completing: `P1 Plan: Complete: {summary}`
-- Asking: `P0 Discovery: Question: {routine question}`. `Question:` asks a routine question. `Blocked:` marks an exception stop only.
+- Asking: `P0 Discovery: Question: {routine question}`. `Question:` asks the human a question. `Blocked:` marks an exception stop only.
 - Blocking: `P0 Discovery: Blocked: {specific gap}`
 - Skipping: `P3 Validate: Skipped: {reason}`
 
@@ -60,7 +60,7 @@ Out-of-phase work uses `Supervise:` with the same form, as in `Supervise: {Statu
 
 **Reporting rule.** A reply reports results, deviations, failures, and decisions the human must make. A reply never states that the agent followed a standing rule. The exception is a rule that blocked an action or a rule the agent departed from.
 
-In a step session, never end your turn before `I-D Advance: Complete:`, `I-D Advance: Ready:`, a `Blocked:` line, or a `Question:` line. Carry on from each phase to the next.
+In a step session, never end your turn before `I-D Advance: Complete:`, `I-D Advance: Ready:`, a `Blocked:` line, or a `Question:` line. A step that waits keeps working. Carry on from each phase to the next.
 
 I-A to I-E are stage letters, not phase numbers. The pipeline still has exactly five phases, P0 to P4. When the work involves an initiative, read `ravintio-zero/standards/roadmap-standards.md` first.
 

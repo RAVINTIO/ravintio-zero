@@ -3,7 +3,7 @@
 > Change record. Index of all ADRs across all features. Updated after every pipeline run.
 > Do not archive this file. Update it in place.
 
-Last updated: 0000487-steps-apply-decision-rows
+Last updated: 0000489-question-only-for-questions
 
 ---
 
@@ -333,5 +333,7 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 | [ADR-0312](adr/0312-renumber-colliding-ids-in-the-merge-queue.md) | Renumber colliding ids in the merge queue | accepted | After the base merge, the queue gives a PR's ADR or backlog entry the next free id when the base holds the same id, and commits the change. | 0000485-adr-number-collision |
 | [ADR-0313](adr/0313-regenerate-in-a-separate-commit.md) | Regenerate in a separate commit after every base merge | accepted | The queue rebuilds the backlog index and checks both counters after every base merge, and commits any change in its own commit before the push. | 0000481-regenerate-after-every-merge |
 | [ADR-0316](adr/0316-check-decision-rows-in-the-build-log.md) | Check the Decisions rows in the build log | accepted | A module lists the Decisions rows for a step. The build-log-check fails a log that has no line for an applicable row. | 0000487-steps-apply-decision-rows |
+| [ADR-0318](adr/0318-question-asks-the-human.md) | Question asks the human something | accepted | A Question line asks the human a question and ends with a question mark. The reply Stop hook warns on one that does not. | 0000489-question-only-for-questions |
 | [ADR-0315](adr/0315-coordinator-merge-command.md) | A coordinator merge command | proposed | One script merges the initiative branch into a coordinator branch, resolves shared files, regenerates them, and aborts on any other conflict. | 0000505-coordinator-branch-regenerate |
+| [ADR-0317](adr/0317-coordinator-task-scripts.md) | Coordinator task scripts and a shell section | accepted | The coordinator writes scripts with the Write tool and runs them with bash. A drain subcommand and a bulk-edit script replace improvised shell. | 0000474-coordinator-shell-guidance |
 | [ADR-0314](adr/0314-coordinator-status-view-and-events.md) | Coordinator status view and event notices | accepted | A read-only status script, chart-based watcher state, and new watcher and driver events give the coordinator one true view of the run. | 0000450-coordinator-status-view |

@@ -241,6 +241,27 @@ The coordinator session cuts the cost of a decision. It follows these rules at e
 - <!-- rule: coord-base-merge --> **Base merge command.** `node ravintio-zero/scripts/coordinator-merge.mjs --base origin/initiative/{id}-{slug}` merges the initiative branch into a coordinator branch. Run `git fetch` first and commit your changes. It resolves conflicts on the shared files that the queue resolves, then rebuilds `plan/backlog/index.md` and raises each counter to the higher parent value. It commits any change with the subject `{id}-{slug}: Regenerate shared files`. If a conflict touches any other file, it aborts the merge, names the file, and exits 1. It never pushes (0000505 ADR-0315).
 - <!-- rule: coord-startup-skill --> **Start-up skill.** A session that is not a step session loads the initiative skill when `plan/current-initiative/initiative.md` is `active` or a draft in `plan/roadmap/` is `charted`.
 
+### Coordinator shell tasks
+
+<!-- rule: coord-shell-tasks -->
+Shell snags cost the coordinator time from 2026-11-08 to 2026-11-10 (0000474 ADR-0317). Write a script for any repeated or compound task. Create it with the Write tool, then run it with `bash {script}`. Name bash in the script's first line, because the host shell may be zsh.
+
+These snags recur:
+
+- zsh does not split `set -- $x`. Use bash, or read into an array.
+- zsh reads `$b:r` as a modifier. Write `${b}` with braces, or use `${b%.*}` in bash.
+- A JavaScript `replace` with `$'` or `$&` in the replacement text duplicates text. Use `bulk-edit.mjs`, which treats the replacement as plain text.
+
+Use these commands for repeated tasks:
+
+| Task | Command |
+|------|---------|
+| Drain the queue items of a merged step | `node ravintio-zero/scripts/initiative-queue.mjs drain --step {n}` |
+| Check open step PRs for overlap | `node ravintio-zero/scripts/coordinator-pr-check.mjs {base-commit} --base initiative/{id}-{slug}` |
+| Apply literal edits to many files | `node ravintio-zero/scripts/bulk-edit.mjs {spec.json}`. Write the spec with the Write tool. Add `--dry-run` to preview. |
+
+`merge-guard` and `block-forced-add` stay strict. They block variables and compound commands in the forms they guard. They also block quoted flags. Never ask to widen them. Put such a command in a script instead.
+
 ### I-B Activate
 
 Activate turns a charted initiative into a live branch. Run these checks first:
@@ -280,6 +301,7 @@ Run executes one initiative step. Concurrent steps are the normal flow: the driv
 - <!-- rule: icrun-p1-skip --> P1 runs unless the step's row in `## P1 skips` says `yes`. A step with no `yes` row that would skip P1 prints `I-C Run: Blocked: step {n} has no P1 skip row marked yes.` and stops. A missing table counts as an empty one.
 - <!-- rule: icrun-p1-skipped-log --> If a step skips P1 on a `yes` row, the build log holds `Skipped: P1 (chart row: step {n}, {reason})`.
 - <!-- rule: icrun-p0-stops --> P0 stops only when a backlog entry is too vague to draft a brief from. Print `Blocked:` with the entry and what is missing. The exception stops in Exception Stops still apply, including the credential stop.
+- <!-- rule: icrun-question-real --> A `Question:` line asks the human a question and ends with a question mark. A step that waits for its suites, CI, or a background task keeps working. A step session cannot schedule a wakeup, so it waits in the foreground or as a background task. The reply Stop hook warns on a `Question:` line with no question mark (0000489 ADR-0318).
 - <!-- rule: icrun-bump --> P0 applies the step's `Bump` (`major`, `minor`, or `patch`, default `minor`) to the initiative branch's version to plan with. That is the last known version from Discovery Start Actions step 8. P4 writes no version. The merge queue sets the released version at merge, in merge order. The initiative branch's version comes from `product.yml`, or from `docs/about.md` when `product.yml` is absent. The downgrade block still applies.
 
 All messages use the `I-C Run:` prefix.
