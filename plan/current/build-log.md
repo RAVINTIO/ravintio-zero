@@ -74,8 +74,8 @@ Complete: P1 (2026-11-11T08:44:16Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-11T08:44:36Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-11T09:45:35Z` |
+| Wall clock | `53` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | `0` |
@@ -90,3 +90,7 @@ Complete: P1 (2026-11-11T08:44:16Z)
 - Tests run: REQ-001: src/ravintio-zero/tests/test-0000491-req-001-chain-ranking.sh, test-0000379-req-001-chart-columns.sh, test-0000379-req-002-003-005-scheduler.sh, test-0000399-req-002-add-step.sh, test-0000438-req-001-full-feature-id.sh (2026-11-11T08:46:16Z)
 - Tests run: REQ-002: src/ravintio-zero/tests/test-0000491-req-001-chain-ranking.sh (2026-11-11T08:46:16Z)
 - Done: U-2 (content, inline, none, 2026-11-11T08:46:16Z)
+- Tests run: full suite: 428 passed, 4 failed (2026-11-11T09:45:35Z)
+- Baseline: 3 inherited failing suites, recorded in `plan/current/baseline-failures.md`. The fourth failure, `test-0000189-req-007-old-name-guard.sh`, passes in a fresh clean clone and locally, so it did not reproduce.
+
+Complete: P2 (2026-11-11T09:45:35Z)
