@@ -1,7 +1,7 @@
 ---
 title: "ADR 0321: Replies name actors by role"
 summary: "Replies name each actor by role, and the advisory reply hook flags I and you in a run reply."
-status: "proposed"
+status: "accepted"
 component: "ravintio-zero"
 feature: "0000521-replies-name-actors-by-role"
 version: "0.1.0"
