@@ -50,7 +50,7 @@ log_lines() { if [ -f "$1/$LOG_REL" ]; then wc -l < "$1/$LOG_REL" | tr -d ' '; e
 echo ""
 echo "=== req-001 AC-1: a time inside the margin passes ==="
 P=$(new_project)
-for T in 14:34 14:30 14:26 14:25 14:35; do
+for T in 14:32 14:30 14:28 14:29 14:31; do
   run_hook "$P" 14:30 "$T P2 Implement: Starting: x"
   assert_equals "0" "$CODE" "req-001 AC-1: $T against 14:30 exits 0"
   assert_equals "" "$OUT" "req-001 AC-1: $T against 14:30 prints nothing"
@@ -79,12 +79,12 @@ assert_equals "0" "$CODE" "req-001 AC-2: an unparsable clock exits 0"
 echo ""
 echo "=== req-001 AC-3: the check wraps at midnight ==="
 P=$(new_project)
-run_hook "$P" 00:02 "23:58 P2 Implement: Starting: x"
-assert_equals "" "$OUT" "req-001 AC-3: 23:58 against 00:02 passes"
-run_hook "$P" 23:58 "00:02 P2 Implement: Starting: x"
-assert_equals "" "$OUT" "req-001 AC-3: 00:02 against 23:58 passes"
-run_hook "$P" 00:02 "23:50 P2 Implement: Starting: x"
-assert_contains '"systemMessage"' "$OUT" "req-001 AC-3: 23:50 against 00:02 warns"
+run_hook "$P" 00:01 "23:59 P2 Implement: Starting: x"
+assert_equals "" "$OUT" "req-001 AC-3: 23:59 against 00:01 passes"
+run_hook "$P" 23:59 "00:01 P2 Implement: Starting: x"
+assert_equals "" "$OUT" "req-001 AC-3: 00:01 against 23:59 passes"
+run_hook "$P" 00:01 "23:50 P2 Implement: Starting: x"
+assert_contains '"systemMessage"' "$OUT" "req-001 AC-3: 23:50 against 00:01 warns"
 assert_equals "0" "$CODE" "req-001 AC-3: the hook exits 0"
 
 echo ""

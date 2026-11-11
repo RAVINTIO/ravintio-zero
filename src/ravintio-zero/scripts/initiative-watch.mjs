@@ -124,7 +124,10 @@ class Stop extends Error {}
 
 const cut = (text, max) => (text.length > max ? text.slice(0, max) : text);
 // Local time as hh:mm, 24-hour and zero padded. Every printed line starts with it (0000388).
+// RAVINTIO_REPLY_CLOCK (hh:mm) replaces the clock for tests (0000499).
 const clock = () => {
+  const given = /^([0-2][0-9]):([0-5][0-9])$/.exec(process.env.RAVINTIO_REPLY_CLOCK ?? '');
+  if (given) return `${given[1]}:${given[2]}`;
   const d = new Date();
   return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
 };
