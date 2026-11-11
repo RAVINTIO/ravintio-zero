@@ -126,6 +126,7 @@ Run mode: autonomous (2026-11-11T01:03:16Z, initiative step 42)
 - Rework: merged initiative/0000360-backlog-sweep after step 44 and kept renumberIds and regenerateAfterMerge in both merge-queue.mjs copies. Renumbered this step's ADR-0310 to ADR-0313. Added test-0000481-req-002-renumber-then-regenerate.sh. Full suite: 418 feature and 19 regression suites passed (2026-11-11T03:47:15Z)
 - Postmortem: plan/postmortems/2026-11-11-pr-conflicted-with-initiative-branch.md (2026-11-11T03:47:45Z)
 - Postmortem: plan/postmortems/2026-11-11-pr-conflicted-with-initiative-branch.md (2026-11-11T03:47:50Z)
+- Queue item rebase-step-42: acted on and archived with the run at plan/_archive/0000481-regenerate-after-every-merge-2026-11-11/coordinator-instruction-rebase.md
 - Complete: P4 Ship
 
 ---
