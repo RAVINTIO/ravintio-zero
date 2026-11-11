@@ -50,3 +50,19 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Design confirmed: draft-accepted (initiative) (2026-11-11T18:06:21Z)
 
 Complete: P0 (2026-11-11T18:06:21Z)
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-11T18:06:27Z` |
+| End | `2026-11-11T18:07:58Z` |
+| Wall clock | `2` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Three requirements, one ADR (0321). Inline, because the units touch shared files. |
+
+Complete: P1 (2026-11-11T18:07:58Z)
