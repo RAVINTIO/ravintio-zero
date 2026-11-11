@@ -72,8 +72,8 @@ Complete: P1 (2026-11-11T18:07:58Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-11T18:08:14Z` |
-| End | `{{pending}}` |
-| Wall clock | `{{pending}}` |
+| End | `2026-11-11T18:31:44Z` |
+| Wall clock | `23` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | `0` |
@@ -93,3 +93,7 @@ Complete: P1 (2026-11-11T18:07:58Z)
 - Tests run: REQ-001: test-0000521-req-001-003-actor-names.sh, test-0000200-req-001-002-reply-conventions.sh, test-0000151-req-011-orchestrator-references-split.sh (2026-11-11T18:10:54Z)
 - Tests run: REQ-002: test-0000521-req-002-actor-pronoun-hook.sh, test-0000390-req-005-advisory-reply-check.sh (2026-11-11T18:10:54Z)
 - Tests run: REQ-003: test-0000450-req-004-report-format.sh (2026-11-11T18:10:54Z)
+- Tests run: full suite: 438 passed, 1 failed (2026-11-11T18:31:44Z)
+- Baseline: 3 suites failed on the base commit. The full run failed only `test-0000450-req-004-report-format.sh`, which the base commit also fails. It reads `$ZERO_DIR/../..`, which is the repo root only from `src/ravintio-zero/`.
+
+Complete: P2 (2026-11-11T18:31:44Z)
