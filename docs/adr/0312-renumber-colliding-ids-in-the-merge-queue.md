@@ -1,7 +1,7 @@
 ---
 title: "ADR 312: Renumber colliding ids in the merge queue"
 summary: "After the base merge, the queue gives a PR's ADR or backlog entry the next free id when the base holds the same id, and commits the change."
-status: "proposed"
+status: "accepted"
 component: "ravintio-zero"
 version: "0.1.0"
 feature: "0000485-adr-number-collision"
