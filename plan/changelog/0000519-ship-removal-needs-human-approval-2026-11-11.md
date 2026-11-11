@@ -2,7 +2,7 @@
 
 **Feature:** Ship removal needs human approval
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** 187
 
 ## What changed
 
