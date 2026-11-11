@@ -28,3 +28,9 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Run speed: standard
 - Stale `plan/.feature-id` held `0000446-drain-ready-prs-after-a-stop` from the previous step. Rewritten to this step's id.
 - Migration 0009 stays pending: its migrator needs a y/n answer and a step session has no human.
+- Queue: `plan/.initiative-queue/` holds only `rebase-step-25`, which names another step. No item names step 43.
+- Backlog pickup: 0000484 pulled in, folder deleted, index regenerated.
+- Scope Lock Challenge: in scope, out of scope, deferred, and assumptions all taken from the charted step and backlog entry 0000484 [source: draft-accepted (initiative)].
+- Design confirmed: draft-accepted (initiative) (2026-11-11T01:04:03Z)
+
+Complete: P0 (2026-11-11T01:04:03Z)
