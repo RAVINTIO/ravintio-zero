@@ -1,17 +1,17 @@
 ---
-title: "ADR 310: Stop CI waits on a conflicting PR"
+title: "ADR 311: Stop CI waits on a conflicting PR"
 summary: "The merge queue reads mergeability while it waits for checks and stops on a conflict or when no check appears. A step reads it before its CI poll."
 status: "accepted"
 component: "ravintio-zero"
 version: "0.1.0"
 feature: "0000483-mergeability-before-ci-wait"
 ---
-# ADR-0310 - Stop CI waits on a conflicting PR
+# ADR-0311 - Stop CI waits on a conflicting PR
 
 **Skill:** [plan](../skills/ravintio-plan/SKILL.md)
 **Feature:** 0000483-mergeability-before-ci-wait
 **Component:** ravintio-zero
-**File:** `docs/adr/0310-stop-ci-waits-on-a-conflicting-pr.md`
+**File:** `docs/adr/0311-stop-ci-waits-on-a-conflicting-pr.md`
 **Date:** 2026-11-11
 
 ## Context

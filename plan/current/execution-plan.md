@@ -65,7 +65,7 @@ The plan read these files at the tip of `origin/initiative/0000360-backlog-sweep
 | `src/ravintio-zero/skills/ravintio-ship/SKILL.md` | e908187e | U-002 |
 | `src/ravintio-zero/tests/test-0000483-req-002-step-reads-mergeability.sh` | new | U-002 |
 | `docs/architecture-overview.md` | 6c66f4d5 | U-003 |
-| `docs/adr/0310-stop-ci-waits-on-a-conflicting-pr.md` | new | U-003 |
+| `docs/adr/0311-stop-ci-waits-on-a-conflicting-pr.md` | new | U-003 |
 
 ## Concurrency plan
 
@@ -73,7 +73,7 @@ The plan read these files at the tip of `origin/initiative/0000360-backlog-sweep
 |------|-----------|--------|-------|-------------------|------------------|
 | U-001 | none | `src/ravintio-zero/scripts/merge-queue.mjs`, `src/ravintio-zero/tests/test-0000483-req-001-queue-stops-on-conflict.sh` | 1 | none | none |
 | U-002 | none | `src/ravintio-zero/standards/roadmap-standards.md`, `src/ravintio-zero/skills/ravintio-ship/SKILL.md`, `src/ravintio-zero/tests/test-0000483-req-002-step-reads-mergeability.sh` | 1 | none | none |
-| U-003 | U-001, U-002 | `docs/architecture-overview.md`, `docs/adr/0310-stop-ci-waits-on-a-conflicting-pr.md` | 2 | Living docs unit. It records what U-001 and U-002 built | none |
+| U-003 | U-001, U-002 | `docs/architecture-overview.md`, `docs/adr/0311-stop-ci-waits-on-a-conflicting-pr.md` | 2 | Living docs unit. It records what U-001 and U-002 built | none |
 
 ## Assumptions
 

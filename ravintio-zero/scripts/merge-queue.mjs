@@ -25,7 +25,7 @@
  *
  * While no check is listed, the wait reads the PR's `mergeable` value. A `CONFLICTING` PR stops the queue with a
  * named error, because GitHub starts no workflow for it. With no check after MQ_NOCHECKS_MS ms (default 600000)
- * the wait also stops (feature 0000483, ADR-0310).
+ * the wait also stops (feature 0000483, ADR-0311).
  *
  * A failed run can leave a set-version commit on the PR branch. Before the base merge, a rerun reverts
  * such commits in one new commit when the base version has moved, so the merge has no conflict on the

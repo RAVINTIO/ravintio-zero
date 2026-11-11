@@ -23,4 +23,4 @@ Running the queue against a stub `gh` verified all five acceptance criteria. See
 
 ## Docs edit pass
 
-Changed docs: `docs/architecture-overview.md`, ADR 0310, and the changelog. One cycle, run inline. `prose-check.mjs` exits 0.
+Changed docs: `docs/architecture-overview.md`, ADR 0311, and the changelog. One cycle, run inline. `prose-check.mjs` exits 0.

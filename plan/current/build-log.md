@@ -123,7 +123,7 @@ Complete: P3 (2026-11-11T01:51:59Z)
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
-| Notes | Initiative step. No version bump, because the merge queue sets it. ADR 0310 set to accepted. |
+| Notes | Initiative step. No version bump, because the merge queue sets it. ADR 0311 set to accepted. |
 
 Complete: P4 (2026-11-11T01:52:08Z)
 
@@ -142,3 +142,4 @@ Complete: P4 (2026-11-11T01:52:08Z)
 | Cheaper tier agent calls | `0` |
 | Self-corrections | `0` |
 | Phases skipped | none |
+CI duration: 378s (run 42942228664, 2026-11-11T02:01:24Z)

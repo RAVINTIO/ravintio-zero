@@ -11,7 +11,7 @@
 - `roadmap-standards.md` tells a step to run `gh pr view {n} --json mergeable` before the first CI poll. The step merges the initiative branch into a conflicting PR.
 - The ship skill names the same read.
 - Two new suites, `test-0000483-req-001-queue-stops-on-conflict.sh` and `test-0000483-req-002-step-reads-mergeability.sh`.
-- ADR 0310 records the decision.
+- ADR 0311 records the decision.
 
 ## Why
 

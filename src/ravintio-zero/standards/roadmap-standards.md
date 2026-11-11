@@ -526,7 +526,7 @@ Every message in this stage begins with `I-D Advance:` after the `P4 Ship:` pref
 
 3. Set the changelog `**PR:**` field to the PR number from the `gh pr create` output. Commit the change and push the branch. Never commit after the squash, because the squash carries the number onto the initiative branch.
 4. Wait for CI in two parts. The run is still open, so the step can edit code.
-   Before part 1, run `gh pr view {n} --json mergeable`. GitHub starts no workflow for a conflicting PR, so no check would ever appear (0000483, ADR-0310). If the value is `CONFLICTING`, merge `origin/initiative/{id}-{slug}` into the branch, resolve shared files with `shared-files.mjs`, push, and read again. `UNKNOWN` is transient, so read again after a few seconds. A conflict in any other file stops the step:
+   Before part 1, run `gh pr view {n} --json mergeable`. GitHub starts no workflow for a conflicting PR, so no check would ever appear (0000483, ADR-0311). If the value is `CONFLICTING`, merge `origin/initiative/{id}-{slug}` into the branch, resolve shared files with `shared-files.mjs`, push, and read again. `UNKNOWN` is transient, so read again after a few seconds. A conflict in any other file stops the step:
 
    ```
    I-D Advance: Blocked: PR #{n} conflicts with the initiative branch.
