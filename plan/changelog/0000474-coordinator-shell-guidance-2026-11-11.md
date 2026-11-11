@@ -2,7 +2,7 @@
 
 **Feature:** Coordinator shell guidance
 **Version:** set by the merge queue at merge
-**PR:** raised at ship
+**PR:** #182
 
 ## What changed
 
