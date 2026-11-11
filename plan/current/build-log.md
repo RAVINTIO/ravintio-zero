@@ -67,6 +67,34 @@ Complete: P0 (2026-11-11T07:13:00Z)
 
 Complete: P1 (2026-11-11T07:14:23Z)
 
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-11T07:14:41Z` |
+| End | `2026-11-11T07:47:00Z` |
+| Wall clock | `32` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Two units ran inline. They share the Question wording. The full suite took about 30 minutes because another step shared the machine. |
+
+- RED: U-1 (2026-11-11T07:15:09Z)
+- RED: U-2 (2026-11-11T07:15:09Z)
+- GREEN: U-1 (2026-11-11T07:15:50Z)
+- GREEN: U-2 (2026-11-11T07:16:00Z)
+- Done: U-1 (content, inline, none, 2026-11-11T07:15:50Z)
+- Done: U-2 (content, inline, none, 2026-11-11T07:16:00Z)
+- Tests run: REQ-001: src/ravintio-zero/tests/test-0000489-req-001-question-wording.sh, test-0000358-req-001-question-status.sh (2026-11-11T07:15:50Z)
+- Tests run: REQ-002: src/ravintio-zero/tests/test-0000489-req-002-question-check.sh, test-0000468-req-001-clock-check.sh, test-0000200-req-003-stop-hook-warns-and-logs.sh (2026-11-11T07:16:00Z)
+- Tests run: full suite: 427 passed, 1 failed (2026-11-11T07:46:00Z)
+- Note: the GREEN times are approximate, written after the runs.
+- Baseline: 3 inherited failing suites, recorded in `plan/current/baseline-failures.md`. The one failure here, `test-0000450-req-004-report-format.sh`, also fails in the baseline.
+
+Complete: P2 (2026-11-11T07:47:00Z)
+
 ---
 
 ## Summary (filled at ship, P4)
