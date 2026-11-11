@@ -314,7 +314,7 @@ These events stop new starts:
 - a queue failure, printed as `I-D Advance: Blocked: queue stopped on step {n}`
 - a `Restart:` or `Setup:` hit after a merge
 
-The driver prints `I-C Run: Stopping:` and starts no new step. Running steps still reach ready or stop, and the queue still merges them unless the queue failed. Before it exits 1, the driver prints `I-C Run: Step {n}: {state}` for every step. The state is `pending`, `running`, `ready`, `merged`, or `stopped`. It then prints the first stop line with the log of the step that caused it. Worktrees and control folders of unmerged steps stay.
+The driver prints `I-C Run: Stopping:` and starts no new step. Running steps still reach ready or stop, and the queue still merges every other ready step, also after a queue failure. A failed step gets one attempt in a driver run, keeps its `ready` file, and reads `stopped` in the report. A new driver queues it again. Each failure prints its own `I-D Advance: Blocked: queue stopped on step {n}` line. Before it exits 1, the driver prints `I-C Run: Step {n}: {state}` for every step. The state is `pending`, `running`, `ready`, `merged`, or `stopped`. It then prints the first stop line with the log of the step that caused it. Worktrees and control folders of unmerged steps stay.
 
 ### Driver environment
 
