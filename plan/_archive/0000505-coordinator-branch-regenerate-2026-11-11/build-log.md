@@ -28,7 +28,7 @@ Run speed: standard (2026-11-11T04:06:29Z)
 |-------|-------|
 | Start | `2026-11-11T04:06:29Z` |
 | End | `2026-11-11T04:07:07Z` |
-| Wall clock | `4` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | `0` |
@@ -72,7 +72,7 @@ Run speed: standard (2026-11-11T04:06:29Z)
 |-------|-------|
 | Start | `2026-11-11T04:08:41Z` |
 | End | `2026-11-11T04:28:39Z` |
-| Wall clock | `40` |
+| Wall clock | `20` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | `0` |
@@ -118,12 +118,29 @@ Run speed: standard (2026-11-11T04:06:29Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-11T04:28:39Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-11T04:35:30Z` |
+| Wall clock | `7` |
 | Model tier | primary |
 | Skills loaded | ravintio-ship |
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
 | Notes | Initiative step: steps 4, 5, and 8 run after green CI. |
+- Queue items: none name step 54
+- Complete: P4 Ship
 
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `29` |
+| Total agents spawned | `0` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `0` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `1` |
+| Phases skipped | `none` |
