@@ -1,7 +1,7 @@
 ---
 title: "ADR 0319: Driver ranks startable steps by chain length"
 summary: "readySteps lists the startable steps with the longest chain behind them first, and chart order breaks ties."
-status: "proposed"
+status: "accepted"
 component: "ravintio-zero"
 version: "0.1.0"
 ---
