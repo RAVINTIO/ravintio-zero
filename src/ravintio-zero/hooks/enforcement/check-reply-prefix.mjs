@@ -16,7 +16,7 @@
  * prefix (feature 0000388, REQ-001). A time without a prefix is a miss.
  *
  * The hook compares that time with the local clock (feature 0000468, ADR-0305).
- * It takes the shorter way round the day. A difference over 5 minutes is a
+ * It takes the shorter way round the day. A difference over 2 minutes is a
  * miss. RAVINTIO_REPLY_CLOCK (hh:mm) replaces the clock and
  * RAVINTIO_REPLY_MARGIN_MIN replaces the margin. A value that does not parse
  * leaves the default.
@@ -30,10 +30,15 @@
  * and Supervise:. The phase name "Validate and Accept" is not valid.
  *
  * A prefix is followed by a status: Starting, Resuming, Complete, Question,
- * Blocked, or Skipped. Question asks the human a question. Blocked marks an
+ * Blocked, Skipped, Ready, or Restart. A word and colon after the prefix that
+ * is none of these draws a Status check warning and a "status:" line in the
+ * miss log (feature 0000499, ADR-0319). A prefix with no status is not checked. Question asks the human a question. Blocked marks an
  * exception stop. A Question line with no question mark draws a Question
  * check warning and a "question:" line in the miss log (feature 0000489,
- * ADR-0318). No other status is checked.
+ * ADR-0318). A word and colon after the prefix that is not Starting,
+ * Resuming, Complete, Question, Blocked, Skipped, Ready, or Restart draws a
+ * Status check warning and a "status:" line in the miss log (feature 0000499,
+ * ADR-0319). A prefix with no status is not checked.
  *
  * Receives: JSON on stdin (Claude Code Stop payload) with last_assistant_message
  * and transcript_path (a JSONL file). Transcript content may be a string or an
@@ -74,7 +79,8 @@ const VALID_PREFIXES = [
 const LOG_SNIPPET_LENGTH = 80;
 const QUOTE_LENGTH = 40;
 const TIME_RE = /^([0-2][0-9]):([0-5][0-9]) /;
-const DEFAULT_MARGIN_MIN = 5;
+const DEFAULT_MARGIN_MIN = 2;
+const VALID_STATUSES = ["Starting", "Resuming", "Complete", "Question", "Blocked", "Skipped", "Ready", "Restart"];
 const DAY_MIN = 24 * 60;
 const CLOCK_RE = /^([0-2][0-9]):([0-5][0-9])$/;
 
@@ -167,6 +173,14 @@ async function findFinalReply(transcriptPath) {
   return null;
 }
 
+// True when the line is a valid prefix followed by a word and colon outside the status list.
+function isUnknownStatus(lead) {
+  const prefix = VALID_PREFIXES.find((p) => lead.startsWith(p));
+  if (!prefix) return false;
+  const found = /^([A-Za-z]+):/.exec(lead.slice(prefix.length).trimStart());
+  return found !== null && !VALID_STATUSES.includes(found[1]);
+}
+
 // True when the line is a valid prefix with the Question status and no question mark.
 function isFalseQuestion(lead) {
   const prefix = VALID_PREFIXES.find((p) => lead.startsWith(p));
@@ -197,7 +211,8 @@ try {
   const prefixOk = VALID_PREFIXES.some((p) => lead.startsWith(p));
   const clock = prefixOk && timeMatch ? offClock(timeMatch) : null;
   const falseQuestion = prefixOk && clock === null && isFalseQuestion(lead);
-  if (prefixOk && clock === null && !falseQuestion) process.exit(0);
+  const badStatus = prefixOk && clock === null && !falseQuestion && isUnknownStatus(lead);
+  if (prefixOk && clock === null && !falseQuestion && !badStatus) process.exit(0);
 
   const snippet = reply.trim().replace(/\s+/g, " ").slice(0, LOG_SNIPPET_LENGTH);
   try {
@@ -211,7 +226,7 @@ try {
     }
     appendFileSync(
       join(cwd, "plan", ".prefix-misses.log"),
-      `${new Date().toISOString()} ${falseQuestion ? "question: " : ""}${snippet}\n`,
+      `${new Date().toISOString()} ${falseQuestion ? "question: " : ""}${badStatus ? "status: " : ""}${snippet}\n`,
     );
   } catch {
     // A log failure must not stop the warning.
@@ -220,7 +235,11 @@ try {
   // eslint-disable-next-line no-control-regex
   const quote = snippet.replace(/[\x00-\x1f\x7f]/g, " ").slice(0, QUOTE_LENGTH);
   const who = isStep ? "step session" : "this session";
-  const systemMessage = falseQuestion
+  const systemMessage = badStatus
+    ? `[RAVINTIO] Status check: the last reply in ${who} starts "${quote}" ` +
+      "and its status is not one of: " + VALID_STATUSES.join(", ") + ". This does not mean a run stopped. " +
+      "The miss is logged to plan/.prefix-misses.log."
+    : falseQuestion
     ? `[RAVINTIO] Question check: the last reply in ${who} starts "${quote}" ` +
       "and its Question: line holds no question mark. This does not mean a run stopped. " +
       "Use Question: only to ask the human something, and keep working while you wait on your own work. " +

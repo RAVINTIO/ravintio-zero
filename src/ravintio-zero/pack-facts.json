@@ -91,6 +91,14 @@
   ],
   "hooks": [
     {
+      "module": "clock-context",
+      "event": "PostToolUse",
+      "matcher": ".*",
+      "mode": "advisory",
+      "blocks": false,
+      "does": "Returns the local time as hh:mm in additionalContext after every tool call."
+    },
+    {
       "module": "block-forced-add",
       "event": "PreToolUse",
       "matcher": "Bash",

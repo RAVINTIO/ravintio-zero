@@ -31,6 +31,7 @@ const HOOK_FACTS = {
   "check-design": "Adds the confirmed design scope to the context of each prompt.",
   "check-reply-prefix": "Warns when a reply lacks the phase prefix.",
   "check-reply-writing": "Warns when a reply breaks the sentence-length or blocklist rule of the writing standard.",
+  "clock-context": "Returns the local time as hh:mm in additionalContext after every tool call.",
 };
 
 const GIT_HOOK_FACTS = {
