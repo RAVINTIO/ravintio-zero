@@ -12,6 +12,7 @@
 #   pair:M      waits up to 10 s for step M to start, notes the overlap, then writes ready
 #   afterdone:M waits up to 10 s for step M to write ready, then writes ready
 #   block       writes a Blocked: line to the step build log and exits 0
+#   blocklate:M waits up to 10 s for step M to start, then does what block does
 #   waitstop    waits up to 10 s for the driver's Stopping: line, then writes ready
 #   none        exits 0 with no ready file and no session id
 # It records its cwd, branch, and environment in $STUB_DIR/step-{n}.env.
@@ -60,6 +61,7 @@ case "$mode" in
   pair:*) wait_for "$d/${mode#pair:}.started" && touch "$d/$n.overlap"; ready ;;
   afterdone:*) wait_for "$d/${mode#afterdone:}.done"; ready ;;
   block) printf 'Blocked: step %s cannot go on\n' "$n" >> plan/current/build-log.md; exit 0 ;;
+  blocklate:*) wait_for "$d/${mode#blocklate:}.started"; printf 'Blocked: step %s cannot go on\n' "$n" >> plan/current/build-log.md; exit 0 ;;
   waitstop)
     for i in $(seq 100); do grep -q 'Stopping:' "$DRIVER_OUT" && break; sleep 0.1; done
     ready ;;

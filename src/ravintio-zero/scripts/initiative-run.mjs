@@ -133,6 +133,19 @@
 //     appends that line to the step log (0000450). The stop line at exit repeats it. A failed step gets one attempt,
 //     keeps its ready file, and reads stopped. A new driver queues it again. Before exit 1 the driver prints "I-C Run: Step {n}: {state}"
 //     for every step, then the first stop line with the log of the step that caused it.
+//   - Handoff (0000493, ADR-0323): a merge that changed a watched file and no setup file is a
+//     Restart-only hit. The driver fast-forwards the root to the merged ref and starts
+//     "node initiative-run.mjs --root {root} --handoff {pid}" detached, with its own output handles.
+//     It writes the successor pid into the lock, gives up the lock, and prints "I-D Advance:
+//     Restart: step {n} changed {files}. A new driver took over new starts." It then starts no step
+//     and runs no queue. It supervises its own sessions and exits 0 when they end. The successor
+//     checks that the lock holds its pid, then reads the control folders. A ready file queues the
+//     step. A running file that holds the old pid, while that pid lives, adopts the step: no second
+//     session starts and the step counts against the cap. If the old pid dies, the step restarts in
+//     its worktree. A handed-over step that blocks or fails gets a stopped file (one stop line, 500
+//     characters at most) that stops new starts in the successor. A driver without --handoff
+//     removes stale stopped files. A Setup hit, a failed spawn, and a failed fast-forward keep the
+//     stop line.
 //   - The driver refuses a symlink at plan, at either folder, or at a step entry in either. Worktrees
 //     and control folders of unmerged steps stay on every exit.
 
@@ -226,11 +239,13 @@ const out = (line) => writeSync(1, `${clock()} ${line}\n`);
 
 function parseArgs(argv) {
   let root = process.cwd();
+  let handoff = 0;
   for (let i = 0; i < argv.length; i++) {
     if (argv[i] === '--root' && argv[i + 1]) root = argv[++i];
+    else if (argv[i] === '--handoff' && /^[1-9][0-9]{0,9}$/.test(argv[i + 1] ?? '')) handoff = Number(argv[++i]);
     else throw new Stop(`I-C Run: Blocked: unknown argument "${argv[i].slice(0, 40)}"`);
   }
-  return resolve(root);
+  return { root: resolve(root), handoff };
 }
 
 // Reads "name: value" or "- **name:** value" lines. The body wins over the frontmatter,
@@ -638,7 +653,7 @@ for (const sig of ['SIGINT', 'SIGTERM', 'SIGHUP']) {
 process.on('exit', releaseLock);
 
 async function main() {
-  const root = parseArgs(process.argv.slice(2));
+  const { root, handoff } = parseArgs(process.argv.slice(2));
   const cfg = readChildConfig();
   let rm = readInitiative(root);
   if (rm.status !== 'active') throw new Stop(`I-C Run: Blocked: initiative status is ${rm.status}, not active`);
@@ -647,14 +662,21 @@ async function main() {
   const concurrent = usesScheduler(root, rm);
   const lock = join(root, LOCK);
   excludeLock(root, concurrent ? [`${WORKTREES}/`, `${CONTROL}/`] : []);
-  try {
-    writeFileSync(lock, `${process.pid}\n`, { flag: 'wx' });
-  } catch (e) {
-    if (e.code === 'EEXIST') throw new Stop(`I-C Run: Blocked: ${LOCK} exists, another driver may be running`);
-    throw e;
+  if (handoff) {
+    // The old driver wrote this process id into the lock and gave up the lock (0000493).
+    if (!concurrent) throw new Stop('I-C Run: Blocked: --handoff needs a chart with **Concurrency:**');
+    if (!(await lockHeldBy(lock, process.pid))) throw new Stop(`I-C Run: Blocked: ${LOCK} does not hold the handoff driver`);
+    lockPath = lock;
+  } else {
+    try {
+      writeFileSync(lock, `${process.pid}\n`, { flag: 'wx' });
+    } catch (e) {
+      if (e.code === 'EEXIST') throw new Stop(`I-C Run: Blocked: ${LOCK} exists, another driver may be running`);
+      throw e;
+    }
+    lockPath = lock;
   }
-  lockPath = lock;
-  if (concurrent) return schedule(root, cfg, rm);
+  if (concurrent) return schedule(root, cfg, rm, handoff);
 
   const ran = [];
   for (;;) {
@@ -1000,6 +1022,105 @@ function runQueue(n, pr, queueDir, fd) {
   });
 }
 
+// Brings the root to the target commit. The root must sit on the initiative branch. Returns true
+// when HEAD equals the target afterwards.
+function fastForwardRoot(root, branch, target) {
+  if (!target) return false;
+  const head = gitIn(root, ['rev-parse', 'HEAD']);
+  if (!ran0(head)) return false;
+  if (head.stdout.trim() === target) return true;
+  const current = gitIn(root, ['symbolic-ref', '--quiet', '--short', 'HEAD']);
+  if (!ran0(current) || current.stdout.trim() !== branch) return false;
+  return ran0(gitIn(root, ['merge', '--ff-only', '--quiet', target]));
+}
+
+// Handoff helpers (0000493, ADR-0323).
+const alive = (pid) => {
+  try {
+    process.kill(pid, 0);
+    return true;
+  } catch (e) {
+    return e.code === 'EPERM';
+  }
+};
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+// Waits up to 5 s for the lock file to hold the pid.
+async function lockHeldBy(lock, pid) {
+  for (let i = 0; i < 100; i++) {
+    try {
+      if (!isLink(lock) && readFileSync(lock, 'utf8').trim() === String(pid)) return true;
+    } catch {
+      // The old driver has not written it yet.
+    }
+    await sleep(50);
+  }
+  return false;
+}
+
+// Starts the successor with the driver's own output handles and returns its pid, or 0.
+// The argument list is fixed and no shell runs.
+function spawnSuccessor(root, parentPid) {
+  try {
+    const script = fileURLToPath(import.meta.url);
+    const child = spawn(process.execPath, [script, '--root', root, '--handoff', String(parentPid)], {
+      cwd: root,
+      detached: true,
+      stdio: ['ignore', 1, 2],
+      env: process.env,
+    });
+    child.on('error', () => {});
+    child.unref();
+    return child.pid || 0;
+  } catch {
+    return 0;
+  }
+}
+
+// Reads the pid in a step's running file, or 0.
+function runningPid(root, n) {
+  try {
+    const p = join(areaPath(root, CONTROL, `step-${n}`, controlRefusal), 'running');
+    if (isLink(p)) throw controlRefusal();
+    const v = readFileSync(p, 'utf8').trim();
+    return /^[1-9][0-9]{0,9}$/.test(v) ? Number(v) : 0;
+  } catch (e) {
+    if (e instanceof Stop) throw e;
+    return 0;
+  }
+}
+
+// Reads the first line of a step's stopped file as data, cut to MAX_LINE. Returns '' if none.
+function readStopped(root, n) {
+  try {
+    const p = join(areaPath(root, CONTROL, `step-${n}`, controlRefusal), 'stopped');
+    if (isLink(p)) throw controlRefusal();
+    return (readFileSync(p, 'utf8').split(/\r?\n/)[0] || '').slice(0, MAX_LINE);
+  } catch (e) {
+    if (e instanceof Stop) throw e;
+    return '';
+  }
+}
+
+function writeStopped(root, n, msg) {
+  try {
+    const p = join(controlDir(root, n), 'stopped');
+    if (isLink(p)) return;
+    writeFileSync(p, `${msg.split(/\r?\n/)[0].slice(0, MAX_LINE)}\n`, { mode: 0o600 });
+  } catch {
+    // The stop line still prints. The successor then misses it and waits for the step.
+  }
+}
+
+function clearStopped(root, n) {
+  try {
+    const p = join(areaPath(root, CONTROL, `step-${n}`, controlRefusal), 'stopped');
+    if (!isLink(p)) rmSync(p, { force: true });
+  } catch {
+    // Nothing to clear.
+  }
+}
+
 // Runs the approved setup command at a Setup: hit (0000448, ADR-0310). The command comes from the
 // setup Confirmation: row of the chart text, and setup-command.mjs accepts only the pack setup.sh
 // with flag words. The root must hold the merged ref first. If the root sits on the initiative branch
@@ -1008,13 +1129,7 @@ function runQueue(n, pr, queueDir, fd) {
 function approvedSetup(root, branch, chartText, target, n) {
   const cmd = findSetupCommand(chartText);
   if (!cmd || !target) return 'none';
-  const head = gitIn(root, ['rev-parse', 'HEAD']);
-  if (!ran0(head)) return 'none';
-  if (head.stdout.trim() !== target) {
-    const current = gitIn(root, ['symbolic-ref', '--quiet', '--short', 'HEAD']);
-    if (!ran0(current) || current.stdout.trim() !== branch) return 'none';
-    if (!ran0(gitIn(root, ['merge', '--ff-only', '--quiet', target]))) return 'none';
-  }
+  if (!fastForwardRoot(root, branch, target)) return 'none';
   const script = join(root, cmd.file);
   if (isLink(script) || !existsSync(script)) return 'none';
   const r = spawnSync('bash', [script, ...cmd.args], { cwd: root, stdio: ['ignore', 2, 2] });
@@ -1039,8 +1154,9 @@ function chartText(root, ref) {
   }
 }
 
-// Returns the Restart or Setup stop line for a merge that changed watched files, or ''.
-// The approved setup command runs first, and a clean run removes the Setup: part of the stop.
+// Returns { line, files, handoff } for a merge that changed watched files. The line is the Restart
+// or Setup stop line, or ''. The approved setup command runs first, and a clean run removes the
+// Setup: part of the stop. handoff is true for a Restart-only hit, which may hand over (0000493).
 function restartLine(root, n, before, after, branch) {
   const restart = changedWatched(root, before, after);
   const setup = changedSetup(root, before, after);
@@ -1049,15 +1165,16 @@ function restartLine(root, n, before, after, branch) {
     if (done !== 'ran') {
       const files = nameFiles([...restart, ...setup.filter((f) => !restart.includes(f))]);
       if (restart.length > 0) {
-        return `I-D Advance: Restart: Setup: step ${n} changed ${files}. ${setupNote(done)}Rerun setup, then start a new driver so the next step runs the new code.`;
+        return { line: `I-D Advance: Restart: Setup: step ${n} changed ${files}. ${setupNote(done)}Rerun setup, then start a new driver so the next step runs the new code.`, files, handoff: false };
       }
-      return `I-D Advance: Setup: step ${n} changed ${files}. ${setupNote(done)}Rerun setup, then start a new driver.`;
+      return { line: `I-D Advance: Setup: step ${n} changed ${files}. ${setupNote(done)}Rerun setup, then start a new driver.`, files, handoff: false };
     }
   }
   if (restart.length > 0) {
-    return `I-D Advance: Restart: step ${n} changed ${restart.join(', ')}. Start a new driver so the next step runs the new code.`;
+    const files = restart.join(', ');
+    return { line: `I-D Advance: Restart: step ${n} changed ${files}. Start a new driver so the next step runs the new code.`, files, handoff: true };
   }
-  return '';
+  return { line: '', files: '', handoff: false };
 }
 
 // Runs one step session in its worktree until the step writes ready. Applies the resume rule.
@@ -1113,7 +1230,7 @@ async function runScheduledStep(root, rec, cfg, rm) {
 // The scheduler. It starts ready steps up to the concurrency cap, each in its own worktree, and
 // merges ready steps through the merge queue one at a time. A stop ends new starts. Running steps
 // still reach ready or stop, and the queue still merges every ready step, also after a queue failure.
-async function schedule(root, cfg, rm) {
+async function schedule(root, cfg, rm, handoff = 0) {
   const { id, slug, branch } = rm;
   const merged = new Set();
   const mergeOrder = [];
@@ -1152,8 +1269,16 @@ async function schedule(root, cfg, rm) {
       readyOrder.push(s.step);
       out(`I-D Advance: Ready: step ${s.step} has PR #${c.ready} waiting for the queue`);
     } else if (c.running) {
-      rec.resume = true;
+      if (handoff && runningPid(root, s.step) === handoff && alive(handoff)) {
+        // The old driver still supervises this session. Track it and start no second one.
+        rec.state = 'running';
+        rec.adopted = true;
+        out(`I-C Run: Adopted: step ${s.step} runs under the old driver`);
+      } else {
+        rec.resume = true;
+      }
     }
+    if (!handoff) clearStopped(root, s.step);
   }
 
   const stop = { msg: '', log: null };
@@ -1165,6 +1290,7 @@ async function schedule(root, cfg, rm) {
   };
   let queueBusy = false;
   let lastMerge = null;
+  let handedOff = false;
 
   // Wakes the loop when a task ends. The flag keeps a wake that comes before the wait.
   let woken = false;
@@ -1177,16 +1303,54 @@ async function schedule(root, cfg, rm) {
       w();
     }
   };
-  const wait = async () => {
-    if (!woken) await new Promise((r) => { waiter = r; });
+  const wait = async (ms = 0) => {
+    if (!woken) {
+      await new Promise((r) => {
+        waiter = r;
+        if (ms > 0) {
+          setTimeout(() => {
+            if (waiter === r) {
+              waiter = null;
+              r();
+            }
+          }, ms);
+        }
+      });
+    }
     woken = false;
   };
+
+  // Tracks the steps that the old driver still runs. A ready file queues the step. A stopped file
+  // stops new starts. A dead supervisor turns the step into a session restart.
+  const pollAdopted = () => {
+    for (const rec of recs.values()) {
+      if (!rec.adopted || rec.state !== 'running') continue;
+      const c = readControl(root, rec.n, rec.featureId);
+      const stopped = readStopped(root, rec.n);
+      if (c.ready) {
+        rec.adopted = false;
+        rec.state = 'ready';
+        rec.pr = c.ready;
+        readyOrder.push(rec.n);
+        out(`I-D Advance: Ready: step ${rec.n} has PR #${c.ready} waiting for the queue`);
+      } else if (stopped) {
+        rec.adopted = false;
+        rec.state = 'stopped';
+        setStop(stopped, rec);
+      } else if (!alive(handoff)) {
+        rec.adopted = false;
+        rec.state = 'pending';
+        rec.resume = true;
+      }
+    }
+  };
+  const adopted = () => [...recs.values()].some((r) => r.adopted && r.state === 'running');
 
   const allMerged = () => chart.steps.every((s) => merged.has(s.step));
   const running = () => [...recs.values()].filter((r) => r.state === 'running').length;
 
   const startable = () => {
-    if (stop.msg) return [];
+    if (stop.msg || handedOff) return [];
     const free = chart.concurrency - running();
     if (free <= 0) return [];
     const states = new Map();
@@ -1207,14 +1371,43 @@ async function schedule(root, cfg, rm) {
     try {
       rec.pr = await runScheduledStep(root, rec, cfg, rm);
       rec.state = 'ready';
-      readyOrder.push(rec.n);
-      out(`I-D Advance: Ready: step ${rec.n} raised PR #${rec.pr}, waiting for the queue`);
+      // After a handoff the successor reads the ready file and runs the queue.
+      if (!handedOff) {
+        readyOrder.push(rec.n);
+        out(`I-D Advance: Ready: step ${rec.n} raised PR #${rec.pr}, waiting for the queue`);
+      }
     } catch (e) {
       rec.state = 'stopped';
-      setStop(e instanceof Stop ? e.message : `I-C Run: Blocked: driver error ${e.code || e.name}`, rec);
+      const msg = e instanceof Stop ? e.message : `I-C Run: Blocked: driver error ${e.code || e.name}`;
+      if (handedOff) writeStopped(root, rec.n, msg);
+      setStop(msg, rec);
     } finally {
       notify();
     }
+  };
+
+  // Hands new starts and the queue to a successor driver (0000493, ADR-0323). Returns false, with
+  // nothing changed, when the root cannot reach the merged ref or the successor does not start.
+  const handOver = (n, files, target) => {
+    if (!fastForwardRoot(root, branch, target)) return false;
+    const pid = spawnSuccessor(root, process.pid);
+    if (!pid) return false;
+    try {
+      writeFileSync(join(root, LOCK), `${pid}\n`);
+    } catch {
+      try {
+        process.kill(pid);
+      } catch {
+        // Already gone.
+      }
+      return false;
+    }
+    lockPath = null;
+    handedOff = true;
+    // The successor reads the ready files itself.
+    readyOrder.length = 0;
+    out(`I-D Advance: Restart: step ${n} changed ${files}. A new driver took over new starts.`);
+    return true;
   };
 
   const queueTask = async (rec) => {
@@ -1253,8 +1446,14 @@ async function schedule(root, cfg, rm) {
       lastMerge = { rec, before, after };
       // After the last merge the end runs the Setup check instead, as the serial path does.
       if (!allMerged()) {
-        const line = restartLine(root, n, before, after, branch);
-        if (line) setStop(line, rec);
+        const hit = restartLine(root, n, before, after, branch);
+        if (hit.line) {
+          if (hit.handoff && !stop.msg && !handedOff && handOver(n, hit.files, after)) {
+            rec.handedOver = true;
+          } else {
+            setStop(hit.line, rec);
+          }
+        }
       }
     } catch (e) {
       // One failed PR never holds back the other ready PRs (0000446). The failed step keeps its
@@ -1282,10 +1481,22 @@ async function schedule(root, cfg, rm) {
   };
 
   for (;;) {
+    if (handoff) pollAdopted();
     for (const rec of startable()) stepTask(rec);
-    if (!queueBusy && readyOrder.length > 0) queueTask(recs.get(readyOrder.shift()));
+    if (!queueBusy && !handedOff && readyOrder.length > 0) queueTask(recs.get(readyOrder.shift()));
     if (running() === 0 && !queueBusy && readyOrder.length === 0) break;
-    await wait();
+    await wait(adopted() ? 1000 : 0);
+  }
+
+  if (handedOff) {
+    // The successor holds the lock and runs everything else. This driver ends with its sessions.
+    if (stop.msg) {
+      currentLog = stop.log ? stop.log.rel : null;
+      earlierLogs = stop.log ? stop.log.earlier : [];
+      throw new Stop(stop.msg);
+    }
+    out('I-D Advance: Restart: the old driver has no sessions left and is done');
+    return;
   }
 
   const report = () => {
