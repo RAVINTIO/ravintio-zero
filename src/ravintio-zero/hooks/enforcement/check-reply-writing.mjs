@@ -3,7 +3,10 @@
  * Stop hook: advisory reply writing check (feature 0000390, REQ-005, ADR-0285).
  *
  * Checks the last reply for two rules of the writing standard: sentence-length
- * and blocklist. A breach prints a short note. The note never blocks a turn.
+ * and blocklist. A reply that opens with a run prefix also gets the rule
+ * actor-pronoun (feature 0000521, ADR-0321): it flags "I" and "you", because a
+ * run reply names each actor by role. A breach prints a short note. The note
+ * never blocks a turn.
  *
  * The reply is payload.last_assistant_message when it is a string with text.
  * Otherwise the hook reads the transcript once, with no retries, and takes the
@@ -24,12 +27,39 @@ import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
 import { readStdin } from "./read-stdin.mjs";
-import { checkText } from "./prose-rules.mjs";
+import { blocksOf, checkText, sentencesOf } from "./prose-rules.mjs";
 
 const MAX_CHARS = 20000;
 const MAX_SHOWN = 3;
 const QUOTE_LENGTH = 40;
 const RULES = new Set(["sentence-length", "blocklist"]);
+
+// A run reply opens with hh:mm and a run prefix. The tail "-" guard keeps the
+// "I" in a prefix such as "I-C" from counting as a pronoun.
+const RUN_REPLY_RE = /^\d{2}:\d{2} (?:P[0-4] |I-[A-E] |Supervise:)/;
+const PRONOUN_RE = /(?<![\w-])(?:I|[Yy]ou|[Yy]our|[Yy]ours|[Yy]ourself)(?![\w-])/g;
+
+// Finds "I" and "you" in a run reply. Code and lines that start with ">" are skipped.
+function pronounBreaches(reply) {
+  if (!RUN_REPLY_RE.test(reply.trimStart())) return [];
+  const text = reply
+    .split("\n")
+    .filter((line) => !/^\s*>/.test(line))
+    .join("\n");
+  const found = [];
+  for (const block of blocksOf(text, { frontMatter: false })) {
+    for (const sentence of sentencesOf(block)) {
+      for (const m of sentence.text.matchAll(PRONOUN_RE)) {
+        found.push({
+          rule: "actor-pronoun",
+          detail: `"${m[0]}", name the actor by role`,
+          sentence: sentence.text,
+        });
+      }
+    }
+  }
+  return found;
+}
 
 function textOf(content) {
   if (typeof content === "string") return content;
@@ -88,9 +118,11 @@ try {
   }
   if (reply === null) process.exit(0);
 
-  const breaches = checkText(reply.slice(0, MAX_CHARS), { frontMatter: false }).filter((b) =>
-    RULES.has(b.rule),
-  );
+  const checked = reply.slice(0, MAX_CHARS);
+  const breaches = [
+    ...checkText(checked, { frontMatter: false }).filter((b) => RULES.has(b.rule)),
+    ...pronounBreaches(checked),
+  ];
   if (breaches.length === 0) process.exit(0);
 
   const notes = breaches.slice(0, MAX_SHOWN).map((b) => {
