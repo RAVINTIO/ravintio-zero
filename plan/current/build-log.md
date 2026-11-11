@@ -62,10 +62,32 @@ Complete: P0 (2026-11-11T20:16:52Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-11T20:16:52Z` |
+| End | `2026-11-11T20:19:04Z` |
+| Wall clock | `2` |
+| Model tier | primary |
+| Skills loaded | ravintio-orchestrator, ravintio-plan |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | The agent wrote the artifacts inline. They cross-reference each other and are short, so subagent overhead outweighs the gain. |
+
+- Skips: P1 skip row for step 48 says `no`, so P1 ran in full.
+- Consistency check: clean. Human settings check: none.
+- ADR 0323 written with status `proposed`. Ship sets it to `accepted`.
+
+Complete: P1 (2026-11-11T20:19:04Z)
+
+---
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-11T20:19:04Z` |
 | End | `` |
 | Wall clock | `` |
 | Model tier | primary |
-| Skills loaded | ravintio-orchestrator, ravintio-plan |
+| Skills loaded | ravintio-orchestrator, ravintio-implement |
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
