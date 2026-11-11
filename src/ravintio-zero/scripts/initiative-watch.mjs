@@ -68,6 +68,22 @@
 //   file prints "I-C Run: heartbeat: step {n}, ready PR #{k}" instead. Commit events still print.
 //   With no control folder the output is unchanged.
 //
+//   Chart state (0000450 REQ-002): each pass reads the chart, which is the initiative file, with
+//   parseChart. A missing or malformed chart, or one with no "## Steps" table, yields no steps and
+//   never stops the watcher. A step with chart Status "merged" is never listed as ready or running
+//   and prints no ready heartbeat, whatever its control files hold.
+//
+//   Queue and driver events (0000450 REQ-002):
+//     - "I-C Run: event: step {n} ready PR #{k}" prints once for a new ready file of a step the
+//       chart does not mark merged. It prints "?" for k when the file is not a PR number. It works
+//       with no running file. Ready files that exist on the first pass count as already seen.
+//     - A raw line in a step log that starts, after an optional "hh:mm ", with
+//       "I-D Advance: Blocked: queue stopped on step {n}" prints once as "I-C Run: event: " and
+//       the line, cut to 200 characters. A merged step n prints nothing.
+//     - "I-C Run: event: driver exited" prints once when the lock file was present on an earlier
+//       pass and is gone while the initiative file remains.
+//   Every heartbeat ends with ", merged {m} of {total}" when the chart has steps.
+//
 //   Delivery: when the lock file and the initiative file are both gone, it prints one
 //   "I-E Delivery: ..." line and exits 0.
 //
@@ -85,6 +101,7 @@
 import { spawnSync } from 'node:child_process';
 import { closeSync, existsSync, lstatSync, openSync, readFileSync, readSync, readdirSync, statSync, writeSync } from 'node:fs';
 import { join, resolve } from 'node:path';
+import { parseChart } from './initiative-chart.mjs';
 
 const POLL_MS = 10000;
 const HEARTBEAT_MS = 300000;
@@ -222,7 +239,8 @@ function runningStep(root) {
 
 // Concurrent steps: [{ n, running, ready }] in step order, for each control folder step-{n} that
 // holds a running or ready file. Returns [] when no running file exists (0000379 REQ-006).
-function controlSteps(root) {
+// A step in the merged set is skipped, whatever its control files hold (0000450 REQ-002).
+function scanControl(root, merged) {
   refuseLinks(root, CONTROL);
   const dir = join(root, CONTROL);
   if (!existsSync(dir)) return [];
@@ -230,6 +248,7 @@ function controlSteps(root) {
   for (const name of readdirSync(dir)) {
     const m = name.match(/^step-(.+)$/);
     if (!m || !STEP_N.test(m[1])) continue;
+    if (merged.has(Number(m[1]))) continue;
     const rel = `${CONTROL}/${name}`;
     refuseLinks(root, rel);
     const running = existsSync(join(root, rel, 'running'));
@@ -242,8 +261,22 @@ function controlSteps(root) {
     }
     if (running || ready) steps.push({ n: Number(m[1]), running, ready });
   }
-  if (!steps.some((s) => s.running)) return [];
   return steps.sort((a, b) => a.n - b.n);
+}
+
+function controlSteps(root, merged = new Set()) {
+  const steps = scanControl(root, merged);
+  return steps.some((s) => s.running) ? steps : [];
+}
+
+// The chart steps, or [] when the chart is missing, malformed, or has no steps table.
+function chartSteps(text) {
+  if (text === null) return [];
+  try {
+    return parseChart(text).steps;
+  } catch {
+    return [];
+  }
 }
 
 function git(root, args) {
@@ -280,7 +313,7 @@ function ago(ms) {
 
 const stepStates = new Map();
 const newLogState = () => ({ logPath: null, logOffset: 0, logRest: '' });
-const state = { path: null, seen: 0, head: null, lastBeat: null, staleKey: null, logPath: null, logOffset: 0, logRest: '', waiting: false };
+const state = { readySeen: null, lockPrev: null, path: null, seen: 0, head: null, lastBeat: null, staleKey: null, logPath: null, logOffset: 0, logRest: '', waiting: false };
 
 // Collapses control characters and whitespace runs to one space.
 const oneLine = (text) => String(text).replace(/[\u0000-\u001f\u007f]+/g, ' ').replace(/\s+/g, ' ').trim();
@@ -315,7 +348,7 @@ function summarise(event) {
 }
 
 // Prints the activity lines for stream events added to the step log since the last pass.
-function activity(opts, rel, st = state, tag = '') {
+function activity(opts, rel, st = state, tag = '', merged = new Set()) {
   if (!existsSync(join(opts.root, rel))) return;
   refuseLinks(opts.root, rel);
   const file = join(opts.root, rel);
@@ -347,6 +380,8 @@ function activity(opts, rel, st = state, tag = '') {
     try {
       event = JSON.parse(l);
     } catch {
+      const b = l.trim().match(/^(?:[0-9]{2}:[0-9]{2}\s+)?I-D Advance: Blocked: queue stopped on step ([0-9]+)/);
+      if (b && !merged.has(Number(b[1]))) out(cut(`I-C Run: event: ${oneLine(l.trim())}`, MAX_ACTIVITY));
       continue;
     }
     for (const s of summarise(event)) out(cut(`I-C Run: activity: ${tag}${s}`, MAX_ACTIVITY));
@@ -369,7 +404,25 @@ function pass(opts) {
   // With no plan/current/build-log.md the step has not written one yet. The watcher still reads
   // the newest archived log for events, but it skips the stale check (0000354).
   const hasCurrentLog = existsSync(join(root, BUILD_LOG));
-  const steps = controlSteps(root);
+  const chart = chartSteps(initText);
+  const merged = new Set(chart.filter((c) => c.status === 'merged').map((c) => c.step));
+  const mergedBeat = chart.length > 0 ? `, merged ${merged.size} of ${chart.length}` : '';
+
+  // Ready events, tracked apart from running files. Ready files on the first pass count as seen.
+  const readyNow = scanControl(root, merged).filter((s) => s.ready);
+  if (state.readySeen === null) state.readySeen = new Set(readyNow.map((s) => s.n));
+  else {
+    for (const s of readyNow) {
+      if (!state.readySeen.has(s.n)) out(`I-C Run: event: step ${s.n} ready PR #${s.ready}`);
+    }
+    state.readySeen = new Set(readyNow.map((s) => s.n));
+  }
+
+  // Driver exit: the lock was present on an earlier pass and is gone while the initiative remains.
+  if (state.lockPrev === true && !lockHeld && initText !== null) out('I-C Run: event: driver exited');
+  state.lockPrev = lockHeld;
+
+  const steps = controlSteps(root, merged);
   const conc = steps.length > 0;
   if (!conc && !hasCurrentLog && !state.waiting) out('I-C Run: waiting for the build log');
   state.waiting = !conc && !hasCurrentLog;
@@ -416,13 +469,13 @@ function pass(opts) {
       if (e) out(`I-C Run: event: step ${s.n}: ${e}`);
     }
     st.seen = sl.length;
-    activity(opts, `${LOGS}/step-${s.n}.log`, st, `step ${s.n}: `);
+    activity(opts, `${LOGS}/step-${s.n}.log`, st, `step ${s.n}: `, merged);
   }
 
   // Step log activity.
   const position = initText === null ? '' : field(initText, 'position');
   const running = runningStep(root) || position;
-  if (!conc && /^[0-9]{1,4}$/.test(running)) activity(opts, `${LOGS}/step-${running}.log`);
+  if (!conc && /^[0-9]{1,4}$/.test(running)) activity(opts, `${LOGS}/step-${running}.log`, state, '', merged);
 
   // Commit events. A last-seen commit that is not an ancestor of HEAD means the branch changed.
   const head = git(root, ['rev-parse', 'HEAD']).trim();
@@ -455,7 +508,7 @@ function pass(opts) {
     if (conc) {
       for (const s of steps) {
         if (s.ready) {
-          out(`I-C Run: heartbeat: step ${s.n}, ready PR #${s.ready}`);
+          out(`I-C Run: heartbeat: step ${s.n}, ready PR #${s.ready}${mergedBeat}`);
           continue;
         }
         const { lines: sl, mtime: sm } = stepLines.get(s.n);
@@ -465,7 +518,7 @@ function pass(opts) {
           if (m) ph = m[1];
         }
         const lastLine = cut([...sl].reverse().find((l) => l.trim() !== '') ?? '', MAX_TAIL);
-        out(`I-C Run: heartbeat: step ${s.n}, phase ${ph}, last "${lastLine}", last change ${sm === null ? 'unknown' : ago(now - sm)} ago, lock ${lockHeld ? 'held' : 'free'}`);
+        out(`I-C Run: heartbeat: step ${s.n}, phase ${ph}, last "${lastLine}", last change ${sm === null ? 'unknown' : ago(now - sm)} ago, lock ${lockHeld ? 'held' : 'free'}${mergedBeat}`);
       }
       return false;
     }
@@ -477,7 +530,7 @@ function pass(opts) {
     }
     const last = cut([...lines].reverse().find((l) => l.trim() !== '') ?? '', MAX_TAIL);
     const since = mtime === null ? 'unknown' : ago(now - mtime);
-    out(`I-C Run: heartbeat: step ${step}, phase ${phase}, last "${last}", last change ${since} ago, lock ${lockHeld ? 'held' : 'free'}`);
+    out(`I-C Run: heartbeat: step ${step}, phase ${phase}, last "${last}", last change ${since} ago, lock ${lockHeld ? 'held' : 'free'}${mergedBeat}`);
   }
   return false;
 }
