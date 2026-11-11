@@ -2,7 +2,7 @@
 
 **Feature:** Driver keeps uncommitted entries from a worktree
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** 191
 
 ## What changed
 
