@@ -3,7 +3,7 @@
 > Change record. Index of all ADRs across all features. Updated after every pipeline run.
 > Do not archive this file. Update it in place.
 
-Last updated: 0000489-question-only-for-questions
+Last updated: 0000519-ship-removal-needs-human-approval
 
 ---
 

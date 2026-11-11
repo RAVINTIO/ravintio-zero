@@ -1,6 +1,6 @@
 # Architecture Overview
 
-Last updated: 0000489-question-only-for-questions
+Last updated: 0000519-ship-removal-needs-human-approval
 
 ## What this repo is
 
@@ -82,7 +82,7 @@ No mode merges a PR or commits to `main`. The human merges every PR.
 
 **Context size.** At each gate in a gated run, the orchestrator reports the context size. Past about 150,000 tokens, it recommends `/clear`.
 
-**Ship order.** P4 creates no tag. Step 8 reads the run mode, then clears the pipeline sentinels in a commit. Step 9 checks the PR body with `scripts/check-attribution.mjs`, pushes the branch, and raises the PR. Step 10 is the final gate. So the sentinels never reach `main` through the PR.
+**Ship order.** P4 creates no tag. Step 8 reads the run mode, then clears the pipeline sentinels in a commit. Step 9 checks the PR body with `scripts/check-attribution.mjs`, pushes the branch, and raises the PR. Step 10 is the final gate. So the sentinels never reach `main` through the PR. Step 4 removes `plan/current/` with `git rm -r -q plan/current` after the copy, because the Claude Code safety check refuses a plain recursive delete (0000519 ADR-0319). P2 writes docs before the full suite starts and changes no file while it runs.
 
 **Orchestrator references.** The orchestrator `SKILL.md` is 9,000 bytes or fewer. It keeps the Hard Limits, the prefix table, a short Resume Detection rule, and the Pack Index. Fifteen files under `skills/ravintio-orchestrator/references/` hold the sections that apply at one moment of a run. They cover adoption modes, discovery coaching, discovery records, mid-pipeline changes, run speed, scope lock, and session commands. They also cover the skills catalogue, resume detection, P0 coaching, the fresh P0 start, the P0 gate, phase invocation, exception stops, and context hygiene. Each moved section keeps its lines word for word. The initiative stage prefix block sits in `ravintio-zero/standards/roadmap-standards.md`. The Pack Index names one trigger for each file and one rule for template reads. A line-preservation test fails if a moved line is missing.
 
