@@ -1,5 +1,5 @@
 ---
-version: "0.91.0"
+version: "0.92.0"
 feature: "0000378-merge-time-versioning"
 updated: "7 Nov 2026"
 ---
@@ -10,7 +10,7 @@ updated: "7 Nov 2026"
 
 | Field | Value |
 |-------|-------|
-| Version | `0.91.0` |
+| Version | `0.92.0` |
 | Last feature | `0000378-merge-time-versioning` |
 | Updated | `7 Nov 2026` |
 
