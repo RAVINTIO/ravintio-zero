@@ -126,3 +126,37 @@ Complete: P2 (2026-11-11T09:17:39Z)
 - Security: 0 critical or high findings.
 
 Complete: P3 (2026-11-11T09:45:16Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-11T09:45:16Z` |
+| End | `2026-11-11T09:45:57Z` |
+| Wall clock | `0` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Initiative step. The PR goes to the initiative branch, the step waits for CI, and the merge queue sets the version. |
+
+- Postmortem: plan/postmortems/2026-11-11-hook-change-missed-pinning-suites.md REQ-003 (2026-11-11T09:46:45Z)
+
+Complete: P4 (2026-11-11T09:45:57Z)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `64` |
+| Total agents spawned | `1` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `1` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `1` |
+| Phases skipped | `none` |
