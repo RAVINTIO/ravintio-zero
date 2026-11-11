@@ -13,7 +13,7 @@ summary: "Results of the checks, the security review, and execution verification
 - An earlier sharded run on the working tree showed 438 passed and 1 failed. The failure is the inherited 0000450 suite, which reads the repo root from `src/ravintio-zero/` only.
 - `sync-installed.mjs --check`: exit 0. `consistency-check.mjs`: clean. `archetype-gates.mjs`: no gates installed.
 - The orchestrator skill holds 8,937 of 9,000 bytes. All skills total 1,685 of 1,720 lines.
-- Self-corrections: 2. The frozen-line and boot cap suites failed on the first text edit, and the agent reworked the edit.
+- Self-corrections: 0. The frozen-line and boot cap suites failed on the first text edit, before the unit reached GREEN. The agent reworked the edit inside the same attempt.
 
 ## Security
 

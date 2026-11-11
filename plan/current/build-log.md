@@ -27,7 +27,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 |-------|-------|
 | Start | `2026-11-11T18:05:24Z` |
 | End | `2026-11-11T18:06:21Z` |
-| Wall clock | `2` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | `0` |
@@ -79,7 +79,7 @@ Complete: P1 (2026-11-11T18:07:58Z)
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
-| Notes | Three units ran inline in one context. Batches: 2 (U-1 and U-2, then U-3). U-1 and U-2 share no file, but each is a small content edit, so no subagent paid off. |
+| Notes | Three units ran inline in one context. Batches: 2 (U-1 and U-2, then U-3). U-1 and U-2 share no file, but each is a small edit, so no subagent paid off. U-3 is the living docs unit and has no test. |
 
 - In progress: U-1 (2026-11-11T18:08:14Z)
 - RED: U-1 (2026-11-11T18:08:28Z)
@@ -89,7 +89,6 @@ Complete: P1 (2026-11-11T18:07:58Z)
 - RED: U-2 (2026-11-11T18:08:28Z)
 - GREEN: U-2 (2026-11-11T18:10:17Z)
 - Done: U-2 (code, inline, none, 2026-11-11T18:10:17Z)
-- Done: U-3 (content, inline, none, 2026-11-11T18:10:47Z)
 - Tests run: REQ-001: test-0000521-req-001-003-actor-names.sh, test-0000200-req-001-002-reply-conventions.sh, test-0000151-req-011-orchestrator-references-split.sh (2026-11-11T18:10:54Z)
 - Tests run: REQ-002: test-0000521-req-002-actor-pronoun-hook.sh, test-0000390-req-005-advisory-reply-check.sh (2026-11-11T18:10:54Z)
 - Tests run: REQ-003: test-0000450-req-004-report-format.sh (2026-11-11T18:10:54Z)
@@ -114,9 +113,38 @@ Complete: P2 (2026-11-11T18:31:44Z)
 
 - OS gap: local macos, CI ubuntu, windows
 - Tests run: full suite: 436 passed, 3 failed, all inherited (2026-11-11T18:53:35Z)
-- Rework: REQ-001: the frozen-line suite barred an edit to a base line of the orchestrator skill, so the edit moved to a new line (2026-11-11T18:09:50Z)
-- Rework: REQ-001: the boot template cap rose from 3800 to 4000 bytes for the new paragraph (2026-11-11T18:09:50Z)
 - Docs edit pass: 1 cycle, 2 files changed, prose-check exit 0
-- Postmortem: none, no Blocked stop and no escaped defect
 
 Complete: P3 (2026-11-11T18:53:55Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-11T18:54:20Z` |
+| End | `2026-11-11T18:54:24Z` |
+| Wall clock | `1` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Initiative step. The PR goes to the initiative branch, the step waits for CI, and the merge queue sets the version. |
+
+Complete: P4 (2026-11-11T18:54:24Z)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `50` |
+| Total agents spawned | `1` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `1` |
+| Primary tier agent calls | `1` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `0` |
+| Phases skipped | `none` |
