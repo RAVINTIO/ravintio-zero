@@ -133,6 +133,10 @@ Blocked: ship Step 4 needs to delete the contents of plan/current/ after the arc
 
 Resolved: the human approved the removal and the coordinator ran `git rm -rq plan/current` on 2026-11-11 (2026-11-11T06:53:52Z). Ship resumes at Step 4.
 
+Postmortem: plan/postmortems/2026-11-11-ship-removal-refused.md (2026-11-11T06:54:19Z)
+
+CI duration: 417s (run 42957194743, 2026-11-11T04:14:44Z)
+
 ---
 
 ## Summary (filled at ship, P4)
