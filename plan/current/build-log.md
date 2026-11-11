@@ -26,8 +26,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-11T23:55:14Z` |
-| End | `PENDING` |
-| Wall clock | `0` |
+| End | `2026-11-11T23:57:32Z` |
+| Wall clock | `4` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | `0` |
@@ -48,3 +48,24 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Scope Lock (error path): the driver keeps and reports a worktree with unsafe state [source: draft-accepted (initiative)]
 - Scope Lock (cross-session continuity): the sweep is stateless, so each driver start repeats it [source: draft-accepted (initiative)]
 - Design confirmation: draft-accepted (initiative)
+
+Complete: P0 (2026-11-11T23:57:32Z)
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-11T23:57:32Z` |
+| End | `2026-11-11T23:57:32Z` |
+| Wall clock | `0` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Four requirements, one ADR (0326). The units are small and share the driver file, so the agent runs them inline. |
+
+- Decisions: none name step 52
+- Audit: no requirement targets advisories or dependency versions
+
+Complete: P1 (2026-11-11T23:57:32Z)
