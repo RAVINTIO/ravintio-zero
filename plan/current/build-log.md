@@ -51,6 +51,22 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 
 Complete: P0 (2026-11-11T08:42:30Z)
 
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-11T08:42:55Z` |
+| End | `2026-11-11T08:43:46Z` |
+| Wall clock | `1` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Two requirements, one ADR (0319). Inline, because the units are small. |
+
+Complete: P1 (2026-11-11T08:43:46Z)
+
 ---
 
 ## Summary (filled at ship, P4)
