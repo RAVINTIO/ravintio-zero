@@ -1,7 +1,7 @@
 ---
 title: "ADR 0325: Driver keeps worktrees with untracked entries"
 summary: "Before the driver removes a step worktree, it lists untracked files under plan/backlog/. If any exist, or git cannot list them, it keeps the worktree and stops the queue for that step."
-status: "proposed"
+status: "accepted"
 component: "ravintio-zero"
 version: "0.1.0"
 ---
