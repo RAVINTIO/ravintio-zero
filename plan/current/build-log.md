@@ -92,11 +92,15 @@ Complete: P2 (2026-11-11T03:42:37Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-11T03:42:45Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-11T04:07:06Z` |
+| Wall clock | `25` |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
-| Notes | |
+| Notes | Clean clone showed the 2 inherited baseline failures only. One self-correction: control characters in status stop text. |
+Skipped: docs edit pass (prose-check clean, three short insertions)
+- Tests run: full suite: 417 passed, 2 failed, both inherited (2026-11-11T04:07:06Z)
+
+Complete: P3 (2026-11-11T04:07:06Z)
