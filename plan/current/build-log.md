@@ -131,6 +131,8 @@ Complete: P3 (2026-11-11T18:53:55Z)
 | Parallel task batches | `0` |
 | Notes | Initiative step. The PR goes to the initiative branch, the step waits for CI, and the merge queue sets the version. |
 
+CI duration: 343s (run 43082351391, 2026-11-11T19:01:44Z)
+
 Complete: P4 (2026-11-11T18:54:24Z)
 
 ---
