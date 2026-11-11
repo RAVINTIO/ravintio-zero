@@ -16,7 +16,7 @@ The run added a module that lists decision rows for a step. It also added a buil
 ## What helped
 
 - The clean-clone suite ran in the background while the agent wrote the reports (build log P3 notes).
-- The merge of the initiative branch kept the run current. The step renumbered its ADR to 0314 and no conflict stayed open (build log P4 deviation line).
+- The merge of the initiative branch kept the run current. The step renumbered its ADR to 0316 and no conflict stayed open (build log P4 deviation line).
 
 ## What slowed the work
 

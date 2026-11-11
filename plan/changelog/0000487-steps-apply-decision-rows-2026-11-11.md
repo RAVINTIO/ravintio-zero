@@ -11,7 +11,7 @@
 - The P0 start actions gain step 16 with rule anchor `p0-start-decisions`. A step lists its rows at the start of P0 and logs one line for each.
 - Rule `icrun-decision-row` in `roadmap-standards.md` names the lookup and the check.
 - Three new suites, `test-0000487-req-001-decision-rows.sh`, `test-0000487-req-002-check-decisions.sh`, and `test-0000487-req-003-p0-text.sh`, cover the module, the check, and the text.
-- ADR 0314 records the decision.
+- ADR 0316 records the decision.
 
 ## Why
 
@@ -19,7 +19,7 @@ Step 40 ignored the Decisions row for steps 25 to 41. It spent about 30 minutes 
 
 ## Deviations
 
-- The initiative branch took ADR 0313 during the run. This step's ADR is 0314.
+- The initiative branch took ADR 0313 during the run. This step's ADR is 0316.
 - P2 ran inline without subagents, because the units share one module.
 - The check requires a log line only. It does not judge whether the step applied the answer.
 
