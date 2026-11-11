@@ -18,7 +18,7 @@ On 2026-11-11 the human found "I" and "you" in replies subjective and confusing.
 
 ## Deviations
 
-- The orchestrator skill holds 8,937 bytes. The frozen-line test bars an edit to a base line. The change drops the examples sentence from the `Supervise:` line and adds one new line.
+- The orchestrator skill now holds 8,937 bytes. The frozen-line test bars an edit to a base line. The change drops the examples sentence from the `Supervise:` line and adds one new line.
 - The boot template cap in `test-0000151-req-011` rises from 3,800 to 4,000 bytes for the new paragraph.
 
 ## Validation results
