@@ -68,3 +68,36 @@ Complete: P0 (2026-11-11T08:42:29Z)
 - Consistency check: clean. Human settings check: none.
 
 Complete: P1 (2026-11-11T08:45:15Z)
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-11T08:45:15Z` |
+| End | `2026-11-11T08:50:23Z` |
+| Wall clock | `5` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Four units ran inline. They share the clock rule. The watcher already stamped every line (0000388), so U-4 added a test override and a pin only. |
+
+- RED: U-1 (2026-11-11T08:47:18Z)
+- RED: U-2 (2026-11-11T08:47:18Z)
+- RED: U-3 (2026-11-11T08:47:18Z)
+- RED: U-4 (2026-11-11T08:47:18Z)
+- GREEN: U-1 (2026-11-11T08:48:40Z)
+- GREEN: U-3 (2026-11-11T08:49:00Z)
+- GREEN: U-4 (2026-11-11T08:49:20Z)
+- GREEN: U-2 (2026-11-11T08:49:40Z)
+- Done: U-1 (code, inline, none, 2026-11-11T08:48:40Z)
+- Done: U-2 (content, inline, none, 2026-11-11T08:49:40Z)
+- Done: U-3 (code, inline, none, 2026-11-11T08:49:00Z)
+- Done: U-4 (code, inline, none, 2026-11-11T08:49:20Z)
+- Tests run: REQ-001: src/ravintio-zero/tests/test-0000499-req-001-clock-hook.sh (2026-11-11T08:48:40Z)
+- Tests run: REQ-002: src/ravintio-zero/tests/test-0000499-req-002-clock-rule-text.sh (2026-11-11T08:49:40Z)
+- Tests run: REQ-003: src/ravintio-zero/tests/test-0000499-req-003-tighter-reply-check.sh, test-0000468-req-001-clock-check.sh (2026-11-11T08:49:00Z)
+- Tests run: REQ-004: src/ravintio-zero/tests/test-0000499-req-004-stamped-activity-lines.sh (2026-11-11T08:49:20Z)
+- Rework: REQ-003: test-0000468-req-001-clock-check.sh pinned the 5 minute margin, so the margin cases moved to 2 minutes (2026-11-11T08:50:23Z)
+- Note: the GREEN times are approximate, written after the runs.

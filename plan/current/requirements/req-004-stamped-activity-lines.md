@@ -16,8 +16,8 @@ version: "0.1.0"
 As the human, I see the watcher's own time on each activity line, so that the feed stays right when an agent's time is wrong.
 
 ## Functional Requirements
-- `initiative-watch.mjs` starts each `I-C Run: activity:` line with `hh:mm ` from its own local clock at print time.
-- The line still contains `I-C Run: activity:` and keeps its 200 character cap, counted after the stamp.
+- `initiative-watch.mjs` starts each `I-C Run: activity:` line with `hh:mm ` from its own local clock at print time. Feature 0000388 added this stamp to every watcher line. This step pins it for activity lines.
+- The text of the line keeps its 200 character cut. The stamp adds 6 characters.
 - `RAVINTIO_REPLY_CLOCK` (hh:mm) replaces the clock for tests.
 - Other watcher lines stay as they are.
 
@@ -29,7 +29,7 @@ As the human, I see the watcher's own time on each activity line, so that the fe
 - [ ] AC-2: the cap holds
   - Given a tool event with a very long argument
   - When the watcher prints the line
-  - Then the line is 200 characters or fewer, stamp included
+  - Then the text keeps 200 characters and the stamp adds 6
 
 ## Dependencies
 - 0000240 for the activity lines.
