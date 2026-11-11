@@ -56,7 +56,7 @@ Complete: P0 (2026-11-11T22:01:04Z)
 |-------|-------|
 | Start | `2026-11-11T22:01:04Z` |
 | End | `2026-11-11T22:01:16Z` |
-| Wall clock | `3` |
+| Wall clock | `0` |
 | Model tier | primary |
 | Skills loaded | ravintio-plan |
 | Agents spawned | `0` |
@@ -78,17 +78,23 @@ Complete: P1 (2026-11-11T22:01:16Z)
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
-| Notes | Autonomous run. The units share one driver file, so the agent runs them inline. |
+| Notes | Autonomous run. The units share one driver file, so the agent runs them inline. The agent wrote the unit marker lines after the work, from one clock read. |
 
-- In progress: U1 tests (2026-11-11T22:03:42Z)
-- RED: U1 tests (2026-11-11T22:03:42Z)
-- GREEN: U2 driver (2026-11-11T22:03:42Z)
-- Done: U1 tests (content, inline, none, 2026-11-11T22:03:42Z)
-- Done: U2 driver (content, inline, none, 2026-11-11T22:03:42Z)
-- Done: U3 living docs (content, inline, none, 2026-11-11T22:03:42Z)
 - Tests run: REQ-001: test-0000495-req-001-002-dead-lock.sh (2026-11-11T22:03:42Z)
 - Tests run: REQ-002: test-0000495-req-001-002-dead-lock.sh, test-0000043-req-007-roadmap-driver.sh (2026-11-11T22:03:42Z)
 - Tests run: REQ-003: test-0000495-req-001-002-dead-lock.sh (2026-11-11T22:03:42Z)
+- In progress: U1 tests (2026-11-11T22:29:17Z)
+- RED: U1 tests (2026-11-11T22:29:17Z)
+- GREEN: U1 tests (2026-11-11T22:29:17Z)
+- Done: U1 tests (content, inline, none, 2026-11-11T22:29:17Z)
+- In progress: U2 driver (2026-11-11T22:29:17Z)
+- RED: U2 driver (2026-11-11T22:29:17Z)
+- GREEN: U2 driver (2026-11-11T22:29:17Z)
+- Done: U2 driver (content, inline, none, 2026-11-11T22:29:17Z)
+- In progress: U3 living docs (2026-11-11T22:29:17Z)
+- RED: U3 living docs (2026-11-11T22:29:17Z)
+- GREEN: U3 living docs (2026-11-11T22:29:17Z)
+- Done: U3 living docs (content, inline, none, 2026-11-11T22:29:17Z)
 - Tests run: full suite: 0 new failures, 3 inherited (2026-11-11T22:28:12Z)
 Complete: P2 (2026-11-11T22:28:12Z)
 
@@ -115,11 +121,29 @@ Complete: P3 (2026-11-11T22:29:07Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-11T22:29:07Z` |
-| End | |
-| Wall clock | |
+| End | `2026-11-11T22:29:22Z` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator, ravintio-ship |
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
 | Notes | none |
+
+Complete: P4 (2026-11-11T22:29:22Z)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `32` |
+| Total agents spawned | `0` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `0` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `0` |
+| Phases skipped | `none` |
