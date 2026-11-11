@@ -1,11 +1,11 @@
 ---
-title: "Backlog Entry: 0000523 - Old-name guard fails in the full suite"
+title: "Backlog Entry: 0000525 - Old-name guard fails in the full suite"
 summary: "test-0000189-req-007 fails in some full-suite runs and passes alone, and the hit it prints is on an allowlisted file."
 status: "open"
 priority: "medium"
 theme: "tests"
 ---
-# Backlog Entry: 0000523 - Old-name guard fails in the full suite
+# Backlog Entry: 0000525 - Old-name guard fails in the full suite
 
 **Source feature:** 0000491-driver-favours-critical-path
 **Source phase:** P3

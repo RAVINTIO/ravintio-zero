@@ -32,7 +32,7 @@ Inherited failures:
 - `test-0000037-req-004-remove-old-folder.sh`. The baseline already records it.
 - `test-0000318-req-004-merge-guard-pinned.sh`. The baseline already records it.
 - `test-0000450-req-004-report-format.sh`. The baseline already records it.
-- `test-0000189-req-007-old-name-guard.sh` failed once in the full run and passes alone. Backlog entry 0000523 records it.
+- `test-0000189-req-007-old-name-guard.sh` failed once in the full run and passes alone. Backlog entry 0000525 records it.
 
 ## Workflow governance
 

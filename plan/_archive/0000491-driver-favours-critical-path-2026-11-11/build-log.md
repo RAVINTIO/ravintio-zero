@@ -110,7 +110,7 @@ Complete: P2 (2026-11-11T09:45:35Z)
 | Notes | OS gap: local macos, CI ubuntu, windows |
 
 - Tests run: full suite: 428 passed, 4 failed (clean clone, 2026-11-11T09:47:25Z)
-- Baseline: 3 inherited suites, 1 flagged new. `test-0000189-req-007-old-name-guard.sh` passes alone and in a fresh clean clone. Filed as backlog entry 0000523.
+- Baseline: 3 inherited suites, 1 flagged new. `test-0000189-req-007-old-name-guard.sh` passes alone and in a fresh clean clone. Filed as backlog entry 0000525.
 - Docs edit pass: 1 cycle, 2 changes, prose-check exit 0.
 - Security: 0 critical or high findings.
 

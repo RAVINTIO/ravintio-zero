@@ -9,7 +9,7 @@ summary: "Results of the checks, the security review, and execution verification
 - New suite `test-0000491-req-001-chain-ranking.sh`: 10 of 10 pass. It passed 6 of 10 before the change.
 - Related suites `test-0000379-req-001-chart-columns.sh`, `test-0000379-req-002-003-005-scheduler.sh`, `test-0000399-req-002-add-step.sh`, and `test-0000438-req-001-full-feature-id.sh` pass.
 - Full suite in a clean clone: 428 feature suites passed and 4 failed. Regression suite: 19 passed.
-- The baseline already records three of the failures (`baseline-failures.md`). The fourth, `test-0000189-req-007-old-name-guard.sh`, passes alone locally and in a fresh clean clone. Backlog entry 0000523 records it.
+- The baseline already records three of the failures (`baseline-failures.md`). The fourth, `test-0000189-req-007-old-name-guard.sh`, passes alone locally and in a fresh clean clone. Backlog entry 0000525 records it.
 - `consistency-check.mjs`: clean. `archetype-gates.mjs`: no gates installed.
 - Self-corrections: 0.
 
