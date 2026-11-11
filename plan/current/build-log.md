@@ -62,8 +62,8 @@ Run mode: autonomous (2026-11-11T01:03:16Z, initiative step 42)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-11T01:17:32Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-11T01:54:20Z` |
+| Wall clock | `75` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | `0` |
@@ -77,3 +77,5 @@ Run mode: autonomous (2026-11-11T01:03:16Z, initiative step 42)
 - Done: U-1 REQ-001 (content, inline, none, 2026-11-11T01:17:32Z)
 - Done: U-2 docs (content, inline, none, 2026-11-11T01:17:32Z)
 - Tests run: REQ-001: test-0000481-req-001-regenerate.sh, test-0000481-req-001-queue-regenerates.sh, test-0000456-req-001-shared-files.sh, test-0000456-req-001-queue-resolves.sh, test-0000378-req-002-003-merge-queue.sh, test-0000464-req-001-002-queue-branches.sh (2026-11-11T01:17:32Z)
+- Tests run: full suite: 408 passed, 2 failed (2026-11-11T01:54:20Z)
+- Baseline: the two failing suites pass in the worktree at the base and at HEAD. They fail only in a clean clone, which no step 42 file touches. Recorded as inherited in plan/current/baseline-failures.md.
