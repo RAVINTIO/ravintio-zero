@@ -31,7 +31,7 @@ Status messages use one form: `{prefix} {Status}: {one-liner}`. The status is St
 - Entering a phase: `P1 Plan: Starting: {one-liner}`
 - Resuming: `P1 Plan: Resuming: {what was in progress, what is next}`
 - Completing: `P1 Plan: Complete: {one-liner summary}`
-- Question: `P0 Discovery: Question: {routine question}`. Use it for a routine question to the human.
+- Question: `P0 Discovery: Question: {routine question}`. It asks the human a question and ends with a question mark.
 - Blocked: `P0 Discovery: Blocked: {specific gap}`. Use it for an exception stop only.
 - Skipped: `P3 Validate: Skipped: {reason}`
 

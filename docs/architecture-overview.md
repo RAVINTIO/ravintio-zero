@@ -1,6 +1,6 @@
 # Architecture Overview
 
-Last updated: 0000487-steps-apply-decision-rows
+Last updated: 0000489-question-only-for-questions
 
 ## What this repo is
 
@@ -21,7 +21,7 @@ The repo runs its own pipeline on the installed `ravintio-zero/`. Git reads its 
 
 ## Pipeline
 
-The pipeline runs five phases, numbered P0 to P4. There is one route: every change is a feature change, and a small change is a small run. Each agent message starts with its phase prefix, then a status and a one-liner, as in `P1 Plan: Complete: 4 requirements, 2 ADRs`. The status is Starting, Resuming, Complete, Question, Blocked, or Skipped. `Question:` asks the human a routine question, and `Blocked:` marks an exception stop only.
+The pipeline runs five phases, numbered P0 to P4. There is one route: every change is a feature change, and a small change is a small run. Each agent message starts with its phase prefix, then a status and a one-liner, as in `P1 Plan: Complete: 4 requirements, 2 ADRs`. The status is Starting, Resuming, Complete, Question, Blocked, or Skipped. `Question:` asks the human a question and ends with a question mark, and `Blocked:` marks an exception stop only. A step that waits on its own work keeps working (0000489 ADR-0317).
 
 | Phase | Prefix | Owning skill |
 |-------|--------|--------------|
@@ -49,7 +49,7 @@ Migration findings come from the ledger `plan/state/migrations.md`, which sits o
 
 Each backlog entry carries `priority` (`high`, `medium`, or `low`) and `theme` in its frontmatter. A missing field reads as `medium` and `unsorted`. `scripts/backlog-index.mjs` writes `plan/backlog/index.md`, grouped by theme and ordered by priority. With `--check` it exits 1 when the committed index differs from a fresh run, and CI runs that check. With `--review` it lists entries older than `backlogReviewDays` in `product.yml` (default 5), counted from **Date filed**. Discovery Start Actions step 10 runs the review and offers entries in index order. Migration 0007 sets the defaults on existing entries.
 
-`check-reply-prefix.mjs` checks `last_assistant_message` from the Stop payload. If the field is absent, it reads the last assistant message that follows the last user prompt and holds no `tool_use` block. It rereads the transcript up to 4 times. If it finds no final reply, it stays silent. It compares a leading `hh:mm` with the local clock, taking the shorter way round the day. A difference over 5 minutes is a miss, as is a missing prefix. `RAVINTIO_REPLY_CLOCK` and `RAVINTIO_REPLY_MARGIN_MIN` override the clock and the margin. The hook still only warns (0000468 ADR-0305).
+`check-reply-prefix.mjs` checks `last_assistant_message` from the Stop payload. If the field is absent, it reads the last assistant message that follows the last user prompt and holds no `tool_use` block. It rereads the transcript up to 4 times. If it finds no final reply, it stays silent. It compares a leading `hh:mm` with the local clock, taking the shorter way round the day. A difference over 5 minutes is a miss, as is a missing prefix. `RAVINTIO_REPLY_CLOCK` and `RAVINTIO_REPLY_MARGIN_MIN` override the clock and the margin. The hook still only warns (0000468 ADR-0305). It also warns on a final reply whose `Question:` status line holds no question mark, and it logs a `question:` line (0000489 ADR-0317).
 
 ### Run modes
 
