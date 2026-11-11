@@ -64,6 +64,38 @@ Complete: P0 (2026-11-11T01:04:11Z)
 
 Complete: P1 (2026-11-11T01:06:00Z)
 
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-11T01:06:04Z` |
+| End | `2026-11-11T01:11:23Z` |
+| Wall clock | `5` |
+| Model tier | inline |
+| Skills loaded | ravintio-implement |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Inline, because three small units share one driver file. RED: 16, 18, and 6 checks failed in the three new suites. GREEN: 16 of 16, 29 of 29, and 7 of 7. The source in `src/ravintio-zero/` changed and `sync-installed.mjs` copied it to `ravintio-zero/`. |
+
+- In progress: U-001 REQ-001 setup command helper (2026-11-11T01:06:11Z)
+- RED: U-001 REQ-001 setup command helper (2026-11-11T01:06:26Z)
+- GREEN: U-001 REQ-001 setup command helper (2026-11-11T01:06:48Z)
+- Done: U-001 REQ-001 setup command helper (inline, inline, none, 2026-11-11T01:06:48Z)
+- In progress: U-002 REQ-002 driver runs the setup command (2026-11-11T01:06:48Z)
+- RED: U-002 REQ-002 driver runs the setup command (2026-11-11T01:07:52Z)
+- GREEN: U-002 REQ-002 driver runs the setup command (2026-11-11T01:10:27Z)
+- Done: U-002 REQ-002 driver runs the setup command (inline, inline, none, 2026-11-11T01:10:27Z)
+- In progress: U-003 REQ-003 standards and skill text (2026-11-11T01:10:27Z)
+- RED: U-003 REQ-003 standards and skill text (2026-11-11T01:10:34Z)
+- GREEN: U-003 REQ-003 standards and skill text (2026-11-11T01:11:12Z)
+- Done: U-003 REQ-003 standards and skill text (inline, inline, none, 2026-11-11T01:11:12Z)
+- Tests run: REQ-001: test-0000448-req-001-setup-command-helper.sh (2026-11-11T01:06:48Z)
+- Tests run: REQ-002: test-0000448-req-002-driver-runs-setup-command.sh, test-0000313-req-001, test-0000377-req-003, test-0000250-req-002, test-0000379-req-002-003-005, test-0000446-req-001 (2026-11-11T01:10:27Z)
+- Tests run: REQ-003: test-0000448-req-003-standards-and-skill-text.sh, test-0000313-req-002, test-0000313-req-003, test-0000205-req-004, test-0000384, test-0000043-req-009, test-0000468-req-002, test-0000205-req-007 (2026-11-11T01:11:12Z)
+
+Complete: P2 (2026-11-11T01:11:23Z)
+
 ---
 
 ## Summary (filled at ship, P4)

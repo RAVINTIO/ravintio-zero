@@ -70,6 +70,7 @@ responsibilities:
   - "Name the queue items that name a step in the initiative driver prompts, and fail ship with scripts/initiative-queue.mjs when a named item has no commit or report"
   - "Write and check the step ready file with scripts/initiative-ready.mjs, and recover a bad ready file in the initiative driver from the one open PR of the step branch"
   - "Stop the initiative driver with an I-D Advance: Setup: line after a merged step that changes installed pack files, so the initiative skill reruns setup before the next step"
+  - "Run the approved setup command from the Confirmation: row at a Setup: stop through setup-command.mjs, and stop only when the row is missing, the form differs, or the command fails"
   - "Merge one ready step PR at a time with merge-queue.mjs, which checks the PR title against the chart, sets the version from the step Bump in every file that version-files.txt lists, checks that the files agree, and tags the merge commit, so versions follow merge order"
   - "Reshape and check an initiative branch in merge order, and fold the admin commits that clear a replay conflict"
   - "Run up to the chart's Concurrency of initiative steps at once, each in its own worktree, and merge each ready step PR through merge-queue.mjs in ready order"
