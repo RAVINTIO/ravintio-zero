@@ -151,3 +151,5 @@ Complete: P4 (2026-11-11T09:48:03Z)
 Resolved: P4 Ship block, safety check refused removal of plan/current (2026-11-11T18:04:34Z, the human approved the removal and the coordinator ran git rm -rq plan/current)
 
 Blocked: merge of origin/initiative/0000360-backlog-sweep conflicts in 5 files and gate-write refuses the edits because plan/current/design.md is gone (2026-11-11T18:05:18Z)
+
+Resolved: P4 Ship block, merge of origin/initiative/0000360-backlog-sweep (2026-11-11T19:18:31Z, the coordinator merged with the queue helpers and pushed 17289d2f, ADR renumbered to 0322, backlog entry 0000523 moved to 0000527)
