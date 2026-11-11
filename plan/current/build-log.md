@@ -23,6 +23,18 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 
 ### P0: Discovery
 
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-11T01:03:17Z` |
+| End | `2026-11-11T01:04:03Z` |
+| Wall clock | `1` |
+| Model tier | primary |
+| Skills loaded | ravintio-orchestrator |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Initiative 0000360 step 43. Migration 0009 stays pending: its migrator needs a y/n answer and a step session has no human. |
+
 - Adoption mode: standard-iterative (signal: plan/_archive/ holds prior runs)
 - Run mode: autonomous (2026-11-11T01:03:17Z)
 - Run speed: standard
@@ -98,3 +110,35 @@ Complete: P2 (2026-11-11T01:08:35Z)
 - Skipped: docs edit pass subagent (changed docs are short, so the pass ran inline)
 
 Complete: P3 (2026-11-11T01:51:59Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-11T01:52:08Z` |
+| End | `2026-11-11T01:52:08Z` |
+| Wall clock | `1` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Initiative step. No version bump, because the merge queue sets it. ADR 0310 set to accepted. |
+
+Complete: P4 (2026-11-11T01:52:08Z)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `5` |
+| Total agents spawned | `0` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `0` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `0` |
+| Phases skipped | none |
