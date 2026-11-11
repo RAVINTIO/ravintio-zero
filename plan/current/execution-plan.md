@@ -65,7 +65,7 @@ flowchart LR
 | src/ravintio-zero/hooks/enforcement/check-reply-prefix.mjs | 83ffac21 local | U-2 |
 | docs/architecture-overview.md | 83ffac21 local | U-3 |
 | docs/decisions-index.md | 83ffac21 local | U-3 |
-| docs/adr/0317-question-asks-the-human.md | new | U-3 |
+| docs/adr/0318-question-asks-the-human.md | new | U-3 |
 
 ## Concurrency plan
 

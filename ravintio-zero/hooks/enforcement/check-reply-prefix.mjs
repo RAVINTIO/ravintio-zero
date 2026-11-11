@@ -33,7 +33,7 @@
  * Blocked, or Skipped. Question asks the human a question. Blocked marks an
  * exception stop. A Question line with no question mark draws a Question
  * check warning and a "question:" line in the miss log (feature 0000489,
- * ADR-0317). No other status is checked.
+ * ADR-0318). No other status is checked.
  *
  * Receives: JSON on stdin (Claude Code Stop payload) with last_assistant_message
  * and transcript_path (a JSONL file). Transcript content may be a string or an

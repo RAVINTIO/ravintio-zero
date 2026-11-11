@@ -5,12 +5,12 @@ status: "proposed"
 component: "ravintio-zero"
 version: "0.1.0"
 ---
-# ADR-0317 - Question asks the human something
+# ADR-0318 - Question asks the human something
 
 **Skill:** [plan](../skills/ravintio-plan/SKILL.md)
 **Feature:** 0000489-question-only-for-questions
 **Component:** ravintio-zero
-**File:** `docs/adr/0317-question-asks-the-human.md`
+**File:** `docs/adr/0318-question-asks-the-human.md`
 **Date:** 2026-11-11
 
 ## Context
