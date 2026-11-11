@@ -2,7 +2,7 @@
 
 **Feature:** Merge ready PRs after a stop
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** 173
 
 ## What changed
 
