@@ -26,8 +26,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-11T22:49:33Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-11T22:52:07Z` |
+| Wall clock | `3` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | `0` |
@@ -47,6 +47,24 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Scope Lock (error path): git cannot list the files, so the queue stops and keeps the worktree [source: draft-accepted (initiative)]
 - Scope Lock (cross-session continuity): the entry stays in the kept worktree until the step commits it or the human deals with it [source: draft-accepted (initiative)]
 - Design confirmation: draft-accepted (initiative)
+
+Complete: P0 (2026-11-11T22:52:07Z)
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-11T22:52:07Z` |
+| End | `2026-11-11T22:52:07Z` |
+| Wall clock | `0` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Three requirements, one ADR (0325). The units are small and share the driver file, so the agent runs them inline. |
+
+Complete: P1 (2026-11-11T22:52:07Z)
 
 ---
 
