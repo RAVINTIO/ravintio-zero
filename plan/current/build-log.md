@@ -93,6 +93,7 @@ Complete: P1 (2026-11-11T08:43:46Z)
 - Rework: REQ-001: the installed-copy check used a root that fails for the installed copy of the suite (2026-11-11T09:46:57Z)
 - Note: the GREEN times are approximate, written after the runs. The two failures were `test-0000450-req-004-report-format.sh`, which fails in the baseline, and the Rework suite, which passes after the fix.
 - Baseline: 3 inherited failing suites, recorded in `plan/current/baseline-failures.md`.
+- Postmortem: plan/postmortems/2026-11-11-installed-copy-check-used-wrong-root.md REQ-001 (2026-11-11T10:10:17Z)
 
 Complete: P2 (2026-11-11T09:46:57Z)
 
