@@ -56,9 +56,11 @@ Start with the time from `date +%H:%M`, read before each reply: `hh:mm {prefix} 
 
 Initiative stages use the prefixes I-A to I-E. Read `ravintio-zero/standards/roadmap-standards.md` for the list and examples.
 
-Out-of-phase work uses `Supervise:` with the same form, as in `Supervise: {Status}: {one-liner}`. Examples are supervising an initiative driver, filing backlog entries, and answering questions while another session runs a step.
+Out-of-phase work uses `Supervise:` with the same form, as in `Supervise: {Status}: {one-liner}`.
 
 **Reporting rule.** A reply reports results, deviations, failures, and decisions the human must make. A reply never states that the agent followed a standing rule. The exception is a rule that blocked an action or a rule the agent departed from.
+
+**Actor names.** A reply names each actor by role and never uses "I" or "you".
 
 In a step session, never end your turn before `I-D Advance: Complete:`, `I-D Advance: Ready:`, a `Blocked:` line, or a `Question:` line. A step that waits keeps working. Carry on from each phase to the next.
 
