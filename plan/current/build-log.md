@@ -27,8 +27,8 @@ Run speed: standard (2026-11-11T06:55:05Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-11T06:53:00Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-11T06:55:57Z` |
+| Wall clock | `3` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | `0` |
@@ -43,5 +43,8 @@ Run speed: standard (2026-11-11T06:55:05Z)
 - Stale `.feature-id` (0000505) replaced with this step's id
 - Scope Lock (all paths): light track skips the Scope Lock Challenge [source: draft-accepted (initiative)]
 - Backlog 0000437 pulled in
+- Design confirmed: draft-accepted (initiative)
+- Baseline: the two known clean-clone failures recorded without a base run (chart Decisions row 25-41)
+- Complete: P0 Discovery (2026-11-11T06:55:57Z)
 
 ---
