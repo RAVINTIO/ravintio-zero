@@ -79,3 +79,13 @@ Complete: P1 (2026-11-11T22:01:16Z)
 | MCP calls | `0` |
 | Parallel task batches | `0` |
 | Notes | Autonomous run. The units share one driver file, so the agent runs them inline. |
+
+- In progress: U1 tests (2026-11-11T22:03:42Z)
+- RED: U1 tests (2026-11-11T22:03:42Z)
+- GREEN: U2 driver (2026-11-11T22:03:42Z)
+- Done: U1 tests (content, inline, none, 2026-11-11T22:03:42Z)
+- Done: U2 driver (content, inline, none, 2026-11-11T22:03:42Z)
+- Done: U3 living docs (content, inline, none, 2026-11-11T22:03:42Z)
+- Tests run: REQ-001: test-0000495-req-001-002-dead-lock.sh (2026-11-11T22:03:42Z)
+- Tests run: REQ-002: test-0000495-req-001-002-dead-lock.sh, test-0000043-req-007-roadmap-driver.sh (2026-11-11T22:03:42Z)
+- Tests run: REQ-003: test-0000495-req-001-002-dead-lock.sh (2026-11-11T22:03:42Z)
