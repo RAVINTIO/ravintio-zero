@@ -258,9 +258,9 @@ Use these commands for repeated tasks:
 |------|---------|
 | Drain the queue items of a merged step | `node ravintio-zero/scripts/initiative-queue.mjs drain --step {n}` |
 | Check open step PRs for overlap | `node ravintio-zero/scripts/coordinator-pr-check.mjs {base-commit} --base initiative/{id}-{slug}` |
-| Apply literal edits to many files | `node ravintio-zero/scripts/bulk-edit.mjs {spec.json}`, with the spec written by the Write tool. Add `--dry-run` to preview. |
+| Apply literal edits to many files | `node ravintio-zero/scripts/bulk-edit.mjs {spec.json}`. Write the spec with the Write tool. Add `--dry-run` to preview. |
 
-`merge-guard` and `block-forced-add` stay strict. They block a variable, a compound command, or a quoted flag in the forms they guard. Never ask to widen them. Put such a command in a script instead.
+`merge-guard` and `block-forced-add` stay strict. They block variables and compound commands in the forms they guard. They also block quoted flags. Never ask to widen them. Put such a command in a script instead.
 
 ### I-B Activate
 

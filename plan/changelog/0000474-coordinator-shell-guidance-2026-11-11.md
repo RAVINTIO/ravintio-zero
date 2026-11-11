@@ -6,7 +6,10 @@
 
 ## What changed
 
-- `roadmap-standards.md` gains the section Coordinator shell tasks (rule `coord-shell-tasks`). It names bash and tells the coordinator to write scripts with the Write tool. It lists three snags. They are `set -- $x` in zsh, the `$b:r` modifier, and `$'` in a JavaScript `replace`.
+- `roadmap-standards.md` gains the section Coordinator shell tasks (rule `coord-shell-tasks`). It names bash and tells the coordinator to write scripts with the Write tool. It lists three snags:
+  - `set -- $x` in zsh.
+  - The `$b:r` modifier in zsh.
+  - `$'` in a JavaScript `replace`.
 - `scripts/initiative-queue.mjs drain --step {n}` removes the queue items of a merged step.
 - `scripts/bulk-edit.mjs {spec.json}` applies literal edits from a JSON spec file. `--dry-run` previews them.
 - The initiative skill points to the section and to the drain command.
