@@ -68,14 +68,14 @@ Complete: P1 (2026-11-11T02:59:59Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-11T02:59:59Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-11T03:42:37Z` |
+| Wall clock | `30` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
-| Agents spawned | `0` |
+| Agents spawned | `3` |
 | MCP calls | `0` |
-| Parallel task batches | `0` |
-| Notes | |
+| Parallel task batches | `1` |
+| Notes | Batch 1 ran U-1 to U-3 as parallel sonnet subagents. U-4 and U-5 ran inline. |
 
 - In progress: U-1 U-2 U-3 batch 1, parallel subagents on sonnet (2026-11-11T03:00:16Z)
 - Done: U-4 (content, inline, none, 2026-11-11T03:01:33Z)
@@ -83,3 +83,6 @@ Complete: P1 (2026-11-11T02:59:59Z)
 - Done: U-2 (code, sonnet, medium, 2026-11-11T03:04:21Z)
 - Done: U-3 (code, sonnet, medium, 2026-11-11T03:04:37Z)
 - Done: U-5 (content, inline, none, 2026-11-11T03:05:00Z)
+- Tests run: full suite: 419 passed, 0 failed (2026-11-11T03:42:37Z)
+
+Complete: P2 (2026-11-11T03:42:37Z)
