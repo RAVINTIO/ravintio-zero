@@ -22,7 +22,7 @@ Evidence: the human's request in the coordinator session, 2026-11-11.
 
 ## Suggested Action
 
-Replies, reports, and `Blocked:` lines name each actor by role. They use "the human" for a person and "the agent" for a model running a task, or a narrower role such as "the coordinator" or "step 45". Update the reply conventions in `CLAUDE.md`, the orchestrator skill, and `ravintio-zero/standards/roadmap-standards.md`. The reply writing hook flags "I" and "you" in a reply.
+Replies, reports, and `Blocked:` lines name each actor by role. They use "the human" for a person and "the agent" for a model running a task. A narrower role, such as "the coordinator" or "step 45", also works. Update the reply conventions in `CLAUDE.md`, the orchestrator skill, and `ravintio-zero/standards/roadmap-standards.md`. The reply writing hook flags "I" and "you" in a reply. The initiative skill heading `Decisions for you` becomes `Decisions for the human`.
 
 ## Why Deferred
 
