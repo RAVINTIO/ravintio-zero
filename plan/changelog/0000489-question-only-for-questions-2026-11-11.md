@@ -10,7 +10,7 @@
 - The orchestrator `SKILL.md` and `pipeline-reference.md` describe `Question:` the same way.
 - `check-reply-prefix.mjs` warns on a final reply whose `Question:` status line has no question mark. It logs a `question:` line to `plan/.prefix-misses.log` and still exits 0.
 - Two new suites, `test-0000489-req-001-question-wording.sh` and `test-0000489-req-002-question-check.sh`, cover the text and the hook.
-- ADR 0317 records the decision.
+- ADR 0318 records the decision.
 
 ## Why
 

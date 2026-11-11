@@ -1,5 +1,5 @@
 ---
-title: "ADR 0317: Question asks the human something"
+title: "ADR 0318: Question asks the human something"
 summary: "A Question line asks the human a question and ends with a question mark. The Stop hook warns on one that does not."
 status: "proposed"
 component: "ravintio-zero"
