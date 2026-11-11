@@ -116,18 +116,34 @@ Complete: P2 (2026-11-11T01:11:23Z)
 
 Complete: P3 (2026-11-11T01:28:54Z)
 
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-11T01:29:17Z` |
+| End | `2026-11-11T01:29:35Z` |
+| Wall clock | `1` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Initiative step. No version bump, because the merge queue sets it. ADR 0310 set to accepted. The archive, build report, and sentinel clearing follow green CI in the closing push. |
+
+Complete: P4 (2026-11-11T01:29:35Z)
+
 ---
 
 ## Summary (filled at ship, P4)
 
 | Metric | Value |
 |--------|-------|
-| Total phases completed | `` |
-| Total wall clock | `` |
-| Total agents spawned | `` |
-| Total MCP calls | `` |
-| Phases using parallelism | `` |
-| Primary tier agent calls | `` |
-| Cheaper tier agent calls | `` |
-| Self-corrections | `` |
-| Phases skipped | `` |
+| Total phases completed | `5` |
+| Total wall clock | `27` |
+| Total agents spawned | `0` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `1` |
+| Primary tier agent calls | `0` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `0` |
+| Phases skipped | none |

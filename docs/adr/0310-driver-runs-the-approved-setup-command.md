@@ -1,7 +1,7 @@
 ---
 title: "ADR 310: Driver runs the approved setup command"
 summary: "The driver runs the setup command from the Confirmation row at a Setup stop, with a strict command form and no shell."
-status: "proposed"
+status: "accepted"
 component: "ravintio-zero"
 version: "0.1.0"
 feature: "0000448-driver-runs-approved-setup-command"
