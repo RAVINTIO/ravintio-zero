@@ -2,7 +2,7 @@
 
 **Feature:** Coordinator branches regenerate shared files
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** #181
 
 ## What changed
 
