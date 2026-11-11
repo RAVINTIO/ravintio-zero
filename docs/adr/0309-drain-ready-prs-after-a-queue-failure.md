@@ -1,7 +1,7 @@
 ---
 title: "ADR 309: Drain ready PRs after a queue failure"
 summary: "The driver keeps queueing ready PRs after one queue failure, one attempt per step, and still starts no new step."
-status: "proposed"
+status: "accepted"
 component: "ravintio-zero"
 version: "0.1.0"
 feature: "0000446-drain-ready-prs-after-a-stop"

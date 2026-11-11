@@ -76,12 +76,18 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Parallel task batches | 0 |
 | Notes | Inline. Both units are small and the code unit edits one function. No batch departure. |
 
-- Done: U-001 (content, inline, none, 2026-11-10T23:26:32Z)
-- RED: U-001 (2026-11-10T23:26:32Z)
-- GREEN: U-001 (2026-11-10T23:26:32Z)
-- Done: U-002 (content, inline, none, 2026-11-10T23:26:32Z)
-- Done: U-003 (content, inline, none, 2026-11-10T23:26:32Z)
-- Done: U-004 (content, inline, none, 2026-11-10T23:26:32Z)
+- RED: U-001 (2026-11-10T23:24:32Z)
+- GREEN: U-001 (2026-11-10T23:26:13Z)
+- Done: U-001 (content, inline, none, 2026-11-10T23:26:13Z)
+- RED: U-002 (2026-11-10T23:24:32Z)
+- GREEN: U-002 (2026-11-10T23:26:13Z)
+- Done: U-002 (content, inline, none, 2026-11-10T23:26:13Z)
+- RED: U-003 (2026-11-10T23:24:32Z)
+- GREEN: U-003 (2026-11-10T23:26:13Z)
+- Done: U-003 (content, inline, none, 2026-11-10T23:26:13Z)
+- RED: U-004 (2026-11-10T23:24:32Z)
+- GREEN: U-004 (2026-11-10T23:26:13Z)
+- Done: U-004 (content, inline, none, 2026-11-10T23:26:13Z)
 - Tests run: REQ-001: test-0000446-req-001-drain-after-queue-failure.sh, test-0000379-req-004-queue-handoff.sh (2026-11-10T23:26:32Z)
 - Tests run: REQ-002: test-0000446-req-002-drain-rule-in-standards.sh (2026-11-10T23:26:32Z)
 - Tests run: full suite: 427 passed, 0 failed (2026-11-10T23:48:32Z)
@@ -111,14 +117,18 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-11T00:09:22Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-11T00:16:02Z` |
+| Wall clock | `7` |
 | Model tier | primary |
 | Skills loaded | ravintio-ship |
 | Agents spawned | 0 |
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | Initiative step. The order is changelog, PR, CI wait, then archive. |
+
+- CI duration: 332s (run 42929192672, 2026-11-11T00:16:02Z)
+- Retrospective not run. A missing retrospective never blocks ship.
+- Complete: P4 (2026-11-11T00:16:02Z)
 
 ---
 
@@ -127,7 +137,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Metric | Value |
 |--------|-------|
 | Total phases completed | `5` |
-| Total wall clock | `` |
+| Total wall clock | `54` |
 | Total agents spawned | `0` |
 | Total MCP calls | `0` |
 | Phases using parallelism | `0` |
