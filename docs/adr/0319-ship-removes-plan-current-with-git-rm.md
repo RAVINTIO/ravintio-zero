@@ -1,7 +1,7 @@
 ---
 title: "ADR 0319: Ship removes plan/current with git rm"
 summary: "Ship Step 4 removes plan/current/ with git rm -r -q plan/current after the copy, and P2 writes docs outside the full suite run."
-status: "proposed"
+status: "accepted"
 component: "ravintio-zero"
 feature: "0000519-ship-removal-needs-human-approval"
 version: "0.1.0"
