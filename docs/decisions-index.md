@@ -3,7 +3,7 @@
 > Change record. Index of all ADRs across all features. Updated after every pipeline run.
 > Do not archive this file. Update it in place.
 
-Last updated: 0000505-coordinator-branch-regenerate
+Last updated: 0000474-coordinator-shell-guidance
 
 ---
 
@@ -333,4 +333,5 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 | [ADR-0312](adr/0312-renumber-colliding-ids-in-the-merge-queue.md) | Renumber colliding ids in the merge queue | accepted | After the base merge, the queue gives a PR's ADR or backlog entry the next free id when the base holds the same id, and commits the change. | 0000485-adr-number-collision |
 | [ADR-0313](adr/0313-regenerate-in-a-separate-commit.md) | Regenerate in a separate commit after every base merge | accepted | The queue rebuilds the backlog index and checks both counters after every base merge, and commits any change in its own commit before the push. | 0000481-regenerate-after-every-merge |
 | [ADR-0315](adr/0315-coordinator-merge-command.md) | A coordinator merge command | proposed | One script merges the initiative branch into a coordinator branch, resolves shared files, regenerates them, and aborts on any other conflict. | 0000505-coordinator-branch-regenerate |
+| [ADR-0316](adr/0316-coordinator-task-scripts.md) | Coordinator task scripts and a shell section | proposed | The coordinator writes scripts with the Write tool and runs them with bash. A drain subcommand and a bulk-edit script replace improvised shell. | 0000474-coordinator-shell-guidance |
 | [ADR-0314](adr/0314-coordinator-status-view-and-events.md) | Coordinator status view and event notices | accepted | A read-only status script, chart-based watcher state, and new watcher and driver events give the coordinator one true view of the run. | 0000450-coordinator-status-view |
