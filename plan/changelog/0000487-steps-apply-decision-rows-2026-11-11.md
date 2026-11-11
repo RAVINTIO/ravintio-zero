@@ -19,6 +19,7 @@ Step 40 ignored the Decisions row for steps 25 to 41. It spent about 30 minutes 
 
 ## Deviations
 
+- The initiative branch took ADR 0313 during the run. This step's ADR is 0314.
 - P2 ran inline without subagents, because the units share one module.
 - The check requires a log line only. It does not judge whether the step applied the answer.
 

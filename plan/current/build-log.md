@@ -126,6 +126,7 @@ Complete: P3 (2026-11-11T04:05:06Z)
 | Parallel task batches | `0` |
 | Notes | Initiative step. The PR goes to the initiative branch, the step waits for CI, and the merge queue sets the version. |
 
+- Deviation: the initiative branch took ADR 0313 while this step ran. I merged the branch, resolved the conflicts by hand, and renumbered this step's ADR to 0314.
 Complete: P4 (2026-11-11T04:05:35Z)
 
 ---
