@@ -129,6 +129,10 @@ Complete: P3 (2026-11-11T04:05:06Z)
 - Deviation: the initiative branch took ADR 0313 while this step ran. I merged the branch, resolved the conflicts by hand, and renumbered this step's ADR to 0314.
 Complete: P4 (2026-11-11T04:05:35Z)
 
+Blocked: ship Step 4 needs to delete the contents of plan/current/ after the archive copy, and the Claude Code safety check refused the removal. The archive copy exists at plan/_archive/0000487-steps-apply-decision-rows-2026-11-11/. A human must run the removal or approve it.
+
+Resolved: the human approved the removal and the coordinator ran `git rm -rq plan/current` on 2026-11-11 (2026-11-11T06:53:52Z). Ship resumes at Step 4.
+
 ---
 
 ## Summary (filled at ship, P4)
@@ -144,5 +148,3 @@ Complete: P4 (2026-11-11T04:05:35Z)
 | Cheaper tier agent calls | `0` |
 | Self-corrections | `0` |
 | Phases skipped | none |
-
-Blocked: ship Step 4 needs to delete the contents of plan/current/ after the archive copy, and the Claude Code safety check refused the removal. The archive copy exists at plan/_archive/0000487-steps-apply-decision-rows-2026-11-11/. A human must run the removal or approve it.
