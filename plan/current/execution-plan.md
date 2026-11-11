@@ -54,17 +54,19 @@ flowchart LR
 
 | File | Commit read | Unit |
 |------|-------------|------|
-| ravintio-zero/scripts/shared-files.mjs | fdc0dea9 | U-1 |
-| ravintio-zero/scripts/merge-queue.mjs | b75d165f | U-1 |
-| ravintio-zero/standards/roadmap-standards.md | 6c66f4d5 | U-2 |
-| ravintio-zero/tests/test-0000481-req-001-regenerate.sh | new | U-1 |
+| src/ravintio-zero/scripts/shared-files.mjs | fdc0dea9 | U-1 |
+| src/ravintio-zero/scripts/merge-queue.mjs | b75d165f | U-1 |
+| src/ravintio-zero/standards/roadmap-standards.md | 6c66f4d5 | U-2 |
+| src/ravintio-zero/tests/test-0000481-req-001-regenerate.sh | new | U-1 |
+| src/ravintio-zero/tests/test-0000481-req-001-queue-regenerates.sh | new | U-1 |
 
 ## Concurrency plan
 
 | Unit | Depends on | Writes | Batch | Sequential reason | Shared resources |
 |------|-----------|--------|-------|-------------------|------------------|
-| U-1 | none | ravintio-zero/scripts/shared-files.mjs, ravintio-zero/scripts/merge-queue.mjs, ravintio-zero/tests/test-0000481-req-001-regenerate.sh | 1 | Too small to split. One script change with its test. | none |
-| U-2 | none | ravintio-zero/standards/roadmap-standards.md, docs/architecture-overview.md, docs/decisions-index.md | 1 | none | none |
+| U-1 | none | src/ravintio-zero/scripts/shared-files.mjs, src/ravintio-zero/scripts/merge-queue.mjs, src/ravintio-zero/tests/test-0000481-req-001-regenerate.sh, src/ravintio-zero/tests/test-0000481-req-001-queue-regenerates.sh | 1 | Too small to split. One script change with its test. | none |
+| U-2 | none | src/ravintio-zero/standards/roadmap-standards.md, docs/architecture-overview.md, docs/decisions-index.md | 1 | none | none |
+| U-3 | U-1, U-2 | ravintio-zero/ (sync-installed refresh) | 2 | Copies the source to the installed copy after both units | none |
 
 ## Assumptions
 

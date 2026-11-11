@@ -14,6 +14,7 @@ version: "0.92.0"
 
 - `regenerateSharedFiles` in `shared-files.mjs`.
 - A call to it in `merge-queue.mjs` after every base merge, with a commit before the push.
+- The edits live in `src/ravintio-zero/`. The sync script refreshes the installed copy `ravintio-zero/` in its own commit.
 - Tests, and an update to the Shared files section of `roadmap-standards.md`.
 
 ## Out of Scope

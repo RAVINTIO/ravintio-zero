@@ -10,6 +10,10 @@
 //   - plan/backlog/index.md is rebuilt with backlog-index.mjs.
 //   - A living doc keeps the PR branch's `Last updated:` line and the table rows that either side added.
 // Any other conflicted path, or a hunk the module cannot read, throws. The caller aborts the merge.
+//
+// regenerateSharedFiles({ root, subject }) runs after every base merge, clean or resolved (0000481, ADR-0310).
+// It rebuilds the backlog index, raises each counter to the higher value of the merge parents, and commits any
+// change with `subject`. It returns the changed paths, or an empty list when it adds no commit.
 // Every git call takes an argument array. The module treats file text as data.
 
 import fs from 'node:fs';
@@ -135,4 +139,44 @@ export function resolveSharedConflicts({ root = process.cwd() } = {}) {
     resolved.push(BACKLOG_INDEX);
   }
   return resolved;
+}
+
+/** The text of a repo-relative file at a revision, or '' if the revision or file is absent. */
+function textAt(root, rev, file) {
+  const result = git(root, ['show', `${rev}:${file}`]);
+  return result.status === 0 ? result.stdout.trim() : '';
+}
+
+/**
+ * Regenerate the shared files after a base merge, clean or resolved (0000481, ADR-0310).
+ * Rebuilds the backlog index and raises each counter to the higher value of the merge parents.
+ * If any file changes, commits those files by path with `subject` and returns their paths.
+ * Returns an empty list and adds no commit when every file is current.
+ */
+export function regenerateSharedFiles({ root = process.cwd(), subject } = {}) {
+  if (typeof subject !== 'string' || subject === '') throw new Error('a commit subject is required');
+  const changed = [];
+  for (const file of COUNTERS) {
+    const abs = path.join(root, file);
+    if (!fs.existsSync(abs)) continue;
+    const current = fs.readFileSync(abs, 'utf8').trim();
+    const parents = ['HEAD^1', 'HEAD^2'].map((rev) => textAt(root, rev, file)).filter((v) => /^\d+$/.test(v));
+    if (!/^\d+$/.test(current) || parents.length === 0) continue;
+    const highest = parents.reduce((a, b) => (Number(b) > Number(a) ? b : a));
+    if (Number(highest) > Number(current)) {
+      fs.writeFileSync(abs, `${highest}\n`);
+      changed.push(file);
+    }
+  }
+  if (fs.existsSync(path.join(root, BACKLOG_INDEX))) {
+    const before = fs.readFileSync(path.join(root, BACKLOG_INDEX), 'utf8');
+    const result = spawnSync(process.execPath, [path.join(HERE, 'backlog-index.mjs'), '--root', root], { encoding: 'utf8' });
+    if (result.status !== 0) throw new Error(`${BACKLOG_INDEX}: backlog-index failed: ${(result.stderr || result.stdout).trim()}`);
+    if (fs.readFileSync(path.join(root, BACKLOG_INDEX), 'utf8') !== before) changed.push(BACKLOG_INDEX);
+  }
+  if (changed.length > 0) {
+    gitOut(root, ['add', '--', ...changed]);
+    gitOut(root, ['commit', '-m', subject, '--', ...changed]);
+  }
+  return changed;
 }

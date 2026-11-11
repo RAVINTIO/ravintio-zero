@@ -24,14 +24,17 @@
 
 ## Engineering Layer
 - Stack: Node.js scripts, bash tests, GitHub Actions CI
-- Components: `ravintio-zero` pack scripts `shared-files.mjs` and `merge-queue.mjs`
+- Components: `ravintio-zero` pack source in `src/ravintio-zero/` and its installed copy in `ravintio-zero/`, scripts `shared-files.mjs` and `merge-queue.mjs`
 - Data ownership: the pack owns the shared files named in the allowlist
 - Deployment: not applicable
 - API versioning: not applicable
 
 ## Component Paths
+- src/ravintio-zero/scripts/
 - ravintio-zero/scripts/
+- src/ravintio-zero/tests/
 - ravintio-zero/tests/
+- src/ravintio-zero/standards/
 - ravintio-zero/standards/
 - ravintio-zero/docs/
 - docs/

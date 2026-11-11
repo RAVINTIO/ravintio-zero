@@ -473,6 +473,7 @@ Every merged step edits a few files that other open step PRs also edit. `ravinti
 | `docs/decisions-index.md`, `docs/architecture-overview.md` | The PR branch keeps its `Last updated:` line. Rows that either side added stay. |
 
 - The queue prints `resolved: {path}` for each file, then commits the merge with its usual subject.
+- After every base merge, clean or resolved, the queue rebuilds `plan/backlog/index.md`. It also raises each counter to the higher value of the two merge parents (0000481, ADR-0310). If a file changes, the queue commits it before the push. The subject is `{first 7 digits of Feature id}: Regenerate shared files`. The queue prints `regenerated: {path}`. If nothing changes, it adds no commit.
 - A conflict in any other file stops the queue. So does a row that both sides changed, or a hunk the module cannot read. The queue aborts the merge first.
 
 After every run, whether it merged or stopped, `run` detaches HEAD in its worktree. A restart can then check the PR branch out in a step worktree.

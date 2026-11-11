@@ -32,6 +32,10 @@
  * `resolved:` line for each, and commits the merge. A conflict in any other file aborts the merge and stops
  * the queue (feature 0000456, ADR-0302).
  *
+ * After every base merge, clean or resolved, the queue rebuilds the backlog index and checks the two counters
+ * with shared-files.mjs. If a file changes, it commits the change before the push and prints a
+ * `regenerated:` line for each (feature 0000481, ADR-0310).
+ *
  * The chart `Merge commit` cell holds `tag v{version}`. The queue never commits
  * after the squash, so the sha lives in the tag and in the printed output.
  */
@@ -41,7 +45,7 @@ import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync
 import { tmpdir } from "node:os";
 import { dirname, isAbsolute, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { resolveSharedConflicts } from "./shared-files.mjs";
+import { regenerateSharedFiles, resolveSharedConflicts } from "./shared-files.mjs";
 import { presentPaths, readEntries, readVersions, setVersions } from "./version-files.mjs";
 
 const GIT = process.env.GIT_BIN || "git";
@@ -464,6 +468,17 @@ function resolveBaseMerge({ root, base, head, mergeSubject, mergeError }) {
   for (const file of resolved) console.log(`resolved: ${file}`);
 }
 
+/** Regenerate the shared files and commit any change before the push. Any failure stops the queue. */
+function regenerateAfterMerge({ root, base, head, featureId }) {
+  let changed;
+  try {
+    changed = regenerateSharedFiles({ root, subject: `${featureId.slice(0, 7)}: Regenerate shared files` });
+  } catch (e) {
+    throw new Stop(`regeneration after the merge of ${base} into ${head} failed: ${e.message}`);
+  }
+  for (const file of changed) console.log(`regenerated: ${file}`);
+}
+
 /** Steps 2 to 6 of `run`, on the PR branch that the caller checked out. */
 function mergeAndRelease({ root, list, chartAbs, chartRel, step, pr, base, head, featureId, bumpKind }) {
   // Take back the version commits of an earlier failed run when the base version has moved (0000454).
@@ -476,6 +491,8 @@ function mergeAndRelease({ root, list, chartAbs, chartRel, step, pr, base, head,
   } catch (e) {
     resolveBaseMerge({ root, base, head, mergeSubject, mergeError: e });
   }
+  // A clean merge can leave a generated shared file stale, so regenerate after every base merge (0000481).
+  regenerateAfterMerge({ root, base, head, featureId });
   const mergedHead = git(root, ["rev-parse", "HEAD"]).trim();
   if (mergedHead !== git(root, ["rev-parse", `origin/${head}`]).trim()) {
     git(root, ["push", "origin", `${head}:${head}`]);
