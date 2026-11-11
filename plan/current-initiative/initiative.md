@@ -8,7 +8,7 @@ status: "active"  # proposed | charted | active | delivered | blocked
 **Goal:** Close every open backlog entry except the four that need paid services. The first three steps make the driver run independent steps at once, each in its own worktree, with each version set as its step merges. Step 20 moves the pack source to `src/ravintio-zero/`. The last step, step 21, makes activation smoother for the human.
 **Branch:** initiative/0000360-backlog-sweep
 **Status:** active
-**Position:** 41
+**Position:** 46
 **Speed:** standard
 **Step CI fixes:** allowed
 **Concurrency:** 3
@@ -408,7 +408,7 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 38 | 0000468-reply-time-matches-the-clock | Reply time matches the clock | 0000434 | minor | 0.85.0 | merged | hooks | 22 |
 | 39 | 0000470-plan-rereads-files-at-the-branch-point | Plan rereads files at the branch point | 0000435 | minor | 0.86.0 | merged | plan-skill | 22 |
 | 40 | 0000472-ci-duration-metric | CI duration metric | 0000436 | minor | 0.90.0 | merged | ci | 22 |
-| 41 | 0000474-coordinator-shell-guidance | Coordinator shell guidance | 0000437 | minor |  | pending | initiative-skill | 29 |
+| 41 | 0000474-coordinator-shell-guidance | Coordinator shell guidance | 0000437 | minor | 0.99.0 | merged | initiative-skill | 29 |
 | 42 | 0000481-regenerate-after-every-merge | Regenerate shared files after every base merge | 0000482 | minor | 0.95.0 | merged | queue | 22 |
 | 43 | 0000483-mergeability-before-ci-wait | Check mergeability before a CI wait | 0000484 | minor | 0.93.0 | merged | ship | 30 |
 | 44 | 0000485-adr-number-collision | Parallel steps reserve distinct ids | 0000479 | minor | 0.94.0 | merged | adr | 22 |
@@ -473,3 +473,4 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 29 | #180 | tag v0.96.0 | 0.96.0 | 2026-11-11T04:33:24Z |
 | 54 | #181 | tag v0.97.0 | 0.97.0 | 2026-11-11T04:48:52Z |
 | 45 | #179 | tag v0.98.0 | 0.98.0 | 2026-11-11T07:03:07Z |
+| 41 | #182 | tag v0.99.0 | 0.99.0 | 2026-11-11T07:51:16Z |

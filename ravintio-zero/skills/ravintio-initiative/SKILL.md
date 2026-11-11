@@ -89,7 +89,7 @@ A line that starts `Restart: Setup:` names both. Rerun setup first. Read this sk
 
 While the driver holds the lock, queue admin work. Do not edit the working tree and do not reserve an id. Write each item as a folder in `plan/.initiative-queue/`. Its `item.md` holds `**Step:** {n}` and `**Destination:** {repo path}`, and the other files are the content. For a new backlog entry, set the destination to `plan/backlog/{id}-{slug}/entry.md` and write `{id}` where the id goes. The step reserves the id and fills it in.
 
-Name the step that the work aligns with, or the next pending step. After a step merges, clear the items that named it. Never move or delete an item while a step runs. Admin that fits no step waits until the driver stops, then lands through a `chore/` PR.
+Name the step that the work aligns with, or the next pending step. After a step merges, run `node ravintio-zero/scripts/initiative-queue.mjs drain --step {n}`. For a repeated or compound shell task, follow rule `coord-shell-tasks` in the roadmap standards. Write a script with the Write tool and run it with `bash`. Never move or delete an item while a step runs. Admin that fits no step waits until the driver stops, then lands through a `chore/` PR.
 
 `reserve-id.mjs --commit` refuses on `initiative/*`. When the driver has stopped, run it on a `feat/` branch so the counter commit rides in the coordinator PR.
 
