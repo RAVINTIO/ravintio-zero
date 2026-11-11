@@ -2,7 +2,7 @@
 
 **Feature:** Coordinator status view
 **Version:** set by the merge queue at merge
-**PR:** 0
+**PR:** 180
 
 ## What changed
 
