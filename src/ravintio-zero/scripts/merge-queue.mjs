@@ -23,6 +23,10 @@
  * PR MERGEABLE with a clean state, and it retries a "not mergeable" or "Base
  * branch was modified" refusal once (feature 0000411).
  *
+ * While no check is listed, the wait reads the PR's `mergeable` value. A `CONFLICTING` PR stops the queue with a
+ * named error, because GitHub starts no workflow for it. With no check after MQ_NOCHECKS_MS ms (default 600000)
+ * the wait also stops (feature 0000483, ADR-0311).
+ *
  * A failed run can leave a set-version commit on the PR branch. Before the base merge, a rerun reverts
  * such commits in one new commit when the base version has moved, so the merge has no conflict on the
  * version rows. Nothing rewrites pushed history. The worktree ends on a detached HEAD after every run,
@@ -31,6 +35,9 @@
  * If the base merge conflicts only on shared files, the queue resolves them with shared-files.mjs, prints a
  * `resolved:` line for each, and commits the merge. A conflict in any other file aborts the merge and stops
  * the queue (feature 0000456, ADR-0302).
+ *
+ * After the base merge, the queue renumbers an ADR or a backlog entry that the PR added under an id that the
+ * base also holds, commits the change, and prints a `renumbered:` line for each (feature 0000485, ADR-0312).
  *
  * After every base merge, clean or resolved, the queue rebuilds the backlog index and checks the two counters
  * with shared-files.mjs. If a file changes, it commits the change before the push and prints a
@@ -45,6 +52,7 @@ import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync
 import { tmpdir } from "node:os";
 import { dirname, isAbsolute, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { renumberCollisions } from "./id-collisions.mjs";
 import { regenerateSharedFiles, resolveSharedConflicts } from "./shared-files.mjs";
 import { presentPaths, readEntries, readVersions, setVersions } from "./version-files.mjs";
 
@@ -72,10 +80,15 @@ function sleepSync(ms) {
   Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
 }
 
-/** Poll PR checks until all pass. Stop on a failed check or a timeout. */
+/**
+ * Poll PR checks until all pass. Stop on a failed check or a timeout. While no check is listed, read
+ * the PR's mergeability. GitHub starts no workflow for a conflicting PR, so a conflict means no check
+ * will ever appear (0000483). A wait that lists no check within MQ_NOCHECKS_MS also stops.
+ */
 function waitForChecks(root, pr) {
   const poll = Number(process.env.MQ_POLL_MS) || 10000;
   const timeout = Number(process.env.MQ_TIMEOUT_MS) || 1800000;
+  const noChecks = Number(process.env.MQ_NOCHECKS_MS) || 600000;
   const start = Date.now();
   for (;;) {
     let out = "";
@@ -94,6 +107,13 @@ function waitForChecks(root, pr) {
       const bad = list.filter((c) => c.bucket === "fail" || c.bucket === "cancel");
       if (bad.length) throw new Stop(`CI failed on PR #${pr}: ${bad.map((c) => c.name).join(", ")}`);
       if (list.every((c) => c.bucket === "pass" || c.bucket === "skipping")) return;
+    } else {
+      if (prState(root, pr).mergeable === "CONFLICTING") {
+        throw new Stop(`PR #${pr} conflicts with its base branch, so GitHub runs no checks. Merge the base into the PR branch and rerun.`);
+      }
+      if (Date.now() - start >= noChecks) {
+        throw new Stop(`no CI checks appeared on PR #${pr} within ${noChecks / 1000}s`);
+      }
     }
     if (Date.now() - start >= timeout) throw new Stop(`timed out waiting for CI on PR #${pr}`);
     sleepSync(poll);
@@ -468,6 +488,22 @@ function resolveBaseMerge({ root, base, head, mergeSubject, mergeError }) {
   for (const file of resolved) console.log(`resolved: ${file}`);
 }
 
+/**
+ * Two parallel steps can reserve one ADR number or one backlog id. After the base merge, give the PR's file
+ * the next free id, commit the change, and print one `renumbered:` line for each (0000485).
+ */
+function renumberIds({ root, base, oursHead, featureId }) {
+  let changes;
+  try {
+    changes = renumberCollisions({ root, ours: oursHead, theirs: `origin/${base}` });
+  } catch (e) {
+    throw new Stop(`renumber of colliding ids failed: ${e.message}`);
+  }
+  if (changes.length === 0) return;
+  git(root, ["commit", "-m", `${featureId.slice(0, 7)}: Renumber colliding ids`]);
+  for (const c of changes) console.log(`renumbered: ${c.kind === "adr" ? "adr" : "backlog"} ${c.from} -> ${c.to}`);
+}
+
 /** Regenerate the shared files and commit any change before the push. Any failure stops the queue. */
 function regenerateAfterMerge({ root, base, head, featureId }) {
   let changed;
@@ -486,11 +522,13 @@ function mergeAndRelease({ root, list, chartAbs, chartRel, step, pr, base, head,
   // A short subject of our own (0000405). Git's default names both branches and can pass the
   // 72-character limit that the blocking commit-msg hook enforces.
   const mergeSubject = `${featureId.slice(0, 7)}: Merge the initiative branch`;
+  const oursHead = git(root, ["rev-parse", "HEAD"]).trim();
   try {
     git(root, ["merge", "-m", mergeSubject, `origin/${base}`]);
   } catch (e) {
     resolveBaseMerge({ root, base, head, mergeSubject, mergeError: e });
   }
+  renumberIds({ root, base, oursHead, featureId });
   // A clean merge can leave a generated shared file stale, so regenerate after every base merge (0000481).
   regenerateAfterMerge({ root, base, head, featureId });
   const mergedHead = git(root, ["rev-parse", "HEAD"]).trim();
