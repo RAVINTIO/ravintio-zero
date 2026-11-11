@@ -30,8 +30,10 @@
  * and Supervise:. The phase name "Validate and Accept" is not valid.
  *
  * A prefix is followed by a status: Starting, Resuming, Complete, Question,
- * Blocked, or Skipped. The hook checks the prefix only. Question is for a routine
- * question. Blocked marks an exception stop.
+ * Blocked, or Skipped. Question asks the human a question. Blocked marks an
+ * exception stop. A Question line with no question mark draws a Question
+ * check warning and a "question:" line in the miss log (feature 0000489,
+ * ADR-0318). No other status is checked.
  *
  * Receives: JSON on stdin (Claude Code Stop payload) with last_assistant_message
  * and transcript_path (a JSONL file). Transcript content may be a string or an
@@ -165,6 +167,14 @@ async function findFinalReply(transcriptPath) {
   return null;
 }
 
+// True when the line is a valid prefix with the Question status and no question mark.
+function isFalseQuestion(lead) {
+  const prefix = VALID_PREFIXES.find((p) => lead.startsWith(p));
+  if (!prefix) return false;
+  const status = lead.slice(prefix.length).trimStart();
+  return status.startsWith("Question:") && !lead.includes("?");
+}
+
 try {
   const raw = await readStdin();
   const input = JSON.parse(raw);
@@ -186,7 +196,8 @@ try {
   const lead = trimmed.replace(TIME_RE, "");
   const prefixOk = VALID_PREFIXES.some((p) => lead.startsWith(p));
   const clock = prefixOk && timeMatch ? offClock(timeMatch) : null;
-  if (prefixOk && clock === null) process.exit(0);
+  const falseQuestion = prefixOk && clock === null && isFalseQuestion(lead);
+  if (prefixOk && clock === null && !falseQuestion) process.exit(0);
 
   const snippet = reply.trim().replace(/\s+/g, " ").slice(0, LOG_SNIPPET_LENGTH);
   try {
@@ -200,7 +211,7 @@ try {
     }
     appendFileSync(
       join(cwd, "plan", ".prefix-misses.log"),
-      `${new Date().toISOString()} ${snippet}\n`,
+      `${new Date().toISOString()} ${falseQuestion ? "question: " : ""}${snippet}\n`,
     );
   } catch {
     // A log failure must not stop the warning.
@@ -209,7 +220,12 @@ try {
   // eslint-disable-next-line no-control-regex
   const quote = snippet.replace(/[\x00-\x1f\x7f]/g, " ").slice(0, QUOTE_LENGTH);
   const who = isStep ? "step session" : "this session";
-  const systemMessage = clock !== null
+  const systemMessage = falseQuestion
+    ? `[RAVINTIO] Question check: the last reply in ${who} starts "${quote}" ` +
+      "and its Question: line holds no question mark. This does not mean a run stopped. " +
+      "Use Question: only to ask the human something, and keep working while you wait on your own work. " +
+      "The miss is logged to plan/.prefix-misses.log."
+    : clock !== null
     ? `[RAVINTIO] Reply time check: the last reply in ${who} starts with ${timeMatch[1]}:${timeMatch[2]} ` +
       `but the clock reads ${clock}. This does not mean a run stopped. ` +
       "Run date +%H:%M before each reply and start the reply with that time. " +
