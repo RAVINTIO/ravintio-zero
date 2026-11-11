@@ -37,7 +37,7 @@ S="$(dirname "$R")/stub"
 assert_equals "1" "$CODE" "REQ-004 AC-3: driver exits 1"
 assert_contains "I-D Advance: Blocked: queue stopped on step 1. merge-queue: CI failed on PR #101" "$OUT" "REQ-004 AC-3: the Blocked line names the step and the queue error"
 assert_equals "no" "$(yes_no "$S/step-2.env")" "REQ-004 AC-3: no new step starts"
-assert_contains "I-C Run: Step 1: ready" "$OUT" "REQ-004 AC-3: report names step 1 ready"
+assert_contains "I-C Run: Step 1: stopped" "$OUT" "REQ-004 AC-3: report names step 1 stopped (0000446)"
 assert_contains "I-C Run: Step 2: pending" "$OUT" "REQ-004 AC-3: report names step 2 pending"
 assert_contains "Log: plan/.initiative-logs/step-1.log" "$(tail -1 "$(dirname "$R")/out.txt")" "REQ-004 AC-3: the stop line names the log"
 
