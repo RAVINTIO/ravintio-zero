@@ -23,6 +23,11 @@ The coordinator missed a ready line for 24 minutes and a driver exit for two hou
 
 Evidence rows: 17, 23, and 26. See `plan/retrospectives/0000360-backlog-sweep-retrospective.md`.
 
+## Added on 2026-11-10
+
+- The watcher shows merged steps as `ready`, because it reads stale control files. It should read the chart status.
+- The driver prints stop lines for stops the coordinator has already cleared, such as "queue stopped on step 26" after step 26 merged. The status view should show only live stops.
+
 ## Suggested Action
 
 Print one status view with queue state, ready PRs, running steps, and open decisions. Make the watcher and driver print an event for a ready file, a queue failure, and an exit. Add a report format that lists decisions apart from routine fixes.

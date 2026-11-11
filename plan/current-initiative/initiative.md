@@ -70,6 +70,22 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 39 | none | none | none |
 | 40 | none | none | none |
 | 41 | none | none | none |
+| 42 | none | none | none |
+| 43 | none | none | none |
+| 44 | none | none | none |
+| 45 | none | none | none |
+| 46 | none | none | none |
+| 47 | none | none | none |
+| 48 | none | none | none |
+| 49 | none | none | none |
+| 50 | none | none | none |
+| 51 | none | none | none |
+| 52 | none | none | none |
+| 53 | none | none | none |
+| 54 | none | none | none |
+| 55 | none | none | none |
+| 56 | none | none | none |
+| 57 | none | none | none |
 
 ## Dependencies
 
@@ -118,6 +134,22 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 39 | none | none | none |
 | 40 | none | none | none |
 | 41 | none | none | none |
+| 42 | none | none | none |
+| 43 | none | none | none |
+| 44 | none | none | none |
+| 45 | none | none | none |
+| 46 | none | none | none |
+| 47 | none | none | none |
+| 48 | none | none | none |
+| 49 | none | none | none |
+| 50 | none | none | none |
+| 51 | none | none | none |
+| 52 | none | none | none |
+| 53 | none | none | none |
+| 54 | none | none | none |
+| 55 | none | none | none |
+| 56 | none | none | none |
+| 57 | none | none | none |
 
 ## Decisions
 
@@ -183,6 +215,22 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 39 | none | none | none |
 | 40 | none | none | none |
 | 41 | none | none | none |
+| 42 | none | none | none |
+| 43 | none | none | none |
+| 44 | none | none | none |
+| 45 | none | none | none |
+| 46 | none | none | none |
+| 47 | none | none | none |
+| 48 | none | none | none |
+| 49 | none | none | none |
+| 50 | none | none | none |
+| 51 | none | none | none |
+| 52 | none | none | none |
+| 53 | none | none | none |
+| 54 | none | none | none |
+| 55 | none | none | none |
+| 56 | none | none | none |
+| 57 | none | none | none |
 
 ## Baselines
 
@@ -209,6 +257,22 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 39 | none | none | none |
 | 40 | none | none | none |
 | 41 | none | none | none |
+| 42 | none | none | none |
+| 43 | none | none | none |
+| 44 | none | none | none |
+| 45 | none | none | none |
+| 46 | none | none | none |
+| 47 | none | none | none |
+| 48 | none | none | none |
+| 49 | none | none | none |
+| 50 | none | none | none |
+| 51 | none | none | none |
+| 52 | none | none | none |
+| 53 | none | none | none |
+| 54 | none | none | none |
+| 55 | none | none | none |
+| 56 | none | none | none |
+| 57 | none | none | none |
 
 ## Criteria
 
@@ -241,6 +305,22 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 39 | none | none | none |
 | 40 | none | none | none |
 | 41 | none | none | none |
+| 42 | none | none | none |
+| 43 | none | none | none |
+| 44 | none | none | none |
+| 45 | none | none | none |
+| 46 | none | none | none |
+| 47 | none | none | none |
+| 48 | none | none | none |
+| 49 | none | none | none |
+| 50 | none | none | none |
+| 51 | none | none | none |
+| 52 | none | none | none |
+| 53 | none | none | none |
+| 54 | none | none | none |
+| 55 | none | none | none |
+| 56 | none | none | none |
+| 57 | none | none | none |
 
 ## P1 skips
 
@@ -267,6 +347,22 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 39 | no | Added after the chart. The human sets this at P1. |
 | 40 | no | Added after the chart. The human sets this at P1. |
 | 41 | no | Added after the chart. The human sets this at P1. |
+| 42 | no | Added after the chart. The human sets this at P1. |
+| 43 | no | Added after the chart. The human sets this at P1. |
+| 44 | no | Added after the chart. The human sets this at P1. |
+| 45 | no | Added after the chart. The human sets this at P1. |
+| 46 | no | Added after the chart. The human sets this at P1. |
+| 47 | no | Added after the chart. The human sets this at P1. |
+| 48 | no | Added after the chart. The human sets this at P1. |
+| 49 | no | Added after the chart. The human sets this at P1. |
+| 50 | no | Added after the chart. The human sets this at P1. |
+| 51 | no | Added after the chart. The human sets this at P1. |
+| 52 | no | Added after the chart. The human sets this at P1. |
+| 53 | no | Added after the chart. The human sets this at P1. |
+| 54 | no | Added after the chart. The human sets this at P1. |
+| 55 | no | Added after the chart. The human sets this at P1. |
+| 56 | no | Added after the chart. The human sets this at P1. |
+| 57 | no | Added after the chart. The human sets this at P1. |
 
 ## Steps
 
@@ -313,6 +409,22 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 39 | 0000470-plan-rereads-files-at-the-branch-point | Plan rereads files at the branch point | 0000435 | minor | 0.86.0 | merged | plan-skill | 22 |
 | 40 | 0000472-ci-duration-metric | CI duration metric | 0000436 | minor | 0.90.0 | merged | ci | 22 |
 | 41 | 0000474-coordinator-shell-guidance | Coordinator shell guidance | 0000437 | minor |  | pending | initiative-skill | 29 |
+| 42 | 0000481-regenerate-after-every-merge | Regenerate shared files after every base merge | 0000482 | minor |  | pending | queue | 22 |
+| 43 | 0000483-mergeability-before-ci-wait | Check mergeability before a CI wait | 0000484 | minor |  | pending | ship | 30 |
+| 44 | 0000485-adr-number-collision | Parallel steps reserve distinct ids | 0000479 | minor |  | pending | adr | 22 |
+| 45 | 0000487-steps-apply-decision-rows | Steps apply the chart's Decisions rows | 0000488 | minor |  | pending | skills | 22 |
+| 46 | 0000489-question-only-for-questions | Steps use Question only for real questions | 0000490 | minor |  | pending | skills | 45 |
+| 47 | 0000491-driver-favours-critical-path | Driver favours the critical path | 0000492 | minor |  | pending | driver | 41 |
+| 48 | 0000493-driver-starts-after-restart | Driver keeps starting steps after a Restart | 0000494 | minor |  | pending | driver | 47 |
+| 49 | 0000495-driver-clears-dead-lock | Driver clears a dead lock | 0000496 | minor |  | pending | driver | 48 |
+| 50 | 0000497-keep-worktree-entries | Driver keeps uncommitted entries from a worktree | 0000498 | minor |  | pending | driver | 49 |
+| 51 | 0000499-reply-times-match-clock | Reply times match the clock | 0000500 | minor |  | pending | skills | 46 |
+| 52 | 0000501-remove-merged-worktrees | Driver removes merged step worktrees | 0000502 | minor |  | pending | driver | 50 |
+| 53 | 0000503-planned-restart-exit-code | Planned restart exits with its own code | 0000504 | minor |  | pending | driver | 52 |
+| 54 | 0000505-coordinator-branch-regenerate | Coordinator branches regenerate shared files | 0000506 | minor |  | pending | queue | 42 |
+| 55 | 0000507-hook-check-after-setup | Check every hook after setup | 0000508 | minor |  | pending | driver | 53 |
+| 56 | 0000509-clear-merged-ready-files | Driver clears ready files of merged steps | 0000510 | minor |  | pending | driver | 55 |
+| 57 | 0000511-driver-stop-summary | Driver prints a stop summary | 0000512 | minor |  | pending | driver | 56 |
 
 ## Merges
 
