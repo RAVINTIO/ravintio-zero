@@ -376,6 +376,11 @@ The driver loads its code once. After a merged step, it compares the initiative 
 
 The installed pack files live outside the repo copy the driver reads. After a merged step, the driver checks whether the step changed `ravintio-zero/skills/`, `ravintio-zero/hooks/`, `ravintio-zero/setup.sh`, or `ravintio-zero/setup/`. If it did, the driver stops.
 
+- Before it stops, the driver runs the approved setup command (0000448, ADR-0310). `setup-command.mjs` reads the `Confirmation:` row for setup in `## Decisions`. It returns the command only if it is the pack `setup.sh` followed by plain words and `--flag` words.
+- The driver runs the command with `bash`, an argument array, and no shell. It prints `I-D Advance: Setup: step {n} ran the approved setup command` and carries on.
+- Before it runs the command, the driver checks that the root holds the merged initiative ref. If the root sits on the initiative branch behind the ref, the driver fast-forwards it.
+- If the row is missing, the form differs, the root can't match the ref, or the command exits non-zero, the driver stops. After a non-zero exit the line adds `The approved setup command failed.` before `Rerun setup`.
+- A `Restart:` hit still stops the driver. The command runs first, and the stop line then drops the `Setup:` part.
 - The stop line is `I-D Advance: Setup: step {n} changed {files}. Rerun setup, then start a new driver.`
 - If the same step also triggers the restart stop, the driver prints one combined line. The line reads: `I-D Advance: Restart: Setup: step {n} changed {files}. Rerun setup, then start a new driver so step {next} runs the new code.` The list holds the restart files first, then the setup-only files, with no repeats.
 - The driver releases the lock and exits 1.

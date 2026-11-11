@@ -100,6 +100,10 @@ if (process.env.QUEUE_RESTART_STEP === step) {
   mkdirSync(join(root, 'ravintio-zero/scripts'), { recursive: true });
   writeFileSync(join(root, 'ravintio-zero/scripts/initiative-run.mjs'), '// changed\n');
 }
+if (process.env.QUEUE_SETUP_STEP === step) {
+  mkdirSync(join(root, 'ravintio-zero/skills'), { recursive: true });
+  writeFileSync(join(root, 'ravintio-zero/skills/s.md'), 'changed\n');
+}
 g('add', '-A');
 g('commit', '-q', '-m', `merge step ${step}`);
 g('push', '-q', 'origin', `HEAD:refs/heads/${B}`);
