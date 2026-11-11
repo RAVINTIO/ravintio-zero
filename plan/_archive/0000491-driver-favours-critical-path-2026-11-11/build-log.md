@@ -149,3 +149,5 @@ Complete: P4 (2026-11-11T09:48:03Z)
 | Phases skipped | `none` |
 
 Resolved: P4 Ship block, safety check refused removal of plan/current (2026-11-11T18:04:34Z, the human approved the removal and the coordinator ran git rm -rq plan/current)
+
+Blocked: merge of origin/initiative/0000360-backlog-sweep conflicts in 5 files and gate-write refuses the edits because plan/current/design.md is gone (2026-11-11T18:05:18Z)
