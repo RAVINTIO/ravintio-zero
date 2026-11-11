@@ -2,7 +2,7 @@
 
 **Feature:** Replies name actors by role
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** 188
 
 ## What changed
 
