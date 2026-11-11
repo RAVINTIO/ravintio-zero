@@ -62,7 +62,7 @@ function readText(root, file) {
 
 /** The set of lines that the PR added to a file since the merge base. */
 function addedLines(root, base, ours, file) {
-  const diff = git(root, ['diff', '-U0', '--no-color', base, ours, '--', file], true).stdout;
+  const diff = git(root, ['diff', '-U0', '--no-color', '--no-renames', base, ours, '--', file], true).stdout;
   const added = new Set();
   for (const line of diff.split('\n')) {
     if (line.startsWith('+') && !line.startsWith('+++')) added.add(line.slice(1));
@@ -116,8 +116,8 @@ export function renumberCollisions({ root = process.cwd(), ours, theirs } = {}) 
   const theirsRef = theirs ?? 'HEAD^2';
   if (git(root, ['rev-parse', '-q', '--verify', theirsRef], true).status !== 0) return [];
   const base = git(root, ['merge-base', oursRef, theirsRef]).stdout.trim();
-  const added = lines(git(root, ['diff', '-z', '--name-only', '--diff-filter=A', base, oursRef]).stdout);
-  const changed = lines(git(root, ['diff', '-z', '--name-only', '--diff-filter=AM', base, oursRef]).stdout);
+  const added = lines(git(root, ['diff', '-z', '--no-renames', '--name-only', '--diff-filter=A', base, oursRef]).stdout);
+  const changed = lines(git(root, ['diff', '-z', '--no-renames', '--name-only', '--diff-filter=AM', base, oursRef]).stdout);
   const tree = lines(git(root, ['ls-files', '-z']).stdout);
   const changes = [];
   const touched = new Set();

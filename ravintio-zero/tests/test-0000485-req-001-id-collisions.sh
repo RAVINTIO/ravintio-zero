@@ -59,11 +59,13 @@ make_world() {
     echo 0000010 > plan/backlog/.next-id
     printf '# Decisions\n\nLast updated: base\n\n| ADR | Title | Status | Summary | Feature |\n|-----|-------|--------|---------|---------|\n' > docs/decisions-index.md
     echo base > plan/backlog/index.md
+    if [ -n "${MOVED:-}" ]; then write_entry "$R" "0000005-moved"; fi
     git add -A && git commit -q -m base
     git checkout -q -b feat
     write_adr "$R" "$fa" feat-a; index_row "$fa" feat-a "$R"
     printf 'See ADR-%s for the reason.\nLink: docs/adr/%s-feat-a.md\nVersion 0.%s.0 stays.\n' "$fa" "$fa" "${fa#0}" > note.md
     write_entry "$R" "$fi-feat-e"
+    if [ -n "${MOVED:-}" ]; then git mv "plan/backlog/0000005-moved" "plan/backlog/$fi-moved"; fi
     echo "$(printf '%04d' $((10#$fa + 1)))" > docs/adr/.next-id
     echo "$(printf '%07d' $((10#$fi + 1)))" > plan/backlog/.next-id
     git add -A && git commit -q -m feat
@@ -128,5 +130,12 @@ echo 0309 > "$R/docs/adr/.next-id"; git -C "$R" commit -q --amend --no-edit -a
 run_module
 assert_equals "yes" "$([ -f "$R/docs/adr/0309-feat-a.md" ] && echo yes)" "the new number follows a higher counter"
 assert_equals "0310" "$(cat "$R/docs/adr/.next-id")" "the counter moves past the higher number"
+
+# ---------------------------------------------------------------- an entry the PR renamed counts as added
+MOVED=1 make_world moved 0301 0302 0000010 0000010
+run_module
+assert_contains '"kind":"backlog"' "$OUT" "a renamed entry that collides is reported"
+assert_equals "" "$([ -d "$R/plan/backlog/0000010-moved" ] && echo yes)" "the renamed entry no longer holds the colliding id"
+assert_equals "yes" "$([ -f "$R/plan/backlog/0000010-base-e/entry.md" ] && echo yes)" "the base entry keeps the id"
 
 print_summary
