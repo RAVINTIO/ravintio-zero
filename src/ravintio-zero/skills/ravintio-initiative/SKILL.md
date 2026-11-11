@@ -74,7 +74,7 @@ End each report with two parts:
 
 If the driver prints `Blocked:` or exits non-zero, report the stop line and the step log path `plan/.initiative-logs/step-{n}.log`. Relay each `I-C Run: Step {n}: {state}` line too, which names every step's state. Never resume the step. Ask the human how to proceed. After the human acts, offer to restart the driver.
 
-A `Restart:` line is not a failure. It means a merged step changed the driver, the watcher, or this skill, and the running code is old. Report the line. Then start a new driver and a new watcher without asking. Read this skill again first if the line names it.
+A `Restart:` line is not a failure. It means a merged step changed the driver, the watcher, or this skill, and the running code is old. Report the line. Then start a new driver and a new watcher without asking. Read this skill again first if the line names it. If the line ends `A new driver took over new starts.`, the old driver hands over and a new driver already runs, so start a new watcher only.
 
 The driver runs the approved setup command itself when the `Confirmation:` row names it, and prints `ran the approved setup command`. A `Setup:` line (`I-D Advance: Setup: step {n} changed {files}. Rerun setup, then start a new driver.`) means the driver did not run it. The line is a planned stop, not a failure. Report the line, then:
 
