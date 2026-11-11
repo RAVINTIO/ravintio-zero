@@ -73,13 +73,34 @@ Run speed: standard (2026-11-11T06:55:05Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-11T06:58:49Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-11T07:32:23Z` |
+| Wall clock | `34` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | `0` |
 | MCP calls | `0` |
-| Parallel task batches | `0` |
-| Notes | Inline units: too small to split. Edits go to src/ravintio-zero/, then sync-installed. |
+| Parallel task batches | `1` |
+| Notes | Inline units: too small to split. Edits go to src/ravintio-zero/, then sync-installed. First full-suite run used the installed-copy runner and failed one suite that reads paths relative to src. CI uses the src runner, so the suite reran from src. |
+
+- In progress: U-1 REQ-002 (2026-11-11T07:32:23Z)
+- RED: U-1 REQ-002 (2026-11-11T07:32:23Z)
+- GREEN: U-1 REQ-002 (2026-11-11T07:32:23Z)
+- Done: U-1 REQ-002 (content, inline, none, 2026-11-11T07:32:23Z)
+- In progress: U-2 REQ-003 (2026-11-11T07:32:23Z)
+- RED: U-2 REQ-003 (2026-11-11T07:32:23Z)
+- GREEN: U-2 REQ-003 (2026-11-11T07:32:23Z)
+- Done: U-2 REQ-003 (content, inline, none, 2026-11-11T07:32:23Z)
+- In progress: U-3 REQ-001, REQ-004 (2026-11-11T07:32:23Z)
+- RED: U-3 REQ-001, REQ-004 (2026-11-11T07:32:23Z)
+- GREEN: U-3 REQ-001, REQ-004 (2026-11-11T07:32:23Z)
+- Done: U-3 REQ-001, REQ-004 (content, inline, none, 2026-11-11T07:32:23Z)
+- Done: U-4 docs (content, inline, none, 2026-11-11T07:32:23Z)
+- Done: U-5 sync (content, inline, none, 2026-11-11T07:32:23Z)
+- Tests run: REQ-002: test-0000474-req-002-queue-drain.sh (2026-11-11T07:32:23Z)
+- Tests run: REQ-003: test-0000474-req-003-bulk-edit.sh (2026-11-11T07:32:23Z)
+- Tests run: REQ-001, REQ-004: test-0000474-req-001-004-shell-section-and-guards.sh (2026-11-11T07:32:23Z)
+- Tests run: full suite: 426 passed, 0 failed (2026-11-11T07:32:23Z)
+- Complete: P2 Implement (2026-11-11T07:32:23Z)
+- Baseline: the two known clean-clone failures did not appear in the local shards. Nothing new failed.
 
 ---
