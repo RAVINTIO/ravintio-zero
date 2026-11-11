@@ -131,6 +131,8 @@ Complete: P3 (2026-11-11T23:34:21Z)
 | Parallel task batches | `0` |
 | Notes | none |
 
+- CI duration: 262s (run 43120991399, 2026-11-11T23:40:52Z)
+
 Complete: P4 (2026-11-11T23:34:42Z)
 
 ---
