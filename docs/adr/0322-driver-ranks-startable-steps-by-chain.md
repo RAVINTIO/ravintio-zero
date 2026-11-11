@@ -5,12 +5,12 @@ status: "accepted"
 component: "ravintio-zero"
 version: "0.1.0"
 ---
-# ADR-0321 - Driver ranks startable steps by chain length
+# ADR-0322 - Driver ranks startable steps by chain length
 
 **Skill:** [plan](../skills/ravintio-plan/SKILL.md)
 **Feature:** 0000491-driver-favours-critical-path
 **Component:** ravintio-zero
-**File:** `docs/adr/0321-driver-ranks-startable-steps-by-chain.md`
+**File:** `docs/adr/0322-driver-ranks-startable-steps-by-chain.md`
 **Date:** 2026-11-11
 
 ## Context

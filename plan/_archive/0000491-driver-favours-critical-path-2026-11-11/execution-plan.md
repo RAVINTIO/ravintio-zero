@@ -60,7 +60,7 @@ flowchart LR
 | src/ravintio-zero/tests/test-0000491-req-001-chain-ranking.sh | new | U-1 |
 | docs/architecture-overview.md | 140887d0 | U-2 |
 | docs/decisions-index.md | 140887d0 | U-2 |
-| docs/adr/0321-driver-ranks-startable-steps-by-chain.md | new | U-2 |
+| docs/adr/0322-driver-ranks-startable-steps-by-chain.md | new | U-2 |
 
 ## Concurrency plan
 
