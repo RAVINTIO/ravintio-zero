@@ -1,7 +1,7 @@
 ---
 title: "ADR 0324: Driver takes a dead lock"
 summary: "When the driver lock names a process that no longer runs, the driver reports it and takes the lock. A live, unreadable, or symlinked lock still refuses."
-status: "proposed"
+status: "accepted"
 component: "ravintio-zero"
 version: "0.1.0"
 ---
