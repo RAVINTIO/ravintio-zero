@@ -2,7 +2,7 @@
 
 **Feature:** Check mergeability before a CI wait
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** 176
 
 ## What changed
 
