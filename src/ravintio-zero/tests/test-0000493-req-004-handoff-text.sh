@@ -7,7 +7,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
 PACK="$SCRIPT_DIR/.."
-ROOT_PACK="$SCRIPT_DIR/../../../ravintio-zero"
+REPO="$(cd "$SCRIPT_DIR" && git rev-parse --show-toplevel)"
 STANDARDS="$PACK/standards/roadmap-standards.md"
 SKILL="$PACK/skills/ravintio-initiative/SKILL.md"
 
@@ -33,7 +33,7 @@ fi
 
 # AC-3: the two trees hold identical copies.
 for rel in standards/roadmap-standards.md skills/ravintio-initiative/SKILL.md; do
-  if cmp -s "$PACK/$rel" "$ROOT_PACK/$rel"; then
+  if cmp -s "$REPO/src/ravintio-zero/$rel" "$REPO/ravintio-zero/$rel"; then
     assert_equals "same" "same" "REQ-004 AC-3: $rel matches in both trees"
   else
     assert_equals "same" "different" "REQ-004 AC-3: $rel matches in both trees"
