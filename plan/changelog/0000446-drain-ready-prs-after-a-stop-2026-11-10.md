@@ -22,3 +22,13 @@ After a queue failure, the driver held back every ready PR. Green PRs for indepe
 ## Deviations
 
 - P1 and P2 ran inline without subagents. The work is two small units.
+
+## Validation results
+
+- The full suite passed in the working tree: 408 feature suites and 19 regression suites.
+- A clean clone of `HEAD` ran 406 feature suites to a pass. The 2 failures come from the base commit.
+- The security review found no critical or high finding.
+
+## Skipped phases
+
+None.

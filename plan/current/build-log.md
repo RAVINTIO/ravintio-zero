@@ -27,7 +27,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 |-------|-------|
 | Start | `2026-11-10T23:21:38Z` |
 | End | `2026-11-10T23:23:46Z` |
-| Wall clock | `3` |
+| Wall clock | `2` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -50,7 +50,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 
 | Field | Value |
 |-------|-------|
-| Start | `2026-11-10T23:23:46Z` |
+| Start | `2026-11-10T23:22:36Z` |
 | End | `2026-11-10T23:23:46Z` |
 | Wall clock | `1` |
 | Model tier | primary |
@@ -66,9 +66,9 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 
 | Field | Value |
 |-------|-------|
-| Start | `2026-11-10T23:26:32Z` |
+| Start | `2026-11-10T23:23:46Z` |
 | End | `2026-11-10T23:48:32Z` |
-| Wall clock | `27` |
+| Wall clock | `25` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 0 |
@@ -91,9 +91,9 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 
 | Field | Value |
 |-------|-------|
-| Start | `2026-11-11T00:08:52Z` |
+| Start | `2026-11-10T23:48:32Z` |
 | End | `2026-11-11T00:08:52Z` |
-| Wall clock | `1` |
+| Wall clock | `20` |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | 0 |
@@ -105,3 +105,33 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Tests run: full suite: 406 passed, 2 failed, both inherited (2026-11-11T00:08:52Z)
 - Docs edit pass: 1 cycle, inline, prose-check exit 0 (2026-11-11T00:08:52Z)
 - Complete: P3 (2026-11-11T00:08:52Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-11T00:09:22Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Initiative step. The order is changelog, PR, CI wait, then archive. |
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `` |
+| Total agents spawned | `0` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `0` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `0` |
+| Phases skipped | `none` |
