@@ -1,17 +1,17 @@
 ---
-title: "ADR 0319: Ship removes plan/current with git rm"
+title: "ADR 0320: Ship removes plan/current with git rm"
 summary: "Ship Step 4 removes plan/current/ with git rm -r -q plan/current after the copy, and P2 writes docs outside the full suite run."
 status: "accepted"
 component: "ravintio-zero"
 feature: "0000519-ship-removal-needs-human-approval"
 version: "0.1.0"
 ---
-# ADR-0319 - Ship removes plan/current with git rm
+# ADR-0320 - Ship removes plan/current with git rm
 
 **Skill:** [plan](../skills/ravintio-plan/SKILL.md)
 **Feature:** 0000519-ship-removal-needs-human-approval
 **Component:** ravintio-zero
-**File:** `docs/adr/0319-ship-removes-plan-current-with-git-rm.md`
+**File:** `docs/adr/0320-ship-removes-plan-current-with-git-rm.md`
 **Date:** 2026-11-11
 
 ## Context

@@ -9,7 +9,7 @@
 - Ship Step 4 removes `plan/current/` with `git rm -r -q plan/current` after the copy. The path is literal, with no `cd` and no glob.
 - Rule `implement-full-suite-once` tells the agent to write docs before the full suite starts and to change no file until it ends. The fast batch line for docs units says the same.
 - Two new suites, `test-0000519-req-001-ship-removal-command.sh` and `test-0000519-req-002-p2-docs-timing.sh`, cover the text.
-- ADR 0319 records the decision.
+- ADR 0320 records the decision.
 
 ## Why
 

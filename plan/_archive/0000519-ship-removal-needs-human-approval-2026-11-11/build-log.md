@@ -63,7 +63,7 @@ Complete: P0 (2026-11-11T08:42:30Z)
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
-| Notes | Two requirements, one ADR (0319). Inline, because the units are small. |
+| Notes | Two requirements, one ADR (0320). Inline, because the units are small. |
 
 Complete: P1 (2026-11-11T08:43:46Z)
 

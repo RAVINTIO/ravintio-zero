@@ -60,7 +60,7 @@ flowchart LR
 | src/ravintio-zero/skills/ravintio-implement/SKILL.md | c952df2c | U-2 |
 | docs/architecture-overview.md | 140887d0 | U-3 |
 | docs/decisions-index.md | 140887d0 | U-3 |
-| docs/adr/0319-ship-removes-plan-current-with-git-rm.md | new | U-3 |
+| docs/adr/0320-ship-removes-plan-current-with-git-rm.md | new | U-3 |
 
 ## Concurrency plan
 
