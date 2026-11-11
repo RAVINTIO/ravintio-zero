@@ -1,7 +1,7 @@
 ---
 title: "ADR 0323: Driver hands over new starts after a Restart"
 summary: "After a Restart-only merge, the old driver starts a successor that takes the lock, adopts running steps, and starts new ones, while the old driver supervises its own sessions."
-status: "proposed"
+status: "accepted"
 component: "ravintio-zero"
 version: "0.1.0"
 ---
