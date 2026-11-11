@@ -4,6 +4,7 @@
 // Usage:
 //   node initiative-queue.mjs list  --step {n} [--root dir]
 //   node initiative-queue.mjs check --step {n} [--base ref] [--root dir]
+//   node initiative-queue.mjs drain --step {n} [--root dir]
 //
 // The queue is $RAVINTIO_INITIATIVE_ROOT/plan/.initiative-queue/, or plan/.initiative-queue/ under
 // --root (default: the current folder) when the variable is unset.
@@ -11,6 +12,8 @@
 //   check  exits 1 and names each named item that has no committed destination in
 //          `git diff {base}...HEAD` and no "Queue item {folder}: {reason}" line in
 //          plan/current/build-log.md. The default base is origin/{branch} from the chart.
+//   drain  removes each item folder that names {n} and prints "drained: {folder}", or
+//          "drained: none". The coordinator runs it after the step merges (0000474).
 // Item text is data. The helper never runs it, skips a symlinked folder or file, and prints a
 // folder name only if it matches NAME.
 
@@ -104,9 +107,9 @@ function parse(argv) {
     if (argv[i] === '--step') opts.step = argv[++i] ?? '';
     else if (argv[i] === '--base') opts.base = argv[++i] ?? '';
     else if (argv[i] === '--root') opts.root = argv[++i] ?? '';
-    else fail('usage: initiative-queue.mjs list|check --step {n} [--base ref] [--root dir]');
+    else fail('usage: initiative-queue.mjs list|check|drain --step {n} [--base ref] [--root dir]');
   }
-  if (!['list', 'check'].includes(opts.cmd)) fail('usage: initiative-queue.mjs list|check --step {n} [--base ref] [--root dir]');
+  if (!['list', 'check', 'drain'].includes(opts.cmd)) fail('usage: initiative-queue.mjs list|check|drain --step {n} [--base ref] [--root dir]');
   if (!/^[1-9][0-9]{0,2}$/.test(opts.step ?? '')) fail('--step needs a step number');
   return opts;
 }
@@ -144,6 +147,15 @@ function main() {
   for (const w of warnings) process.stderr.write(`initiative-queue: ${w}\n`);
   if (opts.cmd === 'list') {
     for (const it of items) process.stdout.write(`${it.name}\t${it.dest}\n`);
+    return;
+  }
+  if (opts.cmd === 'drain') {
+    // The coordinator drains after the step merges. Each name passed NAME in namedItems.
+    for (const it of items) {
+      fs.rmSync(path.join(queueRoot, QUEUE, it.name), { recursive: true, force: true });
+      process.stdout.write(`drained: ${it.name}\n`);
+    }
+    if (items.length === 0) process.stdout.write('drained: none\n');
     return;
   }
   if (items.length === 0) return;
