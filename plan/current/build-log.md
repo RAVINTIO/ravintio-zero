@@ -76,3 +76,6 @@ Complete: P1 (2026-11-11T02:59:59Z)
 | MCP calls | `0` |
 | Parallel task batches | `0` |
 | Notes | |
+
+- In progress: U-1 U-2 U-3 batch 1, parallel subagents on sonnet (2026-11-11T03:00:16Z)
+- Done: U-4 (content, inline, none, 2026-11-11T03:01:33Z)
