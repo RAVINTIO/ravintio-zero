@@ -1,7 +1,7 @@
 ---
 title: "ADR 0319: The clock comes from a PostToolUse hook"
 summary: "A PostToolUse hook gives agents the local time after every tool call, so no reply or log line holds an estimated time."
-status: "proposed"
+status: "accepted"
 component: "ravintio-zero"
 feature: "0000499-reply-times-match-clock"
 version: "0.1.0"
