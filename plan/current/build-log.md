@@ -104,3 +104,17 @@ Skipped: docs edit pass (prose-check clean, three short insertions)
 - Tests run: full suite: 417 passed, 2 failed, both inherited (2026-11-11T04:07:06Z)
 
 Complete: P3 (2026-11-11T04:07:06Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-11T04:07:18Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | |
