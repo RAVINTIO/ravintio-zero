@@ -122,6 +122,7 @@ Run mode: autonomous (2026-11-11T01:03:16Z, initiative step 42)
 | Parallel task batches | `0` |
 | Notes | Initiative step: steps 4, 5, and 8 run after green CI. |
 
+- Resolved: the earlier Blocked line. The cause was a PR conflict with the initiative branch, which stopped CI from starting. The CI triggers were not at fault. The coordinator cleared the block on 2026-11-11 (2026-11-11T03:08:01Z)
 - Complete: P4 Ship
 
 ---
