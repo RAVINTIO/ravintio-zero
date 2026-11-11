@@ -75,13 +75,13 @@ Complete: P1 (2026-11-11T08:44:16Z)
 |-------|-------|
 | Start | `2026-11-11T08:44:36Z` |
 | End | `2026-11-11T09:45:35Z` |
-| Wall clock | `53` |
+| Wall clock | `61` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
-| Notes | Unit U-1 ran inline because it is one function, one paragraph, and one suite. |
+| Notes | Unit U-1 ran inline because it is one function, one paragraph, and one suite. Unit U-2 is docs with no test, so it carries no RED or GREEN line. |
 
 - In progress: U-1 (2026-11-11T08:44:36Z)
 - RED: U-1 (2026-11-11T08:44:54Z)
@@ -89,7 +89,7 @@ Complete: P1 (2026-11-11T08:44:16Z)
 - Done: U-1 (code, inline, none, 2026-11-11T08:46:16Z)
 - Tests run: REQ-001: src/ravintio-zero/tests/test-0000491-req-001-chain-ranking.sh, test-0000379-req-001-chart-columns.sh, test-0000379-req-002-003-005-scheduler.sh, test-0000399-req-002-add-step.sh, test-0000438-req-001-full-feature-id.sh (2026-11-11T08:46:16Z)
 - Tests run: REQ-002: src/ravintio-zero/tests/test-0000491-req-001-chain-ranking.sh (2026-11-11T08:46:16Z)
-- Done: U-2 (content, inline, none, 2026-11-11T08:46:16Z)
+- Done: U-2 (content, direct, none, 2026-11-11T08:46:16Z)
 - Tests run: full suite: 428 passed, 4 failed (2026-11-11T09:45:35Z)
 - Baseline: 3 inherited failing suites, recorded in `plan/current/baseline-failures.md`. The fourth failure, `test-0000189-req-007-old-name-guard.sh`, passes in a fresh clean clone and locally, so it did not reproduce.
 
@@ -101,7 +101,7 @@ Complete: P2 (2026-11-11T09:45:35Z)
 |-------|-------|
 | Start | `2026-11-11T09:45:53Z` |
 | End | `2026-11-11T09:47:25Z` |
-| Wall clock | `18` |
+| Wall clock | `2` |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | `1` |
@@ -115,3 +115,35 @@ Complete: P2 (2026-11-11T09:45:35Z)
 - Security: 0 critical or high findings.
 
 Complete: P3 (2026-11-11T09:47:25Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-11T09:47:53Z` |
+| End | `2026-11-11T09:48:03Z` |
+| Wall clock | `1` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Initiative step. The PR goes to the initiative branch, the step waits for CI, and the merge queue sets the version. |
+
+Complete: P4 (2026-11-11T09:48:03Z)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `66` |
+| Total agents spawned | `1` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `1` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `0` |
+| Phases skipped | `none` |
