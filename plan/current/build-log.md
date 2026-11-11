@@ -37,3 +37,10 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 
 Run mode: autonomous (2026-11-11T02:57:12Z)
 Backlog 0000428 pulled in from the step row. Queue items for step 29: none.
+Scope Lock (happy path): The coordinator runs the status script and sees each step state with PR numbers and no live stop. [source: draft-accepted (initiative)]
+Scope Lock (first-run path): With no control folder and no lock, the script prints chart counts and reports no driver. [source: draft-accepted (initiative)]
+Scope Lock (error path): A blocked step or failed queue shows as a live stop with its reason. The stop vanishes once the step merges. [source: draft-accepted (initiative)]
+Scope Lock (cross-session continuity): The script and watcher keep no state on disk, so a new session gets the same view. [source: draft-accepted (initiative)]
+Scope Lock complete. All four scenario paths captured.
+Design confirmed: draft-accepted (initiative) (2026-11-11T02:57:50Z)
+Baseline: running in the background, output at /tmp/step29-baseline.txt
