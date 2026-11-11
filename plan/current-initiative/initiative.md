@@ -86,6 +86,8 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 55 | none | none | none |
 | 56 | none | none | none |
 | 57 | none | none | none |
+| 58 | none | none | none |
+| 59 | none | none | none |
 
 ## Dependencies
 
@@ -150,6 +152,8 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 55 | none | none | none |
 | 56 | none | none | none |
 | 57 | none | none | none |
+| 58 | none | none | none |
+| 59 | none | none | none |
 
 ## Decisions
 
@@ -231,6 +235,8 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 55 | none | none | none |
 | 56 | none | none | none |
 | 57 | none | none | none |
+| 58 | none | none | none |
+| 59 | none | none | none |
 
 ## Baselines
 
@@ -273,6 +279,8 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 55 | none | none | none |
 | 56 | none | none | none |
 | 57 | none | none | none |
+| 58 | none | none | none |
+| 59 | none | none | none |
 
 ## Criteria
 
@@ -321,6 +329,8 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 55 | none | none | none |
 | 56 | none | none | none |
 | 57 | none | none | none |
+| 58 | none | none | none |
+| 59 | none | none | none |
 
 ## P1 skips
 
@@ -363,6 +373,8 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 55 | no | Added after the chart. The human sets this at P1. |
 | 56 | no | Added after the chart. The human sets this at P1. |
 | 57 | no | Added after the chart. The human sets this at P1. |
+| 58 | no | Added after the chart. The human sets this at P1. |
+| 59 | no | Added after the chart. The human sets this at P1. |
 
 ## Steps
 
@@ -425,6 +437,8 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 55 | 0000507-hook-check-after-setup | Check every hook after setup | 0000508 | minor |  | pending | driver | 53 |
 | 56 | 0000509-clear-merged-ready-files | Driver clears ready files of merged steps | 0000510 | minor |  | pending | driver | 55 |
 | 57 | 0000511-driver-stop-summary | Driver prints a stop summary | 0000512 | minor |  | pending | driver | 56 |
+| 58 | 0000519-ship-removal-needs-human-approval | Ship removes plan/current with git rm | 0000518 | minor |  | pending | ship | 43 |
+| 59 | 0000521-replies-name-actors-by-role | Replies name actors by role | 0000522 | minor |  | pending | skills | 51 |
 
 ## Merges
 
