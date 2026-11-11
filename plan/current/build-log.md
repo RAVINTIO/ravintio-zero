@@ -66,3 +66,30 @@ Complete: P0 (2026-11-11T18:06:21Z)
 | Notes | Three requirements, one ADR (0321). Inline, because the units touch shared files. |
 
 Complete: P1 (2026-11-11T18:07:58Z)
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-11T18:08:14Z` |
+| End | `{{pending}}` |
+| Wall clock | `{{pending}}` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Three units ran inline in one context. Batches: 2 (U-1 and U-2, then U-3). U-1 and U-2 share no file, but each is a small content edit, so no subagent paid off. |
+
+- In progress: U-1 (2026-11-11T18:08:14Z)
+- RED: U-1 (2026-11-11T18:08:28Z)
+- GREEN: U-1 (2026-11-11T18:09:40Z)
+- Done: U-1 (content, inline, none, 2026-11-11T18:09:50Z)
+- In progress: U-2 (2026-11-11T18:08:14Z)
+- RED: U-2 (2026-11-11T18:08:28Z)
+- GREEN: U-2 (2026-11-11T18:10:10Z)
+- Done: U-2 (code, inline, none, 2026-11-11T18:10:15Z)
+- Done: U-3 (content, inline, none, 2026-11-11T18:10:39Z)
+- Tests run: REQ-001: test-0000521-req-001-003-actor-names.sh, test-0000200-req-001-002-reply-conventions.sh, test-0000151-req-011-orchestrator-references-split.sh (2026-11-11T18:10:54Z)
+- Tests run: REQ-002: test-0000521-req-002-actor-pronoun-hook.sh, test-0000390-req-005-advisory-reply-check.sh (2026-11-11T18:10:54Z)
+- Tests run: REQ-003: test-0000450-req-004-report-format.sh (2026-11-11T18:10:54Z)
