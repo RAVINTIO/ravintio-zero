@@ -45,6 +45,8 @@ Use `Supervise:` for out-of-phase work. Examples are supervising a driver, filin
 
 **Reporting rule.** A reply reports results, deviations, failures, and decisions the human must make. A reply never states that the agent followed a standing rule. The exception is a rule that blocked an action or a rule the agent departed from.
 
+**Actor names.** A reply names each actor by role, such as "the human", "the agent", or "step 45". A reply never uses "I" or "you".
+
 ## Worktrees
 
 A human session works on a `feat/` branch in the main working tree, with no worktrees. The driver may use `plan/.initiative-worktrees/`.

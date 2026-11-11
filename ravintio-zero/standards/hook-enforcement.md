@@ -19,7 +19,7 @@ RAVINTIO installs these deterministic enforcement hooks via `setup.sh`:
 - **check-design** (UserPromptSubmit): Injects the local time as `hh:mm` and the active component scope from `design.md` as additional context.
 - **check-reply-prefix** (Stop): While a run is active, warns when a reply lacks a valid phase or stage prefix and logs the miss to `plan/.prefix-misses.log`. A reply may lead with `hh:mm` before the prefix. The check compares that time with the clock and warns when they differ by more than 2 minutes. It also warns on a status that is not Starting, Resuming, Complete, Question, Blocked, Skipped, Ready, or Restart. `RAVINTIO_REPLY_CLOCK` (`hh:mm`) and `RAVINTIO_REPLY_MARGIN_MIN` override the clock and the margin. The check skips a coordinator session while `plan/.initiative-runner.lock` exists. It never blocks.
 - **clock-context** (PostToolUse): Returns the local time as `hh:mm` in `additionalContext` after every tool call. `RAVINTIO_REPLY_CLOCK` (`hh:mm`) replaces the clock for tests. It adds context and never blocks.
-- **check-reply-writing** (Stop): Warns when a reply has a sentence over 25 words or a blocklist word. It runs only when `.claude/output-styles/ravintio-writing.md` exists. The note quotes up to 3 sentences and is advisory. It never blocks.
+- **check-reply-writing** (Stop): Warns when a reply has a sentence over 25 words or a blocklist word. It also flags "I" and "you" in a reply that opens with `hh:mm` and a run prefix. It runs only when `.claude/output-styles/ravintio-writing.md` exists. The note quotes up to 3 sentences and is advisory. It never blocks.
 - **commit-msg** (git hook): Blocks commits that break `commit-standards.md`. Exit 1 on violation. Use `git commit --no-verify` to bypass intentionally.
 - **ratchet-check** (PreToolUse: Write, Edit): While a loop is active (a `plan/current/loop-state-*.md` with `status: active`), blocks writes that remove acceptance-criteria or in-scope lines from `plan/current/` artifacts. Strengthening passes. Intentional weakening needs a human-written `plan/current/.ratchet-approve` line (single-use). Agents must never write that marker.
 
@@ -52,7 +52,7 @@ Fallback hooks, which Codex does not run for RAVINTIO. Follow each rule as an in
 - **check-design**: At the start of each prompt, read the active component scope in `plan/current/design.md`.
 - **check-reply-prefix**: Begin every reply in an active run with a valid prefix, as the reply conventions in the boot file describe.
 - **clock-context**: Write every time from the latest clock hook value or `date +%H:%M`. Never estimate a time.
-- **check-reply-writing**: Keep sentences under 25 words and avoid the blocklist words in `standards/writing-standards.md`.
+- **check-reply-writing**: Keep sentences under 25 words and avoid the blocklist words in `standards/writing-standards.md`. In a run reply, name each actor by role and never use "I" or "you".
 - **commit-msg** (git hook): Blocks commits that break `commit-standards.md`. Exit 1 on violation. Use `git commit --no-verify` to bypass intentionally.
 
 Project hooks run only after a person trusts them. Run `/hooks` in Codex to review and trust the RAVINTIO hooks. Until a person trusts them, nothing blocks a merge or a forced add, including in `codex exec`. Never run a pull request merge command against `main` yourself.
