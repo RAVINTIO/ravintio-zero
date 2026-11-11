@@ -2,7 +2,7 @@
 
 **Feature:** Regenerate shared files after every base merge
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** #177
 
 ## What changed
 
