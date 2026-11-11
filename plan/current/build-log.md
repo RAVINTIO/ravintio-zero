@@ -111,3 +111,35 @@ Complete: P2 (2026-11-11T03:40:24Z)
 - Security: 0 critical or high findings.
 
 Complete: P3 (2026-11-11T04:05:06Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-11T04:05:35Z` |
+| End | `2026-11-11T04:05:35Z` |
+| Wall clock | `0` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Initiative step. The PR goes to the initiative branch, the step waits for CI, and the merge queue sets the version. |
+
+Complete: P4 (2026-11-11T04:05:35Z)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `68` |
+| Total agents spawned | `1` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `1` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `0` |
+| Phases skipped | none |
