@@ -438,7 +438,7 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 56 | 0000509-clear-merged-ready-files | Driver clears ready files of merged steps | 0000510 | minor |  | pending | driver | 55 |
 | 57 | 0000511-driver-stop-summary | Driver prints a stop summary | 0000512 | minor |  | pending | driver | 56 |
 | 58 | 0000519-ship-removal-needs-human-approval | Ship removes plan/current with git rm | 0000518 | minor | 0.102.0 | merged | ship | 43 |
-| 59 | 0000521-replies-name-actors-by-role | Replies name actors by role | 0000522 | minor |  | pending | skills | 51 |
+| 59 | 0000521-replies-name-actors-by-role | Replies name actors by role | 0000522 | minor | 0.103.0 | merged | skills | 51 |
 
 ## Merges
 
@@ -491,3 +491,4 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 46 | #183 | tag v0.100.0 | 0.100.0 | 2026-11-11T08:25:33Z |
 | 51 | #186 | tag v0.101.0 | 0.101.0 | 2026-11-11T10:05:27Z |
 | 58 | #187 | tag v0.102.0 | 0.102.0 | 2026-11-11T10:28:00Z |
+| 59 | #188 | tag v0.103.0 | 0.103.0 | 2026-11-11T19:10:23Z |

@@ -196,7 +196,7 @@ Setup wires the enforcement hooks into `.claude/settings.json` on every install.
 | `auto-trigger-orchestrator` | UserPromptSubmit | Loads the orchestrator skill once per session when no pipeline is active yet |
 | `check-reply-prefix` | Stop | Warns when the final reply in an active run lacks a valid prefix, and logs each miss. Never blocks |
 | `clock-context` | PostToolUse | Returns the local time as `hh:mm` after every tool call, so an agent never estimates a time. Never blocks |
-| `check-reply-writing` | Stop | Reports long sentences and blocklist words in the final reply when the writing output style is installed. Never blocks |
+| `check-reply-writing` | Stop | Reports long sentences, blocklist words, and "I" or "you" in a run reply when the writing output style is installed. Never blocks |
 
 Every timestamp comes from a fresh clock read, either the latest clock hook value or `date +%H:%M`. An agent never estimates a time.
 

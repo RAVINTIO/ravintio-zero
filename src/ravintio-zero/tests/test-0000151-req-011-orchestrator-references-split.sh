@@ -94,7 +94,8 @@ assert_equals "yes" "$([ "$SKILL_BYTES" -le "$SKILL_CAP" ] && echo yes || echo n
 # boot template measured 3,414 bytes on 2026-10-28, and the cap leaves margin. The generated CLAUDE.md has a separate
 # 6,000 byte cap in test-0000245-req-003-004.
 # Cap raised to 3,800 for grouped coaching commits (0000387).
-CLAUDE_CAP=3800
+# Cap raised to 4,000 for the actor names rule (0000521).
+CLAUDE_CAP=4000
 assert_equals "yes" "$([ "$CLAUDE_BYTES" -le "$CLAUDE_CAP" ] && echo yes || echo no)" "pack-only boot template is $CLAUDE_CAP bytes or fewer ($CLAUDE_BYTES)"
 
 echo "=== (a) overrides never change the size cap result ==="

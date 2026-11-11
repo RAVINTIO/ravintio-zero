@@ -67,8 +67,8 @@ Before each report, run `node ravintio-zero/scripts/initiative-status.mjs`. It p
 
 End each report with two parts:
 
-- **Decisions for you:** each open question or stop that needs the human, with the options. Write `none` if there is none.
-- **Routine fixes made:** each pre-approved fix you applied, such as a conflict, a CI rerun, or a setup rerun. Write `none` if there is none.
+- **Decisions for the human:** each open question or stop that needs the human, with the options. Write `none` if there is none.
+- **Routine fixes made:** each pre-approved fix the coordinator applied, such as a conflict, a CI rerun, or a setup rerun. Write `none` if there is none.
 
 ## Stops
 

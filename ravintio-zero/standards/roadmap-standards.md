@@ -62,6 +62,9 @@ Every timestamp an agent writes comes from a clock read at that moment. An estim
 - Example: `I-C Run: Starting: step 2 of initiative 0000050`
 - Example: `I-B Activate: Blocked: no remote named origin`
 
+<!-- rule: reply-actor-names -->
+A reply names each actor by role. It says "the human" for a person and "the agent" for a model running a task. A narrower role also works, such as "the coordinator", "the driver", or "step 45". A reply never uses "I" or "you". The reply writing hook flags both in a reply that opens with a run prefix (0000521 ADR-0321).
+
 ### The three parts
 
 Three parts run an initiative. The human talks only to their own session. Step sessions run with no human present.
@@ -446,7 +449,7 @@ The driver writes the child's stdout and stderr to `plan/.initiative-logs/step-{
 - A live stop is an open `Blocked:` or `Question:` line in the build log of an unmerged step. A `queue stopped on step {n}` line in its step log also counts. A later `Resolved:` line or a merge clears it.
 - The watcher reads the same chart status. It prints `I-C Run: event: step {n} ready PR #{k}` once for a new `ready` file. It prints a queue stop line from a step log once. When the lock disappears and the initiative file remains, it prints `I-C Run: event: driver exited`.
 - The driver prints `I-D Advance: Blocked: queue stopped on step {n}` and the reason when the queue fails. It also appends the line to the step log.
-- The coordinator ends each report with `Decisions for you` and `Routine fixes made`, as the initiative skill describes.
+- The coordinator ends each report with `Decisions for the human` and `Routine fixes made`, as the initiative skill describes.
 
 ## Merge carve-out
 

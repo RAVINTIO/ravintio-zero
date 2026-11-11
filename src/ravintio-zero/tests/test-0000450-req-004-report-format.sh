@@ -20,7 +20,7 @@ assert_contains "initiative-status.mjs" "$SKILL" "req-004 AC-1: the skill names 
 
 echo ""
 echo "=== req-004 AC-2: the skill defines the two report parts ==="
-assert_contains "Decisions for you" "$SKILL" "req-004 AC-2: Decisions for you"
+assert_contains "Decisions for the human" "$SKILL" "req-004 AC-2: Decisions for the human"
 assert_contains "Routine fixes made" "$SKILL" "req-004 AC-2: Routine fixes made"
 assert_contains "I-C Run: event:" "$SKILL" "req-004 AC-2: the skill relays watcher events"
 
