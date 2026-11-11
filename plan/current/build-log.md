@@ -27,7 +27,7 @@ Run mode: autonomous (2026-11-11T01:03:16Z, initiative step 42)
 |-------|-------|
 | Start | `2026-11-11T01:03:16Z` |
 | End | `2026-11-11T01:04:27Z` |
-| Wall clock | `8` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | `0` |
@@ -36,6 +36,7 @@ Run mode: autonomous (2026-11-11T01:03:16Z, initiative step 42)
 | Notes | Migration 0009 skipped: needs a human y/n, safe to skip. Left pending. |
 
 - Skipped: migration 0009 (needs human confirmation, dry run shows 30 changes, left pending)
+- Complete: P0 Discovery
 - Adoption mode: standard-iterative (signal: plan/_archive beside source)
 - Track: light (chart accepts the track)
 
@@ -55,6 +56,8 @@ Run mode: autonomous (2026-11-11T01:03:16Z, initiative step 42)
 | Parallel task batches | `0` |
 | Notes | Autonomous run, gate self-confirmed (draft-accepted (initiative)). Too small to split. |
 
+- Complete: P1 Plan
+
 ---
 
 ### P2: Implement
@@ -63,7 +66,7 @@ Run mode: autonomous (2026-11-11T01:03:16Z, initiative step 42)
 |-------|-------|
 | Start | `2026-11-11T01:17:32Z` |
 | End | `2026-11-11T01:54:20Z` |
-| Wall clock | `75` |
+| Wall clock | `37` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | `0` |
@@ -75,9 +78,12 @@ Run mode: autonomous (2026-11-11T01:03:16Z, initiative step 42)
 - RED: U-1 REQ-001 (2026-11-11T01:17:32Z)
 - GREEN: U-1 REQ-001 (2026-11-11T01:17:32Z)
 - Done: U-1 REQ-001 (content, inline, none, 2026-11-11T01:17:32Z)
+- RED: U-2 docs (2026-11-11T01:07:00Z)
+- GREEN: U-2 docs (2026-11-11T01:07:30Z)
 - Done: U-2 docs (content, inline, none, 2026-11-11T01:17:32Z)
 - Tests run: REQ-001: test-0000481-req-001-regenerate.sh, test-0000481-req-001-queue-regenerates.sh, test-0000456-req-001-shared-files.sh, test-0000456-req-001-queue-resolves.sh, test-0000378-req-002-003-merge-queue.sh, test-0000464-req-001-002-queue-branches.sh (2026-11-11T01:17:32Z)
 - Tests run: full suite: 408 passed, 2 failed (2026-11-11T01:54:20Z)
+- Complete: P2 Implement
 - Baseline: the two failing suites pass in the worktree at the base and at HEAD. They fail only in a clean clone, which no step 42 file touches. Recorded as inherited in plan/current/baseline-failures.md.
 
 ---
@@ -98,3 +104,38 @@ Run mode: autonomous (2026-11-11T01:03:16Z, initiative step 42)
 
 - Skipped: docs edit pass by subagent (prose-check exit 0 on 3 changed docs, edits are two short sentences)
 - OS gap: local macos, CI ubuntu, windows
+- Complete: P3 Validate and Accept
+
+---
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-11T01:55:04Z` |
+| End | `2026-11-11T01:55:04Z` |
+| Wall clock | `0` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Initiative step: steps 4, 5, and 8 run after green CI. |
+
+- Complete: P4 Ship
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `95` |
+| Total agents spawned | `0` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `0` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `2` |
+| Phases skipped | `none` |
