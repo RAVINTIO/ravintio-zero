@@ -34,7 +34,7 @@ const TOOLS = {
       "gate-write", "ratchet-check", "em-dash-guard", "merge-guard",
       "block-forced-add", "auto-trigger-orchestrator",
       "check-orchestrator-presence", "check-design", "check-reply-prefix",
-      "check-reply-writing",
+      "check-reply-writing", "clock-context",
     ],
   },
   codex: {

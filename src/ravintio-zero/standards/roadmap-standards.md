@@ -47,7 +47,9 @@ The driver still requires status `active` before it runs a step.
 Initiative stages use five more prefixes. They use the same `{prefix} {Status}: {one-liner}` form.
 
 <!-- rule: reply-time-form -->
-Every reply begins with the local time. The form is `hh:mm {prefix} {Status}: {one-liner}`. Run `date +%H:%M` before each reply and lead with that value. The `UserPromptSubmit` hook gives the time as context only, and it goes stale in a long turn. The reply-prefix hook accepts a prefix with or without the time. It warns when a given time differs from the clock by more than 5 minutes.
+Every reply begins with the local time. The form is `hh:mm {prefix} {Status}: {one-liner}`. Run `date +%H:%M` before each reply and lead with that value. The `UserPromptSubmit` hook gives the time as context only, and it goes stale in a long turn. The reply-prefix hook accepts a prefix with or without the time. It warns when a given time differs from the clock by more than 2 minutes, and when the status is not in the allowed list.
+
+Every timestamp an agent writes comes from a clock read at that moment. An estimate is never acceptable. The source is the latest time from the clock hook or `date +%H:%M`. The `PostToolUse` clock hook returns the local `hh:mm` after every tool call, so a step session always holds a fresh time (0000499 ADR-0319).
 
 | Prefix | Stage |
 |--------|-------|

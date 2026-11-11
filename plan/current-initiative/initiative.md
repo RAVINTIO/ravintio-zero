@@ -430,7 +430,7 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 48 | 0000493-driver-starts-after-restart | Driver keeps starting steps after a Restart | 0000494 | minor |  | pending | driver | 47 |
 | 49 | 0000495-driver-clears-dead-lock | Driver clears a dead lock | 0000496 | minor |  | pending | driver | 48 |
 | 50 | 0000497-keep-worktree-entries | Driver keeps uncommitted entries from a worktree | 0000498 | minor |  | pending | driver | 49 |
-| 51 | 0000499-reply-times-match-clock | Reply times match the clock | 0000500 | minor |  | pending | skills | 46 |
+| 51 | 0000499-reply-times-match-clock | Reply times match the clock | 0000500 | minor | 0.101.0 | merged | skills | 46 |
 | 52 | 0000501-remove-merged-worktrees | Driver removes merged step worktrees | 0000502 | minor |  | pending | driver | 50 |
 | 53 | 0000503-planned-restart-exit-code | Planned restart exits with its own code | 0000504 | minor |  | pending | driver | 52 |
 | 54 | 0000505-coordinator-branch-regenerate | Coordinator branches regenerate shared files | 0000506 | minor | 0.97.0 | merged | queue | 42 |
@@ -489,3 +489,4 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 45 | #179 | tag v0.98.0 | 0.98.0 | 2026-11-11T07:03:07Z |
 | 41 | #182 | tag v0.99.0 | 0.99.0 | 2026-11-11T07:51:16Z |
 | 46 | #183 | tag v0.100.0 | 0.100.0 | 2026-11-11T08:25:33Z |
+| 51 | #186 | tag v0.101.0 | 0.101.0 | 2026-11-11T10:05:27Z |

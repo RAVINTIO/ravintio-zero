@@ -22,7 +22,7 @@ done
 echo ""
 echo "=== req-002 AC-2: the enforcement reference states the margin ==="
 REF="$PACK/standards/hook-enforcement.md"
-assert_contains "5 minutes" "$(cat "$REF")" "req-002 AC-2: hook-enforcement.md names the margin"
+assert_contains "2 minutes" "$(cat "$REF")" "req-002 AC-2: hook-enforcement.md names the margin"
 assert_contains "RAVINTIO_REPLY_CLOCK" "$(cat "$REF")" "req-002 AC-2: hook-enforcement.md names the clock override"
 assert_contains "RAVINTIO_REPLY_MARGIN_MIN" "$(cat "$REF")" "req-002 AC-2: hook-enforcement.md names the margin override"
 

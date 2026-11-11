@@ -667,9 +667,10 @@ install_enforcement_hooks() {
   local forced_add_cmd="$launcher guard block-forced-add.mjs$fail_closed"
   local reply_prefix_cmd="$launcher advisory check-reply-prefix.mjs"
   local reply_writing_cmd="$launcher advisory check-reply-writing.mjs"
+  local clock_cmd="$launcher advisory clock-context.mjs"
 
   if command -v node >/dev/null 2>&1; then
-    RAVINTIO_GATE="$gate_cmd" RAVINTIO_RATCHET="$ratchet_cmd" RAVINTIO_EM_DASH="$em_dash_cmd" RAVINTIO_TRIGGER="$trigger_cmd" RAVINTIO_PRESENCE="$presence_cmd" RAVINTIO_DESIGN="$design_cmd" RAVINTIO_MERGE_GUARD="$merge_guard_cmd" RAVINTIO_FORCED_ADD="$forced_add_cmd" RAVINTIO_REPLY_PREFIX="$reply_prefix_cmd" RAVINTIO_REPLY_WRITING="$reply_writing_cmd" RAVINTIO_RETIRED="$RETIRED_HOOK_NAMES" RAVINTIO_SETTINGS="$settings" RAVINTIO_SETTINGS_REL="$settings_rel" node -e "$RAVINTIO_WRITE_SETTINGS_JS$RAVINTIO_SETTINGS_SHAPE_JS"'
+    RAVINTIO_GATE="$gate_cmd" RAVINTIO_RATCHET="$ratchet_cmd" RAVINTIO_EM_DASH="$em_dash_cmd" RAVINTIO_TRIGGER="$trigger_cmd" RAVINTIO_PRESENCE="$presence_cmd" RAVINTIO_DESIGN="$design_cmd" RAVINTIO_MERGE_GUARD="$merge_guard_cmd" RAVINTIO_FORCED_ADD="$forced_add_cmd" RAVINTIO_REPLY_PREFIX="$reply_prefix_cmd" RAVINTIO_REPLY_WRITING="$reply_writing_cmd" RAVINTIO_CLOCK="$clock_cmd" RAVINTIO_RETIRED="$RETIRED_HOOK_NAMES" RAVINTIO_SETTINGS="$settings" RAVINTIO_SETTINGS_REL="$settings_rel" node -e "$RAVINTIO_WRITE_SETTINGS_JS$RAVINTIO_SETTINGS_SHAPE_JS"'
       const fs = require("fs"), path = require("path");
       const gate     = process.env.RAVINTIO_GATE;
       const ratchet  = process.env.RAVINTIO_RATCHET;
@@ -681,6 +682,7 @@ install_enforcement_hooks() {
       const forcedAdd = process.env.RAVINTIO_FORCED_ADD;
       const replyPrefix = process.env.RAVINTIO_REPLY_PREFIX;
       const replyWriting = process.env.RAVINTIO_REPLY_WRITING;
+      const clockCmd = process.env.RAVINTIO_CLOCK;
       const sf       = process.env.RAVINTIO_SETTINGS;
       let s = {};
       // On invalid JSON, print one fixed line that names the file, write
@@ -720,7 +722,7 @@ install_enforcement_hooks() {
       // event and the file, never the old value, which can hold a secret
       // (0000041 ADR-003). An absent or null value gets the entries with no
       // warning. setup.ps1 prints the same text.
-      for (const ev of ["PreToolUse", "UserPromptSubmit", "Stop"]) {
+      for (const ev of ["PreToolUse", "UserPromptSubmit", "Stop", "PostToolUse"]) {
         const v = s.hooks[ev];
         if (v === undefined || v === null || Array.isArray(v)) continue;
         process.stderr.write("  ! Warning: hooks." + ev + " in " + process.env.RAVINTIO_SETTINGS_REL +
@@ -801,6 +803,13 @@ install_enforcement_hooks() {
       s.hooks.Stop.push(
         {matcher:".*", hooks:[{type:"command",command:replyPrefix}]},
         {matcher:".*", hooks:[{type:"command",command:replyWriting}]}
+      );
+      // PostToolUse: clock-context returns the local time after each tool call
+      // (0000499 req-001, idempotent). The same path-boundary match as the other events.
+      const postToolModule = /(^|[\s"\x27\/\\])(clock-context)\.mjs\b/;
+      s.hooks.PostToolUse = keepUserCommands(s.hooks.PostToolUse || [], postToolModule);
+      s.hooks.PostToolUse.push(
+        {matcher:".*", hooks:[{type:"command",command:clockCmd}]}
       );
       fs.mkdirSync(path.dirname(sf),{recursive:true});
       writeSettings(sf, JSON.stringify(s,null,2)+"\n");
