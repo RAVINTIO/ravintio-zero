@@ -22,7 +22,7 @@ Evidence row: 30 in `plan/current-initiative/coordinator-evidence.md`.
 
 ## Suggested Action
 
-after every base merge, clean or not, the queue regenerates `plan/backlog/index.md` and checks `plan/backlog/.next-id` and `docs/adr/.next-id`. If any file changes, the queue commits the regeneration before it pushes.
+After every base merge, clean or not, the queue regenerates `plan/backlog/index.md` and checks `plan/backlog/.next-id` and `docs/adr/.next-id`. If any file changes, the queue commits the regeneration before it pushes.
 
 ## Why Deferred
 

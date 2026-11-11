@@ -22,7 +22,7 @@ Evidence: driver output at 00:29 on 2026-11-11.
 
 ## Suggested Action
 
-at each stop, the driver prints one summary block. The block lists the steps that merged, the fixes the driver made by itself, and the one action left for the human, or "none".
+At each stop, the driver prints one summary block. The block lists the steps that merged, the fixes the driver made by itself, and the one action left for the human, or "none".
 
 ## Why Deferred
 

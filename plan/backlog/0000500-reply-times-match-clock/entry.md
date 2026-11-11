@@ -22,7 +22,7 @@ Evidence: `plan/.initiative-logs/step-27.log`, 00:17 to 00:22 on 2026-11-11.
 
 ## Suggested Action
 
-the reply hook compares the time in the prefix with the clock and flags a gap of more than 2 minutes. It also flags a status outside the allowed list. The step instructions say to read the time with `date +%H:%M` for every reply.
+The reply hook compares the time in the prefix with the clock and flags a gap of more than 2 minutes. It also flags a status outside the allowed list. The step instructions say to read the time with `date +%H:%M` for every reply.
 
 ## Why Deferred
 

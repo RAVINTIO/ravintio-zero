@@ -22,7 +22,7 @@ Evidence: driver output from 20:01 to 21:28 on 2026-11-10.
 
 ## Suggested Action
 
-the driver hands off at once. It stops starting steps, lets the running sessions finish, and a new driver takes over new starts and the queue. Or the driver re-execs itself between steps without stopping running sessions.
+The driver hands off at once. It stops starting steps, lets the running sessions finish, and a new driver takes over new starts and the queue. Or the driver re-execs itself between steps without stopping running sessions.
 
 ## Why Deferred
 

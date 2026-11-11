@@ -16,13 +16,13 @@ theme: "initiative"
 
 ## Problem
 
-The chart's `## Decisions` table holds pre-approved answers, such as the 2026-11-10 row for steps 25 to 41 on faster local runs. Step 40 ignored that row and ran a full baseline and a full suite serially in a clean clone, which cost about 30 minutes on the critical path.
+The chart's `## Decisions` table holds pre-approved answers, such as the 2026-11-10 row for steps 25 to 41 on faster local runs. Step 40 ignored that row. It ran a full baseline and a full suite one after the other in a clean clone. That cost about 30 minutes on the critical path.
 
 Evidence: step 40 activity from 21:57 to 22:52 on 2026-11-10.
 
 ## Suggested Action
 
-the step's P0 reads every `## Decisions` row that names its step, including a range such as `25-41`, and records each one it applies in the build log. A check fails a step build log that misses an applicable row.
+The step's P0 reads every `## Decisions` row that names its step, including a range such as `25-41`. It records each row it applies in the build log. A check fails a step build log that misses an applicable row.
 
 ## Why Deferred
 

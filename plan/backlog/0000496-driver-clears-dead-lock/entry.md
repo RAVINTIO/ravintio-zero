@@ -1,6 +1,6 @@
 ---
 title: "Backlog Entry: 0000496 - Driver clears a dead lock"
-summary: "On 2026-11-10 at 19:05 the coordinator stopped a driver that had just started."
+summary: "On 2026-11-10 at 19:05 the coordinator stopped a driver that had started a moment before."
 status: "open"
 priority: "high"
 theme: "initiative"
@@ -16,13 +16,13 @@ theme: "initiative"
 
 ## Problem
 
-On 2026-11-10 at 19:05 the coordinator stopped a driver that had just started. The driver left `plan/.initiative-runner.lock` with the id of a process that no longer ran. The next driver refuses to start while the lock exists, so the coordinator removed it by hand.
+On 2026-11-10 at 19:05 the coordinator stopped a driver that had started a moment before. The driver left `plan/.initiative-runner.lock` with the id of a process that no longer ran. The next driver refuses to start while the lock exists, so the coordinator removed it by hand.
 
 Evidence: the restart at 19:05 on 2026-11-10.
 
 ## Suggested Action
 
-when the lock names a process that no longer runs, the driver reports it and takes the lock. It still refuses when the process runs.
+When the lock names a process that no longer runs, the driver reports it and takes the lock. It still refuses when the process runs.
 
 ## Why Deferred
 

@@ -22,7 +22,7 @@ Evidence: `git worktree list` at 00:29 on 2026-11-11.
 
 ## Suggested Action
 
-after a step merges, the driver removes its worktree once the session has exited and the head matches origin. If the worktree holds uncommitted files, the driver keeps it and reports them.
+After a step merges, the driver removes its worktree once the session has exited and the head matches origin. If the worktree holds uncommitted files, the driver keeps it and reports them.
 
 ## Why Deferred
 

@@ -22,7 +22,7 @@ Evidence: coordinator hook check at 00:33 on 2026-11-11.
 
 ## Suggested Action
 
-add a hook check script. It runs each installed hook with `CLAUDE_PROJECT_DIR` set and a sample input for its matcher. It reports a hook that fails to load, and it treats a guard's deliberate block as a pass. The driver runs it after setup and stops on a failure.
+Add a hook check script. It runs each installed hook with `CLAUDE_PROJECT_DIR` set and a sample input for its matcher. It reports a hook that fails to load, and it treats a guard's deliberate block as a pass. The driver runs it after setup and stops on a failure.
 
 ## Why Deferred
 

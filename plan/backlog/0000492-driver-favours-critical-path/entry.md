@@ -22,7 +22,7 @@ Evidence row: 29 in `plan/current-initiative/coordinator-evidence.md`.
 
 ## Suggested Action
 
-when several steps can start, the driver starts first the one with the longest chain of steps waiting behind it.
+When several steps can start, the driver starts first the one with the longest chain of steps waiting behind it.
 
 ## Why Deferred
 

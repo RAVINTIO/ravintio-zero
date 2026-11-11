@@ -22,7 +22,7 @@ Evidence: `plan/.initiative-logs/step-31.log`, 15:06 on 2026-11-10.
 
 ## Suggested Action
 
-the orchestrator and the step instructions say that `Question:` asks the human something, and that a step waiting on its own work keeps working. A check flags a final reply whose `Question:` line holds no question mark.
+The orchestrator and the step instructions say that `Question:` asks the human something, and that a step waiting on its own work keeps working. A check flags a final reply whose `Question:` line holds no question mark.
 
 ## Why Deferred
 

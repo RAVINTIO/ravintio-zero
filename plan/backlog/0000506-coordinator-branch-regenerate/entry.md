@@ -22,7 +22,7 @@ Evidence: merge commit `e3abc90` on `feat/0000360-chart-steps-42-to-50`.
 
 ## Suggested Action
 
-add one command that brings the initiative branch into a coordinator branch. It regenerates `plan/backlog/index.md`, checks `plan/backlog/.next-id` and `docs/adr/.next-id`, and commits the result. It refuses when a conflict touches any other file.
+Add one command that brings the initiative branch into a coordinator branch. It regenerates `plan/backlog/index.md`, checks `plan/backlog/.next-id` and `docs/adr/.next-id`, and commits the result. It refuses when a conflict touches any other file.
 
 ## Why Deferred
 

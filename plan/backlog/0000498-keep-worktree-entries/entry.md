@@ -22,7 +22,7 @@ Evidence: `plan/.initiative-worktrees/step-40` at 23:10 on 2026-11-10.
 
 ## Suggested Action
 
-before the driver or the queue removes a step worktree, it lists untracked files under `plan/backlog/` and moves them to the main tree's queue, or refuses and reports them. Ship also checks that every entry the step filed is committed.
+Before the driver or the queue removes a step worktree, it lists untracked files under `plan/backlog/`. It moves them to the main tree's queue, or refuses and reports them. Ship also checks that the step committed every entry it filed.
 
 ## Why Deferred
 

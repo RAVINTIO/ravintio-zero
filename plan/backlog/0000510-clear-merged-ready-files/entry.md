@@ -22,7 +22,7 @@ Evidence: `plan/.initiative-control/` at 00:30 on 2026-11-11.
 
 ## Suggested Action
 
-when the chart shows a step as merged, the driver removes that step's `ready` file and reports it.
+When the chart shows a step as merged, the driver removes that step's `ready` file and reports it.
 
 ## Why Deferred
 

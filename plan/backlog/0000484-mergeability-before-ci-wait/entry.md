@@ -22,7 +22,7 @@ Evidence row: 28 in `plan/current-initiative/coordinator-evidence.md`.
 
 ## Suggested Action
 
-before a CI wait, the step and the queue read `gh pr view --json mergeable`. If the PR conflicts, they merge the initiative branch first and do not wait. A wait that sees no checks after a set time stops with a named error.
+Before a CI wait, the step and the queue read `gh pr view --json mergeable`. If the PR conflicts, they merge the initiative branch first and do not wait. A wait that sees no checks after a set time stops with a named error.
 
 ## Why Deferred
 
