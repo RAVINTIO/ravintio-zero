@@ -147,3 +147,5 @@ Complete: P4 (2026-11-11T09:48:03Z)
 | Cheaper tier agent calls | `0` |
 | Self-corrections | `0` |
 | Phases skipped | `none` |
+
+Resolved: P4 Ship block, safety check refused removal of plan/current (2026-11-11T18:04:34Z, the human approved the removal and the coordinator ran git rm -rq plan/current)
