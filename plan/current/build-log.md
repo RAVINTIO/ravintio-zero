@@ -114,10 +114,32 @@ Complete: P2 (2026-11-11T21:10:25Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-11T21:10:25Z` |
+| End | `2026-11-11T21:33:14Z` |
+| Wall clock | `23` |
+| Model tier | primary |
+| Skills loaded | ravintio-orchestrator, ravintio-validate-and-accept |
+| Agents spawned | `1` |
+| MCP calls | `0` |
+| Parallel task batches | `1` |
+| Notes | The docs edit pass ran in a subagent (sonnet) while the full suite ran in the background. |
+
+- Tests run: full suite: 439 passed, 3 failed (inherited) (2026-11-11T21:33:14Z)
+- Docs edit pass: 1 cycle, 1 edit, prose-check exit 0.
+- Security review: no critical or high findings.
+
+Complete: P3 (2026-11-11T21:33:14Z)
+
+---
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-11T21:33:14Z` |
 | End | `` |
 | Wall clock | `` |
 | Model tier | primary |
-| Skills loaded | ravintio-orchestrator, ravintio-validate-and-accept |
+| Skills loaded | ravintio-orchestrator, ravintio-ship |
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
