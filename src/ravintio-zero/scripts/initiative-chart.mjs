@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Parses an initiative chart: the `## Steps` table by header name and the `**Concurrency:**` field.
-// Exports parseChart(text) and readySteps(steps, states). No packages.
+// Exports parseChart(text) and readySteps(steps, states), which ranks by chain length. No packages.
 
 function splitRow(line) {
   return line.trim().replace(/^\|/, "").replace(/\|$/, "").split("|").map((c) => c.trim());
@@ -83,8 +83,38 @@ export function parseChart(text) {
 }
 
 /**
- * Pending steps, in chart order, that may start now. `states` maps step to the driver's
- * derived 'running' or 'ready'. The list holds no concurrency cap.
+ * The chain length of each unmerged step: 1 plus the longest chain among its dependants. A dependant
+ * lists the step in `After`, or is the next unmerged step in the same lane. A cycle ends the count at
+ * the step that repeats. Returns a Map from step number to chain length.
+ */
+function chainLengths(steps) {
+  const open = steps.filter((s) => s.status !== "merged");
+  const next = new Map();
+  const dependants = new Map(open.map((s) => [s.step, []]));
+  const lastInLane = new Map();
+  for (const s of open) {
+    if (lastInLane.has(s.lane)) dependants.get(lastInLane.get(s.lane)).push(s.step);
+    lastInLane.set(s.lane, s.step);
+    for (const n of s.after) if (dependants.has(n)) dependants.get(n).push(s.step);
+  }
+  const walking = new Set();
+  const length = (n) => {
+    if (next.has(n)) return next.get(n);
+    if (walking.has(n)) return 0;
+    walking.add(n);
+    let best = 0;
+    for (const d of dependants.get(n)) best = Math.max(best, length(d));
+    walking.delete(n);
+    next.set(n, 1 + best);
+    return 1 + best;
+  };
+  for (const s of open) length(s.step);
+  return next;
+}
+
+/**
+ * Pending steps that may start now, longest chain first. Chart order breaks ties. `states` maps step
+ * to the driver's derived 'running' or 'ready'. The list holds no concurrency cap.
  */
 export function readySteps(steps, states = new Map()) {
   const merged = new Set(steps.filter((s) => s.status === "merged").map((s) => s.step));
@@ -101,5 +131,9 @@ export function readySteps(steps, states = new Map()) {
     held.add(s.lane);
     out.push(s);
   }
-  return out;
+  const chain = chainLengths(steps);
+  return out
+    .map((s, i) => ({ s, i, c: chain.get(s.step) ?? 1 }))
+    .sort((a, b) => b.c - a.c || a.i - b.i)
+    .map((x) => x.s);
 }

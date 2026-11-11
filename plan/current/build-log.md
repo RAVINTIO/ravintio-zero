@@ -68,3 +68,25 @@ Complete: P0 (2026-11-11T08:42:21Z)
 | Notes | Two requirements and one ADR. Inline, because both units share one function. |
 
 Complete: P1 (2026-11-11T08:44:16Z)
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-11T08:44:36Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Unit U-1 ran inline because it is one function, one paragraph, and one suite. |
+
+- In progress: U-1 (2026-11-11T08:44:36Z)
+- RED: U-1 (2026-11-11T08:44:54Z)
+- GREEN: U-1 (2026-11-11T08:46:16Z)
+- Done: U-1 (code, inline, none, 2026-11-11T08:46:16Z)
+- Tests run: REQ-001: src/ravintio-zero/tests/test-0000491-req-001-chain-ranking.sh, test-0000379-req-001-chart-columns.sh, test-0000379-req-002-003-005-scheduler.sh, test-0000399-req-002-add-step.sh, test-0000438-req-001-full-feature-id.sh (2026-11-11T08:46:16Z)
+- Tests run: REQ-002: src/ravintio-zero/tests/test-0000491-req-001-chain-ranking.sh (2026-11-11T08:46:16Z)
+- Done: U-2 (content, inline, none, 2026-11-11T08:46:16Z)
