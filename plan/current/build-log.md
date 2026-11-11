@@ -27,7 +27,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 |-------|-------|
 | Start | `2026-11-11T08:41:41Z` |
 | End | `2026-11-11T08:42:30Z` |
-| Wall clock | `2` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | `0` |
@@ -117,18 +117,34 @@ Complete: P2 (2026-11-11T09:46:57Z)
 
 Complete: P3 (2026-11-11T10:09:20Z)
 
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-11T10:09:43Z` |
+| End | `2026-11-11T10:09:43Z` |
+| Wall clock | `0` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Initiative step. The PR goes to the initiative branch, the step waits for CI, and the merge queue sets the version. |
+
+Complete: P4 (2026-11-11T10:09:43Z)
+
 ---
 
 ## Summary (filled at ship, P4)
 
 | Metric | Value |
 |--------|-------|
-| Total phases completed | `{{count}}` |
-| Total wall clock | `{{minutes from pipeline start to the P4 End}}` |
-| Total agents spawned | `{{count}}` |
-| Total MCP calls | `{{count}}` |
-| Phases using parallelism | `{{count}}` |
-| Primary tier agent calls | `{{count}}` |
-| Cheaper tier agent calls | `{{count}}` |
-| Self-corrections | `{{count}}` |
-| Phases skipped | `{{list or "none"}}` |
+| Total phases completed | `5` |
+| Total wall clock | `89` |
+| Total agents spawned | `1` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `1` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `1` |
+| Phases skipped | `none` |
