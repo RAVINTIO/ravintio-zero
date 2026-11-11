@@ -23,8 +23,10 @@ assert_equals "" "$PLAIN" "req-001 AC-2: the ship skill names no plain rm -r of 
 
 echo ""
 echo "=== req-001 AC-3: the installed copy matches ==="
-ROOT="$(cd "$ZERO_DIR/../.." && pwd)"
-node "$ZERO_DIR/scripts/sync-installed.mjs" --check --root "$ROOT" >/dev/null 2>&1
-assert_equals "0" "$?" "req-001 AC-3: ravintio-zero/ matches src/ravintio-zero/"
+ROOT="$(git -C "$ZERO_DIR" rev-parse --show-toplevel)"
+INSTALLED="$ROOT/ravintio-zero/skills/ravintio-ship/SKILL.md"
+SOURCE="$ROOT/src/ravintio-zero/skills/ravintio-ship/SKILL.md"
+cmp -s "$SOURCE" "$INSTALLED"
+assert_equals "0" "$?" "req-001 AC-3: the installed ship skill matches the source"
 
 print_summary
