@@ -3,8 +3,10 @@ title: "ADR 001: One brand guard allowlist file"
 summary: "The CI test and pre-push read one allowlist file, and the guard runs only in the pack source."
 status: "accepted"
 version: "0.1.0"
+component: "ravintio-zero"
+feature: "0000394-github-security-and-ci-lint"
 ---
-# ADR-001 - One brand guard allowlist file
+# ADR-0336 - One brand guard allowlist file
 
 **Skill:** [plan](../../../ravintio-zero/skills/ravintio-plan/SKILL.md)
 **Feature:** 0000394-github-security-and-ci-lint
@@ -17,7 +19,7 @@ The brand guard allowlist sits inside `test-0000160-req-006-brand-guard.sh`. A h
 
 ## Decision
 
-The allowlist moves to `ravintio-zero/tests/brand-guard-allowlist.txt`. Blank lines and lines that start with `#` are ignored. A line that starts with `!` names an excluded path prefix. Any other line holds a path regex, a tab, and a line regex. `ravintio-zero/scripts/brand-guard.sh` and the test both read it. `pre-push` runs the script only when `product.yml` declares the id `ravintio-zero`, because a consumer repo has no reason to ban the old name.
+The allowlist moves to `ravintio-zero/tests/brand-guard-allowlist.txt`. The readers skip blank lines and lines that start with `#`. A line that starts with `!` names an excluded path prefix. Any other line holds a path regex, a tab, and a line regex. `ravintio-zero/scripts/brand-guard.sh` and the test both read it. `pre-push` runs the script only when `product.yml` declares the id `ravintio-zero`, because a consumer repo has no reason to ban the old name.
 
 ## Alternatives Considered
 

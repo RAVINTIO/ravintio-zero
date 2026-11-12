@@ -3,8 +3,10 @@ title: "ADR 001: Postmortem coverage by line"
 summary: "Ship matches stops and reworks to Postmortem lines, and a record check runs on each named file."
 status: "accepted"
 version: "0.1.0"
+component: "ravintio-zero"
+feature: "0000392-ship-postmortems"
 ---
-# ADR-001 - Postmortem coverage by line
+# ADR-0334 - Postmortem coverage by line
 
 **Skill:** [plan](../../../ravintio-zero/skills/ravintio-plan/SKILL.md)
 **Feature:** 0000392-ship-postmortems

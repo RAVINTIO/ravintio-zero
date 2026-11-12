@@ -3,8 +3,10 @@ title: "ADR 001: Coordinator skip uses env marker and lock"
 summary: "The prefix hook skips its check when RAVINTIO_INITIATIVE_STEP is not 1 and the driver lock exists under the working directory."
 status: "proposed"
 version: "0.1.0"
+component: "ravintio-zero"
+feature: "0000388-replies-and-questions"
 ---
-# ADR-001 - Coordinator skip uses env marker and lock
+# ADR-0333 - Coordinator skip uses env marker and lock
 
 **Skill:** [plan](../../../ravintio-zero/skills/ravintio-plan/SKILL.md)
 **Feature:** 0000388-replies-and-questions
