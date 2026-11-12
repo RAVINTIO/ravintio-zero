@@ -92,3 +92,6 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Cheaper tier agent calls | `{{count}}` |
 | Self-corrections | `{{count}}` |
 | Phases skipped | `{{list or "none"}}` |
+
+- Decisions: none name step 55
+- Queue item migration-done-step-55: committed to plan/current/coordinator-instruction-migration-done.md
