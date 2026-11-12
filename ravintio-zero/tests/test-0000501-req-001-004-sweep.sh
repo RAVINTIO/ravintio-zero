@@ -12,7 +12,7 @@ source "$SCRIPT_DIR/helpers/assert.sh"
 
 DRIVER="$SCRIPT_DIR/../scripts/initiative-run.mjs"
 STANDARDS="$SCRIPT_DIR/../standards/roadmap-standards.md"
-ADR="$SCRIPT_DIR/../../../docs/adr/0326-driver-sweeps-merged-worktrees.md"
+ADR="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)/docs/adr/0326-driver-sweeps-merged-worktrees.md"
 WORK="$(mktemp -d)"
 LIVE_PID=""
 trap '[ -n "$LIVE_PID" ] && kill "$LIVE_PID" 2>/dev/null; rm -rf "$WORK"' EXIT
