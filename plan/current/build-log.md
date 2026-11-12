@@ -51,14 +51,14 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-12T13:41:00Z` |
-| End | `pending` |
-| Wall clock | `pending` |
+| End | `2026-11-12T13:42:50Z` |
+| Wall clock | `1 minutes` |
 | Model tier | primary |
 | Skills loaded | ravintio-plan |
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
-| Notes | `Plan runs. The chart row for step 55 in the P1 skips table says no.` |
+| Notes | `Complete: P1 (2026-11-12T13:42:50Z). Autonomous run, so no gate stop. Consistency check clean. Human settings check clean. ADR 0339 written.` |
 
 ---
 
