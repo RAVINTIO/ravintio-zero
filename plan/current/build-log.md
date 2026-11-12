@@ -26,14 +26,14 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-12T07:21:09Z` |
-| End | `pending` |
-| Wall clock | `pending` |
+| End | `2026-11-12T13:41:00Z` |
+| Wall clock | `379 minutes, including a pause from 07:25Z to the design confirmation` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
-| Notes | `Queue item migration-done-step-55: coordinator note that migration 0009 has finished. Merged origin/initiative/0000360-backlog-sweep. Resume detection reports no pending migration. Note kept at plan/current/coordinator-instruction-migration-done.md.` |
+| Notes | `Complete: P0 (2026-11-12T13:41:00Z). Queue item migration-done-step-55: coordinator note that migration 0009 has finished. Merged origin/initiative/0000360-backlog-sweep. Resume detection reports no pending migration. Note kept at plan/current/coordinator-instruction-migration-done.md.` |
 
 - Run mode: autonomous (2026-11-12T13:39:43Z)
 - Scope Lock (happy path): every hook passes and the driver carries on [source: draft-accepted (initiative)]
@@ -43,6 +43,22 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Scope Lock complete. All four scenario paths captured.
 - Decision rows naming step 55: none.
 - Design confirmed: draft-accepted (initiative). The human confirmed three design points on 2026-11-12.
+
+---
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-12T13:41:00Z` |
+| End | `pending` |
+| Wall clock | `pending` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | `Plan runs. The chart row for step 55 in the P1 skips table says no.` |
 
 ---
 
