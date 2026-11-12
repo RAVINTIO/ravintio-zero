@@ -25,7 +25,8 @@ version: "0.1.0"
 | Result | Verdict |
 |--------|---------|
 | Exit 0 | pass |
-| Exit 2 | pass, because a guard blocks on purpose |
+| Exit 2 | pass, because a guard blocks on purpose, unless the launcher line below appears |
+| A `[RAVINTIO] guard-run:` line on stderr, with any exit code | fail, because the launcher could not run the hook |
 | Any other exit code, a spawn error, or a time-out after 15 seconds | fail |
 | An event and matcher with no sample | fail |
 

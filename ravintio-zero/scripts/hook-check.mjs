@@ -7,7 +7,8 @@
 // hook command with CLAUDE_PROJECT_DIR set to the root and one fixed JSON sample on stdin, chosen
 // by hook event and matcher. Each hook runs in a fresh temporary working directory.
 //   pass   the hook exits 0, or exits 2 (a guard's deliberate block)
-//   fail   any other exit code, a spawn error, a time-out, or an event and matcher with no sample
+//   fail   any other exit code, a spawn error, a time-out, an event and matcher with no sample, or
+//          a "[RAVINTIO] guard-run:" stderr line, which means the launcher could not run the hook
 // The script prints one line per hook and exits 0 if all pass, or 1 if any fails. It exits 2 with
 // one stderr line if settings.json is missing or is not valid JSON.
 
@@ -17,6 +18,10 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 
 const TIMEOUT_MS = 15000;
+
+// The launcher guard-run.mjs prints this prefix when it cannot run a hook script. A deliberate
+// block comes from the guard itself and never carries it.
+const LAUNCHER_FAILURE = /\[RAVINTIO\] guard-run:/;
 
 // One fixed sample per hook event and matcher alternative. A tool path points at a file outside
 // the project, so a write guard passes the sample on its own merits.
@@ -92,6 +97,11 @@ export function checkHooks(root) {
             });
             if (r.error) {
               results.push({ ...base, pass: false, detail: `did not run: ${r.error.code || r.error.message}` });
+            } else if (LAUNCHER_FAILURE.test(r.stderr || '')) {
+              // guard-run.mjs exits 2 for a guard it cannot run and exits 0 for a missing advisory.
+              // Neither is a deliberate block, so the hook fails.
+              const line = (r.stderr || '').split(/\r?\n/).find((l) => LAUNCHER_FAILURE.test(l)) || '';
+              results.push({ ...base, pass: false, detail: `exit ${r.status} ${line}`.trim() });
             } else if (r.status === 0 || r.status === 2) {
               results.push({ ...base, pass: true, detail: `exit ${r.status}` });
             } else {
