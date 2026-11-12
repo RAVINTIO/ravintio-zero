@@ -14,6 +14,7 @@
 #   block       writes a Blocked: line to the step build log and exits 0
 #   blocklate:M waits up to 10 s for step M to start, then does what block does
 #   waitstop    waits up to 10 s for the driver's Stopping: line, then writes ready
+#   blockstop   waits up to 10 s for the driver's Stopping: line, then does what block does
 #   none        exits 0 with no ready file and no session id
 #   entry       leaves an untracked backlog entry in the worktree, then writes ready
 #   notes       leaves an untracked file outside plan/backlog/ in the worktree, then writes ready
@@ -68,6 +69,9 @@ case "$mode" in
   waitstop)
     for i in $(seq 100); do grep -q 'Stopping:' "$DRIVER_OUT" && break; sleep 0.1; done
     ready ;;
+  blockstop)
+    for i in $(seq 100); do grep -q 'Stopping:' "$DRIVER_OUT" && break; sleep 0.1; done
+    printf 'Blocked: step %s cannot go on\n' "$n" >> plan/current/build-log.md; exit 0 ;;
   none) exit 0 ;;
   entry) mkdir -p plan/backlog/0000900-lost-entry; printf 'entry\n' > plan/backlog/0000900-lost-entry/entry.md; ready ;;
   notes) printf 'notes\n' > notes.txt; ready ;;

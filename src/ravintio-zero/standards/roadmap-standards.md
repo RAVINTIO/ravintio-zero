@@ -397,10 +397,11 @@ The driver resumes a step that ends its turn early. A step session exits 0 when 
 
 The driver loads its code once. After a merged step, it compares the initiative branch ref before and after the step. If the step changed `ravintio-zero/scripts/initiative-run.mjs`, `ravintio-zero/scripts/initiative-watch.mjs`, or `ravintio-zero/skills/ravintio-initiative/SKILL.md`, the driver stops.
 
-- The stop line is `I-D Advance: Restart: step {n} changed {files}. Start a new driver so step {next} runs the new code.` The driver releases the lock and exits 1.
+- The stop line is `I-D Advance: Restart: step {n} changed {files}. Start a new driver so step {next} runs the new code.` The driver releases the lock and exits 75, the code for a planned stop (0000503, ADR-0327). Every other stop exits 1.
 - The check runs after the delivery, block, and not-merged checks, so a delivered initiative never restarts.
 - If git or the branch ref is unreadable, the driver skips the check.
 - The initiative skill treats the line as a restart and not a failure. If the line also holds `Setup:`, it follows the setup stop first. It then starts a new driver and a new watcher without asking.
+- A `Restart: Setup:` line also exits 75. A bare `Setup:` line, a `Blocked:` line, and a stop signal exit 1. If a failure also stops the run, the driver exits 1 and keeps the restart line in its report.
 - The new driver reads the position from the branch ref and carries no other state. Its final report lists only the steps it ran.
 - Under the concurrent driver, the hit stops new starts first, and the line reads `so the next step runs the new code`. The driver exits after the running steps reach ready or stop. The new driver queues each `ready` step with no new session.
 
