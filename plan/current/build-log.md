@@ -67,14 +67,14 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-12T13:43:32Z` |
-| End | `pending` |
-| Wall clock | `pending` |
+| End | `2026-11-12T14:25:37Z` |
+| Wall clock | `42 minutes` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
-| Notes | `Three units in three dependent batches, so nothing runs in parallel. Each unit is small and shares files with the next, so the agent runs the TDD loop inline.` |
+| Notes | `Complete: P2 (2026-11-12T14:25:37Z). Three units in three dependent batches, so nothing runs in parallel. Each unit is small and shares files with the next, so the agent runs the TDD loop inline.` |
 
 - In progress: U-1 hook-check (2026-11-12T13:44:22Z)
 - RED: U-1 hook-check (2026-11-12T13:44:22Z)
@@ -91,6 +91,12 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 
 - In progress: U-3 docs (2026-11-12T13:46:59Z)
 - Done: U-3 docs (inline, primary, none, 2026-11-12T13:46:59Z)
+
+- Tests run: full suite: 446 passed, 2 failed (2026-11-12T14:25:37Z)
+- The first full run failed test-0000321-req-005-applied.sh. The pulled-in entry left the backlog index stale. The agent rebuilt the index and that suite now passes.
+- The second failure, test-0000450-req-004-report-format.sh, also fails on the base commit. Migration 0009 archived ADR 0314.
+- Baseline: plan/current/baseline-failures.md lists that one inherited suite.
+- A scratch clone of the base commit showed 23 more failures in the queue suites. Those suites need the real repo environment and pass in the worktree, so the file omits them.
 
 ---
 
