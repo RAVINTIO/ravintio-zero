@@ -146,6 +146,8 @@ Complete: P3 (2026-11-12T14:49:00Z)
 | Parallel task batches | `0` |
 | Notes | `Initiative step: the agent raises the PR first, then archives after green CI.` |
 
+- CI duration: 376s (run 43241613073, 2026-11-12T14:59:14Z)
+
 Complete: P4 (2026-11-12T14:49:49Z)
 
 ---
