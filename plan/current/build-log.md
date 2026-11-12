@@ -83,6 +83,12 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Done: U-1 hook-check (inline, primary, none, 2026-11-12T13:44:59Z)
 - Tests run: REQ-001, REQ-002: test-0000507-req-001-hook-check.sh (2026-11-12T13:44:59Z)
 
+- In progress: U-2 driver-wiring (2026-11-12T13:46:24Z)
+- RED: U-2 driver-wiring (2026-11-12T13:46:24Z)
+- GREEN: U-2 driver-wiring (2026-11-12T13:46:24Z)
+- Done: U-2 driver-wiring (inline, primary, none, 2026-11-12T13:46:24Z)
+- Tests run: REQ-003: test-0000507-req-003-driver-hook-check.sh, test-0000448-req-002-driver-runs-setup-command.sh, test-0000313-req-001-driver-setup-stop.sh (2026-11-12T13:46:24Z)
+
 ---
 
 <!-- Copy and fill in this block at each phase boundary. Headings use the form
