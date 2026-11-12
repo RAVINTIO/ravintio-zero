@@ -2,7 +2,7 @@
 
 **Feature:** Check every hook after setup
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** 195
 
 ## What changed
 
