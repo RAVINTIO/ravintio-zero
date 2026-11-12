@@ -95,3 +95,4 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 
 - Decisions: none name step 55
 - Queue item migration-done-step-55: committed to plan/current/coordinator-instruction-migration-done.md
+- Queue item design-confirmed-step-55: committed to plan/current/coordinator-instruction-design-confirmed.md. The human confirmed three design points. Deleted pause.md, wrote design.md, restarted the baseline run.
