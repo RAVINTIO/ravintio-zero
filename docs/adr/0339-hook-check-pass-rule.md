@@ -1,7 +1,7 @@
 ---
 title: "ADR 0339: Hook check pass rule and driver wiring"
 summary: "The hook check counts exit 0 and exit 2 as a pass, uses one fixed sample per event and matcher, and runs from the driver after setup."
-status: "proposed"
+status: "accepted"
 version: "0.1.0"
 component: "ravintio-zero"
 feature: "0000507-hook-check-after-setup"
