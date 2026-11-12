@@ -76,6 +76,9 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Parallel task batches | `0` |
 | Notes | `Three units in three dependent batches, so nothing runs in parallel. Each unit is small and shares files with the next, so the agent runs the TDD loop inline.` |
 
+- In progress: U-1 hook-check (2026-11-12T13:44:22Z)
+- RED: U-1 hook-check (2026-11-12T13:44:22Z)
+
 ---
 
 <!-- Copy and fill in this block at each phase boundary. Headings use the form
