@@ -3,8 +3,10 @@ title: "ADR 001: One brand guard allowlist file"
 summary: "The CI test and pre-push read one allowlist file, and the guard runs only in the pack source."
 status: "accepted"
 version: "0.1.0"
+component: "ravintio-zero"
+feature: "0000394-github-security-and-ci-lint"
 ---
-# ADR-001 - One brand guard allowlist file
+# ADR-0336 - One brand guard allowlist file
 
 **Skill:** [plan](../../../ravintio-zero/skills/ravintio-plan/SKILL.md)
 **Feature:** 0000394-github-security-and-ci-lint

@@ -3,8 +3,10 @@ title: "ADR 001: Baseline failures match by suite name"
 summary: "The baseline records failed suite file names and P3 compares by name."
 status: "accepted"
 version: "0.1.0"
+component: "ravintio-zero"
+feature: "0000385-faster-test-runs"
 ---
-# ADR-001 - Baseline failures match by suite name
+# ADR-0331 - Baseline failures match by suite name
 
 **Skill:** [plan](../../../ravintio-zero/skills/ravintio-plan/SKILL.md)
 **Feature:** 0000385-faster-test-runs
@@ -45,7 +47,7 @@ The runner prints the failed suite file names under `Failed suites:`. It does no
 
 ## Related ADRs
 
-- ADR-002 - related-to
+- ADR-0332 - related-to
 
 ## Supersedes
 

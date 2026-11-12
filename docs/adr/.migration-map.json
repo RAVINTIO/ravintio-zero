@@ -1090,5 +1090,49 @@
   "0000384:003": {
     "number": "0273",
     "file": "0273-human-settings-check.md"
+  },
+  "0000382:001": {
+    "number": "0328",
+    "file": "0328-lifecycle-commands-as-flags.md"
+  },
+  "0000382:002": {
+    "number": "0329",
+    "file": "0329-clean-tree-check-with-no-bypass.md"
+  },
+  "0000382:003": {
+    "number": "0330",
+    "file": "0330-uninstall-from-manifest-and-markers.md"
+  },
+  "0000385:001": {
+    "number": "0331",
+    "file": "0331-baseline-by-suite-name.md"
+  },
+  "0000385:002": {
+    "number": "0332",
+    "file": "0332-clean-clone-by-script.md"
+  },
+  "0000388:001": {
+    "number": "0333",
+    "file": "0333-coordinator-skip-uses-env-marker-and-lock.md"
+  },
+  "0000392:001": {
+    "number": "0334",
+    "file": "0334-postmortem-coverage-by-count.md"
+  },
+  "0000392:002": {
+    "number": "0335",
+    "file": "0335-queue-polls-checks-json.md"
+  },
+  "0000394:001": {
+    "number": "0336",
+    "file": "0336-shared-brand-guard-allowlist.md"
+  },
+  "0000394:002": {
+    "number": "0337",
+    "file": "0337-workflow-lint-tooling.md"
+  },
+  "0000394:003": {
+    "number": "0338",
+    "file": "0338-settings-check-and-human-stop.md"
   }
 }

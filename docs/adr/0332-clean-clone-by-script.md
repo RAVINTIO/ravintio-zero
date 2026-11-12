@@ -3,8 +3,10 @@ title: "ADR 002: Clean clone through a script"
 summary: "P3 runs the suite through clean-clone-test.mjs, which clones HEAD and removes the clone on every exit."
 status: "accepted"
 version: "0.1.0"
+component: "ravintio-zero"
+feature: "0000385-faster-test-runs"
 ---
-# ADR-002 - Clean clone through a script
+# ADR-0332 - Clean clone through a script
 
 **Skill:** [plan](../../../ravintio-zero/skills/ravintio-plan/SKILL.md)
 **Feature:** 0000385-faster-test-runs
@@ -45,7 +47,7 @@ P3 runs the suite in the working tree, so untracked files, ignored caches, and l
 
 ## Related ADRs
 
-- ADR-001 - related-to
+- ADR-0331 - related-to
 
 ## Supersedes
 

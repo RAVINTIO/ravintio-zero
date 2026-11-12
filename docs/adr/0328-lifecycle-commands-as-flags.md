@@ -3,8 +3,10 @@ title: "ADR 001: Lifecycle commands as flags"
 summary: "Update, doctor, and uninstall are flags on the tool argument."
 status: "accepted"
 version: "0.1.0"
+component: "ravintio-zero"
+feature: "0000382-install-lifecycle"
 ---
-# ADR-001 - Lifecycle commands as flags
+# ADR-0328 - Lifecycle commands as flags
 
 **Skill:** [plan](../../../ravintio-zero/skills/ravintio-plan/SKILL.md)
 **Feature:** 0000382-install-lifecycle
@@ -44,7 +46,7 @@ Each command is a flag that follows the tool: `--doctor`, `--update {source}`, a
 
 ## Related ADRs
 
-- ADR-002 - related-to
+- ADR-0329 - related-to
 
 ## Supersedes
 

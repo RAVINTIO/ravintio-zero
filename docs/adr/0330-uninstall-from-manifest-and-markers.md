@@ -3,8 +3,10 @@ title: "ADR 003: Uninstall from manifest and markers"
 summary: "Uninstall removes manifest paths and RAVINTIO-marked entries, and nothing else."
 status: "accepted"
 version: "0.1.0"
+component: "ravintio-zero"
+feature: "0000382-install-lifecycle"
 ---
-# ADR-003 - Uninstall from manifest and markers
+# ADR-0330 - Uninstall from manifest and markers
 
 **Skill:** [plan](../../../ravintio-zero/skills/ravintio-plan/SKILL.md)
 **Feature:** 0000382-install-lifecycle
@@ -52,7 +54,7 @@ It refuses while `plan/.orchestrator-active` or `plan/.initiative-runner.lock` e
 
 ## Related ADRs
 
-- ADR-001 - related-to
+- ADR-0328 - related-to
 
 ## Supersedes
 
