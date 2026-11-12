@@ -105,16 +105,20 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-12T14:26:18Z` |
-| End | `pending` |
-| Wall clock | `pending` |
+| End | `2026-11-12T14:49:00Z` |
+| Wall clock | `22 minutes` |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
-| Notes | `Autonomous run. The agent writes evidence to acceptance-evidence.md.` |
+| Notes | `Complete: P3 (2026-11-12T14:49:00Z). Autonomous run. The agent writes evidence to acceptance-evidence.md.` |
 
 - Rework: REQ-002: execution verification showed that a missing guard script exits 2 through guard-run.mjs and passed the check. The agent added the launcher-line rule (2026-11-12T14:27:25Z)
+
+- Tests run: full suite: 445 passed, 3 failed, clean clone (2026-11-12T14:49:00Z). All 3 failures also fail on the base commit. OS gap: local macos, CI ubuntu and windows.
+- Tests run: REQ-001, REQ-002, REQ-003: test-0000507-req-001-hook-check.sh, test-0000507-req-003-driver-hook-check.sh, test-0000321-req-005-applied.sh (2026-11-12T14:49:00Z)
+- Skipped: docs edit subagent. prose-check exits 0 on the six changed docs and the agent found no problem a script misses.
 
 ---
 

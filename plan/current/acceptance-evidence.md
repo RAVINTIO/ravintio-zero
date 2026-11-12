@@ -2,7 +2,9 @@
 
 ## Checks
 
-- Full suite on the working tree before the P3 fix: 446 passed, 2 failed. One failure was a stale backlog index, which the agent fixed. One fails on the base commit too (`test-0000450-req-004-report-format.sh`).
+- Clean-clone suite run: 445 passed, 3 failed, plus 19 of 19 regression suites. The 3 failures fail on the base commit too and sit in the baseline file as inherited: `test-0000037-req-004`, `test-0000318-req-004`, and `test-0000450-req-004`. The baseline check exits 0.
+- The clone ran before the launcher-line fix. The agent reran the two new suites and `test-0000321-req-005` after the fix, and all pass.
+- A first working-tree run found a stale backlog index. The agent fixed it.
 - New suites: `test-0000507-req-001-hook-check.sh` 29 checks, `test-0000507-req-003-driver-hook-check.sh` 15 checks. Both pass.
 - Driver suites 0000448, 0000313, and 0000250 pass.
 - `consistency-check.mjs` and `prose-check.mjs` are clean. `archetype-gates.mjs` found no gates installed.
@@ -20,4 +22,4 @@
 ## Docs edit pass
 
 - Changed docs: `docs/architecture-overview.md`, `docs/decisions-index.md`, `docs/component-registry.md`, `docs/dependency-graph.md`, `src/ravintio-zero/docs/hook-check.md`, `plan/changelog/0000507-hook-check-after-setup-2026-11-12.md`.
-- Cycles: 1. `prose-check.mjs` exit code: 0.
+- Cycles: 1 (no edit needed). `prose-check.mjs` exit code: 0.
