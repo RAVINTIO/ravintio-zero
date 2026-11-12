@@ -79,6 +79,10 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - In progress: U-1 hook-check (2026-11-12T13:44:22Z)
 - RED: U-1 hook-check (2026-11-12T13:44:22Z)
 
+- GREEN: U-1 hook-check (2026-11-12T13:44:59Z)
+- Done: U-1 hook-check (inline, primary, none, 2026-11-12T13:44:59Z)
+- Tests run: REQ-001, REQ-002: test-0000507-req-001-hook-check.sh (2026-11-12T13:44:59Z)
+
 ---
 
 <!-- Copy and fill in this block at each phase boundary. Headings use the form

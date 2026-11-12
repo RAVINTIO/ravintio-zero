@@ -111,4 +111,15 @@ mkdir -p "$WORK/p7"
 node "$CHECK" --root "$WORK/p7" >/dev/null 2>&1; CODE7=$?
 assert_equals "2" "$CODE7" "missing file exits 2"
 
+echo ""
+echo "=== R-001: the installed hook set passes and the repo stays unchanged ==="
+REPO="$(cd "$SCRIPT_DIR/../../.." && pwd)"
+if [ -f "$REPO/.claude/settings.json" ] && git -C "$REPO" rev-parse --git-dir >/dev/null 2>&1; then
+  BEFORE="$(git -C "$REPO" status --porcelain)"
+  node "$CHECK" --root "$REPO" >/dev/null 2>&1; CODE8=$?
+  AFTER="$(git -C "$REPO" status --porcelain)"
+  assert_equals "0" "$CODE8" "the installed hooks pass"
+  assert_equals "$BEFORE" "$AFTER" "the check leaves the repo unchanged"
+fi
+
 print_summary
