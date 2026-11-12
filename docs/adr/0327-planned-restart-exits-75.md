@@ -21,7 +21,7 @@ version: "0.1.0"
 
 A `Restart` class extends `Stop` and carries `planned = true`. The serial path throws it for each stop line that starts `I-D Advance: Restart:`. That includes the combined `Restart: Setup:` line.
 
-The concurrent path sets the flag when the first stop line starts the same way. A later failure in the same run clears it. `main()` exits 75 for a planned stop and 1 for every other stop. The handoff exit stays 0.
+The concurrent path throws `Restart` when the first stop line starts the same way and no later stop line is a failure. `main()` exits 75 for a `Restart` and 1 for every other stop. The handoff exit stays 0.
 
 The code 75 is `EX_TEMPFAIL` in `sysexits.h`. It means a temporary condition that a retry clears.
 
@@ -49,7 +49,7 @@ The code 75 is `EX_TEMPFAIL` in `sysexits.h`. It means a temporary condition tha
 - A tool that read exit 1 as the restart signal must read 75.
 
 **Risks:**
-- A failure exits 75 by mistake. A later stop line clears the flag, and a test pins the case.
+- A failure exits 75 by mistake. A later stop line that is not a `Restart` line marks the run failed, so it exits 1. A test pins the case.
 
 ## Related ADRs
 
