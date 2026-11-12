@@ -62,6 +62,22 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 
 ---
 
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-12T13:43:32Z` |
+| End | `pending` |
+| Wall clock | `pending` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | `Three units in three dependent batches, so nothing runs in parallel. Each unit is small and shares files with the next, so the agent runs the TDD loop inline.` |
+
+---
+
 <!-- Copy and fill in this block at each phase boundary. Headings use the form
      "### P<n>: {Phase Name}" with n from 1 to 4 and the phase names
      P1: Plan, P2: Implement, P3: Validate and Accept, P4: Ship.
