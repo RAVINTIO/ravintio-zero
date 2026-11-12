@@ -19,7 +19,7 @@ The runner prints the failed suite file names under `Failed suites:`. It does no
 
 ## Decision
 
-`baseline-failures.mjs` records and compares suite file names. A suite that fails on the base commit is inherited. Any other failed suite is new.
+`baseline-failures.mjs` records and compares suite file names. A suite that fails on the base commit counts as inherited. Any other failed suite is new.
 
 ## Alternatives Considered
 
@@ -37,7 +37,7 @@ The runner prints the failed suite file names under `Failed suites:`. It does no
 ## Consequences
 
 **Positive:**
-- The key exists in the runner output today, so no runner change is needed.
+- The key exists in the runner output today, so the runner needs no change.
 
 **Negative:**
 - A new failure inside an already failing suite looks inherited.

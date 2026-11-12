@@ -19,7 +19,7 @@ Nothing checks the workflows before they run. Entry 0000325 asks for `actionlint
 
 ## Decision
 
-A `workflow-lint` job in `.github/workflows/ravintio.yml` installs `zizmor` from PyPI at a pinned version and `actionlint` from its release download script at a pinned commit and version. It runs `actionlint` and then `zizmor --no-online-audits .github/workflows`. The job is not copied to `ravintio-zero/hooks/ravintio.yml`, because consumers choose their own lint tools. Existing findings get fixed in the workflows. A finding that cannot be fixed gets an inline `zizmor: ignore` with a reason.
+A `workflow-lint` job in `.github/workflows/ravintio.yml` installs `zizmor` from PyPI at a pinned version. It installs `actionlint` from its release download script at a pinned commit and version. It runs `actionlint` and then `zizmor --no-online-audits .github/workflows`. Setup does not copy the job to `ravintio-zero/hooks/ravintio.yml`, because consumers choose their own lint tools. Existing findings get fixed in the workflows. A finding that cannot be fixed gets an inline `zizmor: ignore` with a reason.
 
 ## Alternatives Considered
 
