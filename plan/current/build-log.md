@@ -155,3 +155,5 @@ Complete: P4 (2026-11-12T02:02:56Z)
 | Cheaper tier agent calls | `0` |
 | Self-corrections | `1` |
 | Phases skipped | `none` |
+
+CI duration: 445s (run 43138752203, 2026-11-12T02:11:47Z)
