@@ -27,7 +27,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 |-------|-------|
 | Start | `2026-11-11T23:55:14Z` |
 | End | `2026-11-11T23:57:32Z` |
-| Wall clock | `4` |
+| Wall clock | `2` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | `0` |
@@ -74,9 +74,9 @@ Complete: P1 (2026-11-11T23:57:32Z)
 
 | Field | Value |
 |-------|-------|
-| Start | `2026-11-12T00:46:25Z` |
+| Start | `2026-11-11T23:57:32Z` |
 | End | `2026-11-12T00:46:25Z` |
-| Wall clock | `48` |
+| Wall clock | `49` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | `0` |
@@ -109,7 +109,7 @@ Complete: P2 (2026-11-12T00:46:25Z)
 
 | Field | Value |
 |-------|-------|
-| Start | `2026-11-12T01:08:30Z` |
+| Start | `2026-11-12T00:46:25Z` |
 | End | `2026-11-12T01:08:30Z` |
 | Wall clock | `22` |
 | Model tier | primary |
@@ -124,3 +124,35 @@ Complete: P2 (2026-11-12T00:46:25Z)
 - Security review: no critical or high findings.
 
 Complete: P3 (2026-11-12T01:08:30Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-12T01:08:30Z` |
+| End | `2026-11-12T01:08:45Z` |
+| Wall clock | `0` |
+| Model tier | primary |
+| Skills loaded | ravintio-orchestrator, ravintio-ship |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | none |
+
+Complete: P4 (2026-11-12T01:08:45Z)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `74` |
+| Total agents spawned | `1` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `1` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `1` |
+| Phases skipped | `none` |
