@@ -100,6 +100,22 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 
 ---
 
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-12T14:26:18Z` |
+| End | `pending` |
+| Wall clock | `pending` |
+| Model tier | primary |
+| Skills loaded | ravintio-validate-and-accept |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | `Autonomous run. The agent writes evidence to acceptance-evidence.md.` |
+
+---
+
 <!-- Copy and fill in this block at each phase boundary. Headings use the form
      "### P<n>: {Phase Name}" with n from 1 to 4 and the phase names
      P1: Plan, P2: Implement, P3: Validate and Accept, P4: Ship.
