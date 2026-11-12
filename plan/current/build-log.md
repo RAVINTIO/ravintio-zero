@@ -75,11 +75,65 @@ Complete: P1 (2026-11-12T01:32:39Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-12T01:32:39Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-12T02:02:47Z` |
+| Wall clock | `29` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
 | Notes | Autonomous run. The units share one driver file, so the agent runs them inline. |
+
+- Tests run: REQ-001: test-0000503-req-001-003-restart-exit.sh (2026-11-12T02:02:47Z)
+- Tests run: REQ-002: test-0000503-req-001-003-restart-exit.sh (2026-11-12T02:02:47Z)
+- Tests run: REQ-003: test-0000503-req-001-003-restart-exit.sh (2026-11-12T02:02:47Z)
+- In progress: U1 tests (2026-11-12T02:02:47Z)
+- RED: U1 tests (2026-11-12T02:02:47Z)
+- GREEN: U1 tests (2026-11-12T02:02:47Z)
+- Done: U1 tests (content, inline, none, 2026-11-12T02:02:47Z)
+- In progress: U2 driver (2026-11-12T02:02:47Z)
+- RED: U2 driver (2026-11-12T02:02:47Z)
+- GREEN: U2 driver (2026-11-12T02:02:47Z)
+- Done: U2 driver (content, inline, none, 2026-11-12T02:02:47Z)
+- In progress: U3 living docs (2026-11-12T02:02:47Z)
+- RED: U3 living docs (2026-11-12T02:02:47Z)
+- GREEN: U3 living docs (2026-11-12T02:02:47Z)
+- Done: U3 living docs (content, inline, none, 2026-11-12T02:02:47Z)
+- Tests run: full suite: 442 feature suites and 19 regression suites passed, 4 failed (2026-11-12T02:02:47Z)
+- The full suite found `test-0000379-req-002-003-005-scheduler.sh`, an older suite that expected exit 1 for a restart line. The agent set it to 75 and reran it: 57 passed. The other three failures are on the baseline list.
+
+Complete: P2 (2026-11-12T02:02:47Z)
+
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-12T02:02:47Z` |
+| End | `2026-11-12T02:02:47Z` |
+| Wall clock | `0` |
+| Model tier | primary |
+| Skills loaded | ravintio-validate-and-accept |
+| Agents spawned | `1` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Autonomous run. One fresh-context subagent ran the docs edit pass. The suite from P2 ran in a clean clone. |
+
+- OS gap: local macos, CI ubuntu, windows
+- Docs edit pass: 1 cycle, 2 sentences rewritten, prose-check exit 0.
+- Security review: no critical or high findings.
+
+Complete: P3 (2026-11-12T02:02:47Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-12T02:02:47Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-orchestrator, ravintio-ship |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | none |
