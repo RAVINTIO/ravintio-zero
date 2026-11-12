@@ -1,7 +1,7 @@
 ---
 title: "ADR 0326: Driver sweeps merged worktrees"
 summary: "At start, the driver removes the worktree of each merged step when no session runs there, the tree is clean, and the head is on origin. It keeps and reports every other worktree."
-status: "proposed"
+status: "accepted"
 component: "ravintio-zero"
 version: "0.1.0"
 ---
