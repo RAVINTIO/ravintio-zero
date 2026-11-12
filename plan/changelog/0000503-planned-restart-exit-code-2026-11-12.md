@@ -2,7 +2,7 @@
 
 **Feature:** Planned restart exits with its own code
 **Version:** set by the merge queue at merge
-**PR:** pending, updated at Step 9
+**PR:** #193
 
 ## What changed
 
