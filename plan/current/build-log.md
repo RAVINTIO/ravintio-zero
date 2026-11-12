@@ -26,8 +26,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-12T01:30:28Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-12T01:32:39Z` |
+| Wall clock | `2` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | `0` |
@@ -48,3 +48,38 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Scope Lock (error path): a failure keeps exit 1, also when a restart hit came first in the same run [source: draft-accepted (initiative)]
 - Scope Lock (cross-session continuity): the exit code carries no state, so a new driver reads the position from the branch ref [source: draft-accepted (initiative)]
 - Design confirmation: draft-accepted (initiative)
+
+Complete: P0 (2026-11-12T01:32:39Z)
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-12T01:32:39Z` |
+| End | `2026-11-12T01:32:39Z` |
+| Wall clock | `0` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Three requirements, one ADR (0327). The units are small and share the driver file, so the agent runs them inline. |
+
+- Decisions: none name step 53
+- Audit: no requirement targets advisories or dependency versions
+
+Complete: P1 (2026-11-12T01:32:39Z)
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-12T01:32:39Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Autonomous run. The units share one driver file, so the agent runs them inline. |
