@@ -127,6 +127,11 @@
 //     plan/backlog/ in it. If it finds any, or git cannot list them, it keeps the worktree and stops
 //     the queue for the step with a line that names up to five files. The ready file stays, so a new
 //     driver queues the step again. The removal would delete untracked backlog entries (0000497).
+//   - At start, the driver sweeps the worktree of each merged step in the chart. It removes the
+//     worktree only when no live pid sits in the step's running file, "git status" lists no file,
+//     and the head is on origin/feat/{feature-id} or that branch is gone. Otherwise it keeps the
+//     worktree and prints "I-C Run: Kept: step {n} {reason}". A kept worktree never stops the run
+//     (0000501, ADR-0326).
 //   - The queue takes one ready step at a time, in ready order. It removes the step worktree and
 //     runs "node {merge-queue.mjs} run --step {n} --pr {k} --root {queue worktree}". MERGE_QUEUE_BIN
 //     overrides the script. The queue worktree is plan/.initiative-worktrees/queue, detached at the
@@ -964,6 +969,57 @@ function removeWorktree(root, n) {
   if (!ran0(r)) throw new Stop(`could not remove ${WORKTREES}/step-${n}. ${lastLine(r.stderr)}`);
 }
 
+// Returns why a merged step's worktree is unsafe to remove, or '' when it is safe. A git command that
+// fails counts as unsafe (0000501 ADR-0326).
+function unsafeWorktree(wt, featureId) {
+  const inspect = (r) => `worktree could not be inspected: ${lastLine(r.stderr) || r.error?.code || 'git failed'}`.slice(0, MAX_LINE);
+  const status = gitIn(wt, ['status', '--porcelain', '-z']);
+  if (!ran0(status)) return inspect(status);
+  const files = status.stdout.split('\0').filter(Boolean).map((e) => e.slice(3));
+  if (files.length > 0) {
+    const rest = files.length > 5 ? ` and ${files.length - 5} more` : '';
+    return `worktree holds uncommitted files: ${files.slice(0, 5).join(', ')}${rest}`;
+  }
+  const head = gitIn(wt, ['rev-parse', 'HEAD']);
+  if (!ran0(head)) return inspect(head);
+  const branch = `feat/${featureId}`;
+  const remote = gitIn(wt, ['ls-remote', '--heads', 'origin', `refs/heads/${branch}`]);
+  if (!ran0(remote)) return inspect(remote);
+  const tip = remote.stdout.trim().split(/\s+/)[0];
+  if (!tip || tip === head.stdout.trim()) return '';
+  const below = gitIn(wt, ['merge-base', '--is-ancestor', head.stdout.trim(), tip]);
+  if (below.status === 0) return '';
+  return below.status === 1 ? `worktree head is not on origin/${branch}` : inspect(below);
+}
+
+// Removes the worktree of each merged step when it is safe, once at start. It prints one Kept line for
+// each worktree it leaves, and never stops the run (0000501 ADR-0326).
+function sweepMergedWorktrees(root, steps, merged) {
+  for (const s of steps) {
+    if (!merged.has(s.step)) continue;
+    const n = s.step;
+    const keep = (why) => out(`I-C Run: Kept: step ${n} ${why}`.slice(0, MAX_LINE));
+    try {
+      const wt = areaPath(root, WORKTREES, `step-${n}`, worktreeRefusal);
+      if (!present(wt)) continue;
+      const pid = runningPid(root, n);
+      if (pid && alive(pid)) {
+        keep('a session still runs');
+        continue;
+      }
+      const why = unsafeWorktree(wt, s.featureId);
+      if (why) {
+        keep(why);
+        continue;
+      }
+      const r = gitIn(root, ['worktree', 'remove', '--force', wt]);
+      if (!ran0(r)) keep(`worktree could not be removed: ${lastLine(r.stderr)}`);
+    } catch (e) {
+      keep(`worktree could not be inspected: ${e instanceof Stop ? e.message : e.code || e.name}`);
+    }
+  }
+}
+
 function controlDir(root, n) {
   const dir = areaPath(root, CONTROL, `step-${n}`, controlRefusal);
   mkdirSync(dir, { recursive: true, mode: 0o700 });
@@ -1333,6 +1389,8 @@ async function schedule(root, cfg, rm, handoff = 0) {
     }
     if (!handoff) clearStopped(root, s.step);
   }
+  // A driver that did not take over from another sweeps the worktrees of merged steps (0000501).
+  if (!handoff) sweepMergedWorktrees(root, chart.steps, merged);
 
   const stop = { msg: '', log: null };
   const setStop = (msg, rec) => {
