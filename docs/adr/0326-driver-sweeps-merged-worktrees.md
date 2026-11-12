@@ -15,7 +15,7 @@ version: "0.1.0"
 
 ## Context
 
-The driver removes a step worktree in `queueTask()`, before it runs the merge queue. A step that merged in an earlier driver run, by hand, or with its removal skipped keeps its worktree. On 2026-11-11 the worktree `plan/.initiative-worktrees/step-12` still existed, although step 12 merged on 2026-11-08. Old worktrees hold their branches and pile up.
+The driver removes a step worktree in `queueTask()`, before it runs the merge queue. A step keeps its worktree if it merged by hand or the driver skipped its removal in an earlier run. On 2026-11-11 the worktree `plan/.initiative-worktrees/step-12` still existed, although step 12 merged on 2026-11-08. Old worktrees hold their branches and pile up.
 
 ## Decision
 
