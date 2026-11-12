@@ -7,6 +7,7 @@
 # REQ-002 AC-1: exit 2 from a guard passes.
 # REQ-002 AC-2: a missing hook script fails and exits 1.
 # REQ-002 AC-3: exit 1 from a hook fails.
+# REQ-002 AC-4: exit 2 or exit 0 with a guard-run: stderr line fails, because the launcher could not run the hook.
 
 set -uo pipefail
 
@@ -39,6 +40,18 @@ STUB
 #!/usr/bin/env bash
 cat > /dev/null
 exit 1
+STUB
+  cat > "$root/hooks/launcher-fail.sh" <<'STUB'
+#!/usr/bin/env bash
+cat > /dev/null
+echo "[RAVINTIO] guard-run: the hook script gate-write.mjs is missing from /x. Blocking, because a guard that cannot run must not allow the call. Rerun setup." >&2
+exit 2
+STUB
+  cat > "$root/hooks/launcher-warn.sh" <<'STUB'
+#!/usr/bin/env bash
+cat > /dev/null
+echo "[RAVINTIO] guard-run: the advisory hook script check-design.mjs is missing from /x. Rerun setup." >&2
+exit 0
 STUB
   printf '%s' "$root"
 }
@@ -110,6 +123,16 @@ echo "=== REQ-001: a missing settings file exits 2 ==="
 mkdir -p "$WORK/p7"
 node "$CHECK" --root "$WORK/p7" >/dev/null 2>&1; CODE7=$?
 assert_equals "2" "$CODE7" "missing file exits 2"
+
+echo ""
+echo "=== REQ-002 AC-4: a launcher failure fails even on exit 2 or exit 0 ==="
+SET9="{\"hooks\":{\"PreToolUse\":[$(entry x Write 'bash \"${CLAUDE_PROJECT_DIR}/hooks/launcher-fail.sh\"')],\"Stop\":[$(entry x '.*' 'bash \"${CLAUDE_PROJECT_DIR}/hooks/launcher-warn.sh\"')]}}"
+R9="$(make_project p9 "$SET9")"
+OUT9="$(node "$CHECK" --root "$R9" 2>&1)"; CODE9=$?
+assert_equals "1" "$CODE9" "a launcher failure exits 1"
+assert_contains "fail: PreToolUse Write launcher-fail.sh" "$OUT9" "the guard that cannot run fails"
+assert_contains "fail: Stop .* launcher-warn.sh" "$OUT9" "the advisory that cannot run fails"
+assert_contains "guard-run" "$OUT9" "the line shows the launcher message"
 
 echo ""
 echo "=== R-001: the installed hook set passes and the repo stays unchanged ==="

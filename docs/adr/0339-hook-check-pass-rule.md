@@ -22,6 +22,7 @@ After setup, no command checks that every hook in `.claude/settings.json` loads 
 
 - `hook-check.mjs` sets `CLAUDE_PROJECT_DIR` and feeds each hook one fixed sample for its event and matcher.
 - Exit 0 and exit 2 pass. Any other exit code, a spawn error, or a time-out fails.
+- A `[RAVINTIO] guard-run:` stderr line fails the hook at any exit code. The launcher fails closed with exit 2 for a guard it cannot run. The exit code alone cannot tell a missing guard from a deliberate block.
 - A hook with no sample for its event and matcher fails the check.
 - The driver runs the check after the approved setup command exits 0. A failure stops the driver with a `Blocked:` line.
 
@@ -30,6 +31,7 @@ After setup, no command checks that every hook in `.claude/settings.json` loads 
 | Alternative | Pros | Cons | Why Rejected |
 |-------------|------|------|-------------|
 | Check that each script file exists | No process runs | Misses a crash on load | The failure of 2026-11-11 was a load failure |
+| Treat exit 2 as a pass with no stderr check | One rule | A missing guard script passes, which is the failure the check exists to find | The launcher exits 2 for a missing guard |
 | Treat only exit 0 as a pass | One rule | Fails every working guard | Guards block by design |
 | Run the check from setup.sh | One place | Setup then fails on a hook the human may fix next | The driver needs the stop line, not setup |
 

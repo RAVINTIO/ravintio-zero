@@ -13,6 +13,7 @@
 
 ## Deviations
 
+- Exit 2 passes only without a `[RAVINTIO] guard-run:` stderr line. `guard-run.mjs` exits 2 for a guard whose script is missing, so a plain exit 2 rule would pass the failure the check exists to find. P3 execution verification found it. The requirement, ADR-0339, and the docs now say so.
 - A pack with no `hook-check.mjs` skips the check and the driver prints a Setup line. This keeps the existing driver suites passing against older fixtures.
 
 ## Validation results

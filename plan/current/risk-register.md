@@ -18,6 +18,7 @@ version: "0.1.0"
 | R-001 | technical | A sample input makes a hook write to the repo | low | medium | Run each hook in a temporary working directory and test that the repo stays unchanged | open |
 | R-002 | operational | A false failure stops the driver after a good setup | medium | high | Pin the pass codes 0 and 2 in the test and print the hook, event, and exit code | open |
 | R-003 | security | The script runs a command from `.claude/settings.json` that someone edited | low | high | Run only commands already in the file, which the human trusts at setup | open |
+| R-005 | technical | A missing guard script exits 2 through the launcher and looks like a deliberate block | high | high | Fail any hook that prints a `[RAVINTIO] guard-run:` stderr line, and test it | mitigated |
 | R-004 | technical | A new hook has no sample, so the check skips it | medium | medium | Fail the check for a hook event or matcher with no sample | open |
 
 ## Assumptions Logged as Risks

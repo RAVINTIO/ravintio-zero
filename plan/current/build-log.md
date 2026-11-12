@@ -114,6 +114,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Parallel task batches | `0` |
 | Notes | `Autonomous run. The agent writes evidence to acceptance-evidence.md.` |
 
+- Rework: REQ-002: execution verification showed that a missing guard script exits 2 through guard-run.mjs and passed the check. The agent added the launcher-line rule (2026-11-12T14:27:25Z)
+
 ---
 
 <!-- Copy and fill in this block at each phase boundary. Headings use the form
