@@ -80,14 +80,15 @@
 //      If the step changed initiative-run.mjs, initiative-watch.mjs, or the initiative skill,
 //      the running driver and its watcher hold old code. The driver prints
 //      "I-D Advance: Restart: step {n} changed {files}. Start a new driver so step {next}
-//      runs the new code.", releases the lock, and exits 1. The initiative skill starts a new
-//      driver and watcher at once. If git or the ref is unreadable, the check is skipped.
+//      runs the new code.", releases the lock, and exits 75, the code for a planned stop
+//      (0000503, ADR-0327). The initiative skill starts a new driver and watcher at once. If
+//      git or the ref is unreadable, the check is skipped.
 //      The same comparison covers ravintio-zero/skills/, hooks/, setup.sh, and setup/. If the
 //      step changed any of them, the installed copies are stale. The driver prints
 //      "I-D Advance: Setup: step {n} changed {files}. Rerun setup, then start a new driver.",
 //      releases the lock, and exits 1. If the step also changed a restart file, it prints one
 //      line, "I-D Advance: Restart: Setup: step {n} changed {files}. Rerun setup, then start a
-//      new driver so step {next} runs the new code." The files list restart files first, names
+//      new driver so step {next} runs the new code." That line also exits 75. The files list restart files first, names
 //      each once, and shows at most 5, then "and {k} more". After the last step the Setup
 //      check also runs, before the Pending line, and a hit stops the driver with no Pending (0000373).
 //      Before it stops on a Setup hit, the driver reads the setup "Confirmation:" row of the chart
@@ -141,7 +142,9 @@
 //     prints "I-C Run: Stopping:". Running steps still reach ready or stop. The queue still merges
 //     every other ready step, also after a queue failure (0000446). On a queue failure the driver
 //     prints "I-D Advance: Blocked: queue stopped on step {n}" and the reason at once. It also
-//     appends that line to the step log (0000450). The stop line at exit repeats it. A failed step gets one attempt,
+//     appends that line to the step log (0000450). The stop line at exit repeats it. A stop line
+//     that starts "I-D Advance: Restart:" exits 75, unless a failure also stopped the run. Every
+//     other stop exits 1 (0000503). A failed step gets one attempt,
 //     keeps its ready file, and reads stopped. A new driver queues it again. Before exit 1 the driver prints "I-C Run: Step {n}: {state}"
 //     for every step, then the first stop line with the log of the step that caused it.
 //   - Handoff (0000493, ADR-0323): a merge that changed a watched file and no setup file is a
@@ -240,6 +243,14 @@ const PR = /^[1-9][0-9]{0,6}$/;
 const SETUP_OUTPUT = ['.claude', 'CLAUDE.md', 'AGENTS.md', '.codex'];
 
 class Stop extends Error {}
+
+// A stop whose line starts "I-D Advance: Restart:" is planned. The driver exits 75 for it and 1
+// for every other stop (0000503, ADR-0327).
+const EXIT_PLANNED = 75;
+const isRestartLine = (msg) => msg.startsWith('I-D Advance: Restart:');
+class Restart extends Stop {
+  planned = true;
+}
 
 // Local time as hh:mm, 24-hour and zero padded. Every printed line starts with it (0000388).
 const clock = () => {
@@ -799,13 +810,13 @@ async function main() {
       if (done !== 'ran') {
         const files = nameFiles([...restart, ...setup.filter((f) => !restart.includes(f))]);
         if (restart.length > 0) {
-          throw new Stop(`I-D Advance: Restart: Setup: step ${position} changed ${files}. ${setupNote(done)}Rerun setup, then start a new driver so step ${rm.position} runs the new code.`);
+          throw new Restart(`I-D Advance: Restart: Setup: step ${position} changed ${files}. ${setupNote(done)}Rerun setup, then start a new driver so step ${rm.position} runs the new code.`);
         }
         throw new Stop(`I-D Advance: Setup: step ${position} changed ${files}. ${setupNote(done)}Rerun setup, then start a new driver.`);
       }
     }
     if (restart.length > 0) {
-      throw new Stop(`I-D Advance: Restart: step ${position} changed ${restart.join(', ')}. Start a new driver so step ${rm.position} runs the new code.`);
+      throw new Restart(`I-D Advance: Restart: step ${position} changed ${restart.join(', ')}. Start a new driver so step ${rm.position} runs the new code.`);
     }
   }
 }
@@ -1392,9 +1403,12 @@ async function schedule(root, cfg, rm, handoff = 0) {
   // A driver that did not take over from another sweeps the worktrees of merged steps (0000501).
   if (!handoff) sweepMergedWorktrees(root, chart.steps, merged);
 
-  const stop = { msg: '', log: null };
+  const stop = { msg: '', log: null, failed: false };
   const setStop = (msg, rec) => {
-    if (stop.msg) return;
+    if (stop.msg) {
+      if (!isRestartLine(msg)) stop.failed = true;
+      return;
+    }
     stop.msg = msg;
     stop.log = rec ? rec.log : null;
     out(`I-C Run: Stopping: no new step starts after step ${rec ? rec.n : 'none'}`);
@@ -1582,6 +1596,7 @@ async function schedule(root, cfg, rm, handoff = 0) {
         }
       }
       if (stop.msg) {
+        stop.failed = true;
         if (!announced) out(msg);
       } else setStop(msg, rec);
     } finally {
@@ -1620,7 +1635,7 @@ async function schedule(root, cfg, rm, handoff = 0) {
   const stopWith = (msg, log) => {
     currentLog = log ? log.rel : null;
     earlierLogs = log ? log.earlier : [];
-    return new Stop(msg);
+    return isRestartLine(msg) && !stop.failed ? new Restart(msg) : new Stop(msg);
   };
   if (stop.msg) {
     report();
@@ -1655,6 +1670,6 @@ main().then(
   () => process.exit(0),
   (e) => {
     out(e instanceof Stop ? withLog(e.message) : `I-C Run: Blocked: driver error ${e.code || e.name}`);
-    process.exit(1);
+    process.exit(e instanceof Restart ? EXIT_PLANNED : 1);
   },
 );
