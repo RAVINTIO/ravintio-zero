@@ -2,7 +2,7 @@
 id: "ravintio-zero"
 name: "RAVINTIO Zero"
 feature: "0000397-pack-source-in-src"
-version: "0.107.0"
+version: "0.108.0"
 status: "active"
 type: "component-pack"
 domain: "developer-tooling"
