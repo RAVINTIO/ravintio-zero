@@ -35,6 +35,15 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Parallel task batches | `0` |
 | Notes | `Queue item migration-done-step-55: coordinator note that migration 0009 has finished. Merged origin/initiative/0000360-backlog-sweep. Resume detection reports no pending migration. Note kept at plan/current/coordinator-instruction-migration-done.md.` |
 
+- Run mode: autonomous (2026-11-12T13:39:43Z)
+- Scope Lock (happy path): every hook passes and the driver carries on [source: draft-accepted (initiative)]
+- Scope Lock (first-run path): the check runs against a fresh install [source: draft-accepted (initiative)]
+- Scope Lock (error path): the script names a failing hook and the driver prints Blocked [source: draft-accepted (initiative)]
+- Scope Lock (cross-session continuity): the check keeps no state [source: draft-accepted (initiative)]
+- Scope Lock complete. All four scenario paths captured.
+- Decision rows naming step 55: none.
+- Design confirmed: draft-accepted (initiative). The human confirmed three design points on 2026-11-12.
+
 ---
 
 <!-- Copy and fill in this block at each phase boundary. Headings use the form
