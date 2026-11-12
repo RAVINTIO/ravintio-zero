@@ -27,13 +27,13 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 |-------|-------|
 | Start | `2026-11-12T07:21:09Z` |
 | End | `2026-11-12T13:41:00Z` |
-| Wall clock | `379 minutes, including a pause from 07:25Z to the design confirmation` |
+| Wall clock | `379` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
-| Notes | `Complete: P0 (2026-11-12T13:41:00Z). Queue item migration-done-step-55: coordinator note that migration 0009 has finished. Merged origin/initiative/0000360-backlog-sweep. Resume detection reports no pending migration. Note kept at plan/current/coordinator-instruction-migration-done.md.` |
+| Notes | `Queue item migration-done-step-55: coordinator note that migration 0009 has finished. Merged origin/initiative/0000360-backlog-sweep. Resume detection reports no pending migration. Note kept at plan/current/coordinator-instruction-migration-done.md.` |
 
 - Run mode: autonomous (2026-11-12T13:39:43Z)
 - Scope Lock (happy path): every hook passes and the driver carries on [source: draft-accepted (initiative)]
@@ -44,6 +44,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Decision rows naming step 55: none.
 - Design confirmed: draft-accepted (initiative). The human confirmed three design points on 2026-11-12.
 
+Complete: P0 (2026-11-12T13:41:00Z)
+
 ---
 
 ### P1: Plan
@@ -52,13 +54,15 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 |-------|-------|
 | Start | `2026-11-12T13:41:00Z` |
 | End | `2026-11-12T13:42:50Z` |
-| Wall clock | `1 minutes` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-plan |
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
-| Notes | `Complete: P1 (2026-11-12T13:42:50Z). Autonomous run, so no gate stop. Consistency check clean. Human settings check clean. ADR 0339 written.` |
+| Notes | `Autonomous run, so no gate stop. Consistency check clean. Human settings check clean. ADR 0339 written.` |
+
+Complete: P1 (2026-11-12T13:42:50Z)
 
 ---
 
@@ -68,13 +72,13 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 |-------|-------|
 | Start | `2026-11-12T13:43:32Z` |
 | End | `2026-11-12T14:25:37Z` |
-| Wall clock | `42 minutes` |
+| Wall clock | `42` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
-| Notes | `Complete: P2 (2026-11-12T14:25:37Z). Three units in three dependent batches, so nothing runs in parallel. Each unit is small and shares files with the next, so the agent runs the TDD loop inline.` |
+| Notes | `Three units in three dependent batches, so nothing runs in parallel. Each unit is small and shares files with the next, so the agent runs the TDD loop inline.` |
 
 - In progress: U-1 hook-check (2026-11-12T13:44:22Z)
 - RED: U-1 hook-check (2026-11-12T13:44:22Z)
@@ -98,6 +102,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Baseline: plan/current/baseline-failures.md lists that one inherited suite.
 - A scratch clone of the base commit showed 23 more failures in the queue suites. Those suites need the real repo environment and pass in the worktree, so the file omits them.
 
+Complete: P2 (2026-11-12T14:25:37Z)
+
 ---
 
 ### P3: Validate and Accept
@@ -106,19 +112,41 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 |-------|-------|
 | Start | `2026-11-12T14:26:18Z` |
 | End | `2026-11-12T14:49:00Z` |
-| Wall clock | `22 minutes` |
+| Wall clock | `22` |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
-| Notes | `Complete: P3 (2026-11-12T14:49:00Z). Autonomous run. The agent writes evidence to acceptance-evidence.md.` |
+| Notes | `Autonomous run. The agent writes evidence to acceptance-evidence.md.` |
 
 - Rework: REQ-002: execution verification showed that a missing guard script exits 2 through guard-run.mjs and passed the check. The agent added the launcher-line rule (2026-11-12T14:27:25Z)
 
 - Tests run: full suite: 445 passed, 3 failed, clean clone (2026-11-12T14:49:00Z). All 3 failures also fail on the base commit. OS gap: local macos, CI ubuntu and windows.
 - Tests run: REQ-001, REQ-002, REQ-003: test-0000507-req-001-hook-check.sh, test-0000507-req-003-driver-hook-check.sh, test-0000321-req-005-applied.sh (2026-11-12T14:49:00Z)
 - Skipped: docs edit subagent. prose-check exits 0 on the six changed docs and the agent found no problem a script misses.
+
+- Postmortem: plan/postmortems/2026-11-12-missing-guard-passed-hook-check.md REQ-002 (2026-11-12T14:50:27Z)
+
+Complete: P3 (2026-11-12T14:49:00Z)
+
+---
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-12T14:49:49Z` |
+| End | `2026-11-12T14:49:49Z` |
+| Wall clock | `0` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | `Initiative step: the agent raises the PR first, then archives after green CI.` |
+
+Complete: P4 (2026-11-12T14:49:49Z)
 
 ---
 
@@ -168,15 +196,15 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 
 | Metric | Value |
 |--------|-------|
-| Total phases completed | `{{count}}` |
-| Total wall clock | `{{minutes from pipeline start to the P4 End}}` |
-| Total agents spawned | `{{count}}` |
-| Total MCP calls | `{{count}}` |
-| Phases using parallelism | `{{count}}` |
-| Primary tier agent calls | `{{count}}` |
-| Cheaper tier agent calls | `{{count}}` |
-| Self-corrections | `{{count}}` |
-| Phases skipped | `{{list or "none"}}` |
+| Total phases completed | `5` |
+| Total wall clock | `448 minutes, including a pause` |
+| Total agents spawned | `0` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `0` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `1` |
+| Phases skipped | `none` |
 
 - Decisions: none name step 55
 - Queue item migration-done-step-55: committed to plan/current/coordinator-instruction-migration-done.md

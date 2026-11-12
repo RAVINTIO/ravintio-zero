@@ -2,7 +2,7 @@
 
 **Feature:** Check every hook after setup
 **Version:** set by the merge queue at merge
-**PR:** set at P4
+**PR:** pending
 
 ## What changed
 
@@ -10,6 +10,10 @@
 - The initiative driver runs the script after the approved setup command. A failure prints `I-D Advance: Blocked: hook check failed after setup:` and stops the driver.
 - New docs: `src/ravintio-zero/docs/hook-check.md` and ADR-0339.
 - Two new suites: `test-0000507-req-001-hook-check` and `test-0000507-req-003-driver-hook-check`.
+
+## Why
+
+After setup, no command checked that every hook loads and runs. The first ad hoc check on 2026-11-11 failed for every hook because it did not set `CLAUDE_PROJECT_DIR`. A broken hook now stops the driver before the next step.
 
 ## Deviations
 
