@@ -161,7 +161,7 @@ RESTART_SECTION="$(awk '/^#### Restart stop/{f=1;next} /^#### /{f=0} f' "$STD")"
 assert_contains "exits 75" "$RESTART_SECTION" "REQ-003 AC-1: the standards name exit 75 in the Restart stop section"
 STOPS="$(awk '/^## Stops/{f=1;next} /^## /{f=0} f' "$SKILL")"
 assert_contains "75" "$STOPS" "REQ-003 AC-2: the skill names exit 75 in Stops"
-assert_contains "exit 75" "$(sed -n '1,160p' "$DRIVER")" "REQ-003 AC-2: the driver header names exit 75"
+assert_contains "exits 75" "$(sed -n '1,160p' "$DRIVER")" "REQ-003 AC-2: the driver header names exit 75"
 ADR="$(ls "$REPO"/docs/adr/*planned-restart-exits-75.md 2>/dev/null | head -1)"
 if [ -n "$ADR" ]; then
   assert_contains "0000503-planned-restart-exit-code" "$(cat "$ADR")" "REQ-003 AC-3: the ADR names the feature"

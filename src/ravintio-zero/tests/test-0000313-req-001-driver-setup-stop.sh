@@ -109,7 +109,7 @@ echo ""
 echo "=== req-001 AC-3: both stops give one line ==="
 R="$(make_fixture ac3)"
 run_driver "$R" "ravintio-zero/scripts/initiative-run.mjs ravintio-zero/hooks/x.sh"
-assert_equals "1" "$CODE" "req-001 AC-3: driver exits 1"
+assert_equals "75" "$CODE" "req-001 AC-3: driver exits 75"
 assert_contains "I-D Advance: Restart: Setup: step 1 changed ravintio-zero/scripts/initiative-run.mjs, ravintio-zero/hooks/x.sh. Rerun setup, then start a new driver so step 2 runs the new code." "$OUT" "req-001 AC-3: one line names both files"
 assert_equals "1" "$(printf '%s\n' "$OUT" | grep -c 'I-D Advance: Restart: Setup:')" "req-001 AC-3: exactly one such line"
 
