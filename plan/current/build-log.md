@@ -92,5 +92,8 @@ Run mode: autonomous (2026-11-13T04:20:00Z, initiative step)
 - Tests run: REQ-002: ravintio-zero/tests/test-0000536-req-001-003-pending-migrations.sh (2026-11-13T04:26:05Z)
 - Tests run: REQ-003: ravintio-zero/tests/test-0000536-req-001-003-pending-migrations.sh (2026-11-13T04:26:05Z)
 - Deviation: the pack source also lives in `src/ravintio-zero/`, and `test-0000493-req-004` needs both trees to match. The agent mirrored the four edits and the new test there and added `src/ravintio-zero/` to `## Component Paths` in `design.md` (2026-11-13T04:46:57Z)
+- Tests run: full suite: 449 passed, 2 failed (2026-11-13T05:13:23Z)
+- Full suite note: the run started in `ravintio-zero/tests/`. `test-0000010` failed on its relative paths there and passes from the repo root. `test-0000450-req-004` is a baseline failure. The baseline run (clean clone) listed 3 failing suites, recorded in `plan/current/baseline-failures.md`.
+- P2 End: 2026-11-13T05:13:23Z
 
 ---
