@@ -15,7 +15,9 @@ source "$SCRIPT_DIR/helpers/assert.sh"
 DRIVER="$SCRIPT_DIR/../scripts/initiative-run.mjs"
 CHECK="$SCRIPT_DIR/../scripts/step-clock-check.mjs"
 STANDARDS="$SCRIPT_DIR/../standards/roadmap-standards.md"
-REPO="$SCRIPT_DIR/../../.."
+# The tests run from src/ravintio-zero/tests and from the installed ravintio-zero/tests.
+REPO="$SCRIPT_DIR/../.."
+[ -f "$REPO/docs/decisions-index.md" ] || REPO="$SCRIPT_DIR/../../.."
 WORK="$(mktemp -d)"
 trap 'rm -rf "$WORK"' EXIT
 
