@@ -20,7 +20,7 @@ As the human, I want one block at each driver stop. It lists the merged steps an
 - The driver fix lines are `I-C Run: Cleared:`, `I-D Advance: Ready: step {n} recovered`, `I-D Advance: Setup: step {n} ran the approved`, and the `I-C Run: Starting: lock named process` line.
 - At every end of a run, the driver prints `I-C Run: Summary: merged this run: {steps in merge order, or none}`.
 - It then prints `I-C Run: Summary: driver fixes: {count}` and one `I-C Run: Summary: fix: {line}` for each fix, up to 10.
-- The block prints just before the final line of the run, so the stop line or the `I-E Delivery:` line stays last.
+- The block prints before the final line of the run, so the stop line or the `I-E Delivery:` line stays last.
 
 ## Acceptance Criteria
 - [ ] AC-1: the block names a merge

@@ -6,7 +6,7 @@
 
 ## What changed
 
-- Every driver run now prints a summary block just before its final line. The stop line or the `I-E Delivery:` line stays last. Each line starts with `I-C Run: Summary:`.
+- Every driver run now prints a summary block before its final line. The stop line or the `I-E Delivery:` line stays last. Each line starts with `I-C Run: Summary:`.
 - `merged this run:` lists the steps the run merged, or `none`.
 - `driver fixes:` counts the repairs the driver made by itself. One `fix:` line repeats each of the first 10.
 - `action for the human:` ends the block. It reads `none` after a clean end, and names one action for a pending delivery, a `Restart:` stop, a `Setup:` stop, or any other stop.

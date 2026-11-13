@@ -16,7 +16,7 @@ version: "0.1.0"
 As the human, I want the block to end with my one action, or "none", so I know at once whether to act.
 
 ## Functional Requirements
-- The driver prints `I-C Run: Summary: action for the human: {action}` as the last line of the block, just before the final line of the run.
+- The driver prints `I-C Run: Summary: action for the human: {action}` as the last line of the block, before the final line of the run.
 - If the run ends with no stop and delivery is complete, the action is `none`.
 - If the run printed `I-E Delivery: Pending:`, the action is `run initiative delivery from the initiative skill`.
 - If the stop line starts `I-D Advance: Restart:`, the action is `start a new driver`.
