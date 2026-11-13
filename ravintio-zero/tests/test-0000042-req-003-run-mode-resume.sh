@@ -25,8 +25,8 @@ ORCH_RESUME_REF="$ZERO_DIR/skills/ravintio-orchestrator/references/orchestrator-
 item() { grep -hE "^[0-9]+\. \*\*$1\.\*\*" "$ORCH" "$ORCH_RESUME_REF"; }
 has() { printf '%s\n' "$2" | grep -qiF -- "$1" && echo yes || echo no; }
 
-RESTORE="$(item 'Run-mode restore')"
-OPEN="$(item 'Open')"
+RESTORE="$(rule_text resume-run-mode)"
+OPEN="$(rule_text resume-open)"
 
 echo ""
 echo "=== req-003 (a): a missing or unknown run mode asks again ==="
@@ -47,8 +47,8 @@ assert_equals "no" "$(has 'defaults to' "$RESTORE")" \
 echo ""
 echo "=== req-003 (a): the fresh-start stale check is unchanged ==="
 
-assert_contains '3. **Stale run-mode** (fresh starts only): if `plan/.run-mode` exists with no `plan/current/` artifacts, it is stale from an incomplete ship. Warn, delete it, continue.' \
-  "$(cat "$ORCH" "$ORCH_RESUME_REF")" "req-003 (a): the stale run-mode check keeps its wording"
+assert_contains '**Stale run-mode** (fresh starts only): if `plan/.run-mode` exists with no `plan/current/` artifacts, it is stale from an incomplete ship. Warn, delete it, continue.' \
+  "$(rule_text p0-start-stale-run-mode)" "req-003 (a): the stale run-mode check keeps its wording"
 
 echo ""
 echo "=== req-003 (b): a valid run mode restores without asking ==="

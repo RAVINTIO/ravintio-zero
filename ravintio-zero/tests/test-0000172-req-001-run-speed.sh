@@ -36,9 +36,12 @@ check "req-001 AC-1: orchestrator asks for and records the run speed" "$ok"
 
 # AC-2: missing or unknown counts as standard, roadmap Speed field
 ok=1
+# Read the section into a variable first: grep -q on a pipe ends early and, under
+# pipefail, fails the test once the section outgrows one awk write buffer.
+IC_RUN="$(orch_section '### I-C Run')"
 if grep -qi 'missing `plan/.run-speed` counts as `standard`' "$REF" \
   && grep -qi 'also counts as `standard`' "$REF" \
-  && section "$ROAD" '### I-C Run' | grep -qF '**Speed:**' \
+  && [[ "$IC_RUN" == *'**Speed:**'* ]] \
   && grep -qF '**Speed:**' "$TPL"; then ok=0; fi
 check "req-001 AC-2: missing or unknown is standard, roadmap names Speed" "$ok"
 

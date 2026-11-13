@@ -9,8 +9,8 @@ source "$SCRIPT_DIR/helpers/assert.sh"
 ZERO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 ORCH="$(orch_combined "$ZERO_DIR/skills/ravintio-orchestrator")"
-PI=$(sed -n '/^## Phase Invocation/,/^## Exception Stops/p' "$ORCH")
-DC=$(sed -n '/^### Design Confirmation/,/^## Phase Invocation/p' "$ORCH")
+PI=$(orch_section "## Phase Invocation")
+DC=$(orch_section "### Design Confirmation")
 
 echo "=== (a) context size at gates ==="
 assert_contains '150,000' "$PI" "names the 150,000 token threshold"

@@ -7,7 +7,7 @@ source "$SCRIPT_DIR/helpers/assert.sh"
 ORCH="$(orch_combined "$(cd "$SCRIPT_DIR/.." && pwd)/skills/ravintio-orchestrator")"
 S=$(cat "$ORCH")
 
-STEP7=$(printf '%s\n' "$S" | grep -E '^7\. \*\*Detect adoption mode\*\*')
+STEP7=$(rule_text p0-start-adoption-mode)
 MODES=$(printf '%s\n' "$S" | sed -n '/### Adoption Modes/,/#### Retrofit Scan/p')
 CHECK=$(printf '%s\n' "$S" | grep -F -- '- [ ] Adoption mode')
 

@@ -36,7 +36,7 @@ assert_equals "ravintio-zero" "$(grep -E '^id:' "$REPO/product.yml" | sed 's/id:
 assert_equals "ravintio-zero" "$(grep -E '^\s+- id:' "$REPO/product.yml" | head -1 | sed 's/.*id: *"\{0,1\}\([^"]*\)"\{0,1\}/\1/' | tr -d ' ')" \
   "components[] still names the ravintio-zero component"
 ORCH_SKILL="$(orch_combined "$REPO/ravintio-zero/skills/ravintio-orchestrator")"
-STEP9=$(grep -E '^9\. \*\*Product id check\*\*' "$ORCH_SKILL" || true)
+STEP9=$(rule_text p0-start-product-id)
 assert_contains "hard-stop" "$STEP9" "discovery step 9 hard-stops on a missing product id"
 assert_contains "versioning" "$STEP9" "the product id prompt gives versioning as its reason"
 assert_equals "0" "$(printf '%s' "$STEP9" | grep -ci telemetry || true)" "the product id prompt does not cite telemetry"

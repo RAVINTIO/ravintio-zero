@@ -36,7 +36,7 @@ assert_contains "stale" "$TEXT" "req-004 AC-2: the skill flags a stale log"
 echo ""
 echo "=== req-004 AC-3: the orchestrator no longer resumes an initiative ==="
 ORCH_TEXT=$(cat "$ORCH")
-RESUME=$(printf '%s\n' "$ORCH_TEXT" | sed -n '/^## Resume Detection/,/^## Pack Index/p')$'\n'$(cat "$(dirname "$ORCH")/references/orchestrator-resume-detection.md")
+RESUME=$(orch_section "## Resume Detection")$'\n'$(orch_section "## Findings and checks")$'\n'$(orch_section "## Checks")
 assert_contains "ravintio-initiative" "$RESUME" "req-004 AC-3: Resume Detection names the initiative skill"
 assert_contains "never resumes an initiative" "$RESUME" "req-004 AC-3: the orchestrator never resumes an initiative"
 assert_equals "no" "$(printf '%s\n' "$RESUME" | grep -q "run I-E Delivery" && echo yes || echo no)" "req-004 AC-3: Resume Detection does not run I-E Delivery"
