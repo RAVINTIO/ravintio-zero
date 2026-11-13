@@ -23,6 +23,8 @@ description: Produces the plan-phase artifact set (requirements, ADRs, scope, ri
 - `ravintio-zero/templates/data-contract-guide.md`
 - `ravintio-zero/standards/formatting-standards.md`
 
+Read each standard or template through the resolver: `node ravintio-zero/scripts/resolve-override.mjs {standards|templates} {file}`. See `ravintio-zero/standards/archetype-standards.md`.
+
 **One question at a time.** When you need human input, ask one question and wait.
 
 ## Input

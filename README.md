@@ -121,6 +121,7 @@ One optional flag:
 | Folder | Contents |
 |--------|----------|
 | [skills/](ravintio-zero/skills/) | The 12 pipeline skills: the orchestrator, four phase skills, the TDD trio, and four support skills |
+| [archetypes/](ravintio-zero/archetypes/) | Starter archetypes that swap a standard or add gates, installed with `setup.sh archetype use` |
 | [templates/](ravintio-zero/templates/) | File format templates for every pipeline artifact, each with a guide where applicable |
 | [schemas/](ravintio-zero/schemas/) | Shared type definitions and the domain document envelope |
 | [standards/](ravintio-zero/standards/) | Code quality, API design, database, deployment, infrastructure, monorepo, observability, and testing standards |

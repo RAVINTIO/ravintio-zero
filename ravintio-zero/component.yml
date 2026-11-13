@@ -1,8 +1,8 @@
 # RAVINTIO Component Manifest
 id: "ravintio-zero"
 name: "RAVINTIO Zero"
-feature: "0000378-merge-time-versioning"
-version: "0.73.0"
+feature: "0000391-standards-archetypes"
+version: "0.74.0"
 status: "active"
 type: "component-pack"
 domain: "developer-tooling"
@@ -74,6 +74,10 @@ responsibilities:
   - "Check an install with --doctor, update the pack from a local folder with --update, and reverse setup with --uninstall, through scripts/install-lifecycle.mjs for setup.sh and setup.ps1"
   - "Keep strict mode as it is across re-runs, and turn it off only with --no-strict-orchestrator"
   - "Generate ravintio-zero/pack-facts.json from the pack with scripts/pack-facts.mjs, and fail CI when the committed file is stale"
+  - "Resolve a standard or template with scripts/resolve-override.mjs, which returns an override in ravintio-overrides/ before the pack copy"
+  - "List the files that hooks enforce in archetypes/protected.json, so the resolver always returns the pack copy of those"
+  - "Ship a catalogue of four starter archetypes in archetypes/, and install one with the archetype list and archetype use commands of scripts/archetype.mjs"
+  - "Check the gates of each installed archetype at P3 with scripts/archetype-gates.mjs, and exit 1 on a failed gate"
 
 exceptions:
   - "Does not generate application code. That is the implement phase's job in consumer projects."
@@ -116,6 +120,7 @@ data:
 
 scope:
   inScope:
+    - "Archetypes: archetypes/ catalogue and protected.json, scripts/archetype.mjs, scripts/resolve-override.mjs, scripts/archetype-gates.mjs"
     - "Library standards docs for TypeScript, Python, Go, Java, databases"
     - "Formatting standards: date format, locale, verbosity"
     - "Enforcement hooks: gate-write, check-design, ratchet-check, em-dash-guard, merge-guard, block-forced-add, auto-trigger-orchestrator, check-orchestrator-presence, check-reply-prefix, check-reply-writing"

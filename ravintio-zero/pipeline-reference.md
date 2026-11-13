@@ -461,6 +461,14 @@ ravintio-overrides/
 
 Agents check `ravintio-overrides/library-standards/` first. Structure matches the pack default.
 
+### standards/ and templates/
+
+Files here replace the pack file of the same name. The resolver returns the override first. If `ravintio-zero/archetypes/protected.json` lists the file, the resolver returns the pack copy.
+
+### archetype command
+
+`setup.sh archetype list` prints the starter archetypes. `setup.sh archetype use {kind}/{name}` installs one into `ravintio-overrides/` and records it in `ravintio-overrides/archetypes.json`. The P3 gate check reads that record.
+
 ---
 
 *Source of truth: `ravintio-zero/`. See [getting-started.md](getting-started.md) for setup steps.*

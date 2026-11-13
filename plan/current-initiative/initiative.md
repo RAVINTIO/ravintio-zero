@@ -8,7 +8,7 @@ status: "active"  # proposed | charted | active | delivered | blocked
 **Goal:** Close every open backlog entry except the four that need paid services. The first three steps make the driver run independent steps at once, each in its own worktree, with each version set as its step merges. Step 20 moves the pack source to `src/ravintio-zero/`. The last step, step 21, makes activation smoother for the human.
 **Branch:** initiative/0000360-backlog-sweep
 **Status:** active
-**Position:** 15
+**Position:** 19
 **Speed:** standard
 **Step CI fixes:** allowed
 **Concurrency:** 3
@@ -161,7 +161,7 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 12 | 0000388-replies-and-questions | Replies and questions | 0000257, 0000258, 0000259, 0000306 | minor | 0.64.0 | merged | orchestrator | 4 |
 | 13 | 0000389-writing-standard | Writing standard | 0000300 | minor | 0.68.0 | merged | writing | 4 |
 | 14 | 0000390-prose-checks | Prose checks | 0000301, 0000303, 0000304 | minor | 0.73.0 | merged | writing | 6, 13 |
-| 15 | 0000391-standards-archetypes | Standards archetypes | 0000305 | minor | | pending | writing | 6, 14 |
+| 15 | 0000391-standards-archetypes | Standards archetypes | 0000305 | minor | 0.74.0 | merged | writing | 6, 14 |
 | 16 | 0000392-ship-postmortems | Ship postmortems | 0000285 | minor | 0.72.0 | merged | ship | 4 |
 | 17 | 0000393-session-integrity-and-guards | Session integrity and guards | 0000271, 0000367, 0000272, 0000260 | minor | 0.66.0 | merged | guards | 6 |
 | 18 | 0000394-github-security-and-ci-lint | GitHub security and CI lint | 0000323, 0000324, 0000325 | minor | 0.69.0 | merged | github | 4 |
@@ -188,3 +188,4 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 10 | #145 | tag v0.71.0 | 0.71.0 | 2026-11-09T15:42:35Z |
 | 16 | #134 | tag v0.72.0 | 0.72.0 | 2026-11-09T16:44:31Z |
 | 14 | #146 | tag v0.73.0 | 0.73.0 | 2026-11-09T18:09:03Z |
+| 15 | #148 | tag v0.74.0 | 0.74.0 | 2026-11-09T19:48:19Z |

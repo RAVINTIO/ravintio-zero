@@ -11,6 +11,15 @@
     .\ravintio-zero\setup.ps1 claude-code
 #>
 
+# The archetype verb runs before argument parsing and only dispatches (0000391 ADR-0293).
+if ($args.Count -gt 0 -and $args[0] -ceq 'archetype') {
+    $ArchScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+    $ArchRest = @()
+    if ($args.Count -gt 1) { $ArchRest = @($args[1..($args.Count - 1)]) }
+    & node (Join-Path (Join-Path $ArchScriptDir 'scripts') 'archetype.mjs') @ArchRest '--root' (Split-Path -Parent $ArchScriptDir)
+    exit $LASTEXITCODE
+}
+
 # Manual arg parsing — supports --flag style for cross-platform consistency
 $Tool = $null
 $StrictOrchestrator = $false

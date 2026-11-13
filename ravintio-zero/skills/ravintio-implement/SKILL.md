@@ -53,6 +53,8 @@ Build multiple components in dependency order: shared packages, then data owners
 
 Before writing any dependency manifest, check `ravintio-overrides/library-standards/{language}/prefer-avoid.md`, then the pack's `ravintio-zero/standards/library-standards/` lists. Substitute preferred alternatives for avoided libraries. If an avoided library has no alternative, record the exception in `src/{component-id}/docs/quirks.md` and escalate. Skip the audit when the lists are stubs. Follow `ravintio-zero/standards/library-standards/_version-policy.md` for version pinning.
 
+Read any other standard or template through the resolver: `node ravintio-zero/scripts/resolve-override.mjs {standards|templates} {file}`. See `ravintio-zero/standards/archetype-standards.md`.
+
 Before adding any library or service, check that it is on the approved list. The list is the `Approved dependencies` field of `design.md` in a gated run and the `## Dependencies` table of `initiative.md` in an initiative step. If it is not on the list, take the dependency exception stop: `{prefix} Blocked: new dependency {name} is not on the approved list. Approve it or choose an approved alternative.` This applies in every run mode.
 
 ## TDD inner loop
