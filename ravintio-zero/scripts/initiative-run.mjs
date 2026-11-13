@@ -43,8 +43,10 @@
 //
 // What it does:
 //   1. Reads plan/current-initiative/initiative.md and stops unless status is "active".
-//   2. Takes plan/.initiative-runner.lock. If the lock exists, it refuses to start
-//      and leaves the lock alone.
+//   2. Takes plan/.initiative-runner.lock. If the lock exists, it refuses to start and leaves
+//      the lock alone. The one exception is a lock that holds only a pid for a process that
+//      no longer runs. The driver prints the pid, removes the lock, and takes it. A pid that
+//      runs, text that is not a pid, and a symlink still refuse.
 //   3. Runs `claude -p --output-format stream-json --verbose --permission-mode auto
 //      --append-system-prompt "Write all prose to ravintio-zero/standards/writing-standards.md." --model {model} [--max-turns {n}]
 //      "Run initiative step {position}"`
@@ -652,6 +654,45 @@ for (const sig of ['SIGINT', 'SIGTERM', 'SIGHUP']) {
 }
 process.on('exit', releaseLock);
 
+// Returns the pid a lock names when that process no longer runs, else 0. A symlink, a file
+// that holds anything but one decimal pid, and a pid that runs all return 0 (0000495, ADR-0324).
+function deadLockPid(lock) {
+  try {
+    if (isLink(lock)) return 0;
+    const text = readFileSync(lock, 'utf8');
+    if (!/^[1-9][0-9]{0,9}\n?$/.test(text)) return 0;
+    const pid = Number(text);
+    return alive(pid) ? 0 : pid;
+  } catch {
+    return 0;
+  }
+}
+
+// Writes this process id into the lock. If the lock exists, the driver refuses unless the lock
+// names a process that no longer runs. It then reports the pid, removes the file, and writes
+// again with wx, so only one of two racing drivers wins.
+function takeLock(lock) {
+  const refuse = () => new Stop(`I-C Run: Blocked: ${LOCK} exists, another driver may be running`);
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      writeFileSync(lock, `${process.pid}\n`, { flag: 'wx' });
+      return;
+    } catch (e) {
+      if (e.code !== 'EEXIST') throw e;
+    }
+    const dead = deadLockPid(lock);
+    if (!dead || attempt > 0) throw refuse();
+    out(`I-C Run: Starting: lock named process ${dead}, which no longer runs. Taking the lock.`);
+    // Remove the file only if it still names the dead process.
+    if (deadLockPid(lock) !== dead) throw refuse();
+    try {
+      unlinkSync(lock);
+    } catch (e) {
+      if (e.code !== 'ENOENT') throw e;
+    }
+  }
+}
+
 async function main() {
   const { root, handoff } = parseArgs(process.argv.slice(2));
   const cfg = readChildConfig();
@@ -668,12 +709,7 @@ async function main() {
     if (!(await lockHeldBy(lock, process.pid))) throw new Stop(`I-C Run: Blocked: ${LOCK} does not hold the handoff driver`);
     lockPath = lock;
   } else {
-    try {
-      writeFileSync(lock, `${process.pid}\n`, { flag: 'wx' });
-    } catch (e) {
-      if (e.code === 'EEXIST') throw new Stop(`I-C Run: Blocked: ${LOCK} exists, another driver may be running`);
-      throw e;
-    }
+    takeLock(lock);
     lockPath = lock;
   }
   if (concurrent) return schedule(root, cfg, rm, handoff);

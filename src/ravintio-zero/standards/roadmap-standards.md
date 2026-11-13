@@ -333,6 +333,9 @@ The driver owns these paths in the main root. It adds each to `.git/info/exclude
 | `plan/.initiative-logs/step-{n}.log` | The step's stream, then the queue output for its PR |
 | `plan/.initiative-runner.lock` | The one driver lock. A step holds no lock. |
 
+<!-- rule: driver-dead-lock -->
+A driver refuses to start while `plan/.initiative-runner.lock` exists. The one exception is a lock that holds only a pid for a process that no longer runs. The driver prints `I-C Run: Starting: lock named process {pid}, which no longer runs. Taking the lock.`, removes the file, and writes its own pid with `wx`. A pid that runs, text that is not a pid, and a symlink still refuse, and the driver leaves the file alone (0000495 ADR-0324).
+
 On a restart, a `ready` file queues the step with no new session. A `running` file without `ready` restarts the session in the existing worktree. A step that exits without `ready` and without a block follows the resume rule.
 
 These events stop new starts:
