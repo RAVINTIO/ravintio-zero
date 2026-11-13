@@ -1,6 +1,6 @@
 # Component Registry
 
-Last updated: 0000397-pack-source-in-src
+Last updated: 0000507-hook-check-after-setup
 
 ## Registry
 

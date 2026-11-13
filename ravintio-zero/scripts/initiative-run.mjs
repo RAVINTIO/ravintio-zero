@@ -96,6 +96,9 @@
 //      that command with bash and no shell, prints "I-D Advance: Setup: step {n} ran the approved
 //      setup command", and carries on. A missing row, another form, a main tree it cannot bring to
 //      the merged ref, or a non-zero exit keeps the stop (0000448). A Restart hit still stops.
+//      After a clean setup exit the driver runs hook-check.mjs from the installed pack with --root. A
+//      failure prints "I-D Advance: Blocked: hook check failed after setup: {failing hooks}" and keeps
+//      the stop. A pack with no hook-check.mjs skips the check with a Setup: line (0000507, ADR-0339).
 //   7. It repeats until delivery: initiative.md is gone and
 //      plan/_archive/{id}-{slug}-initiative-*/ exists. It then exits 0.
 //      If every step in the "## Steps" table has merged but the archive is not there yet,
@@ -1254,12 +1257,30 @@ function approvedSetup(root, branch, chartText, target, n) {
   if (isLink(script) || !existsSync(script)) return 'none';
   const r = spawnSync('bash', [script, ...cmd.args], { cwd: root, stdio: ['ignore', 2, 2] });
   if (r.error || r.status !== 0) return 'failed';
+  if (!hookCheckPasses(root, dirname(script), n)) return 'hookcheck';
   out(`I-D Advance: Setup: step ${n} ran the approved setup command`);
   return 'ran';
 }
 
+// Runs hook-check.mjs from the pack that setup just installed (0000507, ADR-0339). Prints a
+// Blocked: line that names up to three failing hooks and returns false on a failure. A pack with
+// no hook-check.mjs predates the check, so the driver says so and carries on.
+function hookCheckPasses(root, packDir, n) {
+  const check = join(packDir, 'scripts', 'hook-check.mjs');
+  if (isLink(check) || !existsSync(check)) {
+    out(`I-D Advance: Setup: step ${n} skipped the hook check because hook-check.mjs is missing`);
+    return true;
+  }
+  const r = spawnSync(process.execPath, [check, '--root', root], { cwd: root, encoding: 'utf8' });
+  if (!r.error && r.status === 0) return true;
+  const failed = (r.stdout || '').split(/\r?\n/).filter((l) => l.startsWith('fail:')).slice(0, 3);
+  const why = failed.length > 0 ? failed.join(' | ') : (r.stderr || '').split(/\r?\n/).find((l) => l.trim() !== '') || 'the check did not run';
+  out(`I-D Advance: Blocked: hook check failed after setup: ${why.slice(0, 300)}`);
+  return false;
+}
+
 // The sentence a Setup: stop line adds when the approved command ran and failed.
-const setupNote = (done) => (done === 'failed' ? 'The approved setup command failed. ' : '');
+const setupNote = (done) => (done === 'failed' ? 'The approved setup command failed. ' : done === 'hookcheck' ? 'The hook check failed. ' : '');
 
 // Reads the chart text from the ref, or from the working tree when the ref is unreadable.
 function chartText(root, ref) {
