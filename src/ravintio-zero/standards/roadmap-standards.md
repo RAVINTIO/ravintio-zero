@@ -453,13 +453,15 @@ A step that changes a chart format updates the active `initiative.md` in the sam
 `run` takes these actions in order and stops on the first failure:
 
 1. Check the PR title.
-2. Merge the initiative branch into the PR branch and push, with no force. A conflict stops the queue. The merge commit has the subject `{first 7 digits of Feature id}: Merge the initiative branch`, which the `commit-msg` hook accepts.
+2. If an earlier failed run left a set-version commit on the PR branch and the base version has moved, revert it in one new commit. Merge the initiative branch into the PR branch and push, with no force. A conflict stops the queue. The merge commit has the subject `{first 7 digits of Feature id}: Merge the initiative branch`, which the `commit-msg` hook accepts.
 3. Wait for CI with `gh pr checks {k} --watch --fail-fast`.
 4. Apply the row's `Bump` to the initiative branch version and write the result to every file in `version-files.txt`.
 5. Check that every version file holds the same version.
 6. Write the row's `Version` and the status `merged`, and add a row to the `## Merges` table. The `Merge commit` cell reads `tag v{version}`. Set `**Position:**` to the lowest step that has not merged.
 7. Commit those files by path, push, and squash-merge with `--delete-branch`.
 8. Tag the merge commit `v{version}` and push the tag.
+
+After every run, whether it merged or stopped, `run` detaches HEAD in its worktree. A restart can then check the PR branch out in a step worktree.
 
 Each version follows merge order. `reshape-initiative.mjs` and `check-initiative-history.mjs` sort the steps by the `Version` column in ascending order. A step with no `Version` follows the versioned steps in chart order.
 
