@@ -8,7 +8,7 @@ status: "active"  # proposed | charted | active | delivered | blocked
 **Goal:** Close every open backlog entry except the four that need paid services. The first three steps make the driver run independent steps at once, each in its own worktree, with each version set as its step merges. Step 20 moves the pack source to `src/ravintio-zero/`. The last step, step 21, makes activation smoother for the human.
 **Branch:** initiative/0000360-backlog-sweep
 **Status:** active
-**Position:** 52
+**Position:** 53
 **Speed:** standard
 **Step CI fixes:** allowed
 **Concurrency:** 3
@@ -427,7 +427,7 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 49 | 0000495-driver-clears-dead-lock | Driver clears a dead lock | 0000496 | minor | 0.106.0 | merged | driver | 48 |
 | 50 | 0000497-keep-worktree-entries | Driver keeps uncommitted entries from a worktree | 0000498 | minor | 0.107.0 | merged | driver | 49 |
 | 51 | 0000499-reply-times-match-clock | Reply times match the clock | 0000500 | minor | 0.101.0 | merged | skills | 46 |
-| 52 | 0000501-remove-merged-worktrees | Driver removes merged step worktrees | 0000502 | minor |  | pending | driver | 50 |
+| 52 | 0000501-remove-merged-worktrees | Driver removes merged step worktrees | 0000502 | minor | 0.108.0 | merged | driver | 50 |
 | 53 | 0000503-planned-restart-exit-code | Planned restart exits with its own code | 0000504 | minor |  | pending | driver | 52 |
 | 54 | 0000505-coordinator-branch-regenerate | Coordinator branches regenerate shared files | 0000506 | minor | 0.97.0 | merged | queue | 42 |
 | 55 | 0000507-hook-check-after-setup | Check every hook after setup | 0000508 | minor |  | pending | driver | 53 |
@@ -492,3 +492,4 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 48 | #189 | tag v0.105.0 | 0.105.0 | 2026-11-11T21:48:25Z |
 | 49 | #190 | tag v0.106.0 | 0.106.0 | 2026-11-11T22:43:16Z |
 | 50 | #191 | tag v0.107.0 | 0.107.0 | 2026-11-11T23:46:39Z |
+| 52 | #192 | tag v0.108.0 | 0.108.0 | 2026-11-12T01:22:53Z |

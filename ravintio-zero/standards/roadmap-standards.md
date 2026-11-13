@@ -321,7 +321,8 @@ The driver runs the scheduler when the chart holds `**Concurrency:**` (0000379 A
 4. The session runs with its working directory in the worktree. Its environment holds `RAVINTIO_INITIATIVE_STEP=1` and `RAVINTIO_INITIATIVE_QUEUE=1`. It also holds `RAVINTIO_INITIATIVE_ROOT`, the main root, and `RAVINTIO_INITIATIVE_CONTROL`, the step's control folder.
 5. The step ends at ready. It writes its PR number to `$RAVINTIO_INITIATIVE_CONTROL/ready` and prints `I-D Advance: Ready: PR #{n}` (see I-D Advance).
 6. The driver reads `ready`, removes the step worktree, and queues the PR. The queue runs `merge-queue.mjs run --step {n} --pr {k}` in `plan/.initiative-worktrees/queue`, one PR at a time in ready order. A merge prints `I-D Advance: Complete: step {n} merged`, and the driver deletes the step's control folder. If the worktree holds untracked backlog entries, or git cannot list them, the driver keeps the worktree and stops the queue for that step. The stop line names up to five files, and the `ready` file stays (0000497 ADR-0325).
-7. The driver ends when every row has merged. It then prints the same `I-E Delivery:` lines as the serial path.
+7. <!-- rule: driver-sweep-merged-worktrees --> At start, the driver sweeps the worktree of each merged step. It removes the worktree when three things hold. No live pid sits in the step's `running` file. `git status --porcelain` lists no file. The head is on `origin/feat/{feature-id}`, or that branch is gone. Otherwise it keeps the worktree and prints `I-C Run: Kept: step {n} {reason}`. A kept worktree never stops the run (0000501 ADR-0326).
+8. The driver ends when every row has merged. It then prints the same `I-E Delivery:` lines as the serial path.
 
 The driver owns these paths in the main root. It adds each to `.git/info/exclude` and refuses a symlink at any of them.
 
