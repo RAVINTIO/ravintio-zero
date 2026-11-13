@@ -1,0 +1,85 @@
+# Brand guard allowlist (0000394 ADR-001).
+# Read by ravintio-zero/scripts/brand-guard.sh (pre-push) and by test-0000160-req-006-brand-guard.sh (CI).
+# Blank lines and lines that start with # are ignored.
+# A line that starts with ! names an excluded path prefix.
+# Any other line holds a path regex, a tab, and a line regex (extended, case-sensitive).
+# Add an entry with a reason. A stale entry that matches no line fails the CI test.
+
+# --- Paths that hold history or past records ---
+!plan/_archive/
+!docs/adr/
+!plan/changelog/
+!ravintio-zero/migrations/_done/
+!plan/current/
+
+# --- Sibling repos that keep their names ---
+# The separate product's repo name and URL.
+^README\.md$	ravintio/planifest-framework
+# The docs repo name and its file names, in the README documentation table.
+^README\.md$	planifest-docs
+# File names inside the docs repo, linked from the stack evaluation standards.
+^ravintio-zero/standards/reference/(backend|frontend)-stack-evaluation\.md$	p0[0-9]{2}-planifest-
+# The frontend evaluation title names its file in the docs repo.
+^ravintio-zero/standards/reference/frontend-stack-evaluation\.md$	^# p016-planifest-
+
+# --- Past feature ids ---
+# Feature ids 0000031 and 0000037 contain the old name. They appear in tests, manifests, backlog entries, and docs.
+.	0000031-five-phase-planifest-zero|0000037-self-host-on-planifest-zero
+
+# --- Past decisions quoted as they were ---
+# Index rows quote the title and summary of an ADR from history (0000384).
+^docs/decisions-index\.md$	^\| \[ADR-[0-9]{4}\]
+
+# --- Tests that read pre-rename history ---
+# The 0000034 test builds a fixture that uses the old pack folder name.
+^ravintio-zero/tests/(regression/)?test-0000034-req-003-atomic-settings-writes\.sh$	OLD_PACK="planifest-zero"
+# The frozen orchestrator skill base, a byte fixture of the pre-rename text.
+^ravintio-zero/tests/fixtures/0000151-orchestrator-skill-base\.md$	.
+# The 0000151 test rewrites the frozen fixture to the new names with sed.
+^ravintio-zero/tests/test-0000151-req-011-orchestrator-references-split\.sh$	^sed -e "s/PLANIFEST/RAVINTIO/g"|^  -e "s/Planifest/RAVINTIO/g"
+# The 0000042 prose test names the sibling repo and the old folder.
+^ravintio-zero/tests/test-0000042-req-008-pack-prose\.sh$	planifest-\$\{WORD\}
+# The 0000042 wording test names the sibling repo and the old folder in its allowlist.
+^ravintio-zero/tests/(regression/)?test-0000042-req-010-pack-wording-allowlist\.sh$	planifest\[-\]framework
+# It also allowlists this guard's own entry for that pattern.
+^ravintio-zero/tests/(regression/)?test-0000042-req-010-pack-wording-allowlist\.sh$	test-0000160-req-006-brand-guard
+
+# --- 0.x legacy aliases, removed at 1.0.0 ---
+# The initiative runner stops when an old environment variable name is set (0000189).
+^ravintio-zero/scripts/initiative-run\.mjs$	PLANIFEST_ROADMAP_(MODEL|MAX_TURNS)|legacy PLANIFEST_\*
+# The 0000189 old-variable test sets those names to check the stop.
+^ravintio-zero/tests/test-0000189-req-006-old-variable-stop\.sh$	PLANIFEST_ROADMAP_(MODEL|MAX_TURNS)
+# The dependency graph documents the fallback.
+^docs/dependency-graph\.md$	PLANIFEST_ROADMAP_(MODEL|MAX_TURNS)
+# The component manifest lists the fallback variables.
+^ravintio-zero/component\.yml$	PLANIFEST_ROADMAP_(MODEL|MAX_TURNS)
+# The REQ-003 test checks the fallback, scans for the old variable prefix, and checks no old label is emitted.
+^ravintio-zero/tests/test-0000160-req-003-.*\.sh$	PLANIFEST_|planifest\.
+# The em dash guard honours the old sentinel.
+^ravintio-zero/hooks/enforcement/em-dash-guard\.mjs$	planifest-em-dash-allow
+# The REQ-002 test checks the old sentinel and the setup leftovers.
+^ravintio-zero/tests/test-0000160-req-002-.*$	planifest-(em-dash-allow|zero|overrides)|\.planifest-(setup-flags|manifest)
+
+# --- Tests that name the 0000030 folder, which 0000031 renamed ---
+^ravintio-zero/tests/test-0000031-req-00[14]-[a-z-]+\.sh$	^OLD_NAME="planifest""-framework"$
+^ravintio-zero/tests/test-0000037-req-00[14]-[a-z-]+\.sh$	^OLD_FOLDER="planifest-""framework"$
+
+# --- Setup detection of leftover folders and old markers ---
+# Setup detects and reports leftover old folders.
+^ravintio-zero/setup\.(sh|ps1)$	planifest-(zero|overrides)
+# Setup removes old markers.
+^ravintio-zero/setup\.(sh|ps1)$	\.planifest-(setup-flags|manifest)
+
+# --- The rename migration, its helpers, and its tests ---
+# The migration names the old paths on purpose.
+^ravintio-zero/migrations/0004-ravintio-rename\.md$	.
+# The helpers move the old paths to the new ones.
+^ravintio-zero/migrations/migrate-ravintio-rename\.(sh|ps1)$	.
+
+# --- This guard ---
+# This test and its regression copy, which must name the word to match it.
+^ravintio-zero/tests/(regression/)?test-0000160-req-006-brand-guard\.sh$	.
+
+# --- The allowlist itself ---
+# The file names the word in its own entries.
+^ravintio-zero/tests/brand-guard-allowlist\.txt$	.
