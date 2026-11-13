@@ -27,7 +27,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 |-------|-------|
 | Start | `2026-11-13T02:48:12Z` |
 | End | `2026-11-13T02:48:59Z` |
-| Wall clock | `3` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | `0` |
@@ -102,6 +102,8 @@ Complete: P1 (2026-11-13T02:50:35Z)
 - The 3 failures match the baseline list.
 - Rework: REQ-002: the summary first printed last and broke five suites that read the last line. It now prints before the final line (2026-11-13T03:48:17Z)
 
+- Postmortem: plan/postmortems/2026-11-13-summary-broke-last-line-suites.md (2026-11-13T03:49:07Z) REQ-002
+
 Complete: P2 (2026-11-13T03:48:17Z)
 
 ### P3: Validate and Accept
@@ -123,3 +125,35 @@ Complete: P2 (2026-11-13T03:48:17Z)
 - Security review: no critical or high findings.
 
 Complete: P3 (2026-11-13T03:48:17Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-13T03:48:33Z` |
+| End | `2026-11-13T03:48:33Z` |
+| Wall clock | `0` |
+| Model tier | primary |
+| Skills loaded | ravintio-orchestrator, ravintio-ship |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | none |
+
+Complete: P4 (2026-11-13T03:48:33Z)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `62` |
+| Total agents spawned | `1` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `1` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `1` |
+| Phases skipped | `none` |
