@@ -107,7 +107,7 @@ If the human asks for a repo instruction while a step runs, add it to the scope 
 
 ## I-E Delivery
 
-After the driver exits, follow the I-E Delivery section of the roadmap standards. It reshapes the branch with `reshape-initiative.mjs`, moves the step tags, runs the history check, and sets the merge commit title. Raise the PR from `initiative/{id}-{slug}-reshaped`. After the human merges it, delete the old branch. Then give the final report:
+After the driver exits, follow the I-E Delivery section of the roadmap standards. It reshapes the branch with `reshape-initiative.mjs` in merge order, names each admin fold in the PR body, moves the step tags, runs the history check, and sets the merge commit title. Raise the PR from `initiative/{id}-{slug}-reshaped`. After the human merges it, delete the old branch. Then give the final report:
 
 1. The initiative PR URL.
 2. Each step with its version and tag.

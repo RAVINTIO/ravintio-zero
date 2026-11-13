@@ -1,6 +1,6 @@
 ---
-version: "0.57.0"
-feature: "0000377-driver-stops-and-headroom"
+version: "0.58.0"
+feature: "0000378-merge-time-versioning"
 updated: "7 Nov 2026"
 ---
 # About
@@ -10,8 +10,8 @@ updated: "7 Nov 2026"
 
 | Field | Value |
 |-------|-------|
-| Version | `0.57.0` |
-| Last feature | `0000377-driver-stops-and-headroom` |
+| Version | `0.58.0` |
+| Last feature | `0000378-merge-time-versioning` |
 | Updated | `7 Nov 2026` |
 
 ## What this is

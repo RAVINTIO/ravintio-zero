@@ -110,7 +110,9 @@ assert_equals "$(git -C "$TMP/c" rev-parse "$BRANCH^{tree}")" "$(git -C "$TMP/c"
 
 echo "=== req-003 AC-1: a conflict stops ==="
 make_repo d conflict
-OUT=$(run "$TMP/d" --tags); RC=$?
+# Assigning the coordinator edit to step 3 keeps it out of any fold, so the conflict stays (0000378 folds the rest).
+EDIT=$(git -C "$TMP/d" log --format=%h --grep="coordinator edit" -1 "$BRANCH")
+OUT=$(run "$TMP/d" --tags --assign "$EDIT=3"); RC=$?
 assert_equals "1" "$RC" "AC-1: exits 1"
 assert_contains "0000902" "$OUT" "AC-1: names the commit"
 assert_equals "" "$(git -C "$TMP/d" branch --list "$NEW")" "AC-1: no new branch"

@@ -86,7 +86,7 @@ Last, run `ravintio-retrospective` in run mode. It writes the record to `plan/re
 
 ### Step 6: Version bump
 
-Derive the current product version with `node ravintio-zero/scripts/product-version.mjs`, then apply the release version to `docs/about.md`, `product.yml`, and `component.yml`. The version must match `[0-9]+\.[0-9]+(\.[0-9]+)?` and must not be lower than the last release tag. If it fails validation, ask the human for the value. Never tag a fabricated version.
+Derive the current product version with `node ravintio-zero/scripts/product-version.mjs`, then run `node ravintio-zero/scripts/version-files.mjs set {version}` to write it to every file in `ravintio-zero/version-files.txt`. Run `node ravintio-zero/scripts/version-files.mjs check` before the push. If it exits 1, stop in both run modes and fix the files it names. The version must match `[0-9]+\.[0-9]+(\.[0-9]+)?` and must not be lower than the last release tag. If it fails validation, ask the human for the value. Never tag a fabricated version.
 
 ### Step 7: Release tag
 
