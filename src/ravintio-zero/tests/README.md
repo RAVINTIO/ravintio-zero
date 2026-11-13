@@ -10,7 +10,7 @@ PowerShell 7. All suites cover the Claude Code target only.
 |------|----------|
 | `test-*.sh` | Per-feature Bash suites |
 | `test-*.ps1` | Per-feature PowerShell suites, which run `setup.ps1` |
-| `helpers/` | Shared assertions (`assert.sh`, `assert.ps1`), the pack text helpers, `commit_workspace_pack`, `with_timeout` (`timeout.sh`), and the `setup.ps1` workspace helper |
+| `helpers/` | Shared assertions (`assert.sh`, `assert.ps1`), the pack text helpers, `commit_workspace_pack`, `isolate_git_env`, `with_timeout` (`timeout.sh`), and the `setup.ps1` workspace helper |
 | `brand-guard-allowlist.txt` | The brand guard allowlist. `scripts/brand-guard.sh` (the `pre-push` check) and `test-0000160-req-006-brand-guard.sh` (CI) both read it. Both skip the allowlist files by exact path through `brand_guard_skips_path`, so the file holds no row for itself. |
 | `regression/` | The long-term regression pack and its manifest |
 | `run-tests.sh` | The runner for every suite |
@@ -32,6 +32,10 @@ a helper in `helpers/assert.sh`. See section 8 of `standards/testing-standards.m
 ## Workspaces that run setup
 
 Setup copies only committed pack and override files, so a suite that runs `setup.sh` commits the pack in its workspace first. Call `commit_workspace_pack "$ws"` from `helpers/assert.sh` after the copy and after any file you plant in `ravintio-zero/` or `ravintio-overrides/`. The PowerShell helper `Invoke-Setup` commits before each run. `Save-WorkspacePack` does the same on request.
+
+## Git isolation
+
+Both runners give each suite a temporary global git config that holds `user.useConfigOnly = true`. They hide the system config and clear the author, committer, and `EMAIL` variables (0000462, ADR-0303). A commit with no identity then fails on a developer machine, as it does on a CI runner. A suite that commits sets `-c user.name` and `-c user.email` in its own git call. `helpers/git-isolation.sh` holds `isolate_git_env` and `remove_git_isolation` for the Bash runner. `run-tests.ps1` sets the same variables.
 
 ## Test scope in a run
 

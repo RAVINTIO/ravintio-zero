@@ -301,7 +301,7 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 32 | 0000456-regenerate-shared-files-at-merge | Regenerate shared files at merge | 0000430 | minor | 0.82.0 | merged | queue | 31 |
 | 33 | 0000458-refuse-step-merge-outside-queue | Refuse a step merge outside the queue | 0000431 | minor | 0.81.0 | merged | guard | 31 |
 | 34 | 0000460-narrow-brand-guard-self-entry | Narrow the brand guard self-entry | 0000432 | patch | 0.80.1 | merged | tests | 22 |
-| 35 | 0000462-tests-without-git-identity | Tests catch runner-only failures | 0000414 | minor |  | pending | tests | 34 |
+| 35 | 0000462-tests-without-git-identity | Tests catch runner-only failures | 0000414 | minor | 0.83.0 | merged | tests | 34 |
 | 36 | 0000464-merge-queue-test-gaps | Merge queue test gaps | 0000400 | minor |  | pending | tests | 31, 35 |
 | 37 | 0000466-version-files-completeness-check | Version files completeness check | 0000433 | minor |  | pending | tests | 36 |
 | 38 | 0000468-reply-time-matches-the-clock | Reply time matches the clock | 0000434 | minor |  | pending | hooks | 22 |
@@ -340,3 +340,4 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 34 | #161 | tag v0.80.1 | 0.80.1 | 2026-11-10T16:16:16Z |
 | 33 | #162 | tag v0.81.0 | 0.81.0 | 2026-11-10T17:46:33Z |
 | 32 | #164 | tag v0.82.0 | 0.82.0 | 2026-11-10T18:17:04Z |
+| 35 | #165 | tag v0.83.0 | 0.83.0 | 2026-11-10T18:59:00Z |

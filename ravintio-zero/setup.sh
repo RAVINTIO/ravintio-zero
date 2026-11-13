@@ -212,7 +212,8 @@ preserve_developer_boot_file() {
   [ -f "$path" ] && [ ! -L "$path" ] || return 0
   grep -q '[^[:space:]]' "$path" 2>/dev/null || return 0
   marker="$(printf '%s\n' "$content" | head -1)"
-  if [ -n "$marker" ] && grep -qxF -- "$marker" "$path"; then
+  # Windows PowerShell 5.1 writes a BOM, so strip it from the first line before the compare (0000462).
+  if [ -n "$marker" ] && LC_ALL=C sed $'1s/^\xef\xbb\xbf//' "$path" | grep -qxF -- "$marker"; then
     return 0
   fi
   base="$(basename "$path" .md)"
