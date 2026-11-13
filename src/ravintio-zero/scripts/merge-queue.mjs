@@ -36,6 +36,9 @@
  * `resolved:` line for each, and commits the merge. A conflict in any other file aborts the merge and stops
  * the queue (feature 0000456, ADR-0302).
  *
+ * After the base merge, the queue renumbers an ADR or a backlog entry that the PR added under an id that the
+ * base also holds, commits the change, and prints a `renumbered:` line for each (feature 0000485, ADR-0312).
+ *
  * The chart `Merge commit` cell holds `tag v{version}`. The queue never commits
  * after the squash, so the sha lives in the tag and in the printed output.
  */
@@ -45,6 +48,7 @@ import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync
 import { tmpdir } from "node:os";
 import { dirname, isAbsolute, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { renumberCollisions } from "./id-collisions.mjs";
 import { resolveSharedConflicts } from "./shared-files.mjs";
 import { presentPaths, readEntries, readVersions, setVersions } from "./version-files.mjs";
 
@@ -480,6 +484,22 @@ function resolveBaseMerge({ root, base, head, mergeSubject, mergeError }) {
   for (const file of resolved) console.log(`resolved: ${file}`);
 }
 
+/**
+ * Two parallel steps can reserve one ADR number or one backlog id. After the base merge, give the PR's file
+ * the next free id, commit the change, and print one `renumbered:` line for each (0000485).
+ */
+function renumberIds({ root, base, oursHead, featureId }) {
+  let changes;
+  try {
+    changes = renumberCollisions({ root, ours: oursHead, theirs: `origin/${base}` });
+  } catch (e) {
+    throw new Stop(`renumber of colliding ids failed: ${e.message}`);
+  }
+  if (changes.length === 0) return;
+  git(root, ["commit", "-m", `${featureId.slice(0, 7)}: Renumber colliding ids`]);
+  for (const c of changes) console.log(`renumbered: ${c.kind === "adr" ? "adr" : "backlog"} ${c.from} -> ${c.to}`);
+}
+
 /** Steps 2 to 6 of `run`, on the PR branch that the caller checked out. */
 function mergeAndRelease({ root, list, chartAbs, chartRel, step, pr, base, head, featureId, bumpKind }) {
   // Take back the version commits of an earlier failed run when the base version has moved (0000454).
@@ -487,11 +507,13 @@ function mergeAndRelease({ root, list, chartAbs, chartRel, step, pr, base, head,
   // A short subject of our own (0000405). Git's default names both branches and can pass the
   // 72-character limit that the blocking commit-msg hook enforces.
   const mergeSubject = `${featureId.slice(0, 7)}: Merge the initiative branch`;
+  const oursHead = git(root, ["rev-parse", "HEAD"]).trim();
   try {
     git(root, ["merge", "-m", mergeSubject, `origin/${base}`]);
   } catch (e) {
     resolveBaseMerge({ root, base, head, mergeSubject, mergeError: e });
   }
+  renumberIds({ root, base, oursHead, featureId });
   const mergedHead = git(root, ["rev-parse", "HEAD"]).trim();
   if (mergedHead !== git(root, ["rev-parse", `origin/${head}`]).trim()) {
     git(root, ["push", "origin", `${head}:${head}`]);

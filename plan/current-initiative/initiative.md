@@ -407,7 +407,7 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 41 | 0000474-coordinator-shell-guidance | Coordinator shell guidance | 0000437 | minor |  | pending | initiative-skill | 29 |
 | 42 | 0000481-regenerate-after-every-merge | Regenerate shared files after every base merge | 0000482 | minor |  | pending | queue | 22 |
 | 43 | 0000483-mergeability-before-ci-wait | Check mergeability before a CI wait | 0000484 | minor | 0.93.0 | merged | ship | 30 |
-| 44 | 0000485-adr-number-collision | Parallel steps reserve distinct ids | 0000479 | minor |  | pending | adr | 22 |
+| 44 | 0000485-adr-number-collision | Parallel steps reserve distinct ids | 0000479 | minor | 0.94.0 | merged | adr | 22 |
 | 45 | 0000487-steps-apply-decision-rows | Steps apply the chart's Decisions rows | 0000488 | minor |  | pending | skills | 22 |
 | 46 | 0000489-question-only-for-questions | Steps use Question only for real questions | 0000490 | minor |  | pending | skills | 45 |
 | 47 | 0000491-driver-favours-critical-path | Driver favours the critical path | 0000492 | minor |  | pending | driver | 41 |
@@ -464,3 +464,4 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 27 | #173 | tag v0.91.0 | 0.91.0 | 2026-11-11T00:22:34Z |
 | 28 | #175 | tag v0.92.0 | 0.92.0 | 2026-11-11T01:45:18Z |
 | 43 | #176 | tag v0.93.0 | 0.93.0 | 2026-11-11T02:09:04Z |
+| 44 | #178 | tag v0.94.0 | 0.94.0 | 2026-11-11T02:46:32Z |
