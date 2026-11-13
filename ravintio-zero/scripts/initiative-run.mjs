@@ -41,13 +41,18 @@
 // are private to the user: the folder has mode 700 and each log mode 600. Every stop after a step starts ends with
 // "Log: plan/.initiative-logs/step-{position}.log".
 //
+// Hook events: the driver passes --include-hook-events, so each step log also holds one
+// hook_response event for every hook that ran, including the PostToolUse clock. Run
+// `node step-clock-check.mjs plan/.initiative-logs/step-{position}.log` to see whether the
+// step received the clock (0000534 ADR-0342).
+//
 // What it does:
 //   1. Reads plan/current-initiative/initiative.md and stops unless status is "active".
 //   2. Takes plan/.initiative-runner.lock. If the lock exists, it refuses to start and leaves
 //      the lock alone. The one exception is a lock that holds only a pid for a process that
 //      no longer runs. The driver prints the pid, removes the lock, and takes it. A pid that
 //      runs, text that is not a pid, and a symlink still refuse.
-//   3. Runs `claude -p --output-format stream-json --verbose --permission-mode auto
+//   3. Runs `claude -p --output-format stream-json --verbose --include-hook-events --permission-mode auto
 //      --append-system-prompt "Write all prose to ravintio-zero/standards/writing-standards.md." --model {model} [--max-turns {n}]
 //      "Run initiative step {position}"`
 //      and waits. Each step starts a fresh session. The position goes to claude as one
@@ -631,7 +636,7 @@ function queueSentence(queueRoot, position) {
 function runStep(root, position, cfg, fd, labels, resumeId, opts = {}) {
   return new Promise((resolveStep) => {
     const bin = process.env.CLAUDE_BIN || 'claude';
-    const args = ['-p', '--output-format', 'stream-json', '--verbose', '--permission-mode', 'auto', '--append-system-prompt', WRITING_LINE, '--model', cfg.model];
+    const args = ['-p', '--output-format', 'stream-json', '--verbose', '--include-hook-events', '--permission-mode', 'auto', '--append-system-prompt', WRITING_LINE, '--model', cfg.model];
     if (cfg.turns) args.push('--max-turns', cfg.turns);
     const queue = queueSentence(opts.queueRoot ?? root, position);
     if (resumeId) args.push('--resume', resumeId, CONTINUE_PROMPT(position, logLine(opts.cwd ?? root, opts.featureId), queue));
