@@ -8,7 +8,7 @@ status: "active"  # proposed | charted | active | delivered | blocked
 **Goal:** Close every open backlog entry except the four that need paid services. The first three steps make the driver run independent steps at once, each in its own worktree, with each version set as its step merges. Step 20 moves the pack source to `src/ravintio-zero/`. The last step, step 21, makes activation smoother for the human.
 **Branch:** initiative/0000360-backlog-sweep
 **Status:** active
-**Position:** 57
+**Position:** 60
 **Speed:** standard
 **Step CI fixes:** allowed
 **Concurrency:** 3
@@ -436,7 +436,7 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 54 | 0000505-coordinator-branch-regenerate | Coordinator branches regenerate shared files | 0000506 | minor | 0.97.0 | merged | queue | 42 |
 | 55 | 0000507-hook-check-after-setup | Check every hook after setup | 0000508 | minor | 0.110.0 | merged | driver | 53 |
 | 56 | 0000509-clear-merged-ready-files | Driver clears ready files of merged steps | 0000510 | minor | 0.111.0 | merged | driver | 55 |
-| 57 | 0000511-driver-stop-summary | Driver prints a stop summary | 0000512 | minor |  | pending | driver | 56 |
+| 57 | 0000511-driver-stop-summary | Driver prints a stop summary | 0000512 | minor | 0.112.0 | merged | driver | 56 |
 | 58 | 0000519-ship-removal-needs-human-approval | Ship removes plan/current with git rm | 0000518 | minor | 0.102.0 | merged | ship | 43 |
 | 59 | 0000521-replies-name-actors-by-role | Replies name actors by role | 0000522 | minor | 0.103.0 | merged | skills | 51 |
 
@@ -500,3 +500,4 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 53 | #193 | tag v0.109.0 | 0.109.0 | 2026-11-12T02:19:39Z |
 | 55 | #195 | tag v0.110.0 | 0.110.0 | 2026-11-12T15:07:12Z |
 | 56 | #196 | tag v0.111.0 | 0.111.0 | 2026-11-13T02:38:32Z |
+| 57 | #197 | tag v0.112.0 | 0.112.0 | 2026-11-13T04:04:17Z |
