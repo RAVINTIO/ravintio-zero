@@ -93,6 +93,17 @@ Run this scan before you write the execution plan. For each cause below that the
 
 If a grep matches nothing, write `none found` in the row.
 
+## Branch-point reread
+
+Run this step after the Test impact scan and before you write the execution plan. Parallel steps change shared files within minutes, so a file you read early can be stale.
+
+<!-- rule: plan-branch-point-reread -->
+List every file a unit edits. Run `git fetch origin`, then read each file from the tip of the PR base branch with `git show origin/{base}:{path}`. Write a row for each file in the `## Branch-point reads` table of the execution plan. Name the last commit that changed it, from `git log -1 --format=%h origin/{base} -- {path}`. Write `new` for a file the unit creates.
+
+- Read the plan's claims about each file from this text, never from an earlier read.
+- If `origin` has no such branch, read the local base branch and write `local` after the commit.
+- If `origin/{base}` moves before the plan gate, repeat the reread and update the rows.
+
 ## Requirements rules
 
 - Derive requirements directly from user stories in the brief. Do not invent requirements not stated or implied.
