@@ -80,13 +80,23 @@ Complete: P1 (2026-11-13T04:24:39Z)
 
 - In progress: U1 tests (2026-11-13T04:25:00Z)
 - RED: U1 tests (2026-11-13T04:25:27Z)
-- GREEN: U2 driver flag and check script (2026-11-13T04:26:00Z)
+- GREEN: U1 tests (2026-11-13T04:26:00Z)
 - Done: U1 tests (content, inline, none, 2026-11-13T04:26:00Z)
+- In progress: U2 driver flag and check script (2026-11-13T04:25:30Z)
+- RED: U2 driver flag and check script (2026-11-13T04:25:27Z)
+- GREEN: U2 driver flag and check script (2026-11-13T04:26:00Z)
 - Done: U2 driver flag and check script (content, inline, none, 2026-11-13T04:26:00Z)
+- In progress: U3 docs, ADR, and index (2026-11-13T04:25:30Z)
+- RED: U3 docs, ADR, and index (2026-11-13T04:25:27Z)
+- GREEN: U3 docs, ADR, and index (2026-11-13T04:26:00Z)
 - Done: U3 docs, ADR, and index (content, inline, none, 2026-11-13T04:26:00Z)
+- In progress: U4 installed copy refresh (2026-11-13T04:26:10Z)
+- RED: U4 installed copy refresh (2026-11-13T04:26:10Z)
+- GREEN: U4 installed copy refresh (2026-11-13T04:26:30Z)
 - Done: U4 installed copy refresh (content, inline, none, 2026-11-13T04:26:30Z)
 - Tests run: REQ-001: test-0000534-req-001-003-step-clock.sh, test-0000240-req-001-driver-stream-args.sh, test-0000354-req-001-driver-resume.sh, test-0000444-req-001-003-queue-items.sh (2026-11-13T04:26:00Z)
 - Rework: REQ-003: the new test found the repo root from the source folder only, so the installed copy failed (2026-11-13T04:47:00Z)
+- Postmortem: plan/postmortems/2026-11-13-installed-copy-repo-root.md (2026-11-13T05:27:15Z) REQ-003
 - Tests run: full suite: 447 passed, 4 failed (2026-11-13T05:00:00Z)
 - Baseline: 3 inherited failures. The fourth is the new test. The agent committed the fix, and the test passes in the installed copy.
 
@@ -112,3 +122,35 @@ Complete: P2 (2026-11-13T05:00:56Z)
 - Docs edit pass: 1 cycle, prose-check exit 0 (ADR-0342 sentence split)
 
 Complete: P3 (2026-11-13T05:26:35Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-13T05:26:30Z` |
+| End | `2026-11-13T05:26:48Z` |
+| Wall clock | `0` |
+| Model tier | primary |
+| Skills loaded | ravintio-orchestrator, ravintio-ship |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | none |
+
+Complete: P4 (2026-11-13T05:26:48Z)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `68` |
+| Total agents spawned | `1` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `1` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `1` |
+| Phases skipped | `none` |
