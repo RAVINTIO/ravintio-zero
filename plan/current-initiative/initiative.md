@@ -8,7 +8,7 @@ status: "active"  # proposed | charted | active | delivered | blocked
 **Goal:** Close every open backlog entry except the four that need paid services. The first three steps make the driver run independent steps at once, each in its own worktree, with each version set as its step merges. Step 20 moves the pack source to `src/ravintio-zero/`. The last step, step 21, makes activation smoother for the human.
 **Branch:** initiative/0000360-backlog-sweep
 **Status:** active
-**Position:** 21
+**Position:** 22
 **Speed:** standard
 **Step CI fixes:** allowed
 **Concurrency:** 3
@@ -167,7 +167,7 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 18 | 0000394-github-security-and-ci-lint | GitHub security and CI lint | 0000323, 0000324, 0000325 | minor | 0.69.0 | merged | github | 4 |
 | 19 | 0000395-pack-prose-to-the-standard | Pack prose to the standard | 0000302 | minor | 0.75.0 | merged | writing | 5-18 |
 | 20 | 0000397-pack-source-in-src | Pack source in src | 0000396 | minor | 0.76.0 | merged | layout | 19 |
-| 21 | 0000399-smoother-activation | Smoother activation | 0000398 | minor | | pending | initiative | 20 |
+| 21 | 0000399-smoother-activation | Smoother activation | 0000398 | minor | 0.77.0 | merged | initiative | 20 |
 
 ## Merges
 
@@ -191,3 +191,4 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 15 | #148 | tag v0.74.0 | 0.74.0 | 2026-11-09T19:48:19Z |
 | 19 | #149 | tag v0.75.0 | 0.75.0 | 2026-11-09T21:30:06Z |
 | 20 | #150 | tag v0.76.0 | 0.76.0 | 2026-11-10T00:06:56Z |
+| 21 | #152 | tag v0.77.0 | 0.77.0 | 2026-11-10T01:56:33Z |

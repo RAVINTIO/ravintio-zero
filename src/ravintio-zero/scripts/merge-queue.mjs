@@ -32,7 +32,7 @@ import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync
 import { tmpdir } from "node:os";
 import { dirname, isAbsolute, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { readList, readVersions, setVersions } from "./version-files.mjs";
+import { presentPaths, readEntries, readVersions, setVersions } from "./version-files.mjs";
 
 const GIT = process.env.GIT_BIN || "git";
 const GH = process.env.GH_BIN || "gh";
@@ -271,8 +271,14 @@ function agreed(rows) {
 function versionsOnRef(root, ref, list) {
   const tmp = mkdtempSync(join(tmpdir(), "mq-base-"));
   try {
-    for (const p of readList(list)) {
-      const text = git(root, ["show", `${ref}:${p}`]);
+    for (const { path: p, optional } of readEntries(list)) {
+      let text;
+      try {
+        text = git(root, ["show", `${ref}:${p}`]);
+      } catch (e) {
+        if (optional) continue; // an optional file the ref lacks (0000420)
+        throw e;
+      }
       const dest = join(tmp, p);
       mkdirSync(dirname(dest), { recursive: true });
       writeFileSync(dest, text);
@@ -398,7 +404,8 @@ function cmdRun(a) {
     cmdVersions({ root, list });
     const mergedAt = new Date().toISOString().replace(/\.\d+Z$/, "Z");
     writeFileSync(chartAbs, updateChart(readChartText(chartAbs), { step, pr, version: next, mergedAt }));
-    const paths = [chartRel, ...readList(list)];
+    // Stage only the listed files that exist, so an optional file a repo lacks is left out (0000420).
+    const paths = [chartRel, ...presentPaths(root, list)];
     git(root, ["add", "--", ...paths]);
     git(root, ["commit", "-m", `chore(${featureId.slice(0, 7)}): set version ${next} for step ${step}`, "--", ...paths]);
     git(root, ["push", "origin", `${head}:${head}`]);

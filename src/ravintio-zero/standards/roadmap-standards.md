@@ -229,6 +229,17 @@ The driver runs steps at once when the chart allows it. Chart fills the `Lane` a
 
 The `Status` column holds `pending`, `running`, `ready`, or `merged`. The committed chart holds only `pending` and `merged`, and the merge queue writes `merged`. The driver derives `running` and `ready` from its control folders and never commits them. `scripts/initiative-chart.mjs` reads the table by header name.
 
+### Coordinator questions and commands
+
+The coordinator session cuts the cost of a decision. It follows these rules at every stage.
+
+- <!-- rule: coord-question-form --> **Restate, default, confirm.** Restate the human's request as one concrete plan in their own terms. Name the default. Ask "Go?". Offer other options only when the request leaves a real fork open.
+- <!-- rule: coord-one-question --> **One question per reply.** Never ask about something the human already stated.
+- <!-- rule: coord-activate-command --> **Activate command.** `node ravintio-zero/scripts/initiative-activate.mjs --yes` runs the I-B Activate checks and cuts and pushes the initiative branch. It then lands the coordinator PR, waits for CI, and merges it. It ends by printing the driver and watcher commands. The coordinator starts both as background tasks. `--dry-run` prints the plan and changes nothing. A rerun after a stop resumes at the PR step.
+- <!-- rule: coord-add-step --> **Add-step helper.** `node ravintio-zero/scripts/initiative-add-step.mjs --title "{title}" --slug {slug}` reserves the ids, files the backlog entry, rebuilds the backlog index, and writes the new step's row in every chart table. Never edit the tables by hand to add a step.
+- <!-- rule: coord-plan-only-pr --> **Plan-only coordinator PR.** Before the full suite, run `node ravintio-zero/scripts/coordinator-pr-check.mjs {base}`. If it prints `plan-only`, the plan format checks have passed and the full suite need not rerun. If it prints `full-suite`, run the suite.
+- <!-- rule: coord-startup-skill --> **Start-up skill.** A session that is not a step session loads the initiative skill when `plan/current-initiative/initiative.md` is `active` or a draft in `plan/roadmap/` is `charted`.
+
 ### I-B Activate
 
 Activate turns a charted initiative into a live branch. Run these checks first:
