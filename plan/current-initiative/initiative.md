@@ -451,8 +451,8 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 57 | 0000511-driver-stop-summary | Driver prints a stop summary | 0000512 | minor | 0.112.0 | merged | driver | 56 |
 | 58 | 0000519-ship-removal-needs-human-approval | Ship removes plan/current with git rm | 0000518 | minor | 0.102.0 | merged | ship | 43 |
 | 59 | 0000521-replies-name-actors-by-role | Replies name actors by role | 0000522 | minor | 0.103.0 | merged | skills | 51 |
-| 60 | 0000529-step-sessions-receive-clock | Step sessions receive the clock | 0000530 | minor |  | pending | skills | 59 |
-| 61 | 0000532-pending-migrations-reach-the-human-early | Pending migrations reach the human early | 0000531 | minor |  | pending | initiative-skill | 41 |
+| 60 | 0000534-step-sessions-receive-clock | Step sessions receive the clock | 0000535 | minor |  | pending | skills | 59 |
+| 61 | 0000536-pending-migrations-reach-the-human-early | Pending migrations reach the human early | 0000537 | minor |  | pending | initiative-skill | 41 |
 
 ## Merges
 
