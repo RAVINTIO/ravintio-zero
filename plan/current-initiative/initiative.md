@@ -405,7 +405,7 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 39 | 0000470-plan-rereads-files-at-the-branch-point | Plan rereads files at the branch point | 0000435 | minor | 0.86.0 | merged | plan-skill | 22 |
 | 40 | 0000472-ci-duration-metric | CI duration metric | 0000436 | minor | 0.90.0 | merged | ci | 22 |
 | 41 | 0000474-coordinator-shell-guidance | Coordinator shell guidance | 0000437 | minor |  | pending | initiative-skill | 29 |
-| 42 | 0000481-regenerate-after-every-merge | Regenerate shared files after every base merge | 0000482 | minor |  | pending | queue | 22 |
+| 42 | 0000481-regenerate-after-every-merge | Regenerate shared files after every base merge | 0000482 | minor | 0.95.0 | merged | queue | 22 |
 | 43 | 0000483-mergeability-before-ci-wait | Check mergeability before a CI wait | 0000484 | minor | 0.93.0 | merged | ship | 30 |
 | 44 | 0000485-adr-number-collision | Parallel steps reserve distinct ids | 0000479 | minor | 0.94.0 | merged | adr | 22 |
 | 45 | 0000487-steps-apply-decision-rows | Steps apply the chart's Decisions rows | 0000488 | minor |  | pending | skills | 22 |
@@ -465,3 +465,4 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 28 | #175 | tag v0.92.0 | 0.92.0 | 2026-11-11T01:45:18Z |
 | 43 | #176 | tag v0.93.0 | 0.93.0 | 2026-11-11T02:09:04Z |
 | 44 | #178 | tag v0.94.0 | 0.94.0 | 2026-11-11T02:46:32Z |
+| 42 | #177 | tag v0.95.0 | 0.95.0 | 2026-11-11T03:58:15Z |
