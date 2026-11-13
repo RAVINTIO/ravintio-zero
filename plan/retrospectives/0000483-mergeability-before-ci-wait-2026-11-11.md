@@ -31,7 +31,7 @@ The merge queue now stops on a conflicting PR or when no check appears, and a st
 ## Change
 
 - Ship clears `plan/.feature-id` or the shared-files resolver covers it (`plan/backlog/0000514-clear-feature-id-at-ship/entry.md`).
-- Parallel steps reserve distinct ADR numbers. Step 44 of the chart already covers it (`plan/current-initiative/initiative.md`, step 44 row).
+- Parallel steps reserve distinct ADR numbers. Step 44 of the chart already covers it (`plan/_archive/0000360-backlog-sweep-initiative-2026-11-13/initiative.md`, step 44 row).
 
 ## Actions
 

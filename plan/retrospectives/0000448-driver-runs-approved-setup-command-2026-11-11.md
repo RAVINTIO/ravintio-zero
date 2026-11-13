@@ -17,7 +17,7 @@ The run added `setup-command.mjs` and made the driver run the approved setup com
 
 - The archived run of step 40 gave a template for every artifact (`plan/_archive/0000472-ci-duration-metric-2026-11-10/`).
 - The shared scheduler fixture ran the concurrent path with a one-line switch, `QUEUE_SETUP_STEP` (`src/ravintio-zero/tests/helpers/scheduler-fixture.sh`).
-- The chart decision row for steps 25 to 41 named four shards and the two inherited failures, so P3 needed no base run (`plan/current-initiative/initiative.md`).
+- The chart decision row for steps 25 to 41 named four shards and the two inherited failures, so P3 needed no base run (`plan/_archive/0000360-backlog-sweep-initiative-2026-11-13/initiative.md`).
 
 ## What slowed the work
 

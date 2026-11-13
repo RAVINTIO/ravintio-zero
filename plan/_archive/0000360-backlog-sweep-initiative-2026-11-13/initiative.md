@@ -1,13 +1,13 @@
 ---
 title: "Initiative: 0000360 - backlog sweep"
 summary: "Closes 62 open backlog entries in 21 steps, and makes the driver run independent steps at once in worktrees."
-status: "active"  # proposed | charted | active | delivered | blocked
+status: "delivered"  # proposed | charted | active | delivered | blocked
 ---
 # Initiative: 0000360 - backlog sweep
 
 **Goal:** Close every open backlog entry except the four that need paid services. The first three steps make the driver run independent steps at once, each in its own worktree, with each version set as its step merges. Step 20 moves the pack source to `src/ravintio-zero/`. The last step, step 21, makes activation smoother for the human.
 **Branch:** initiative/0000360-backlog-sweep
-**Status:** active
+**Status:** delivered
 **Position:** 62
 **Speed:** standard
 **Step CI fixes:** allowed
