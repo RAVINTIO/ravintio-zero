@@ -47,3 +47,19 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Design confirmation: draft-accepted (initiative)
 
 Complete: P0 (2026-11-13T04:23:00Z)
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-13T04:23:10Z` |
+| End | `2026-11-13T04:24:39Z` |
+| Wall clock | `2` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Standard speed. The artifacts share one small change, so the agent wrote them inline. The ADR number 0342 came from `reserve-id.mjs`. |
+
+Complete: P1 (2026-11-13T04:24:39Z)
