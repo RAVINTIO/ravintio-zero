@@ -16,6 +16,7 @@ new_workspace() {
   ws=$(mktemp -d "$TMP/ws_XXXXXX")
   cp -r "$ZERO_DIR" "$ws/ravintio-zero"
   git init "$ws" >/dev/null 2>&1
+  commit_workspace_pack "$ws"
   mkdir -p "$ws/.claude/commands"
   for n in fast-path change-pipeline retrofit; do
     printf -- '---\nname: %s\ndescription: Retired.\n---\n# %s\n' "$n" "$n" >"$ws/.claude/commands/$n.md"

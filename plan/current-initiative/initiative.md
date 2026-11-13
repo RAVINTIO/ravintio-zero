@@ -8,7 +8,7 @@ status: "active"  # proposed | charted | active | delivered | blocked
 **Goal:** Close every open backlog entry except the four that need paid services. The first three steps make the driver run independent steps at once, each in its own worktree, with each version set as its step merges. Step 20 moves the pack source to `src/ravintio-zero/`. The last step, step 21, makes activation smoother for the human.
 **Branch:** initiative/0000360-backlog-sweep
 **Status:** active
-**Position:** 6
+**Position:** 8
 **Speed:** standard
 **Step CI fixes:** allowed
 **Concurrency:** 3
@@ -152,7 +152,7 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 3 | 0000379-parallel-steps-on-worktrees | Parallel steps on worktrees | 0000375 | minor | 0.59.0 | merged | driver | 2 |
 | 4 | 0000380-test-helpers-and-rule-anchors | Test helpers and rule anchors | 0000261, 0000308, 0000337 | minor | 0.60.0 | merged | tests | 3 |
 | 5 | 0000381-setup-safety | Setup safety | 0000262, 0000289, 0000293, 0000290 | minor | 0.61.0 | merged | setup | 4 |
-| 6 | 0000382-install-lifecycle | Install lifecycle | 0000283, 0000299, 0000292, 0000291, 0000298, 0000286 | minor | | pending | setup | 5 |
+| 6 | 0000382-install-lifecycle | Install lifecycle | 0000283, 0000299, 0000292, 0000291, 0000298, 0000286 | minor | 0.63.0 | merged | setup | 5 |
 | 7 | 0000383-test-impact-scan | Test impact scan | 0000361, 0000362, 0000363, 0000369, 0000297 | minor | 0.62.0 | merged | plan | 4 |
 | 8 | 0000384-plan-checks | Plan checks | 0000255, 0000263, 0000333, 0000347, 0000280, 0000364 | minor | | pending | plan | 7 |
 | 9 | 0000385-faster-test-runs | Faster test runs | 0000294, 0000295, 0000296 | minor | | pending | run | 4 |
@@ -177,3 +177,4 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 4 | #129 | tag v0.60.0 | 0.60.0 | 2026-11-07T21:21:46Z |
 | 5 | #131 | tag v0.61.0 | 0.61.0 | 2026-11-08T01:04:33Z |
 | 7 | #132 | tag v0.62.0 | 0.62.0 | 2026-11-08T02:38:25Z |
+| 6 | #136 | tag v0.63.0 | 0.63.0 | 2026-11-08T15:23:07Z |

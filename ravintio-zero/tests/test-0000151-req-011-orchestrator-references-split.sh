@@ -193,6 +193,7 @@ echo "=== (c) setup installs the reference files ==="
 WS="$(mktemp -d -t ravintio_0000151_req011_ws_XXXXXX)"
 cp -r "$ZERO_DIR" "$WS/ravintio-zero"
 git init "$WS" >/dev/null 2>&1
+commit_workspace_pack "$WS"
 (cd "$WS" && GIT_CEILING_DIRECTORIES="$(dirname "$WS")" bash ravintio-zero/setup.sh claude-code >"$WS/setup.out" 2>"$WS/setup.err")
 assert_exit_zero "$?" "setup.sh exits 0"
 INST="$WS/.claude/skills/ravintio-orchestrator/references"

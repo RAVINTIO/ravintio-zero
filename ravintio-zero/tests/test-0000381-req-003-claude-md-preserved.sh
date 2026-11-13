@@ -14,8 +14,10 @@ trap 'rm -rf "$TMP"' EXIT
 WS=$(mktemp -d "$TMP/ws_XXXXXX")
 cp -r "$ZERO_DIR" "$WS/ravintio-zero"
 git init "$WS" >/dev/null 2>&1
+commit_workspace_pack "$WS"
 printf '# Team rules\n\nAlways squash. Never rebase shared branches.\n' >"$WS/CLAUDE.md"
 run_setup() {
+  commit_workspace_pack "$WS"
   (cd "$WS" && GIT_CEILING_DIRECTORIES="$(dirname "$WS")" bash ravintio-zero/setup.sh claude-code >"$WS/setup.out" 2>"$WS/setup.err")
 }
 run_setup
@@ -48,9 +50,11 @@ echo "=== req-003: an existing destination is never overwritten ==="
 WS2=$(mktemp -d "$TMP/ws_XXXXXX")
 cp -r "$ZERO_DIR" "$WS2/ravintio-zero"
 git init "$WS2" >/dev/null 2>&1
+commit_workspace_pack "$WS2"
 mkdir -p "$WS2/ravintio-overrides/instructions"
 echo "earlier" >"$WS2/ravintio-overrides/instructions/original-CLAUDE.md"
 echo "Second content" >"$WS2/CLAUDE.md"
+commit_workspace_pack "$WS2"
 (cd "$WS2" && GIT_CEILING_DIRECTORIES="$(dirname "$WS2")" bash ravintio-zero/setup.sh claude-code >"$WS2/setup.out" 2>&1)
 assert_equals "earlier" "$(cat "$WS2/ravintio-overrides/instructions/original-CLAUDE.md")" "the earlier file is unchanged"
 assert_contains "Second content" "$(cat "$WS2/ravintio-overrides/instructions/original-CLAUDE-2.md" 2>/dev/null)" "the content goes to a numbered file"
