@@ -124,6 +124,7 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | Step | Fork | Pre-approved answer | Bump effect |
 |------|------|---------------------|-------------|
 | 1-21 | Confirmation: setup rerun at each `Setup:` stop | Run the exact command `ravintio-zero/setup.sh claude-code --strict-orchestrator`. If the command differs in any way, stop for the human. | none |
+| 25-41 | Local suite runs | Approved by the human on 2026-11-10. Run the local suite in 4 parallel shards with `RAVINTIO_SHARD=1/4` to `4/4`, and read every shard's summary. Reuse the known baseline: `test-0000037-req-004-remove-old-folder.sh` and `test-0000318-req-004-merge-guard-pinned.sh` fail in a clean clone on the base. Record them with `baseline-failures.mjs` without a base run. If any other suite fails, run that suite on the base commit to tell an inherited failure from a new one. CI still runs every suite. | none |
 | 1 | The orchestrator skill has 118 bytes left under its 9000 byte cap | Move the Context Hygiene section to `references/orchestrator-context-hygiene.md` with a Pack Index row, and update the cap tests (0000371), before the `Question:` edit | none |
 | 1 | The driver changes while it runs | The coordinator takes the `Restart:` stop and starts a new driver and watcher | none |
 | 2 | Steps 1 and 2 still bump in P4 | Steps 1 and 2 use today's P4 bump. The merge queue sets versions from step 3 on. | none |
@@ -303,7 +304,7 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 34 | 0000460-narrow-brand-guard-self-entry | Narrow the brand guard self-entry | 0000432 | patch | 0.80.1 | merged | tests | 22 |
 | 35 | 0000462-tests-without-git-identity | Tests catch runner-only failures | 0000414 | minor | 0.83.0 | merged | tests | 34 |
 | 36 | 0000464-merge-queue-test-gaps | Merge queue test gaps | 0000400 | minor | 0.87.0 | merged | tests | 31, 35 |
-| 37 | 0000466-version-files-completeness-check | Version files completeness check | 0000433 | minor |  | pending | tests | 36 |
+| 37 | 0000466-version-files-completeness-check | Version files completeness check | 0000433 | minor | 0.88.0 | merged | tests | 36 |
 | 38 | 0000468-reply-time-matches-the-clock | Reply time matches the clock | 0000434 | minor | 0.85.0 | merged | hooks | 22 |
 | 39 | 0000470-plan-rereads-files-at-the-branch-point | Plan rereads files at the branch point | 0000435 | minor | 0.86.0 | merged | plan-skill | 22 |
 | 40 | 0000472-ci-duration-metric | CI duration metric | 0000436 | minor |  | pending | ci | 22 |
@@ -345,3 +346,4 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 38 | #167 | tag v0.85.0 | 0.85.0 | 2026-11-10T20:27:02Z |
 | 39 | #168 | tag v0.86.0 | 0.86.0 | 2026-11-10T20:51:47Z |
 | 36 | #166 | tag v0.87.0 | 0.87.0 | 2026-11-10T21:22:46Z |
+| 37 | #170 | tag v0.88.0 | 0.88.0 | 2026-11-10T22:18:06Z |
