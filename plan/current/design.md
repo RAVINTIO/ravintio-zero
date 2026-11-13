@@ -48,7 +48,7 @@
 
 ## Risks
 - The summary throws and hides the original stop. Likelihood low, impact medium. Mitigation: the printer sits in a `try` block and writes only strings.
-- A new line breaks a reader of driver output. Likelihood low, impact low. Mitigation: the lines use a new `Summary:` status and print after all existing lines.
+- A new line breaks a reader of driver output. Likelihood low, impact low. Mitigation: the lines use a new `Summary:` status and print just before the final line, so that line stays last.
 
 ## Dependencies
 - Upstream: `out()`, `main()`, and the two final handlers in `initiative-run.mjs`.

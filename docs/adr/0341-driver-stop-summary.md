@@ -19,7 +19,7 @@ At each driver stop, the human reads many lines to learn what happened and wheth
 
 ## Decision
 
-`out()` in `initiative-run.mjs` records each merge line and each driver fix line. At every end of a run, the driver prints a summary block after its last other line. The block has these lines.
+`out()` in `initiative-run.mjs` records each merge line and each driver fix line. At every end of a run, the driver prints a summary block just before its final line, so the stop line or the `I-E Delivery:` line stays last. The block has these lines.
 
 1. `I-C Run: Summary: merged this run: {steps or none}`
 2. `I-C Run: Summary: driver fixes: {count}`, then one `I-C Run: Summary: fix: {line}` for each fix, up to 10

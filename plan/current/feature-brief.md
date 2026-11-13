@@ -74,7 +74,7 @@ None change. The summary adds lines. It changes no existing line.
 
 ### Constraints
 - The driver adds no dependency.
-- The summary prints after the last existing line and names no secret.
+- The summary prints just before the final line, which stays last. It names no secret.
 - Exit codes stay as they are (0, 1, and 75).
 
 ### Assumptions

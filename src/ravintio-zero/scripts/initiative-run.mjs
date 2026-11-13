@@ -182,7 +182,7 @@
 // and the final lines with "I-E Delivery:". A stop line names the reason and,
 // for a block, repeats the Blocked: message cut to 500 characters.
 //
-// Summary: every run prints a block just before its final line (0000511, ADR-0341). The stop line or the I-E Delivery: line stays last. Each line starts
+// Summary: every run prints a block before its final line (0000511, ADR-0341). The stop line or the I-E Delivery: line stays last. Each line starts
 // with "I-C Run: Summary:". "merged this run:" lists the steps the run merged, in merge order, or none.
 // "driver fixes:" counts the repairs the driver made by itself, then one "fix:" line repeats each of the
 // first 10. "action for the human:" ends the block. It reads none after a clean end, "run initiative
@@ -294,7 +294,7 @@ function humanAction(stopMsg) {
   return 'read the stop line and the step log, then start a new driver';
 }
 
-// Prints the summary block once, just before the final line of a run, so the stop line or the
+// Prints the summary block once, before the final line of a run, so the stop line or the
 // I-E Delivery: line stays last. It never throws and changes no exit code.
 const MAX_SUMMARY_FIXES = 10;
 let summaryDone = false;

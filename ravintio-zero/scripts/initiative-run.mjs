@@ -182,7 +182,7 @@
 // and the final lines with "I-E Delivery:". A stop line names the reason and,
 // for a block, repeats the Blocked: message cut to 500 characters.
 //
-// Summary: every run ends with a block after the last other line (0000511, ADR-0341). Each line starts
+// Summary: every run prints a block before its final line (0000511, ADR-0341). The stop line or the I-E Delivery: line stays last. Each line starts
 // with "I-C Run: Summary:". "merged this run:" lists the steps the run merged, in merge order, or none.
 // "driver fixes:" counts the repairs the driver made by itself, then one "fix:" line repeats each of the
 // first 10. "action for the human:" ends the block. It reads none after a clean end, "run initiative
@@ -294,9 +294,13 @@ function humanAction(stopMsg) {
   return 'read the stop line and the step log, then start a new driver';
 }
 
-// Prints the summary block after the last other line of a run. It never throws and changes no exit code.
+// Prints the summary block once, before the final line of a run, so the stop line or the
+// I-E Delivery: line stays last. It never throws and changes no exit code.
 const MAX_SUMMARY_FIXES = 10;
+let summaryDone = false;
 function printSummary(stopMsg) {
+  if (summaryDone) return;
+  summaryDone = true;
   try {
     out(`I-C Run: Summary: merged this run: ${record.merged.length > 0 ? record.merged.join(', ') : 'none'}`);
     out(`I-C Run: Summary: driver fixes: ${record.fixes.length}`);
@@ -716,8 +720,8 @@ for (const sig of ['SIGINT', 'SIGTERM', 'SIGHUP']) {
     if (activeChild) activeChild.kill(sig);
     for (const c of children) if (c !== activeChild) c.kill(sig);
     releaseLock();
-    out(withLog(`I-C Run: Blocked: driver stopped by ${sig}`));
     printSummary(`I-C Run: Blocked: driver stopped by ${sig}`);
+    out(withLog(`I-C Run: Blocked: driver stopped by ${sig}`));
     process.exit(1);
   });
 }
@@ -811,6 +815,8 @@ async function main() {
       if (res.session) session = res.session;
       if (delivered(root, id, slug)) {
         ran.push(position);
+        record.merged.push(String(position));
+        printSummary('');
         reportSteps(ran);
         out(`I-E Delivery: Complete: initiative ${id}-${slug} archived, driver done`);
         return;
@@ -832,6 +838,7 @@ async function main() {
       closeSync(log.fd);
     }
     ran.push(position);
+    record.merged.push(String(position));
     if (rm.status !== 'active') throw new Stop(`I-C Run: Blocked: initiative status is ${rm.status}, not active`);
     const total = countSteps(rm.text);
     if (total > 0 && Number(rm.position) > total) {
@@ -846,6 +853,8 @@ async function main() {
           throw new Stop(`I-D Advance: Setup: step ${position} changed ${nameFiles(lastSetup)}. ${setupNote(done)}Rerun setup, then start a new driver.`);
         }
       }
+      record.pending = true;
+      printSummary('');
       reportSteps(ran);
       out(`I-E Delivery: Pending: all ${total} steps merged, initiative delivery runs from the initiative skill`);
       return;
@@ -1717,6 +1726,7 @@ async function schedule(root, cfg, rm, handoff = 0) {
       earlierLogs = stop.log ? stop.log.earlier : [];
       throw new Stop(stop.msg);
     }
+    printSummary('');
     out('I-D Advance: Restart: the old driver has no sessions left and is done');
     return;
   }
@@ -1753,6 +1763,8 @@ async function schedule(root, cfg, rm, handoff = 0) {
       }
     }
   }
+  record.pending = !delivered(root, id, slug);
+  printSummary('');
   reportSteps(mergeOrder);
   if (delivered(root, id, slug)) out(`I-E Delivery: Complete: initiative ${id}-${slug} archived, driver done`);
   else out(`I-E Delivery: Pending: all ${chart.steps.length} steps merged, initiative delivery runs from the initiative skill`);
@@ -1768,8 +1780,8 @@ main().then(
     process.exit(0);
   },
   (e) => {
-    out(e instanceof Stop ? withLog(e.message) : `I-C Run: Blocked: driver error ${e.code || e.name}`);
     printSummary(e instanceof Stop ? e.message : 'I-C Run: Blocked: driver error');
+    out(e instanceof Stop ? withLog(e.message) : `I-C Run: Blocked: driver error ${e.code || e.name}`);
     process.exit(e instanceof Restart ? EXIT_PLANNED : 1);
   },
 );

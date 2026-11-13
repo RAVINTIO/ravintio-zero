@@ -16,7 +16,7 @@ version: "0.111.0"
 | ID | Category | Description | Likelihood | Impact | Mitigation | Status |
 |----|----------|------------|------------|--------|-----------|--------|
 | R-001 | technical | The summary throws and hides the original stop | low | medium | The printer sits in a `try` block and writes only strings. | open |
-| R-002 | operational | A reader of driver output meets a new line kind | low | low | The lines use a new `Summary:` status and print after every other line. | open |
+| R-002 | operational | A reader of driver output meets a new line kind | low | low | The lines use a new `Summary:` status and print just before the final line. | open |
 | R-003 | operational | The recorder misses a fix that has no matching line | medium | low | The full output still holds it. The summary lists only fixes with a line. | accepted |
 
 ## Assumptions Logged as Risks

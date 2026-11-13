@@ -18,6 +18,8 @@ trap 'rm -rf "$WORK"' EXIT
 source "$SCRIPT_DIR/helpers/scheduler-fixture.sh"
 
 last_line() { printf '%s\n' "$1" | tail -n 1; }
+# The summary block sits before the final line, so the action line is the one before it.
+action_line() { printf '%s\n' "$1" | grep 'Summary: action for the human' | tail -n 1; }
 
 echo ""
 echo "=== REQ-001 AC-1, AC-3: a clean run lists the merged steps and no fixes ==="
@@ -29,9 +31,10 @@ assert_contains "I-C Run: Summary: driver fixes: 0" "$OUT" "REQ-001 AC-3: counts
 assert_not_contains "Summary: fix:" "$OUT" "REQ-001 AC-3: prints no fix line"
 
 echo ""
-echo "=== REQ-002 AC-1: a clean end names its action and the action line is last ==="
-assert_contains "I-C Run: Summary: action for the human: " "$(last_line "$OUT")" "REQ-002 AC-1: the last line is the action line"
-assert_contains "run initiative delivery from the initiative skill" "$(last_line "$OUT")" "REQ-002 AC-1: delivery is pending, so the action says so"
+echo "=== REQ-002 AC-1: a clean end names its action and the final line stays last ==="
+assert_contains "I-C Run: Summary: action for the human: " "$(action_line "$OUT")" "REQ-002 AC-1: prints the action line"
+assert_contains "I-E Delivery: Pending:" "$(last_line "$OUT")" "REQ-002 AC-1: the final line stays the Pending line"
+assert_contains "run initiative delivery from the initiative skill" "$(action_line "$OUT")" "REQ-002 AC-1: delivery is pending, so the action says so"
 
 echo ""
 echo "=== REQ-001 AC-3: a run that merges nothing says none ==="
@@ -58,7 +61,8 @@ echo "=== REQ-002 AC-2: a blocked step points at the stop line and the step log 
 R="$(make_repo blocked 2 '1||' '2||1')"
 STUB_MODE_1=block run_sched "$R"
 assert_equals "1" "$CODE" "REQ-002 AC-2: driver still exits 1"
-assert_equals "I-C Run: Summary: action for the human: read the stop line and the step log, then start a new driver" "$(last_line "$OUT" | sed -E 's/^[0-9]{2}:[0-9]{2} //')" "REQ-002 AC-2: names the action"
+assert_equals "I-C Run: Summary: action for the human: read the stop line and the step log, then start a new driver" "$(action_line "$OUT" | sed -E 's/^[0-9]{2}:[0-9]{2} //')" "REQ-002 AC-2: names the action"
+assert_contains "Blocked:" "$(last_line "$OUT")" "REQ-002 AC-2: the stop line stays last"
 
 echo ""
 echo "=== REQ-002 AC-3: a planned restart keeps exit 75 and names its action ==="
@@ -68,14 +72,15 @@ printf '// local\n' > "$R/ravintio-zero/scripts/initiative-run.mjs"
 QUEUE_RESTART_STEP=1 run_sched "$R"
 assert_equals "75" "$CODE" "REQ-002 AC-3: driver exits 75"
 assert_contains "I-C Run: Summary: merged this run: 1" "$OUT" "REQ-002 AC-3: lists the merged step"
-assert_contains "action for the human: start a new driver" "$(last_line "$OUT")" "REQ-002 AC-3: names the action"
+assert_contains "action for the human: start a new driver" "$(action_line "$OUT")" "REQ-002 AC-3: names the action"
+assert_contains "I-D Advance: Restart:" "$(last_line "$OUT")" "REQ-002 AC-3: the stop line stays last"
 
 echo ""
 echo "=== REQ-002: a setup stop keeps exit 1 and names its action ==="
 R="$(make_repo setup 2 '1||' '2||1')"
 QUEUE_SETUP_STEP=1 run_sched "$R"
 assert_equals "1" "$CODE" "REQ-002: driver exits 1"
-assert_contains "action for the human: run the setup command in the stop line, then start a new driver" "$(last_line "$OUT")" "REQ-002: names the action"
+assert_contains "action for the human: run the setup command in the stop line, then start a new driver" "$(action_line "$OUT")" "REQ-002: names the action"
 
 echo ""
 echo "=== REQ-003: the driver header, the standards, and the ADR state the summary ==="
