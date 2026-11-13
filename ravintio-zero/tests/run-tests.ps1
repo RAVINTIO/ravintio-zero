@@ -1,10 +1,11 @@
 # Runs every test-*.ps1 suite in tests/ and tests/regression/ under the
-# PowerShell host that started this script (0000036 ADR-002). CI runs it once
-# with powershell (Windows PowerShell 5.1) and once with pwsh (PowerShell 7).
+# PowerShell host that started this script (0000036 ADR-002). CI runs it in
+# shards with powershell (Windows PowerShell 5.1) on Windows (0000409 ADR-0284).
 # run-tests.sh runs the same suites with pwsh, alongside the bash suites.
 #
 # Environment:
 #   RAVINTIO_TEST_QUIET=1   hide PASS lines and banners, keep every failure and the summary
+#   RAVINTIO_SHARD=i/n      run only shard i of n of the suites
 #   RAVINTIO_TIMING_FILE    set by this script (0000171 req-003). Invoke-Setup appends
 #                           one setup.ps1 time per run, and the total prints before the summary.
 #
@@ -20,6 +21,25 @@
 
 $ErrorActionPreference = 'Stop'
 $quiet = ($env:RAVINTIO_TEST_QUIET -eq '1')
+
+# RAVINTIO_SHARD=i/n runs only shard i of n (0000409 ADR-0284). Suites are numbered from 0 in run
+# order, feature suites then regression suites, and suite k runs when k mod n is i - 1. Read it
+# before the loop below removes it from the environment.
+$shardI = 1
+$shardN = 1
+$shardValue = $env:RAVINTIO_SHARD
+if (-not [string]::IsNullOrEmpty($shardValue)) {
+    if ($shardValue -match '^(\d+)/(\d+)$' -and [int]$Matches[2] -ge 1 -and [int]$Matches[1] -ge 1 -and [int]$Matches[1] -le [int]$Matches[2]) {
+        $shardI = [int]$Matches[1]
+        $shardN = [int]$Matches[2]
+        Write-Host "Shard $shardI of $shardN"
+    }
+    else {
+        Write-Host "RAVINTIO_SHARD must be i/n with 1 <= i <= n, not '$shardValue'"
+        exit 2
+    }
+}
+
 foreach ($item in @(Get-ChildItem Env: | Where-Object { $_.Name -like 'RAVINTIO_*' })) {
     if ($item.Name -notin @('RAVINTIO_PWSH', 'RAVINTIO_TEST_QUIET')) { Remove-Item "Env:$($item.Name)" -ErrorAction SilentlyContinue }
 }
@@ -81,6 +101,10 @@ if (Test-Path -LiteralPath $regressionDir) {
 if ($suites.Count -eq 0) {
     Write-Host "No PowerShell suites found."
     exit 1
+}
+
+if ($shardN -gt 1) {
+    $suites = @(for ($k = 0; $k -lt $suites.Count; $k++) { if (($k % $shardN) -eq ($shardI - 1)) { $suites[$k] } })
 }
 
 $timingFile = Join-Path ([System.IO.Path]::GetTempPath()) ("ravintio-timing-" + [guid]::NewGuid().ToString('N') + ".txt")

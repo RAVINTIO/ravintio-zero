@@ -19,9 +19,10 @@ if [ ! -f "$WORKFLOW" ]; then
 fi
 
 # The job block runs from its key to the next job key at the same indent.
-JOB="$(awk '/^  bash-suites:/{f=1; print; next} f && /^  [a-z][a-z-]*:/{exit} f{print}' "$WORKFLOW")"
+# 0000409 ADR-0284 moved the suites into the bash-suites-shard job.
+JOB="$(awk '/^  bash-suites-shard:/{f=1; print; next} f && /^  [a-z][a-z-]*:/{exit} f{print}' "$WORKFLOW")"
 
-assert_equals "yes" "$([ -n "$JOB" ] && echo yes || echo no)" "req-006: the bash-suites job exists"
+assert_equals "yes" "$([ -n "$JOB" ] && echo yes || echo no)" "req-006: the bash-suites-shard job exists"
 assert_contains "runs-on: ubuntu-latest" "$JOB" "req-006: the job runs on ubuntu-latest"
 assert_contains "contents: read" "$JOB" "req-006: the job has read-only contents permission"
 assert_equals "0" "$(printf '%s\n' "$JOB" | grep -c 'secrets\.' || true)" "req-006: the job uses no secrets"
