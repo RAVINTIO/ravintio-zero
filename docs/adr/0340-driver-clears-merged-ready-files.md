@@ -1,7 +1,7 @@
 ---
 title: "ADR 0340: Driver clears ready files of merged steps"
 summary: "At start, the driver removes the ready file of each merged step unless a live session runs there. It keeps and reports every file it cannot clear."
-status: "proposed"
+status: "accepted"
 component: "ravintio-zero"
 version: "0.1.0"
 ---
