@@ -48,6 +48,7 @@ flowchart LR
 |-------|------|------|
 | Skill-text budget | `test-0000314-req-002-driver-files-stay.sh`, `test-0000399-req-003-004-question-rule.sh` | U-1 |
 | Reference file edit | `test-0000243-req-005-short-rule.sh`, `test-0000151-req-011-orchestrator-references-split.sh` | U-2 |
+| Mirrored tree | `test-0000493-req-004-handoff-text.sh` needs `src/ravintio-zero/` to match `ravintio-zero/`. | U-1, U-2, U-4 |
 | Fixture-pinned line | `fixtures/0000243-resume-detection-base.md` holds the old check 1 line. Keep it verbatim. | U-2 |
 | Backlog entry id | none found | none |
 | New test file | `test-0000164-req-008-no-process-substitution-loops.sh` | U-4 |

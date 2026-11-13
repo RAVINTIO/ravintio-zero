@@ -44,6 +44,8 @@ Batch 1 of {total_batches}:
 Apply all in this batch? (all / none / pick, enter numbers to apply selectively, e.g. "1 3 5")
 ```
 
+In an initiative step, a `Migration:` row in `## Decisions` gives the answer, `all` or `none`. Use it in place of the human's reply and ask no question.
+
 ### Step 4: Apply confirmed changes
 
 For each confirmed correction, apply the change using the Edit tool. Do not apply any change the human declined.

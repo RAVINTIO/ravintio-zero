@@ -33,6 +33,7 @@
 
 ## Component Paths
 - ravintio-zero/
+- src/ravintio-zero/
 - docs/
 - plan/
 
