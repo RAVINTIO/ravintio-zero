@@ -15,7 +15,7 @@ version: "0.1.0"
 
 ## Context
 
-The queue deletes the control folder of a step after it merges the step. A step that merged by hand, or under an earlier driver, keeps its `ready` file in `plan/.initiative-control/`. On 2026-11-11 the coordinator removed 7 of these files by hand, for steps 10, 11, 13, 16, 18, 20, and 34.
+The queue deletes the control folder of a step after it merges the step. If a step merged by hand or under an earlier driver, it keeps its `ready` file in `plan/.initiative-control/`. On 2026-11-11 the coordinator removed 7 of these files by hand, for steps 10, 11, 13, 16, 18, 20, and 34.
 
 ## Decision
 
