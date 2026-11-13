@@ -52,15 +52,7 @@ A host monitor expires after 30 minutes. Start a new one until the driver exits.
 
 ## Reports
 
-Report at least every 5 minutes while the driver runs, at each phase end, and on request. Report an event at once when the build log gains a phase `Complete:`, `Blocked:`, or `Resolved:` line. When the build log changes to a new step, also report the `Complete:` lines already in it.
-
-An interval report names:
-
-- each running step and its phase
-- the last build log line and its age
-- the commits since the last report
-- any stop
-- whether the driver still runs
+Report at least every 5 minutes while the driver runs, at each phase end, and on request. Report an event at once when the build log gains a phase `Complete:`, `Blocked:`, or `Resolved:` line. When the build log changes to a new step, also report the `Complete:` lines already in it. An interval report names each running step and its phase. It gives the last build log line with its age, the commits since the last report, any stop, and whether the driver runs.
 
 While steps run, the monitor also prints `I-C Run: activity:` lines with the step number, one per tool call, subagent start, or assistant text. Relay each one to the human at once, in the order received. Do not wait for the next interval report.
 
@@ -70,6 +62,13 @@ A progress report, on request and at each phase end, has two parts:
 
 - **Initiative:** steps merged out of the total, backlog entries done out of the total, and a table of each step's feature, entries, version, and status.
 - **Current step:** report each running step and each ready step waiting for the queue. For each running step, give the phase, the progress within it, and what comes next. Progress is units done out of planned in P2, and criteria verified out of total from P3. Add highlights, such as what the step changes for the user, and any risk.
+
+Before each report, run `node ravintio-zero/scripts/initiative-status.mjs`. It prints the driver state, the step counts, each ready PR, each running step, and each live stop. A stop for a merged step does not show. Report from its output and never from memory. Relay each `I-C Run: event:` line for a ready step, a queue stop, or a driver exit at once. Run the status script after a queue stop or a driver exit.
+
+End each report with two parts:
+
+- **Decisions for you:** each open question or stop that needs the human, with the options. Write `none` if there is none.
+- **Routine fixes made:** each pre-approved fix you applied, such as a conflict, a CI rerun, or a setup rerun. Write `none` if there is none.
 
 ## Stops
 

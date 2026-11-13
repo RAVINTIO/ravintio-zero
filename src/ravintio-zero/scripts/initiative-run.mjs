@@ -128,7 +128,9 @@
 //     {n} merged" and deletes the control folder. The Restart and Setup checks then run.
 //   - A block, a failed session, a queue failure, or a Restart or Setup hit stops new starts. It
 //     prints "I-C Run: Stopping:". Running steps still reach ready or stop. The queue still merges
-//     every other ready step, also after a queue failure (0000446). A failed step gets one attempt,
+//     every other ready step, also after a queue failure (0000446). On a queue failure the driver
+//     prints "I-D Advance: Blocked: queue stopped on step {n}" and the reason at once. It also
+//     appends that line to the step log (0000450). The stop line at exit repeats it. A failed step gets one attempt,
 //     keeps its ready file, and reads stopped. A new driver queues it again. Before exit 1 the driver prints "I-C Run: Step {n}: {state}"
 //     for every step, then the first stop line with the log of the step that caused it.
 //   - The driver refuses a symlink at plan, at either folder, or at a step entry in either. Worktrees
@@ -1222,7 +1224,11 @@ async function schedule(root, cfg, rm) {
     try {
       log = appendLog(root, String(n));
       if (!rec.log) rec.log = { rel: log.rel, earlier: log.earlier };
-      const blocked = (why) => new Stop(`I-D Advance: Blocked: queue stopped on step ${n}${why ? `. ${why.slice(0, MAX_LINE)}` : ''}`);
+      const blocked = (why) => {
+        const stopped = new Stop(`I-D Advance: Blocked: queue stopped on step ${n}${why ? `. ${why.slice(0, MAX_LINE)}` : ''}`);
+        stopped.queueFailure = true;
+        return stopped;
+      };
       let qdir;
       let before;
       try {
@@ -1255,8 +1261,19 @@ async function schedule(root, cfg, rm) {
       // ready file, so a new driver queues it again. The first stop line ends the run.
       rec.state = 'stopped';
       const msg = e instanceof Stop ? e.message : `I-C Run: Blocked: driver error ${e.code || e.name}`;
-      if (stop.msg) out(msg);
-      else setStop(msg, rec);
+      // A queue failure prints at once and lands in the step log, so the watcher sees it (0000450).
+      const announced = e instanceof Stop && e.queueFailure === true;
+      if (announced) {
+        out(msg);
+        try {
+          if (log) writeSync(log.fd, `${msg}\n`);
+        } catch {
+          // The line already reached stdout. A log write failure changes no stop.
+        }
+      }
+      if (stop.msg) {
+        if (!announced) out(msg);
+      } else setStop(msg, rec);
     } finally {
       if (log) closeSync(log.fd);
       queueBusy = false;
