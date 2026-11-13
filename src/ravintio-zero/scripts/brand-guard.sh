@@ -11,6 +11,9 @@
 # test test-0000160-req-006-brand-guard.sh sources this file and calls
 # brand_guard_load, so the hook and CI read one list.
 #
+# The two allowlist files name the word in their own rows, so the guard skips
+# them by exact path in brand_guard_skips_path. The allowlist holds no row for them.
+#
 # This source joins the word from two halves, so a scan does not match it.
 
 BG_TAB=$'\t'
@@ -28,6 +31,17 @@ brand_guard_load() {
       *) ALLOWLIST+=("$line") ;;
     esac
   done < "$file"
+}
+
+# brand_guard_skips_path <path>: returns 0 for the two allowlist files, by exact
+# path (ADR-0300). The names are fixed strings, not patterns, and no allowlist
+# row can add to them. The hook and the CI test both call this function.
+brand_guard_skips_path() {
+  case "$1" in
+    src/ravintio-zero/tests/brand-guard-allowlist.txt) return 0 ;;
+    ravintio-zero/tests/brand-guard-allowlist.txt) return 0 ;;
+  esac
+  return 1
 }
 
 brand_guard_main() {
@@ -54,6 +68,7 @@ brand_guard_main() {
 
   while IFS= read -r path; do
     [ -n "$path" ] || continue
+    brand_guard_skips_path "$path" && continue
     skip=0
     for prefix in "${EXCLUDED_PREFIXES[@]}"; do
       case "$path" in "$prefix"*) skip=1; break ;; esac
