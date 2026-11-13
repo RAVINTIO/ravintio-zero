@@ -1,7 +1,7 @@
 ---
 title: "ADR 0342: Step sessions receive the clock"
 summary: "The driver records hook events in each step log, and a check fails a log that shows no clock."
-status: "proposed"
+status: "accepted"
 component: "ravintio-zero"
 version: "0.1.0"
 ---
