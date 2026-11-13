@@ -3,8 +3,10 @@ title: "ADR 003: Settings check script and the human stop"
 summary: "A script lists and checks the admin-only settings, and the step stops once for the human at P3."
 status: "accepted"
 version: "0.1.0"
+component: "ravintio-zero"
+feature: "0000394-github-security-and-ci-lint"
 ---
-# ADR-003 - Settings check script and the human stop
+# ADR-0338 - Settings check script and the human stop
 
 **Skill:** [plan](../../../ravintio-zero/skills/ravintio-plan/SKILL.md)
 **Feature:** 0000394-github-security-and-ci-lint
@@ -45,7 +47,7 @@ Secret scanning, push protection, Dependabot security updates, private vulnerabi
 
 ## Related ADRs
 
-- ADR-002 - related-to
+- ADR-0337 - related-to
 
 ## Supersedes
 

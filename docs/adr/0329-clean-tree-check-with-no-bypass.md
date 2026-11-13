@@ -3,8 +3,10 @@ title: "ADR 002: Clean-tree check with no bypass"
 summary: "Setup refuses uncommitted pack and override files, and test workspaces commit their pack."
 status: "accepted"
 version: "0.1.0"
+component: "ravintio-zero"
+feature: "0000382-install-lifecycle"
 ---
-# ADR-002 - Clean-tree check with no bypass
+# ADR-0329 - Clean-tree check with no bypass
 
 **Skill:** [plan](../../../ravintio-zero/skills/ravintio-plan/SKILL.md)
 **Feature:** 0000382-install-lifecycle
@@ -44,7 +46,7 @@ Setup runs `git status --porcelain -- ravintio-zero ravintio-overrides` before i
 
 ## Related ADRs
 
-- ADR-001 - related-to
+- ADR-0328 - related-to
 
 ## Supersedes
 

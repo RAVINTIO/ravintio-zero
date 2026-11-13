@@ -3,8 +3,10 @@ title: "ADR 001: Baseline failures match by suite name"
 summary: "The baseline records failed suite file names and P3 compares by name."
 status: "accepted"
 version: "0.1.0"
+component: "ravintio-zero"
+feature: "0000385-faster-test-runs"
 ---
-# ADR-001 - Baseline failures match by suite name
+# ADR-0331 - Baseline failures match by suite name
 
 **Skill:** [plan](../../../ravintio-zero/skills/ravintio-plan/SKILL.md)
 **Feature:** 0000385-faster-test-runs
@@ -17,7 +19,7 @@ The runner prints the failed suite file names under `Failed suites:`. It does no
 
 ## Decision
 
-`baseline-failures.mjs` records and compares suite file names. A suite that fails on the base commit is inherited. Any other failed suite is new.
+`baseline-failures.mjs` records and compares suite file names. A suite that fails on the base commit counts as inherited. Any other failed suite is new.
 
 ## Alternatives Considered
 
@@ -35,7 +37,7 @@ The runner prints the failed suite file names under `Failed suites:`. It does no
 ## Consequences
 
 **Positive:**
-- The key exists in the runner output today, so no runner change is needed.
+- The key exists in the runner output today, so the runner needs no change.
 
 **Negative:**
 - A new failure inside an already failing suite looks inherited.
@@ -45,7 +47,7 @@ The runner prints the failed suite file names under `Failed suites:`. It does no
 
 ## Related ADRs
 
-- ADR-002 - related-to
+- ADR-0332 - related-to
 
 ## Supersedes
 
