@@ -8,7 +8,7 @@ status: "active"  # proposed | charted | active | delivered | blocked
 **Goal:** Close every open backlog entry except the four that need paid services. The first three steps make the driver run independent steps at once, each in its own worktree, with each version set as its step merges. Step 20 moves the pack source to `src/ravintio-zero/`. The last step, step 21, makes activation smoother for the human.
 **Branch:** initiative/0000360-backlog-sweep
 **Status:** active
-**Position:** 48
+**Position:** 49
 **Speed:** standard
 **Step CI fixes:** allowed
 **Concurrency:** 3
@@ -423,7 +423,7 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 45 | 0000487-steps-apply-decision-rows | Steps apply the chart's Decisions rows | 0000488 | minor | 0.98.0 | merged | skills | 22 |
 | 46 | 0000489-question-only-for-questions | Steps use Question only for real questions | 0000490 | minor | 0.100.0 | merged | skills | 45 |
 | 47 | 0000491-driver-favours-critical-path | Driver favours the critical path | 0000492 | minor | 0.104.0 | merged | driver | 41 |
-| 48 | 0000493-driver-starts-after-restart | Driver keeps starting steps after a Restart | 0000494 | minor |  | pending | driver | 47 |
+| 48 | 0000493-driver-starts-after-restart | Driver keeps starting steps after a Restart | 0000494 | minor | 0.105.0 | merged | driver | 47 |
 | 49 | 0000495-driver-clears-dead-lock | Driver clears a dead lock | 0000496 | minor |  | pending | driver | 48 |
 | 50 | 0000497-keep-worktree-entries | Driver keeps uncommitted entries from a worktree | 0000498 | minor |  | pending | driver | 49 |
 | 51 | 0000499-reply-times-match-clock | Reply times match the clock | 0000500 | minor | 0.101.0 | merged | skills | 46 |
@@ -489,3 +489,4 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 58 | #187 | tag v0.102.0 | 0.102.0 | 2026-11-11T10:28:00Z |
 | 59 | #188 | tag v0.103.0 | 0.103.0 | 2026-11-11T19:10:23Z |
 | 47 | #185 | tag v0.104.0 | 0.104.0 | 2026-11-11T20:06:47Z |
+| 48 | #189 | tag v0.105.0 | 0.105.0 | 2026-11-11T21:48:25Z |

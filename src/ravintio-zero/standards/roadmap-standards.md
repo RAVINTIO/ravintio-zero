@@ -329,7 +329,7 @@ The driver owns these paths in the main root. It adds each to `.git/info/exclude
 |------|-------|
 | `plan/.initiative-worktrees/step-{n}/` | The step's worktree, removed after the step merges |
 | `plan/.initiative-worktrees/queue/` | The queue worktree, detached at the initiative ref |
-| `plan/.initiative-control/step-{n}/` | `running`, with the driver pid, and `ready`, with the PR number |
+| `plan/.initiative-control/step-{n}/` | `running`, with the driver pid, `ready`, with the PR number, and `stopped`, with one stop line |
 | `plan/.initiative-logs/step-{n}.log` | The step's stream, then the queue output for its PR |
 | `plan/.initiative-runner.lock` | The one driver lock. A step holds no lock. |
 
@@ -399,6 +399,20 @@ The driver loads its code once. After a merged step, it compares the initiative 
 - The initiative skill treats the line as a restart and not a failure. If the line also holds `Setup:`, it follows the setup stop first. It then starts a new driver and a new watcher without asking.
 - The new driver reads the position from the branch ref and carries no other state. Its final report lists only the steps it ran.
 - Under the concurrent driver, the hit stops new starts first, and the line reads `so the next step runs the new code`. The driver exits after the running steps reach ready or stop. The new driver queues each `ready` step with no new session.
+
+##### Handoff
+
+If a concurrent driver hits a `Restart:` line with no setup file, it hands over new starts instead of stopping (0000493, ADR-0323).
+
+- The old driver fast-forwards the root, then starts the successor with `node initiative-run.mjs --root {root} --handoff {pid}`. The pid is the old driver pid.
+- The old driver writes the successor pid into `plan/.initiative-runner.lock` and prints `I-D Advance: Restart: step {n} changed {files}. A new driver took over new starts.`
+- The old driver starts no step and runs no queue. It supervises its own sessions and exits 0 when they end.
+- The successor adopts each step whose `running` file holds the old driver pid while that pid lives. It starts no session for the step and counts the step against the cap.
+- The successor queues an adopted step when its `ready` file appears. If the old driver pid dies, it restarts the step in its worktree.
+- If an adopted step blocks or fails, the old driver writes a `stopped` file in the step's control folder. The file holds one stop line of 500 characters at most. The successor stops new starts when it reads the file.
+- A driver without `--handoff` deletes stale `stopped` files.
+- A `Setup:` or `Restart: Setup:` hit, a failed spawn, a failed fast-forward, and the serial path keep the stop line above.
+- On the handoff line, the coordinator starts a new watcher only. Every other `Restart:` or `Setup:` line works as before.
 
 #### Setup stop
 
