@@ -296,7 +296,7 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 27 | 0000446-drain-ready-prs-after-a-stop | Merge ready PRs after a stop | 0000426 | minor |  | pending | driver | 26 |
 | 28 | 0000448-driver-runs-approved-setup-command | Driver runs the approved setup command | 0000427 | minor |  | pending | driver | 27 |
 | 29 | 0000450-coordinator-status-view | Coordinator status view | 0000428 | minor |  | pending | driver | 28 |
-| 30 | 0000452-ci-wait-before-archive | Ship waits for CI before it archives | 0000412 | minor |  | pending | ship | 22 |
+| 30 | 0000452-ci-wait-before-archive | Ship waits for CI before it archives | 0000412 | minor | 0.78.0 | merged | ship | 22 |
 | 31 | 0000454-queue-failure-recovery | Queue failure recovery | 0000429 | minor |  | pending | queue | 22 |
 | 32 | 0000456-regenerate-shared-files-at-merge | Regenerate shared files at merge | 0000430 | minor |  | pending | queue | 31 |
 | 33 | 0000458-refuse-step-merge-outside-queue | Refuse a step merge outside the queue | 0000431 | minor |  | pending | guard | 31 |
@@ -334,3 +334,4 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 21 | #152 | tag v0.77.0 | 0.77.0 | 2026-11-10T01:56:33Z |
 | 22 | #155 | tag v0.77.1 | 0.77.1 | 2026-11-10T03:16:08Z |
 | 23 | #158 | tag v0.77.2 | 0.77.2 | 2026-11-10T14:56:17Z |
+| 30 | #157 | tag v0.78.0 | 0.78.0 | 2026-11-10T15:09:08Z |

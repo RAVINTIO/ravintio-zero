@@ -204,11 +204,13 @@ Each unit commits its own files by path, one commit at a time, per `## Fast batc
 
 When `plan/current-initiative/initiative.md` has `status: active`, read `ravintio-zero/standards/roadmap-standards.md` first. Step 9 gives way to its I-D Advance stage, and I-E Delivery follows the last step. Outside an initiative, ignore this section.
 
+The order changes in a step. Run Steps 1 to 3, then Step 9 and the CI wait of I-D Advance, all before Step 4. Steps 4, 5, and 8 run only after green CI, because `gate-write` blocks code edits once the step archives `plan/current/`. They form the closing push, the last push before `ready`.
+
 Before the PR, the step commits the items in `plan/.initiative-queue/` that name it, as I-C Run describes.
 
 After `gh pr create`, the agent sets `**PR:**` to the PR number, commits, and pushes it before it waits on CI and before the squash. It never commits after the squash.
 
-The step never edits the chart and never merges. After green CI, it hands the PR to the merge queue, as I-D Advance describes. If `RAVINTIO_INITIATIVE_QUEUE` is `1`, it writes the PR number to `$RAVINTIO_INITIATIVE_CONTROL/ready`, prints `I-D Advance: Ready: PR #{n}`, and ends. Otherwise it runs `node ravintio-zero/scripts/merge-queue.mjs run --step {step} --pr {n}`.
+The step never edits the chart and never merges. It writes `ready` only after every check on the closing push passed. A pending or failed check means no `ready`. After green CI, it hands the PR to the merge queue, as I-D Advance describes. If `RAVINTIO_INITIATIVE_QUEUE` is `1`, it writes the PR number to `$RAVINTIO_INITIATIVE_CONTROL/ready`, prints `I-D Advance: Ready: PR #{n}`, and ends. Otherwise it runs `node ravintio-zero/scripts/merge-queue.mjs run --step {step} --pr {n}`.
 
 The queue merges with this plain line. `{n}` is the literal PR number from the `gh pr create` output. A merge line takes no command substitution, variables, or pipes, or `merge-guard` cannot confirm the squash and blocks it.
 
