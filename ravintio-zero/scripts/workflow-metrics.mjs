@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * workflow-metrics.mjs - derive four workflow metrics from a run folder.
+ * workflow-metrics.mjs - derive five workflow metrics from a run folder.
  *
  * Usage: node workflow-metrics.mjs [--standard <path>] <run-folder>
  *
@@ -36,7 +36,11 @@ const METRICS = [
   { key: "blocked-stops", label: "`Blocked:` stops" },
   { key: "design-changes", label: "Mid-pipeline design changes" },
   { key: "gate-corrections", label: "Human corrections at gates" },
+  { key: "ci-duration-seconds", label: "Longest CI run (seconds)" },
 ];
+
+// "CI duration: {seconds}s (run {run-id}, {timestamp})", written by ship.
+const CI_DURATION = /^CI duration: (\d+)s \(run ([^,)\s]+)[,)]/;
 
 function fail(msg, code = 1) {
   process.stderr.write(`workflow-metrics: ${msg}\n`);
@@ -126,6 +130,9 @@ function countMarkers(text, tally) {
       tally.design++;
     } else if (line.startsWith("Gate revised:")) {
       tally.gate++;
+    } else {
+      const ci = CI_DURATION.exec(line);
+      if (ci && Number(ci[1]) > tally.ci.seconds) tally.ci = { seconds: Number(ci[1]), run: ci[2] };
     }
   }
 }
@@ -164,7 +171,7 @@ function readThresholds(path) {
 
 const { standard, folder } = parseArgs(process.argv.slice(2));
 
-const tally = { rework: new Map(), blocked: 0, design: 0, gate: 0, dispatch: new Map(), lastDone: new Map() };
+const tally = { rework: new Map(), blocked: 0, design: 0, gate: 0, ci: { seconds: 0, run: null }, dispatch: new Map(), lastDone: new Map() };
 countMarkers(readText(join(folder, "build-log.md")), tally);
 
 let loopFiles = [];
@@ -189,8 +196,14 @@ for (const [id, n] of tally.rework) {
   }
 }
 
-const values = [topCount, tally.blocked, tally.design, tally.gate];
-const shown = [topId ? `${topCount} (${topId})` : "0", ...values.slice(1).map(String)];
+const values = [topCount, tally.blocked, tally.design, tally.gate, tally.ci.seconds];
+const shown = [
+  topId ? `${topCount} (${topId})` : "0",
+  String(tally.blocked),
+  String(tally.design),
+  String(tally.gate),
+  tally.ci.run ? `${tally.ci.seconds} (run ${tally.ci.run})` : "0",
+];
 
 let breaches = 0;
 const rows = METRICS.map((m, i) => {

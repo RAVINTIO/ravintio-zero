@@ -307,7 +307,7 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 37 | 0000466-version-files-completeness-check | Version files completeness check | 0000433 | minor | 0.88.0 | merged | tests | 36 |
 | 38 | 0000468-reply-time-matches-the-clock | Reply time matches the clock | 0000434 | minor | 0.85.0 | merged | hooks | 22 |
 | 39 | 0000470-plan-rereads-files-at-the-branch-point | Plan rereads files at the branch point | 0000435 | minor | 0.86.0 | merged | plan-skill | 22 |
-| 40 | 0000472-ci-duration-metric | CI duration metric | 0000436 | minor |  | pending | ci | 22 |
+| 40 | 0000472-ci-duration-metric | CI duration metric | 0000436 | minor | 0.90.0 | merged | ci | 22 |
 | 41 | 0000474-coordinator-shell-guidance | Coordinator shell guidance | 0000437 | minor |  | pending | initiative-skill | 29 |
 
 ## Merges
@@ -348,3 +348,4 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 36 | #166 | tag v0.87.0 | 0.87.0 | 2026-11-10T21:22:46Z |
 | 37 | #170 | tag v0.88.0 | 0.88.0 | 2026-11-10T22:18:06Z |
 | 26 | #171 | tag v0.89.0 | 0.89.0 | 2026-11-10T22:31:25Z |
+| 40 | #172 | tag v0.90.0 | 0.90.0 | 2026-11-10T23:13:30Z |
