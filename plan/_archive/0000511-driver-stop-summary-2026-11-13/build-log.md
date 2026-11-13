@@ -142,6 +142,8 @@ Complete: P3 (2026-11-13T03:48:17Z)
 
 Complete: P4 (2026-11-13T03:48:33Z)
 
+- CI duration: 361s (run 43361588236, 2026-11-13T03:57:01Z)
+
 ---
 
 ## Summary (filled at ship, P4)
