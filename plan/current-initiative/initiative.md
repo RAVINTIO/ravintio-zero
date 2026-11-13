@@ -88,6 +88,8 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 57 | none | none | none |
 | 58 | none | none | none |
 | 59 | none | none | none |
+| 60 | none | none | none |
+| 61 | none | none | none |
 
 ## Dependencies
 
@@ -154,6 +156,8 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 57 | none | none | none |
 | 58 | none | none | none |
 | 59 | none | none | none |
+| 60 | none | none | none |
+| 61 | none | none | none |
 
 ## Decisions
 
@@ -237,6 +241,8 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 57 | none | none | none |
 | 58 | none | none | none |
 | 59 | none | none | none |
+| 60 | none | none | none |
+| 61 | none | none | none |
 
 ## Baselines
 
@@ -281,6 +287,8 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 57 | none | none | none |
 | 58 | none | none | none |
 | 59 | none | none | none |
+| 60 | none | none | none |
+| 61 | none | none | none |
 
 ## Criteria
 
@@ -331,6 +339,8 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 57 | none | none | none |
 | 58 | none | none | none |
 | 59 | none | none | none |
+| 60 | none | none | none |
+| 61 | none | none | none |
 
 ## P1 skips
 
@@ -375,6 +385,8 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 57 | no | Added after the chart. The human sets this at P1. |
 | 58 | no | Added after the chart. The human sets this at P1. |
 | 59 | no | Added after the chart. The human sets this at P1. |
+| 60 | no | Added after the chart. The human sets this at P1. |
+| 61 | no | Added after the chart. The human sets this at P1. |
 
 ## Steps
 
@@ -439,6 +451,8 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 57 | 0000511-driver-stop-summary | Driver prints a stop summary | 0000512 | minor | 0.112.0 | merged | driver | 56 |
 | 58 | 0000519-ship-removal-needs-human-approval | Ship removes plan/current with git rm | 0000518 | minor | 0.102.0 | merged | ship | 43 |
 | 59 | 0000521-replies-name-actors-by-role | Replies name actors by role | 0000522 | minor | 0.103.0 | merged | skills | 51 |
+| 60 | 0000534-step-sessions-receive-clock | Step sessions receive the clock | 0000535 | minor |  | pending | skills | 59 |
+| 61 | 0000536-pending-migrations-reach-the-human-early | Pending migrations reach the human early | 0000537 | minor |  | pending | initiative-skill | 41 |
 
 ## Merges
 
