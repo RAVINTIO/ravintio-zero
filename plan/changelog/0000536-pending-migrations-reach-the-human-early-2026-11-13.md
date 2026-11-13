@@ -2,7 +2,7 @@
 
 **Feature:** Pending migrations reach the human early
 **Version:** set by the merge queue at merge
-**PR:** set at ship
+**PR:** pending
 
 ## What changed
 
