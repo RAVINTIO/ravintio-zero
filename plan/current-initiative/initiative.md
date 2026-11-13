@@ -8,7 +8,7 @@ status: "active"  # proposed | charted | active | delivered | blocked
 **Goal:** Close every open backlog entry except the four that need paid services. The first three steps make the driver run independent steps at once, each in its own worktree, with each version set as its step merges. Step 20 moves the pack source to `src/ravintio-zero/`. The last step, step 21, makes activation smoother for the human.
 **Branch:** initiative/0000360-backlog-sweep
 **Status:** active
-**Position:** 22
+**Position:** 23
 **Speed:** standard
 **Step CI fixes:** allowed
 **Concurrency:** 3
@@ -50,6 +50,7 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 19 | ravintio-zero | none | none |
 | 20 | ravintio-zero | none. The pack source moves to `src/ravintio-zero/`, and no file format changes. | none |
 | 21 | ravintio-zero | none | none |
+| 22 | none | none | none |
 
 ## Dependencies
 
@@ -78,6 +79,7 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 19 | none | none | none |
 | 20 | none | none | none |
 | 21 | none | none | none |
+| 22 | none | none | none |
 
 ## Decisions
 
@@ -118,12 +120,14 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 21 | Step 21 runs last (0000398) | Step 21 runs after step 20. It edits the pack source in `src/ravintio-zero/` and refreshes the installed copy. | none |
 | 1-21 | A test pins text that the step edits | Update the pin in the same step and log a `Rework:` line | none |
 | 1-21 | A step changes the tree while its own suite runs | Rerun the suite on a clean tree before closing the phase | none |
+| 22 | none | none | none |
 
 ## Baselines
 
 | Step | Target | Baseline | Source |
 |------|--------|----------|--------|
 | 1-21 | none | none | No step sets a speed or size target |
+| 22 | none | none | none |
 
 ## Criteria
 
@@ -136,12 +140,14 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 20 | `git log --follow src/ravintio-zero/setup.sh` reaches commits from before the move | Deterministic | local |
 | 20 | `ravintio-zero/` matches `src/ravintio-zero/` byte for byte at the step's end | Deterministic | local |
 | 1-21 | Windows setup tests pass | Deterministic | CI |
+| 22 | none | none | none |
 
 ## P1 skips
 
 | Step | Skip P1 | Reason |
 |------|---------|--------|
 | 1-21 | no | Every step changes scripts, hooks, skills, or tests |
+| 22 | no | Added after the chart. The human sets this at P1. |
 
 ## Steps
 
@@ -168,6 +174,7 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 19 | 0000395-pack-prose-to-the-standard | Pack prose to the standard | 0000302 | minor | 0.75.0 | merged | writing | 5-18 |
 | 20 | 0000397-pack-source-in-src | Pack source in src | 0000396 | minor | 0.76.0 | merged | layout | 19 |
 | 21 | 0000399-smoother-activation | Smoother activation | 0000398 | minor | 0.77.0 | merged | initiative | 20 |
+| 22 | 0000421-initiative-retrospective | Initiative retrospective | 0000422 | patch | 0.77.1 | merged | initiative | 21 |
 
 ## Merges
 
@@ -192,3 +199,4 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 19 | #149 | tag v0.75.0 | 0.75.0 | 2026-11-09T21:30:06Z |
 | 20 | #150 | tag v0.76.0 | 0.76.0 | 2026-11-10T00:06:56Z |
 | 21 | #152 | tag v0.77.0 | 0.77.0 | 2026-11-10T01:56:33Z |
+| 22 | #155 | tag v0.77.1 | 0.77.1 | 2026-11-10T03:16:08Z |
