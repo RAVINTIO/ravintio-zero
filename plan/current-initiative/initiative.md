@@ -163,7 +163,7 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 14 | 0000390-prose-checks | Prose checks | 0000301, 0000303, 0000304 | minor | | pending | writing | 6, 13 |
 | 15 | 0000391-standards-archetypes | Standards archetypes | 0000305 | minor | | pending | writing | 6, 14 |
 | 16 | 0000392-ship-postmortems | Ship postmortems | 0000285 | minor | | pending | ship | 4 |
-| 17 | 0000393-session-integrity-and-guards | Session integrity and guards | 0000271, 0000367, 0000272, 0000260 | minor | | pending | guards | 6 |
+| 17 | 0000393-session-integrity-and-guards | Session integrity and guards | 0000271, 0000367, 0000272, 0000260 | minor | 0.66.0 | merged | guards | 6 |
 | 18 | 0000394-github-security-and-ci-lint | GitHub security and CI lint | 0000323, 0000324, 0000325 | minor | | pending | github | 4 |
 | 19 | 0000395-pack-prose-to-the-standard | Pack prose to the standard | 0000302 | minor | | pending | writing | 5-18 |
 | 20 | 0000397-pack-source-in-src | Pack source in src | 0000396 | minor | | pending | layout | 19 |
@@ -180,3 +180,4 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 6 | #136 | tag v0.63.0 | 0.63.0 | 2026-11-08T15:23:07Z |
 | 12 | #133 | tag v0.64.0 | 0.64.0 | 2026-11-08T16:55:17Z |
 | 8 | #138 | tag v0.65.0 | 0.65.0 | 2026-11-09T00:27:39Z |
+| 17 | #142 | tag v0.66.0 | 0.66.0 | 2026-11-09T02:56:13Z |

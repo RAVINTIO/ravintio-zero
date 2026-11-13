@@ -8,6 +8,11 @@
  * text. Ids appear only after they pass a strict pattern. Writes nothing and
  * always exits 0.
  *
+ * Pack version: the `version:` line of ravintio-zero/component.yml is compared
+ * with `packVersion` in the first fenced json block of
+ * plan/state/pack-version.md. An absent record gives no finding. docs/about.md
+ * holds the product version and is never read for this check.
+ *
  * Migrations: plan/state/migrations.md is a ledger table with rows
  * `| {id} | {done or not applicable} | {pack version} |`. A `done` row means no
  * finding. A `not applicable` row at the current pack version (the `version:`
@@ -104,18 +109,22 @@ try {
     out.push(`pending migration: ${m ? m[1] : "unreadable"}`);
   }
 
-  // 2. Pack version.
-  const comp = read(p("ravintio-zero", "component.yml"));
-  const about = read(p("docs", "about.md"));
-  if (comp !== null && about !== null) {
-    const ver = (t) => {
-      const m = /^version:\s*["']?([^"'\s]*)["']?\s*$/m.exec(t);
-      return m && /^\d+\.\d+\.\d+$/.test(m[1]) ? m[1] : null;
-    };
-    const a = ver(comp);
-    const b = ver(about);
-    if (a === null || b === null) out.push("pack version unreadable");
-    else if (a !== b) out.push("pack version differs from docs/about.md");
+  // 2. Pack version. The record is plan/state/pack-version.md. An absent
+  // record raises no finding. docs/about.md is never read.
+  const rec = read(p("plan", "state", "pack-version.md"));
+  if (read(p("ravintio-zero", "component.yml")) !== null && rec !== null) {
+    let recorded = null;
+    const blk = /^```json[ \t]*\r?\n([\s\S]*?)^```/m.exec(rec);
+    if (blk) {
+      try {
+        const v = JSON.parse(blk[1]).packVersion;
+        recorded = typeof v === "string" && /^\d+\.\d+\.\d+$/.test(v) ? v : null;
+      } catch {
+        recorded = null;
+      }
+    }
+    if (current === null || recorded === null) out.push("pack version unreadable");
+    else if (current !== recorded) out.push("pack version differs from plan/state/pack-version.md");
   }
 
   const currentEntries = () => list(p("plan", "current")).filter((n) => n !== ".gitkeep");
