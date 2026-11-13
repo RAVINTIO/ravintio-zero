@@ -1,6 +1,6 @@
 # Architecture Overview
 
-Last updated: 0000507-hook-check-after-setup
+Last updated: 0000536-pending-migrations-reach-the-human-early
 
 ## What this repo is
 
@@ -232,7 +232,7 @@ Setup still prunes retired hooks. See Retired hooks under Re-run safety.
 
 Migration 0004 and its helpers, `migrations/migrate-ravintio-rename.sh` and `.ps1`, do the upgrade. They move the overrides folder and the workflow file. Inside the workflow they rewrite the pack paths and the pack's own variables, and leave other names such as secrets. They remove the earlier markers. They never delete the earlier pack folder. They stop git tracking it and move it to `.ravintio-backup/`, which `.git/info/exclude` hides. The human deletes the backup after checking it. A conflict, an earlier backup, or a symlink at a moved path stops the helper before it moves anything. A symlinked parent folder skips only the step that writes through it, with a warning. A rerun changes nothing. After a run that changes the project, the helper moves 0004 to `migrations/_done/`.
 
-A migration can declare an `Applies when:` condition. The orchestrator and `ravintio-migrator` skip a migration whose condition is false and leave it pending. So 0004 ships pending, and never runs in this repo.
+A migration can declare an `Applies when:` condition. The orchestrator and `ravintio-migrator` skip a migration whose condition is false and leave it pending. So 0004 ships pending, and never runs in this repo. A step session never asks the human about a pending migration. Chart lists each one and takes the human's answer as a `Migration:` row in `## Decisions`. A step runs `ravintio-migrator` for a migration that has a row, with the row's answer as the reply. For any other, it writes `Migration pending: {id}` in its build log and carries on. The coordinator raises each such line in its next report (0000536 ADR-0343).
 
 ---
 

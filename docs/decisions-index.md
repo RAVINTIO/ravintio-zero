@@ -3,7 +3,7 @@
 > Change record. Index of all ADRs across all features. Updated after every pipeline run.
 > Do not archive this file. Update it in place.
 
-Last updated: 0000534-step-sessions-receive-clock
+Last updated: 0000536-pending-migrations-reach-the-human-early
 
 ---
 
@@ -361,3 +361,4 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 | [ADR-0340](adr/0340-driver-clears-merged-ready-files.md) | Driver clears ready files of merged steps | accepted | At start, the driver removes the ready file of each merged step unless a live session runs there, and reports each file it keeps. | 0000509-clear-merged-ready-files |
 | [ADR-0341](adr/0341-driver-stop-summary.md) | Driver prints a stop summary | accepted | The driver ends every run with a summary block of merged steps, its own fixes, and the one action left for the human. | 0000511-driver-stop-summary |
 | [ADR-0342](adr/0342-step-sessions-receive-the-clock.md) | Step sessions receive the clock | accepted | The driver records hook events in each step log, and a check fails a log that shows no clock. | 0000534-step-sessions-receive-clock |
+| [ADR-0343](adr/0343-steps-never-stop-on-pending-migrations.md) | Steps never stop on pending migrations | accepted | Chart collects the human's answer for each pending migration. A step runs a migration that has a row and logs the rest. | 0000536-pending-migrations-reach-the-human-early |

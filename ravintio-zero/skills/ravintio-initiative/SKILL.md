@@ -39,6 +39,7 @@ Follow the I-A Chart and I-B Activate sections of the roadmap standards. Activat
 
 - **Guard.** Run a guard check on each entry. Check whether it widens a guard, such as `merge-guard`, `gate-write`, `ratchet-check`, or another fail-closed hook. Name the guard and the new forms it would allow. Ask for a separate approval for each widening, apart from the chart confirmation.
 - **Lanes.** Coach a `Lane` and an `After` list for each step, and the `**Concurrency:**` field (default 3). Steps that edit the same files share a lane. A step that changes most files lists every earlier step in `After`, and every later step lists it. See Chart-time lanes.
+- **Migrations.** List every pending migration from resume detection and take the human's answer for each, per `Chart-time migrations`. Chart starts no step before then.
 - **Confirmation.** Plan each step confirmation, per rule `agree-explicit` in `orchestrator-p0-coaching.md`. List each one that a step's skills ask for. Record the exact command as a `Confirmation:` row in `## Decisions`, or plan a human stop for that step.
 
 **Questions.** Restate the human's words as one concrete plan, name the default, and ask "Go?". Offer other options only for a real fork. Ask at most one question per reply. Never ask about what the human already said. **Activate.** Run `node ravintio-zero/scripts/initiative-activate.mjs --yes` after one "Go?". Add a step with `node ravintio-zero/scripts/initiative-add-step.mjs`. For a coordinator PR, run `node ravintio-zero/scripts/coordinator-pr-check.mjs {base}`. If it prints `plan-only`, skip the full suite. See Coordinator questions and commands in the roadmap standards.
@@ -67,7 +68,7 @@ Before each report, run `node ravintio-zero/scripts/initiative-status.mjs`. It p
 
 End each report with two parts:
 
-- **Decisions for the human:** each open question or stop that needs the human, with the options. Write `none` if there is none.
+- **Decisions for the human:** each open question or stop that needs the human, with the options. Include each `Migration pending:` line from a step build log. Show its findings and take the human's answer for each one. Write `none` if there is none.
 - **Routine fixes made:** each pre-approved fix the coordinator applied, such as a conflict, a CI rerun, or a setup rerun. Write `none` if there is none.
 
 ## Stops
