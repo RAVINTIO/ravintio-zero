@@ -457,8 +457,9 @@ The installed pack files live outside the repo copy the driver reads. After a me
 
 #### Step logs
 
-The driver writes the child's stdout and stderr to `plan/.initiative-logs/step-{position}.log`, in arrival order. It starts `claude` with `--output-format stream-json --verbose`, so stdout holds one JSON event per line.
+The driver writes the child's stdout and stderr to `plan/.initiative-logs/step-{position}.log`, in arrival order. It starts `claude` with `--output-format stream-json --verbose --include-hook-events`, so stdout holds one JSON event per line. The log also holds a `hook_response` event for each hook that ran, with the hook's output.
 
+- <!-- rule: step-clock-check --> `node ravintio-zero/scripts/step-clock-check.mjs plan/.initiative-logs/step-{n}.log` shows whether a step received the clock. It exits 1 and prints `Blocked:` if the log holds tool calls and no `PostToolUse` output with `Local time: hh:mm`. It exits 0 if the log holds clock output or no tool calls, and 2 for a usage error. It reads one file and prints counts only (0000534 ADR-0342).
 - `initiative-watch.mjs` reads new bytes of the current step's log every 10 seconds. It prints one `I-C Run: activity:` line per tool call, subagent start, and assistant text, in the order received. Each line is 200 characters or fewer. It never prints tool results.
 - The watcher prints a stale line only when a commit is at least 15 minutes newer than the last build log write. It prints each stale state once. If the last-seen commit is not an ancestor of `HEAD`, it prints one `branch changed` line instead of a line for each commit. Each heartbeat reads the lock file again.
 - The initiative skill relays each activity line to the human.

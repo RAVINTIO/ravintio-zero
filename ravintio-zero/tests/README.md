@@ -149,4 +149,5 @@ The runner picks the file up automatically. Nothing else needs registering.
 ### Step activity
 
 - `test-0000240-req-001-driver-stream-args.sh` checks the driver passes `--output-format stream-json --verbose`, keeps the log at mode 600, and prints no step content.
+- `test-0000534-req-001-003-step-clock.sh` checks the driver passes `--include-hook-events` on a first run and a resume, and that `step-clock-check.mjs` fails a step log with tool calls and no clock output.
 - `test-0000240-req-002-activity-lines.sh` checks that the watcher prints one `I-C Run: activity:` line per event, in order, at 200 characters or fewer. It also checks that the skill and standards describe them. The flag `--since-bytes {n}` treats the first n bytes of the step log as seen.

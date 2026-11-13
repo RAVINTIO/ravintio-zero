@@ -1,11 +1,11 @@
 ---
-title: "Backlog Entry: 0000539 - Test impact scan lists the mirrored pack tree"
+title: "Backlog Entry: 0000540 - Test impact scan lists the mirrored pack tree"
 summary: "Step 61 edited pack files and learned from the full suite that src/ravintio-zero/ must match ravintio-zero/."
 status: "open"
 priority: "medium"
 theme: "skills"
 ---
-# Backlog Entry: 0000539 - Test impact scan lists the mirrored pack tree
+# Backlog Entry: 0000540 - Test impact scan lists the mirrored pack tree
 
 **Source feature:** 0000536-pending-migrations-reach-the-human-early
 

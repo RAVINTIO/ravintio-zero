@@ -111,7 +111,7 @@ run_driver() {
 D1="$WORK/d1"
 make_repo "$D1"
 run_driver "$D1"
-assert_equals "-p --output-format stream-json --verbose --permission-mode auto --append-system-prompt Write all prose to ravintio-zero/standards/writing-standards.md. --model sonnet Run initiative step 1" "$(cat "$D1/stub.log")" "req-002 AC-1: an empty queue leaves the prompt as it was"
+assert_equals "-p --output-format stream-json --verbose --include-hook-events --permission-mode auto --append-system-prompt Write all prose to ravintio-zero/standards/writing-standards.md. --model sonnet Run initiative step 1" "$(cat "$D1/stub.log")" "req-002 AC-1: an empty queue leaves the prompt as it was"
 D2="$WORK/d2"
 make_repo "$D2"
 item "$D2" fix-the-thing 1 "plan/x.md"

@@ -12,7 +12,7 @@
 - Check 1 of the orchestrator resume detection reference gains a step-session bullet. The old line stays.
 - `ravintio-migrator` takes a chart row's answer in place of the human's reply.
 - The initiative skill names both rules.
-- The suite `test-0000536-req-001-003` covers the text. ADR 0342 records the decision.
+- The suite `test-0000536-req-001-003` covers the text. ADR 0343 records the decision.
 
 ## Why
 

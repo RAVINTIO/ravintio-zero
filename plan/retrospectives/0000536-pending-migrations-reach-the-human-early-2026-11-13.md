@@ -31,7 +31,7 @@ The step shipped in about 80 minutes as PR 200 with green CI. It added the chart
 
 ## Change
 
-- The Test impact scan needs a cause for the mirrored pack tree (`plan/backlog/0000539-test-impact-scan-lists-the-mirrored-pack-tree/entry.md`).
+- The Test impact scan needs a cause for the mirrored pack tree (`plan/backlog/0000540-test-impact-scan-lists-the-mirrored-pack-tree/entry.md`).
 
 ## Actions
 

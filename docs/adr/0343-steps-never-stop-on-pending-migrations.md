@@ -1,16 +1,16 @@
 ---
-title: "ADR 0342: Steps never stop on pending migrations"
+title: "ADR 0343: Steps never stop on pending migrations"
 summary: "Chart collects the human's answer for each pending migration, and a step session records one it has no row for and carries on."
 status: "accepted"
 component: "ravintio-zero"
 version: "0.1.0"
 ---
-# ADR-0342 - Steps never stop on pending migrations
+# ADR-0343 - Steps never stop on pending migrations
 
 **Skill:** [plan](../../ravintio-zero/skills/ravintio-plan/SKILL.md)
 **Feature:** 0000536-pending-migrations-reach-the-human-early
 **Component:** ravintio-zero
-**File:** `docs/adr/0342-steps-never-stop-on-pending-migrations.md`
+**File:** `docs/adr/0343-steps-never-stop-on-pending-migrations.md`
 **Date:** 2026-11-13
 
 ## Context
@@ -19,9 +19,9 @@ On 2026-11-12 at 02:26 step 55 stopped in P0 to ask about pending migration 0009
 
 ## Decision
 
-I-A Chart runs resume detection and lists every pending migration. The human answers each one, `all` or `none`. Chart writes each answer as a `## Decisions` row whose Fork starts with `Migration:`.
+I-A Chart runs resume detection and lists every pending migration. The human sees each finding and approves findings one by one. The answer lists the approved findings, or holds `none`. It never holds `all`, so no finding runs without review. Chart writes each answer as a `## Decisions` row whose Fork starts with `Migration:`.
 
-A step session runs `ravintio-migrator` for a migration that has a row, with the row's answer in place of the human's reply. For any other pending migration, the step writes `Migration pending: {id}` in its build log and carries on. The coordinator raises each such line in its next report.
+A step session runs `ravintio-migrator` for a migration that has a row, and applies only the findings the row lists. For any other pending migration, the step writes `Migration pending: {id}` in its build log and carries on. The coordinator raises each such line in its next report.
 
 ## Alternatives Considered
 
