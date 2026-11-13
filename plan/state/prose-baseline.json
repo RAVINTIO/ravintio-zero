@@ -5,6 +5,12 @@
       "passive": 2,
       "sentence-length": 1
     },
+    "plan/backlog/0000285-enforce-postmortems-with-capa/entry.md": {
+      "passive": 2
+    },
+    "plan/backlog/0000305-archetypes-for-standards-and-templates/entry.md": {
+      "sentence-length": 1
+    },
     "plan/backlog/0000396-pack-source-in-src/entry.md": {
       "passive": 1
     },
@@ -361,11 +367,36 @@
       "em-dash": 9,
       "passive": 3
     },
-    "plan/backlog/0000285-enforce-postmortems-with-capa/entry.md": {
-      "passive": 2
-    },
-    "plan/backlog/0000305-archetypes-for-standards-and-templates/entry.md": {
+    "src/ravintio-zero/migrations/_done/0001-date-format.md": {
+      "em-dash": 5,
+      "semicolon": 1,
       "sentence-length": 1
+    },
+    "src/ravintio-zero/migrations/_done/0002-british-english.md": {
+      "em-dash": 3,
+      "semicolon": 1,
+      "sentence-length": 1
+    },
+    "src/ravintio-zero/migrations/_done/0003-archive-dirname.md": {
+      "em-dash": 8,
+      "semicolon": 2,
+      "sentence-length": 1
+    },
+    "src/ravintio-zero/migrations/_done/migrate-adoption-mode-and-about-md.md": {
+      "em-dash": 3,
+      "sentence-length": 1
+    },
+    "src/ravintio-zero/migrations/_done/migrate-product-yml-component-paths.md": {
+      "blocklist": 2,
+      "em-dash": 10,
+      "passive": 2,
+      "semicolon": 3,
+      "sentence-length": 5
+    },
+    "src/ravintio-zero/migrations/_done/retroactive-release-tags.md": {
+      "blocklist": 1,
+      "em-dash": 9,
+      "passive": 3
     }
   }
 }

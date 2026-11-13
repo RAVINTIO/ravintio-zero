@@ -45,13 +45,16 @@ jobs:
           PR_BODY: ${{ github.event.pull_request.body }}
         run: |
           printf '%s' "$PR_BODY" > "$RUNNER_TEMP/pr-body.txt"
-          node ravintio-zero/scripts/check-attribution.mjs "$RUNNER_TEMP/pr-body.txt"
+          node src/ravintio-zero/scripts/check-attribution.mjs "$RUNNER_TEMP/pr-body.txt"
 
       - name: Check the backlog index
-        run: node ravintio-zero/scripts/backlog-index.mjs --check
+        run: node src/ravintio-zero/scripts/backlog-index.mjs --check
 
       - name: Check the pack facts file
-        run: node ravintio-zero/scripts/pack-facts.mjs --check
+        run: node src/ravintio-zero/scripts/pack-facts.mjs --check
+
+      - name: Check the installed copy matches the source
+        run: node src/ravintio-zero/scripts/sync-installed.mjs --check
 
       - name: Fail on a committed ignored file
         run: |
@@ -76,15 +79,15 @@ jobs:
           persist-credentials: false
 
       - name: Check prose against the baseline
-        run: node ravintio-zero/scripts/prose-check.mjs check
+        run: node src/ravintio-zero/scripts/prose-check.mjs check
 
       - name: Check the baseline did not rise
         env:
           BASE_REF: ${{ github.base_ref }}
-        run: node ravintio-zero/scripts/prose-check.mjs diff --base "origin/$BASE_REF"
+        run: node src/ravintio-zero/scripts/prose-check.mjs diff --base "origin/$BASE_REF"
 
   # This job is specific to this repository's own self-description and is
-  # deliberately NOT mirrored into ravintio-zero/hooks/ravintio.yml
+  # deliberately NOT mirrored into src/ravintio-zero/hooks/ravintio.yml
   # (the copy setup.sh ships to consumer repos) — a consuming repo's README
   # doesn't have this repository's "## Repository structure" / "## The
   # pack" sections to validate against. See ADR-001 (feature 0000019).
@@ -97,11 +100,11 @@ jobs:
           persist-credentials: false
 
       - name: Verify README matches repository structure
-        run: node ravintio-zero/scripts/self-description-check.mjs .
+        run: node src/ravintio-zero/scripts/self-description-check.mjs .
 
   # Lints the workflows with actionlint and zizmor, each at a pinned version
   # (0000394 ADR-002). Like self-description-check, it is deliberately NOT
-  # mirrored into ravintio-zero/hooks/ravintio.yml, because a consuming repo
+  # mirrored into src/ravintio-zero/hooks/ravintio.yml, because a consuming repo
   # picks its own lint tools. zizmor runs without online audits, so it needs
   # no token.
   workflow-lint:
@@ -152,7 +155,7 @@ jobs:
         env:
           RAVINTIO_SHARD: ${{ matrix.shard }}/4
         run: |
-          & ./ravintio-zero/tests/run-tests.ps1
+          & ./src/ravintio-zero/tests/run-tests.ps1
           exit $LASTEXITCODE
 
   # Carries the required check name "windows-powershell (powershell)". It runs
@@ -196,7 +199,7 @@ jobs:
         env:
           RAVINTIO_REQUIRE_PWSH: "1"
           RAVINTIO_SHARD: ${{ matrix.shard }}/4
-        run: bash ravintio-zero/tests/run-tests.sh
+        run: bash src/ravintio-zero/tests/run-tests.sh
 
   # Carries the required check name "bash-suites". It runs even when a shard
   # fails, and passes only when every shard passed. Its "if" adds always() to
@@ -231,7 +234,7 @@ jobs:
       - name: Check first-parent titles
         env:
           HEAD_REF: ${{ github.head_ref }}
-        run: node ravintio-zero/scripts/check-initiative-history.mjs --base origin/main --head "origin/$HEAD_REF"
+        run: node src/ravintio-zero/scripts/check-initiative-history.mjs --base origin/main --head "origin/$HEAD_REF"
 
   # Fails a PR into main from outside an initiative whose branch name or
   # commit count breaks the rule (0000327 req-002). It reads the branch head,
@@ -251,7 +254,7 @@ jobs:
       - name: Check the branch and commit count
         env:
           HEAD_REF: ${{ github.head_ref }}
-        run: node ravintio-zero/scripts/check-pr-into-main.mjs --head-ref "$HEAD_REF" --base origin/main --head "origin/$HEAD_REF"
+        run: node src/ravintio-zero/scripts/check-pr-into-main.mjs --head-ref "$HEAD_REF" --base origin/main --head "origin/$HEAD_REF"
 
   # Fails a push to main whose newest commit squashed an initiative PR
   # (0000319 req-004).
@@ -268,7 +271,7 @@ jobs:
           persist-credentials: false
 
       - name: Check the merge method
-        run: node ravintio-zero/scripts/check-main-merge.mjs
+        run: node src/ravintio-zero/scripts/check-main-merge.mjs
 
   # Tags the merge commit on the default branch after the human merges
   # (0000169 ADR-002). Only this job holds write access, and it never runs
@@ -293,7 +296,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
       - name: Tag the merge commit
-        run: node ravintio-zero/scripts/release-tag.mjs
+        run: node src/ravintio-zero/scripts/release-tag.mjs
 
   # Deletes the head branch of a merged PR (0000355 ADR-003). It holds the
   # only pull request write scope, runs no PR code, and has no checkout. It

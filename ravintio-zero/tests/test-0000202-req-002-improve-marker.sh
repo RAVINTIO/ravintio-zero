@@ -7,10 +7,11 @@ set -uo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
-ZERO_DIR="$SCRIPT_DIR/.."
+ZERO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+REPO_ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
 STD="$ZERO_DIR/standards/workflow-governance-standards.md"
 MANIFEST="$ZERO_DIR/component.yml"
-ARCH="$ZERO_DIR/../docs/architecture-overview.md"
+ARCH="$REPO_ROOT/docs/architecture-overview.md"
 PIPE="$ZERO_DIR/pipeline-reference.md"
 
 MARKERS=$(awk '/^## Marker lines/{f=1;next} /^## /{f=0} f' "$STD")

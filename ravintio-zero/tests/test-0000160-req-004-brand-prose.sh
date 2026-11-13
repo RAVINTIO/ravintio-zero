@@ -14,7 +14,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 source "$SCRIPT_DIR/helpers/version.sh"
 ZERO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-ROOT_DIR="$(cd "$ZERO_DIR/.." && pwd)"
+ROOT_DIR="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
 PS1="$ZERO_DIR/setup.ps1"
 MOJI=$'\xc3\x83\xc2\xa2'
 

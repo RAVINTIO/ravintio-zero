@@ -7,7 +7,7 @@ set -uo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
-WORKFLOW="$SCRIPT_DIR/../../.github/workflows/ravintio.yml"
+WORKFLOW="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel 2>/dev/null)/.github/workflows/ravintio.yml"
 
 if [ ! -f "$WORKFLOW" ]; then
   echo "  SKIP: no repo workflow next to ravintio-zero/, so this is a consumer copy"

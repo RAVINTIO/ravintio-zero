@@ -51,6 +51,9 @@ const SCOPED_PREFIXES = [
   "ravintio-zero/skills/",
   "ravintio-zero/templates/",
   "ravintio-zero/standards/",
+  "src/ravintio-zero/skills/",
+  "src/ravintio-zero/templates/",
+  "src/ravintio-zero/standards/",
 ];
 
 function norm(p) {

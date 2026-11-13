@@ -14,7 +14,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
 ZERO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-REPO_ROOT="$(cd "$ZERO_DIR/.." && pwd)"
+REPO_ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
 RECORD="plan/state/claude-code.md"
 OLD_DIR="ravintio-overrides/setup-config"
 RETIRED_FLAGS=(--structured-telemetry-mcp --backend-url --context-mode-mcp --include-full-skill-library)
