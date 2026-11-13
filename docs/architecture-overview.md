@@ -1,6 +1,6 @@
 # Architecture Overview
 
-Last updated: 0000519-ship-removal-needs-human-approval
+Last updated: 0000521-replies-name-actors-by-role
 
 ## What this repo is
 
@@ -177,6 +177,8 @@ Boot files are disposable build outputs. Every run regenerates `CLAUDE.md` from 
 ## Prose checks
 
 `ravintio-zero/hooks/enforcement/prose-rules.mjs` holds the prose rules. They are `sentence-length` (over 25 words), `blocklist`, `semicolon`, `em-dash`, and `passive`. The rules skip front matter, fenced code, inline code, tables, and HTML comments. Both `scripts/prose-check.mjs` and the `check-reply-writing` Stop hook import the module, because a hook installs as one file beside `read-stdin.mjs`.
+
+The `check-reply-writing` hook also holds the rule `actor-pronoun`. It flags "I", "you", and "your" in a run reply. A run reply opens with `hh:mm` and a run prefix. The hook skips code and `>` lines. The rule lives in the hook, not in `prose-rules.mjs`, because documents keep the second person. The boot templates, the orchestrator skill, and the roadmap standards tell a reply to name each actor by role (0000521 ADR-0321).
 
 `prose-check.mjs` has three commands. `check` reads the in-scope Markdown files, or the staged files, or one commit message. `update` lowers the baseline. `diff --base <ref>` fails when the baseline holds a higher count than it does at `<ref>`. The scope covers Markdown in these places:
 
