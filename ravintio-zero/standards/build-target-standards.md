@@ -4,7 +4,7 @@ version: "1.0.0"
 ---
 # Build Target Standards
 
-Agents read `Build target` from the confirmed design stack declaration and adjust all environment assumptions accordingly. Never infer the build target from `compute` or `iac` fields; always read the explicit declaration.
+Agents read `Build target` from the confirmed design stack declaration and adjust all environment assumptions accordingly. Never infer the build target from `compute` or `iac` fields. Always read the explicit declaration.
 
 ---
 
@@ -23,7 +23,7 @@ Agents read `Build target` from the confirmed design stack declaration and adjus
 
 **Agent behaviour:**
 - **Never** check host-installed runtimes or tools. Do not run `node`, `dotnet`, `python`, `go`, `ruby`, `java`, `mvn`, `gradle`, or equivalent CLI commands directly against the host
-- **Never** fail or warn because a runtime is absent on the host; it is expected to be absent
+- **Never** fail or warn because a runtime is absent on the host. Expect it to be absent
 - Scaffold Dockerfile-first: a working `Dockerfile` is the primary build artifact, not a host-runnable project
 - Run all validation checks via `docker build` and `docker run`, not via host toolchain
 - Codegen: generate `Dockerfile` and `docker-compose.yml` (or equivalent) before any source code
@@ -37,7 +37,7 @@ Agents read `Build target` from the confirmed design stack declaration and adjus
 - Do not attempt to run build or test commands locally
 - Scaffold CI workflow files as the primary validation mechanism
 - Codegen: generate CI configuration (e.g. `.github/workflows/`) alongside source code
-- Validate: report that validation requires a CI run; do not attempt local execution
+- Validate: report that validation requires a CI run. Do not attempt local execution
 - Flag any acceptance criterion that requires local execution as a scope mismatch
 
 ---

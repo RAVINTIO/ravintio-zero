@@ -1,0 +1,402 @@
+{
+  "version": 1,
+  "files": {
+    "plan/backlog/0000220-verify-codex-merge-guard-after-trust/entry.md": {
+      "passive": 2,
+      "sentence-length": 1
+    },
+    "plan/backlog/0000285-enforce-postmortems-with-capa/entry.md": {
+      "passive": 2
+    },
+    "plan/backlog/0000305-archetypes-for-standards-and-templates/entry.md": {
+      "sentence-length": 1
+    },
+    "plan/backlog/0000396-pack-source-in-src/entry.md": {
+      "passive": 1
+    },
+    "plan/backlog/0000405-test-impact-for-history-moves/entry.md": {
+      "passive": 1
+    },
+    "plan/backlog/index.md": {
+      "passive": 1
+    },
+    "plan/changelog/0000030-framework-cut-down-2026-08-22.md": {
+      "passive": 3,
+      "sentence-length": 2
+    },
+    "plan/changelog/0000031-five-phase-planifest-zero-2026-08-30.md": {
+      "passive": 1,
+      "sentence-length": 1
+    },
+    "plan/changelog/0000032-relocate-setup-config-to-plan-state-2026-09-05.md": {
+      "passive": 2,
+      "sentence-length": 2
+    },
+    "plan/changelog/0000032-relocate-setup-config-to-plan-state-test-report-2026-09-05.md": {
+      "passive": 1
+    },
+    "plan/changelog/0000033-remove-telemetry-mcp-2026-10-16.md": {
+      "passive": 4
+    },
+    "plan/changelog/0000033-remove-telemetry-mcp-test-report-2026-10-16.md": {
+      "passive": 1
+    },
+    "plan/changelog/0000034-setup-hardening-2026-10-16.md": {
+      "passive": 1
+    },
+    "plan/changelog/0000035-powershell-setup-parity-2026-10-17.md": {
+      "passive": 1
+    },
+    "plan/changelog/0000036-test-runner-coverage-2026-10-17.md": {
+      "passive": 1
+    },
+    "plan/changelog/0000037-self-host-on-planifest-zero-2026-10-17.md": {
+      "passive": 1
+    },
+    "plan/changelog/0000038-setup-hook-filter-fixes-2026-10-19.md": {
+      "passive": 1
+    },
+    "plan/changelog/0000039-setup-hardening-release-sizing-2026-10-19.md": {
+      "passive": 1
+    },
+    "plan/changelog/0000041-setup-cleanup-and-park-hardening-2026-10-22.md": {
+      "passive": 1
+    },
+    "plan/changelog/0000042-autonomous-mode-and-prefixes-2026-10-23.md": {
+      "passive": 1
+    },
+    "plan/changelog/0000043-autonomous-roadmaps-2026-10-24.md": {
+      "passive": 8
+    },
+    "plan/changelog/0000151-hardening-efficiency-and-ci-2026-10-24.md": {
+      "passive": 5
+    },
+    "plan/changelog/0000160-ravintio-rebrand-2026-10-24.md": {
+      "passive": 2
+    },
+    "plan/changelog/0000164-hardening-and-backlog-skill-2026-10-25.md": {
+      "passive": 6,
+      "sentence-length": 1
+    },
+    "plan/changelog/0000169-release-hygiene-2026-10-25.md": {
+      "passive": 2
+    },
+    "plan/changelog/0000171-faster-setup-ps1-tests-2026-10-25.md": {
+      "passive": 2,
+      "sentence-length": 1
+    },
+    "plan/changelog/0000172-subagent-acceleration-2026-10-25.md": {
+      "passive": 2
+    },
+    "plan/changelog/0000173-workflow-governance-gates-2026-10-25.md": {
+      "passive": 2
+    },
+    "plan/changelog/0000197-merge-guard-block-message-2026-10-27.md": {
+      "passive": 2,
+      "sentence-length": 1
+    },
+    "plan/changelog/0000198-cap-echoed-plan-text-2026-10-27.md": {
+      "passive": 1,
+      "sentence-length": 1
+    },
+    "plan/changelog/0000200-reply-conventions-2026-10-27.md": {
+      "passive": 1,
+      "sentence-length": 1
+    },
+    "plan/changelog/0000201-plan-concurrent-work-2026-10-27.md": {
+      "passive": 1,
+      "sentence-length": 1
+    },
+    "plan/changelog/0000203-blameless-postmortems-2026-10-27.md": {
+      "passive": 1,
+      "sentence-length": 2
+    },
+    "plan/changelog/0000204-run-and-initiative-retrospectives-2026-10-27.md": {
+      "sentence-length": 2
+    },
+    "plan/changelog/0000205-initiative-skill-2026-10-27.md": {
+      "sentence-length": 3
+    },
+    "plan/changelog/0000206-chart-time-decisions-2026-10-27.md": {
+      "sentence-length": 3
+    },
+    "plan/changelog/0000207-codex-support-2026-10-27.md": {
+      "passive": 2
+    },
+    "plan/changelog/0000217-verify-codex-setup-2026-10-27.md": {
+      "passive": 1
+    },
+    "plan/changelog/0000239-test-suite-reliability-2026-10-28.md": {
+      "sentence-length": 1
+    },
+    "plan/changelog/0000241-watcher-false-events-2026-10-28.md": {
+      "sentence-length": 1
+    },
+    "plan/changelog/0000242-size-cap-excludes-overrides-2026-10-28.md": {
+      "passive": 1
+    },
+    "plan/changelog/0000243-session-start-detection-2026-10-28.md": {
+      "passive": 1
+    },
+    "plan/changelog/0000244-split-orchestrator-skill-2026-10-28.md": {
+      "passive": 1
+    },
+    "plan/changelog/0000245-boot-rules-into-skills-2026-10-28.md": {
+      "passive": 1
+    },
+    "plan/changelog/0000248-ship-merge-and-wall-clocks-2026-10-28.md": {
+      "passive": 1,
+      "sentence-length": 1
+    },
+    "plan/changelog/0000250-initiative-mid-run-changes-2026-10-28.md": {
+      "sentence-length": 1
+    },
+    "plan/changelog/0000252-chart-rules-2026-10-28.md": {
+      "sentence-length": 2
+    },
+    "plan/changelog/0000253-refresh-setup-2026-10-29.md": {
+      "passive": 4
+    },
+    "plan/changelog/0000316-hooks-fail-closed-2026-10-31.md": {
+      "passive": 1
+    },
+    "plan/changelog/0000317-block-forced-adds-2026-10-31.md": {
+      "passive": 1
+    },
+    "plan/changelog/0000318-titled-coordinator-prs-2026-11-01.md": {
+      "passive": 2
+    },
+    "plan/changelog/0000321-backlog-triage-2026-11-01.md": {
+      "passive": 1,
+      "sentence-length": 1
+    },
+    "plan/changelog/0000327-squash-before-main-2026-11-01.md": {
+      "passive": 3
+    },
+    "plan/changelog/0000351-step-titles-and-history-shape-2026-11-06.md": {
+      "passive": 1
+    },
+    "plan/changelog/0000352-coordinator-admin-in-step-prs-2026-11-06.md": {
+      "passive": 2
+    },
+    "plan/changelog/0000353-reshape-at-delivery-2026-11-06.md": {
+      "passive": 1,
+      "sentence-length": 2
+    },
+    "plan/changelog/0000354-steps-run-to-the-end-2026-11-06.md": {
+      "passive": 2
+    },
+    "plan/changelog/0000355-codeql-and-branch-cleanup-2026-11-06.md": {
+      "passive": 3
+    },
+    "plan/changelog/0000357-guard-gaps-closed-2026-11-06.md": {
+      "passive": 1
+    },
+    "plan/changelog/0000358-clean-step-stops-and-logs-2026-11-07.md": {
+      "passive": 3
+    },
+    "plan/changelog/0000359-safe-parallel-commits-2026-11-07.md": {
+      "passive": 1,
+      "sentence-length": 1
+    },
+    "plan/changelog/0000377-driver-stops-and-headroom-2026-11-07.md": {
+      "passive": 1
+    },
+    "plan/changelog/0000378-merge-time-versioning-2026-11-07.md": {
+      "passive": 2,
+      "sentence-length": 1
+    },
+    "plan/changelog/0000380-test-helpers-and-rule-anchors-2026-11-07.md": {
+      "passive": 2
+    },
+    "plan/changelog/0000383-test-impact-scan-2026-11-07.md": {
+      "sentence-length": 1
+    },
+    "plan/changelog/0000384-plan-checks-2026-11-08.md": {
+      "passive": 1,
+      "sentence-length": 1
+    },
+    "plan/changelog/0000387-light-discovery-and-audits-2026-11-09.md": {
+      "passive": 1,
+      "sentence-length": 2
+    },
+    "plan/changelog/0000388-replies-and-questions-2026-11-07.md": {
+      "passive": 1
+    },
+    "plan/changelog/0000393-session-integrity-and-guards-2026-11-09.md": {
+      "passive": 2,
+      "sentence-length": 1
+    },
+    "plan/changelog/0000394-github-security-and-ci-lint-2026-11-08.md": {
+      "passive": 1
+    },
+    "plan/postmortems/2026-10-31-step-6-forced-add-committed-driver-files.md": {
+      "passive": 1
+    },
+    "plan/retrospectives/0000204-run-and-initiative-retrospectives-2026-10-27.md": {
+      "sentence-length": 3
+    },
+    "plan/retrospectives/0000205-initiative-skill-2026-10-27.md": {
+      "sentence-length": 3
+    },
+    "plan/retrospectives/0000206-chart-time-decisions-2026-10-27.md": {
+      "sentence-length": 1
+    },
+    "plan/retrospectives/0000207-codex-support-2026-10-27.md": {
+      "sentence-length": 1
+    },
+    "plan/retrospectives/0000208-refresh-setup-record-2026-10-27.md": {
+      "passive": 1
+    },
+    "plan/retrospectives/0000217-verify-codex-setup-2026-10-27.md": {
+      "passive": 1
+    },
+    "plan/retrospectives/0000238-backlog-clearance-two-initiative-2026-10-29.md": {
+      "passive": 3,
+      "sentence-length": 1
+    },
+    "plan/retrospectives/0000243-session-start-detection-2026-10-28.md": {
+      "passive": 1
+    },
+    "plan/retrospectives/0000245-boot-rules-into-skills-2026-10-28.md": {
+      "passive": 2
+    },
+    "plan/retrospectives/0000246-plan-checks-count-and-cap-tests-2026-10-28.md": {
+      "passive": 1,
+      "sentence-length": 1
+    },
+    "plan/retrospectives/0000247-git-state-hygiene-2026-10-28.md": {
+      "sentence-length": 1
+    },
+    "plan/retrospectives/0000248-ship-merge-and-wall-clocks-2026-10-28.md": {
+      "sentence-length": 1
+    },
+    "plan/retrospectives/0000252-chart-rules-2026-10-28.md": {
+      "passive": 1,
+      "sentence-length": 2
+    },
+    "plan/retrospectives/0000253-refresh-setup-2026-10-29.md": {
+      "passive": 1,
+      "sentence-length": 1
+    },
+    "plan/retrospectives/0000312-guards-history-and-test-noise-initiative-2026-11-01.md": {
+      "sentence-length": 2
+    },
+    "plan/retrospectives/0000313-driver-setup-stop-2026-10-31.md": {
+      "sentence-length": 1
+    },
+    "plan/retrospectives/0000314-step-logs-stay-in-place-2026-10-31.md": {
+      "sentence-length": 1
+    },
+    "plan/retrospectives/0000318-titled-coordinator-prs-2026-11-01.md": {
+      "passive": 1
+    },
+    "plan/retrospectives/0000320-quiet-session-start-2026-11-01.md": {
+      "passive": 3,
+      "sentence-length": 1
+    },
+    "plan/retrospectives/0000321-backlog-triage-2026-11-01.md": {
+      "passive": 2
+    },
+    "plan/retrospectives/0000349-clean-initiative-history-initiative-2026-11-07.md": {
+      "passive": 3,
+      "sentence-length": 2
+    },
+    "plan/retrospectives/0000353-reshape-at-delivery-2026-11-06.md": {
+      "sentence-length": 1
+    },
+    "plan/retrospectives/0000355-codeql-and-branch-cleanup-2026-11-06.md": {
+      "passive": 1
+    },
+    "plan/retrospectives/0000357-guard-gaps-closed-2026-11-06.md": {
+      "sentence-length": 1
+    },
+    "plan/retrospectives/0000358-clean-step-stops-and-logs-2026-11-07.md": {
+      "sentence-length": 1
+    },
+    "plan/retrospectives/0000359-safe-parallel-commits-2026-11-07.md": {
+      "passive": 2
+    },
+    "plan/retrospectives/0000380-test-helpers-and-rule-anchors-2026-11-07.md": {
+      "passive": 1,
+      "sentence-length": 1
+    },
+    "plan/retrospectives/0000381-setup-safety-2026-11-07.md": {
+      "passive": 1
+    },
+    "plan/retrospectives/0000382-install-lifecycle-2026-11-08.md": {
+      "sentence-length": 2
+    },
+    "plan/retrospectives/0000384-plan-checks-2026-11-08.md": {
+      "passive": 3
+    },
+    "plan/retrospectives/0000389-writing-standard-2026-11-08.md": {
+      "passive": 1
+    },
+    "plan/state/migrations.md": {
+      "passive": 1
+    },
+    "ravintio-zero/migrations/_done/0001-date-format.md": {
+      "em-dash": 5,
+      "semicolon": 1,
+      "sentence-length": 1
+    },
+    "ravintio-zero/migrations/_done/0002-british-english.md": {
+      "em-dash": 3,
+      "semicolon": 1,
+      "sentence-length": 1
+    },
+    "ravintio-zero/migrations/_done/0003-archive-dirname.md": {
+      "em-dash": 8,
+      "semicolon": 2,
+      "sentence-length": 1
+    },
+    "ravintio-zero/migrations/_done/migrate-adoption-mode-and-about-md.md": {
+      "em-dash": 3,
+      "sentence-length": 1
+    },
+    "ravintio-zero/migrations/_done/migrate-product-yml-component-paths.md": {
+      "blocklist": 2,
+      "em-dash": 10,
+      "passive": 2,
+      "semicolon": 3,
+      "sentence-length": 5
+    },
+    "ravintio-zero/migrations/_done/retroactive-release-tags.md": {
+      "blocklist": 1,
+      "em-dash": 9,
+      "passive": 3
+    },
+    "src/ravintio-zero/migrations/_done/0001-date-format.md": {
+      "em-dash": 5,
+      "semicolon": 1,
+      "sentence-length": 1
+    },
+    "src/ravintio-zero/migrations/_done/0002-british-english.md": {
+      "em-dash": 3,
+      "semicolon": 1,
+      "sentence-length": 1
+    },
+    "src/ravintio-zero/migrations/_done/0003-archive-dirname.md": {
+      "em-dash": 8,
+      "semicolon": 2,
+      "sentence-length": 1
+    },
+    "src/ravintio-zero/migrations/_done/migrate-adoption-mode-and-about-md.md": {
+      "em-dash": 3,
+      "sentence-length": 1
+    },
+    "src/ravintio-zero/migrations/_done/migrate-product-yml-component-paths.md": {
+      "blocklist": 2,
+      "em-dash": 10,
+      "passive": 2,
+      "semicolon": 3,
+      "sentence-length": 5
+    },
+    "src/ravintio-zero/migrations/_done/retroactive-release-tags.md": {
+      "blocklist": 1,
+      "em-dash": 9,
+      "passive": 3
+    }
+  }
+}

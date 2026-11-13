@@ -24,7 +24,7 @@ description: CI, security review, execution verification, and the acceptance gat
 
 ## Build target: docker
 
-When `Build target: docker` is declared in `plan/current/design.md`, run every CI check inside the container (`docker build`, then `docker run --rm {image} {check-command}`). Never run checks against the host toolchain. A missing host runtime is expected, not a failure. Report results from container output.
+When `plan/current/design.md` declares `Build target: docker`, run every CI check inside the container (`docker build`, then `docker run --rm {image} {check-command}`). Never run checks against the host toolchain. Expect a missing host runtime. It is not a failure. Report results from container output.
 
 ## Input
 
@@ -37,12 +37,17 @@ When `Build target: docker` is declared in `plan/current/design.md`, run every C
 
 Run the stack's declared checks in this order:
 
-0. **Library audit**: check `ravintio-overrides/library-standards/{language}/prefer-avoid.md`, then the pack copy. If an avoided library is installed, fail and name the preferred alternative.
+0. **Library audit**: check `ravintio-overrides/library-standards/{language}/prefer-avoid.md`, then the pack copy. If the project installs an avoided library, fail and name the preferred alternative.
 1. **Semantic correctness**: every requirement needs a mapped, executing test identifiable by req-ID. Every acceptance criterion needs a covering test. Produce a coverage table. A missing criterion is a failure, not a warning.
 2. **Lint**
 3. **Typecheck**
-4. **Test**: for this pack run `RAVINTIO_TEST_QUIET=1 bash ravintio-zero/tests/run-tests.sh`, which prints only failures and the summary If a suite fails, read the `Failed suites:` list under the totals for each file name.
+4. **Test**: in a developer repo run the repo's own test command from the stack declaration. For this pack run `RAVINTIO_TEST_QUIET=1 bash ravintio-zero/tests/run-tests.sh`, which prints only failures and the summary. If a suite fails, read the `Failed suites:` list under the totals for each file name.
+   - <!-- rule: p3-clean-clone --> **Clean clone.** Commit your work, then run the suite in a clean clone of `HEAD` with `node ravintio-zero/scripts/clean-clone-test.mjs -- {suite command}`. It removes the clone when the run ends. If it prints an `OS gap:` line, copy that line to the build log.
+   - <!-- rule: p3-baseline-check --> **Baseline.** Save the output and run `node ravintio-zero/scripts/baseline-failures.mjs check {output}`. Stop only on a `new:` suite. List each `inherited:` suite in the build report.
+   - <!-- rule: p3-rerun-failed --> **Rerun.** After a fix, rerun only the failed suites first.
+   - <!-- rule: p3-full-suite --> **Full suite.** Run the full suite once, green apart from inherited suites, before acceptance.
 5. **Build**
+6. **Archetype gates**: run `node ravintio-zero/scripts/archetype-gates.mjs`. Exit 1 fails the check. Self-correct it like any other.
 
 If a check fails, self-correct: read the error, find the root cause, fix it, re-run. Record each cycle (check, error, root cause, fix, result). For each cycle whose fix touches a requirement's code or test, append `Rework: REQ-{nnn}: {reason} ({ISO-8601 timestamp})` to the build log, as `ravintio-zero/standards/workflow-governance-standards.md` defines. Maximum **5 cycles**. Loop mechanics (state file, run-log records, stop rules, escalation format) follow `ravintio-loop-runner`, with a cap of 5. After 5 failed cycles, STOP and escalate in both run modes:
 
@@ -58,7 +63,7 @@ Never proceed while a check fails. Never weaken a test, suppress a lint rule, or
 
 ## Verify by execution
 
-Tests passing proves the tests pass. Acceptance criteria are verified by running the software and observing behaviour. **Reading test output alone never counts.** If a criterion cannot be run, mark it `not-verifiable` with a reason. Never silently pass it.
+Tests passing proves the tests pass. You verify acceptance criteria by running the software and observing behaviour. **Reading test output alone never counts.** If a criterion cannot be run, mark it `not-verifiable` with a reason. Never silently pass it.
 
 Pick the observation method by target type:
 
@@ -81,19 +86,29 @@ Per-criterion outcomes:
 
 **Missing programs.** Run `command -v {program}` before a report says a program is missing. Then look in the common install folders, such as `/opt/homebrew/bin`, `/usr/local/bin`, and `~/.local/bin`. If a search finds the program, run it. A report that names a program as missing lists each command it ran.
 
-Write `plan/current/verification-report.md`: what was started and how, then per criterion the method, outcome, and observation evidence.
+Write `plan/current/verification-report.md`: what you started and how, then per criterion the method, outcome, and observation evidence.
+
+## Docs edit pass
+
+- <!-- rule: p3-docs-edit-pass --> Scope: changed user-facing docs. That means files under `docs/`, README files, and the changelog. Plan records under `plan/` are out of scope.
+- Dispatch a fresh-context subagent at the primary tier, per `ravintio-zero/standards/agent-dispatch-standards.md`.
+- It reviews each changed doc against `ravintio-zero/standards/writing-standards.md` for problems a script misses. Examples are items grouped in threes for rhythm, a definition packed into one sentence, and a fragment that restates the sentence before it.
+- The subagent fixes what it finds. You record each change in the build log.
+- Loop mechanics follow `ravintio-loop-runner`, with loop id `docs-edit` and a cap of 3. The pass ends only when `node ravintio-zero/scripts/prose-check.mjs check --files {changed docs}` exits 0.
+- After 3 failed cycles, escalate in both run modes, in the loop-runner format.
+- If no user-facing doc changed, write `Skipped: docs edit pass (no user-facing doc changed)` in the build log.
 
 ## Security review
 
 Produce `plan/current/security-report.md`. Every finding names a specific file, endpoint, or configuration. Generic advice is not acceptable. Cover:
 
-- **Injection points**: unvalidated input, query construction, template rendering, and incomplete escaping or sanitising (an escape that misses a character, such as a backslash before an escaped pipe, quote, or delimiter)
+- **Injection points**: unvalidated input, query construction, template rendering, and incomplete escaping or sanitising. This includes an escape that misses a character, such as a backslash before an escaped pipe, quote, or delimiter
 - **Credential handling**: hardcoded secrets, environment exposure, token handling
 - **Path traversal**: file access built from user input
 - **Dependency risk**: known vulnerabilities, abandoned maintenance, excessive permissions
 - **Data exposure**: over-broad responses, logs leaking sensitive values, open network surface
 
-Structure: a findings table (finding, location, severity Critical/High/Medium/Low, mitigation or "not mitigated"), then an overall risk rating and the top actions before production. Rate conservatively. If in doubt, rate higher. Cross-reference the risk register: confirm whether each identified risk is mitigated or still open. Be sure critical and high findings are genuine. If any critical or high finding is not mitigated, STOP in both run modes:
+Structure: a findings table (finding, location, severity Critical/High/Medium/Low, mitigation or "not mitigated"), then an overall risk rating and the top actions before production. Rate conservatively. If in doubt, rate higher. Cross-reference the risk register: confirm whether the code mitigates each identified risk or leaves it open. Be sure critical and high findings are genuine. If the code leaves any critical or high finding unmitigated, STOP in both run modes:
 
 ```
 P3 Validate: Blocked: {n} unmitigated critical or high security findings. Approve a mitigation or accept the risk.
@@ -107,10 +122,11 @@ Read `plan/.run-mode`. The evidence is the same in both modes:
 
 1. Checks run and their results, with the self-correction count
 2. Security findings, led by critical and high
-3. Execution evidence: what was run, what was observed, any `not-verifiable` criteria
+3. Execution evidence: what you ran, what you observed, any `not-verifiable` criteria
 4. Search evidence: for any program reported missing, the `PATH` check commands with a found or not-found result, and each unverified claim by name
+5. Docs edit pass result: the changed docs, the cycle count, and the final `prose-check.mjs` exit code
 
-In `gated`, this gate stops for the human. Present the evidence. The human accepts, requests changes, or rejects.
+In `gated`, this gate stops for the human. Present the evidence. The human accepts, requests changes, or rejects. Agreement follows rule `agree-explicit` in `ravintio-orchestrator/references/orchestrator-p0-coaching.md`.
 
 In `autonomous`, do not stop. Write the evidence to `plan/current/acceptance-evidence.md` and commit it. The PR may be public. The evidence holds results, counts, and `file:line` cites, and never raw command output, environment values, or file contents. The ship phase copies it into the PR description under `## Acceptance evidence`. The human reviews it there before merging.
 
@@ -126,7 +142,7 @@ Rollbacks are human-initiated, never automatic.
 
 ## Parallelism
 
-Batch 1 (parallel): lint + typecheck, library audit + semantic check. Batch 2 (after Batch 1 passes): tests. Batch 3: build. Security analyses (dependency audit, secrets scan, input validation scan) run in parallel with each other. Never run tests before typecheck passes, the summary risk rating before all findings are in, or cycle N+1 before N's fix is verified. File out-of-scope discoveries to `plan/backlog/` per `ravintio-zero/standards/agent-dispatch-standards.md`.
+Batch 1 (parallel): lint + typecheck, library audit + semantic check. Batch 2 (after Batch 1 passes): tests. Batch 3: build. Security analyses (dependency audit, secrets scan, input validation scan) run in parallel with each other. Never run tests before typecheck passes, the summary risk rating before all findings are in, or cycle N+1 before N's fix passes verification. File out-of-scope discoveries to `plan/backlog/` per `ravintio-zero/standards/agent-dispatch-standards.md`.
 
 ### Fast batch
 

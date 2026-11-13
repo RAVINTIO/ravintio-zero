@@ -8,9 +8,9 @@ This project uses RAVINTIO Zero, a confirmed-design pipeline. These rules are no
 2. **No code without documentation.** Every component MUST have a component.yml manifest and docs/ artifacts. Never produce code without its corresponding documentation.
 3. **No direct schema modification.** Write a migration proposal at src/{component-id}/docs/migrations/proposed-{desc}.md and STOP for human approval.
 4. **Destructive schema operations require human approval.** Drop column, drop table, rename - propose and stop. No exceptions.
-5. **Data is owned by one component.** Never write to data owned by another component.
+5. **One component owns each piece of data.** Never write to data owned by another component.
 6. **No credentials in context.** If a credential appears anywhere, flag it immediately and do not use it.
-7. **Update documentation after any deviation.** If implementation required deviating from the spec, plan, or design decisions, you MUST update the affected artifacts (plan/, docs/, or component.yml) to reflect what was actually built. Documentation must always match reality.
+7. **Update documentation after any deviation.** If implementation deviated from the spec, plan, or design decisions, you MUST update the affected artifacts (plan/, docs/, or component.yml). They must reflect what you actually built. Documentation must always match reality.
 
 ## Operational Directives
 
@@ -26,7 +26,7 @@ Project hooks run only after a person trusts them. Run `/hooks` in Codex to trus
 
 ## Reply Conventions
 
-Begin every reply in an active run with a prefix. Use the status form `{prefix} {Status}: {one-liner}`. The status is Starting, Resuming, Complete, Question, Blocked, or Skipped.
+Begin every reply in an active run with the time and a prefix. Use the form `hh:mm {prefix} {Status}: {one-liner}`. Take the time from `date +%H:%M`. The status is Starting, Resuming, Complete, Question, Blocked, or Skipped.
 
 | Prefix | Use for |
 |--------|---------|
@@ -45,6 +45,12 @@ Use `Supervise:` for out-of-phase work. Examples are supervising an initiative d
 
 **Reporting rule.** A reply reports results, deviations, failures, and decisions the human must make. A reply never states that the agent followed a standing rule. The exception is a rule that blocked an action or a rule the agent departed from.
 
+**Actor names.** A reply names each actor by role, such as "the human", "the agent", or "step 45". A reply never uses "I" or "you".
+
+## Worktrees
+
+A human session works on a `feat/` branch in the main working tree and creates no worktrees. The initiative driver may run steps in worktrees under `plan/.initiative-worktrees/`.
+
 ## Escalation
 
-If you are blocked, unable to resolve tests after 5 attempts, or confused by conflicting requirements, **STOP**. Do not guess. State clearly what is blocking you and ask the human for direction.
+If anything blocks you, you cannot resolve tests after 5 attempts, or conflicting requirements confuse you, **STOP**. Do not guess. State clearly what is blocking you and ask the human for direction.

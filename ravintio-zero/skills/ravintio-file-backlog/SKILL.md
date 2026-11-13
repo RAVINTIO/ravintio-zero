@@ -5,7 +5,7 @@ description: Files one uncommitted backlog entry in another repo. Finds or creat
 
 # RAVINTIO - file-backlog
 
-> You file one backlog entry in a target repo and leave that repo's git state as you found it. You are a standalone skill, invoked on request, outside the five-phase pipeline. No `plan/current/design.md` or phase gate is required to use it.
+> You file one backlog entry in a target repo and leave that repo's git state as you found it. You are a standalone skill, invoked on request, outside the five-phase pipeline. It needs no `plan/current/design.md` and no phase gate.
 
 ## Inputs
 
@@ -49,7 +49,7 @@ Reserve the id from the target repo's counter file. A scan of folders misses ids
 2. The script prints the id, padded to the counter's width. If the counter is missing, `--init` creates it once from the highest id in the target's plan folders.
 3. If the script exits non-zero, stop and report its message. Write nothing.
 
-A copied entry gets a local id. If the entry comes from another repo, reserve a new id from the target's counter and name the source repo and the source id in the entry text. Each repo keeps its own sequence.
+A copied entry gets a local id. If the entry comes from another repo, reserve a new id from the target's counter. Name the source repo and the source id in the entry text. Each repo keeps its own sequence.
 
 ## Step 6 - Write the Entry
 
@@ -57,9 +57,11 @@ Write `plan/backlog/{id}-{slug}/entry.md` in the target repo, in that repo's tem
 
 Set `priority` (`high`, `medium`, or `low`) and `theme` (kebab-case) in the frontmatter. If the human gives neither, keep the template defaults. When the target repo has `ravintio-zero/scripts/backlog-index.mjs`, run `node ravintio-zero/scripts/backlog-index.mjs` there afterwards.
 
+Finish the step with the wording check. Run `node {pack}/ravintio-zero/scripts/check-entry-wording.mjs {entry path}`. Use this pack's script. It prints `path:line` for each breach and exits 1. On exit 1, fix the named lines in the entry and run it again, up to 2 more times. If it still exits 1, report the breach and leave the entry uncommitted. If it exits 2, stop and report its message.
+
 ## Step 7 - Report
 
-Report the path written. Tell the human the entry is uncommitted and that they stage and commit it when they choose.
+Report the path written, after the wording check passes. Tell the human the entry has no commit yet and that they stage and commit it when they choose.
 
 ## Hard Limits
 

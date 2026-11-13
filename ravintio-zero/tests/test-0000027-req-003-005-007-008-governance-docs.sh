@@ -74,7 +74,7 @@ assert_contains "The feature builds or modifies an API" "$plan_content" \
 assert_contains "The feature introduces or modifies a deployed runtime service" "$plan_content" \
   "req-008: ravintio-plan states the operational model's trigger condition"
 
-README_CONTENT=$(cat "$SCRIPT_DIR/../../README.md")
+README_CONTENT=$(cat "$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)/README.md")
 assert_contains "five plan-phase artifacts by default" "$README_CONTENT" \
   "req-008: README states the default artifact count"
 

@@ -9,24 +9,21 @@ set -uo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
-WORKFLOW="$SCRIPT_DIR/../../.github/workflows/ravintio.yml"
+WORKFLOW="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel 2>/dev/null)/.github/workflows/ravintio.yml"
 HELPER="$SCRIPT_DIR/helpers/setup-workspace.ps1"
 
 if [ -f "$WORKFLOW" ]; then
-  JOB="$(awk '/^  windows-powershell:/{f=1; print; next} f && /^  [a-z][a-z-]*:/{exit} f{print}' "$WORKFLOW")"
+  # 0000409 ADR-0284: the parallel matrix is now 4 shards under Windows
+  # PowerShell 5.1, in the windows-powershell-shard job.
+  JOB="$(awk '/^  windows-powershell-shard:/{f=1; print; next} f && /^  [a-z][a-z-]*:/{exit} f{print}' "$WORKFLOW")"
 
   assert_contains "strategy:" "$JOB" "req-015: the job defines a strategy"
   assert_contains "fail-fast: false" "$JOB" "req-015: one failing entry does not cancel the other"
   assert_contains "matrix:" "$JOB" "req-015: the job defines a matrix"
-  assert_equals "2" "$(printf '%s\n' "$JOB" | grep -cE '^ *- shell: ' || true)" "req-015: the matrix has exactly two entries"
-  assert_contains "- shell: powershell" "$JOB" "req-015: one entry is Windows PowerShell 5.1"
-  assert_contains "- shell: pwsh" "$JOB" "req-015: one entry is PowerShell 7"
-  assert_contains 'shell: ${{ matrix.shell }}' "$JOB" "req-015: the step takes its shell from the matrix"
-  # GitHub rejects an expression in a step's shell key, so it must sit under
-  # the job's defaults.run.
-  assert_contains "$(printf 'defaults:\n      run:\n        shell: ${{ matrix.shell }}')" "$JOB" "req-015: the matrix shell is the job's default run shell"
-  assert_equals "1" "$(printf '%s\n' "$JOB" | grep -cE 'shell: \$\{\{' || true)" "req-015: no step sets an expression shell"
-  assert_equals "1" "$(printf '%s\n' "$JOB" | grep -c 'ravintio-zero/tests/run-tests.ps1' || true)" \
+  assert_contains "shard: [1, 2, 3, 4]" "$JOB" "req-015: the matrix has four shards"
+  assert_contains "$(printf 'defaults:\n      run:\n        shell: powershell')" "$JOB" "req-015: Windows PowerShell 5.1 is the job's default run shell"
+  assert_equals "0" "$(printf '%s\n' "$JOB" | grep -cE 'shell: \$\{\{' || true)" "req-015: no step sets an expression shell"
+  assert_equals "1" "$(printf '%s\n' "$JOB" | grep -c 'src/ravintio-zero/tests/run-tests.ps1' || true)" \
     "req-015: one run-tests.ps1 invocation per matrix entry"
   assert_contains "runs-on: windows-latest" "$JOB" "req-015: the job keeps windows-latest"
   assert_contains "contents: read" "$JOB" "req-015: the job keeps read-only contents"
@@ -35,7 +32,7 @@ if [ -f "$WORKFLOW" ]; then
     "req-015: the checkout stays pinned to a commit"
   assert_contains "persist-credentials: false" "$JOB" "req-015: the checkout leaves no token"
 
-  BASH_JOB="$(awk '/^  bash-suites:/{f=1; print; next} f && /^  [a-z][a-z-]*:/{exit} f{print}' "$WORKFLOW")"
+  BASH_JOB="$(awk '/^  bash-suites-shard:/{f=1; print; next} f && /^  [a-z][a-z-]*:/{exit} f{print}' "$WORKFLOW")"
   assert_contains 'RAVINTIO_REQUIRE_PWSH: "1"' "$BASH_JOB" "req-015: bash-suites still requires pwsh"
 else
   echo "  SKIP: no repo workflow next to ravintio-zero/, so this is a consumer copy"

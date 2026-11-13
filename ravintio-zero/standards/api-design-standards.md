@@ -17,7 +17,7 @@
 ## 2. Request/Response Format
 
 - All IDs use the format defined in the component's data contract
-- Null fields are omitted from responses (do not send `"field": null`)
+- Omit null fields from responses (do not send `"field": null`)
 - Envelope responses for collections: `{ "data": [...], "pagination": {...} }`
 
 ---
@@ -49,7 +49,7 @@ All errors use a consistent structure:
 - All endpoints require authentication unless explicitly marked as public in the OpenAPI spec
 - Use the auth strategy declared in the confirmed design (JWT, session, OAuth2, API key)
 - Authorization checks happen at the handler level, not in middleware alone
-- Rate limiting is required for all public-facing endpoints
+- All public-facing endpoints require rate limiting
 
 ---
 

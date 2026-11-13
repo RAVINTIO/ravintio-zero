@@ -8,11 +8,18 @@
  * text. Ids appear only after they pass a strict pattern. Writes nothing and
  * always exits 0.
  *
+ * Pack version: the `version:` line of ravintio-zero/component.yml is compared
+ * with `packVersion` in the first fenced json block of
+ * plan/state/pack-version.md. An absent record gives no finding. docs/about.md
+ * holds the product version and is never read for this check.
+ *
  * Migrations: plan/state/migrations.md is a ledger table with rows
  * `| {id} | {done or not applicable} | {pack version} |`. A `done` row means no
  * finding. A `not applicable` row at the current pack version (the `version:`
  * line of ravintio-zero/component.yml) means no finding unless the migration's
- * `**Detect:**` line holds a true item. Any other migration reports as pending.
+ * `**Detect:**` line holds a true item. A migration with a `**Detect:**` line
+ * that matches nothing also means no finding, whatever its ledger row says. A migration
+ * with no Detect line, or a true Detect item, reports as pending.
  * A missing or unreadable ledger reports every migration. Detect items are
  * joined by ` | `: `exists {path}`, `contains {path} {text}`, and
  * `child-exists {dir} {name}`. Paths are relative to the project root. An
@@ -70,6 +77,10 @@ function itemTrue(item) {
   return list(p(rel)).some((c) => isDir(p(rel, c)) && existsSync(p(rel, c, arg.trim())));
 }
 
+function hasDetect(text) {
+  return /^\*\*Detect:\*\*/m.test(text || "");
+}
+
 function detectTrue(text) {
   const m = /^\*\*Detect:\*\*[ \t]*(.*)$/m.exec(text || "");
   return m !== null && m[1].split(" | ").some(itemTrue);
@@ -100,22 +111,28 @@ try {
     const m = /^(\d{4})-[a-z0-9-]+\.md$/.exec(name);
     const row = m ? rows.get(m[1]) : undefined;
     if (row && row.result === "done") continue;
-    if (row && current !== null && row.version === current && !detectTrue(read(p("ravintio-zero", "migrations", name)))) continue;
+    const text = read(p("ravintio-zero", "migrations", name));
+    if (row && current !== null && row.version === current && !detectTrue(text)) continue;
+    if (hasDetect(text) && !detectTrue(text)) continue;
     out.push(`pending migration: ${m ? m[1] : "unreadable"}`);
   }
 
-  // 2. Pack version.
-  const comp = read(p("ravintio-zero", "component.yml"));
-  const about = read(p("docs", "about.md"));
-  if (comp !== null && about !== null) {
-    const ver = (t) => {
-      const m = /^version:\s*["']?([^"'\s]*)["']?\s*$/m.exec(t);
-      return m && /^\d+\.\d+\.\d+$/.test(m[1]) ? m[1] : null;
-    };
-    const a = ver(comp);
-    const b = ver(about);
-    if (a === null || b === null) out.push("pack version unreadable");
-    else if (a !== b) out.push("pack version differs from docs/about.md");
+  // 2. Pack version. The record is plan/state/pack-version.md. An absent
+  // record raises no finding. docs/about.md is never read.
+  const rec = read(p("plan", "state", "pack-version.md"));
+  if (read(p("ravintio-zero", "component.yml")) !== null && rec !== null) {
+    let recorded = null;
+    const blk = /^```json[ \t]*\r?\n([\s\S]*?)^```/m.exec(rec);
+    if (blk) {
+      try {
+        const v = JSON.parse(blk[1]).packVersion;
+        recorded = typeof v === "string" && /^\d+\.\d+\.\d+$/.test(v) ? v : null;
+      } catch {
+        recorded = null;
+      }
+    }
+    if (current === null || recorded === null) out.push("pack version unreadable");
+    else if (current !== recorded) out.push("pack version differs from plan/state/pack-version.md");
   }
 
   const currentEntries = () => list(p("plan", "current")).filter((n) => n !== ".gitkeep");
@@ -172,7 +189,7 @@ try {
   }
 
   // 10. Units in progress.
-  const unitOk = /^(?:(?:REQ|U)-\d{3}(?: (?:test-writer|implementer|refactor|validate|ship))?|P[0-4] cycle \d{1,2})$/;
+  const unitOk = /^(?:(?:REQ|U)-\d{3}(?: (?:test-writer|implementer|refactor|validate|ship|inline))?|P[0-4] cycle \d{1,2})$/;
   log.forEach((l, i) => {
     const m = /^In progress: (.*?) \(([^()]*)\)\s*$/.exec(l);
     if (!m) return;

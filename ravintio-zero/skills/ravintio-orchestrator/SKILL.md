@@ -17,10 +17,11 @@ Non-negotiable. They apply in every session, every phase.
 2. **No code without documentation.** Code and its docs land together. Never commit one without the other.
 3. **No direct schema modification.** Write a migration proposal and stop for human approval.
 4. **Destructive schema operations require human approval.** Drop column, drop table, rename: propose and stop. No exceptions.
-5. **Data is owned by one component.** Never write to data owned by another component.
+5. **One component owns each piece of data.** Never write to data another component owns.
 6. **Credentials are never in your context.** If one appears in a prompt, file, or environment, do not use it. Flag it. If it is in a file the run will commit, it is an exception stop in both run modes.
-7. **Documentation is updated after any deviation.** If implementation deviates from the spec, plan, or design, update the affected artifacts so documentation matches reality.
+7. **Update documentation after any deviation.** If implementation deviates from the spec, plan, or design, update the affected artifacts so documentation matches reality.
 8. **Commit after every meaningful artifact write.** Never batch work waiting for a phase gate. Each artifact is a commit on its own.
+   Records that share a topic group into one commit. See the grouping rule in `references/orchestrator-discovery-records.md`.
 9. **Write a build-log phase block before any phase work.** Create `plan/current/build-log.md` at discovery if absent. A missing block is a pipeline error: stop and fix it before proceeding.
 10. **The pipeline has exactly five phases, P0 to P4.** Build-log phase headings MUST use the form `### P<n>: {Phase Name}` with n from 0 to 4. Never cite a phase number outside P0 to P4.
 11. **Every run archives `plan/current/`.** The ship phase moves it to `plan/_archive/{feature-id}-{date}/` and updates incoming links. Never leave a permanent working folder behind.
@@ -28,7 +29,7 @@ Non-negotiable. They apply in every session, every phase.
 
 Read every time you log with `date -u +%Y-%m-%dT%H:%M:%SZ` and never type one.
 
-In an active initiative, stage by explicit path and never stage a `plan/backlog/` entry the step did not write. Never run `git add -f` or `git add --force`. If a file is ignored on purpose, leave it out. If it must be tracked, add a negation rule to `.gitignore`. A step session never moves, renames, or deletes `plan/.initiative-logs/`, `plan/.initiative-runner.lock`, or `plan/.initiative-queue/`. The driver and the watcher own them.
+In an active initiative, stage by explicit path and never stage a `plan/backlog/` entry the step did not write. Never run `git add -f` or `git add --force`. If git ignores a file on purpose, leave it out. If it must be tracked, add a negation rule to `.gitignore`. A step session never moves, renames, or deletes `plan/.initiative-logs/`, `plan/.initiative-runner.lock`, or `plan/.initiative-queue/`. The driver and the watcher own them.
 
 ---
 
@@ -45,22 +46,25 @@ Every request is a feature change. It runs one route: the five-phase pipeline. E
 | P4 | Ship | `P4 Ship:` | ravintio-ship |
 
 Status messages use one form: `{prefix} {Status}: {one-liner}`. The status is Starting, Resuming, Complete, Question, Blocked, or Skipped.
+Start with the time from `date +%H:%M`, read before each reply: `hh:mm {prefix} {Status}: {one-liner}`.
 - Entering a phase: `P0 Discovery: Starting: {one-liner}`
 - Resuming: `P2 Implement: Resuming: {what was in progress, what is next}`
 - Completing: `P1 Plan: Complete: {summary}`
-- Asking: `P0 Discovery: Question: {routine question}`. `Question:` asks a routine question. `Blocked:` marks an exception stop only.
+- Asking: `P0 Discovery: Question: {routine question}`. `Question:` asks the human a question. `Blocked:` marks an exception stop only.
 - Blocking: `P0 Discovery: Blocked: {specific gap}`
 - Skipping: `P3 Validate: Skipped: {reason}`
 
 Initiative stages use the prefixes I-A to I-E. Read `ravintio-zero/standards/roadmap-standards.md` for the list and examples.
 
-Out-of-phase work uses `Supervise:` with the same form, as in `Supervise: {Status}: {one-liner}`. Examples are supervising an initiative driver, filing backlog entries, and answering questions while another session runs a step.
+Out-of-phase work uses `Supervise:` with the same form, as in `Supervise: {Status}: {one-liner}`.
 
 **Reporting rule.** A reply reports results, deviations, failures, and decisions the human must make. A reply never states that the agent followed a standing rule. The exception is a rule that blocked an action or a rule the agent departed from.
 
-In a step session, never end your turn before `I-D Advance: Complete:` or a `Blocked:` line. Carry on from each phase to the next.
+**Actor names.** A reply names each actor by role and never uses "I" or "you".
 
-I-A to I-E are stage letters, not phase numbers. The pipeline still has exactly five phases, P0 to P4. When an initiative is involved, read `ravintio-zero/standards/roadmap-standards.md` first.
+In a step session, never end your turn before `I-D Advance: Complete:`, `I-D Advance: Ready:`, a `Blocked:` line, or a `Question:` line. A step that waits keeps working. Carry on from each phase to the next.
+
+I-A to I-E are stage letters, not phase numbers. The pipeline still has exactly five phases, P0 to P4. When the work involves an initiative, read `ravintio-zero/standards/roadmap-standards.md` first.
 
 ---
 
@@ -83,6 +87,7 @@ Read these reference files before you act on their topic. Each holds rules moved
 
 | Before you act on… | Read first |
 |--------------------|------------|
+| A brief that describes a fix or a small change | `references/orchestrator-light-discovery.md` |
 | Opening a fresh P0, or sizing and splitting a release | `references/orchestrator-discovery-coaching.md` |
 | Detecting or confirming an adoption mode, or a retrofit scan | `references/orchestrator-adoption-modes.md` |
 | The Scope Lock Challenge | `references/orchestrator-scope-lock.md` |
@@ -97,26 +102,15 @@ Read these reference files before you act on their topic. Each holds rules moved
 | Presenting the design for confirmation | `references/orchestrator-p0-gate.md` |
 | Invoking P1, P2, P3, or P4, or stating context size at a gate | `references/orchestrator-phase-invocation.md` |
 | An exception stop, or writing a `Blocked:` line | `references/orchestrator-exception-stops.md` |
+| Clearing context at discovery start or after ship | `references/orchestrator-context-hygiene.md` |
 
 ---
 
 Phase Skip Protocol, Pause Command, and Park Command are in the Pack Index row for `orchestrator-session-commands.md`.
 
-## Context Hygiene
-
-Clear context at two bookends: discovery start (fresh runs only) and after ship completes. Issue `/clear` or the host tool's equivalent. If the tool has none, ask the human to clear manually and confirm before continuing. Mid-run, if context accumulates material that no longer serves the active phase, offer compaction. Advisory only: never block on it.
-
----
-
 ## P0: Discovery
 
-Opening Briefing, Decomposition, Adoption Modes (the table that step 7 uses), Scope Lock Challenge, Discovery Audit Trail, and Skill Map are in the reference files that the Pack Index lists. Read each file before you act on its topic.
-
----
-
----
-
----
+The Pack Index lists files for Opening Briefing, Decomposition, Adoption Modes, Scope Lock Challenge, Discovery Audit Trail, and Skill Map. Step 7 uses the Adoption Modes table. Read each file before you act on its topic.
 
 Mid-Pipeline Requirement Changes is in the Pack Index row for `orchestrator-mid-pipeline-changes.md`.
 

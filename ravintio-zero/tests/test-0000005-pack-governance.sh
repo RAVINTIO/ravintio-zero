@@ -13,6 +13,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
 ZERO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+REPO_ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
 STANDARDS="$ZERO_DIR/standards"
 SKILLS="$ZERO_DIR/skills"
 MIGRATIONS="$ZERO_DIR/migrations"
@@ -134,7 +135,7 @@ assert_file_exists "$ZERO_DIR/skills-inbox/.gitkeep" "req-010: skills-inbox dire
 echo ""
 echo "=== req-011: skill registries ==="
 
-assert_file_exists "$ZERO_DIR/../ravintio-overrides/capability-skills/.gitkeep" "req-011: ravintio-overrides/capability-skills/ exists"
+assert_file_exists "$REPO_ROOT/ravintio-overrides/capability-skills/.gitkeep" "req-011: ravintio-overrides/capability-skills/ exists"
 assert_contains "Copy-CapabilitySkills"          "$(cat "$ZERO_DIR/setup.ps1")" "req-011: setup.ps1 has Copy-CapabilitySkills"
 assert_contains "capability-skills"              "$(cat "$ZERO_DIR/setup.ps1")" "req-011: setup.ps1 copies from capability-skills"
 
@@ -153,7 +154,7 @@ echo "=== req-013: formatting standards ==="
 
 assert_file_exists "$STANDARDS/formatting-standards.md"      "req-013: formatting-standards.md exists"
 FMT=$(cat "$STANDARDS/formatting-standards.md")
-assert_contains "DD MMM YYYY"                   "$FMT" "req-013: DD MMM YYYY date format"
+assert_contains "2026-08-18"                    "$FMT" "req-013: ISO body text date format"
 assert_contains "British English"               "$FMT" "req-013: British English locale"
 assert_contains "Verbosity"                     "$FMT" "req-013: verbosity standard"
 
@@ -196,7 +197,7 @@ else
 fi
 
 assert_contains "ravintio-overrides"           "$(cat "$ZERO_DIR/setup.ps1")" "req-016: setup.ps1 reads ravintio-overrides"
-assert_file_exists "$ZERO_DIR/../ravintio-overrides/library-standards/.gitkeep" "req-016: ravintio-overrides scaffolded"
+assert_file_exists "$REPO_ROOT/ravintio-overrides/library-standards/.gitkeep" "req-016: ravintio-overrides scaffolded"
 
 # -----------------------------------------------------------------------
 

@@ -10,10 +10,40 @@ PowerShell 7. All suites cover the Claude Code target only.
 |------|----------|
 | `test-*.sh` | Per-feature Bash suites |
 | `test-*.ps1` | Per-feature PowerShell suites, which run `setup.ps1` |
-| `helpers/` | Shared assertions (`assert.sh`, `assert.ps1`) and the `setup.ps1` workspace helper |
+| `helpers/` | Shared assertions (`assert.sh`, `assert.ps1`), the pack text helpers, `commit_workspace_pack`, `isolate_git_env`, `with_timeout` (`timeout.sh`), and the `setup.ps1` workspace helper |
+| `brand-guard-allowlist.txt` | The brand guard allowlist. `scripts/brand-guard.sh` (the `pre-push` check) and `test-0000160-req-006-brand-guard.sh` (CI) both read it. Both skip the allowlist files by exact path through `brand_guard_skips_path`, so the file holds no row for itself. |
 | `regression/` | The long-term regression pack and its manifest |
 | `run-tests.sh` | The runner for every suite |
 | `run-tests.ps1` | The runner for the PowerShell suites only |
+
+## Reading pack text
+
+A suite that asserts what a skill, standard, or template says reads it through
+a helper in `helpers/assert.sh`. See section 8 of `standards/testing-standards.md`.
+
+- `orch_section "<heading>"` returns a section from `SKILL.md`, the orchestrator
+  references, or the roadmap standards.
+- `rule_text <id>` and `assert_rule <id> <term>...` read a rule by its
+  `<!-- rule: <id> -->` anchor.
+- `strip_rule_anchors` removes anchors before a line-by-line comparison.
+- `with_timeout <seconds> <command>...` caps a command. Source
+  `helpers/timeout.sh` first.
+
+## Workspaces that run setup
+
+Setup copies only committed pack and override files, so a suite that runs `setup.sh` commits the pack in its workspace first. Call `commit_workspace_pack "$ws"` from `helpers/assert.sh` after the copy and after any file you plant in `ravintio-zero/` or `ravintio-overrides/`. The PowerShell helper `Invoke-Setup` commits before each run. `Save-WorkspacePack` does the same on request.
+
+## Git isolation
+
+Both runners give each suite a temporary global git config that holds `user.useConfigOnly = true`. They hide the system config and clear the author, committer, and `EMAIL` variables (0000462, ADR-0303). A commit with no identity then fails on a developer machine, as it does on a CI runner. A suite that commits sets `-c user.name` and `-c user.email` in its own git call. `helpers/git-isolation.sh` holds `isolate_git_env` and `remove_git_isolation` for the Bash runner. `run-tests.ps1` sets the same variables.
+
+## Test scope in a run
+
+A TDD cycle runs the new test and the tests that cover the changed files. P3 runs
+the full suite once, in a clean clone of `HEAD`, with `scripts/clean-clone-test.mjs`.
+`scripts/baseline-failures.mjs` compares the failed suites with the ones P0
+recorded, so P3 stops only on a new failure. `testing-standards.md` section 9
+holds the rules.
 
 ## Running the tests
 
@@ -22,7 +52,7 @@ bash ravintio-zero/tests/run-tests.sh
 ```
 
 The runner discovers every `test-*.sh` and `test-*.ps1` in this directory by
-glob. No suite is registered by hand. Add a conforming file and it runs on the
+glob. You register no suite by hand. Add a conforming file and it runs on the
 next invocation. After the per-feature suites, the runner executes every suite
 under `regression/` and reports the two sets separately.
 
@@ -48,6 +78,10 @@ after the last. If a suite changes one, the run fails and names the path with
 `Tree changed during the run`. The check skips ignored files and skips itself
 outside a git repository.
 
+Git ignores `.claude/skills/`, so the tree check cannot see it. Both runners
+list that folder before the first suite and after the last. If a suite adds or
+removes a path, the run fails and names it with `Skills changed during the run`.
+
 You can also run a single suite directly:
 
 ```bash
@@ -66,12 +100,22 @@ clean up after themselves, so a run leaves your working tree unaffected.
 
 ## CI
 
-The `windows-powershell` job in `.github/workflows/ravintio.yml` runs
-`run-tests.ps1` on `windows-latest`, once under each host.
+CI splits the suites into shards that run in parallel. Both runners read
+`RAVINTIO_SHARD=i/n` and run only shard i of n. To run one shard yourself:
 
-The `bash-suites` job runs `run-tests.sh` on `ubuntu-latest`. It sets
-`RAVINTIO_REQUIRE_PWSH=1`, so the run fails if `pwsh` is missing. The job
-also runs the `.ps1` suites under `pwsh` on Linux.
+```bash
+RAVINTIO_SHARD=2/4 bash ravintio-zero/tests/run-tests.sh
+```
+
+The `windows-powershell-shard` job in `.github/workflows/ravintio.yml` runs
+`run-tests.ps1` on `windows-latest` under Windows PowerShell 5.1, in 4 shards.
+
+The `bash-suites-shard` job runs `run-tests.sh` on `ubuntu-latest` in 4
+shards. It sets `RAVINTIO_REQUIRE_PWSH=1`, so the run fails if `pwsh` is
+missing. It also runs the `.ps1` suites under `pwsh` on Linux.
+
+The `bash-suites` and `windows-powershell (powershell)` jobs carry the
+required check names. Each one passes only when every shard passed.
 
 ## The regression pack
 
@@ -98,11 +142,12 @@ The runner picks the file up automatically. Nothing else needs registering.
 
 ### Helper guards
 
-- `print_summary` fails a Bash suite that calls an undefined `assert_*` function. It scans the suite for lines that start with an `assert_*` word and prints `FAIL: undefined assert function: {name}` for each name that is not a function. A call after `&&` or inside `$(...)` is not scanned.
+- `print_summary` fails a Bash suite that calls an undefined `assert_*` function. It scans the suite for lines that start with an `assert_*` word and prints `FAIL: undefined assert function: {name}` for each name that is not a function. The scan skips a call after `&&` or inside `$(...)`.
 - `assert_not_contains needle haystack message` passes when the needle is absent.
 - `stale_install_skip_reason root` returns 0 and prints a reason when an initiative is active and `.claude/skills/.ravintio-manifest` is older than the newest pack skill. A suite that compares installed copies prints `SKIP: {reason}` instead of comparing.
 
 ### Step activity
 
 - `test-0000240-req-001-driver-stream-args.sh` checks the driver passes `--output-format stream-json --verbose`, keeps the log at mode 600, and prints no step content.
-- `test-0000240-req-002-activity-lines.sh` checks that the watcher prints one `I-C Run: activity:` line per event, in order, at 200 characters or fewer, and that the skill and standards describe them. `--since-bytes {n}` treats the first n bytes of the step log as seen.
+- `test-0000534-req-001-003-step-clock.sh` checks the driver passes `--include-hook-events` on a first run and a resume, and that `step-clock-check.mjs` fails a step log with tool calls and no clock output.
+- `test-0000240-req-002-activity-lines.sh` checks that the watcher prints one `I-C Run: activity:` line per event, in order, at 200 characters or fewer. It also checks that the skill and standards describe them. The flag `--since-bytes {n}` treats the first n bytes of the step log as seen.

@@ -16,8 +16,8 @@ set -uo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
-ZERO_DIR="$SCRIPT_DIR/.."
-REPO_ROOT="$(cd "$ZERO_DIR/.." && pwd)"
+ZERO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+REPO_ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
 
 file_exists() { [ -f "$1" ] && echo "yes" || echo "no"; }
 grep_has() { grep -q "$1" "$2" 2>/dev/null && echo "yes" || echo "no"; }
@@ -32,6 +32,7 @@ make_workspace() {
   dir=$(mktemp -d -t ravintio_0000029_test_XXXXXX)
   cp -r "$ZERO_DIR" "$dir/ravintio-zero"
   git init "$dir" >/dev/null 2>&1
+  commit_workspace_pack "$dir"
   git config --global --add safe.directory "$dir" >/dev/null 2>&1 || true
   echo "$dir"
 }
@@ -64,6 +65,7 @@ echo "=== (c) req-001: ravintio-overrides/instructions/ content present after re
 
 mkdir -p ravintio-overrides/instructions
 printf '### Test Override\nOVERRIDE-MARKER-0000029\n' > ravintio-overrides/instructions/custom-900-test.md
+commit_workspace_pack "$PWD"
 bash ravintio-zero/setup.sh claude-code >/tmp/ravintio_0000029_c.log 2>&1
 assert_exit_zero "$?" "(c): rerun with overrides exits 0"
 assert_equals "yes" "$(grep_has "OVERRIDE-MARKER-0000029" "CLAUDE.md")" \

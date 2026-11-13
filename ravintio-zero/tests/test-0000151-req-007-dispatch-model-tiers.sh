@@ -7,7 +7,7 @@ set -uo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 ZERO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-ROOT_DIR="$(cd "$ZERO_DIR/.." && pwd)"
+ROOT_DIR="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
 
 STD="$ZERO_DIR/standards/agent-dispatch-standards.md"
 IMPL="$ZERO_DIR/skills/ravintio-implement/SKILL.md"
@@ -24,7 +24,7 @@ LOOP=$(sed -n '/^## TDD inner loop/,/^## Rules/p' "$IMPL")
 assert_contains 'recommended_model' "$LOOP" "TDD loop names recommended_model"
 assert_contains 'fails twice' "$LOOP" "haiku unit failing twice is covered"
 assert_contains 'retry' "$LOOP" "retry on sonnet is covered"
-assert_contains 'five-attempt escalation is unchanged' "$LOOP" "five-attempt escalation unchanged"
+assert_contains 'five-attempt escalation stays the same' "$LOOP" "five-attempt escalation unchanged"
 
 echo "=== (b) model frontmatter and installed copies ==="
 for s in test-writer implementer refactor; do

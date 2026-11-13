@@ -8,13 +8,13 @@
 
 ## Purpose
 
-The Iteration Log is the audit trail. It records what happened during the pipeline run: which steps completed, what self-corrections were needed, what quirks were discovered, and what the agent recommends the human review. It's the first thing a human reads before approving a PR.
+The Iteration Log is the audit trail. It records what happened during the pipeline run. That covers which steps completed, which self-corrections the agent needed, which quirks it found, and what it recommends the human review. It's the first thing a human reads before approving a PR.
 
 ---
 
 ## Who Writes It
 
-The **implement skill** writes it during the final documentation step. If the run is interrupted before that step, the last active agent writes it.
+The **implement skill** writes it during the final documentation step. If an interruption ends the run before that step, the last active agent writes it.
 
 ---
 
@@ -42,15 +42,15 @@ Anything unusual the agent noticed during the run. These are also written to `qu
 
 ### Recommended Improvements
 
-Not blockers, but things the human should consider. These are flagged for attention at the PR gate:
-- "The auth token TTL is hardcoded - consider making it configurable"
+Not blockers, but things the human should consider. The agent flags these for attention at the PR gate:
+- "The code hardcodes the auth token TTL - consider making it configurable"
 - "Test coverage for the error paths is thin - 3 out of 7 error cases have tests"
 
 ---
 
 ## Reading a Pipeline Run
 
-When reviewing a PR that was produced by RAVINTIO:
+When reviewing a PR that RAVINTIO produced:
 
 1. **Check the phase table** - are all phases complete?
 2. **Read the self-correct log** - were there many retries? Were they for the same issue? This signals a spec gap, not an agent failure.

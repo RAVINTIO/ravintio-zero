@@ -1,0 +1,213 @@
+---
+title: "Build Log - 0000507-hook-check-after-setup"
+summary: "Working record of the pipeline run, maintained by the orchestrator."
+---
+# Build Log - 0000507-hook-check-after-setup
+
+> Created at discovery (P0). Appended by the orchestrator at each phase boundary. Survives session changes.
+
+## Header
+
+| Field | Value |
+|-------|-------|
+| Feature ID | `0000507-hook-check-after-setup` |
+| Pipeline start | `2026-11-12T07:21:09Z` |
+| Tool | `Claude Code` |
+| Primary model | `claude-sonnet-5-5` |
+| Cheaper model | `claude-haiku-5-5` |
+| Run speed | `standard` |
+
+---
+
+## Phase Log
+
+### P0: Discovery
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-12T07:21:09Z` |
+| End | `2026-11-12T13:41:00Z` |
+| Wall clock | `379` |
+| Model tier | primary |
+| Skills loaded | ravintio-orchestrator |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | `Queue item migration-done-step-55: coordinator note that migration 0009 has finished. Merged origin/initiative/0000360-backlog-sweep. Resume detection reports no pending migration. Note kept at plan/current/coordinator-instruction-migration-done.md.` |
+
+- Run mode: autonomous (2026-11-12T13:39:43Z)
+- Scope Lock (happy path): every hook passes and the driver carries on [source: draft-accepted (initiative)]
+- Scope Lock (first-run path): the check runs against a fresh install [source: draft-accepted (initiative)]
+- Scope Lock (error path): the script names a failing hook and the driver prints Blocked [source: draft-accepted (initiative)]
+- Scope Lock (cross-session continuity): the check keeps no state [source: draft-accepted (initiative)]
+- Scope Lock complete. All four scenario paths captured.
+- Decision rows naming step 55: none.
+- Design confirmed: draft-accepted (initiative). The human confirmed three design points on 2026-11-12.
+
+Complete: P0 (2026-11-12T13:41:00Z)
+
+---
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-12T13:41:00Z` |
+| End | `2026-11-12T13:42:50Z` |
+| Wall clock | `1` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | `Autonomous run, so no gate stop. Consistency check clean. Human settings check clean. ADR 0339 written.` |
+
+Complete: P1 (2026-11-12T13:42:50Z)
+
+---
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-12T13:43:32Z` |
+| End | `2026-11-12T14:25:37Z` |
+| Wall clock | `42` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | `Three units in three dependent batches, so nothing runs in parallel. Each unit is small and shares files with the next, so the agent runs the TDD loop inline.` |
+
+- In progress: U-1 hook-check (2026-11-12T13:44:22Z)
+- RED: U-1 hook-check (2026-11-12T13:44:22Z)
+
+- GREEN: U-1 hook-check (2026-11-12T13:44:59Z)
+- Done: U-1 hook-check (inline, primary, none, 2026-11-12T13:44:59Z)
+- Tests run: REQ-001, REQ-002: test-0000507-req-001-hook-check.sh (2026-11-12T13:44:59Z)
+
+- In progress: U-2 driver-wiring (2026-11-12T13:46:24Z)
+- RED: U-2 driver-wiring (2026-11-12T13:46:24Z)
+- GREEN: U-2 driver-wiring (2026-11-12T13:46:24Z)
+- Done: U-2 driver-wiring (inline, primary, none, 2026-11-12T13:46:24Z)
+- Tests run: REQ-003: test-0000507-req-003-driver-hook-check.sh, test-0000448-req-002-driver-runs-setup-command.sh, test-0000313-req-001-driver-setup-stop.sh (2026-11-12T13:46:24Z)
+
+- In progress: U-3 docs (2026-11-12T13:46:59Z)
+- Done: U-3 docs (inline, primary, none, 2026-11-12T13:46:59Z)
+
+- Tests run: full suite: 446 passed, 2 failed (2026-11-12T14:25:37Z)
+- The first full run failed test-0000321-req-005-applied.sh. The pulled-in entry left the backlog index stale. The agent rebuilt the index and that suite now passes.
+- The second failure, test-0000450-req-004-report-format.sh, also fails on the base commit. Migration 0009 archived ADR 0314.
+- Baseline: plan/current/baseline-failures.md lists that one inherited suite.
+- A scratch clone of the base commit showed 23 more failures in the queue suites. Those suites need the real repo environment and pass in the worktree, so the file omits them.
+
+Complete: P2 (2026-11-12T14:25:37Z)
+
+---
+
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-12T14:26:18Z` |
+| End | `2026-11-12T14:49:00Z` |
+| Wall clock | `22` |
+| Model tier | primary |
+| Skills loaded | ravintio-validate-and-accept |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | `Autonomous run. The agent writes evidence to acceptance-evidence.md.` |
+
+- Rework: REQ-002: execution verification showed that a missing guard script exits 2 through guard-run.mjs and passed the check. The agent added the launcher-line rule (2026-11-12T14:27:25Z)
+
+- Tests run: full suite: 445 passed, 3 failed, clean clone (2026-11-12T14:49:00Z). All 3 failures also fail on the base commit. OS gap: local macos, CI ubuntu and windows.
+- Tests run: REQ-001, REQ-002, REQ-003: test-0000507-req-001-hook-check.sh, test-0000507-req-003-driver-hook-check.sh, test-0000321-req-005-applied.sh (2026-11-12T14:49:00Z)
+- Skipped: docs edit subagent. prose-check exits 0 on the six changed docs and the agent found no problem a script misses.
+
+- Postmortem: plan/postmortems/2026-11-12-missing-guard-passed-hook-check.md REQ-002 (2026-11-12T14:50:27Z)
+
+Complete: P3 (2026-11-12T14:49:00Z)
+
+---
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-12T14:49:49Z` |
+| End | `2026-11-12T14:49:49Z` |
+| Wall clock | `0` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | `Initiative step: the agent raises the PR first, then archives after green CI.` |
+
+- CI duration: 376s (run 43241613073, 2026-11-12T14:59:14Z)
+
+Complete: P4 (2026-11-12T14:49:49Z)
+
+---
+
+<!-- Copy and fill in this block at each phase boundary. Headings use the form
+     "### P<n>: {Phase Name}" with n from 1 to 4 and the phase names
+     P1: Plan, P2: Implement, P3: Validate and Accept, P4: Ship.
+
+### P<n>: {Phase Name}
+
+| Field | Value |
+|-------|-------|
+| Start | `{{timestamp}}` |
+| End | `{{timestamp, filled when the phase completes}}` |
+| Wall clock | `{{whole minutes from Start to End}}` |
+| Model tier | primary / cheaper |
+| Skills loaded | `{{skill names}}` |
+| Agents spawned | `{{count}}` |
+| MCP calls | `{{count}}` |
+| Parallel task batches | `{{count}}` |
+| Notes | `{{free text or "none"}}` |
+
+-->
+
+<!-- Skipped phase. A phase with no block needs a line "Skipped: P<n> ({reason})".
+     Ship runs ravintio-zero/scripts/build-log-check.mjs, which fails a missing
+     block that has no such line.
+-->
+
+<!-- Progress markers. Each dispatched unit adds these lines under its phase
+     block, per "Progress Markers and Interrupted Units" in
+     ravintio-zero/standards/agent-dispatch-standards.md:
+
+- In progress: {unit} ({ISO-8601 timestamp})
+- RED: {unit} ({ISO-8601 timestamp})
+- GREEN: {unit} ({ISO-8601 timestamp})
+- Done: {unit} ({class}, {tier}, {effort}, {ISO-8601 timestamp})
+- Resumed after interruption: {unit} rerun, {stash note}
+- Tests run: REQ-{nnn}: {test files} ({ISO-8601 timestamp})
+- Tests run: full suite: {n} passed, {m} failed ({ISO-8601 timestamp})
+- Audit: re-run at P1 ({result})
+
+-->
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `448 minutes, including a pause` |
+| Total agents spawned | `0` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `0` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `1` |
+| Phases skipped | `none` |
+
+- Decisions: none name step 55
+- Queue item migration-done-step-55: committed to plan/current/coordinator-instruction-migration-done.md
+- Queue item design-confirmed-step-55: committed to plan/current/coordinator-instruction-design-confirmed.md. The human confirmed three design points. Deleted pause.md, wrote design.md, restarted the baseline run.

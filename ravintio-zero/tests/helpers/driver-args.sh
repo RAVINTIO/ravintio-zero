@@ -3,7 +3,7 @@
 
 # Prints the fixed argument prefix.
 driver_args_prefix() {
-  printf '%s' '-p --output-format stream-json --verbose --permission-mode auto'
+  printf '%s' '-p --output-format stream-json --verbose --include-hook-events --permission-mode auto --append-system-prompt Write all prose to ravintio-zero/standards/writing-standards.md.'
 }
 
 # driver_args <model> <max-turns or ""> <prompt words...>: prints the full argument line the

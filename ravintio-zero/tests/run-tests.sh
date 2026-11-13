@@ -7,6 +7,7 @@
 #   RAVINTIO_REQUIRE_PWSH=1     fail the run when pwsh is missing (0000036 ADR-002)
 #   RAVINTIO_PREFLIGHT_ONLY=1   check for stray files, run no suite, and exit
 #   RAVINTIO_TEST_QUIET=1       hide PASS lines and banners, keep every failure and the summary
+#   RAVINTIO_SHARD=i/n          run only shard i of n of the suites (0000409 ADR-0284)
 #
 # Under the totals the runner lists each failed suite by file name, in quiet mode too (0000358).
 #
@@ -37,6 +38,12 @@ while IFS= read -r name; do
   esac
 done <<< "$(compgen -e | grep '^RAVINTIO_' || true)"
 
+# Git isolation (0000462, ADR-0303): each suite sees a global git config that refuses to guess an
+# identity, so a commit with no identity fails here as it does on a CI runner.
+source "$SCRIPT_DIR/helpers/git-isolation.sh"
+isolate_git_env
+trap remove_git_isolation EXIT
+
 # Prints one "path<TAB>hash" line per modified, deleted, or untracked file. Fails outside a git repository.
 snapshot_tree() {
   local top f
@@ -50,6 +57,16 @@ snapshot_tree() {
   done | LC_ALL=C sort
 }
 
+# Prints the sorted paths under .claude/skills/ of the repository (0000381 REQ-001). The folder is
+# ignored by git, so the tree snapshot cannot see it. A suite that empties it fails the run.
+skills_listing() {
+  local top
+  top="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel 2>/dev/null)" || return 0
+  [ -d "$top/.claude/skills" ] || return 0
+  (cd "$top" && find .claude/skills -mindepth 1 -print 2>/dev/null | LC_ALL=C sort)
+}
+
+SKILLS_BEFORE="$(skills_listing)"
 TREE_BEFORE=""
 TREE_CHECK=0
 if TREE_BEFORE="$(snapshot_tree)"; then TREE_CHECK=1; fi
@@ -75,12 +92,17 @@ KNOWN_NON_SUITES=(
   "test-0000164-req-001-gate-write-outside-project.mjs"  # called by the req-001 .sh suite
   "test-0000164-req-002-gate-write-documented-scope.mjs" # called by the req-002 .sh suite
   "test-0000164-req-006-gate-write-symlink-cases.mjs"    # called by the req-006 .sh suite
+  "test-0000393-req-001-gate-write-shell.mjs"            # called by the 0000393 req-001 .sh suite
   "regression/test-gate-write-windows.mjs" # the regression copy of the same
   "regression/regression-manifest.json"    # the promoted-suite list
   "regression/.gitkeep"                    # keeps the folder in git
+  "brand-guard-allowlist.txt"              # the brand guard allowlist, read by pre-push and the CI brand test (0000394)
   "helpers/assert.sh"                      # Bash assert helpers
+  "helpers/git-isolation.sh"               # isolate_git_env, the runner's git config isolation (0000462)
+  "helpers/timeout.sh"                    # with_timeout, the portable time limit (0000380)
   "helpers/version.sh"                     # version comparison for the 0000160 req-004 and 0000164 req-011 suites
   "helpers/driver-args.sh"                 # claude arguments the driver passes, for the driver suites (0000354 REQ-004)
+  "helpers/scheduler-fixture.sh"           # git repo and stub fixtures for the concurrent driver suites (0000379)
   "helpers/unguarded-jobs.sh"              # lists workflow jobs with no guard and no marker (0000355 REQ-003)
   "helpers/assert.ps1"                     # PowerShell assert helpers (0000036 ADR-002)
   "helpers/setup-workspace.ps1"            # temporary projects for the setup.ps1 suites
@@ -93,6 +115,8 @@ KNOWN_NON_SUITES=(
   "fixtures/0000039-setup-hardening/deep-settings.json"       # a value nested 15 levels deep (0000039 req-003)
   "fixtures/0000151-orchestrator-skill-base.md"               # orchestrator SKILL.md at the base commit (0000151 req-011)
   "fixtures/0000243-resume-detection-base.md"                 # the Resume Detection section before 0000243 (0000243 req-005)
+  "fixtures/0000387-mermaid-no-diagram/README.md"             # what the 0000387 fixture holds
+  "fixtures/0000387-mermaid-no-diagram/criteria.md"           # a Mermaid criterion in a repo with no diagram (0000387 req-003)
 )
 
 is_known_file() {
@@ -123,6 +147,33 @@ if [ "${RAVINTIO_PREFLIGHT_ONLY:-0}" = "1" ]; then
   [ "$UNDISCOVERED" -eq 0 ]
   exit $?
 fi
+
+# ── Shard (0000409) ───────────────────────────────────────────────────────────
+#
+# RAVINTIO_SHARD=i/n runs only shard i of n. Suites are numbered from 0 in run
+# order, feature suites then regression suites, and suite k runs when k mod n
+# is i - 1. CI runs each shard as its own job. Unset, every suite runs.
+SHARD_I=1
+SHARD_N=1
+if [ -n "${RAVINTIO_SHARD:-}" ]; then
+  if [[ "$RAVINTIO_SHARD" =~ ^([0-9]+)/([0-9]+)$ ]] && [ "${BASH_REMATCH[2]}" -ge 1 ] \
+    && [ "${BASH_REMATCH[1]}" -ge 1 ] && [ "${BASH_REMATCH[1]}" -le "${BASH_REMATCH[2]}" ]; then
+    SHARD_I="${BASH_REMATCH[1]}"
+    SHARD_N="${BASH_REMATCH[2]}"
+    echo "Shard $SHARD_I of $SHARD_N"
+  else
+    echo "RAVINTIO_SHARD must be i/n with 1 <= i <= n, not '$RAVINTIO_SHARD'"
+    exit 2
+  fi
+fi
+SUITE_INDEX=0
+
+# Returns 0 when the next suite in run order belongs to this shard.
+in_shard() {
+  local k=$SUITE_INDEX
+  SUITE_INDEX=$((SUITE_INDEX + 1))
+  [ $((k % SHARD_N)) -eq $((SHARD_I - 1)) ]
+}
 
 HAVE_PWSH=0
 command -v "$PWSH" >/dev/null 2>&1 && HAVE_PWSH=1
@@ -183,6 +234,7 @@ run_suite() {
 # hardcoded list silently skipped 5 of 14 suites, including this feature's own).
 for suite in "$SCRIPT_DIR"/test-*.sh "$SCRIPT_DIR"/test-*.ps1; do
   [ -e "$suite" ] || continue
+  in_shard || continue
   run_suite "$suite"
 done
 
@@ -203,6 +255,7 @@ if [ "${#REGRESSION_TESTS[@]}" -eq 0 ]; then
   echo "  No regression tests yet."
 else
   for regression_test in "${REGRESSION_TESTS[@]}"; do
+    in_shard || continue
     run_one "$regression_test"
     case $? in
       0) REGRESSION_PASS=$((REGRESSION_PASS + 1)) ;;
@@ -227,6 +280,17 @@ if [ "$TREE_CHECK" -eq 1 ]; then
   fi
 fi
 
+SKILLS_CHANGED=0
+SKILLS_AFTER="$(skills_listing)"
+if [ "$SKILLS_BEFORE" != "$SKILLS_AFTER" ]; then
+  echo ""
+  while IFS= read -r path; do
+    [ -n "$path" ] || continue
+    echo "Skills changed during the run: $path"
+    SKILLS_CHANGED=$((SKILLS_CHANGED + 1))
+  done <<< "$(comm -3 <(printf '%s\n' "$SKILLS_BEFORE") <(printf '%s\n' "$SKILLS_AFTER") | sed 's/^[[:space:]]*//' | LC_ALL=C sort -u)"
+fi
+
 # ── Summary ───────────────────────────────────────────────────────────────────
 
 echo ""
@@ -243,6 +307,9 @@ fi
 if [ "$TREE_CHANGED" -gt 0 ]; then
   echo "Changed paths:     $TREE_CHANGED (named above)"
 fi
+if [ "$SKILLS_CHANGED" -gt 0 ]; then
+  echo "Changed skills:    $SKILLS_CHANGED (named above)"
+fi
 if [ "$UNDISCOVERED" -gt 0 ]; then
   echo "Undiscovered files: $UNDISCOVERED (named above)"
 fi
@@ -254,7 +321,7 @@ if [ "$PS_SKIPPED" -gt 0 ] && [ "${RAVINTIO_REQUIRE_PWSH:-0}" = "1" ]; then
   PS_REQUIRED_FAIL=1
 fi
 
-if [ "$TOTAL_FAIL" -eq 0 ] && [ "$REGRESSION_FAIL" -eq 0 ] && [ "$UNDISCOVERED" -eq 0 ] && [ "$TREE_CHANGED" -eq 0 ] && [ "$PS_REQUIRED_FAIL" -eq 0 ]; then
+if [ "$TOTAL_FAIL" -eq 0 ] && [ "$REGRESSION_FAIL" -eq 0 ] && [ "$UNDISCOVERED" -eq 0 ] && [ "$TREE_CHANGED" -eq 0 ] && [ "$SKILLS_CHANGED" -eq 0 ] && [ "$PS_REQUIRED_FAIL" -eq 0 ]; then
   echo "All tests passed."
   exit 0
 else

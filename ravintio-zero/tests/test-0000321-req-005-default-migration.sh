@@ -9,6 +9,7 @@ set -uo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 ZERO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
+source "$SCRIPT_DIR/helpers/timeout.sh"
 
 HELPER="$ZERO_DIR/migrations/migrate-backlog-priority-and-theme.sh"
 MIGRATION="$ZERO_DIR/migrations/0007-backlog-priority-and-theme.md"
@@ -114,7 +115,7 @@ if command -v pwsh >/dev/null 2>&1 && [ -f "${HELPER_PS1:-$ZERO_DIR/migrations/m
   { printf -- '---\r\n'; for i in $(seq 1 60); do printf 'k%s: v\r\n' "$i"; done; } > "$R/plan/backlog/0000001-open/entry.md"
   cp "$R/plan/backlog/0000001-open/entry.md" "$WS/before.md"
   START=$(date +%s)
-  ( cd "$R" && perl -e 'alarm 20; exec @ARGV' pwsh -NoProfile -File "$ZERO_DIR/migrations/migrate-backlog-priority-and-theme.ps1" >/dev/null 2>&1 ); CODE=$?
+  ( cd "$R" && with_timeout 20 pwsh -NoProfile -File "$ZERO_DIR/migrations/migrate-backlog-priority-and-theme.ps1" >/dev/null 2>&1 ); CODE=$?
   ELAPSED=$(( $(date +%s) - START ))
   assert_equals "0" "$CODE" "ps1 helper finishes on an unclosed CRLF block"
   assert_equals "yes" "$([ "$ELAPSED" -lt 10 ] && echo yes || echo no)" "ps1 helper finishes inside 10 seconds ($ELAPSED)"

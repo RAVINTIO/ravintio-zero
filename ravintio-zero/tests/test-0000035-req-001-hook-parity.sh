@@ -59,13 +59,14 @@ echo "=== req-001 (a): setup.ps1 declares the same entries a setup.sh run writes
 WS=$(mktemp -d -t ravintio_0000035_req001_test_XXXXXX)
 cp -r "$ZERO_DIR" "$WS/ravintio-zero"
 git init "$WS" >/dev/null 2>&1
+commit_workspace_pack "$WS"
 (cd "$WS" && bash ravintio-zero/setup.sh claude-code >/dev/null 2>&1)
 SH_LIST="$(sh_entries "$WS/.claude/settings.json")"
 PS1_LIST="$(ps1_entries)"
 rm -rf "$WS"
 
-assert_equals "11" "$(printf '%s\n' "$SH_LIST" | grep -c .)" \
-  "req-001 (a): a setup.sh run writes eleven RAVINTIO hook entries"
+assert_equals "12" "$(printf '%s\n' "$SH_LIST" | grep -c .)" \
+  "req-001 (a): a setup.sh run writes twelve RAVINTIO hook entries"
 assert_equals "$SH_LIST" "$PS1_LIST" \
   "req-001 (a): setup.ps1 declares the same event, matcher, and module list in the same order"
 

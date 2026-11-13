@@ -6,9 +6,9 @@ set -uo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
-ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
 WF_REPO="$ROOT/.github/workflows/ravintio.yml"
-WF_TPL="$ROOT/ravintio-zero/hooks/ravintio.yml"
+WF_TPL="$SCRIPT_DIR/../hooks/ravintio.yml"
 HELPER="$SCRIPT_DIR/helpers/unguarded-jobs.sh"
 
 if ! command -v ruby >/dev/null 2>&1; then

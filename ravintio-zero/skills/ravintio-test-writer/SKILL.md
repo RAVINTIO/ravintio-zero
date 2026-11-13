@@ -13,7 +13,7 @@ model: haiku
 
 1. Write **one test** per invocation. One.
 2. Do **not** write implementation code. Not even a stub. Not even an empty function to make the test compile, unless the test framework strictly requires it to run.
-3. If the test passes before any implementation is written, it is invalid. The test MUST exit non-zero (RED) on first run.
+3. If the test passes before you write any implementation, it is invalid. The test MUST exit non-zero (RED) on first run.
 4. Credentials are never in your context.
 5. Do not run the full test suite. Run only this one test.
 
@@ -26,8 +26,8 @@ model: haiku
 ## What You Produce
 
 The test file:
-- Is placed in the appropriate test directory for the stack (e.g. `src/{component-id}/tests/`, `ravintio-zero/tests/`)
-- Is named after the requirement: `test-{req-id}-{slug}.{ext}`
+- Goes in the appropriate test directory for the stack (e.g. `src/{component-id}/tests/`, `ravintio-zero/tests/`). In a developer repo, use the repo's own test folder from the stack declaration
+- Takes the requirement's name: `test-{req-id}-{slug}.{ext}`
 - Has a test description that includes the requirement ID: e.g. `describe('req-001-tdd-subloop-protocol: ...')` or `# req-001`
 - Tests exactly the behaviour described in the requirement's acceptance criteria, one criterion per test function: the test file is the unit per requirement
 
@@ -45,7 +45,7 @@ The test file:
 
 ## Regression Tagging
 
-If this test covers core behaviour that should be protected long-term (not just for this feature), add a comment at the top of the test file:
+If this test covers core behaviour that deserves long-term protection (beyond this feature), add a comment at the top of the test file:
 
 ```bash
 # REGRESSION-CANDIDATE: covers {what behaviour}, tagged for human review

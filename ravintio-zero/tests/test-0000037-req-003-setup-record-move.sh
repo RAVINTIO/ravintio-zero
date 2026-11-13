@@ -14,7 +14,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
 ZERO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-REPO_ROOT="$(cd "$ZERO_DIR/.." && pwd)"
+REPO_ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
 RECORD="plan/state/claude-code.md"
 OLD_DIR="ravintio-overrides/setup-config"
 RETIRED_FLAGS=(--structured-telemetry-mcp --backend-url --context-mode-mcp --include-full-skill-library)
@@ -89,6 +89,7 @@ mkdir -p "$WS/plan/state"
 [ -f "$RECORD" ] && cp "$RECORD" "$WS/$RECORD"
 [ -d ravintio-overrides ] && cp -r ravintio-overrides "$WS/ravintio-overrides"
 git init "$WS" >/dev/null 2>&1
+commit_workspace_pack "$WS"
 
 cd "$WS"
 # Setup runs with the tracked flags, so the copy's record keeps them.

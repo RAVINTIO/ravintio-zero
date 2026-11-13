@@ -122,7 +122,8 @@ Assert-True ($renderLines -ccontains 'UserPromptSubmit|.*|node ./tools/notify.sh
 foreach ($module in $global:RavintioModules) {
     $count = @($renderLines | Where-Object { $_.Contains(" $module.mjs") }).Count
     $expectedCount = 1
-    if (@('gate-write', 'ratchet-check', 'em-dash-guard') -ccontains $module) { $expectedCount = 2 }
+    if (@('ratchet-check', 'em-dash-guard') -ccontains $module) { $expectedCount = 2 }
+    if ($module -ceq 'gate-write') { $expectedCount = 3 }
     Assert-Equal $expectedCount $count "req-002 (a): $module appears once per matcher"
 }
 
@@ -137,6 +138,7 @@ $expected = @(
     'PreToolUse|Edit|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard em-dash-guard.mjs || exit 2',
     'PreToolUse|Bash|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard merge-guard.mjs || exit 2',
     'PreToolUse|Bash|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard block-forced-add.mjs || exit 2',
+    'PreToolUse|Bash|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" guard gate-write.mjs || exit 2',
     'UserPromptSubmit|.*|node ./tools/notify.sh (object)',
     'UserPromptSubmit|.*|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" advisory auto-trigger-orchestrator.mjs',
     'UserPromptSubmit|.*|node "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforcement/guard-run.mjs" advisory check-orchestrator-presence.mjs',
@@ -167,7 +169,7 @@ if ($run.Code -ne 0) { Write-Host $run.Output }
 $settings = Read-Settings $ws
 $odd = @($settings.hooks.PreToolUse)[0]
 Assert-Equal 'node .claude/hooks/enforcement/gate-write.mjs' "$($odd.hooks)" "req-002: the string hooks value stays as it was"
-Assert-Equal 9 (@($settings.hooks.PreToolUse).Count) "req-002: the eight fresh PreToolUse entries follow it"
+Assert-Equal 10 (@($settings.hooks.PreToolUse).Count) "req-002: the nine fresh PreToolUse entries follow it"
 Remove-SetupWorkspace $ws
 
 Write-Host ""

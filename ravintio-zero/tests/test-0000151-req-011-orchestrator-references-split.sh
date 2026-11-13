@@ -15,7 +15,7 @@ SKILL="$SKILL_DIR/SKILL.md"
 REFS="$SKILL_DIR/references"
 # 0000244 moved the initiative stage prefix block here.
 ROADMAP_STD="$ZERO_DIR/standards/roadmap-standards.md"
-# SKILL.md at the base commit 8b1e929 (36,275 bytes after the 0000189 rename), kept as a fixture so the
+# SKILL.md at the base commit 8b1e929 (36,350 bytes after the 0000189 rename), kept as a fixture so the
 # check does not depend on git history.
 BASE="$SCRIPT_DIR/fixtures/0000151-orchestrator-skill-base.md"
 
@@ -54,14 +54,17 @@ sed -e '/^| Discovery findings | `ravintio-zero\/templates\//d' -e '/^| A featur
 # 0000358 added the Question status and moved the product id check from Blocked: to Question:.
 sed -e 's|The status is Starting, Resuming, Complete, Blocked, or Skipped\.|The status is Starting, Resuming, Complete, Question, Blocked, or Skipped.|' \
   -e 's|`P0 Discovery: Blocked: No declared product id found|`P0 Discovery: Question: No declared product id found|' \
-  "$BASE_RENAMED.tmp5" > "$BASE_RENAMED"
+  "$BASE_RENAMED.tmp5" > "$BASE_RENAMED.tmp6"
+# 0000393 added the pack version record to check 2 of Resume Detection.
+sed -e 's|Record the outcome in the build log\. If rejected,|Record the outcome in the build log. `plan/state/pack-version.md` holds the last confirmed pack version. When the human confirms a pack update, write that record with the current pack version and the time. An absent record raises no finding. If rejected,|' \
+  "$BASE_RENAMED.tmp6" > "$BASE_RENAMED"
 
 # Print every non-blank, non-heading line of $1 that no later file holds as a
 # whole line. Usage: missing_lines base file...
 missing_lines() {
   local base="$1"; shift
   local all="$TMP/all.$$"
-  cat "$@" > "$all"
+  cat "$@" | strip_rule_anchors > "$all"
   grep -v '^[[:space:]]*$' "$base" | grep -v '^#' | grep -vx -- '---' | while IFS= read -r line; do
     grep -Fxq -- "$line" "$all" || printf '%s\n' "$line"
   done
@@ -80,7 +83,7 @@ SKILL_BYTES=$(wc -c < "$SKILL" | tr -d ' ')
 # 0000245 caps the boot file on its own. The boot template is the pack content, so the measure ignores a stale install.
 BOOT_FILE="$ZERO_DIR/templates/standard-boot.md"
 CLAUDE_BYTES=$(pack_claude_bytes "$BOOT_FILE")
-assert_equals "36275" "$(wc -c < "$BASE" | tr -d ' ')" "fixture holds the 36,275 byte baseline"
+assert_equals "36350" "$(wc -c < "$BASE" | tr -d ' ')" "fixture holds the 36,350 byte baseline"
 # 0000244 moved the task-bound sections to references/, so the SKILL.md cap fell from 27,800 to 9,000 bytes.
 SKILL_CAP=9000
 assert_equals "yes" "$([ "$SKILL_BYTES" -le "$SKILL_CAP" ] && echo yes || echo no)" "SKILL.md is $SKILL_CAP bytes or fewer ($SKILL_BYTES)"
@@ -90,7 +93,9 @@ assert_equals "yes" "$([ "$SKILL_BYTES" -le "$SKILL_CAP" ] && echo yes || echo n
 # 0000245 split the combined cap. The boot template has its own cap, as backlog entry 0000222 asked. The pack-only
 # boot template measured 3,414 bytes on 2026-10-28, and the cap leaves margin. The generated CLAUDE.md has a separate
 # 6,000 byte cap in test-0000245-req-003-004.
-CLAUDE_CAP=3600
+# Cap raised to 3,800 for grouped coaching commits (0000387).
+# Cap raised to 4,000 for the actor names rule (0000521).
+CLAUDE_CAP=4000
 assert_equals "yes" "$([ "$CLAUDE_BYTES" -le "$CLAUDE_CAP" ] && echo yes || echo no)" "pack-only boot template is $CLAUDE_CAP bytes or fewer ($CLAUDE_BYTES)"
 
 echo "=== (a) overrides never change the size cap result ==="
@@ -193,6 +198,7 @@ echo "=== (c) setup installs the reference files ==="
 WS="$(mktemp -d -t ravintio_0000151_req011_ws_XXXXXX)"
 cp -r "$ZERO_DIR" "$WS/ravintio-zero"
 git init "$WS" >/dev/null 2>&1
+commit_workspace_pack "$WS"
 (cd "$WS" && GIT_CEILING_DIRECTORIES="$(dirname "$WS")" bash ravintio-zero/setup.sh claude-code >"$WS/setup.out" 2>"$WS/setup.err")
 assert_exit_zero "$?" "setup.sh exits 0"
 INST="$WS/.claude/skills/ravintio-orchestrator/references"

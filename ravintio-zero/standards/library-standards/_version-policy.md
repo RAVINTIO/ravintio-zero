@@ -8,7 +8,7 @@
 
 ### 1. Target the latest stable release
 
-Use the latest stable version of each library at the time of scaffolding. Do not pin to an old major unless a specific compatibility constraint is documented in `quirks.md`.
+Use the latest stable version of each library at the time of scaffolding. Do not pin to an old major unless `quirks.md` documents a specific compatibility constraint.
 
 ### 2. Exact or tilde pinning: no `^latest` or floating ranges
 
@@ -23,7 +23,7 @@ Lockfiles commit exact resolutions and are the ground truth.
 
 ### 3. Check the changelog before upgrading
 
-Before bumping a major version, read the changelog for breaking changes; record the review in `quirks.md` if the upgrade required code changes.
+Before bumping a major version, read the changelog for breaking changes. Record the review in `quirks.md` if the upgrade required code changes.
 
 ### 4. Peer dependency satisfaction
 

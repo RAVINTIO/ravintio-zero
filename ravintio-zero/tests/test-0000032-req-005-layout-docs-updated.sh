@@ -11,8 +11,8 @@ set -uo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
-ZERO_DIR="$SCRIPT_DIR/.."
-REPO_ROOT="$ZERO_DIR/.."
+ZERO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+REPO_ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
 
 PLAN_README="$REPO_ROOT/plan/README.md"
 FEATURE_STRUCTURE="$REPO_ROOT/plan/feature-structure.md"

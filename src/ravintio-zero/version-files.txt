@@ -1,0 +1,7 @@
+# Files that carry the product version. One repo-relative path per line.
+# version-files.mjs check and set both read this list.
+# A line that starts with "? " names an optional file, skipped when it does not exist (0000420).
+docs/about.md
+product.yml
+ravintio-zero/component.yml
+? src/ravintio-zero/component.yml

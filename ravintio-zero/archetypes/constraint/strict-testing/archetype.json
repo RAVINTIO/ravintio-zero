@@ -1,0 +1,41 @@
+{
+  "name": "strict-testing",
+  "kind": "constraint",
+  "summary": "Fails P3 without a Pact contract per component API or a mutation score of at least 80.",
+  "slots": [
+    "strict-testing"
+  ],
+  "thresholds": {
+    "mutation-score": 80
+  },
+  "gates": [
+    {
+      "id": "pact-contracts",
+      "type": "file-per-component",
+      "path": "src/{id}/docs/contracts/*.pact.json",
+      "rule": "Each component API has a Pact contract file."
+    },
+    {
+      "id": "mutation-score",
+      "type": "min-value",
+      "report": "reports/mutation/mutation-score.json",
+      "key": "mutationScore",
+      "min": 80,
+      "rule": "The mutation score from Stryker or PIT meets the minimum."
+    }
+  ],
+  "setup": {
+    "note": "The pack installs no test tools. You install Pact, Stryker or PIT, and Playwright MCP.",
+    "mcp-servers": [
+      {
+        "name": "playwright",
+        "description": "Playwright MCP lets the agent drive a browser to check UI behaviour during P3.",
+        "command": "npx",
+        "args": [
+          "@playwright/mcp@latest"
+        ]
+      }
+    ]
+  },
+  "rule": "UI work gets checked through Playwright MCP, and each component API keeps a Pact contract."
+}

@@ -14,7 +14,7 @@ reason: "{why the human parked the feature, in one sentence}"
 
 ## State at Park
 
-{Free-text description of what is done and what remains. Name the requirement or
+{Free-text description of the finished work and what remains. Name the requirement or
 task in progress, any decisions pending, and any blockers. Write enough for the
 orchestrator to rebuild the full context on resume without the earlier
 conversation.}

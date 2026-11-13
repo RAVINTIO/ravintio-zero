@@ -1,6 +1,6 @@
 ﻿# Component Manifest - Template Guide
 
-> This is the canonical template for `component.yml` - the manifest file that describes a built component. Agents write it after building; agents and humans read it before changing anything.
+> This is the canonical template for `component.yml` - the manifest file that describes a built component. Agents write it after building. Agents and humans read it before changing anything.
 
 *Related: [Shared Schema Definitions](../schemas/shared.schema.json)*
 
@@ -8,11 +8,11 @@
 
 ## When is it created?
 
-The `component.yml` is created at **two points** in the lifecycle:
+Agents and humans create `component.yml` at **two points** in the lifecycle:
 
-1. **Pre-seeded by the human** (or orchestrator) before the pipeline runs - with stack decisions, feature mode, and domain knowledge path. Purpose, contract, and data sections are left empty or minimal. This gives the implement phase its constraints.
+1. **Pre-seeded by the human** (or orchestrator) before the pipeline runs - with stack decisions, feature mode, and domain knowledge path. The human leaves the purpose, contract, and data sections empty or minimal. This gives the implement phase its constraints.
 
-2. **Completed by the implement skill** after the implementation is built - the agent fills in purpose, contract, data ownership, risk, scope, and quality sections based on what was actually implemented.
+2. **Completed by the implement skill** after it builds the implementation. The agent fills in the purpose, contract, data ownership, risk, scope, and quality sections from what it actually implemented.
 
 From that point forward, every agent reads it before modifying the component.
 

@@ -4,17 +4,19 @@
 
 ## 1. Date Format
 
-Two formats are used across all RAVINTIO artifacts. No others are permitted in document body text.
+Body text and filenames use different formats. The prose rules are in [writing standards](writing-standards.md).
 
-### Body text: DD MMM YYYY
+### Body text: ISO or long form
 
-All human-readable dates in document body text, changelogs, ADRs, plans, comments, and templates use **DD MMM YYYY**.
+Human-readable dates in document body text, changelogs, ADRs, plans, comments, and templates use **2026-08-18** or **"August 18, 2026"**. Pick one form for a document and keep it.
 
 | Correct | Incorrect |
 |---------|-----------|
-| 02 May 2026 | 2026-05-02 |
-| 14 Jan 2025 | 01/14/2025 |
-| 07 Dec 2024 | 07/12/2024 |
+| 2026-05-02 | 02 May 2026 |
+| January 14, 2025 | 01/14/2025 |
+| 2024-12-07 | 07/12/2024 |
+
+Existing artifacts and templates that hold `DD MMM YYYY` stay as they are until a rewrite reaches them. New sentences follow this section.
 
 ### Filename prefixes: YYYY-MM-DD
 
@@ -28,7 +30,7 @@ Frontmatter `date:` fields and JSON date values use **YYYY-MM-DD**.
 
 ### Forbidden in body text
 
-`MM/DD/YYYY`, `DD/MM/YYYY`, `YYYY/MM/DD`, ISO 8601 (`2026-05-02`), and any other format not listed above are forbidden in document body text.
+`MM/DD/YYYY`, `DD/MM/YYYY`, `YYYY/MM/DD`, and any other format not listed above are forbidden in document body text.
 
 ---
 
@@ -50,9 +52,9 @@ RAVINTIO agents default to the **shortest response that fully communicates the o
 
 ### Rules
 
-1. **Brevity is the default.** Partial sentences and single-line confirmations are correct when no explanation is needed.
+1. **Brevity is the default.** Partial sentences and single-line confirmations are correct when the reader needs no explanation.
 2. **Explain when the why is non-obvious.** A constraint being applied, a decision that could surprise the human, or a requirement conflict all warrant explanation.
-3. **Do not narrate.** Do not describe what you are about to do before doing it, or summarise what you just did after doing it.
+3. **Do not narrate.** Do not describe what you are about to do before doing it, or summarise what you did after doing it.
 4. **No affirmatory padding.** Do not open responses with "Certainly!", "Great question!", "Of course!", "As requested,", or similar.
 5. **The human can always ask for more.** If they want detail, they will ask. Default to less.
 
@@ -68,19 +70,19 @@ RAVINTIO agents default to the **shortest response that fully communicates the o
 
 - Applying a constraint that the human did not explicitly request (cite the constraint)
 - Deviating from the spec (cite the requirement and explain why)
-- Blocking due to a hard limit (state what is blocked and why)
+- Blocking due to a hard limit (state what the limit blocks and why)
 - Answering a direct question (answer it)
 
 ---
 
 ## 4. Em Dash Prohibition
 
-The em dash character (U+2014) is not permitted in RAVINTIO artifacts. Use a comma, colon, semicolon, full stop and new sentence, or parentheses instead, depending on the sentence.
+RAVINTIO artifacts must not contain the em dash character (U+2014). Use a comma, colon, full stop and new sentence, or parentheses instead, depending on the sentence. The writing standard bans semicolons.
 
 ### Enforcement (req-006, ADR-003, feature 0000028)
 
-`em-dash-guard.mjs` (`ravintio-zero/hooks/enforcement/em-dash-guard.mjs`), a `PreToolUse(Write, Edit)` hook sibling to `gate-write.mjs` and `ratchet-check.mjs`, blocks a write containing U+2014 within `plan/current/`, `docs/`, `ravintio-zero/skills/`, `ravintio-zero/templates/`, and `ravintio-zero/standards/`. Paths outside that set, including `plan/_archive/` and `plan/changelog/` (historical record), are not scanned.
+`em-dash-guard.mjs` (`ravintio-zero/hooks/enforcement/em-dash-guard.mjs`), a `PreToolUse(Write, Edit)` hook sibling to `gate-write.mjs` and `ratchet-check.mjs`, blocks a write containing U+2014 within `plan/current/`, `docs/`, `ravintio-zero/skills/`, `ravintio-zero/templates/`, and `ravintio-zero/standards/`. The hook does not scan paths outside that set, including `plan/_archive/` and `plan/changelog/` (historical record).
 
 ### Bypass
 
-A single-line sentinel comment, `<!-- ravintio-em-dash-allow -->`, present anywhere in the content being written, allows that write through regardless of em dash matches. The sentinel is reusable, not single-use, and either a human or an agent may write it: an em dash carries no weakening semantics, so it does not need the human-only, single-use marker `plan/current/.ratchet-approve` uses for ratchet approvals.
+A single-line sentinel comment, `<!-- ravintio-em-dash-allow -->`, present anywhere in the content being written, allows that write through regardless of em dash matches. The sentinel is reusable, not single-use, and either a human or an agent may write it. An em dash carries no weakening semantics, so it does not need the human-only, single-use marker that `plan/current/.ratchet-approve` uses for ratchet approvals.

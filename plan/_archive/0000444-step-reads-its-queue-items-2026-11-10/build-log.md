@@ -1,0 +1,142 @@
+---
+title: "Build Log - 0000444-step-reads-its-queue-items"
+summary: "Working record of the pipeline run, maintained by the orchestrator."
+---
+# Build Log - 0000444-step-reads-its-queue-items
+
+> Created at discovery (P0). Appended by the orchestrator at each phase boundary. Survives session changes.
+
+## Header
+
+| Field | Value |
+|-------|-------|
+| Feature ID | `0000444-step-reads-its-queue-items` |
+| Pipeline start | `2026-11-10T21:44:23Z` |
+| Tool | `claude-code` |
+| Primary model | `claude-sonnet-5-5` |
+| Cheaper model | `claude-haiku-5-5` |
+| Run speed | `standard` |
+
+---
+
+## Phase Log
+
+### P0: Discovery
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T21:44:23Z` |
+| End | `2026-11-10T21:45:44Z` |
+| Wall clock | `1` |
+| Model tier | primary |
+| Skills loaded | ravintio-orchestrator |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Initiative step 26 of 0000360-backlog-sweep. Migration 0009 left pending: it needs a human y/n and a step session has no human. |
+
+- Run mode: autonomous (2026-11-10T21:44:23Z)
+- Run speed: standard (2026-11-10T21:44:23Z)
+- Queue: `plan/.initiative-queue/` holds one item, `rebase-step-25`, which names step 25. No item names step 26.
+- Design self-confirmed: draft-accepted (initiative) (2026-11-10T21:45:44Z). Track light. Scope Lock Challenge skipped on the light track.
+- Complete: P0 (2026-11-10T21:45:44Z)
+
+---
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T21:48:36Z` |
+| End | `2026-11-10T21:49:11Z` |
+| Wall clock | `1` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Inline: three small artifacts, no independent batch worth a subagent. |
+
+- Complete: P1 (2026-11-10T21:49:11Z)
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T21:50:02Z` |
+| End | `2026-11-10T22:06:24Z` |
+| Wall clock | `16` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Inline units U-001 to U-003 run in batch order. |
+
+- In progress: U-001 (2026-11-10T21:50:02Z)
+- RED: U-001 (2026-11-10T21:50:04Z)
+- GREEN: U-001 (2026-11-10T21:51:27Z)
+- Done: U-001 (content, inline, none, 2026-11-10T21:51:27Z)
+- Tests run: REQ-001, REQ-002, REQ-003: test-0000444-req-001-003-queue-items.sh (2026-11-10T21:51:27Z)
+- RED: U-002 (2026-11-10T21:50:04Z)
+- GREEN: U-002 (2026-11-10T21:51:27Z)
+- Done: U-002 (content, inline, none, 2026-11-10T21:51:27Z)
+- In progress: U-003 (2026-11-10T21:51:27Z)
+- Done: U-003 (docs, primary, none, 2026-11-10T22:06:24Z)
+- Tests run: full suite: 403 passed, 0 failed (2026-11-10T22:06:24Z)
+- Complete: P2 (2026-11-10T22:06:24Z)
+
+---
+
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T22:06:41Z` |
+| End | `2026-11-10T22:07:03Z` |
+| Wall clock | `1` |
+| Model tier | primary |
+| Skills loaded | ravintio-validate-and-accept |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Full suite ran as 4 shards under the chart decision for steps 25 to 41. |
+- Docs edit pass: inline review, 1 cycle, prose-check exit 0 (2026-11-10T22:07:03Z)
+- Tests run: full suite: 403 passed, 0 failed (2026-11-10T22:07:03Z)
+- Complete: P3 (2026-11-10T22:07:03Z)
+
+---
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-10T22:07:18Z` |
+| End | `2026-11-10T22:17:21Z` |
+| Wall clock | `10` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Initiative step order: PR and CI first, then archive. |
+- Rework: REQ-001: CodeQL flagged incomplete escaping in initiative-queue.mjs, fixed with escapeRe (2026-11-10T22:10:31Z)
+- Tests run: REQ-001: test-0000444-req-001-003-queue-items.sh (2026-11-10T22:10:31Z)
+- Complete: P4 (2026-11-10T22:17:21Z)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `33` |
+| Total agents spawned | `0` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `0` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `1` |
+| Phases skipped | `none` |
+- Postmortem: plan/postmortems/2026-11-10-incomplete-escape-in-queue-helper.md REQ-001 (2026-11-10T22:17:49Z)

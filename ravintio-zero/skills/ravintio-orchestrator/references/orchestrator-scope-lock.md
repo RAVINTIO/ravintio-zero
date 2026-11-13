@@ -14,14 +14,14 @@ Run this after coaching Q&A completes and before presenting the design. It is a 
 
 An initiative step self-confirms this gate as I-C Run in `ravintio-zero/standards/roadmap-standards.md` describes.
 
-Read `plan/current/feature-brief.md`. If `## Scenario Paths` is filled in, use the human's four paths. Otherwise derive them from the user stories and acceptance criteria. The four questions:
+Read `plan/current/feature-brief.md`. If the human filled in `## Scenario Paths`, use those four paths. Otherwise derive them from the user stories and acceptance criteria. The four questions:
 
 1. **Happy path:** the end-to-end flow when everything works. First action, and what success looks like.
 2. **First-run path:** the very first use, before any prior data or state exists.
 3. **Error path:** the most likely failure mode and what should happen.
-4. **Cross-session continuity:** what state is at risk if the session is interrupted, and how it is recovered.
+4. **Cross-session continuity:** what state is at risk if something interrupts the session, and how you recover it.
 
-**Draft inline.** Draft all four suggested answers yourself, in this context. Do not dispatch a subagent. Drafting rules: frame from usage, describe outcome not implementation, write an honest "not applicable" where true, and check each draft against decisions the human has already confirmed. Surface any contradiction alongside the draft rather than resolving it silently.
+**Draft inline.** Draft all four suggested answers yourself, in this context. Do not dispatch a subagent. Drafting rules: frame from usage, describe outcome not implementation, write "not applicable" only where true, and check each draft against the human's confirmed decisions. Surface any contradiction alongside the draft rather than resolving it silently.
 
 **Present as a batch.** Show all four questions with their labelled drafts in a single turn. Label every draft as a draft, never as a decided answer.
 
@@ -33,4 +33,4 @@ Read `plan/current/feature-brief.md`. If `## Scenario Paths` is filled in, use t
 Scope Lock ({path type}): {one-sentence summary} [source: human | draft-accepted | draft-edited]
 ```
 
-If an answer reveals a scope gap, ask one clarifying question, capture the answer in the same format, then return to the batch. If the human defers an item: `Scope Lock, deferred: {description} (blocked until {dependency})`. When all four are captured, confirm: "Scope Lock complete. All four scenario paths captured."
+If an answer reveals a scope gap, ask one clarifying question, capture the answer in the same format, then return to the batch. If the human defers an item: `Scope Lock, deferred: {description} (blocked until {dependency})`. When you have captured all four, confirm: "Scope Lock complete. All four scenario paths captured."

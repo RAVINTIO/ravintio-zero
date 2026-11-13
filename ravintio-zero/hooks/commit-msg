@@ -60,6 +60,30 @@ if [ "$SUBJECT_LEN" -gt 72 ]; then
   WARNINGS+=("Subject line is ${SUBJECT_LEN} chars (max 72) — truncate to: \"${SUBJECT:0:69}...\" (commit-standards.md §1)")
 fi
 
+# ── Rule 4: Prose rules ───────────────────────────────────────────────────
+# Runs the prose linter on the message (0000390 REQ-003). A missing node or
+# script skips the check with one note. Exit code 2 means bad input and does
+# not block.
+REPO_TOP=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+PROSE_SCRIPT=""
+for candidate in "$REPO_TOP/ravintio-zero/scripts/prose-check.mjs" "$REPO_TOP/src/ravintio-zero/scripts/prose-check.mjs"; do
+  if [ -f "$candidate" ]; then
+    PROSE_SCRIPT="$candidate"
+    break
+  fi
+done
+if ! command -v node >/dev/null 2>&1 || [ -z "$PROSE_SCRIPT" ]; then
+  echo "  [RAVINTIO] prose check skipped: node or prose-check.mjs not found."
+else
+  PROSE_OUT=$(node "$PROSE_SCRIPT" check --message "$COMMIT_MSG_FILE" 2>&1)
+  PROSE_RC=$?
+  if [ "$PROSE_RC" -eq 1 ]; then
+    while IFS= read -r line; do
+      [ -n "$line" ] && WARNINGS+=("Prose: $line")
+    done < <(printf '%s\n' "$PROSE_OUT" | head -n 10)
+  fi
+fi
+
 # ── Print violations and block ─────────────────────────────────────────────
 if [ "${#WARNINGS[@]}" -gt 0 ]; then
   echo ""

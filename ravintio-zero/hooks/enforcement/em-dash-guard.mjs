@@ -51,6 +51,9 @@ const SCOPED_PREFIXES = [
   "ravintio-zero/skills/",
   "ravintio-zero/templates/",
   "ravintio-zero/standards/",
+  "src/ravintio-zero/skills/",
+  "src/ravintio-zero/templates/",
+  "src/ravintio-zero/standards/",
 ];
 
 function norm(p) {
@@ -117,7 +120,7 @@ try {
 
   const message =
     `[RAVINTIO] Em dash (U+2014) found in '${relTarget}' at line(s): ${listed}${more}. ` +
-    "Replace with a comma, colon, semicolon, full stop, or parentheses depending " +
+    "Replace with a comma, colon, full stop, or parentheses depending " +
     "on the sentence. If the character is genuinely required (a literal quotation, " +
     `for example), add ${SENTINEL} anywhere in the content to bypass. ` +
     "See ravintio-zero/standards/hook-enforcement.md.\n";

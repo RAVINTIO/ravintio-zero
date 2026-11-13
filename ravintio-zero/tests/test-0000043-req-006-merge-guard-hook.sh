@@ -6,6 +6,8 @@
 # closed. A stub gh on PATH stands in for the real one.
 
 set -uo pipefail
+# A step session sets RAVINTIO_INITIATIVE_QUEUE=1, which makes merge-guard refuse every merge (0000458).
+unset RAVINTIO_INITIATIVE_QUEUE
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
@@ -120,6 +122,7 @@ SETUP_PS1="$ZERO_DIR/setup.ps1"
 WS=$(mktemp -d -t ravintio_0000043_req006_ws_XXXXXX)
 cp -r "$ZERO_DIR" "$WS/ravintio-zero"
 git init "$WS" >/dev/null 2>&1
+commit_workspace_pack "$WS"
 (cd "$WS" && bash ravintio-zero/setup.sh claude-code >/dev/null 2>&1)
 SH_ENTRY=$(node -e '
   const s = JSON.parse(require("fs").readFileSync(process.argv[1], "utf8"));

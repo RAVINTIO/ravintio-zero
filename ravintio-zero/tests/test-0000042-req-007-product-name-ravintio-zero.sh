@@ -11,9 +11,10 @@ set -uo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
-ROOT="$SCRIPT_DIR/../.."
+ZERO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
 PRODUCT="$ROOT/product.yml"
-COMPONENT="$ROOT/ravintio-zero/component.yml"
+COMPONENT="$ZERO_DIR/component.yml"
 README="$ROOT/README.md"
 
 # First top-level scalar: key at column 0, quotes stripped.

@@ -29,10 +29,14 @@
 - Deployment: {topology summary}
 - API versioning: {strategy or "not applicable"}
 
+## Component Paths
+<!-- List every folder the plan writes. gate-write blocks writes outside this list. -->
+- {folder the plan writes}/
+
 ## Scope
 - In: {list}
 - Out: {list}
-- Deferred: {list - with notes on what is blocked until resolved}
+- Deferred: {list - with notes on what each deferred item blocks until resolved}
 
 ## Assumptions
 - {assumption} - impact if wrong: {what breaks}

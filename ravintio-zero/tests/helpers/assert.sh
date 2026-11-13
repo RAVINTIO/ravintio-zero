@@ -153,6 +153,116 @@ orch_combined() {
   echo "$out"
 }
 
+# -----------------------------------------------------------------------
+# Pack text helpers (0000261, 0000308)
+#
+# A test that asserts what a skill says reads it through these helpers, never
+# through a fixed file path or its own sed range. Moving a section to another
+# file, or rewording a rule that keeps its anchor, then fails no test.
+# -----------------------------------------------------------------------
+
+_ASSERT_PACK_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+
+# orch_section "<heading>" prints one section from SKILL.md, the orchestrator
+# references, and the roadmap standards. A section runs from its heading to the
+# next heading of the same or higher level. Headings inside fenced code do not
+# count. The heading matches as a prefix, so "## Phase Invocation" finds
+# "## Phase Invocation (P1 to P4)". Exit 1 and a marker line when no file holds it.
+# Set ORCH_PACK_ROOT to read another pack folder, as the helper suite does.
+orch_section() {
+  local heading="$1" root="${ORCH_PACK_ROOT:-$_ASSERT_PACK_ROOT}" file out="" part
+  for file in "$root/skills/ravintio-orchestrator/SKILL.md" \
+              "$root"/skills/ravintio-orchestrator/references/orchestrator-*.md \
+              "$root/standards/roadmap-standards.md"; do
+    [ -f "$file" ] || continue
+    part="$(awk -v h="$heading" '
+      BEGIN { n = 0; while (substr(h, n + 1, 1) == "#") n++; on = 0; fence = 0 }
+      /^```/ { fence = !fence }
+      !fence && /^#+ / {
+        match($0, /^#+/); lvl = RLENGTH
+        if (on && lvl <= n) on = 0
+        if (!on && index($0, h) == 1) {
+          c = substr($0, length(h) + 1, 1)
+          if (c == "" || c == " " || c == "(" || c == ":") on = 1
+        }
+      }
+      on { print }
+    ' "$file")"
+    [ -n "$part" ] && out="${out:+$out$'\n'}$part"
+  done
+  if [ -z "$out" ]; then
+    echo "<<SECTION NOT FOUND: $heading>>"
+    return 1
+  fi
+  printf '%s\n' "$out"
+}
+
+# rule_text <id> prints the rule after "<!-- rule: <id> -->" in any .md file
+# under skills/, standards/, or templates/. The anchor starts its line, after an
+# optional list marker, so a mention inside a code span is no anchor. The rule is
+# the rest of the anchor line and the lines after it, up to a blank line, a
+# heading, or the next anchor.
+# Exit 1 with a marker line when no file holds the anchor. Exit 2 when two do.
+# Set RULE_PACK_ROOT to read another pack folder, as the anchor suite does.
+rule_text() {
+  local id="$1" root="${RULE_PACK_ROOT:-$_ASSERT_PACK_ROOT}" pfx hits file count
+  pfx='^[[:space:]]*(([-*]|[0-9]+[.)])[[:space:]]+)?'
+  hits="$(grep -rcE --include='*.md' "${pfx}<!-- rule: $id -->" \
+    "$root/skills" "$root/standards" "$root/templates" 2>/dev/null | grep -v ':0$')"
+  count=$(printf '%s\n' "$hits" | grep -c .)
+  if [ "$count" -eq 0 ]; then
+    echo "<<RULE ANCHOR NOT FOUND: $id>>"
+    return 1
+  fi
+  if [ "$count" -gt 1 ] || [ "${hits##*:}" -gt 1 ]; then
+    echo "<<DUPLICATE RULE ANCHOR: $id>>"
+    return 2
+  fi
+  file="${hits%:*}"
+  awk -v pat="${pfx}<!-- rule: $id -->" '
+    on == 0 {
+      if (match($0, pat)) { on = 1; rest = substr($0, RSTART + RLENGTH); sub(/^[[:space:]]+/, "", rest); if (rest != "") print rest }
+      next
+    }
+    {
+      if ($0 ~ /^[[:space:]]*$/ || $0 ~ /^#+ / || $0 ~ /^[[:space:]]*(([-*]|[0-9]+[.)])[[:space:]]+)?<!-- rule: /) exit
+      print
+    }
+  ' "$file"
+}
+
+# strip_rule_anchors removes every "<!-- rule: id -->" comment from stdin, with
+# the space after it. Use it when a test compares skill text line by line against
+# an older revision, so that adding an anchor changes no comparison.
+strip_rule_anchors() {
+  sed -E 's/<!-- rule: [a-z0-9-]+ --> ?//g'
+}
+
+# assert_rule <id> <term>... passes when the anchor exists once and its rule
+# text holds every term. A failure line names the anchor, and the missing terms.
+assert_rule() {
+  local id="$1" text rc term missing=""
+  shift
+  text="$(rule_text "$id")"
+  rc=$?
+  if [ "$rc" -ne 0 ]; then
+    _fail_line "rule $id: $text"
+    ((FAIL++)) || true
+    return 0
+  fi
+  for term in "$@"; do
+    [[ "$text" == *"$term"* ]] || missing="${missing:+$missing, }\"$term\""
+  done
+  if [ -z "$missing" ]; then
+    _pass_line "rule $id holds its key terms"
+    ((PASS++)) || true
+  else
+    _fail_line "rule $id lacks: $missing"
+    echo "        rule text: $text"
+    ((FAIL++)) || true
+  fi
+}
+
 # 0000239 req-001: a call to an undefined assert_* function counts as a failure.
 # macOS ships Bash 3.2, which has no command_not_found_handle, so this scans the
 # running suite for lines that start with an assert_* word and checks that each
@@ -183,6 +293,18 @@ stale_install_skip_reason() {
   grep -qE '^status: "?active"?[[:space:]]*(#.*)?$' "$init" || return 1
   [ -n "$(find "$root/ravintio-zero/skills" -type f -newer "$manifest" -print -quit 2>/dev/null)" ] || return 1
   echo "an initiative is active and the install manifest is older than the newest pack skill"
+}
+
+# Commits a test workspace's pack and override folders (0000382 ADR-002).
+# Setup refuses uncommitted pack files, so a suite calls this after it copies
+# the pack and after it plants any file in ravintio-zero/ or ravintio-overrides/.
+# It makes the folder a git repository when it is not one.
+commit_workspace_pack() {
+  git -C "$1" rev-parse --is-inside-work-tree >/dev/null 2>&1 || git init -q "$1" >/dev/null 2>&1
+  git -C "$1" add -A . >/dev/null 2>&1
+  git -C "$1" -c user.email=test@example.com -c user.name=test -c commit.gpgsign=false \
+    -c core.hooksPath=/dev/null commit -q --allow-empty -m "Commit the test pack" >/dev/null 2>&1
+  return 0
 }
 
 print_summary() {

@@ -19,9 +19,9 @@ The coaching conversation and the pipeline are the same in every mode. Only the 
 | Retrofit | 3: source exists in `src/` with no archive or overrides | Suggest from project markers, human confirms | Run the retrofit scan below first. |
 | Greenfield | 4: none of the above | Start at `0.1.0` | Coach from the feature brief directly. |
 
-Never combine signals. If the human states a mode that conflicts with the detected signal, warn once with the consequence, proceed if they confirm, and record the confirmed mode in the build log.
+Never combine signals. If the human states a mode that conflicts with the detected signal, warn once with the consequence. If they confirm, proceed and record the confirmed mode in the build log.
 
-`discovery.md` is fresh every run and archived at ship. Its shared header covers the adoption-mode result with its signal, the git pre-flight findings, and the skills-inbox scan. Prior runs' discovery is read from `plan/_archive/` and `docs/`, never from a leftover file.
+`discovery.md` is fresh every run and archived at ship. Its shared header covers the adoption-mode result with its signal, the git pre-flight findings, and the skills-inbox scan. Read prior runs' discovery from `plan/_archive/` and `docs/`, never from a leftover file.
 
 #### Retrofit Scan
 

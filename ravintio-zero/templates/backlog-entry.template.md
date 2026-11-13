@@ -16,17 +16,17 @@ theme: "unsorted"  # kebab-case group name
 > the counter.
 >
 > **A copied entry gets a local id.** If you copy an entry from another repo, reserve
-> a new id from this repo's counter and name the source repo and the source id in the
+> a new id from this repo's counter. Name the source repo and the source id in the
 > entry text. Each repo keeps its own sequence.
 >
-> **Deferral source** distinguishes why the entry exists: `discovered mid-flight`
-> (a surprise found during a run, judged out of scope on the spot; today's only
-> case for ad hoc filings), `deliberate scope decision` (a call already made and
-> reasoned through in the source feature's own `scope.md`/ADRs; this entry
-> points back at that reasoning rather than repeating it), or `tech debt`
-> (acknowledged debt filed alongside the code that incurred it). Entries routed
+> **Deferral source** distinguishes why the entry exists. Use `discovered mid-flight`
+> for a surprise found during a run and judged out of scope on the spot. It is
+> today's only case for ad hoc filings. Use `deliberate scope decision` for a call
+> already made and reasoned through in the source feature's own `scope.md`/ADRs.
+> The entry points back at that reasoning rather than repeating it. Use `tech debt`
+> for acknowledged debt filed alongside the code that incurred it. Entries routed
 > automatically from a `recommendations.md` Deferred Items or Tech Debt row use
-> `deliberate scope decision` or `tech debt` respectively; entries filed live
+> `deliberate scope decision` or `tech debt` respectively. Entries filed live
 > during a run use `discovered mid-flight`.
 >
 > Use `human request` when the human asks for the entry directly, rather than
@@ -44,24 +44,28 @@ theme: "unsorted"  # kebab-case group name
 > Regenerate it in the same commit as any entry change.
 
 **Source feature:** {{feature-id that discovered this | none (human request)}}
+
 **Source phase:** {{P0–P4 phase active when discovered | none (human request)}}
+
 **Deferral source:** {{discovered mid-flight | deliberate scope decision | tech debt | human request}}
+
 **Date filed:** {{ISO-8601 date}}
+
 **Parked branch:** {{feature branch, for a parked entry only | omit for an open entry}}
 
 ---
 
 ## Problem
 
-{{What was discovered. Specific enough that a future discovery run (with no memory of this
+{{What you found. Specific enough that a future discovery run (with no memory of this
 session) can judge whether to pull it in. Name files/paths where relevant.}}
 
 ## Suggested Action
 
-{{One or two sentences: what fixing it would look like. A suggestion, not a spec;
-scope is decided at pickup.}}
+{{One or two sentences: what fixing it would look like. A suggestion, not a spec.
+Pickup decides the scope.}}
 
 ## Why Deferred
 
-{{Why this was not folded into the active feature: out of scope / non-blocking /
+{{Why you did not fold this into the active feature: out of scope / non-blocking /
 would need its own design decision.}}

@@ -10,8 +10,9 @@ set -uo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
-ROOT_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
+ROOT_DIR="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
 SELF_REL="ravintio-zero/tests/test-0000164-req-011-version-relabel.sh"
+SELF_SRC_REL="src/$SELF_REL"
 
 # Built from parts so this file never holds the wording it searches for.
 V2="2""\\.0\\.0"
@@ -30,7 +31,7 @@ promises() {
 }
 
 live_files() {
-  git -C "$ROOT_DIR" ls-files -- . ':!plan/_archive' ':!plan/changelog' ':!plan/current' ":!$SELF_REL" \
+  git -C "$ROOT_DIR" ls-files -- . ':!plan/_archive' ':!plan/changelog' ':!docs/adr' ':!docs/decisions-index.md' ':!plan/current' ":!$SELF_REL" ":!$SELF_SRC_REL" \
     | sed "s|^|$ROOT_DIR/|"
 }
 

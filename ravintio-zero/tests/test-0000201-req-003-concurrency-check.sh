@@ -34,7 +34,7 @@ echo "=== 0000201 req-003 concurrency-check ==="
 # AC-1: a valid plan passes
 D=$(make_fixture valid)
 write_plan "$D" <<'MD'
-| U1-a | none | `src/a.txt`, `src/b.txt` | 1 | |
+| U1-a | none | `src/a.txt`, `src/b.txt`, `docs/a.md` | 1 | |
 | U2-b | - | `src/c.txt` | 1 | none |
 | U3-c | U1-a, `U2-b` | `src/d.txt` | 2 | Reads the final wording of U1 and U2. |
 MD
@@ -72,7 +72,7 @@ assert_contains "no unit row" "$OUT" "req-003 AC-2: finding says there is no uni
 for reason in "" "none" "-"; do
   D=$(make_fixture "seq$reason")
   write_plan "$D" <<MD
-| U1-a | none | \`src/a.txt\` | 1 | $reason |
+| U1-a | none | \`docs/a.txt\` | 1 | $reason |
 | U2-b | none | \`src/b.txt\` | 1 | |
 | U3-lone | U1-a | \`src/c.txt\` | 2 | $reason |
 MD

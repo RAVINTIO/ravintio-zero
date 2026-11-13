@@ -1,10 +1,11 @@
 # Runs every test-*.ps1 suite in tests/ and tests/regression/ under the
-# PowerShell host that started this script (0000036 ADR-002). CI runs it once
-# with powershell (Windows PowerShell 5.1) and once with pwsh (PowerShell 7).
+# PowerShell host that started this script (0000036 ADR-002). CI runs it in
+# shards with powershell (Windows PowerShell 5.1) on Windows (0000409 ADR-0284).
 # run-tests.sh runs the same suites with pwsh, alongside the bash suites.
 #
 # Environment:
 #   RAVINTIO_TEST_QUIET=1   hide PASS lines and banners, keep every failure and the summary
+#   RAVINTIO_SHARD=i/n      run only shard i of n of the suites
 #   RAVINTIO_TIMING_FILE    set by this script (0000171 req-003). Invoke-Setup appends
 #                           one setup.ps1 time per run, and the total prints before the summary.
 #
@@ -20,6 +21,25 @@
 
 $ErrorActionPreference = 'Stop'
 $quiet = ($env:RAVINTIO_TEST_QUIET -eq '1')
+
+# RAVINTIO_SHARD=i/n runs only shard i of n (0000409 ADR-0284). Suites are numbered from 0 in run
+# order, feature suites then regression suites, and suite k runs when k mod n is i - 1. Read it
+# before the loop below removes it from the environment.
+$shardI = 1
+$shardN = 1
+$shardValue = $env:RAVINTIO_SHARD
+if (-not [string]::IsNullOrEmpty($shardValue)) {
+    if ($shardValue -match '^(\d+)/(\d+)$' -and [int]$Matches[2] -ge 1 -and [int]$Matches[1] -ge 1 -and [int]$Matches[1] -le [int]$Matches[2]) {
+        $shardI = [int]$Matches[1]
+        $shardN = [int]$Matches[2]
+        Write-Host "Shard $shardI of $shardN"
+    }
+    else {
+        Write-Host "RAVINTIO_SHARD must be i/n with 1 <= i <= n, not '$shardValue'"
+        exit 2
+    }
+}
+
 foreach ($item in @(Get-ChildItem Env: | Where-Object { $_.Name -like 'RAVINTIO_*' })) {
     if ($item.Name -notin @('RAVINTIO_PWSH', 'RAVINTIO_TEST_QUIET')) { Remove-Item "Env:$($item.Name)" -ErrorAction SilentlyContinue }
 }
@@ -50,6 +70,24 @@ function Get-TreeSnapshot {
 }
 
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
+function Get-SkillsListing {
+    # The folder is ignored by git, so the tree snapshot cannot see it (0000381 REQ-001).
+    # Windows PowerShell 5.1 turns native stderr into a terminating error under 'Stop', so relax it here.
+    $savedPreference = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
+    try {
+        $top = & git -C $here rev-parse --show-toplevel 2>$null
+        if ($LASTEXITCODE -ne 0 -or -not $top) { return ,@() }
+        $dir = Join-Path $top '.claude/skills'
+        if (-not (Test-Path -LiteralPath $dir)) { return ,@() }
+        return ,@(Get-ChildItem -LiteralPath $dir -Recurse -Force | ForEach-Object { $_.FullName.Substring($top.Length) } | Sort-Object)
+    }
+    finally {
+        $ErrorActionPreference = $savedPreference
+    }
+}
+
+$skillsBefore = Get-SkillsListing
 $treeBefore = Get-TreeSnapshot
 $hostExe = (Get-Process -Id $PID).Path
 Write-Host "Host: PowerShell $($PSVersionTable.PSVersion) ($($PSVersionTable.PSEdition)), $hostExe"
@@ -65,10 +103,26 @@ if ($suites.Count -eq 0) {
     exit 1
 }
 
+if ($shardN -gt 1) {
+    $suites = @(for ($k = 0; $k -lt $suites.Count; $k++) { if (($k % $shardN) -eq ($shardI - 1)) { $suites[$k] } })
+}
+
 $timingFile = Join-Path ([System.IO.Path]::GetTempPath()) ("ravintio-timing-" + [guid]::NewGuid().ToString('N') + ".txt")
 [System.IO.File]::WriteAllText($timingFile, '')
 $savedTimingFile = $env:RAVINTIO_TIMING_FILE
 $env:RAVINTIO_TIMING_FILE = $timingFile
+
+# Git isolation (0000462, ADR-0303). Each suite sees a global git config that refuses to guess an
+# identity, so a commit with no identity fails here as it does on a CI runner.
+$gitIsolationFile = Join-Path ([System.IO.Path]::GetTempPath()) ("ravintio-gitconfig-" + [guid]::NewGuid().ToString('N'))
+[System.IO.File]::WriteAllText($gitIsolationFile, "[user]`n`tuseConfigOnly = true`n")
+$savedGitEnv = @{}
+foreach ($name in @('GIT_CONFIG_GLOBAL', 'GIT_CONFIG_NOSYSTEM', 'GIT_AUTHOR_NAME', 'GIT_AUTHOR_EMAIL', 'GIT_AUTHOR_DATE', 'GIT_COMMITTER_NAME', 'GIT_COMMITTER_EMAIL', 'GIT_COMMITTER_DATE', 'EMAIL')) {
+    $savedGitEnv[$name] = [Environment]::GetEnvironmentVariable($name)
+    if ($name -notin @('GIT_CONFIG_GLOBAL', 'GIT_CONFIG_NOSYSTEM')) { [Environment]::SetEnvironmentVariable($name, $null) }
+}
+$env:GIT_CONFIG_GLOBAL = $gitIsolationFile
+$env:GIT_CONFIG_NOSYSTEM = '1'
 
 $failed = @()
 try {
@@ -102,6 +156,8 @@ finally {
     $env:RAVINTIO_TIMING_FILE = $savedTimingFile
     if ($null -eq $savedTimingFile) { Remove-Item Env:RAVINTIO_TIMING_FILE -ErrorAction SilentlyContinue }
     Remove-Item -LiteralPath $timingFile -Force -ErrorAction SilentlyContinue
+    foreach ($name in $savedGitEnv.Keys) { [Environment]::SetEnvironmentVariable($name, $savedGitEnv[$name]) }
+    Remove-Item -LiteralPath $gitIsolationFile -Force -ErrorAction SilentlyContinue
 }
 
 $treeChanged = @()
@@ -112,6 +168,13 @@ if ($null -ne $treeBefore) {
     foreach ($path in $treeChanged) { Write-Host "Tree changed during the run: $path" }
 }
 
+$skillsAfter = Get-SkillsListing
+$skillsChanged = @()
+if (@($skillsBefore).Count -gt 0 -or @($skillsAfter).Count -gt 0) {
+    $skillsChanged = @(Compare-Object -ReferenceObject @($skillsBefore) -DifferenceObject @($skillsAfter) | ForEach-Object { $_.InputObject })
+}
+foreach ($path in $skillsChanged) { Write-Host "Skills changed during the run: $path" }
+
 Write-Host ""
 Write-Host "================================"
 Write-Host "PowerShell suites: $($suites.Count - $failed.Count) passed, $($failed.Count) failed."
@@ -120,5 +183,5 @@ if ($failed.Count -gt 0) {
     foreach ($name in $failed) { Write-Host "  $name" }
 }
 Write-Host "================================"
-if ($failed.Count -gt 0 -or $treeChanged.Count -gt 0) { exit 1 }
+if ($failed.Count -gt 0 -or $treeChanged.Count -gt 0 -or $skillsChanged.Count -gt 0) { exit 1 }
 exit 0

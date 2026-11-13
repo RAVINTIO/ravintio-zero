@@ -17,9 +17,10 @@ jobs:
     if: github.event_name == 'pull_request' && github.event.action != 'closed'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Validate Code/Doc Parity
         run: |
@@ -45,6 +46,9 @@ jobs:
 
       - name: Check the backlog index
         run: node ravintio-zero/scripts/backlog-index.mjs --check
+
+      - name: Check the pack facts file
+        run: node ravintio-zero/scripts/pack-facts.mjs --check
 
       - name: Fail on a committed ignored file
         run: |
@@ -167,3 +171,24 @@ jobs:
           fi
           gh api -X DELETE "repos/$REPO/git/refs/heads/$HEAD_REF"
           echo "Deleted branch $HEAD_REF."
+
+  # Runs the prose linter on every in-scope file, and on a pull request checks
+  # that the baseline did not rise (0000390 REQ-003).
+  prose:
+    if: github.event_name == 'pull_request' && github.event.action != 'closed'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Check prose against the baseline
+        run: node ravintio-zero/scripts/prose-check.mjs check
+
+      - name: Check the baseline did not rise
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: node ravintio-zero/scripts/prose-check.mjs diff --base "origin/$BASE_REF"

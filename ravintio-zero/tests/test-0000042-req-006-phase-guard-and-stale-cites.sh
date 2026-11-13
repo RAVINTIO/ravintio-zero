@@ -15,23 +15,30 @@ set -uo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
-REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+REPO_ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
 
-# Paths the guard reads, relative to a repo root.
+# Paths the guard reads, relative to a repo root. The pack lives at
+# src/ravintio-zero/ in the source repo and at ravintio-zero/ in an install.
+# The guard skips whichever of the two a root lacks.
 SCOPE=(
   ravintio-zero/skills ravintio-zero/templates ravintio-zero/hooks
   ravintio-zero/standards ravintio-zero/workflows ravintio-zero/migrations
   ravintio-zero/schemas ravintio-zero/skills-inbox
   ravintio-zero/getting-started.md ravintio-zero/pipeline-reference.md
   ravintio-zero/project-operations.md
+  src/ravintio-zero/skills src/ravintio-zero/templates src/ravintio-zero/hooks
+  src/ravintio-zero/standards src/ravintio-zero/workflows src/ravintio-zero/migrations
+  src/ravintio-zero/schemas src/ravintio-zero/skills-inbox
+  src/ravintio-zero/getting-started.md src/ravintio-zero/pipeline-reference.md
+  src/ravintio-zero/project-operations.md
   docs ravintio-overrides plan README.md
 )
 # History paths the guard skips. plan/.initiative-logs holds the git-ignored
 # step logs, which echo the step's own test output (0000314). Only that folder
 # is skipped, so a new untracked skill file is still scanned.
 EXCLUDE=(
-  plan/_archive plan/changelog plan/current plan/backlog
-  ravintio-zero/migrations/_done plan/.initiative-logs
+  plan/_archive plan/changelog plan/current plan/backlog docs/adr docs/decisions-index.md
+  ravintio-zero/migrations/_done src/ravintio-zero/migrations/_done plan/.initiative-logs
 )
 # P5 to P9, "Phase <n>", or a retired letter prefix (D:, PL:, IM:, VA:, SH:).
 PATTERN='\bP[5-9]\b|\bPhase [0-9]\b|(^|[^A-Za-z0-9_])(D|PL|IM|VA|SH):'
@@ -136,9 +143,10 @@ if [ -f "$INSTR/custom-004-ship-push-and-raise-pr.md" ]; then
 fi
 
 OLD_REFS="$(cd "$REPO_ROOT" && git grep -n 'custom-004-p9' -- . \
-  ':!plan/_archive' ':!plan/changelog' ':!plan/current' ':!plan/backlog' \
-  ':!ravintio-zero/migrations/_done' \
-  ':!ravintio-zero/tests/test-0000042-req-006-phase-guard-and-stale-cites.sh' 2>/dev/null)"
+  ':!plan/_archive' ':!plan/changelog' ':!docs/adr' ':!plan/current' ':!plan/backlog' \
+  ':!ravintio-zero/migrations/_done' ':!src/ravintio-zero/migrations/_done' \
+  ':!ravintio-zero/tests/test-0000042-req-006-phase-guard-and-stale-cites.sh' \
+  ':!src/ravintio-zero/tests/test-0000042-req-006-phase-guard-and-stale-cites.sh' 2>/dev/null)"
 assert_equals "" "$OLD_REFS" "req-006 (c): no live file names custom-004-p9"
 
 print_summary

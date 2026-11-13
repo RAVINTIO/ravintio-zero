@@ -30,7 +30,7 @@ ZERO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 HOOKS="$ZERO_DIR/hooks"
 ENF="$HOOKS/enforcement"
 
-# The nine enforcement hooks that import the shared readStdin. Every other
+# The ten enforcement hooks that import the shared readStdin. Every other
 # former caller lived in hooks/telemetry/ and no longer exists.
 READSTDIN_CALLERS=(
   "$ENF/auto-trigger-orchestrator.mjs" "$ENF/check-design.mjs"
@@ -38,6 +38,7 @@ READSTDIN_CALLERS=(
   "$ENF/gate-write.mjs" "$ENF/ratchet-check.mjs" "$ENF/merge-guard.mjs"
   "$ENF/block-forced-add.mjs"
   "$ENF/check-reply-prefix.mjs"
+  "$ENF/check-reply-writing.mjs"
 )
 
 count_defs() {
@@ -54,6 +55,7 @@ make_workspace() {
   dir=$(mktemp -d -t ravintio_0000028_req002_XXXXXX)
   cp -r "$ZERO_DIR" "$dir/ravintio-zero"
   git init "$dir" >/dev/null 2>&1
+  commit_workspace_pack "$dir"
   git config --global --add safe.directory "$dir" >/dev/null 2>&1 || true
   printf 'components: []\n' > "$dir/product.yml"
   echo "$dir"
@@ -101,7 +103,7 @@ done
 ACTUAL_IMPORTERS="$(grep -rl 'read-stdin.mjs' "$HOOKS" 2>/dev/null | sort | tr '\n' ' ')"
 EXPECTED_IMPORTERS="$(printf '%s\n' "${READSTDIN_CALLERS[@]}" | sort | tr '\n' ' ')"
 assert_equals "$EXPECTED_IMPORTERS" "$ACTUAL_IMPORTERS" \
-  "req-002: the nine enforcement hooks are the complete set of readStdin importers"
+  "req-002: the ten enforcement hooks are the complete set of readStdin importers"
 
 # Every import in every hook must resolve on disk. A missing shared module is
 # an ESM module-load failure, which happens before the hook's own try/catch and

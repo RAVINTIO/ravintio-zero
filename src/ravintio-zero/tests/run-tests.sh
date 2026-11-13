@@ -1,0 +1,330 @@
+#!/usr/bin/env bash
+# Test runner for ravintio-zero tests
+# Usage: bash ravintio-zero/tests/run-tests.sh
+#
+# Environment:
+#   RAVINTIO_PWSH=<path>        PowerShell 7 program to run .ps1 suites (default: pwsh)
+#   RAVINTIO_REQUIRE_PWSH=1     fail the run when pwsh is missing (0000036 ADR-002)
+#   RAVINTIO_PREFLIGHT_ONLY=1   check for stray files, run no suite, and exit
+#   RAVINTIO_TEST_QUIET=1       hide PASS lines and banners, keep every failure and the summary
+#   RAVINTIO_SHARD=i/n          run only shard i of n of the suites (0000409 ADR-0284)
+#
+# Under the totals the runner lists each failed suite by file name, in quiet mode too (0000358).
+#
+# The runner removes every RAVINTIO_ variable from the environment of each suite (0000315), so a
+# suite gives the same result in any session. The initiative driver sets RAVINTIO_INITIATIVE_STEP
+# in every step session, and the hooks read it. A suite that needs a variable sets it for its own
+# call. Three variables pass through: RAVINTIO_PWSH, RAVINTIO_TIMING_FILE, and RAVINTIO_TEST_QUIET. The
+# last one only changes how much a suite prints, and assert.sh reads it. A suite that starts a
+# nested runner unsets it first.
+#
+# The runner also compares tracked and untracked files before the first suite and after the last.
+# If a suite changes one, the run fails and names the path. Ignored files are not compared.
+
+set -uo pipefail
+unset RAVINTIO_INITIATIVE_STEP
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+REGRESSION_DIR="$SCRIPT_DIR/regression"
+PWSH="${RAVINTIO_PWSH:-pwsh}"
+
+# Every exported RAVINTIO_ variable except the three that pass through is removed for each suite.
+CLEAR_ARGS=()
+while IFS= read -r name; do
+  [ -n "$name" ] || continue
+  case "$name" in
+    RAVINTIO_PWSH|RAVINTIO_TIMING_FILE|RAVINTIO_TEST_QUIET) ;;
+    *) CLEAR_ARGS+=(-u "$name") ;;
+  esac
+done <<< "$(compgen -e | grep '^RAVINTIO_' || true)"
+
+# Git isolation (0000462, ADR-0303): each suite sees a global git config that refuses to guess an
+# identity, so a commit with no identity fails here as it does on a CI runner.
+source "$SCRIPT_DIR/helpers/git-isolation.sh"
+isolate_git_env
+trap remove_git_isolation EXIT
+
+# Prints one "path<TAB>hash" line per modified, deleted, or untracked file. Fails outside a git repository.
+snapshot_tree() {
+  local top f
+  top="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel 2>/dev/null)" || return 1
+  git -C "$top" ls-files -z -m -o --exclude-standard | while IFS= read -r -d '' f; do
+    if [ -e "$top/$f" ] || [ -L "$top/$f" ]; then
+      printf '%s\t%s\n' "$f" "$(git -C "$top" hash-object -- "$f" 2>/dev/null || echo unreadable)"
+    else
+      printf '%s\tdeleted\n' "$f"
+    fi
+  done | LC_ALL=C sort
+}
+
+# Prints the sorted paths under .claude/skills/ of the repository (0000381 REQ-001). The folder is
+# ignored by git, so the tree snapshot cannot see it. A suite that empties it fails the run.
+skills_listing() {
+  local top
+  top="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel 2>/dev/null)" || return 0
+  [ -d "$top/.claude/skills" ] || return 0
+  (cd "$top" && find .claude/skills -mindepth 1 -print 2>/dev/null | LC_ALL=C sort)
+}
+
+SKILLS_BEFORE="$(skills_listing)"
+TREE_BEFORE=""
+TREE_CHECK=0
+if TREE_BEFORE="$(snapshot_tree)"; then TREE_CHECK=1; fi
+
+TOTAL_PASS=0
+TOTAL_FAIL=0
+PS_SKIPPED=0
+FAILED_SUITES=()
+
+# ── Pre-flight: every file under tests/ is a suite or a known non-suite ──────
+#
+# A suite is test-*.sh or test-*.ps1 directly in tests/ or tests/regression/.
+# Any other file the runner would skip without a word, which is how a
+# misnamed suite once went unrun for a whole release (backlog 0000084). So
+# each one is named here, and the run fails (0000036 ADR-001). A new helper or
+# data file needs an entry in this list.
+KNOWN_NON_SUITES=(
+  "README.md"                              # how to run the tests
+  "run-tests.sh"                           # this runner
+  "run-tests.ps1"                          # the PowerShell-only runner (0000036 ADR-002)
+  "test-gate-write-windows.mjs"            # called by test-gate-write-windows.sh
+  "helpers/gate-write-harness.mjs"         # shared harness for the 0000164 gate-write suites
+  "test-0000164-req-001-gate-write-outside-project.mjs"  # called by the req-001 .sh suite
+  "test-0000164-req-002-gate-write-documented-scope.mjs" # called by the req-002 .sh suite
+  "test-0000164-req-006-gate-write-symlink-cases.mjs"    # called by the req-006 .sh suite
+  "test-0000393-req-001-gate-write-shell.mjs"            # called by the 0000393 req-001 .sh suite
+  "regression/test-gate-write-windows.mjs" # the regression copy of the same
+  "regression/regression-manifest.json"    # the promoted-suite list
+  "regression/.gitkeep"                    # keeps the folder in git
+  "brand-guard-allowlist.txt"              # the brand guard allowlist, read by pre-push and the CI brand test (0000394)
+  "helpers/assert.sh"                      # Bash assert helpers
+  "helpers/git-isolation.sh"               # isolate_git_env, the runner's git config isolation (0000462)
+  "helpers/timeout.sh"                    # with_timeout, the portable time limit (0000380)
+  "helpers/version.sh"                     # version comparison for the 0000160 req-004 and 0000164 req-011 suites
+  "helpers/driver-args.sh"                 # claude arguments the driver passes, for the driver suites (0000354 REQ-004)
+  "helpers/scheduler-fixture.sh"           # git repo and stub fixtures for the concurrent driver suites (0000379)
+  "helpers/unguarded-jobs.sh"              # lists workflow jobs with no guard and no marker (0000355 REQ-003)
+  "helpers/assert.ps1"                     # PowerShell assert helpers (0000036 ADR-002)
+  "helpers/setup-workspace.ps1"            # temporary projects for the setup.ps1 suites
+  "fixtures/0000038-hook-filter/README.md"              # what the 0000038 fixtures hold
+  "fixtures/0000038-hook-filter/settings-before.json"  # planted settings.json for the 0000038 suites
+  "fixtures/0000038-hook-filter/expected-after.txt"    # hook commands after one setup run
+  "fixtures/0000039-setup-hardening/README.md"                # what the 0000039 fixtures hold
+  "fixtures/0000039-setup-hardening/invalid-settings.json"    # invalid JSON with a planted value (0000039 req-001)
+  "fixtures/0000039-setup-hardening/single-object-hooks.json" # single-object hooks values (0000039 req-002)
+  "fixtures/0000039-setup-hardening/deep-settings.json"       # a value nested 15 levels deep (0000039 req-003)
+  "fixtures/0000151-orchestrator-skill-base.md"               # orchestrator SKILL.md at the base commit (0000151 req-011)
+  "fixtures/0000243-resume-detection-base.md"                 # the Resume Detection section before 0000243 (0000243 req-005)
+  "fixtures/0000387-mermaid-no-diagram/README.md"             # what the 0000387 fixture holds
+  "fixtures/0000387-mermaid-no-diagram/criteria.md"           # a Mermaid criterion in a repo with no diagram (0000387 req-003)
+)
+
+is_known_file() {
+  local rel="$1" dir base known
+  dir="$(dirname "$rel")"
+  base="$(basename "$rel")"
+  [ "$base" = ".DS_Store" ] && return 0        # macOS Finder metadata
+  if [ "$dir" = "." ] || [ "$dir" = "regression" ]; then
+    case "$base" in test-*.sh|test-*.ps1) return 0 ;; esac
+  fi
+  for known in "${KNOWN_NON_SUITES[@]}"; do
+    [ "$rel" = "$known" ] && return 0
+  done
+  return 1
+}
+
+UNDISCOVERED=0
+while IFS= read -r file; do
+  [ -n "$file" ] || continue
+  rel="${file#"$SCRIPT_DIR"/}"
+  if ! is_known_file "$rel"; then
+    echo "Undiscovered file: $rel"
+    UNDISCOVERED=$((UNDISCOVERED + 1))
+  fi
+done <<< "$(find "$SCRIPT_DIR" \( -type f -o -type l \) | LC_ALL=C sort)"
+
+if [ "${RAVINTIO_PREFLIGHT_ONLY:-0}" = "1" ]; then
+  [ "$UNDISCOVERED" -eq 0 ]
+  exit $?
+fi
+
+# ── Shard (0000409) ───────────────────────────────────────────────────────────
+#
+# RAVINTIO_SHARD=i/n runs only shard i of n. Suites are numbered from 0 in run
+# order, feature suites then regression suites, and suite k runs when k mod n
+# is i - 1. CI runs each shard as its own job. Unset, every suite runs.
+SHARD_I=1
+SHARD_N=1
+if [ -n "${RAVINTIO_SHARD:-}" ]; then
+  if [[ "$RAVINTIO_SHARD" =~ ^([0-9]+)/([0-9]+)$ ]] && [ "${BASH_REMATCH[2]}" -ge 1 ] \
+    && [ "${BASH_REMATCH[1]}" -ge 1 ] && [ "${BASH_REMATCH[1]}" -le "${BASH_REMATCH[2]}" ]; then
+    SHARD_I="${BASH_REMATCH[1]}"
+    SHARD_N="${BASH_REMATCH[2]}"
+    echo "Shard $SHARD_I of $SHARD_N"
+  else
+    echo "RAVINTIO_SHARD must be i/n with 1 <= i <= n, not '$RAVINTIO_SHARD'"
+    exit 2
+  fi
+fi
+SUITE_INDEX=0
+
+# Returns 0 when the next suite in run order belongs to this shard.
+in_shard() {
+  local k=$SUITE_INDEX
+  SUITE_INDEX=$((SUITE_INDEX + 1))
+  [ $((k % SHARD_N)) -eq $((SHARD_I - 1)) ]
+}
+
+HAVE_PWSH=0
+command -v "$PWSH" >/dev/null 2>&1 && HAVE_PWSH=1
+
+# Runs one suite and prints its name. Returns 0 on pass, 1 on fail, and 2 when
+# a PowerShell suite can't run because pwsh is missing. With
+# RAVINTIO_TEST_QUIET=1 the output of a passing suite is dropped, and a
+# failing suite prints its output with its name once (0000151 req-008).
+run_one() {
+  local file="$1" quiet_out code name
+  name="$(basename "$file")"
+  if [ "${RAVINTIO_TEST_QUIET:-0}" = "1" ]; then
+    case "$file" in
+      *.ps1) [ "$HAVE_PWSH" -eq 0 ] && return 2 ;;
+    esac
+    quiet_out="$(run_suite_body "$file" 2>&1)"
+    code=$?
+    if [ "$code" -ne 0 ]; then
+      case "$quiet_out" in
+        *"--- $name ---"*) ;;
+        *) echo ""; echo "--- $name ---" ;;
+      esac
+      printf '%s\n' "$quiet_out"
+    fi
+    return "$code"
+  fi
+  echo ""
+  echo "--- $name ---"
+  case "$file" in
+    *.ps1)
+      if [ "$HAVE_PWSH" -eq 0 ]; then
+        echo "  SKIP: pwsh not found"
+        return 2
+      fi
+      ;;
+  esac
+  run_suite_body "$file"
+}
+
+run_suite_body() {
+  case "$1" in
+    *.ps1) env ${CLEAR_ARGS[@]+"${CLEAR_ARGS[@]}"} "$PWSH" -NoProfile -File "$1" ;;
+    *) env ${CLEAR_ARGS[@]+"${CLEAR_ARGS[@]}"} bash "$1" ;;
+  esac
+}
+
+run_suite() {
+  run_one "$1"
+  case $? in
+    0) TOTAL_PASS=$((TOTAL_PASS + 1)) ;;
+    2) PS_SKIPPED=$((PS_SKIPPED + 1)) ;;
+    *) TOTAL_FAIL=$((TOTAL_FAIL + 1)); FAILED_SUITES+=("$(basename "$1")") ;;
+  esac
+}
+
+# Every test-*.sh and test-*.ps1 in this directory is discovered and run
+# automatically. No suite needs to be registered by hand (backlog 0000004:
+# hardcoded list silently skipped 5 of 14 suites, including this feature's own).
+for suite in "$SCRIPT_DIR"/test-*.sh "$SCRIPT_DIR"/test-*.ps1; do
+  [ -e "$suite" ] || continue
+  in_shard || continue
+  run_suite "$suite"
+done
+
+# ── Regression Suite ──────────────────────────────────────────────────────────
+
+REGRESSION_PASS=0
+REGRESSION_FAIL=0
+
+echo ""
+echo "=== Regression Suite ==="
+
+REGRESSION_TESTS=()
+for regression_test in "$REGRESSION_DIR"/test-*.sh "$REGRESSION_DIR"/test-*.ps1; do
+  [ -e "$regression_test" ] && REGRESSION_TESTS+=("$regression_test")
+done
+
+if [ "${#REGRESSION_TESTS[@]}" -eq 0 ]; then
+  echo "  No regression tests yet."
+else
+  for regression_test in "${REGRESSION_TESTS[@]}"; do
+    in_shard || continue
+    run_one "$regression_test"
+    case $? in
+      0) REGRESSION_PASS=$((REGRESSION_PASS + 1)) ;;
+      2) PS_SKIPPED=$((PS_SKIPPED + 1)) ;;
+      *) REGRESSION_FAIL=$((REGRESSION_FAIL + 1)); FAILED_SUITES+=("regression/$(basename "$regression_test")") ;;
+    esac
+  done
+fi
+
+# ── Tree check ────────────────────────────────────────────────────────────────
+
+TREE_CHANGED=0
+if [ "$TREE_CHECK" -eq 1 ]; then
+  TREE_AFTER="$(snapshot_tree)"
+  if [ "$TREE_BEFORE" != "$TREE_AFTER" ]; then
+    echo ""
+    while IFS= read -r path; do
+      [ -n "$path" ] || continue
+      echo "Tree changed during the run: $path"
+      TREE_CHANGED=$((TREE_CHANGED + 1))
+    done <<< "$(comm -3 <(printf '%s\n' "$TREE_BEFORE") <(printf '%s\n' "$TREE_AFTER") | sed 's/^[[:space:]]*//' | cut -f1 | LC_ALL=C sort -u)"
+  fi
+fi
+
+SKILLS_CHANGED=0
+SKILLS_AFTER="$(skills_listing)"
+if [ "$SKILLS_BEFORE" != "$SKILLS_AFTER" ]; then
+  echo ""
+  while IFS= read -r path; do
+    [ -n "$path" ] || continue
+    echo "Skills changed during the run: $path"
+    SKILLS_CHANGED=$((SKILLS_CHANGED + 1))
+  done <<< "$(comm -3 <(printf '%s\n' "$SKILLS_BEFORE") <(printf '%s\n' "$SKILLS_AFTER") | sed 's/^[[:space:]]*//' | LC_ALL=C sort -u)"
+fi
+
+# ── Summary ───────────────────────────────────────────────────────────────────
+
+echo ""
+echo "================================"
+echo "Feature suites:    $TOTAL_PASS passed, $TOTAL_FAIL failed."
+echo "Regression suite:  $REGRESSION_PASS passed, $REGRESSION_FAIL failed."
+if [ "${#FAILED_SUITES[@]}" -gt 0 ]; then
+  echo "Failed suites:"
+  for failed_suite in "${FAILED_SUITES[@]}"; do echo "  $failed_suite"; done
+fi
+if [ "$PS_SKIPPED" -gt 0 ]; then
+  echo "Skipped $PS_SKIPPED PowerShell suites: pwsh not found"
+fi
+if [ "$TREE_CHANGED" -gt 0 ]; then
+  echo "Changed paths:     $TREE_CHANGED (named above)"
+fi
+if [ "$SKILLS_CHANGED" -gt 0 ]; then
+  echo "Changed skills:    $SKILLS_CHANGED (named above)"
+fi
+if [ "$UNDISCOVERED" -gt 0 ]; then
+  echo "Undiscovered files: $UNDISCOVERED (named above)"
+fi
+echo "================================"
+
+PS_REQUIRED_FAIL=0
+if [ "$PS_SKIPPED" -gt 0 ] && [ "${RAVINTIO_REQUIRE_PWSH:-0}" = "1" ]; then
+  echo "RAVINTIO_REQUIRE_PWSH=1, so the skipped PowerShell suites fail the run."
+  PS_REQUIRED_FAIL=1
+fi
+
+if [ "$TOTAL_FAIL" -eq 0 ] && [ "$REGRESSION_FAIL" -eq 0 ] && [ "$UNDISCOVERED" -eq 0 ] && [ "$TREE_CHANGED" -eq 0 ] && [ "$SKILLS_CHANGED" -eq 0 ] && [ "$PS_REQUIRED_FAIL" -eq 0 ]; then
+  echo "All tests passed."
+  exit 0
+else
+  echo "One or more tests failed."
+  exit 1
+fi

@@ -4,7 +4,7 @@
 set -uo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 ZERO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-ROOT="$(cd "$ZERO_DIR/.." && pwd)"
+ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
 SHIP="$ZERO_DIR/skills/ravintio-ship/SKILL.md"
@@ -41,7 +41,7 @@ if command -v ruby >/dev/null 2>&1; then
         s = rt["steps"]
         r << "depth" unless s.any? { |x| x.dig("with", "fetch-depth") == 0 }
         r << "bot" unless s.to_s.include?("41898282+github-actions[bot]@users.noreply.github.com")
-        r << "cmd" unless s.any? { |x| x["run"].to_s.include?("node ravintio-zero/scripts/release-tag.mjs") }
+        r << "cmd" unless s.any? { |x| x["run"].to_s.include?((ARGV[0].include?("/hooks/") ? "node ravintio-zero" : "node src/ravintio-zero") + "/scripts/release-tag.mjs") }
       end
       jobs.each do |k, j|
         next if k == "release-tag"
@@ -70,7 +70,7 @@ assert_equals "yes" "$(has 'I-D Advance' "$(section '## Initiative steps' "$SHIP
 
 SS="$(section '## Ship stages' "$STD")"
 assert_equals "no" "$(has 'tag at Step 7' "$SS")" "roadmap-standards no longer says Step 7 tags"
-assert_equals "yes" "$(has 'git tag v{version} -m "{feature-id}" "$sha"' "$(section '### I-D Advance' "$STD")")" "I-D Advance still tags the squash commit"
+assert_equals "yes" "$(has 'tags the merge commit `v{version}`' "$(section '### I-D Advance' "$STD")")" "I-D Advance: the merge queue still tags the squash commit (0000379)"
 assert_equals "yes" "$(has 'release-tag' "$(cat "$REF")")" "pipeline-reference names the release-tag job"
 assert_equals "yes" "$(has 'release-tag' "$(cat "$OPS")")" "project-operations names the release-tag job"
 assert_equals "no" "$(has 'and the release tag' "$(cat "$C004")")" "custom-004 drops the release tag push"

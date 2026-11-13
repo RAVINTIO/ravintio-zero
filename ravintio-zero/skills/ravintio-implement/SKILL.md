@@ -23,7 +23,7 @@ description: Implements requirements with tests and documentation landing togeth
 
 Precision reading protocol: scope your context by navigating precisely. Never read the entire `plan/` directory unconditionally.
 
-- Component manifest at `src/{component-id}/component.yml`. Read the frontmatter first to decide whether the body is needed.
+- Component manifest at `src/{component-id}/component.yml`. Read the frontmatter first to decide whether you need the body.
 - Execution plan at `plan/current/execution-plan.md` for the architecture overview.
 - Requirements at `plan/current/requirements/*.md`. Read only the requirement file you are actively implementing.
 - OpenAPI specification at `plan/current/openapi-spec.yaml` (if applicable).
@@ -39,7 +39,7 @@ Check whether capability skills exist for the declared stack and load them along
 When `plan/current/design.md` declares `Build target: docker`:
 
 - Never check host-installed runtimes or tools. Do not run `node`, `python`, `go`, `dotnet`, or equivalents on the host.
-- Never fail or warn because a runtime is absent on the host. It is expected to be absent.
+- Never fail or warn because a runtime is absent on the host. Expect it to be absent.
 - Scaffold Dockerfile-first. Generate the `Dockerfile` and `docker-compose.yml` before any source code.
 - All validation runs via `docker build` and `docker run`, never the host toolchain.
 
@@ -47,15 +47,19 @@ When the build target is local, use the host toolchain.
 
 ## Outputs
 
-For each component at `src/{component-id}/`: application code, shared types and validation schemas, unit tests for pure functions, integration tests for endpoints, contract tests for cross-component interfaces, and declared infrastructure. Documentation for the component lands in the same phase. Code and docs are never committed separately.
+For each component at `src/{component-id}/`, build application code, shared types and validation schemas, and unit tests for pure functions. Also build integration tests for endpoints, contract tests for cross-component interfaces, and declared infrastructure. Documentation for the component lands in the same phase. Never commit code and docs separately.
 
-Build multiple components in dependency order: shared packages, then data owners, then consumers. Each component is finished (code, tests, docs) before the next starts. Halt and escalate on a circular dependency.
+Build multiple components in dependency order: shared packages, then data owners, then consumers. Finish each component (code, tests, docs) before the next starts. Halt and escalate on a circular dependency.
 
 Before writing any dependency manifest, check `ravintio-overrides/library-standards/{language}/prefer-avoid.md`, then the pack's `ravintio-zero/standards/library-standards/` lists. Substitute preferred alternatives for avoided libraries. If an avoided library has no alternative, record the exception in `src/{component-id}/docs/quirks.md` and escalate. Skip the audit when the lists are stubs. Follow `ravintio-zero/standards/library-standards/_version-policy.md` for version pinning.
+
+Read any other standard or template through the resolver: `node ravintio-zero/scripts/resolve-override.mjs {standards|templates} {file}`. See `ravintio-zero/standards/archetype-standards.md`.
 
 Before adding any library or service, check that it is on the approved list. The list is the `Approved dependencies` field of `design.md` in a gated run and the `## Dependencies` table of `initiative.md` in an initiative step. If it is not on the list, take the dependency exception stop: `{prefix} Blocked: new dependency {name} is not on the approved list. Approve it or choose an approved alternative.` This applies in every run mode.
 
 ## TDD inner loop
+
+Run the suites that `## Test impact` names before the full suite. A failure there costs seconds, not a full run.
 
 For each functional requirement, orchestrate three subagents in sequence. This is the mandatory implementation discipline.
 
@@ -67,30 +71,49 @@ for each requirement:
     1. dispatch ravintio-test-writer  -> wait for RED (non-zero exit)
     2. dispatch ravintio-implementer  -> wait for GREEN (zero exit)
     if GREEN:
-      3. dispatch ravintio-refactor   -> wait for all-suite GREEN
+      3. dispatch ravintio-refactor   -> wait for affected-tests GREEN
       4. run the improvement loop     -> up to 2 cycles
       break
     else if attempt >= 5:
       ESCALATE to the human. Do not proceed to the next requirement.
 ```
 
-Pass each dispatch the `model` from that skill's own `recommended_model` field. If a haiku unit fails twice, retry that unit on `sonnet`. The two haiku failures count toward the five attempts, and the five-attempt escalation is unchanged.
+Pass each dispatch the `model` from that skill's own `recommended_model` field. If a haiku unit fails twice, retry that unit on `sonnet`. The two haiku failures count toward the five attempts, and the five-attempt escalation stays the same.
 
-After 5 failed attempts on one requirement, stop in both run modes with `P2 Implement: Blocked: {requirement} still fails after 5 attempts. Review the escalation and choose the next step.` Then report: the requirement ID, the test file, what each attempt tried and why it stayed RED, your root-cause assessment, and a recommended action. Wait for human direction.
+After 5 failed attempts on one requirement, emit `P2 Implement: Blocked: {requirement} still fails after 5 attempts. Review the escalation and choose the next step.` and stop in both run modes. Then report the requirement ID, the test file, what each attempt tried, and why it stayed RED. Add your root-cause assessment and a recommended action. Wait for human direction.
 
 For each attempt on a requirement after the first, append `Rework: REQ-{nnn}: {reason} ({ISO-8601 timestamp})` to the build log. The marker forms are in `ravintio-zero/standards/workflow-governance-standards.md`.
 
 Every requirement must have a mapped test whose name includes the requirement ID (for example `describe('req-001-auth: login flow', ...)`). Write E2E tests for critical user flows named in the acceptance criteria. Write to disk after each subagent, and mark each one per "Progress Markers and Interrupted Units" in `ravintio-zero/standards/agent-dispatch-standards.md`. Do not accumulate work in memory across requirements.
 
+## Inline units
+
+<!-- rule: implement-inline-unit -->
+- **An inline unit runs the TDD loop in your own context.** It is a unit of class `content` that applies agreed text or changes one file. Write its failing test, append `- RED: {unit} ({ISO-8601 timestamp})`, make the change, run the test, and append `- GREEN: {unit} ({ISO-8601 timestamp})`. Then append the `Done:` line with tier `inline` and effort `none`. It dispatches no subagent and skips the refactor step and the improvement loop.
+
+<!-- rule: implement-non-inline-subagents -->
+- **A unit that is not inline still runs the test-writer, implementer, and refactor subagents.** The loop above applies to it unchanged.
+
+## Test scope
+
+<!-- rule: implement-affected-tests -->
+- **Each cycle runs the affected tests.** A cycle runs the new test and the tests that cover the changed files of the unit. It does not run the full suite.
+
+<!-- rule: implement-full-suite-once -->
+- **One full suite run before P2 completes.** After the last requirement is GREEN, write docs before the suite starts. Then start one full suite run in the background and change no file until it ends. The runner fails on a changed tree. Fix any failure before you close P2.
+
+<!-- rule: implement-tests-run-line -->
+- **Record the tests.** After each cycle, append `Tests run: REQ-{nnn}: {test files} ({ISO-8601 timestamp})` to the build log. After the full run, append `Tests run: full suite: {n} passed, {m} failed ({ISO-8601 timestamp})`.
+
 ## Improvement loop
 
-After refactor confirms all-suite GREEN, run up to 2 cycles per requirement, as `## Improvement loop` in `ravintio-zero/standards/agent-dispatch-standards.md` describes. Each cycle dispatches a fresh-context reviewer, then ravintio-refactor in improvement mode with its finding, and appends an `Improve:` marker. The loop stops early on `no change worth making`.
+After refactor confirms affected-tests GREEN, run up to 2 cycles per requirement, as `## Improvement loop` in `ravintio-zero/standards/agent-dispatch-standards.md` describes. Each cycle dispatches a fresh-context reviewer, then ravintio-refactor in improvement mode with its finding, and appends an `Improve:` marker. The loop stops early on `no change worth making`.
 
 ## Rules
 
 - **One question at a time** when you need human input.
 - **Implement against the requirements.** The OpenAPI spec defines the contract. Do not add or remove endpoints. Follow the ADRs. Flag a wrong ADR rather than overriding it silently. Do not introduce technology the stack does not declare.
-- **Schema changes.** Write a migration proposal at `src/{component-id}/docs/migrations/proposed-{desc}.md` and STOP for human approval in both run modes: `P2 Implement: Blocked: schema change proposed at {path}. Approve or reject the migration proposal.` Never modify a schema directly. Destructive operations (drop, rename) always stop. This is a hard limit. In an initiative step, a chart-approved additive change does not stop (see `ravintio-zero/standards/roadmap-standards.md`).
+- **Schema changes.** Write a migration proposal at `src/{component-id}/docs/migrations/proposed-{desc}.md` and STOP for human approval in both run modes, with `P2 Implement: Blocked: schema change proposed at {path}. Approve or reject the migration proposal.` (agreement follows rule `agree-explicit` in `ravintio-orchestrator/references/orchestrator-p0-coaching.md`). Never modify a schema directly. Destructive operations (drop, rename) always stop. This is a hard limit. In an initiative step, a chart-approved additive change does not stop (see `ravintio-zero/standards/roadmap-standards.md`).
 - **Data ownership.** Never write to data owned by another component. Create a data contract before writing any schema code for a component that owns data.
 - **Rollbacks are human-initiated, never automatic.** No agent rolls back a deployment, migration, or artifact on its own.
 - **Deviation.** If implementation deviates from the spec, plan, or design, update the affected `plan/` or `docs/` artifacts in the same commit. Record the deviation in `docs/quirks.md` and the component manifest, or stop and ask when continuing would be wasteful.
@@ -99,7 +122,7 @@ After refactor confirms all-suite GREEN, run up to 2 cycles per requirement, as 
 
 ## Documentation
 
-Docs are produced in this phase, alongside the code they describe.
+This phase produces the docs, alongside the code they describe.
 
 Per-component artifacts at `src/{component-id}/docs/`:
 
@@ -150,10 +173,10 @@ When `plan/.run-speed` holds `fast`, dispatch these batches in order, each in on
 
 1. One TDD track per leaf requirement whose files no other track writes. Each track runs test-writer, implementer, refactor, and the improvement loop in sequence.
 2. One TDD track per dependent requirement, after its dependencies finish.
-3. One unit per independent living doc and per-component doc set, while the full test suite runs in the background.
+3. One unit per independent living doc and per-component doc set, before the full test suite starts.
 4. Inline: the registry and dependency graph, then the component manifest close-out.
 
-At `standard`, the steps above apply. The five-attempt escalation is unchanged.
+At `standard`, the steps above apply. The five-attempt escalation stays the same.
 
 ### Shared tree
 

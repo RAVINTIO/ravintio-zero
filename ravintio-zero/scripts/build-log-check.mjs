@@ -17,12 +17,32 @@
  *      one-minute margin. A line not yet committed, or a log outside git,
  *      is compared with the current clock (0000358).
  *
- * Every finding names the phase. Exit codes: 0 = clean, 1 = findings.
+ *   7. Every "GREEN: {unit}" line has an earlier "RED: {unit}" line, and every
+ *      "Done: {unit} (..., inline, ...)" line has both markers (0000386).
+ *      A unit name is the text between the marker and " (".
+ *
+ *   8. Each "Resolved:" line, and each "Rework:" line, has a "Postmortem:" line
+ *      that names a record. The record exists and passes postmortem-check.mjs
+ *      (0000392). A "Postmortem:" line that names a REQ-nnn covers that
+ *      requirement. Any other "Postmortem:" line covers one "Resolved:" line
+ *      or one "Rework:" line that names no requirement.
+ *
+ *   9. Every Decisions row of the initiative chart that names this step has a
+ *      "Decision applied (initiative chart): {fork}" line or a "Decision not
+ *      applicable (initiative chart): {fork}" line (0000487). The chart is
+ *      plan/current-initiative/initiative.md under the project root. The step is
+ *      the chart row whose Feature id equals the log's Feature ID. A missing
+ *      chart, an unreadable chart, or no matching row skips the check.
+ *
+ * Every finding names the phase or the unit. Exit codes: 0 = clean, 1 = findings.
  */
 
 import { execFileSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { dirname, basename, join } from "node:path";
+import { checkRecord } from "./postmortem-check.mjs";
+import { parseChart } from "./initiative-chart.mjs";
+import { rowsForStep } from "./decision-rows.mjs";
 
 const file = process.argv[2] ?? join(process.cwd(), "plan", "current", "build-log.md");
 const findings = [];
@@ -130,6 +150,89 @@ function commitTimes(path) {
       findings.push(`${phase === null ? "Header" : `P${phase}`}: time ${m[0]} on line ${i + 1} is later than ${source}`);
     }
   });
+}
+
+// Check 7: RED before GREEN for each unit, and both markers for an inline Done.
+{
+  const red = new Set(), green = new Set();
+  const seen = new Set();
+  const flag = (msg) => { if (!seen.has(msg)) { seen.add(msg); findings.push(msg); } };
+  const marker = (row, word) => {
+    const m = new RegExp(`^\\s*(?:[-*]\\s*)?${word}:\\s*(.+?)\\s+\\(`).exec(row);
+    return m ? m[1] : null;
+  };
+  let fence = null;
+  for (const row of text.split("\n")) {
+    const f = /^\s*(```|~~~)/.exec(row);
+    if (f) { fence = fence === null ? f[1] : fence === f[1] ? null : fence; continue; }
+    if (fence !== null) continue;
+    const r = marker(row, "RED");
+    if (r !== null) { red.add(r); continue; }
+    const g = marker(row, "GREEN");
+    if (g !== null) {
+      if (!red.has(g)) flag(`Unit ${g}: "GREEN: ${g}" has no earlier "RED: ${g}" line`);
+      green.add(g);
+      continue;
+    }
+    const d = /^\s*(?:[-*]\s*)?Done:\s*(.+?)\s+\(([^)]*)\)/.exec(row);
+    if (d && d[2].split(",").map((x) => x.trim())[1] === "inline") {
+      if (!red.has(d[1])) flag(`Unit ${d[1]}: inline "Done:" line has no "RED: ${d[1]}" line`);
+      if (!green.has(d[1])) flag(`Unit ${d[1]}: inline "Done:" line has no "GREEN: ${d[1]}" line`);
+    }
+  }
+}
+
+// Check 8: every stop and every rework has a postmortem (0000392).
+{
+  const lineRe = (word) => new RegExp(`^\\s*(?:[-*]\\s*)?${word}:(.*)$`, "gm");
+  const resolved = [...text.matchAll(lineRe("Resolved"))].length;
+  const reworks = [...text.matchAll(lineRe("Rework"))].map((m) => m[1]);
+  const reworkReqs = new Set(reworks.flatMap((r) => r.match(/REQ-\d+/g) ?? []).slice(0, 1000));
+  const bareReworks = reworks.filter((r) => !/REQ-\d+/.test(r)).length;
+  const records = [...text.matchAll(lineRe("Postmortem"))].map((m) => m[1].trim());
+  const covered = new Set();
+  let stopLines = 0;
+  for (const rec of records) {
+    const reqs = rec.match(/REQ-\d+/g) ?? [];
+    if (reqs.length) reqs.forEach((r) => covered.add(r)); else stopLines++;
+    const path = rec.split(/\s+/)[0];
+    if (!existsSync(path)) { findings.push(`Postmortem: record ${path} does not exist`); continue; }
+    for (const f of checkRecord(readFileSync(path, "utf-8"))) findings.push(`Postmortem: ${path}: ${f}`);
+  }
+  const needStops = resolved + bareReworks;
+  if (stopLines < needStops) {
+    findings.push(`Postmortem: ${needStops} stop or rework line(s) need a "Postmortem:" line and ${stopLines} found`);
+  }
+  for (const r of [...reworkReqs].sort()) {
+    if (!covered.has(r)) findings.push(`Postmortem: ${r} has a "Rework:" line and no "Postmortem:" line that names it`);
+  }
+}
+
+// Check 9: every Decisions row that names this step has a log line (0000487).
+{
+  const featureId = field(text, "Feature ID");
+  const root = dirname(dirname(dirname(file)));
+  const chartPath = join(root, "plan", "current-initiative", "initiative.md");
+  if (featureId && existsSync(chartPath)) {
+    try {
+      const chartText = readFileSync(chartPath, "utf-8");
+      const row = parseChart(chartText).steps.find((s) => s.featureId === featureId);
+      if (row) {
+        const logged = (fork) =>
+          text.split("\n").some((line) => {
+            const body = line.replace(/^\s*(?:[-*]\s*)?/, "");
+            return ["Decision applied (initiative chart):", "Decision not applicable (initiative chart):"].some(
+              (prefix) => body.startsWith(prefix) && body.slice(prefix.length).trim().startsWith(fork),
+            );
+          });
+        for (const r of rowsForStep(chartText, row.step)) {
+          if (!logged(r.fork)) findings.push(`Decisions: step ${row.step} has no log line for the row "${r.fork}"`);
+        }
+      }
+    } catch {
+      // An unreadable chart skips the check.
+    }
+  }
 }
 
 const total = field(text, "Total wall clock");

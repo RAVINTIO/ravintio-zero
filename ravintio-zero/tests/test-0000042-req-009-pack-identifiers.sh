@@ -13,8 +13,8 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
 ZERO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-REPO_ROOT="$(cd "$ZERO_DIR/.." && pwd)"
-SELF="ravintio-zero/tests/$(basename "$0")"
+REPO_ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
+SELF="${ZERO_DIR#"$REPO_ROOT"/}/tests/$(basename "$0")"
 
 W="work"        # second half of the old word, so this file never matches itself
 UP="FRAME""WORK"; LO="frame"; CAP="Frame"
@@ -23,8 +23,8 @@ UP="FRAME""WORK"; LO="frame"; CAP="Frame"
 # current plan, which quotes the old names to describe the rename.
 in_scope_files() {
   git -C "$REPO_ROOT" ls-files \
-    | grep -v -e '^plan/_archive/' -e '^plan/changelog/' -e '^plan/current/' \
-              -e '^ravintio-zero/migrations/_done/' \
+    | grep -v -e '^plan/_archive/' -e '^plan/changelog/' -e '^plan/current/' -e '^docs/adr/' -e '^docs/decisions-index\.md$' -e '^plan/state/prose-baseline\.json$' \
+              -e '^\(src/\)\{0,1\}ravintio-zero/migrations/_done/' \
     | grep -vxF "$SELF"
 }
 

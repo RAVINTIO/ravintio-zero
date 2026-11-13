@@ -27,6 +27,7 @@
 //   "I-C Run: event:". The events are:
 //     - a new "Complete:" line, such as "P1 Plan: Complete: ..."
 //     - a new "Blocked:" line
+//     - a new "Question:" line
 //     - a new "Resolved:" line
 //     - a new commit, with its subject only
 //   When the watched build log is a different file from the last pass, it also prints the
@@ -57,6 +58,32 @@
 //   heading), the last build log line cut to 200 characters, the time since the last change,
 //   and whether plan/.initiative-runner.lock is held. With --once it always prints one.
 //
+//   Concurrent run (0000379 REQ-006): when one or more plan/.initiative-control/step-{n}/running
+//   files exist, the watcher reports every step with a running or ready file, in step order, and
+//   no longer reads plan/current/build-log.md. Step numbers must match ^[1-9][0-9]{0,2}$. For each
+//   step it reads the worktree build log plan/.initiative-worktrees/step-{n}/plan/current/build-log.md
+//   and the stream log plan/.initiative-logs/step-{n}.log. It prints "I-C Run: event: step {n}: ..."
+//   and "I-C Run: activity: step {n}: ..." lines, and per step a heartbeat
+//   "I-C Run: heartbeat: step {n}, phase ..., last ..., last change ... ago". A step with a ready
+//   file prints "I-C Run: heartbeat: step {n}, ready PR #{k}" instead. Commit events still print.
+//   With no control folder the output is unchanged.
+//
+//   Chart state (0000450 REQ-002): each pass reads the chart, which is the initiative file, with
+//   parseChart. A missing or malformed chart, or one with no "## Steps" table, yields no steps and
+//   never stops the watcher. A step with chart Status "merged" is never listed as ready or running
+//   and prints no ready heartbeat, whatever its control files hold.
+//
+//   Queue and driver events (0000450 REQ-002):
+//     - "I-C Run: event: step {n} ready PR #{k}" prints once for a new ready file of a step the
+//       chart does not mark merged. It prints "?" for k when the file is not a PR number. It works
+//       with no running file. Ready files that exist on the first pass count as already seen.
+//     - A raw line in a step log that starts, after an optional "hh:mm ", with
+//       "I-D Advance: Blocked: queue stopped on step {n}" prints once as "I-C Run: event: " and
+//       the line, cut to 200 characters. A merged step n prints nothing.
+//     - "I-C Run: event: driver exited" prints once when the lock file was present on an earlier
+//       pass and is gone while the initiative file remains.
+//   Every heartbeat ends with ", merged {m} of {total}" when the chart has steps.
+//
 //   Delivery: when the lock file and the initiative file are both gone, it prints one
 //   "I-E Delivery: ..." line and exits 0.
 //
@@ -74,6 +101,7 @@
 import { spawnSync } from 'node:child_process';
 import { closeSync, existsSync, lstatSync, openSync, readFileSync, readSync, readdirSync, statSync, writeSync } from 'node:fs';
 import { join, resolve } from 'node:path';
+import { parseChart } from './initiative-chart.mjs';
 
 const POLL_MS = 10000;
 const HEARTBEAT_MS = 300000;
@@ -87,14 +115,25 @@ const MAX_COMMITS = 100;
 const INITIATIVE = 'plan/current-initiative/initiative.md';
 const LOCK = 'plan/.initiative-runner.lock';
 const BUILD_LOG = 'plan/current/build-log.md';
+const CONTROL = 'plan/.initiative-control';
+const WORKTREES = 'plan/.initiative-worktrees';
+const STEP_N = /^[1-9][0-9]{0,2}$/;
 const ARCHIVE = 'plan/_archive';
 
 class Stop extends Error {}
 
 const cut = (text, max) => (text.length > max ? text.slice(0, max) : text);
+// Local time as hh:mm, 24-hour and zero padded. Every printed line starts with it (0000388).
+// RAVINTIO_REPLY_CLOCK (hh:mm) replaces the clock for tests (0000499).
+const clock = () => {
+  const given = /^([0-2][0-9]):([0-5][0-9])$/.exec(process.env.RAVINTIO_REPLY_CLOCK ?? '');
+  if (given) return `${given[1]}:${given[2]}`;
+  const d = new Date();
+  return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+};
 const out = (line) => {
   try {
-    writeSync(1, `${cut(line, MAX_LINE)}\n`);
+    writeSync(1, `${clock()} ${cut(line, MAX_LINE - 6)}\n`);
   } catch {
     // A closed pipe must not stop the watcher with a stack trace.
   }
@@ -201,6 +240,48 @@ function runningStep(root) {
   }
 }
 
+// Concurrent steps: [{ n, running, ready }] in step order, for each control folder step-{n} that
+// holds a running or ready file. Returns [] when no running file exists (0000379 REQ-006).
+// A step in the merged set is skipped, whatever its control files hold (0000450 REQ-002).
+function scanControl(root, merged) {
+  refuseLinks(root, CONTROL);
+  const dir = join(root, CONTROL);
+  if (!existsSync(dir)) return [];
+  const steps = [];
+  for (const name of readdirSync(dir)) {
+    const m = name.match(/^step-(.+)$/);
+    if (!m || !STEP_N.test(m[1])) continue;
+    if (merged.has(Number(m[1]))) continue;
+    const rel = `${CONTROL}/${name}`;
+    refuseLinks(root, rel);
+    const running = existsSync(join(root, rel, 'running'));
+    if (running) refuseLinks(root, `${rel}/running`);
+    let ready = '';
+    if (existsSync(join(root, rel, 'ready'))) {
+      refuseLinks(root, `${rel}/ready`);
+      ready = readFileSync(join(root, rel, 'ready'), 'utf8').trim();
+      if (!/^[0-9]{1,9}$/.test(ready)) ready = '?';
+    }
+    if (running || ready) steps.push({ n: Number(m[1]), running, ready });
+  }
+  return steps.sort((a, b) => a.n - b.n);
+}
+
+function controlSteps(root, merged = new Set()) {
+  const steps = scanControl(root, merged);
+  return steps.some((s) => s.running) ? steps : [];
+}
+
+// The chart steps, or [] when the chart is missing, malformed, or has no steps table.
+function chartSteps(text) {
+  if (text === null) return [];
+  try {
+    return parseChart(text).steps;
+  } catch {
+    return [];
+  }
+}
+
 function git(root, args) {
   const r = spawnSync('git', ['-C', root, ...args], { encoding: 'utf8' });
   return r.status === 0 ? r.stdout : '';
@@ -222,6 +303,7 @@ function gitOk(root, args) {
 function eventLine(line) {
   const t = line.trim().replace(/^[-*#>\s]+/, '');
   if (/\bBlocked:/.test(t) && !/\bComplete:/.test(t)) return t;
+  if (/\bQuestion:/.test(t) && !/\bComplete:/.test(t)) return t;
   if (/\bResolved:/.test(t) && !/\bComplete:/.test(t)) return t;
   if (/\bComplete:/.test(t)) return t;
   return '';
@@ -232,7 +314,9 @@ function ago(ms) {
   return m < 1 ? 'under 1 minute' : `${m} minute${m === 1 ? '' : 's'}`;
 }
 
-const state = { path: null, seen: 0, head: null, lastBeat: null, staleKey: null, logPath: null, logOffset: 0, logRest: '', waiting: false };
+const stepStates = new Map();
+const newLogState = () => ({ logPath: null, logOffset: 0, logRest: '' });
+const state = { readySeen: null, lockPrev: null, path: null, seen: 0, head: null, lastBeat: null, staleKey: null, logPath: null, logOffset: 0, logRest: '', waiting: false };
 
 // Collapses control characters and whitespace runs to one space.
 const oneLine = (text) => String(text).replace(/[\u0000-\u001f\u007f]+/g, ' ').replace(/\s+/g, ' ').trim();
@@ -267,41 +351,43 @@ function summarise(event) {
 }
 
 // Prints the activity lines for stream events added to the step log since the last pass.
-function activity(opts, rel) {
+function activity(opts, rel, st = state, tag = '', merged = new Set()) {
   if (!existsSync(join(opts.root, rel))) return;
   refuseLinks(opts.root, rel);
   const file = join(opts.root, rel);
   const size = statSync(file).size;
-  if (state.logPath !== rel) {
-    state.logPath = rel;
-    state.logOffset = Math.min(opts.sinceBytes ?? size, size);
-    state.logRest = '';
+  if (st.logPath !== rel) {
+    st.logPath = rel;
+    st.logOffset = Math.min(opts.sinceBytes ?? size, size);
+    st.logRest = '';
   }
-  if (size < state.logOffset) {
-    state.logOffset = 0;
-    state.logRest = '';
+  if (size < st.logOffset) {
+    st.logOffset = 0;
+    st.logRest = '';
   }
-  if (size === state.logOffset) return;
+  if (size === st.logOffset) return;
   const fd = openSync(file, 'r');
   let chunk;
   try {
-    chunk = Buffer.alloc(size - state.logOffset);
-    readSync(fd, chunk, 0, chunk.length, state.logOffset);
+    chunk = Buffer.alloc(size - st.logOffset);
+    readSync(fd, chunk, 0, chunk.length, st.logOffset);
   } finally {
     closeSync(fd);
   }
-  state.logOffset = size;
-  const lines = (state.logRest + chunk.toString('utf8')).split('\n');
-  state.logRest = lines.pop();
+  st.logOffset = size;
+  const lines = (st.logRest + chunk.toString('utf8')).split('\n');
+  st.logRest = lines.pop();
   for (const l of lines) {
     if (l.trim() === '') continue;
     let event;
     try {
       event = JSON.parse(l);
     } catch {
+      const b = l.trim().match(/^(?:[0-9]{2}:[0-9]{2}\s+)?I-D Advance: Blocked: queue stopped on step ([0-9]+)/);
+      if (b && !merged.has(Number(b[1]))) out(cut(`I-C Run: event: ${oneLine(l.trim())}`, MAX_ACTIVITY));
       continue;
     }
-    for (const s of summarise(event)) out(cut(`I-C Run: activity: ${s}`, MAX_ACTIVITY));
+    for (const s of summarise(event)) out(cut(`I-C Run: activity: ${tag}${s}`, MAX_ACTIVITY));
   }
 }
 
@@ -321,9 +407,29 @@ function pass(opts) {
   // With no plan/current/build-log.md the step has not written one yet. The watcher still reads
   // the newest archived log for events, but it skips the stale check (0000354).
   const hasCurrentLog = existsSync(join(root, BUILD_LOG));
-  if (!hasCurrentLog && !state.waiting) out('I-C Run: waiting for the build log');
-  state.waiting = !hasCurrentLog;
-  let rel = hasCurrentLog ? BUILD_LOG : newestArchived(root);
+  const chart = chartSteps(initText);
+  const merged = new Set(chart.filter((c) => c.status === 'merged').map((c) => c.step));
+  const mergedBeat = chart.length > 0 ? `, merged ${merged.size} of ${chart.length}` : '';
+
+  // Ready events, tracked apart from running files. Ready files on the first pass count as seen.
+  const readyNow = scanControl(root, merged).filter((s) => s.ready);
+  if (state.readySeen === null) state.readySeen = new Set(readyNow.map((s) => s.n));
+  else {
+    for (const s of readyNow) {
+      if (!state.readySeen.has(s.n)) out(`I-C Run: event: step ${s.n} ready PR #${s.ready}`);
+    }
+    state.readySeen = new Set(readyNow.map((s) => s.n));
+  }
+
+  // Driver exit: the lock was present on an earlier pass and is gone while the initiative remains.
+  if (state.lockPrev === true && !lockHeld && initText !== null) out('I-C Run: event: driver exited');
+  state.lockPrev = lockHeld;
+
+  const steps = controlSteps(root, merged);
+  const conc = steps.length > 0;
+  if (!conc && !hasCurrentLog && !state.waiting) out('I-C Run: waiting for the build log');
+  state.waiting = !conc && !hasCurrentLog;
+  let rel = conc ? '' : hasCurrentLog ? BUILD_LOG : newestArchived(root);
   let logText = rel ? readText(root, rel) : null;
   if (logText === null) rel = '';
   const lines = logText === null ? [] : logText.split(/\r?\n/);
@@ -348,10 +454,31 @@ function pass(opts) {
     state.seen = lines.length;
   }
 
+  // Concurrent steps: events and activity per step, each tagged with the step number.
+  const stepLines = new Map();
+  for (const s of steps) {
+    const brel = `${WORKTREES}/step-${s.n}/${BUILD_LOG}`;
+    const text = readText(root, brel);
+    const sl = text === null ? [] : text.split(/\r?\n/);
+    while (sl.length && sl[sl.length - 1] === '') sl.pop();
+    stepLines.set(s.n, { lines: sl, mtime: text === null ? null : statSync(join(root, brel)).mtimeMs });
+    let st = stepStates.get(s.n);
+    if (!st) {
+      st = { ...newLogState(), seen: opts.sinceLines ?? sl.length, init: true };
+      stepStates.set(s.n, st);
+    }
+    for (const l of sl.slice(Math.min(st.seen, sl.length))) {
+      const e = eventLine(l);
+      if (e) out(`I-C Run: event: step ${s.n}: ${e}`);
+    }
+    st.seen = sl.length;
+    activity(opts, `${LOGS}/step-${s.n}.log`, st, `step ${s.n}: `, merged);
+  }
+
   // Step log activity.
   const position = initText === null ? '' : field(initText, 'position');
   const running = runningStep(root) || position;
-  if (/^[0-9]{1,4}$/.test(running)) activity(opts, `${LOGS}/step-${running}.log`);
+  if (!conc && /^[0-9]{1,4}$/.test(running)) activity(opts, `${LOGS}/step-${running}.log`, state, '', merged);
 
   // Commit events. A last-seen commit that is not an ancestor of HEAD means the branch changed.
   const head = git(root, ['rev-parse', 'HEAD']).trim();
@@ -370,7 +497,7 @@ function pass(opts) {
 
   // Stale log: report each stale state once.
   const [latest] = readCommits(root, null, 1);
-  if (hasCurrentLog && mtime !== null && latest && latest.time - mtime >= STALE_MS && now - mtime > STALE_MS) {
+  if (!conc && hasCurrentLog && mtime !== null && latest && latest.time - mtime >= STALE_MS && now - mtime > STALE_MS) {
     const key = `${mtime}:${latest.sha}`;
     if (key !== state.staleKey) {
       state.staleKey = key;
@@ -381,6 +508,23 @@ function pass(opts) {
   // Heartbeat.
   if (opts.once || state.lastBeat === null || now - state.lastBeat >= HEARTBEAT_MS) {
     state.lastBeat = now;
+    if (conc) {
+      for (const s of steps) {
+        if (s.ready) {
+          out(`I-C Run: heartbeat: step ${s.n}, ready PR #${s.ready}${mergedBeat}`);
+          continue;
+        }
+        const { lines: sl, mtime: sm } = stepLines.get(s.n);
+        let ph = 'none';
+        for (const l of sl) {
+          const m = l.match(/^###\s+(P[0-9]+):/);
+          if (m) ph = m[1];
+        }
+        const lastLine = cut([...sl].reverse().find((l) => l.trim() !== '') ?? '', MAX_TAIL);
+        out(`I-C Run: heartbeat: step ${s.n}, phase ${ph}, last "${lastLine}", last change ${sm === null ? 'unknown' : ago(now - sm)} ago, lock ${lockHeld ? 'held' : 'free'}${mergedBeat}`);
+      }
+      return false;
+    }
     const step = runningStep(root) || (initText === null ? 'none' : field(initText, 'position') || 'unknown');
     let phase = 'none';
     for (const l of lines) {
@@ -389,7 +533,7 @@ function pass(opts) {
     }
     const last = cut([...lines].reverse().find((l) => l.trim() !== '') ?? '', MAX_TAIL);
     const since = mtime === null ? 'unknown' : ago(now - mtime);
-    out(`I-C Run: heartbeat: step ${step}, phase ${phase}, last "${last}", last change ${since} ago, lock ${lockHeld ? 'held' : 'free'}`);
+    out(`I-C Run: heartbeat: step ${step}, phase ${phase}, last "${last}", last change ${since} ago, lock ${lockHeld ? 'held' : 'free'}${mergedBeat}`);
   }
   return false;
 }

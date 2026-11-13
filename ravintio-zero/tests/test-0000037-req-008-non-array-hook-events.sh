@@ -21,6 +21,7 @@ new_workspace() {
   ws=$(mktemp -d -t ravintio_0000037_req008_test_XXXXXX)
   cp -r "$ZERO_DIR" "$ws/ravintio-zero"
   git init "$ws" >/dev/null 2>&1
+  commit_workspace_pack "$ws"
   mkdir -p "$ws/.claude"
   printf '%s\n' "$ws"
 }
@@ -48,7 +49,7 @@ event_entries() {
 expected_entries() {
   if [ "$1" = "PreToolUse" ]; then
     printf '%s\n' "Write gate-write" "Edit gate-write" "Write ratchet-check" \
-      "Edit ratchet-check" "Write em-dash-guard" "Edit em-dash-guard" "Bash merge-guard" "Bash block-forced-add"
+      "Edit ratchet-check" "Write em-dash-guard" "Edit em-dash-guard" "Bash merge-guard" "Bash block-forced-add" "Bash gate-write"
   else
     printf '%s\n' ".* auto-trigger-orchestrator" ".* check-orchestrator-presence" ".* check-design"
   fi

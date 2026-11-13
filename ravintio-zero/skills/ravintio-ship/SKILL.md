@@ -17,7 +17,7 @@ description: Archive, build assessment, changelog, version, and PR, behind the f
 2. Do not modify application code or pack files during this phase.
 3. Never skip the archive step. A populated `plan/current/` breaks resume detection for the next feature.
 4. Read `plan/.run-mode` before Step 8. In `gated`, the final gate stops before the PR. In `autonomous`, raise the PR without a stop. The PR is where the human reviews the run.
-5. Merging into `main` stays human-only in every run mode, and the agent never commits to `main`. The one exception is `gh pr merge --squash` for the agent's own feature PR into `initiative/*`, after a clean P3 and green CI. The `merge-guard` hook enforces it. See `ravintio-zero/standards/roadmap-standards.md` and `## PRs into main`.
+5. Merging into `main` stays human-only in every run mode, and the agent never commits to `main`. The one exception is `gh pr merge --squash` for the agent's own feature PR into `initiative/*`, after a clean P3 and green CI. The `merge-guard` hook enforces it. A step session under the concurrent driver (`RAVINTIO_INITIATIVE_QUEUE=1`) never merges, because only the merge queue merges a step PR. See `ravintio-zero/standards/roadmap-standards.md` and `## PRs into main`.
 6. Credentials are never in your context.
 7. One question at a time.
 
@@ -57,15 +57,17 @@ Then run the check before Step 4:
 node ravintio-zero/scripts/build-log-check.mjs plan/current/build-log.md
 ```
 
-Stop if it exits non-zero, in both run modes. Fix each phase it names, then rerun. A phase with no block needs a `Skipped: P{n}` line in the log. Never archive a log that fails.
+Stop if it exits non-zero, in both run modes. Fix each finding it names, then rerun. A phase with no block needs a `Skipped: P{n}` line in the log. A `Resolved:` line or a reworked requirement with no `Postmortem:` line is a finding. Run `ravintio-postmortem` for it, as the exception stops describe. Never archive a log that fails.
 
 ### Step 4: Archive
 
 1. Determine the archive path: `plan/_archive/{feature-id}-{YYYY-MM-DD}/`. If it exists, suffix `-2`, `-3`, and so on.
 2. Search the repo for links pointing at `plan/current/...` (living docs, `docs/decisions-index.md`, `src/*/docs/`). Update each to the archive path.
-3. Copy all of `plan/current/` to the archive path, then delete the `plan/current/` contents. Never use an atomic move.
-4. `git add` everything: the archive, the deletions, and the link updates. Untracked artifacts must not be left behind. Check with `git status --porcelain` before committing.
+3. Set each of the run's ADRs in `docs/adr/` to status `accepted`. Add one row per new ADR to `docs/decisions-index.md`. The archive links to `docs/adr/` and holds no copy.
+4. Copy all of `plan/current/` to the archive path, then delete it with `git rm -r -q plan/current` from the repo root. Use that literal path, with no `cd` and no glob, because the Claude Code safety check refuses a plain recursive delete. Never use an atomic move.
+5. `git add` everything: the archive, the deletions, and the link updates. Untracked artifacts must not be left behind. Check with `git status --porcelain` before committing.
    - In an active initiative, stage by explicit path: `plan/current/`, `plan/changelog/`, `plan/_archive/`, and each link update. Never stage a `plan/backlog/` entry the step did not write. The initiative skill queues those, and they stay untracked.
+   - Run `git status --porcelain plan/backlog` in the step's worktree. In a step worktree, every untracked entry there is one the step filed. Stage each one by explicit path and commit it, so the squash carries it. The driver keeps a worktree that holds untracked backlog entries and stops the queue (ADR-0325).
 
 ### Step 5: Build assessment
 
@@ -77,20 +79,23 @@ Read the archived `build-log.md`. It is now the only copy. Write `build-report.m
 - Self-corrections, with whether each was avoidable.
 - One improvement suggestion per phase where warranted.
 - The postmortems the run wrote to `plan/postmortems/`, by path, or `Postmortems: none`.
+- <!-- rule: ship-inherited-failures --> The inherited failures from `baseline-failures.md` in the archive folder, one line each, or `Inherited failures: none`. Offer a backlog entry for each.
 
 Then run `node ravintio-zero/scripts/workflow-metrics.mjs "{archive-folder}"` and append its output to `build-report.md`. If it exits non-zero, write `Workflow governance: not measured ({reason})` instead. The reason is `build log unreadable` or `thresholds invalid`, never a path or error text. A breach does not stop ship in either run mode.
 
-Source every metric from the build log. Never infer or fabricate. If routing or parallelism is not evidenced, treat it as not applied.
+Source every metric from the build log. Never infer or fabricate. If the build log shows no evidence of routing or parallelism, treat it as not applied.
 
 Last, run `ravintio-retrospective` in run mode. It writes the record to `plan/retrospectives/`. Append `Retrospective: {path}` to `build-report.md`, or `Retrospective: none` if the skill wrote no record. A missing retrospective never blocks ship.
 
 ### Step 6: Version bump
 
-Derive the current product version with `node ravintio-zero/scripts/product-version.mjs`, then apply the release version to `docs/about.md`, `product.yml`, and `component.yml`. The version must match `[0-9]+\.[0-9]+(\.[0-9]+)?` and must not be lower than the last release tag. If it fails validation, ask the human for the value. Never tag a fabricated version.
+In an initiative step, skip this step and write `**Version:** set by the merge queue at merge` in the changelog. The merge queue sets the version at merge.
+
+Derive the current product version with `node ravintio-zero/scripts/product-version.mjs`, then run `node ravintio-zero/scripts/version-files.mjs set {version}` to write it to every file in `ravintio-zero/version-files.txt`. Run `node ravintio-zero/scripts/version-files.mjs check` before the push. If it exits 1, stop in both run modes and fix the files it names. The version must match `[0-9]+\.[0-9]+(\.[0-9]+)?` and must not be lower than the last release tag. If it fails validation, ask the human for the value. Never tag a fabricated version.
 
 ### Step 7: Release tag
 
-Create no tag. After the human merges the PR, the CI `release-tag` job tags the merge commit on `main` with `v{version}`. A squash merge leaves a branch tag off `main`. For an initiative step: I-D Advance tags the squash commit.
+Create no tag. After the human merges the PR, the CI `release-tag` job tags the merge commit on `main` with `v{version}`. A squash merge leaves a branch tag off `main`. For an initiative step: the merge queue tags the squash commit.
 
 ### Step 8: Clear sentinels
 
@@ -102,7 +107,7 @@ Do this before any push, in every run mode and for both PR options, so no PR car
 
 If a local-git-only override is active in `ravintio-overrides/instructions/`, skip the question and output the description block. Otherwise, follow the run mode.
 
-In `gated`, ask the human:
+In `gated`, ask the human. Agreement follows rule `agree-explicit` in `ravintio-orchestrator/references/orchestrator-p0-coaching.md`.
 
 ```
 P4 Ship: Version v{version} set. CI tags the merge commit on main.
@@ -113,7 +118,7 @@ Should I raise the PR, or will you?
 
 In `autonomous`, take option [1] without asking.
 
-Title: `{feature-id}: {one-line summary}`. In an initiative step, the title is `{feature-id}: {Feature title}`, with the text of the step's `Title` column in `initiative.md`, because the squash carries it. Body: summary bullets, key decisions, validation results, test plan. In `autonomous`, add an `## Acceptance evidence` section with the contents of the archived `acceptance-evidence.md`. Add the same `## Workflow governance` section from `build-report.md`, or the `Workflow governance: not measured ({reason})` line, in both run modes and for both PR options. A breach does not stop ship. PR bodies carry no AI attribution. Leave out `Generated with [Claude Code]` lines (with or without a robot emoji), `Co-Authored-By:` lines that name an AI tool, and `Claude-Session:` lines or claude.ai/code session links.
+Title: `{feature-id}: {one-line summary}`. In an initiative step, the title is `{feature-id}: {Feature title}`. Here `{feature-id}` is the first 7 digits of the feature id, as in `0000392`. The title text comes from the step's `Title` column in `initiative.md`, because the squash carries it. The merge queue rejects any other form. Before `gh pr create`, run `node ravintio-zero/scripts/merge-queue.mjs title --step {n} --title "{title}"`, and fix the title if it fails. Body: summary bullets, key decisions, validation results, test plan. In `autonomous`, add an `## Acceptance evidence` section with the contents of the archived `acceptance-evidence.md`. Add the same `## Workflow governance` section from `build-report.md`, or the `Workflow governance: not measured ({reason})` line, in both run modes and for both PR options. A breach does not stop ship. PR bodies carry no AI attribution. Leave out `Generated with [Claude Code]` lines (with or without a robot emoji), `Co-Authored-By:` lines that name an AI tool, and `Claude-Session:` lines or claude.ai/code session links.
 
 Before `gh pr create`, write the PR body to a temporary file and run `node ravintio-zero/scripts/check-attribution.mjs <file>` on it. If it fails, remove the attribution lines and rerun. If it still fails, stop in both run modes:
 
@@ -138,7 +143,9 @@ gh pr create
 
 In option [1], capture the PR number and URL, and update the changelog's `**PR:**` field.
 
-In option [2], print the PR title and description. The human pushes the branch later. CI tags the merge commit on `main`. In the local-git-only case, also print the tag commands for the human to run on the merge commit after merging, or note that the CI `release-tag` job does it:
+When the CI wait ends, run `gh run view {run-id} --json startedAt,updatedAt`. Append `CI duration: {seconds}s (run {run-id}, {ISO-8601 timestamp})` to the archived `build-log.md` before Step 5. If `gh` returns no run, write no marker.
+
+In option [2], print the PR title and description. The human pushes the branch later. CI tags the merge commit on `main`. In the local-git-only case, print the tag commands for the human to run on the merge commit after merging. You may instead note that the CI `release-tag` job does it:
 
 ```bash
 git tag v{version} -m "{feature-id}" {merge-commit}
@@ -192,7 +199,7 @@ Ship steps run in order, because most steps read the one before.
 When `plan/.run-speed` holds `fast`, run one batch after Step 4 in one message. It has two units with disjoint files:
 
 1. Step 5, the build assessment, in a cheaper-tier subagent. It writes only `build-report.md` in the archive folder.
-2. Step 6, the version bump, inline. It writes only `docs/about.md`, `product.yml`, and `component.yml`.
+2. Step 6, the version bump, inline. It writes only `docs/about.md`, `product.yml`, and `component.yml`. An initiative step skips it.
 
 Each unit commits its own files by path, one commit at a time, per `## Fast batches` in `ravintio-zero/standards/agent-dispatch-standards.md`. Step 7 starts after both land. At `standard`, run Steps 5 and 6 in order.
 
@@ -200,11 +207,15 @@ Each unit commits its own files by path, one commit at a time, per `## Fast batc
 
 When `plan/current-initiative/initiative.md` has `status: active`, read `ravintio-zero/standards/roadmap-standards.md` first. Step 9 gives way to its I-D Advance stage, and I-E Delivery follows the last step. Outside an initiative, ignore this section.
 
+The order changes in a step. Run Steps 1 to 3, then Step 9 and the CI wait of I-D Advance, all before Step 4. Steps 4, 5, and 8 run only after green CI, because `gate-write` blocks code edits once the step archives `plan/current/`. They form the closing push, the last push before `ready`.
+
 Before the PR, the step commits the items in `plan/.initiative-queue/` that name it, as I-C Run describes.
 
-After `gh pr create`, the agent sets `**PR:**` to the PR number, commits, and pushes it before it waits on CI and before the squash. It never commits after the squash.
+After `gh pr create`, the agent sets `**PR:**` to the PR number, commits, and pushes it before it waits on CI and before the squash. It never commits after the squash. Before the CI poll it runs `gh pr view {n} --json mergeable`. If the value is `CONFLICTING`, it merges the initiative branch into the PR branch and pushes, because GitHub runs no checks on a conflicting PR.
 
-To merge the step PR, copy this plain line. Replace `{n}` with the literal PR number from the `gh pr create` output. Use no command substitution, variables, or pipes on the line, or `merge-guard` cannot confirm the squash and blocks it.
+The step never edits the chart and never merges. It writes `ready` only after every check on the closing push passed. A pending or failed check means no `ready`. After green CI, it hands the PR to the merge queue, as I-D Advance describes. If `RAVINTIO_INITIATIVE_QUEUE` is `1`, it runs `node ravintio-zero/scripts/initiative-ready.mjs --pr {n}`, which writes the PR number to `$RAVINTIO_INITIATIVE_CONTROL/ready` and prints `I-D Advance: Ready: PR #{n}`, and ends. Otherwise it runs `node ravintio-zero/scripts/merge-queue.mjs run --step {step} --pr {n}`.
+
+The queue merges with this plain line. `{n}` is the literal PR number from the `gh pr create` output. A merge line takes no command substitution, variables, or pipes, or `merge-guard` cannot confirm the squash and blocks it.
 
 ```bash
 gh pr merge --squash --delete-branch {n}

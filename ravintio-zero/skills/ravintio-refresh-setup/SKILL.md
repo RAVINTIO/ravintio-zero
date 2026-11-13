@@ -5,7 +5,7 @@ description: Refreshes a RAVINTIO install by detecting the target tool, reading 
 
 # RAVINTIO - refresh-setup
 
-> You refresh an existing RAVINTIO install without the human on the loop having to reverse-engineer the original `setup.sh`/`setup.ps1` invocation from hook wiring. You never guess a flag that changes install behaviour. You never delete anything beyond the two boot files this skill regenerates. You are a standalone skill, invoked on request, outside the five-phase pipeline. No `plan/current/design.md` or phase gate is required to use it.
+> You refresh an existing RAVINTIO install without the human on the loop having to reverse-engineer the original `setup.sh`/`setup.ps1` invocation from hook wiring. You never guess a flag that changes install behaviour. You never delete anything beyond the two boot files this skill regenerates. You are a standalone skill, invoked on request, outside the five-phase pipeline. It needs no `plan/current/design.md` and no phase gate.
 
 ## Step 1 - Determine the Target Tool
 
@@ -43,16 +43,17 @@ A retired flag is one that an earlier release removed: `--structured-telemetry-m
    - It must contain a fenced ```json block that parses as well-formed JSON.
    - The parsed object must hold all three fields: `tool`, `flags`, `writtenAt`.
    - The `tool` field matches the target tool from Step 1.
-   - Every entry in `flags`, after you omit any retired flag, belongs to the allowed set: `--strict-orchestrator`. Reject the record if any other value appears.
+   - Every entry in `flags`, after you omit any retired flag, belongs to the allowed set: `--strict-orchestrator` and `--no-writing-style`. Reject the record if any other value appears.
    - Validate the values, not only the shape. The record is git-tracked, so a hostile commit could otherwise place a shell metacharacter in `flags`, and Step 4 builds a shell command from them.
-   - If all of the above hold, the record is valid: report every flag it holds at **high** confidence, source: `plan/state/{tool}.md`. The marker file is not consulted, and Step 3 skips straight to sub-step 4 below.
-   - If the record is absent, unreadable, fails to parse, is missing any of the three fields, names a different tool, or carries an unknown flag, treat it as missing. This does not stop the run: continue to sub-step 2.
+   - If all of the above hold, the record is valid: report every flag it holds at **high** confidence, source: `plan/state/{tool}.md`. Do not consult the marker file. Step 3 skips straight to sub-step 4 below.
+   - If the record is absent, unreadable, or fails to parse, treat it as missing. Do the same if it lacks any of the three fields, names a different tool, or carries an unknown flag. This does not stop the run: continue to sub-step 2.
 2. Check `{tool-dir}/.ravintio-setup-flags`. If it exists and is well-formed (see `ravintio-zero/component.yml`), read `flags` and report every flag at **high** confidence, source: marker file.
 3. If the marker file is also absent, incomplete, or for a different tool, infer flags from installed hook wiring instead:
 
    | Signal | Implies | Confidence |
    |--------|---------|-----------|
    | `plan/.orchestrator-strict` file exists | `--strict-orchestrator` | high |
+   | A record or marker lists `--no-writing-style` | `--no-writing-style` | high |
    | No signal present for a given flag | that flag was not used | high (absence of a signal is itself a confident signal) |
 
 4. Build the full flag list and the exact command that will be run: `setup.sh {tool} {flags...}` (or `setup.ps1 {tool} {flags...}` on Windows).
@@ -61,13 +62,13 @@ A retired flag is one that an earlier release removed: `--structured-telemetry-m
 
 Always required, in every run, regardless of confidence level, including a run where every flag is high confidence from the marker file. There is no bypass.
 
-Present the target tool, every flag with its source (the record at `plan/state/{tool}.md` / marker file / inferred from `{signal}`) and confidence level, and the exact command about to run.
+Present the target tool and every flag with its source (the record at `plan/state/{tool}.md` / marker file / inferred from `{signal}`) and confidence level. Also present the exact command about to run.
 
 Wait for an explicit affirmative. If the human rejects the proposed flags, halt and take no further action. Do not delete anything or fall back to a different flag set on your own.
 
 ## Step 5 - Write the Marker Before Any Deletion
 
-Immediately after confirmation and before Step 6's deletion, write `{tool-dir}/.ravintio-setup-flags` as JSON with: `tool`, `flags` (the confirmed flags), `writtenAt` (ISO 8601 UTC timestamp), `attemptStatus: "pending"`, and `attemptedCommand` (the exact command from Step 3.3).
+Immediately after confirmation and before Step 6's deletion, write `{tool-dir}/.ravintio-setup-flags` as JSON. Include `tool`, `flags` (the confirmed flags), `writtenAt` (ISO 8601 UTC timestamp), `attemptStatus: "pending"`, and `attemptedCommand` (the exact command from Step 3.3).
 
 This is the same file `setup.sh`/`setup.ps1` write on successful completion, not a separate cache file. This write must complete before Step 6 begins, so a process killed at any point after it leaves recoverable state on disk (see Step 2).
 
@@ -79,13 +80,13 @@ The script hardcodes the exact allowlist (`CLAUDE.md`, `AGENTS.md`) in code, tak
 
 ## Step 7 - Re-invoke Setup
 
-Run the exact command shown and confirmed in Step 4. On success, `setup.sh`/`setup.ps1` itself writes `attemptStatus: "completed"` to the marker file. Confirm to the human that `CLAUDE.md`/`AGENTS.md` were regenerated and report the flags now in effect. On failure, go to Step 8.
+Run the exact command shown and confirmed in Step 4. On success, `setup.sh`/`setup.ps1` itself writes `attemptStatus: "completed"` to the marker file. Confirm to the human that setup regenerated `CLAUDE.md`/`AGENTS.md` and report the flags now in effect. On failure, go to Step 8.
 
 ## Step 8 - Setup Failure Handling
 
 1. **Stop immediately.** Do not retry automatically, under any condition.
-2. **Investigate the likely cause**: check whether the path setup reported is locked, permission-denied, or held by another process (e.g. `lsof`/`fuser` where available).
-3. **Report**: what setup's own output said, which step it reached, the investigated likely cause (or "could not be determined"), that `CLAUDE.md`/`AGENTS.md` may now be missing pending a successful rerun, the exact attempted command as a copyable code block, and confirmation that `settings.local.json` and other user-owned files were not touched.
+2. **Investigate the likely cause**: check whether the path setup reported has a lock, a permission error, or another process holding it (e.g. `lsof`/`fuser` where available).
+3. **Report**: say what setup's own output said and which step it reached. Give the investigated likely cause (or "could not be determined"). State that `CLAUDE.md`/`AGENTS.md` may now be missing pending a successful rerun. Give the exact attempted command as a copyable code block. Confirm that you did not touch `settings.local.json` or other user-owned files.
 4. The marker file from Step 5 still holds `attemptStatus: "pending"` and the attempted command. A later invocation of this skill recovers it via Step 2 instead of repeating detection.
 
 ## What This Skill Never Does

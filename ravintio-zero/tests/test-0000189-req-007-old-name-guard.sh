@@ -5,7 +5,7 @@
 set -uo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 ZERO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-REPO_DIR="$(cd "$ZERO_DIR/.." && pwd)"
+REPO_DIR="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
 echo ""
@@ -23,10 +23,13 @@ OLD_NAMES='roadmap-runner\.lock|\{slug\}-roadmap-\{date\}|current-roadmap|roadma
 
 # Folders that hold history.
 ALLOW_DIRS='plan/_archive/
-plan/changelog/'
+plan/changelog/
+docs/adr/'
+
 
 # Files that must name an old name to do their job.
-ALLOW_FILES='ravintio-zero/scripts/initiative-run.mjs
+ALLOW_FILES='docs/decisions-index.md
+ravintio-zero/scripts/initiative-run.mjs
 ravintio-zero/component.yml
 ravintio-zero/migrations/0005-initiative-rename.md
 ravintio-zero/migrations/migrate-initiative-rename.sh
@@ -40,6 +43,8 @@ ravintio-zero/tests/test-0000189-req-008-open-backlog-entries.sh'
 
 allowed() {
   local f="$1" d
+  # The source copy under src/ shares the allowlist of the installed copy (0000397).
+  case "$f" in src/ravintio-zero/*) f="${f#src/}" ;; esac
   if printf '%s\n' "$ALLOW_FILES" | grep -qxF -- "$f"; then return 0; fi
   while IFS= read -r d; do
     case "$f" in "$d"*) return 0 ;; esac

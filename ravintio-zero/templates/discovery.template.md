@@ -16,6 +16,7 @@ summary: "Raw discovery-pass findings: what the orchestrator knew before coachin
 | Detection signal | `{{signal that produced the mode}}` |
 | Git pre-flight | `{{branch, main-up-to-date confirmation state}}` |
 | Skills inbox | `{{scan result or "empty"}}` |
+| Track | `{{full or light, default full}}` |
 
 ## Mode Findings
 
@@ -48,4 +49,4 @@ summary: "Raw discovery-pass findings: what the orchestrator knew before coachin
 ### External Anchor
 
 - `external-versioning.md` constraints: {{full constraints}}
-- Underlying mode content: append whichever underlying mode's findings apply to what else is present in the repo: archive present → also the Standard-Iterative content; source only → also the Retrofit scan; neither → the Greenfield baseline. {{Standard-Iterative / Retrofit / Greenfield findings per the rule above}}
+- Underlying mode content: append whichever underlying mode's findings apply to what else the repo holds. Archive present → also the Standard-Iterative content. Source only → also the Retrofit scan. Neither → the Greenfield baseline. {{Standard-Iterative / Retrofit / Greenfield findings per the rule above}}

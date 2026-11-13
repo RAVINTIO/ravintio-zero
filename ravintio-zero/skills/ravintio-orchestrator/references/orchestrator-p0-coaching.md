@@ -8,6 +8,24 @@
 
 **Recommend, then confirm.** For every decision, lead with a specific recommendation: `P0 Discovery: [Observation]. I recommend [X] because [one-line reason]. Confirm? ([X] / [alternative])`. This pattern applies in every phase, one decision per message.
 
+<!-- rule: agree-ambiguous -->
+Act on a permission only when the human clearly grants it. Treat "Ok", "fine", "sure", and similar replies as ambiguous when you asked for agreement. Ask the human to reply "Yes, I agree".
+
+<!-- rule: agree-name-option -->
+If more than one question or option is outstanding, ask the human to name the option, as in "Yes, I agree to option 2".
+
+<!-- rule: agree-one-permission -->
+Ask for one permission in each question.
+
+<!-- rule: agree-numbered -->
+If one question must ask for more than one permission, number each one. Ask the human to name the numbers they grant.
+
+<!-- rule: agree-ask-again -->
+If a reply names no numbered permission, ask again. Never assume it grants all of them.
+
+<!-- rule: agree-explicit -->
+"Yes, I agree", "approve", and an exact option label count as agreement with no extra question.
+
 **Priority order:**
 
 1. Problem statement, user stories, and known integrations
@@ -22,7 +40,19 @@
 
 **Be scientific.** Reject vague answers. "It should be fast" becomes "What is the p95 latency target for the primary endpoint?"
 
-**Deferred decisions:** record them as explicitly deferred in the scope document, note what is blocked, move on.
+<!-- rule: criterion-content-exists -->
+Before you confirm a criterion about existing content or data, check that at least one instance exists. Use grep or list the repo.
+
+<!-- rule: criterion-reword-offer -->
+If none exists, offer a reworded criterion before the design gate. Example: a criterion that each Mermaid diagram renders as an SVG, in a repo with no diagram, gets a reworded offer.
+
+<!-- rule: major-bump-question -->
+For an advisory-fix story, ask whether a major bump of an existing dependency is pre-approved when it is the only fix.
+
+<!-- rule: major-bump-record -->
+Record the answer in the `Approved dependencies` field of `design.md`.
+
+**Deferred decisions:** record them as explicitly deferred in the scope document, note what the deferral blocks, move on.
 
 **A complete brief:** confirm it and proceed. Do not coach for the sake of coaching.
 

@@ -1,12 +1,12 @@
 # Component Registry
 
-Last updated: 0000200-reply-conventions
+Last updated: 0000507-hook-check-after-setup
 
 ## Registry
 
 | ID | Name | Type | Domain | Status | Summary | Docs |
 |----|------|------|--------|--------|---------|------|
-| `ravintio-zero` | RAVINTIO Zero | component-pack | developer-tooling | active | Standards, skills, hooks, templates, schemas, and setup scripts that enforce the confirmed-design pipeline for Claude Code. | [component.yml](../ravintio-zero/component.yml) |
+| `ravintio-zero` | RAVINTIO Zero | component-pack | developer-tooling | active | Standards, skills, hooks, templates, schemas, and setup scripts that enforce the confirmed-design pipeline for Claude Code. | [component.yml](../src/ravintio-zero/component.yml) |
 
 ---
 

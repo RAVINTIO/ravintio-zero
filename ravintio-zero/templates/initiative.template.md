@@ -35,13 +35,32 @@ status: "proposed"  # proposed | charted | active | delivered | blocked
 >
 > `**Step CI fixes:**` says whether a step may fix its own CI failure. `allowed` lets the step push a
 > fix inside its own scope. `stop` stops the step. The default is `stop`. See I-D Advance in the same file.
+>
+> `**Concurrency:**` is the most steps the driver runs at once, from 1 to 9. `1` runs one step at a
+> time. A missing field also means one at a time.
+>
+> `Lane` and `After` in `## Steps` say what may run together. Steps in one lane run in chart order.
+> Steps that edit the same files share a lane. A step that changes most files runs alone, with
+> every earlier step in its `After` cell. `After` holds step numbers and ranges such as `6, 13` or
+> `5-18` that must merge first. Leave it empty for none. A missing `Lane` column gives each step
+> its own lane.
+>
+> `Status` takes `pending`, `running`, `ready`, or `merged`. The committed chart holds `pending`
+> and `merged`. The driver derives `running` and `ready`.
 
 **Goal:** {{What the whole chain delivers, in one or two sentences.}}
+
 **Branch:** initiative/{{id}}-{{slug}}
+
 **Status:** {{proposed | charted | active | delivered | blocked}}
+
 **Position:** {{number of the next step to run, for example 1}}
+
 **Speed:** {{standard | fast, optional, a missing field means standard}}
+
 **Step CI fixes:** {{allowed | stop, optional, a missing field means stop}}
+
+**Concurrency:** {{1 to 9, default 3}}
 
 ## Stop conditions
 
@@ -88,6 +107,13 @@ status: "proposed"  # proposed | charted | active | delivered | blocked
 
 ## Steps
 
-| Step | Feature id | Title | Backlog entries | Bump | Version | Status |
-|------|------------|-------|-----------------|------|---------|--------|
-| 1 | {{feature id}} | {{step title in sentence case}} | {{backlog ids}} | minor | | pending |
+| Step | Feature id | Title | Backlog entries | Bump | Version | Status | Lane | After |
+|------|------------|-------|-----------------|------|---------|--------|------|-------|
+| 1 | {{feature id}} | {{step title in sentence case}} | {{backlog ids}} | minor | | pending | {{lane label}} | |
+
+## Merges
+
+The merge queue adds one row for each step it merges. See the merge queue section of the roadmap standards.
+
+| Step | PR | Merge commit | Version | Merged at |
+|------|----|--------------|---------|-----------|

@@ -12,14 +12,14 @@ Version `0.5.0` targets Claude Code alone and follows the [Agent Skills specific
 
 ## Rationale
 
-Agile prefers iteration over heavy upfront planning. That preference is tuned to a specific bottleneck. When implementation takes weeks, a detailed plan goes stale before it ships, so small reversible steps beat big documents.
+Agile prefers iteration over heavy upfront planning. That preference fits a specific bottleneck. When implementation takes weeks, a detailed plan goes stale before it ships, so small reversible steps beat big documents.
 
 Agentic coding tools do not remove that bottleneck. They move it. Implementation is now cheap and fast, so waste shows up earlier. It arrives as plausible-but-wrong output built on unstated assumptions, rather than as a plan that aged out.
 
 RAVINTIO applies agile's own instinct to the new bottleneck. Do not do work that will not survive contact with reality. Three mechanisms follow:
 
 1. **The plan is the reviewable artifact.** When an agent writes the code, the prompt and plan largely determine the output. RAVINTIO makes the plan explicit and reviewable, so architectural choices are visible before code exists.
-2. **Context is recorded per component.** Each component keeps a manifest. Each feature keeps its execution plans and ADRs. That gives an agent or a human the context to modify a component, or the specification to rebuild it.
+2. **Each component records its context.** Each component keeps a manifest. Each feature keeps its execution plans and ADRs. That gives an agent or a human the context to modify a component, or the specification to rebuild it.
 3. **Gaps trigger questions, not guesses.** If the feature brief has gaps, the agent stops and asks rather than filling them with assumptions.
 
 Whether the trade-off pays off depends on the work. See [Limitations](#limitations-and-non-goals).
@@ -35,7 +35,7 @@ The pipeline runs five phases. Every change, however small, takes the same route
 3. **Plan.** The agent produces requirements, an execution plan, and Architecture Decision Records behind one confirmation gate.
 4. **Implement.** Code, tests, and documentation land together.
 5. **Validate and accept.** CI checks and a security review run, then the human accepts.
-6. **Ship.** The plan is archived, the run is assessed, and the pull request is raised.
+6. **Ship.** The pipeline archives the plan, assesses the run, and raises the pull request.
 
 Every agent response carries a phase prefix, from `P0 Discovery:` to `P4 Ship:`, so you always know where you are. Every artifact follows a template, so output stays consistent across sessions and models.
 
@@ -95,6 +95,7 @@ One optional flag:
 
 | Flag | Effect |
 |------|--------|
+| `--no-writing-style` | Skips the writing standard install. By default, setup writes `.claude/output-styles/ravintio-writing.md` and sets `outputStyle` for Claude Code, or adds a writing section to `AGENTS.md` for Codex. Setup leaves an `outputStyle` that is already set. See [writing standards](ravintio-zero/standards/writing-standards.md). |
 | `--strict-orchestrator` | Writes `plan/.orchestrator-strict`, so the orchestrator must acknowledge each new session before work proceeds. See [strict mode](ravintio-zero/project-operations.md#strict-orchestrator-mode). |
 
 ---
@@ -109,7 +110,7 @@ One optional flag:
 
 **Decompose big initiatives.** Split work into features small enough for one agent session, then group features into waves. That is how RAVINTIO manages context at scale.
 
-**Everything is traced.** Every artifact records the skill that produced it, the tool it ran in, and the model that generated it.
+**Everything has a trace.** Every artifact records the skill that produced it, the tool it ran in, and the model that generated it.
 
 **The PR gate is the backstop.** A human reviews the output before it ships.
 
@@ -120,6 +121,7 @@ One optional flag:
 | Folder | Contents |
 |--------|----------|
 | [skills/](ravintio-zero/skills/) | The 12 pipeline skills: the orchestrator, four phase skills, the TDD trio, and four support skills |
+| [archetypes/](ravintio-zero/archetypes/) | Starter archetypes that swap a standard or add gates, installed with `setup.sh archetype use` |
 | [templates/](ravintio-zero/templates/) | File format templates for every pipeline artifact, each with a guide where applicable |
 | [schemas/](ravintio-zero/schemas/) | Shared type definitions and the domain document envelope |
 | [standards/](ravintio-zero/standards/) | Code quality, API design, database, deployment, infrastructure, monorepo, observability, and testing standards |
@@ -138,11 +140,11 @@ One optional flag:
 
 These apply regardless of model or configuration:
 
-1. **Requirement gaps are surfaced, then resolved or explicitly deferred, before implementation begins.** Every deferral is recorded in that feature's `plan/current/scope.md`, so the claim is checkable rather than asserted.
-2. **No direct schema modification.** A migration proposal is required, and the human approves it.
+1. **Requirement gaps surface, then you resolve or explicitly defer them, before implementation begins.** Every deferral goes in that feature's `plan/current/scope.md`, so the claim is checkable rather than asserted.
+2. **No direct schema modification.** A migration proposal comes first, and the human approves it.
 3. **Destructive schema operations require human approval.**
-4. **Data is owned by one component.** Never write to another component's data.
-5. **Code and documentation are written together.** Never one without the other.
+4. **One component owns each piece of data.** Never write to another component's data.
+5. **Write code and documentation together.** Never one without the other.
 6. **Credentials are never in the agent's context.** Capabilities only.
 
 ---

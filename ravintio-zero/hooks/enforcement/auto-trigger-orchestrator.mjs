@@ -18,9 +18,11 @@
  * If the payload has no session_id, the hook emits every time and writes nothing.
  * The advisory banner in check-orchestrator-presence.mjs follows the same rule.
  *
- * Initiative case: if plan/current-initiative/initiative.md holds status active
- * and plan/.orchestrator-active is absent, the instruction names the
- * ravintio-initiative skill instead. The driver lock (plan/.initiative-runner.lock)
+ * Coordinator case (0000399): if plan/.orchestrator-active is absent and either
+ * plan/current-initiative/initiative.md holds status active or a draft
+ * plan/roadmap/*\/initiative.md holds status charted, the instruction names the
+ * ravintio-initiative skill instead. Other draft statuses, such as proposed,
+ * keep the orchestrator. The driver lock (plan/.initiative-runner.lock)
  * and the contents of plan/current/ play no part. The strict-mode hook
  * (check-orchestrator-presence.mjs) applies the same rule.
  *
@@ -41,21 +43,51 @@
  */
 
 import { spawnSync } from "node:child_process";
-import { appendFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { appendFileSync, existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 import { readStdin } from "./read-stdin.mjs";
 
-// True when initiative.md holds status active, in frontmatter or as "**Status:** active".
+// True when text holds the given status, in frontmatter or as "**Status:** {status}".
+function hasStatus(text, status) {
+  return new RegExp(`^\\s*status:\\s*["']?${status}["']?\\s*$`, "im").test(text) ||
+    new RegExp(`^\\s*\\*\\*Status:\\*\\*\\s*${status}\\s*$`, "im").test(text);
+}
+
+// True when initiative.md holds status active.
 // Keep in step with initiativeActive in check-orchestrator-presence.mjs.
 function initiativeActive(cwd) {
   try {
-    const text = readFileSync(join(cwd, "plan", "current-initiative", "initiative.md"), "utf-8");
-    return /^\s*status:\s*["']?active["']?\s*$/im.test(text) ||
-      /^\s*\*\*Status:\*\*\s*active\s*$/im.test(text);
+    return hasStatus(readFileSync(join(cwd, "plan", "current-initiative", "initiative.md"), "utf-8"), "active");
   } catch {
     return false;
   }
+}
+
+// True when a draft chart, plan/roadmap/*/initiative.md, holds status charted.
+// Other draft statuses, such as proposed, do not count.
+// Keep in step with initiativeCharted in check-orchestrator-presence.mjs.
+function initiativeCharted(cwd) {
+  try {
+    const root = join(cwd, "plan", "roadmap");
+    for (const entry of readdirSync(root, { withFileTypes: true })) {
+      if (!entry.isDirectory()) continue;
+      try {
+        if (hasStatus(readFileSync(join(root, entry.name, "initiative.md"), "utf-8"), "charted")) return true;
+      } catch { /* a directory without initiative.md does not count */ }
+    }
+    return false;
+  } catch {
+    return false;
+  }
+}
+
+// A coordinator session is a non-step session with an active initiative or a
+// charted draft. A step session sets RAVINTIO_INITIATIVE_STEP=1 and keeps the orchestrator.
+// Keep in step with coordinatorSession in check-orchestrator-presence.mjs.
+function coordinatorSession(cwd) {
+  return process.env.RAVINTIO_INITIATIVE_STEP !== "1" &&
+    (initiativeActive(cwd) || initiativeCharted(cwd));
 }
 
 // Once-per-session record (0000320): plan/.orchestrator-loaded holds the session id
@@ -106,6 +138,29 @@ function resumeFindings(cwd) {
   }
 }
 
+// Install check (0000382): the cheap part of `setup.sh --doctor`. A clone that
+// has the pack but no wired git hooks, or a repo whose setup never ran, gets
+// one report per session, because this hook emits once per session. A passing
+// check, a missing script, or a timeout adds nothing.
+function installCheck(cwd) {
+  try {
+    const script = join(cwd, "ravintio-zero", "scripts", "install-lifecycle.mjs");
+    if (!existsSync(script)) return "";
+    const run = spawnSync(process.execPath, [script, "doctor", "--quick", "--root", cwd, "--tool", "claude-code"], {
+      encoding: "utf-8",
+      timeout: 2000,
+      env: process.env,
+    });
+    if (run.error || run.status !== 1) return "";
+    const lines = run.stdout.split("\n").filter((l) => l.includes("FAIL")).map((l) => `- ${l.replace(/^\s*FAIL\s*/, "")}`);
+    if (lines.length === 0) return "";
+    return "Install check (tell the human once, then carry on): this clone is not fully set up. " +
+      "Run ./ravintio-zero/setup.sh claude-code to install the guards.\n" + lines.join("\n") + "\n";
+  } catch {
+    return "";
+  }
+}
+
 try {
   const raw = await readStdin();
   const input = JSON.parse(raw);
@@ -123,17 +178,17 @@ try {
   const sessionId = String(input?.session_id ?? "").trim();
   if (loadedThisSession(cwd, sessionId)) process.exit(0);
 
-  // Initiative check: an active initiative means the session drives it. A step
-  // session sets RAVINTIO_INITIATIVE_STEP=1 and keeps the orchestrator. Neither
-  // the driver lock nor plan/current/ is read.
-  if (process.env.RAVINTIO_INITIATIVE_STEP !== "1" && initiativeActive(cwd)) {
+  // Coordinator check: an active initiative or a charted draft means the
+  // session coordinates it. A step session sets RAVINTIO_INITIATIVE_STEP=1 and
+  // keeps the orchestrator. Neither the driver lock nor plan/current/ is read.
+  if (coordinatorSession(cwd)) {
     recordLoaded(cwd, sessionId);
     process.stdout.write(
       "SYSTEM INSTRUCTION: This is a RAVINTIO project (ravintio-zero/ detected) " +
-      "with an active initiative (plan/current-initiative/initiative.md). " +
+      "with an initiative to coordinate (plan/current-initiative/ or plan/roadmap/). " +
       "Load the ravintio-initiative skill now, before responding to the user's prompt. " +
       "Begin with resume detection as described in the skill.\n" +
-      resumeFindings(cwd)
+      resumeFindings(cwd) + installCheck(cwd)
     );
     process.exit(0);
   }
@@ -146,7 +201,7 @@ try {
     "and the orchestrator has not been loaded yet for this session. " +
     "Load the ravintio-orchestrator skill now, before responding to the user's prompt. " +
     "Begin with resume detection as described in the skill.\n" +
-    resumeFindings(cwd)
+    resumeFindings(cwd) + installCheck(cwd)
   );
 
   process.exit(0);

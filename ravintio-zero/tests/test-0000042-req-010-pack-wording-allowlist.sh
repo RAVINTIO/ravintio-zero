@@ -21,8 +21,10 @@ REPO_ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
 # Paths that start with these prefixes are history or past records.
 EXCLUDED_PREFIXES=(
   "plan/_archive/"                    # archived features: history
+  "docs/adr/"                         # ADRs moved out of the archive: history (0000384)
   "plan/changelog/"                   # release notes: history
   "ravintio-zero/migrations/_done/"  # applied migrations: past records
+  "src/ravintio-zero/migrations/_done/"  # the same records in the source folder
   "plan/current/"                     # this feature quotes the old words to describe the rename, until ship archives it
 )
 
@@ -71,8 +73,14 @@ ALLOWLIST=(
   "^ravintio-zero/tests/regression/regression-manifest\\.json\$${TAB}\"sourceFeature\": \"[0-9]{7}-framework-"
   # The 0000030 feature id framework-cut-down in the decisions index.
   "^docs/decisions-index\\.md\$${TAB}framework-cut-down"
+  # Index rows quote the title and summary of an ADR from history (0000384).
+  "^docs/decisions-index\\.md\$${TAB}^\\| \\[ADR-[0-9]{4}\\]"
+  # The prose baseline keys name old ADR files, whose file names hold the word (0000390).
+  "^plan/state/prose-baseline\\.json\$${TAB}^    \"(docs/adr/[0-9]{4}|plan/changelog/[0-9]{7})-[a-z0-9-]+\\.md\": \\{\$"
   # The 0000160 brand guard allowlist names the old folder pattern.
   "^ravintio-zero/tests/test-0000160-req-006-brand-guard\\.sh\$${TAB}planifest.{1,8}framework"
+  # The shared brand guard allowlist holds those entries (0000394).
+  "^ravintio-zero/tests/brand-guard-allowlist\\.txt\$${TAB}."
   # This test and its regression copy, which must name the word to match it.
   "^ravintio-zero/tests/(regression/)?test-0000042-req-010-pack-wording-allowlist\\.sh\$${TAB}."
 )
@@ -95,11 +103,12 @@ check_lines() {
   local root="$1" path num text
   while IFS= read -r path; do
     [ -f "$root/$path" ] || continue
+    local apath="${path#src/}"
     while IFS= read -r hit; do
       [ -n "$hit" ] || continue
       num="${hit%%:*}"
       text="${hit#*:}"
-      allowed "$path" "$text" || echo "$path:$num"
+      allowed "$apath" "$text" || echo "$path:$num"
     done <<< "$(grep -inI -- framework "$root/$path" 2>/dev/null)"
   done
 }

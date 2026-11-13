@@ -13,7 +13,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
 ZERO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-REPO_ROOT="$(cd "$ZERO_DIR/.." && pwd)"
+REPO_ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
 
 WORD="frame""work"
 CAP="Frame""work"
@@ -38,6 +38,7 @@ GENERIC=(
   "ravintio/planifest-${WORD}"           # the separate product's repo
   "planifest-${WORD}/"                    # the old folder that 0000030 renamed
   "${WORD}-cut-down"                      # the 0000030 feature id
+  "^[0-9]+:\\| \\[ADR-[0-9]{4}\\]"          # index rows quote the title of an ADR from history (0000384)
 )
 
 FILES=(

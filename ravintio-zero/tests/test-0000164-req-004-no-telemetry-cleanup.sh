@@ -23,6 +23,7 @@ echo "=== req-004 (b): setup leaves telemetry files and entries alone ==="
 WS="$(mktemp -d -t ravintio_0000164_req004_test_XXXXXX)"
 cp -r "$ZERO_DIR" "$WS/ravintio-zero"
 git init "$WS" >/dev/null 2>&1
+commit_workspace_pack "$WS"
 mkdir -p "$WS/.claude" "$WS/plan/.telemetry-failures" "$WS/plan/.telemetry-receipts"
 echo on >"$WS/.claude/telemetry-enabled"
 cat >"$WS/.claude/settings.json" <<'JSON'

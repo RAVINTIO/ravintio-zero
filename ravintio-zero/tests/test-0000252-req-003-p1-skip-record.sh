@@ -26,7 +26,7 @@ assert_equals "yes" "$([ -n "$C" ] && [ -n "$P" ] && [ -n "$S" ] && [ "$C" -lt "
 PSEC=$(awk '/^## P1 skips/{f=1;next} /^## /{f=0} f' "$TPL")
 assert_contains "| Step | Skip P1 | Reason |" "$PSEC" "req-003 AC-1: the table has a step, a yes or no, and a reason"
 STEPS_HEADER=$(grep -m1 '^| Step | Feature id' "$TPL")
-assert_equals "| Step | Feature id | Title | Backlog entries | Bump | Version | Status |" "$STEPS_HEADER" "req-003 AC-1: the Steps header holds the Title column"
+assert_equals "| Step | Feature id | Title | Backlog entries | Bump | Version | Status | Lane | After |" "$STEPS_HEADER" "req-003 AC-1: the Steps header holds the Title column"
 
 echo ""
 echo "=== req-003 AC-2: the standard states which steps are skippable and the stop ==="

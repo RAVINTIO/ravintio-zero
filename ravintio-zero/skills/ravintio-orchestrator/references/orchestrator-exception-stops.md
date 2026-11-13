@@ -4,16 +4,20 @@
 
 ## Exception Stops
 
-Both run modes stop on these exceptions. Commit all work and push it before the stop, where a push is authorised. The credential stop is the exception. It leaves the flagged file uncommitted and pushes nothing.
+<!-- rule: stops-both-modes --> Both run modes stop on these exceptions. Commit all work and push it before the stop, where you hold a push grant. The credential stop is the exception. It leaves the flagged file uncommitted and pushes nothing.
 
 At each stop, follow these steps:
 
-1. Append `Blocked: {exception} ({ISO-8601 timestamp})` to the build log under the current phase block, and commit it.
-2. Print the message for the exception, then wait.
-3. When the human acts, append `Resolved: {exception} ({ISO-8601 timestamp}, {decision})` to the build log, and commit it.
-4. Run `ravintio-postmortem` for the stop, before ship.
+1. <!-- rule: stops-log-blocked --> Append `Blocked: {exception} ({ISO-8601 timestamp})` to the build log under the current phase block, and commit it.
+2. <!-- rule: stops-print-message --> Print the message for the exception, then wait.
+3. <!-- rule: stops-log-resolved --> When the human acts, append `Resolved: {exception} ({ISO-8601 timestamp}, {decision})` to the build log, and commit it.
+4. <!-- rule: stops-postmortem --> Run `ravintio-postmortem` for the stop, before ship. Append `Postmortem: {path} ({ISO-8601 timestamp})` to the build log and commit it.
 
 After the human acts, the run resumes in the same mode from `plan/.run-mode`.
+
+<!-- rule: stops-postmortem-rework --> A `Rework:` line is a self-correction, so it needs a postmortem too. Before ship, run `ravintio-postmortem` for the rework. One record may cover several requirements. Append `Postmortem: {path} REQ-{nnn}, REQ-{nnn} ({ISO-8601 timestamp})`, and name every requirement the record covers. A `Rework:` line that names no requirement needs a `Postmortem:` line with no `REQ-` id.
+
+<!-- rule: stops-postmortem-ship-check --> Ship runs `build-log-check.mjs`, which fails a `Resolved:` line or a reworked requirement that has no `Postmortem:` line. It also runs `postmortem-check.mjs` on each record. Write the missing record. Never edit the log to hide the gap.
 
 | Exception | Message |
 |-----------|---------|
@@ -24,7 +28,7 @@ After the human acts, the run resumes in the same mode from `plan/.run-mode`.
 | A possible credential appears in a file the run will commit, or in a PR body | `{prefix} Blocked: possible credential in {path}. Remove it or confirm it is not a secret.` Stop before the commit and before any push. Never print the value. |
 | P1 or P2 adds a library or service that is not on the approved list. This applies in every run mode. The list is the `Approved dependencies` field of `design.md` in a gated run, and the `## Dependencies` table of `initiative.md` in an initiative step | `{prefix} Blocked: new dependency {name} is not on the approved list. Approve it or choose an approved alternative.` When the human approves, add the name to the same list and record the decision in the `Resolved:` line. |
 
-A fork that matches a `## Decisions` row is no stop (see I-C Run).
+<!-- rule: stops-decision-row-no-stop --> A fork that matches a `## Decisions` row is no stop (see I-C Run).
 
-The status `Blocked:` follows the phase prefix, as in every status message. Never work round an exception stop. Do not force-push, merge, or skip the failing check.
+<!-- rule: stops-never-work-round --> The status `Blocked:` follows the phase prefix, as in every status message. Never work round an exception stop. Do not force-push, merge, or skip the failing check.
 

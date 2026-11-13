@@ -12,7 +12,7 @@ set -uo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
-REPO="$(cd "$SCRIPT_DIR/../.." && pwd)"
+REPO="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
 DRIVER="$SCRIPT_DIR/../scripts/initiative-run.mjs"
 WORK="$(mktemp -d)"
 trap 'rm -rf "$WORK"' EXIT
@@ -26,13 +26,14 @@ assert_not_contains() {
 echo ""
 echo "=== req-003 (a): no PLANIFEST_ string remains ==="
 LEFT="$(cd "$REPO" && git ls-files -z \
-  | grep -zv -e '^plan/_archive/' -e '^plan/changelog/' -e '^ravintio-zero/migrations/_done/' \
-      -e '^plan/current/' -e '^ravintio-zero/migrations/0004-ravintio-rename.md$' \
-      -e '^ravintio-zero/migrations/migrate-ravintio-rename\.' \
-      -e '^ravintio-zero/tests/test-.*ravintio-rename' \
+  | grep -zvE -e '^plan/_archive/' -e '^plan/changelog/' -e '^docs/adr/' -e '^(src/)?ravintio-zero/migrations/_done/' \
+      -e '^plan/current/' -e '^(src/)?ravintio-zero/migrations/0004-ravintio-rename.md$' \
+      -e '^(src/)?ravintio-zero/migrations/migrate-ravintio-rename\.' \
+      -e '^(src/)?ravintio-zero/tests/test-.*ravintio-rename' \
       -e '^docs/decisions-index\.md$' \
-      -e '^ravintio-zero/tests/test-0000160-req-006-brand-guard.sh$' \
-      -e '^ravintio-zero/tests/test-0000160-req-003-environment-variables.sh$' \
+      -e '^(src/)?ravintio-zero/tests/test-0000160-req-006-brand-guard.sh$' \
+      -e '^(src/)?ravintio-zero/tests/brand-guard-allowlist.txt$' \
+      -e '^(src/)?ravintio-zero/tests/test-0000160-req-003-environment-variables.sh$' \
   | xargs -0 grep -I -n 'PLANIFEST_' 2>/dev/null \
   | grep -Ev 'PLANIFEST_ROADMAP_(MODEL|MAX_TURNS)' )"
 assert_equals "" "$LEFT" "req-003 (a): no PLANIFEST_ string outside the allowed places"

@@ -17,7 +17,7 @@ The setup script activates a **three-tier Progressive Guardrail System** that pr
 
 A `commit-msg` hook also validates every commit message. It blocks AI attribution, affirmatory language, and subjects over 72 characters.
 
-Hooks live in `ravintio-zero/hooks/` and are wired via `git config core.hooksPath`. No `.git/` modifications required. The CI workflow is copied to `.github/workflows/ravintio.yml` on first setup.
+Hooks live in `ravintio-zero/hooks/` and `git config core.hooksPath` wires them. No `.git/` modifications required. Setup copies the CI workflow to `.github/workflows/ravintio.yml` on first run.
 
 → [Detailed guardrail mechanics and hook file locations](pipeline-reference.md#git-guardrails)
 
@@ -34,12 +34,14 @@ When discovery starts, the orchestrator writes `plan/.orchestrator-active` conta
 | **check-design** (UserPromptSubmit) | Injects a hard STOP message if neither the sentinel nor a `feature-brief.md` is present |
 | **auto-trigger-orchestrator** (UserPromptSubmit) | Loads the orchestrator skill once per session when no pipeline is active yet |
 | **check-reply-prefix** (Stop) | Warns when the final reply in an active run lacks a valid phase prefix, and logs each miss to `plan/.prefix-misses.log`. It never blocks |
+| **clock-context** (PostToolUse) | Returns the local time as `hh:mm` after every tool call. It adds context and never blocks |
+| **check-reply-writing** (Stop) | Reports sentences over 25 words and blocklist words in the final reply, and "I" and "you" in a run reply, only when the writing output style is installed. It never blocks |
 | **merge-guard** (PreToolUse, Bash) | Blocks `gh pr merge` unless it is a squash into an `initiative/*` branch. Merging into `main` stays human-only |
 | **block-forced-add** (PreToolUse, Bash) | Blocks `git add -f` and `git add --force`. Leave an ignored file out, or add a negation rule to `.gitignore` |
 
-The sentinel is deleted last during ship, after the archive is confirmed complete. You never create or delete it manually.
+Ship deletes the sentinel last, after the archive completes. You never create or delete it manually.
 
-**If a pipeline run is interrupted** and you want to start fresh: delete `plan/.orchestrator-active` and `plan/current/feature-brief.md`, then reload the orchestrator.
+**If a pipeline run stops part-way** and you want to start fresh: delete `plan/.orchestrator-active` and `plan/current/feature-brief.md`, then reload the orchestrator.
 
 → [Full sentinel lifecycle, hook internals, gate-write interaction with design.md, and manual recovery](pipeline-reference.md#orchestrator-sentinel)
 
@@ -59,7 +61,7 @@ Strict mode makes every session prove that it loaded the orchestrator. By defaul
 .\ravintio-zero\setup.ps1 claude-code --strict-orchestrator
 ```
 
-Setup then writes `plan/.orchestrator-strict`.
+Setup then writes `plan/.orchestrator-strict`. A later run without a strict flag keeps the file. To turn strict mode off, run setup with `--no-strict-orchestrator`. Setup removes the file and prints that it did.
 
 ### Strict mode and the session acknowledgement
 
@@ -102,16 +104,16 @@ Three parts run an initiative. The human talks only to their own session. Step s
 | Part | What it is | Runs where | Owns |
 |------|-----------|------------|------|
 | `ravintio-initiative` skill | The initiative coordinator | The human's session | Chart, activate, watching the steps, progress reports, and delivery |
-| Driver, `initiative-run.mjs` | A script with no AI | A background task that the initiative skill starts | Starting each step session in turn, and stopping on a `Blocked:` line |
-| `ravintio-orchestrator` skill | The feature coordinator | Each step session, a separate `claude -p` process | One feature from P0 to P4, then the merge into the initiative branch |
+| Driver, `initiative-run.mjs` | A script with no AI | A background task that the initiative skill starts | Starting step sessions in worktrees, running the merge queue, and stopping on a `Blocked:` line |
+| `ravintio-orchestrator` skill | The feature coordinator | Each step session, a separate `claude -p` process | One feature from P0 to P4, up to a step PR with green CI |
 
 An initiative runs in this sequence:
 
 1. **I-A Chart.** The initiative skill plans the steps with the human and takes their approval.
 2. **I-B Activate.** The initiative skill cuts the initiative branch and starts the driver.
-3. **I-C Run.** The driver starts a step session. It loads the orchestrator and builds one feature from P0 to P4.
-4. **I-D Advance.** The step session merges its feature PR into the initiative branch, tags the merge commit, and exits.
-5. The driver starts the next step session. Stages I-C and I-D repeat until no steps remain.
+3. **I-C Run.** The driver starts each step whose lane is free and whose `After` steps have merged, up to `**Concurrency:**` at once. Each step session runs in its own worktree. It loads the orchestrator and builds one feature from P0 to P4.
+4. **I-D Advance.** The step session raises its PR, waits for green CI, writes the PR number to its control folder, and exits. The driver runs the merge queue for each ready PR, one at a time. The queue sets the version, merges the PR into the initiative branch, and tags the merge commit.
+5. The driver starts more steps as lanes free up. Stages I-C and I-D repeat until every step has merged.
 6. While steps run, the initiative skill watches the build log and git, and reports to the human. It never edits the working tree.
 7. **I-E Delivery.** After the driver exits, the initiative skill archives the initiative and raises the initiative PR to `main`. It then gives the final report.
 
@@ -121,13 +123,17 @@ An initiative runs in this sequence:
 
 ## Customising with ravintio-overrides
 
-`ravintio-overrides/` is your customisation layer. It is committed to the repo and never overwritten by setup scripts.
+`ravintio-overrides/` is your customisation layer. It lives in the repo, and the setup scripts never overwrite it.
 
 | Directory | Purpose |
 |-----------|---------|
 | `instructions/` | Project-specific instructions appended to the `CLAUDE.md` boot file on every setup run. Files sorted alphabetically and injected between HTML comment markers. |
-| `capability-skills/` | Permanent agent skills installed alongside built-in RAVINTIO skills on every setup run. Each skill is a directory containing a `SKILL.md`. |
+| `capability-skills/` | Permanent agent skills installed alongside built-in RAVINTIO skills on every setup run. Each skill is a directory containing a `SKILL.md`. Setup copies the whole directory, with its `references/`, `scripts/`, and `assets/` folders. A directory with no `SKILL.md` prints a warning and installs nothing. |
 | `library-standards/` | Override the pack's library preferences per language. Agents check here before the pack defaults. Structure mirrors `ravintio-zero/standards/library-standards/`. |
+| `standards/` | Replaces a pack standard by file name. Hook-enforced files listed in `ravintio-zero/archetypes/protected.json` stay fixed. |
+| `templates/` | Replaces a pack template by file name, with the same protection. |
+
+Run `setup.sh archetype list` to see the starter archetypes. Run `setup.sh archetype use {kind}/{name}` to install one into `ravintio-overrides/`. See [archetypes/README.md](archetypes/README.md).
 
 The tracked record of setup flags per tool lives at `plan/state/{tool}.md`, not under `ravintio-overrides/`. The setup script writes it, and the `ravintio-refresh-setup` skill reads it.
 
@@ -137,7 +143,15 @@ The tracked record of setup flags per tool lives at `plan/state/{tool}.md`, not 
 
 ## Updating the pack
 
-After pulling new files into `ravintio-zero/`, re-run the setup script to propagate changes. Pass the same flags used during initial setup. Re-running is idempotent, and it prunes skills the new version has retired.
+To update from a newer copy of the pack, run the update command. It copies the pack from a local folder, commits the new pack files, and runs setup again with the flags in `plan/state/{tool}.md`:
+
+```bash
+./ravintio-zero/setup.sh claude-code --update ../zero/ravintio-zero
+```
+
+Update refuses if `ravintio-zero/` holds uncommitted files. To check the result, run `./ravintio-zero/setup.sh claude-code --doctor`. Doctor exits 1 and names each problem.
+
+If you copy the pack by hand, commit it first. Setup copies only committed files in `ravintio-zero/` and `ravintio-overrides/`. It lists each uncommitted file and copies nothing. It has no flag to skip this check. Then re-run the setup script to propagate changes. Pass the same flags used during initial setup. Re-running is idempotent, and it prunes skills the new version has retired.
 
 ```bash
 # macOS / Linux
@@ -153,6 +167,12 @@ After updating, check `ravintio-zero/migrations/` for any pending `.md` files. T
 
 → [Full update protocol and migration handling](pipeline-reference.md#updating-the-pack)
 
+### Removing the pack
+
+To reverse the setup changes, run `./ravintio-zero/setup.sh claude-code --uninstall`. Uninstall unsets `core.hooksPath` and removes the RAVINTIO hook entries from `.claude/settings.json`. It also removes the skills, commands, and hook scripts that setup installed, and the workflow and `.gitattributes` when they match the pack copies. It prints each change.
+
+Uninstall keeps your own `settings.json` entries and files. It deletes no record under `plan/` and lists the records. It also keeps `CLAUDE.md`, `ravintio-zero/`, and `ravintio-overrides/`. It refuses while `plan/.orchestrator-active` or `plan/.initiative-runner.lock` exists.
+
 ---
 
 ## What to Commit
@@ -167,8 +187,8 @@ After updating, check `ravintio-zero/migrations/` for any pending `.md` files. T
 | `src/` | Yes | Component code and manifests |
 | `docs/` | Yes | Repo-wide registry and dependency graph |
 | `ravintio-overrides/` | Yes | Customisations, committed to share with the team |
-| `.claude/` | Optional | Generated copies, can be `.gitignore`d and regenerated by setup |
-| `CLAUDE.md` | Optional | Boot file, regenerated by setup |
+| `.claude/` | Optional | Generated copies, can be `.gitignore`d and regenerated by setup. `.claude/skills/.ravintio-manifest` lists installed skill folders by repo-relative path. Setup removes a listed folder only if it sits directly inside the skills directory. `.claude/commands/.ravintio-manifest` lists installed commands, and setup removes a listed command the pack stops shipping. |
+| `CLAUDE.md` | Optional | Boot file, regenerated by setup. On a first install over your own `CLAUDE.md`, setup copies its content to `ravintio-overrides/instructions/original-CLAUDE.md` and prints the path. |
 
 → [What "Optional" means and commit message standards](pipeline-reference.md#what-to-commit)
 
@@ -188,6 +208,6 @@ Run the RAVINTIO pipeline in retrofit mode.
 Feature brief: plan/current/feature-brief.md
 ```
 
-In retrofit mode, discovery includes a codebase scan before coaching. The orchestrator scans entry points, maps data ownership, discovers API contracts, and surfaces tech debt, then uses those findings to reduce the coaching questions you need to answer.
+In retrofit mode, discovery includes a codebase scan before coaching. The orchestrator scans entry points, maps data ownership, discovers API contracts, and surfaces tech debt. It uses those findings to cut the coaching questions you need to answer.
 
 → [Retrofit discovery scan details](pipeline-reference.md#retrofit-an-existing-project)

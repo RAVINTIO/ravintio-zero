@@ -7,6 +7,8 @@
 # AC-3: both CI files list initiative/** and neither lists roadmap/**.
 
 set -uo pipefail
+# A step session sets RAVINTIO_INITIATIVE_QUEUE=1, which makes merge-guard refuse every merge (0000458).
+unset RAVINTIO_INITIATIVE_QUEUE
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
@@ -69,7 +71,7 @@ assert_contains "initiative/*" "$OUT" "req-002 AC-2: message names initiative/*"
 
 echo ""
 echo "=== req-002 AC-3: CI branches ==="
-for f in "$ZERO_DIR/../.github/workflows/ravintio.yml" "$ZERO_DIR/hooks/ravintio.yml"; do
+for f in "$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)/.github/workflows/ravintio.yml" "$ZERO_DIR/hooks/ravintio.yml"; do
   t="$(cat "$f")"
   l="$(basename "$(dirname "$f")")/ravintio.yml"
   assert_contains "initiative/**" "$t" "req-002 AC-3: $l lists initiative/**"

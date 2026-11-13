@@ -16,8 +16,15 @@ SKILLS_SRC="$SCRIPT_DIR/skills"
 WORKFLOWS_SRC="$SCRIPT_DIR/workflows"
 SETUP_DIR="$SCRIPT_DIR/setup"
 
+# The archetype verb runs before argument parsing and only dispatches (0000391 ADR-0293).
+if [ "${1:-}" = "archetype" ]; then
+  shift
+  exec node "$SCRIPT_DIR/scripts/archetype.mjs" "$@" --root "$PROJECT_ROOT"
+fi
+
 VALID_TOOLS="claude-code codex"
 STRICT_ORCHESTRATOR=false
+NO_WRITING_STYLE=false
 
 # Prepended to every node script that writes settings.json (0000034 ADR-002).
 # Writes a temporary file in the same folder, then renames it over the target,
@@ -99,6 +106,43 @@ copy_skills() {
   done
 }
 
+remove_manifest_entries() {
+  # Removes each folder the manifest lists, and only a folder that sits directly
+  # inside the skills directory (0000381 ADR-001, backlog 0000262). A line is
+  # relative to the repo root. A legacy absolute line passes the same test. A
+  # line with a ".." segment, a link, or a parent other than the skills
+  # directory is skipped with a warning.
+  local manifest="$1" skills_dir="$2" line path parent phys_skills
+  phys_skills="$(cd -P "$skills_dir" 2>/dev/null && pwd)" || return 0
+  while IFS= read -r line || [ -n "$line" ]; do
+    line="${line%$'\r'}"
+    [ -n "$line" ] || continue
+    case "$line" in
+      /*) path="$line" ;;
+      *) path="$PROJECT_ROOT/$line" ;;
+    esac
+    path="${path%/}"
+    case "/$path/" in
+      */../*|*/./*)
+        echo "  ! Warning: manifest entry outside the skills directory, skipped: $line"
+        continue ;;
+    esac
+    parent="$(cd -P "$(dirname "$path")" 2>/dev/null && pwd)" || parent=""
+    if [ "$parent" != "$phys_skills" ]; then
+      echo "  ! Warning: manifest entry outside the skills directory, skipped: $line"
+      continue
+    fi
+    if [ -L "$path" ]; then
+      echo "  ! Warning: manifest entry is a link, skipped: $line"
+      continue
+    fi
+    if [ -d "$path" ]; then
+      rm -rf "$path"
+      echo "  - removed: $(basename "$path")"
+    fi
+  done < "$manifest"
+}
+
 prune_bundled_files() {
   # Removes the pack copies an older install bundled into a skill (0000171
   # req-004). It deletes only the paths where that install put a pack file:
@@ -158,6 +202,36 @@ prune_retired_skills() {
   done
 }
 
+preserve_developer_boot_file() {
+  # A boot file that lacks the pack's first line is the developer's own. Copy
+  # it to ravintio-overrides/instructions/ before the write, so the override
+  # block re-applies it (0000381 ADR-002, backlog 0000290). A file with the pack
+  # line, an empty file, and a link are left alone. An existing destination is
+  # never overwritten: setup numbers the new file instead.
+  local path="$1" content="$2" marker base dest_dir dest n=1
+  [ -f "$path" ] && [ ! -L "$path" ] || return 0
+  grep -q '[^[:space:]]' "$path" 2>/dev/null || return 0
+  marker="$(printf '%s\n' "$content" | head -1)"
+  # Windows PowerShell 5.1 writes a BOM, so strip it from the first line before the compare (0000462).
+  if [ -n "$marker" ] && LC_ALL=C sed $'1s/^\xef\xbb\xbf//' "$path" | grep -qxF -- "$marker"; then
+    return 0
+  fi
+  base="$(basename "$path" .md)"
+  dest_dir="$PROJECT_ROOT/ravintio-overrides/instructions"
+  [ -L "$PROJECT_ROOT/ravintio-overrides" ] || [ -L "$dest_dir" ] && return 0
+  mkdir -p "$dest_dir"
+  dest="$dest_dir/original-$base.md"
+  while [ -e "$dest" ] || [ -L "$dest" ]; do
+    n=$((n + 1))
+    dest="$dest_dir/original-$base-$n.md"
+  done
+  {
+    printf '<!-- Moved from %s by setup on first install. -->\n' "$(basename "$path")"
+    cat "$path"
+  } > "$dest"
+  echo "  ~ $(basename "$path") content kept in ${dest#"$PROJECT_ROOT"/}"
+}
+
 write_boot_file() {
   # Boot files are disposable build outputs (0000029 ADR-001): always
   # regenerate from the current template so template fixes propagate on every
@@ -167,6 +241,7 @@ write_boot_file() {
   local content="$2"
 
   mkdir -p "$(dirname "$path")"
+  preserve_developer_boot_file "$path" "$content"
   if [ ! -f "$path" ]; then
     echo "$content" > "$path"
     echo "  + $(basename "$path") (created)"
@@ -200,7 +275,8 @@ copy_capability_skills() {
 
     local dest_dir="$target_dir/$skill_name"
     mkdir -p "$dest_dir"
-    cp "$skill_md" "$dest_dir/SKILL.md"
+    # The whole folder, so references/, scripts/, and assets/ install too (0000381 REQ-002).
+    cp -R "$skill_dir/." "$dest_dir/"
     echo "  + capability-skill: $skill_name"
     found=true
   done
@@ -346,6 +422,51 @@ append_override_instructions() {
   echo "  Appending override instructions from ravintio-overrides/instructions/"
 }
 
+# Commands an earlier release shipped in the tool's command folder and no longer
+# ships (0000381 ADR-002, backlog 0000293).
+RETIRED_COMMANDS="fast-path change-pipeline retrofit"
+
+prune_retired_commands() {
+  # Removes a command file the pack no longer ships. Two sources name it: the
+  # command manifest from a past run, and the retired list above. A file counts
+  # as the pack's only if it is a plain file that is not a link, and (for the
+  # retired list) its front matter holds the matching "name:" line. A
+  # developer's own command stays.
+  local dir="$1" manifest="$1/.ravintio-manifest" line name f
+  [ -d "$dir" ] && [ ! -L "$dir" ] || return 0
+  if [ -f "$manifest" ]; then
+    while IFS= read -r line || [ -n "$line" ]; do
+      name="${line%$'\r'}"
+      case "$name" in ""|*/*|.*) continue ;; esac
+      [ -e "$WORKFLOWS_SRC/$name" ] && continue
+      f="$dir/$name"
+      if [ -f "$f" ] && [ ! -L "$f" ]; then
+        rm -f "$f"
+        echo "  - pruned retired command: $name"
+      fi
+    done < "$manifest"
+  fi
+  for name in $RETIRED_COMMANDS; do
+    f="$dir/$name.md"
+    [ -f "$f" ] && [ ! -L "$f" ] || continue
+    if head -8 "$f" | grep -Eq "^name:[[:space:]]*$name[[:space:]]*\r?$"; then
+      rm -f "$f"
+      echo "  - pruned retired command: $name.md"
+    fi
+  done
+}
+
+write_commands_manifest() {
+  # Lists the command files the pack installed, so the next run can prune one
+  # the pack stops shipping.
+  local dir="$1" wf
+  [ -d "$dir" ] && [ ! -L "$dir" ] || return 0
+  : > "$dir/.ravintio-manifest"
+  for wf in "$WORKFLOWS_SRC"/*.md; do
+    [ -f "$wf" ] && basename "$wf" >> "$dir/.ravintio-manifest"
+  done
+}
+
 copy_workflow() {
   local workflow_file="$1"
   local target_dir="$2"
@@ -470,7 +591,7 @@ install_codex_hooks() {
   echo "    block-forced-add (PreToolUse: Bash)"
   echo "  Fallback hooks, stated as instructions in AGENTS.md:"
   echo "    gate-write, ratchet-check, em-dash-guard, auto-trigger-orchestrator,"
-  echo "    check-orchestrator-presence, check-design, check-reply-prefix"
+  echo "    check-orchestrator-presence, check-design, check-reply-prefix, check-reply-writing"
   echo "  Review and trust the project hooks with /hooks in Codex."
   echo "  Until you trust it, Codex skips merge-guard and block-forced-add, including in codex exec."
 }
@@ -545,9 +666,11 @@ install_enforcement_hooks() {
   local merge_guard_cmd="$launcher guard merge-guard.mjs$fail_closed"
   local forced_add_cmd="$launcher guard block-forced-add.mjs$fail_closed"
   local reply_prefix_cmd="$launcher advisory check-reply-prefix.mjs"
+  local reply_writing_cmd="$launcher advisory check-reply-writing.mjs"
+  local clock_cmd="$launcher advisory clock-context.mjs"
 
   if command -v node >/dev/null 2>&1; then
-    RAVINTIO_GATE="$gate_cmd" RAVINTIO_RATCHET="$ratchet_cmd" RAVINTIO_EM_DASH="$em_dash_cmd" RAVINTIO_TRIGGER="$trigger_cmd" RAVINTIO_PRESENCE="$presence_cmd" RAVINTIO_DESIGN="$design_cmd" RAVINTIO_MERGE_GUARD="$merge_guard_cmd" RAVINTIO_FORCED_ADD="$forced_add_cmd" RAVINTIO_REPLY_PREFIX="$reply_prefix_cmd" RAVINTIO_RETIRED="$RETIRED_HOOK_NAMES" RAVINTIO_SETTINGS="$settings" RAVINTIO_SETTINGS_REL="$settings_rel" node -e "$RAVINTIO_WRITE_SETTINGS_JS$RAVINTIO_SETTINGS_SHAPE_JS"'
+    RAVINTIO_GATE="$gate_cmd" RAVINTIO_RATCHET="$ratchet_cmd" RAVINTIO_EM_DASH="$em_dash_cmd" RAVINTIO_TRIGGER="$trigger_cmd" RAVINTIO_PRESENCE="$presence_cmd" RAVINTIO_DESIGN="$design_cmd" RAVINTIO_MERGE_GUARD="$merge_guard_cmd" RAVINTIO_FORCED_ADD="$forced_add_cmd" RAVINTIO_REPLY_PREFIX="$reply_prefix_cmd" RAVINTIO_REPLY_WRITING="$reply_writing_cmd" RAVINTIO_CLOCK="$clock_cmd" RAVINTIO_RETIRED="$RETIRED_HOOK_NAMES" RAVINTIO_SETTINGS="$settings" RAVINTIO_SETTINGS_REL="$settings_rel" node -e "$RAVINTIO_WRITE_SETTINGS_JS$RAVINTIO_SETTINGS_SHAPE_JS"'
       const fs = require("fs"), path = require("path");
       const gate     = process.env.RAVINTIO_GATE;
       const ratchet  = process.env.RAVINTIO_RATCHET;
@@ -558,6 +681,8 @@ install_enforcement_hooks() {
       const mergeGuard = process.env.RAVINTIO_MERGE_GUARD;
       const forcedAdd = process.env.RAVINTIO_FORCED_ADD;
       const replyPrefix = process.env.RAVINTIO_REPLY_PREFIX;
+      const replyWriting = process.env.RAVINTIO_REPLY_WRITING;
+      const clockCmd = process.env.RAVINTIO_CLOCK;
       const sf       = process.env.RAVINTIO_SETTINGS;
       let s = {};
       // On invalid JSON, print one fixed line that names the file, write
@@ -597,7 +722,7 @@ install_enforcement_hooks() {
       // event and the file, never the old value, which can hold a secret
       // (0000041 ADR-003). An absent or null value gets the entries with no
       // warning. setup.ps1 prints the same text.
-      for (const ev of ["PreToolUse", "UserPromptSubmit", "Stop"]) {
+      for (const ev of ["PreToolUse", "UserPromptSubmit", "Stop", "PostToolUse"]) {
         const v = s.hooks[ev];
         if (v === undefined || v === null || Array.isArray(v)) continue;
         process.stderr.write("  ! Warning: hooks." + ev + " in " + process.env.RAVINTIO_SETTINGS_REL +
@@ -644,7 +769,8 @@ install_enforcement_hooks() {
         }
       }
       // PreToolUse: gate-write + ratchet-check + em-dash-guard for Write and Edit,
-      // then merge-guard and block-forced-add for Bash (0000043 req-006, 0000317 req-002)
+      // then merge-guard, block-forced-add and gate-write for Bash (0000043 req-006,
+      // 0000317 req-002, 0000393 req-001)
       // (idempotent: remove then re-add). Remove the three modules on any
       // matcher, so an old Write|Edit entry goes too (0000037 ADR-003).
       const preToolModule = /(^|[\s"\x27\/\\])(gate-write|ratchet-check|em-dash-guard|merge-guard|block-forced-add)\.mjs\b/;
@@ -657,7 +783,8 @@ install_enforcement_hooks() {
         {matcher:"Write", hooks:[{type:"command",command:emDash}]},
         {matcher:"Edit",  hooks:[{type:"command",command:emDash}]},
         {matcher:"Bash",  hooks:[{type:"command",command:mergeGuard}]},
-        {matcher:"Bash",  hooks:[{type:"command",command:forcedAdd}]}
+        {matcher:"Bash",  hooks:[{type:"command",command:forcedAdd}]},
+        {matcher:"Bash",  hooks:[{type:"command",command:gate}]}
       );
       // UserPromptSubmit: auto-trigger first, then presence check, then check-design
       // (REQ-002, REQ-008, idempotent). The same path-boundary match as
@@ -671,10 +798,18 @@ install_enforcement_hooks() {
       );
       // Stop: check-reply-prefix warns when a reply lacks a prefix (0000200
       // req-004, idempotent). The same path-boundary match as the other events.
-      const stopModule = /(^|[\s"\x27\/\\])(check-reply-prefix)\.mjs\b/;
+      const stopModule = /(^|[\s"\x27\/\\])(check-reply-prefix|check-reply-writing)\.mjs\b/;
       s.hooks.Stop = keepUserCommands(s.hooks.Stop || [], stopModule);
       s.hooks.Stop.push(
-        {matcher:".*", hooks:[{type:"command",command:replyPrefix}]}
+        {matcher:".*", hooks:[{type:"command",command:replyPrefix}]},
+        {matcher:".*", hooks:[{type:"command",command:replyWriting}]}
+      );
+      // PostToolUse: clock-context returns the local time after each tool call
+      // (0000499 req-001, idempotent). The same path-boundary match as the other events.
+      const postToolModule = /(^|[\s"\x27\/\\])(clock-context)\.mjs\b/;
+      s.hooks.PostToolUse = keepUserCommands(s.hooks.PostToolUse || [], postToolModule);
+      s.hooks.PostToolUse.push(
+        {matcher:".*", hooks:[{type:"command",command:clockCmd}]}
       );
       fs.mkdirSync(path.dirname(sf),{recursive:true});
       writeSettings(sf, JSON.stringify(s,null,2)+"\n");
@@ -682,7 +817,7 @@ install_enforcement_hooks() {
     echo "  ~ $settings_rel (enforcement hooks wired, Bash kept in the project root)"
   else
     echo "  ! Warning: node not found — skipping settings.json enforcement hook wiring"
-    echo "  ! Manually set env.CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR to 1, and add gate-write, ratchet-check, em-dash-guard (Write/Edit PreToolUse), merge-guard and block-forced-add (Bash PreToolUse), auto-trigger-orchestrator, check-orchestrator-presence and check-design (UserPromptSubmit), and check-reply-prefix (Stop) to $settings_rel"
+    echo "  ! Manually set env.CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR to 1, and add gate-write, ratchet-check, em-dash-guard (Write/Edit PreToolUse), merge-guard, block-forced-add and gate-write (Bash PreToolUse), auto-trigger-orchestrator, check-orchestrator-presence and check-design (UserPromptSubmit), check-reply-prefix and check-reply-writing (Stop) to $settings_rel"
   fi
 }
 
@@ -731,6 +866,112 @@ merge_allowed_tools() {
     echo "  ! Warning: node not found — skipping allowedTools update"
     echo "  ! Manually add \"Agent\" to allowedTools in .claude/settings.json"
   fi
+}
+
+install_writing_style_claude() {
+  # Writes the writing-standard output style and sets outputStyle when the key
+  # is absent (0000389 req-003, req-005). Runs after merge_allowed_tools so it
+  # is the last writer of settings.json. A rerun changes no byte.
+  local settings_file="$1"
+  local settings_rel="${settings_file#"$PROJECT_ROOT"/}"
+  local style_rel=".claude/output-styles/ravintio-writing.md"
+
+  if [ "$NO_WRITING_STYLE" = true ]; then
+    echo "  - writing style skipped (--no-writing-style)"
+    return 0
+  fi
+  if ! command -v node >/dev/null 2>&1; then
+    echo "  ! Warning: node not found, skipping the writing style install"
+    return 0
+  fi
+  RAVINTIO_STYLE_SCRIPT="$(cd "$SCRIPT_DIR/scripts" && pwd -P)/writing-style.mjs" \
+  RAVINTIO_STYLE_FILE="$PROJECT_ROOT/$style_rel" RAVINTIO_STYLE_REL="$style_rel" \
+  RAVINTIO_SETTINGS="$settings_file" RAVINTIO_SETTINGS_REL="$settings_rel" \
+  node -e "$RAVINTIO_WRITE_SETTINGS_JS"'
+    const fs = require("fs"), path = require("path"), cp = require("child_process");
+    const r = cp.spawnSync(process.execPath, [process.env.RAVINTIO_STYLE_SCRIPT, "claude-code"], {encoding:"utf8"});
+    if (r.status !== 0 || !r.stdout.trim()) {
+      console.log("  ! Warning: writing-style.mjs failed, skipping the writing style install");
+      process.exit(0);
+    }
+    const out = r.stdout;
+    const f = process.env.RAVINTIO_STYLE_FILE, rel = process.env.RAVINTIO_STYLE_REL;
+    const had = fs.existsSync(f);
+    if (had && fs.readFileSync(f, "utf8") === out) {
+      console.log("  - " + rel + " (unchanged)");
+    } else {
+      fs.mkdirSync(path.dirname(f), {recursive: true});
+      fs.writeFileSync(f, out, "utf8");
+      console.log((had ? "  ~ " : "  + ") + rel + (had ? " (updated)" : " (created)"));
+    }
+    const sf = process.env.RAVINTIO_SETTINGS;
+    let s = {};
+    if (fs.existsSync(sf)) {
+      const raw = fs.readFileSync(sf,"utf8").replace(/^\uFEFF/,"");
+      try { s = JSON.parse(raw); } catch (_) {
+        process.stderr.write("! Error: " + process.env.RAVINTIO_SETTINGS_REL +
+          " is not valid JSON. Fix it and rerun setup.\n");
+        process.exit(1);
+      }
+    }
+    if (!Object.prototype.hasOwnProperty.call(s, "outputStyle")) {
+      s.outputStyle = "ravintio-writing";
+      fs.mkdirSync(path.dirname(sf),{recursive:true});
+      writeSettings(sf, JSON.stringify(s,null,2)+"\n");
+      console.log("  ~ .claude/settings.json (outputStyle set to ravintio-writing)");
+    } else if (s.outputStyle === "ravintio-writing") {
+      console.log("  - .claude/settings.json (outputStyle already ravintio-writing)");
+    } else {
+      console.log("  - .claude/settings.json (outputStyle already set to " + String(s.outputStyle) + ", left as is)");
+    }
+  ' || exit 1
+}
+
+writing_block_of() {
+  # Prints the writing block (markers included) found in one file, or nothing.
+  [ -f "$1" ] || return 0
+  command -v node >/dev/null 2>&1 || return 0
+  RAVINTIO_FILE="$1" node -e '
+    const t = require("fs").readFileSync(process.env.RAVINTIO_FILE, "utf8");
+    const a = t.indexOf("<!-- ravintio-writing:start -->");
+    const e = "<!-- ravintio-writing:end -->";
+    const b = t.indexOf(e);
+    if (a !== -1 && b > a) process.stdout.write(t.slice(a, b + e.length));
+  '
+}
+
+install_writing_style_codex() {
+  # Puts exactly one writing block in AGENTS.md (0000389 req-004, req-005).
+  # $1 = boot file path, $2 = the block the file held before it was regenerated.
+  local boot="$1" prev="${2:-}"
+
+  if [ "$NO_WRITING_STYLE" = true ]; then
+    echo "  - writing style skipped (--no-writing-style)"
+    return 0
+  fi
+  if ! command -v node >/dev/null 2>&1; then
+    echo "  ! Warning: node not found, skipping the writing section"
+    return 0
+  fi
+  RAVINTIO_STYLE_SCRIPT="$(cd "$SCRIPT_DIR/scripts" && pwd -P)/writing-style.mjs" RAVINTIO_BOOT="$boot" RAVINTIO_PREV="$prev" node -e '
+    const fs = require("fs"), cp = require("child_process");
+    const r = cp.spawnSync(process.execPath, [process.env.RAVINTIO_STYLE_SCRIPT, "codex"], {encoding:"utf8"});
+    if (r.status !== 0 || !r.stdout.trim()) {
+      console.log("  ! Warning: writing-style.mjs failed, skipping the writing section");
+      process.exit(0);
+    }
+    const block = r.stdout.replace(/\n+$/, "");
+    const S = "<!-- ravintio-writing:start -->", E = "<!-- ravintio-writing:end -->";
+    let t = fs.readFileSync(process.env.RAVINTIO_BOOT, "utf8");
+    const a = t.indexOf(S), b = t.indexOf(E);
+    if (a !== -1 && b > a) t = t.slice(0, a) + block + t.slice(b + E.length);
+    else t = t.replace(/\n*$/, "\n\n") + block + "\n";
+    fs.writeFileSync(process.env.RAVINTIO_BOOT, t, "utf8");
+    const prev = process.env.RAVINTIO_PREV;
+    console.log(!prev ? "  + AGENTS.md (writing section added)"
+      : prev === block ? "  - AGENTS.md (writing section unchanged)"
+      : "  ~ AGENTS.md (writing section updated)");
+  ' || exit 1
 }
 
 activate_guardrails() {
@@ -823,6 +1064,15 @@ EOF
     echo "  + plan/ (created)"
   fi
 
+  # The pipeline writes its working files to plan/current/ (0000382, backlog 0000283).
+  if [ ! -d "$plan_dir/current" ]; then
+    if mkdir -p "$plan_dir/current" 2>/dev/null; then
+      echo "  + plan/current/ (created)"
+    else
+      echo "  ! Warning: could not create plan/current/, continuing" >&2
+    fi
+  fi
+
   if [ ! -f "$plan_dir/README.md" ]; then
     cat << 'EOF' > "$plan_dir/README.md"
 # plan/
@@ -836,7 +1086,7 @@ EOF
 
   if [ ! -f "$plan_dir/feature-structure.md" ]; then
     cat << 'EOF' > "$plan_dir/feature-structure.md"
-# RAVINTIO Ã¢â‚¬â€ Repository Structure
+# RAVINTIO - Repository Structure
 
 > The canonical layout for a RAVINTIO-managed repository. Three top-level folders, three concerns.
 
@@ -846,99 +1096,99 @@ EOF
 
 ```
 repo/
-Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ ravintio-zero/        Ã¢â€ Â The pack (skills, templates, schemas, standards)
-Ã¢â€â€š                                 Drop this in. Don't modify it per-project.
-Ã¢â€â€š
-Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ plan/                       Ã¢â€ Â The specifications (organized by feature)
-Ã¢â€â€š                                 Plans, briefs, specs, ADRs, risk, scope, glossary.
-Ã¢â€â€š                                 Everything that describes WHAT to build and WHY.
-Ã¢â€â€š
-Ã¢â€â€Ã¢â€â‚¬Ã¢â€â‚¬ src/                        Ã¢â€ Â The code (organized by component)
+- ravintio-zero/        - Â The pack (skills, templates, schemas, standards)
+-                                 Drop this in. Don't modify it per-project.
+-
+- plan/                       - Â The specifications (organized by feature)
+-                                 Plans, briefs, specs, ADRs, risk, scope, glossary.
+-                                 Everything that describes WHAT to build and WHY.
+-
+- src/                        - Â The code (organized by component)
                                   Implementation, tests, config, manifests.
                                   Everything that IS the built thing.
 ```
 
 ---
 
-## `ravintio-zero/` Ã¢â‚¬â€ The pack
+## `ravintio-zero/` - The pack
 
-This folder is RAVINTIO Zero itself. It is the same across every project. You do not modify it per-feature Ã¢â‚¬â€ you update it when RAVINTIO Zero evolves.
+This folder is RAVINTIO Zero itself. It is the same across every project. You do not modify it per-feature - you update it when RAVINTIO Zero evolves.
 
 ```
 ravintio-zero/
-Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ skills/           Ã¢â€ Â Agent instructions (orchestrator + phase skills)
-Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ templates/        Ã¢â€ Â File format templates for every artifact
-Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ schemas/          Ã¢â€ Â JSON Schema validation definitions
-Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ standards/        Ã¢â€ Â Code quality standards
-Ã¢â€â€Ã¢â€â‚¬Ã¢â€â‚¬ spec/             Ã¢â€ Â This file Ã¢â‚¬â€ the canonical structure definition
+- skills/           - Â Agent instructions (orchestrator + phase skills)
+- templates/        - Â File format templates for every artifact
+- schemas/          - Â JSON Schema validation definitions
+- standards/        - Â Code quality standards
+- spec/             - Â This file - the canonical structure definition
 ```
 
 ---
 
-## `plan/` Ã¢â‚¬â€ The Plan/Specifications
+## `plan/` - The Plan/Specifications
 
 Organized by feature. Each feature gets a subfolder. This is where humans write briefs and agents write specs. No code lives here.
 
 ```
 plan/
-Ã¢â€â€Ã¢â€â‚¬Ã¢â€â‚¬ {feature-id}/
-    Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ feature-brief.md          Ã¢â€ Â Human input (start here)
-    Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ design.md                 Ã¢â€ Â Validated plan (orchestrator output)
-    Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ pipeline-run.md              Ã¢â€ Â Audit trail (per run)
-    Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ pipeline-run-phase-2.md      Ã¢â€ Â Phase 2 audit (if phased)
-    Ã¢â€â€š
-    Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ design-requirements.md               Ã¢â€ Â Functional & non-functional requirements
-    Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ design-spec-phase-2.md       Ã¢â€ Â Phase 2 spec (if phased)
-    Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ openapi-spec.yaml            Ã¢â€ Â API contract
-    Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ scope.md                     Ã¢â€ Â In / Out / Deferred
-    Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ risk-register.md             Ã¢â€ Â Risk items with likelihood & impact
-    Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ domain-glossary.md           Ã¢â€ Â Ubiquitous language
-    Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ security-report.md           Ã¢â€ Â Security review findings
-    Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ quirks.md                    Ã¢â€ Â Quirks and workarounds
-    Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ recommendations.md           Ã¢â€ Â Improvement suggestions
-    Ã¢â€â€š
-    Ã¢â€â€Ã¢â€â‚¬Ã¢â€â‚¬ adr/
-        Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ ADR-001-{title}.md       Ã¢â€ Â Architecture decision records
-        Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ ADR-002-{title}.md
-        Ã¢â€â€Ã¢â€â‚¬Ã¢â€â‚¬ ...
+- {feature-id}/
+    - feature-brief.md          - Â Human input (start here)
+    - design.md                 - Â Validated plan (orchestrator output)
+    - pipeline-run.md              - Â Audit trail (per run)
+    - pipeline-run-phase-2.md      - Â Phase 2 audit (if phased)
+    -
+    - design-requirements.md               - Â Functional & non-functional requirements
+    - design-spec-phase-2.md       - Â Phase 2 spec (if phased)
+    - openapi-spec.yaml            - Â API contract
+    - scope.md                     - Â In / Out / Deferred
+    - risk-register.md             - Â Risk items with likelihood & impact
+    - domain-glossary.md           - Â Ubiquitous language
+    - security-report.md           - Â Security review findings
+    - quirks.md                    - Â Quirks and workarounds
+    - recommendations.md           - Â Improvement suggestions
+    -
+    - adr/
+        - ADR-001-{title}.md       - Â Architecture decision records
+        - ADR-002-{title}.md
+        - ...
 ```
 
-### Path Rules Ã¢â‚¬â€ plan/
+### Path Rules - plan/
 
 1. **Feature ID** follows the format `{0000000}-{kebab-case-name}` - a 7-digit zero-padded number prefix for chronological ordering, followed by a human-chosen kebab-case name.
-2. **No nesting** Ã¢â‚¬â€ specs, ADRs, and supporting docs are flat within the feature folder. One level of subfolders only (adr/).
-3. **No code** Ã¢â‚¬â€ nothing executable lives in `plan/`. If it runs, it belongs in `src/`.
+2. **No nesting** - specs, ADRs, and supporting docs are flat within the feature folder. One level of subfolders only (adr/).
+3. **No code** - nothing executable lives in `plan/`. If it runs, it belongs in `src/`.
 4. **Phased features** append the phase number: `design-spec-phase-2.md`, `pipeline-run-phase-2.md`. The `design.md` is updated per phase, not duplicated.
 5. **ADRs** are numbered sequentially. Never renumber. Superseded ADRs stay with `status: superseded`.
 
 ---
 
-## `src/` Ã¢â‚¬â€ The Code
+## `src/` - The Code
 
 Organized by component. Each component is a subfolder at the top level of `src/`. The component manifest lives with the code, not with the plan.
 
 ```
 src/
-Ã¢â€â€Ã¢â€â‚¬Ã¢â€â‚¬ {component-id}/
-    Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ component.yml               Ã¢â€ Â Component manifest (from template)
-    Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ package.json                  Ã¢â€ Â (or equivalent for the stack)
-    Ã¢â€â€š
-    Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ src/                          Ã¢â€ Â Implementation (structure varies by stack)
-    Ã¢â€â€š   Ã¢â€â€Ã¢â€â‚¬Ã¢â€â‚¬ ...
-    Ã¢â€â€š
-    Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ tests/                        Ã¢â€ Â Tests
-    Ã¢â€â€š   Ã¢â€â€Ã¢â€â‚¬Ã¢â€â‚¬ ...
-    Ã¢â€â€š
-    Ã¢â€â€Ã¢â€â‚¬Ã¢â€â‚¬ docs/
-        Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ data-contract.md          Ã¢â€ Â Schema ownership & invariants
-        Ã¢â€â€Ã¢â€â‚¬Ã¢â€â‚¬ migrations/
-            Ã¢â€â€Ã¢â€â‚¬Ã¢â€â‚¬ proposed-{desc}.md    Ã¢â€ Â Migration proposals
+- {component-id}/
+    - component.yml               - Â Component manifest (from template)
+    - package.json                  - Â (or equivalent for the stack)
+    -
+    - src/                          - Â Implementation (structure varies by stack)
+    -   - ...
+    -
+    - tests/                        - Â Tests
+    -   - ...
+    -
+    - docs/
+        - data-contract.md          - Â Schema ownership & invariants
+        - migrations/
+            - proposed-{desc}.md    - Â Migration proposals
 ```
 
-### Path Rules Ã¢â‚¬â€ src/
+### Path Rules - src/
 
 1. **Component ID** is kebab-case, matches the `id` in `component.yml`.
-2. **component.yml is mandatory** Ã¢â‚¬â€ every component has one. Read it before any work; update it after every build.
+2. **component.yml is mandatory** - every component has one. Read it before any work; update it after every build.
 3. **Component-specific docs** live with the component at `src/{component-id}/docs/`. These describe the component's data contract, migrations, and technical specifics.
 4. **Feature-level docs** live in `plan/`. The component's `component.yml` references the feature via the `feature` field.
 5. **Existing components** that predate RAVINTIO are retrofitted by adding a `component.yml` at their root.
@@ -949,17 +1199,17 @@ src/
 
 ```
 plan/current/design.md
-    Ã¢â€â€Ã¢â€â‚¬Ã¢â€â‚¬ lists component IDs Ã¢â€ â€™ src/{component-id}/component.yml
-                                    Ã¢â€â€Ã¢â€â‚¬Ã¢â€â‚¬ references feature Ã¢â€ â€™ plan/
+    - lists component IDs - â€™ src/{component-id}/component.yml
+                                    - references feature - â€™ plan/
 
 plan/current/design-requirements.md
-    Ã¢â€â€Ã¢â€â‚¬Ã¢â€â‚¬ functional requirements Ã¢â€ â€™ implemented in Ã¢â€ â€™ src/{component-id}/src/
+    - functional requirements - â€™ implemented in - â€™ src/{component-id}/src/
 
 plan/current/adr/ADR-001-*.md
-    Ã¢â€â€Ã¢â€â‚¬Ã¢â€â‚¬ decisions Ã¢â€ â€™ followed by Ã¢â€ â€™ src/{component-id}/src/
+    - decisions - â€™ followed by - â€™ src/{component-id}/src/
 
 plan/current/openapi-spec.yaml
-    Ã¢â€â€Ã¢â€â‚¬Ã¢â€â‚¬ API contract Ã¢â€ â€™ implemented in Ã¢â€ â€™ src/{component-id}/src/
+    - API contract - â€™ implemented in - â€™ src/{component-id}/src/
 ```
 
 The relationship is bidirectional:
@@ -969,7 +1219,7 @@ The relationship is bidirectional:
 
 ---
 
-## Retrofit Ã¢â‚¬â€ Adding RAVINTIO to an Existing Repo
+## Retrofit - Adding RAVINTIO to an Existing Repo
 
 If the repo already has code:
 
@@ -1024,16 +1274,13 @@ setup_tool() {
   echo "  Setting up $tool"
   echo "  Skills directory: $TOOL_SKILLS_DIR/"
 
-  # Manifest cleanup — remove only previously installed directories on re-run
+  # Manifest cleanup — remove only previously installed directories on re-run.
+  # A line is removed only if it is a direct child of the skills directory
+  # (0000381 ADR-001).
   local manifest="$skills_dir/.ravintio-manifest"
   if [ -f "$manifest" ]; then
     echo "  Re-run detected — removing previously installed directories"
-    while IFS= read -r dir_path; do
-      if [ -n "$dir_path" ] && [ -d "$dir_path" ]; then
-        rm -rf "$dir_path"
-        echo "  - removed: $(basename "$dir_path")"
-      fi
-    done < "$manifest"
+    remove_manifest_entries "$manifest" "$skills_dir"
     rm -f "$manifest"
   fi
 
@@ -1049,13 +1296,18 @@ setup_tool() {
   # Copy workflows (if tool defines a workflow dir)
   if [ -n "${TOOL_WORKFLOWS_DIR:-}" ] && [ -d "$WORKFLOWS_SRC" ]; then
     local workflows_dir="$PROJECT_ROOT/$TOOL_WORKFLOWS_DIR"
+    prune_retired_commands "$workflows_dir"
     for wf in "$WORKFLOWS_SRC"/*.md; do
       [ -f "$wf" ] && copy_workflow "$wf" "$workflows_dir"
     done
+    write_commands_manifest "$workflows_dir"
   fi
 
   # Create boot file (if tool defines one)
+  local prev_writing_block=""
   if [ -n "${TOOL_BOOT_FILE:-}" ]; then
+    # Read the old writing block before the boot file is regenerated (0000389).
+    prev_writing_block="$(writing_block_of "$PROJECT_ROOT/$TOOL_BOOT_FILE")"
     if [ -z "${TOOL_BOOT_CONTENT:-}" ] && [ -n "${TOOL_BOOT_TEMPLATE:-}" ]; then
       TOOL_BOOT_CONTENT=$(cat "$SCRIPT_DIR/../$TOOL_BOOT_TEMPLATE")
     fi
@@ -1068,6 +1320,11 @@ setup_tool() {
     append_override_instructions "$TOOL_BOOT_FILE" "$skills_dir"
   else
     append_override_instructions "" "$skills_dir"
+  fi
+
+  # Codex writing section goes last in the boot file, after the overrides (0000389 req-004).
+  if [ "$tool" = "codex" ] && [ -n "${TOOL_BOOT_FILE:-}" ]; then
+    install_writing_style_codex "$PROJECT_ROOT/$TOOL_BOOT_FILE" "$prev_writing_block"
   fi
 
   # Ordered BEFORE the enforcement hook install so that install is the last
@@ -1090,12 +1347,15 @@ setup_tool() {
   # Add Agent to allowedTools so sub-agent dispatch works without per-use confirmation (REQ-002)
   if [ -n "${TOOL_SETTINGS_FILE:-}" ]; then
     merge_allowed_tools "$PROJECT_ROOT/$TOOL_SETTINGS_FILE"
+    # Last writer of settings.json this run (0000389 req-003).
+    install_writing_style_claude "$PROJECT_ROOT/$TOOL_SETTINGS_FILE"
   fi
 
-  # Write manifest listing all installed skill directories (enables safe re-run cleanup)
+  # Write manifest listing all installed skill directories, relative to the
+  # repo root (enables safe re-run cleanup, 0000381 ADR-001). A link is not listed.
   local installed_dirs=()
   for dir in "$skills_dir"/*/; do
-    [ -d "$dir" ] && installed_dirs+=("${dir%/}")
+    [ -d "$dir" ] && [ ! -L "${dir%/}" ] && installed_dirs+=("$TOOL_SKILLS_DIR/$(basename "$dir")")
   done
   if [ ${#installed_dirs[@]} -gt 0 ]; then
     printf '%s\n' "${installed_dirs[@]}" > "$manifest"
@@ -1123,6 +1383,7 @@ write_setup_config_override() {
 
   local flags=()
   [ "$STRICT_ORCHESTRATOR" = true ] && flags+=("--strict-orchestrator")
+  [ "$NO_WRITING_STYLE" = true ] && flags+=("--no-writing-style")
 
   local flags_json="[]"
   if [ ${#flags[@]} -gt 0 ]; then
@@ -1246,6 +1507,7 @@ write_setup_flags_marker() {
 
   local flags=()
   [ "$STRICT_ORCHESTRATOR" = true ] && flags+=("--strict-orchestrator")
+  [ "$NO_WRITING_STYLE" = true ] && flags+=("--no-writing-style")
 
   local flags_json="[]"
   if [ ${#flags[@]} -gt 0 ]; then
@@ -1281,9 +1543,37 @@ retired_flag_error() {
 }
 
 TOOL=""
+NO_STRICT_ORCHESTRATOR=false
+MODE="install"
+UPDATE_SOURCE=""
+SHOW_HELP=false
+
+set_mode() {
+  if [ "$MODE" != "install" ]; then
+    echo "! Error: use only one of --doctor, --update, and --uninstall in one run." >&2
+    exit 1
+  fi
+  MODE="$1"
+}
+
 while [[ $# -gt 0 ]]; do
   case "$1" in
+    -h|--help) SHOW_HELP=true; shift ;;
     --strict-orchestrator) STRICT_ORCHESTRATOR=true; shift ;;
+    --no-writing-style) NO_WRITING_STYLE=true; shift ;;
+    --no-strict-orchestrator) NO_STRICT_ORCHESTRATOR=true; shift ;;
+    --doctor) set_mode doctor; shift ;;
+    --uninstall) set_mode uninstall; shift ;;
+    --update)
+      set_mode update
+      if [ $# -lt 2 ] || [[ "$2" == -* ]]; then
+        echo "! Error: --update needs a source folder, such as --update ../zero/ravintio-zero" >&2
+        exit 1
+      fi
+      UPDATE_SOURCE="$2"; shift 2 ;;
+    --update=*)
+      set_mode update
+      UPDATE_SOURCE="${1#--update=}"; shift ;;
     --structured-telemetry-mcp|--context-mode-mcp|--include-full-skill-library|--backend-url)
       retired_flag_error "$1" ;;
     --backend-url=*)
@@ -1294,11 +1584,11 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-if [ -z "$TOOL" ]; then
+print_help() {
   echo ""
   echo "RAVINTIO Setup"
   echo ""
-  echo "Usage: ./ravintio-zero/setup.sh claude-code [flags]"
+  echo "Usage: ./ravintio-zero/setup.sh <tool> [flags]"
   echo ""
   echo "Tools:"
   for t in $VALID_TOOLS; do
@@ -1309,9 +1599,32 @@ if [ -z "$TOOL" ]; then
   echo "  --strict-orchestrator        Write plan/.orchestrator-strict to enable strict mode."
   echo "                               The check-orchestrator-presence hook will require the"
   echo "                               orchestrator to ack each new session before proceeding."
+  echo "                               A re-run without a strict flag keeps strict mode as it is."
+  echo "  --no-strict-orchestrator     Remove plan/.orchestrator-strict and turn strict mode off."
+  echo "  --no-writing-style           Skip the writing standard install: no Claude Code output"
+  echo "                               style and outputStyle setting, no Codex AGENTS.md section."
+  echo "  --doctor                     Check the install and name each problem. Exits 1 on a problem."
+  echo "  --update <source>            Copy a newer pack from <source>, commit it, and rerun setup"
+  echo "                               with the flags in plan/state/<tool>.md."
+  echo "  --uninstall                  Reverse the setup changes and keep your own files and plan/ records."
+  echo "                               Refuses while a run is active."
+  echo "  -h, --help                   Print this help and exit 0."
+  echo ""
+  echo "Setup copies only committed files. Commit ravintio-zero/ and ravintio-overrides/ first."
+  echo "Your own skills belong in ravintio-overrides/capability-skills/. Setup removes skills"
+  echo "placed straight into the tool's skills folder."
   echo ""
   echo "Run from the repository root."
   echo "Each tool's config: ravintio-zero/setup/<tool>.sh"
+}
+
+if [ "$SHOW_HELP" = true ]; then
+  print_help
+  exit 0
+fi
+
+if [ -z "$TOOL" ]; then
+  print_help
   exit 0
 fi
 
@@ -1328,6 +1641,43 @@ if [ "$tool_is_valid" != true ]; then
   exit 1
 fi
 
+if [ "$STRICT_ORCHESTRATOR" = true ] && [ "$NO_STRICT_ORCHESTRATOR" = true ]; then
+  echo "! Error: use only one of --strict-orchestrator and --no-strict-orchestrator." >&2
+  exit 1
+fi
+
+LIFECYCLE="$SCRIPT_DIR/scripts/install-lifecycle.mjs"
+
+run_lifecycle() {
+  if ! command -v node >/dev/null 2>&1; then
+    echo "! Error: node is not installed, and $1 needs it." >&2
+    exit 1
+  fi
+  node "$LIFECYCLE" "$@"
+}
+
+case "$MODE" in
+  doctor)
+    run_lifecycle doctor --root "$PROJECT_ROOT" --tool "$TOOL"
+    exit $? ;;
+  uninstall)
+    run_lifecycle uninstall --root "$PROJECT_ROOT" --tool "$TOOL"
+    exit $? ;;
+  update)
+    # One function holds the copy and the rerun, so bash has read all of it
+    # before the copy replaces this file. The rerun ends in exec.
+    run_update() {
+      run_lifecycle update --root "$PROJECT_ROOT" --tool "$TOOL" --source "$UPDATE_SOURCE" || exit 1
+      local recorded
+      recorded="$(node "$LIFECYCLE" flags --root "$PROJECT_ROOT" --tool "$TOOL")" || exit 1
+      echo "  Rerunning setup with the recorded flags: ${recorded:-none}"
+      # shellcheck disable=SC2086
+      exec bash "$SCRIPT_DIR/setup.sh" "$TOOL" $recorded
+    }
+    run_update
+    exit 1 ;;
+esac
+
 # Stop before installing anything if an old-brand folder is still present
 # (0000160 REQ-002, ADR-003). The migration renames it first.
 for old_folder in "planifest-zero" "planifest-overrides"; do
@@ -1338,8 +1688,39 @@ for old_folder in "planifest-zero" "planifest-overrides"; do
   fi
 done
 
+# Install only committed pack and override files (0000382 ADR-002, backlog
+# 0000299). The check has no bypass flag. Ignored files do not count.
+require_committed_pack() {
+  if ! command -v git >/dev/null 2>&1 || ! git -C "$PROJECT_ROOT" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    echo "! Error: setup needs a git repository, so it can check that the pack is committed." >&2
+    echo "  Run git init, commit ravintio-zero/ and ravintio-overrides/, then rerun setup." >&2
+    exit 1
+  fi
+  local changed
+  changed="$(git -C "$PROJECT_ROOT" status --porcelain --untracked-files=all -- ravintio-zero ravintio-overrides)"
+  if [ -n "$changed" ]; then
+    echo "! Error: setup copies only committed pack and override files. These files have uncommitted changes:" >&2
+    printf '%s\n' "$changed" | sed 's/^...//; s/^/    /' >&2
+    echo "  Commit or discard them, then rerun setup. Nothing was copied." >&2
+    exit 1
+  fi
+}
+require_committed_pack
+
+# Strict mode follows the flags (0000382 ADR-001, backlog 0000291). A plain
+# re-run keeps it as it is. --no-strict-orchestrator turns it off.
+if [ "$NO_STRICT_ORCHESTRATOR" = true ]; then
+  if [ -e "$PROJECT_ROOT/plan/.orchestrator-strict" ]; then
+    rm -f "$PROJECT_ROOT/plan/.orchestrator-strict"
+    echo "  - plan/.orchestrator-strict removed (--no-strict-orchestrator turned strict mode off)"
+  fi
+elif [ "$STRICT_ORCHESTRATOR" != true ] && [ -e "$PROJECT_ROOT/plan/.orchestrator-strict" ]; then
+  STRICT_ORCHESTRATOR=true
+  echo "  = plan/.orchestrator-strict kept (strict mode stays on. Use --no-strict-orchestrator to turn it off)"
+fi
+
 echo "RAVINTIO Setup"
-echo "Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â"
+echo "========================================"
 
 initialize_repo
 activate_guardrails
@@ -1368,5 +1749,7 @@ run_tool_setup "$TOOL"
 echo ""
 echo "Setup complete."
 echo "  Source of truth: ravintio-zero/"
-echo "  Re-run after you update the pack."
+echo "  Re-run after you update the pack. Check the install with: ./ravintio-zero/setup.sh $TOOL --doctor"
+echo "  Put your own skills in ravintio-overrides/capability-skills/. Setup removes skills"
+echo "  placed straight into the skills folder."
 

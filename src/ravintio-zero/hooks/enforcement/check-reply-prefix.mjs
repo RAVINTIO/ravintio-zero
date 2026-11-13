@@ -1,0 +1,262 @@
+#!/usr/bin/env node
+/**
+ * Stop hook: reply prefix check (feature 0000200, REQ-003, ADR-002).
+ *
+ * Checks that the final reply in an active run starts with a valid phase or
+ * stage prefix. A miss warns the human and adds one line to the miss log, so
+ * the human can measure how often the rule fails.
+ *
+ * The final reply is payload.last_assistant_message when it is a string with
+ * text. Otherwise the hook reads the transcript and takes the last assistant
+ * message when it follows the last user prompt and has no tool_use block. If
+ * it finds none, it rereads up to 4 times, waiting RAVINTIO_PREFIX_REREAD_MS
+ * (default 250) between reads. If it still finds none, it exits silently.
+ *
+ * A reply may lead with the local time as hh:mm and a space, before the
+ * prefix (feature 0000388, REQ-001). A time without a prefix is a miss.
+ *
+ * The hook compares that time with the local clock (feature 0000468, ADR-0305).
+ * It takes the shorter way round the day. A difference over 2 minutes is a
+ * miss. RAVINTIO_REPLY_CLOCK (hh:mm) replaces the clock and
+ * RAVINTIO_REPLY_MARGIN_MIN replaces the margin. A value that does not parse
+ * leaves the default.
+ *
+ * The hook skips the check, with no log and no warning, when
+ * RAVINTIO_INITIATIVE_STEP is not "1" and plan/.initiative-runner.lock exists
+ * under the working directory (feature 0000388, ADR-001).
+ *
+ * Valid prefixes: P0 Discovery:, P1 Plan:, P2 Implement:, P3 Validate:,
+ * P4 Ship:, I-A Chart:, I-B Activate:, I-C Run:, I-D Advance:, I-E Delivery:,
+ * and Supervise:. The phase name "Validate and Accept" is not valid.
+ *
+ * A prefix is followed by a status: Starting, Resuming, Complete, Question,
+ * Blocked, Skipped, Ready, or Restart. A word and colon after the prefix that
+ * is none of these draws a Status check warning and a "status:" line in the
+ * miss log (feature 0000499, ADR-0319). A prefix with no status is not checked. Question asks the human a question. Blocked marks an
+ * exception stop. A Question line with no question mark draws a Question
+ * check warning and a "question:" line in the miss log (feature 0000489,
+ * ADR-0318). A word and colon after the prefix that is not Starting,
+ * Resuming, Complete, Question, Blocked, Skipped, Ready, or Restart draws a
+ * Status check warning and a "status:" line in the miss log (feature 0000499,
+ * ADR-0319). A prefix with no status is not checked.
+ *
+ * Receives: JSON on stdin (Claude Code Stop payload) with last_assistant_message
+ * and transcript_path (a JSONL file). Transcript content may be a string or an
+ * array of { type: "text", text } blocks. The hook checks the first non-empty
+ * line of the reply.
+ *
+ * Outputs: JSON { systemMessage: "<string>" } on stdout for a miss. The message
+ * names the "Reply prefix check", quotes the first 40 characters of the reply,
+ * names the session, and says the miss does not mean a run stopped, or
+ * nothing otherwise. A miss also appends "<ISO timestamp> <first 80
+ * characters of the reply>" to plan/.prefix-misses.log under payload.cwd
+ * (else process.cwd()).
+ *
+ * Skips silently when plan/.orchestrator-active is absent.
+ *
+ * Always exits 0. The hook warns and never blocks a turn (ADR-002).
+ */
+
+import { appendFileSync, existsSync, readFileSync } from "node:fs";
+import { join } from "node:path";
+
+import { readStdin } from "./read-stdin.mjs";
+
+const VALID_PREFIXES = [
+  "P0 Discovery:",
+  "P1 Plan:",
+  "P2 Implement:",
+  "P3 Validate:",
+  "P4 Ship:",
+  "I-A Chart:",
+  "I-B Activate:",
+  "I-C Run:",
+  "I-D Advance:",
+  "I-E Delivery:",
+  "Supervise:",
+];
+
+const LOG_SNIPPET_LENGTH = 80;
+const QUOTE_LENGTH = 40;
+const TIME_RE = /^([0-2][0-9]):([0-5][0-9]) /;
+const DEFAULT_MARGIN_MIN = 2;
+const VALID_STATUSES = ["Starting", "Resuming", "Complete", "Question", "Blocked", "Skipped", "Ready", "Restart"];
+const DAY_MIN = 24 * 60;
+const CLOCK_RE = /^([0-2][0-9]):([0-5][0-9])$/;
+
+// Minutes since midnight for the local clock, or the override when it parses.
+function clockMinutes() {
+  const given = CLOCK_RE.exec(process.env.RAVINTIO_REPLY_CLOCK ?? "");
+  if (given) return Number(given[1]) * 60 + Number(given[2]);
+  const now = new Date();
+  return now.getHours() * 60 + now.getMinutes();
+}
+
+function marginMinutes() {
+  const raw = process.env.RAVINTIO_REPLY_MARGIN_MIN ?? "";
+  const parsed = /^[0-9]{1,4}$/.test(raw) ? Number.parseInt(raw, 10) : NaN;
+  return Number.isFinite(parsed) ? parsed : DEFAULT_MARGIN_MIN;
+}
+
+// Returns the clock as hh:mm when the reply time is over the margin, else null.
+function offClock(timeMatch) {
+  const replied = Number(timeMatch[1]) * 60 + Number(timeMatch[2]);
+  const clock = clockMinutes();
+  const gap = Math.abs(replied - clock);
+  const shorter = Math.min(gap, DAY_MIN - gap);
+  if (shorter <= marginMinutes()) return null;
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${pad(Math.floor(clock / 60) % 24)}:${pad(clock % 60)}`;
+}
+
+function textOf(content) {
+  if (typeof content === "string") return content;
+  if (Array.isArray(content)) {
+    return content
+      .filter((b) => b && b.type === "text" && typeof b.text === "string")
+      .map((b) => b.text)
+      .join("\n");
+  }
+  return "";
+}
+
+function parseLine(line) {
+  if (!line.trim()) return null;
+  try {
+    return JSON.parse(line);
+  } catch {
+    return null;
+  }
+}
+
+function isToolResultOnly(content) {
+  return (
+    Array.isArray(content) &&
+    content.length > 0 &&
+    content.every((b) => b && b.type === "tool_result")
+  );
+}
+
+// Returns the text of the last assistant message when it follows the last
+// user prompt and holds no tool_use block. Returns null otherwise.
+function finalReplyText(transcript) {
+  const lines = transcript.split("\n");
+  for (let i = lines.length - 1; i >= 0; i--) {
+    const entry = parseLine(lines[i]);
+    if (!entry) continue;
+    const message = entry.message ?? entry;
+    const role = message?.role ?? entry.type;
+    if (role === "user") {
+      if (isToolResultOnly(message?.content)) continue;
+      return null;
+    }
+    if (role !== "assistant") continue;
+    const content = message?.content;
+    if (Array.isArray(content) && content.some((b) => b && b.type === "tool_use")) return null;
+    const text = textOf(content);
+    return text.trim() ? text : null;
+  }
+  return null;
+}
+
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+async function findFinalReply(transcriptPath) {
+  const parsed = Number.parseInt(process.env.RAVINTIO_PREFIX_REREAD_MS ?? "", 10);
+  const interval = Number.isFinite(parsed) && parsed >= 0 ? parsed : 250;
+  for (let attempt = 0; attempt <= 4; attempt++) {
+    if (attempt > 0) await sleep(interval);
+    if (typeof transcriptPath !== "string" || !existsSync(transcriptPath)) continue;
+    const reply = finalReplyText(readFileSync(transcriptPath, "utf-8"));
+    if (reply !== null) return reply;
+  }
+  return null;
+}
+
+// True when the line is a valid prefix followed by a word and colon outside the status list.
+function isUnknownStatus(lead) {
+  const prefix = VALID_PREFIXES.find((p) => lead.startsWith(p));
+  if (!prefix) return false;
+  const found = /^([A-Za-z]+):/.exec(lead.slice(prefix.length).trimStart());
+  return found !== null && !VALID_STATUSES.includes(found[1]);
+}
+
+// True when the line is a valid prefix with the Question status and no question mark.
+function isFalseQuestion(lead) {
+  const prefix = VALID_PREFIXES.find((p) => lead.startsWith(p));
+  if (!prefix) return false;
+  const status = lead.slice(prefix.length).trimStart();
+  return status.startsWith("Question:") && !lead.includes("?");
+}
+
+try {
+  const raw = await readStdin();
+  const input = JSON.parse(raw);
+  const cwd = input?.cwd ?? process.cwd();
+
+  if (!existsSync(join(cwd, "plan", ".orchestrator-active"))) process.exit(0);
+
+  const isStep = process.env.RAVINTIO_INITIATIVE_STEP === "1";
+  if (!isStep && existsSync(join(cwd, "plan", ".initiative-runner.lock"))) process.exit(0);
+
+  const given = input?.last_assistant_message;
+  const reply =
+    typeof given === "string" && given.trim() ? given : await findFinalReply(input?.transcript_path);
+  if (reply === null) process.exit(0);
+
+  const firstLine = reply.split("\n").find((l) => l.trim() !== "") ?? "";
+  const trimmed = firstLine.trimStart();
+  const timeMatch = TIME_RE.exec(trimmed);
+  const lead = trimmed.replace(TIME_RE, "");
+  const prefixOk = VALID_PREFIXES.some((p) => lead.startsWith(p));
+  const clock = prefixOk && timeMatch ? offClock(timeMatch) : null;
+  const falseQuestion = prefixOk && clock === null && isFalseQuestion(lead);
+  const badStatus = prefixOk && clock === null && !falseQuestion && isUnknownStatus(lead);
+  if (prefixOk && clock === null && !falseQuestion && !badStatus) process.exit(0);
+
+  const snippet = reply.trim().replace(/\s+/g, " ").slice(0, LOG_SNIPPET_LENGTH);
+  try {
+    // Keep the log out of git. Add it to .git/info/exclude once.
+    const excludePath = join(cwd, ".git", "info", "exclude");
+    if (existsSync(join(cwd, ".git", "info"))) {
+      const held = existsSync(excludePath) ? readFileSync(excludePath, "utf-8") : "";
+      if (!held.split("\n").includes("plan/.prefix-misses.log")) {
+        appendFileSync(excludePath, (held === "" || held.endsWith("\n") ? "" : "\n") + "plan/.prefix-misses.log\n");
+      }
+    }
+    appendFileSync(
+      join(cwd, "plan", ".prefix-misses.log"),
+      `${new Date().toISOString()} ${falseQuestion ? "question: " : ""}${badStatus ? "status: " : ""}${snippet}\n`,
+    );
+  } catch {
+    // A log failure must not stop the warning.
+  }
+
+  // eslint-disable-next-line no-control-regex
+  const quote = snippet.replace(/[\x00-\x1f\x7f]/g, " ").slice(0, QUOTE_LENGTH);
+  const who = isStep ? "step session" : "this session";
+  const systemMessage = badStatus
+    ? `[RAVINTIO] Status check: the last reply in ${who} starts "${quote}" ` +
+      "and its status is not one of: " + VALID_STATUSES.join(", ") + ". This does not mean a run stopped. " +
+      "The miss is logged to plan/.prefix-misses.log."
+    : falseQuestion
+    ? `[RAVINTIO] Question check: the last reply in ${who} starts "${quote}" ` +
+      "and its Question: line holds no question mark. This does not mean a run stopped. " +
+      "Use Question: only to ask the human something, and keep working while you wait on your own work. " +
+      "The miss is logged to plan/.prefix-misses.log."
+    : clock !== null
+    ? `[RAVINTIO] Reply time check: the last reply in ${who} starts with ${timeMatch[1]}:${timeMatch[2]} ` +
+      `but the clock reads ${clock}. This does not mean a run stopped. ` +
+      "Run date +%H:%M before each reply and start the reply with that time. " +
+      "The miss is logged to plan/.prefix-misses.log."
+    :
+    `[RAVINTIO] Reply prefix check: the last reply in ${who} starts "${quote}" ` +
+    "and has no valid prefix. This does not mean a run stopped. " +
+    "Start every reply in an active run with hh:mm and one of: " + VALID_PREFIXES.join(" ") +
+    " The miss is logged to plan/.prefix-misses.log.";
+  process.stdout.write(JSON.stringify({ systemMessage }));
+  process.exit(0);
+} catch {
+  // Stop must never block a turn. Silent fallback (ADR-002).
+  process.exit(0);
+}

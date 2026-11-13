@@ -1,12 +1,20 @@
 #!/usr/bin/env node
 /**
- * workflow-metrics.mjs - derive four workflow metrics from a run folder.
+ * workflow-metrics.mjs - derive five workflow metrics from a run folder.
  *
  * Usage: node workflow-metrics.mjs [--standard <path>] <run-folder>
  *
  * Reads <run-folder>/build-log.md and every <run-folder>/loop-state-*.md.
  * Counts marker lines only (ADR-002). Reads thresholds from the Thresholds
  * table of the workflow governance standard (ADR-003). Reports and never blocks.
+ *
+ * After the governance table it prints "## Dispatch by class and tier": units
+ * and rework per class and tier pair. A classified Done line reads
+ * "Done: {unit} ({class}, {tier}, {effort}, {timestamp})". A Done line without
+ * class fields counts as unclassified. A Rework marker counts toward the class
+ * and tier of the last classified Done line before it that names the same
+ * REQ id, or toward unclassified when none exists. The section never changes
+ * the exit code.
  *
  * Exit codes:
  *   0 - the build log and thresholds were read, with or without a breach
@@ -28,7 +36,11 @@ const METRICS = [
   { key: "blocked-stops", label: "`Blocked:` stops" },
   { key: "design-changes", label: "Mid-pipeline design changes" },
   { key: "gate-corrections", label: "Human corrections at gates" },
+  { key: "ci-duration-seconds", label: "Longest CI run (seconds)" },
 ];
+
+// "CI duration: {seconds}s (run {run-id}, {timestamp})", written by ship.
+const CI_DURATION = /^CI duration: (\d+)s \(run ([^,)\s]+)[,)]/;
 
 function fail(msg, code = 1) {
   process.stderr.write(`workflow-metrics: ${msg}\n`);
@@ -68,6 +80,29 @@ function readText(path) {
 const LIST_PREFIX = /^\s*(?:(?:[-*]|\d+\.)\s+)?/;
 const FENCE = /^\s*(```|~~~)/;
 
+const CLASSIFIED_DONE =
+  /^Done: (.+?) \((content|code|test|config), (cheaper|primary|inline), (?:low|medium|high|none), [^)]*\)\s*$/;
+const UNCLASSIFIED = "unclassified\tunclassified";
+
+function bump(map, key, field) {
+  const row = map.get(key) || { units: 0, rework: 0 };
+  row[field]++;
+  map.set(key, row);
+}
+
+function dispatchSection(dispatch) {
+  const head = ["## Dispatch by class and tier", ""];
+  if (dispatch.size === 0) return [...head, "No dispatched units.", ""];
+  const last = (k) => (k === UNCLASSIFIED ? 1 : 0);
+  const keys = [...dispatch.keys()].sort((a, b) => last(a) - last(b) || (a < b ? -1 : a > b ? 1 : 0));
+  const rows = keys.map((k) => {
+    const [c, t] = k.split("\t");
+    const r = dispatch.get(k);
+    return `| ${c} | ${t} | ${r.units} | ${r.rework} |`;
+  });
+  return [...head, "| Class | Tier | Units | Rework |", "|-------|------|-------|--------|", ...rows, ""];
+}
+
 function countMarkers(text, tally) {
   let fence = null;
   for (const raw of text.split(/\r?\n/)) {
@@ -80,7 +115,14 @@ function countMarkers(text, tally) {
     if (fence !== null) continue;
     const line = raw.replace(LIST_PREFIX, "");
     const rework = /^Rework: (REQ-\d+):/.exec(line);
-    if (rework) {
+    if (line.startsWith("Done:")) {
+      const done = CLASSIFIED_DONE.exec(line);
+      const key = done ? `${done[2]}\t${done[3]}` : UNCLASSIFIED;
+      bump(tally.dispatch, key, "units");
+      const req = /REQ-\d+/.exec(done ? done[1] : line);
+      if (done && req) tally.lastDone.set(req[0], key);
+    } else if (rework) {
+      bump(tally.dispatch, tally.lastDone.get(rework[1]) || UNCLASSIFIED, "rework");
       tally.rework.set(rework[1], (tally.rework.get(rework[1]) || 0) + 1);
     } else if (line.startsWith("Blocked:")) {
       tally.blocked++;
@@ -88,6 +130,9 @@ function countMarkers(text, tally) {
       tally.design++;
     } else if (line.startsWith("Gate revised:")) {
       tally.gate++;
+    } else {
+      const ci = CI_DURATION.exec(line);
+      if (ci && Number(ci[1]) > tally.ci.seconds) tally.ci = { seconds: Number(ci[1]), run: ci[2] };
     }
   }
 }
@@ -126,7 +171,7 @@ function readThresholds(path) {
 
 const { standard, folder } = parseArgs(process.argv.slice(2));
 
-const tally = { rework: new Map(), blocked: 0, design: 0, gate: 0 };
+const tally = { rework: new Map(), blocked: 0, design: 0, gate: 0, ci: { seconds: 0, run: null }, dispatch: new Map(), lastDone: new Map() };
 countMarkers(readText(join(folder, "build-log.md")), tally);
 
 let loopFiles = [];
@@ -151,8 +196,14 @@ for (const [id, n] of tally.rework) {
   }
 }
 
-const values = [topCount, tally.blocked, tally.design, tally.gate];
-const shown = [topId ? `${topCount} (${topId})` : "0", ...values.slice(1).map(String)];
+const values = [topCount, tally.blocked, tally.design, tally.gate, tally.ci.seconds];
+const shown = [
+  topId ? `${topCount} (${topId})` : "0",
+  String(tally.blocked),
+  String(tally.design),
+  String(tally.gate),
+  tally.ci.run ? `${tally.ci.seconds} (run ${tally.ci.run})` : "0",
+];
 
 let breaches = 0;
 const rows = METRICS.map((m, i) => {
@@ -172,5 +223,6 @@ process.stdout.write(
     "",
     `Breaches: ${breaches}. The gate reports and does not block. Counts come from marker lines only.`,
     "",
+    ...dispatchSection(tally.dispatch),
   ].join("\n"),
 );

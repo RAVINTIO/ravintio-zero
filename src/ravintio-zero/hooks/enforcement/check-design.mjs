@@ -1,0 +1,91 @@
+#!/usr/bin/env node
+/**
+ * UserPromptSubmit hook: scope context injection.
+ *
+ * Reads plan/current/design.md and injects the component paths / scope section
+ * as additionalContext so the agent always has confirmed scope visible at the
+ * start of every turn (REQ-005, ADR-004).
+ *
+ * Receives: JSON on stdin (Claude Code UserPromptSubmit hook input or common envelope)
+ * Outputs: JSON { additionalContext: "<string>" } on stdout. Every context
+ * starts with the local time as hh:mm, so replies can lead with it (feature
+ * 0000388, REQ-001). The hook prints nothing only when it fails.
+ *
+ * Always exits 0 — never blocks a turn (ADR-005).
+ */
+
+import { existsSync, readFileSync } from "node:fs";
+import { join } from "node:path";
+
+import { readStdin } from "./read-stdin.mjs";
+
+// Headings that introduce the scope section in design.md
+const SCOPE_SECTION_RE = /^##\s+(Component Paths|Scope)\s*$/im;
+
+// Local time as hh:mm, 24-hour and zero padded.
+function timeLine() {
+  const now = new Date();
+  const pad = (n) => String(n).padStart(2, "0");
+  return (
+    `[RAVINTIO] Local time: ${pad(now.getHours())}:${pad(now.getMinutes())}. ` +
+    "Start every reply with this time before the prefix."
+  );
+}
+
+function emit(body) {
+  const additionalContext = body ? `${timeLine()}\n${body}` : timeLine();
+  process.stdout.write(JSON.stringify({ additionalContext }));
+  process.exit(0);
+}
+
+function extractScope(content) {
+  const match = SCOPE_SECTION_RE.exec(content);
+  if (!match) return null;
+
+  // Capture heading + content until next h2
+  const afterStart = content.slice(match.index);
+  const lines = afterStart.split("\n");
+  const scopeLines = [lines[0]];
+
+  for (let i = 1; i < lines.length; i++) {
+    if (/^##\s/.test(lines[i]) && i > 1) break;
+    scopeLines.push(lines[i]);
+  }
+
+  return scopeLines.join("\n").trim() || null;
+}
+
+try {
+  const raw = await readStdin();
+  const input = JSON.parse(raw);
+  const cwd = input?.cwd ?? process.cwd();
+
+  // Hard STOP when no feature-brief and no orchestrator sentinel (REQ-008, ADR-003)
+  const featureBriefPath = join(cwd, "plan", "current", "feature-brief.md");
+  const sentinelPath = join(cwd, "plan", ".orchestrator-active");
+  if (!existsSync(featureBriefPath) && !existsSync(sentinelPath)) {
+    emit(
+      "[RAVINTIO] STOP — No feature brief and no orchestrator sentinel detected. " +
+        "Before writing any code or plan artefacts, load the ravintio-orchestrator " +
+        "skill and complete P0 Discovery.",
+    );
+  }
+
+  const designPath = join(cwd, "plan", "current", "design.md");
+  if (!existsSync(designPath)) emit("");
+
+  let designContent;
+  try {
+    designContent = readFileSync(designPath, "utf-8");
+  } catch {
+    emit("");
+  }
+
+  const scopeSection = extractScope(designContent);
+  if (!scopeSection) emit("");
+
+  emit("[RAVINTIO] Confirmed scope from plan/current/design.md:\n\n" + scopeSection);
+} catch {
+  // UserPromptSubmit must never block a turn — silent fallback (ADR-005).
+  process.exit(0);
+}

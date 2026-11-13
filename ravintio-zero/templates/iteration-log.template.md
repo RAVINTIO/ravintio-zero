@@ -30,7 +30,7 @@ version: "0.1.0"
 
 ## Self-Correct Log
 
-{{what failed and how it was fixed - each attempt with the error and the fix}}
+{{what failed and how the agent fixed it - each attempt with the error and the fix}}
 
 ## Quirks
 
