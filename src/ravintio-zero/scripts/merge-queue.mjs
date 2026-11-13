@@ -23,6 +23,10 @@
  * PR MERGEABLE with a clean state, and it retries a "not mergeable" or "Base
  * branch was modified" refusal once (feature 0000411).
  *
+ * While no check is listed, the wait reads the PR's `mergeable` value. A `CONFLICTING` PR stops the queue with a
+ * named error, because GitHub starts no workflow for it. With no check after MQ_NOCHECKS_MS ms (default 600000)
+ * the wait also stops (feature 0000483, ADR-0311).
+ *
  * A failed run can leave a set-version commit on the PR branch. Before the base merge, a rerun reverts
  * such commits in one new commit when the base version has moved, so the merge has no conflict on the
  * version rows. Nothing rewrites pushed history. The worktree ends on a detached HEAD after every run,
@@ -68,10 +72,15 @@ function sleepSync(ms) {
   Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
 }
 
-/** Poll PR checks until all pass. Stop on a failed check or a timeout. */
+/**
+ * Poll PR checks until all pass. Stop on a failed check or a timeout. While no check is listed, read
+ * the PR's mergeability. GitHub starts no workflow for a conflicting PR, so a conflict means no check
+ * will ever appear (0000483). A wait that lists no check within MQ_NOCHECKS_MS also stops.
+ */
 function waitForChecks(root, pr) {
   const poll = Number(process.env.MQ_POLL_MS) || 10000;
   const timeout = Number(process.env.MQ_TIMEOUT_MS) || 1800000;
+  const noChecks = Number(process.env.MQ_NOCHECKS_MS) || 600000;
   const start = Date.now();
   for (;;) {
     let out = "";
@@ -90,6 +99,13 @@ function waitForChecks(root, pr) {
       const bad = list.filter((c) => c.bucket === "fail" || c.bucket === "cancel");
       if (bad.length) throw new Stop(`CI failed on PR #${pr}: ${bad.map((c) => c.name).join(", ")}`);
       if (list.every((c) => c.bucket === "pass" || c.bucket === "skipping")) return;
+    } else {
+      if (prState(root, pr).mergeable === "CONFLICTING") {
+        throw new Stop(`PR #${pr} conflicts with its base branch, so GitHub runs no checks. Merge the base into the PR branch and rerun.`);
+      }
+      if (Date.now() - start >= noChecks) {
+        throw new Stop(`no CI checks appeared on PR #${pr} within ${noChecks / 1000}s`);
+      }
     }
     if (Date.now() - start >= timeout) throw new Stop(`timed out waiting for CI on PR #${pr}`);
     sleepSync(poll);
