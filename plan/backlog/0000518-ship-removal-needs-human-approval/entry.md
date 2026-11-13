@@ -25,6 +25,12 @@ Ship Step 4 tells the agent to delete the contents of `plan/current/`. The Claud
 
 Change ship Step 4 to remove the folder with `git rm -r` after the copy, which the safety check accepts. Change the P2 text so the agent writes docs before the suite starts or after it ends.
 
+## Added on 2026-11-11
+
+The human made this step 58 of initiative 0000360. The stop cost about 2 hours, from 04:55 to 06:53, because the driver stayed stopped until the coordinator unblocked the step.
+
+Ship Step 4 runs `git rm -r -q plan/current` from the repo root, with a literal path and no `cd` or glob. A test checks that the Ship skill names this command and names no `rm -r` of `plan/current/`.
+
 ## Why Deferred
 
 Both changes edit pack skills, and ship must not edit pack files during the run.

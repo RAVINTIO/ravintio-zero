@@ -1,6 +1,6 @@
 # Architecture Overview
 
-Last updated: 0000489-question-only-for-questions
+Last updated: 0000499-reply-times-match-clock
 
 ## What this repo is
 
@@ -49,7 +49,7 @@ Migration findings come from the ledger `plan/state/migrations.md`, which sits o
 
 Each backlog entry carries `priority` (`high`, `medium`, or `low`) and `theme` in its frontmatter. A missing field reads as `medium` and `unsorted`. `scripts/backlog-index.mjs` writes `plan/backlog/index.md`, grouped by theme and ordered by priority. With `--check` it exits 1 when the committed index differs from a fresh run, and CI runs that check. With `--review` it lists entries older than `backlogReviewDays` in `product.yml` (default 5), counted from **Date filed**. Discovery Start Actions step 10 runs the review and offers entries in index order. Migration 0007 sets the defaults on existing entries.
 
-`check-reply-prefix.mjs` checks `last_assistant_message` from the Stop payload. If the field is absent, it reads the last assistant message that follows the last user prompt and holds no `tool_use` block. It rereads the transcript up to 4 times. If it finds no final reply, it stays silent. It compares a leading `hh:mm` with the local clock, taking the shorter way round the day. A difference over 5 minutes is a miss, as is a missing prefix. `RAVINTIO_REPLY_CLOCK` and `RAVINTIO_REPLY_MARGIN_MIN` override the clock and the margin. The hook still only warns (0000468 ADR-0305). It also warns on a final reply whose `Question:` status line holds no question mark. It logs a `question:` line for each one (0000489 ADR-0318).
+`check-reply-prefix.mjs` checks `last_assistant_message` from the Stop payload. If the field is absent, it reads the last assistant message that follows the last user prompt and holds no `tool_use` block. It rereads the transcript up to 4 times. If it finds no final reply, it stays silent. It compares a leading `hh:mm` with the local clock, taking the shorter way round the day. A difference over 2 minutes is a miss, as is a missing prefix. `RAVINTIO_REPLY_CLOCK` and `RAVINTIO_REPLY_MARGIN_MIN` override the clock and the margin. The hook still only warns (0000468 ADR-0305). It also warns on a final reply whose `Question:` status line holds no question mark. It logs a `question:` line for each one (0000489 ADR-0318). A status outside Starting, Resuming, Complete, Question, Blocked, Skipped, Ready, and Restart draws a Status check warning and a `status:` log line. The `PostToolUse` hook `clock-context.mjs` returns the local `hh:mm` after every tool call, so an agent reads a time and never estimates one (0000499 ADR-0319).
 
 ### Run modes
 

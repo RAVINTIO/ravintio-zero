@@ -3,7 +3,7 @@
 > Change record. Index of all ADRs across all features. Updated after every pipeline run.
 > Do not archive this file. Update it in place.
 
-Last updated: 0000489-question-only-for-questions
+Last updated: 0000499-reply-times-match-clock
 
 ---
 
@@ -337,3 +337,4 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 | [ADR-0315](adr/0315-coordinator-merge-command.md) | A coordinator merge command | proposed | One script merges the initiative branch into a coordinator branch, resolves shared files, regenerates them, and aborts on any other conflict. | 0000505-coordinator-branch-regenerate |
 | [ADR-0317](adr/0317-coordinator-task-scripts.md) | Coordinator task scripts and a shell section | accepted | The coordinator writes scripts with the Write tool and runs them with bash. A drain subcommand and a bulk-edit script replace improvised shell. | 0000474-coordinator-shell-guidance |
 | [ADR-0314](adr/0314-coordinator-status-view-and-events.md) | Coordinator status view and event notices | accepted | A read-only status script, chart-based watcher state, and new watcher and driver events give the coordinator one true view of the run. | 0000450-coordinator-status-view |
+| [ADR-0319](adr/0319-clock-from-a-post-tool-use-hook.md) | The clock comes from a PostToolUse hook | accepted | A PostToolUse hook gives agents the local time after every tool call. The reply hook warns at a 2 minute gap and on an unknown status. | 0000499-reply-times-match-clock |
