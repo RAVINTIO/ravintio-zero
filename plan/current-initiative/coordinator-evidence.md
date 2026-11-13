@@ -37,6 +37,8 @@ Times are UTC. "Coordinator" marks a mistake by the coordinator session. A blame
 | 27 | 2026-11-10 | 21 | `initiative-add-step.mjs` wrote the bare id `0000421` as the step's `Feature id`, with no slug. The driver then stopped with "step 22 has an invalid feature id" | driver output 02:18, PR #153 | Chart row fixed by hand. Script fix open |
 | 28 | 2026-11-10 | 36 | PR #166 conflicted with the initiative branch after other steps merged, so GitHub ran no CI on it. The step waited on checks that could never register | PR #166, watcher activity from 20:07 to 21:16 | The step saw it and resolved the conflict. Open: the step and the queue check mergeability before a CI wait |
 | 29 | 2026-11-10 | driver | The driver fills free slots with any startable step and does not favour the longest chain. The driver lane, steps 24 to 29 then 41, waited while other lanes ran | driver output 13:28 to 21:28 | Open: rank steps by the chain behind them |
+| 30 | 2026-11-10 | 26 | A clean base merge left `plan/backlog/index.md` stale, because the queue regenerates shared files only on a conflict. CI failed on PR #171 | PR #171, 22:24 | Coordinator regenerated the index. Step 42 |
+| 31 | 2026-11-10 | 40 | The step ignored the `25-41` Decisions row and ran its suites serially, about 30 minutes on the critical path | step 40 activity, 21:57 to 22:52 | Step 45 |
 
 ## Interim workarounds still in use
 

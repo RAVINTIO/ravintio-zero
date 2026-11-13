@@ -8,7 +8,7 @@ status: "active"  # proposed | charted | active | delivered | blocked
 **Goal:** Close every open backlog entry except the four that need paid services. The first three steps make the driver run independent steps at once, each in its own worktree, with each version set as its step merges. Step 20 moves the pack source to `src/ravintio-zero/`. The last step, step 21, makes activation smoother for the human.
 **Branch:** initiative/0000360-backlog-sweep
 **Status:** active
-**Position:** 28
+**Position:** 29
 **Speed:** standard
 **Step CI fixes:** allowed
 **Concurrency:** 3
@@ -70,6 +70,22 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 39 | none | none | none |
 | 40 | none | none | none |
 | 41 | none | none | none |
+| 42 | none | none | none |
+| 43 | none | none | none |
+| 44 | none | none | none |
+| 45 | none | none | none |
+| 46 | none | none | none |
+| 47 | none | none | none |
+| 48 | none | none | none |
+| 49 | none | none | none |
+| 50 | none | none | none |
+| 51 | none | none | none |
+| 52 | none | none | none |
+| 53 | none | none | none |
+| 54 | none | none | none |
+| 55 | none | none | none |
+| 56 | none | none | none |
+| 57 | none | none | none |
 
 ## Dependencies
 
@@ -118,6 +134,22 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 39 | none | none | none |
 | 40 | none | none | none |
 | 41 | none | none | none |
+| 42 | none | none | none |
+| 43 | none | none | none |
+| 44 | none | none | none |
+| 45 | none | none | none |
+| 46 | none | none | none |
+| 47 | none | none | none |
+| 48 | none | none | none |
+| 49 | none | none | none |
+| 50 | none | none | none |
+| 51 | none | none | none |
+| 52 | none | none | none |
+| 53 | none | none | none |
+| 54 | none | none | none |
+| 55 | none | none | none |
+| 56 | none | none | none |
+| 57 | none | none | none |
 
 ## Decisions
 
@@ -179,6 +211,22 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 39 | none | none | none |
 | 40 | none | none | none |
 | 41 | none | none | none |
+| 42 | none | none | none |
+| 43 | none | none | none |
+| 44 | none | none | none |
+| 45 | none | none | none |
+| 46 | none | none | none |
+| 47 | none | none | none |
+| 48 | none | none | none |
+| 49 | none | none | none |
+| 50 | none | none | none |
+| 51 | none | none | none |
+| 52 | none | none | none |
+| 53 | none | none | none |
+| 54 | none | none | none |
+| 55 | none | none | none |
+| 56 | none | none | none |
+| 57 | none | none | none |
 
 ## Baselines
 
@@ -205,6 +253,22 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 39 | none | none | none |
 | 40 | none | none | none |
 | 41 | none | none | none |
+| 42 | none | none | none |
+| 43 | none | none | none |
+| 44 | none | none | none |
+| 45 | none | none | none |
+| 46 | none | none | none |
+| 47 | none | none | none |
+| 48 | none | none | none |
+| 49 | none | none | none |
+| 50 | none | none | none |
+| 51 | none | none | none |
+| 52 | none | none | none |
+| 53 | none | none | none |
+| 54 | none | none | none |
+| 55 | none | none | none |
+| 56 | none | none | none |
+| 57 | none | none | none |
 
 ## Criteria
 
@@ -237,6 +301,22 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 39 | none | none | none |
 | 40 | none | none | none |
 | 41 | none | none | none |
+| 42 | none | none | none |
+| 43 | none | none | none |
+| 44 | none | none | none |
+| 45 | none | none | none |
+| 46 | none | none | none |
+| 47 | none | none | none |
+| 48 | none | none | none |
+| 49 | none | none | none |
+| 50 | none | none | none |
+| 51 | none | none | none |
+| 52 | none | none | none |
+| 53 | none | none | none |
+| 54 | none | none | none |
+| 55 | none | none | none |
+| 56 | none | none | none |
+| 57 | none | none | none |
 
 ## P1 skips
 
@@ -263,6 +343,22 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 39 | no | Added after the chart. The human sets this at P1. |
 | 40 | no | Added after the chart. The human sets this at P1. |
 | 41 | no | Added after the chart. The human sets this at P1. |
+| 42 | no | Added after the chart. The human sets this at P1. |
+| 43 | no | Added after the chart. The human sets this at P1. |
+| 44 | no | Added after the chart. The human sets this at P1. |
+| 45 | no | Added after the chart. The human sets this at P1. |
+| 46 | no | Added after the chart. The human sets this at P1. |
+| 47 | no | Added after the chart. The human sets this at P1. |
+| 48 | no | Added after the chart. The human sets this at P1. |
+| 49 | no | Added after the chart. The human sets this at P1. |
+| 50 | no | Added after the chart. The human sets this at P1. |
+| 51 | no | Added after the chart. The human sets this at P1. |
+| 52 | no | Added after the chart. The human sets this at P1. |
+| 53 | no | Added after the chart. The human sets this at P1. |
+| 54 | no | Added after the chart. The human sets this at P1. |
+| 55 | no | Added after the chart. The human sets this at P1. |
+| 56 | no | Added after the chart. The human sets this at P1. |
+| 57 | no | Added after the chart. The human sets this at P1. |
 
 ## Steps
 
@@ -295,7 +391,7 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 25 | 0000442-ready-file-helper | Ready file helper | 0000424 | minor | 0.84.0 | merged | driver | 24 |
 | 26 | 0000444-step-reads-its-queue-items | Steps read their queue items | 0000425 | minor | 0.89.0 | merged | driver | 25 |
 | 27 | 0000446-drain-ready-prs-after-a-stop | Merge ready PRs after a stop | 0000426 | minor | 0.91.0 | merged | driver | 26 |
-| 28 | 0000448-driver-runs-approved-setup-command | Driver runs the approved setup command | 0000427 | minor |  | pending | driver | 27 |
+| 28 | 0000448-driver-runs-approved-setup-command | Driver runs the approved setup command | 0000427 | minor | 0.92.0 | merged | driver | 27 |
 | 29 | 0000450-coordinator-status-view | Coordinator status view | 0000428 | minor |  | pending | driver | 28 |
 | 30 | 0000452-ci-wait-before-archive | Ship waits for CI before it archives | 0000412 | minor | 0.78.0 | merged | ship | 22 |
 | 31 | 0000454-queue-failure-recovery | Queue failure recovery | 0000429 | minor | 0.80.0 | merged | queue | 22 |
@@ -309,6 +405,22 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 39 | 0000470-plan-rereads-files-at-the-branch-point | Plan rereads files at the branch point | 0000435 | minor | 0.86.0 | merged | plan-skill | 22 |
 | 40 | 0000472-ci-duration-metric | CI duration metric | 0000436 | minor | 0.90.0 | merged | ci | 22 |
 | 41 | 0000474-coordinator-shell-guidance | Coordinator shell guidance | 0000437 | minor |  | pending | initiative-skill | 29 |
+| 42 | 0000481-regenerate-after-every-merge | Regenerate shared files after every base merge | 0000482 | minor |  | pending | queue | 22 |
+| 43 | 0000483-mergeability-before-ci-wait | Check mergeability before a CI wait | 0000484 | minor |  | pending | ship | 30 |
+| 44 | 0000485-adr-number-collision | Parallel steps reserve distinct ids | 0000479 | minor |  | pending | adr | 22 |
+| 45 | 0000487-steps-apply-decision-rows | Steps apply the chart's Decisions rows | 0000488 | minor |  | pending | skills | 22 |
+| 46 | 0000489-question-only-for-questions | Steps use Question only for real questions | 0000490 | minor |  | pending | skills | 45 |
+| 47 | 0000491-driver-favours-critical-path | Driver favours the critical path | 0000492 | minor |  | pending | driver | 41 |
+| 48 | 0000493-driver-starts-after-restart | Driver keeps starting steps after a Restart | 0000494 | minor |  | pending | driver | 47 |
+| 49 | 0000495-driver-clears-dead-lock | Driver clears a dead lock | 0000496 | minor |  | pending | driver | 48 |
+| 50 | 0000497-keep-worktree-entries | Driver keeps uncommitted entries from a worktree | 0000498 | minor |  | pending | driver | 49 |
+| 51 | 0000499-reply-times-match-clock | Reply times match the clock | 0000500 | minor |  | pending | skills | 46 |
+| 52 | 0000501-remove-merged-worktrees | Driver removes merged step worktrees | 0000502 | minor |  | pending | driver | 50 |
+| 53 | 0000503-planned-restart-exit-code | Planned restart exits with its own code | 0000504 | minor |  | pending | driver | 52 |
+| 54 | 0000505-coordinator-branch-regenerate | Coordinator branches regenerate shared files | 0000506 | minor |  | pending | queue | 42 |
+| 55 | 0000507-hook-check-after-setup | Check every hook after setup | 0000508 | minor |  | pending | driver | 53 |
+| 56 | 0000509-clear-merged-ready-files | Driver clears ready files of merged steps | 0000510 | minor |  | pending | driver | 55 |
+| 57 | 0000511-driver-stop-summary | Driver prints a stop summary | 0000512 | minor |  | pending | driver | 56 |
 
 ## Merges
 
@@ -350,3 +462,4 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 26 | #171 | tag v0.89.0 | 0.89.0 | 2026-11-10T22:31:25Z |
 | 40 | #172 | tag v0.90.0 | 0.90.0 | 2026-11-10T23:13:30Z |
 | 27 | #173 | tag v0.91.0 | 0.91.0 | 2026-11-11T00:22:34Z |
+| 28 | #175 | tag v0.92.0 | 0.92.0 | 2026-11-11T01:45:18Z |
