@@ -23,7 +23,11 @@ The step log could not show this. The driver did not pass `--include-hook-events
 
 ## Decision
 
-The driver adds `--include-hook-events` to every step session, so the step log holds each hook response. A new script, `step-clock-check.mjs {log}`, exits 1 when a log holds tool calls and no `PostToolUse` response with `Local time: hh:mm`. It exits 0 for a log with clock output or with no tool calls, and 2 for a usage error. The check reads one file and prints counts, never log text.
+The driver adds `--include-hook-events` to every step session, so the step log holds each hook response. A new script, `step-clock-check.mjs {log}`, checks one step log. It reads one file and prints counts, never log text. It exits with one of these codes:
+
+- 0: the log holds clock output or no tool calls.
+- 1: the log holds tool calls and no `PostToolUse` response with `Local time: hh:mm`.
+- 2: usage error.
 
 The step adds no time zone setting. If the human's clock differs from the machine zone, the human sets `TZ` for the driver.
 
