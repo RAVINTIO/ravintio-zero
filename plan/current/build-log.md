@@ -110,7 +110,7 @@ Complete: P2 (2026-11-13T02:22:54Z)
 |-------|-------|
 | Start | `2026-11-13T02:22:54Z` |
 | End | `2026-11-13T02:24:26Z` |
-| Wall clock | `4` |
+| Wall clock | `2` |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | `1` |
@@ -123,3 +123,35 @@ Complete: P2 (2026-11-13T02:22:54Z)
 - Security review: no critical or high findings.
 
 Complete: P3 (2026-11-13T02:24:26Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-13T02:24:32Z` |
+| End | `2026-11-13T02:24:38Z` |
+| Wall clock | `0` |
+| Model tier | primary |
+| Skills loaded | ravintio-orchestrator, ravintio-ship |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | none |
+
+Complete: P4 (2026-11-13T02:24:38Z)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `49` |
+| Total agents spawned | `1` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `1` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `0` |
+| Phases skipped | `none` |
