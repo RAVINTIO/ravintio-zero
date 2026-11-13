@@ -26,8 +26,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-13T02:48:12Z` |
-| End | `PENDING` |
-| Wall clock | `PENDING` |
+| End | `2026-11-13T02:48:59Z` |
+| Wall clock | `3` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | `0` |
@@ -42,3 +42,10 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Adoption mode: standard-iterative (signal: `plan/_archive/` and `src/` both exist)
 - Version: last known 0.111.0, step bump minor, planned 0.112.0 (the merge queue sets the released version)
 - Stale `plan/.feature-id` held 0000509-clear-merged-ready-files. Replaced with this step's id.
+- Scope Lock (happy path): the driver prints the merged steps, its fixes, and action none at a clean end [source: draft-accepted (initiative)]
+- Scope Lock (first-run path): a run that merged nothing prints `merged this run: none` and `driver fixes: 0` [source: draft-accepted (initiative)]
+- Scope Lock (error path): a stop prints the one action that points at the stop line and the step log [source: draft-accepted (initiative)]
+- Scope Lock (cross-session continuity): the record lives in one driver process, so each run summarises itself [source: draft-accepted (initiative)]
+- Design confirmation: draft-accepted (initiative)
+
+Complete: P0 (2026-11-13T02:48:59Z)
