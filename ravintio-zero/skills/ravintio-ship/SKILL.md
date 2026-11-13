@@ -57,7 +57,7 @@ Then run the check before Step 4:
 node ravintio-zero/scripts/build-log-check.mjs plan/current/build-log.md
 ```
 
-Stop if it exits non-zero, in both run modes. Fix each phase it names, then rerun. A phase with no block needs a `Skipped: P{n}` line in the log. Never archive a log that fails.
+Stop if it exits non-zero, in both run modes. Fix each finding it names, then rerun. A phase with no block needs a `Skipped: P{n}` line in the log. A `Resolved:` line or a reworked requirement with no `Postmortem:` line is a finding. Run `ravintio-postmortem` for it, as the exception stops describe. Never archive a log that fails.
 
 ### Step 4: Archive
 
@@ -117,7 +117,7 @@ Should I raise the PR, or will you?
 
 In `autonomous`, take option [1] without asking.
 
-Title: `{feature-id}: {one-line summary}`. In an initiative step, the title is `{feature-id}: {Feature title}`, with the text of the step's `Title` column in `initiative.md`, because the squash carries it. Body: summary bullets, key decisions, validation results, test plan. In `autonomous`, add an `## Acceptance evidence` section with the contents of the archived `acceptance-evidence.md`. Add the same `## Workflow governance` section from `build-report.md`, or the `Workflow governance: not measured ({reason})` line, in both run modes and for both PR options. A breach does not stop ship. PR bodies carry no AI attribution. Leave out `Generated with [Claude Code]` lines (with or without a robot emoji), `Co-Authored-By:` lines that name an AI tool, and `Claude-Session:` lines or claude.ai/code session links.
+Title: `{feature-id}: {one-line summary}`. In an initiative step, the title is `{feature-id}: {Feature title}`. Here `{feature-id}` is the first 7 digits of the feature id, as in `0000392`. The title text comes from the step's `Title` column in `initiative.md`, because the squash carries it. The merge queue rejects any other form. Before `gh pr create`, run `node ravintio-zero/scripts/merge-queue.mjs title --step {n} --title "{title}"`, and fix the title if it fails. Body: summary bullets, key decisions, validation results, test plan. In `autonomous`, add an `## Acceptance evidence` section with the contents of the archived `acceptance-evidence.md`. Add the same `## Workflow governance` section from `build-report.md`, or the `Workflow governance: not measured ({reason})` line, in both run modes and for both PR options. A breach does not stop ship. PR bodies carry no AI attribution. Leave out `Generated with [Claude Code]` lines (with or without a robot emoji), `Co-Authored-By:` lines that name an AI tool, and `Claude-Session:` lines or claude.ai/code session links.
 
 Before `gh pr create`, write the PR body to a temporary file and run `node ravintio-zero/scripts/check-attribution.mjs <file>` on it. If it fails, remove the attribution lines and rerun. If it still fails, stop in both run modes:
 

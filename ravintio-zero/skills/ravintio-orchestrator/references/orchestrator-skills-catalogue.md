@@ -20,7 +20,7 @@ version: "1.0.0"
 | ravintio-optimise-agent | Human asks to optimise or trim a skill | Standalone. Invoke any time. |
 | ravintio-refresh-setup | Human asks to refresh the setup | Standalone. Invoke any time. |
 | ravintio-file-backlog | Human asks to file a backlog entry in another repo | Standalone. Invoke any time. |
-| ravintio-postmortem | A `Resolved:` line follows a `Blocked:` stop, or a CI failure, a P2 self-correction, an escaped defect, or the human asks | Standalone. The orchestrator runs it before ship. Invoke any time. |
+| ravintio-postmortem | A `Resolved:` line follows a `Blocked:` stop, a `Rework:` line, or a CI failure, a P2 self-correction, an escaped defect, or the human asks | Standalone. The orchestrator runs it before ship. Invoke any time. |
 | ravintio-initiative | An initiative is active and the session is not a step session, or the human asks to chart one | Standalone. The initiative hooks load it. Never runs a step. |
 | ravintio-retrospective | Ship finishes the build report, I-E Delivery finishes the archive, or the human asks | Standalone. Ship and delivery run it. Invoke any time. |
 

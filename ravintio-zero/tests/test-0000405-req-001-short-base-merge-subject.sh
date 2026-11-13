@@ -36,7 +36,7 @@ case "$sub" in
         "$(cat "$D/pr-$k.title")" "$(cat "$D/pr-$k.head")" "$(cat "$D/pr-$k.base")"
     fi ;;
   checks)
-    exit 0 ;;
+    echo '[{"name":"unit-tests","bucket":"pass"}]'; exit 0 ;;
   merge)
     head="$(cat "$D/pr-$k.head")"; base="$(cat "$D/pr-$k.base")"
     t="$(mktemp -d)"

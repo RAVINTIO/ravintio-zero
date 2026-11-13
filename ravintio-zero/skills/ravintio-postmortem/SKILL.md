@@ -13,11 +13,11 @@ Run one postmortem for each of these:
 
 - A failed CI run.
 - A `Blocked:` stop in the build log.
-- A P2 self-correction that a test should have caught.
+- A P2 self-correction that a test should have caught. Every `Rework:` line is one.
 - An escaped defect found after ship.
 - A human request.
 
-The orchestrator runs you after a `Resolved:` line, before ship. Outside a run, the human invokes you.
+The orchestrator runs you after a `Resolved:` line or a `Rework:` line, before ship. `build-log-check.mjs` fails ship when a stop or a reworked requirement has no `Postmortem:` line. Outside a run, the human invokes you.
 
 ## Rules
 
@@ -41,13 +41,17 @@ The orchestrator runs you after a `Resolved:` line, before ship. Outside a run, 
 
 ## Step 3 - Write the actions
 
-Write at least one action. Use these types:
+Write one action row for each type:
 
 - A corrective action fixes this failure.
 - A preventive action stops the same kind of failure.
 - A detective action finds the failure sooner next time.
 
-Each action names its owner, where it lives, and what verifies it.
+Each row names its owner, where it lives, and what verifies it.
+
+1. If a type has no action, write `none, because {reason}` in the Action cell. A bare `none` fails the check.
+2. If the run already made the fix, write the row with the status `done`. Put the commit or the PR in the Ref cell.
+3. If the action is still to do, write the row with the status `filed`, and file it in Step 4.
 
 ## Step 4 - File the actions
 
@@ -56,7 +60,7 @@ Turn each action into a backlog entry or a repo instruction:
 - For a backlog entry, use `ravintio-zero/templates/backlog-entry.template.md` and reserve the id with `node ravintio-zero/scripts/reserve-id.mjs --commit`, which commits `plan/backlog/.next-id` alone at once. The flag refuses on `initiative/*`, so run it on a `feat/` branch. Leave the entry uncommitted if no run is active.
 - For a repo instruction, add a file to `ravintio-overrides/instructions/`.
 
-Link each filed action from the record.
+Put the backlog entry id or the instruction path in the Ref cell of each `filed` row.
 
 ## Step 5 - Write the record
 
@@ -64,7 +68,8 @@ Link each filed action from the record.
 2. Create `plan/postmortems/` if it is missing.
 3. Write `plan/postmortems/{date}-{slug}.md`. The slug is kebab-case and names the failure. If the file exists, add a numeric suffix. Never overwrite a record.
 4. Write nothing under `plan/current/`. Ship archives that folder, and a record must outlive the run.
-5. Commit the record. In a run, append `Postmortem: {path} ({ISO-8601 timestamp})` to the build log and commit it.
+5. Run `node ravintio-zero/scripts/postmortem-check.mjs {path}`. Fix each finding and rerun until it exits 0.
+6. Commit the record. In a run, append `Postmortem: {path} ({ISO-8601 timestamp})` to the build log and commit it. For a rework record, add the `REQ-{nnn}` ids it covers after the path.
 
 ## Report
 

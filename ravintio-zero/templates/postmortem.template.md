@@ -37,6 +37,13 @@ First missed chance to catch it: {{event and the check or phase that could have 
 
 ## Actions
 
-| Type | Action | Owner | Lives in | Verified by | Filed as |
-|------|--------|-------|----------|-------------|----------|
-| {{corrective | preventive | detective}} | {{action}} | {{owner}} | {{path}} | {{test, check, or review}} | {{backlog entry id or repo instruction path}} |
+> One row for each type. A type with no action reads `none, because {reason}` in the Action cell.
+> A `done` row records corrective work made during the run. Its Ref cell holds the commit or PR.
+> A `filed` row's Ref cell holds the backlog entry id or the repo instruction path.
+> `node ravintio-zero/scripts/postmortem-check.mjs {record}` checks this table.
+
+| Type | Action | Status | Owner | Lives in | Verified by | Ref |
+|------|--------|--------|-------|----------|-------------|-----|
+| corrective | {{action, or "none, because {reason}"}} | {{done | filed | none}} | {{owner}} | {{path}} | {{test, check, or review}} | {{commit, PR, backlog id, or instruction path}} |
+| preventive | {{action, or "none, because {reason}"}} | {{done | filed | none}} | {{owner}} | {{path}} | {{test, check, or review}} | {{commit, PR, backlog id, or instruction path}} |
+| detective | {{action, or "none, because {reason}"}} | {{done | filed | none}} | {{owner}} | {{path}} | {{test, check, or review}} | {{commit, PR, backlog id, or instruction path}} |
