@@ -58,7 +58,7 @@ Out-of-phase work uses `Supervise:` with the same form, as in `Supervise: {Statu
 
 **Reporting rule.** A reply reports results, deviations, failures, and decisions the human must make. A reply never states that the agent followed a standing rule. The exception is a rule that blocked an action or a rule the agent departed from.
 
-In a step session, never end your turn before `I-D Advance: Complete:` or a `Blocked:` line. Carry on from each phase to the next.
+In a step session, never end your turn before `I-D Advance: Complete:`, a `Blocked:` line, or a `Question:` line. Carry on from each phase to the next.
 
 I-A to I-E are stage letters, not phase numbers. The pipeline still has exactly five phases, P0 to P4. When an initiative is involved, read `ravintio-zero/standards/roadmap-standards.md` first.
 
@@ -97,26 +97,15 @@ Read these reference files before you act on their topic. Each holds rules moved
 | Presenting the design for confirmation | `references/orchestrator-p0-gate.md` |
 | Invoking P1, P2, P3, or P4, or stating context size at a gate | `references/orchestrator-phase-invocation.md` |
 | An exception stop, or writing a `Blocked:` line | `references/orchestrator-exception-stops.md` |
+| Clearing context at discovery start or after ship | `references/orchestrator-context-hygiene.md` |
 
 ---
 
 Phase Skip Protocol, Pause Command, and Park Command are in the Pack Index row for `orchestrator-session-commands.md`.
 
-## Context Hygiene
-
-Clear context at two bookends: discovery start (fresh runs only) and after ship completes. Issue `/clear` or the host tool's equivalent. If the tool has none, ask the human to clear manually and confirm before continuing. Mid-run, if context accumulates material that no longer serves the active phase, offer compaction. Advisory only: never block on it.
-
----
-
 ## P0: Discovery
 
 Opening Briefing, Decomposition, Adoption Modes (the table that step 7 uses), Scope Lock Challenge, Discovery Audit Trail, and Skill Map are in the reference files that the Pack Index lists. Read each file before you act on its topic.
-
----
-
----
-
----
 
 Mid-Pipeline Requirement Changes is in the Pack Index row for `orchestrator-mid-pipeline-changes.md`.
 

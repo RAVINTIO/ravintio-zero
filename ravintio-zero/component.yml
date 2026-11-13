@@ -2,7 +2,7 @@
 id: "ravintio-zero"
 name: "RAVINTIO Zero"
 feature: "0000359-safe-parallel-commits"
-version: "0.56.0"
+version: "0.57.0"
 status: "active"
 type: "component-pack"
 domain: "developer-tooling"

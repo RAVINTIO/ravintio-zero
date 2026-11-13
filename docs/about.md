@@ -1,6 +1,6 @@
 ---
-version: "0.56.0"
-feature: "0000359-safe-parallel-commits"
+version: "0.57.0"
+feature: "0000377-driver-stops-and-headroom"
 updated: "7 Nov 2026"
 ---
 # About
@@ -10,9 +10,9 @@ updated: "7 Nov 2026"
 
 | Field | Value |
 |-------|-------|
-| Version | `0.56.0` |
-| Last feature | `0000354-steps-run-to-the-end` |
-| Updated | `6 Nov 2026` |
+| Version | `0.57.0` |
+| Last feature | `0000377-driver-stops-and-headroom` |
+| Updated | `7 Nov 2026` |
 
 ## What this is
 
