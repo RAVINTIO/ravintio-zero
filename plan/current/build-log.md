@@ -63,3 +63,31 @@ Complete: P0 (2026-11-13T04:23:00Z)
 | Notes | Standard speed. The artifacts share one small change, so the agent wrote them inline. The ADR number 0342 came from `reserve-id.mjs`. |
 
 Complete: P1 (2026-11-13T04:24:39Z)
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-13T04:25:00Z` |
+| End | `2026-11-13T05:00:56Z` |
+| Wall clock | `35` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | The units are one small change with shared state, so the agent ran them inline. The full suite took most of the wall clock. |
+
+- In progress: U1 tests (2026-11-13T04:25:00Z)
+- RED: U1 tests (2026-11-13T04:25:27Z)
+- GREEN: U2 driver flag and check script (2026-11-13T04:26:00Z)
+- Done: U1 tests (content, inline, none, 2026-11-13T04:26:00Z)
+- Done: U2 driver flag and check script (content, inline, none, 2026-11-13T04:26:00Z)
+- Done: U3 docs, ADR, and index (content, inline, none, 2026-11-13T04:26:00Z)
+- Done: U4 installed copy refresh (content, inline, none, 2026-11-13T04:26:30Z)
+- Tests run: REQ-001: test-0000534-req-001-003-step-clock.sh, test-0000240-req-001-driver-stream-args.sh, test-0000354-req-001-driver-resume.sh, test-0000444-req-001-003-queue-items.sh (2026-11-13T04:26:00Z)
+- Rework: REQ-003: the new test found the repo root from the source folder only, so the installed copy failed (2026-11-13T04:47:00Z)
+- Tests run: full suite: 447 passed, 4 failed (2026-11-13T05:00:00Z)
+- Baseline: 3 inherited failures. The fourth is the new test. The agent committed the fix, and the test passes in the installed copy.
+
+Complete: P2 (2026-11-13T05:00:56Z)
