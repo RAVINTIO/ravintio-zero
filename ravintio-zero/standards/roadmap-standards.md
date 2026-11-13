@@ -237,7 +237,7 @@ The coordinator session cuts the cost of a decision. It follows these rules at e
 - <!-- rule: coord-one-question --> **One question per reply.** Never ask about something the human already stated.
 - <!-- rule: coord-activate-command --> **Activate command.** `node ravintio-zero/scripts/initiative-activate.mjs --yes` runs the I-B Activate checks and cuts and pushes the initiative branch. It then lands the coordinator PR, waits for CI, and merges it. It ends by printing the driver and watcher commands. The coordinator starts both as background tasks. `--dry-run` prints the plan and changes nothing. A rerun after a stop resumes at the PR step.
 - <!-- rule: coord-add-step --> **Add-step helper.** `node ravintio-zero/scripts/initiative-add-step.mjs --title "{title}" --slug {slug}` reserves the ids, files the backlog entry, rebuilds the backlog index, and writes the new step's row in every chart table. Never edit the tables by hand to add a step.
-- <!-- rule: coord-plan-only-pr --> **Plan-only coordinator PR.** Before the full suite, run `node ravintio-zero/scripts/coordinator-pr-check.mjs {base}`. If it prints `plan-only`, the plan format checks have passed and the full suite need not rerun. If it prints `full-suite`, run the suite.
+- <!-- rule: coord-plan-only-pr --> **Plan-only coordinator PR.** Before the full suite, run `node ravintio-zero/scripts/coordinator-pr-check.mjs {base}`. If it prints `plan-only`, the plan format checks have passed and the full suite need not rerun. If it prints `full-suite`, run the suite. Add `--base initiative/{id}-{slug}` to list open `feat/` PRs. The script prints `overlap: #{n} {path}` for each file that a step PR and the coordinator PR both change, and exits 1. It ignores the shared files that the queue resolves. If it exits 1, wait for that step PR to merge.
 - <!-- rule: coord-startup-skill --> **Start-up skill.** A session that is not a step session loads the initiative skill when `plan/current-initiative/initiative.md` is `active` or a draft in `plan/roadmap/` is `charted`.
 
 ### I-B Activate
@@ -454,13 +454,26 @@ A step that changes a chart format updates the active `initiative.md` in the sam
 `run` takes these actions in order and stops on the first failure:
 
 1. Check the PR title.
-2. If an earlier failed run left a set-version commit on the PR branch and the base version has moved, revert it in one new commit. Merge the initiative branch into the PR branch and push, with no force. A conflict stops the queue. The merge commit has the subject `{first 7 digits of Feature id}: Merge the initiative branch`, which the `commit-msg` hook accepts.
+2. If an earlier failed run left a set-version commit on the PR branch and the base version has moved, revert it in one new commit. Merge the initiative branch into the PR branch and push, with no force. If the merge conflicts only on shared files, the queue resolves them (see Shared files below). Any other conflict stops the queue. The merge commit has the subject `{first 7 digits of Feature id}: Merge the initiative branch`, which the `commit-msg` hook accepts.
 3. Wait for CI with `gh pr checks {k} --watch --fail-fast`.
 4. Apply the row's `Bump` to the initiative branch version and write the result to every file in `version-files.txt`.
 5. Check that every version file holds the same version.
 6. Write the row's `Version` and the status `merged`, and add a row to the `## Merges` table. The `Merge commit` cell reads `tag v{version}`. Set `**Position:**` to the lowest step that has not merged.
 7. Commit those files by path, push, and squash-merge with `--delete-branch`.
 8. Tag the merge commit `v{version}` and push the tag.
+
+#### Shared files
+
+Every merged step edits a few files that other open step PRs also edit. `ravintio-zero/scripts/shared-files.mjs` resolves them when the base merge conflicts (0000456 ADR-0302).
+
+| File | Resolution |
+|------|------------|
+| `plan/backlog/.next-id`, `docs/adr/.next-id` | The higher number wins |
+| `plan/backlog/index.md` | Rebuilt with `backlog-index.mjs` from the merged entries |
+| `docs/decisions-index.md`, `docs/architecture-overview.md` | The PR branch keeps its `Last updated:` line. Rows that either side added stay. |
+
+- The queue prints `resolved: {path}` for each file, then commits the merge with its usual subject.
+- A conflict in any other file stops the queue. So does a row that both sides changed, or a hunk the module cannot read. The queue aborts the merge first.
 
 After every run, whether it merged or stopped, `run` detaches HEAD in its worktree. A restart can then check the PR branch out in a step worktree.
 
