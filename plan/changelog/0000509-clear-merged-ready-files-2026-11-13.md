@@ -2,7 +2,7 @@
 
 **Feature:** Driver clears ready files of merged steps
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** 196
 
 ## What changed
 
