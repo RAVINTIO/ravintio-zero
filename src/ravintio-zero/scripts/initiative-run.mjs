@@ -123,7 +123,8 @@
 //     {n} merged" and deletes the control folder. The Restart and Setup checks then run.
 //   - A block, a failed session, a queue failure, or a Restart or Setup hit stops new starts. It
 //     prints "I-C Run: Stopping:". Running steps still reach ready or stop. The queue still merges
-//     them unless the queue failed. Before exit 1 the driver prints "I-C Run: Step {n}: {state}"
+//     every other ready step, also after a queue failure (0000446). A failed step gets one attempt,
+//     keeps its ready file, and reads stopped. A new driver queues it again. Before exit 1 the driver prints "I-C Run: Step {n}: {state}"
 //     for every step, then the first stop line with the log of the step that caused it.
 //   - The driver refuses a symlink at plan, at either folder, or at a step entry in either. Worktrees
 //     and control folders of unmerged steps stay on every exit.
@@ -1053,7 +1054,7 @@ async function runScheduledStep(root, rec, cfg, rm) {
 
 // The scheduler. It starts ready steps up to the concurrency cap, each in its own worktree, and
 // merges ready steps through the merge queue one at a time. A stop ends new starts. Running steps
-// still reach ready or stop, and the queue still merges ready steps unless the queue failed.
+// still reach ready or stop, and the queue still merges every ready step, also after a queue failure.
 async function schedule(root, cfg, rm) {
   const { id, slug, branch } = rm;
   const merged = new Set();
@@ -1105,7 +1106,6 @@ async function schedule(root, cfg, rm) {
     out(`I-C Run: Stopping: no new step starts after step ${rec ? rec.n : 'none'}`);
   };
   let queueBusy = false;
-  let queueFailed = false;
   let lastMerge = null;
 
   // Wakes the loop when a task ends. The flag keeps a wake that comes before the wait.
@@ -1195,8 +1195,12 @@ async function schedule(root, cfg, rm) {
         if (line) setStop(line, rec);
       }
     } catch (e) {
-      queueFailed = true;
-      setStop(e instanceof Stop ? e.message : `I-C Run: Blocked: driver error ${e.code || e.name}`, rec);
+      // One failed PR never holds back the other ready PRs (0000446). The failed step keeps its
+      // ready file, so a new driver queues it again. The first stop line ends the run.
+      rec.state = 'stopped';
+      const msg = e instanceof Stop ? e.message : `I-C Run: Blocked: driver error ${e.code || e.name}`;
+      if (stop.msg) out(msg);
+      else setStop(msg, rec);
     } finally {
       if (log) closeSync(log.fd);
       queueBusy = false;
@@ -1206,8 +1210,8 @@ async function schedule(root, cfg, rm) {
 
   for (;;) {
     for (const rec of startable()) stepTask(rec);
-    if (!queueBusy && !queueFailed && readyOrder.length > 0) queueTask(recs.get(readyOrder.shift()));
-    if (running() === 0 && !queueBusy) break;
+    if (!queueBusy && readyOrder.length > 0) queueTask(recs.get(readyOrder.shift()));
+    if (running() === 0 && !queueBusy && readyOrder.length === 0) break;
     await wait();
   }
 

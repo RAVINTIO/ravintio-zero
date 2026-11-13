@@ -8,7 +8,7 @@ status: "active"  # proposed | charted | active | delivered | blocked
 **Goal:** Close every open backlog entry except the four that need paid services. The first three steps make the driver run independent steps at once, each in its own worktree, with each version set as its step merges. Step 20 moves the pack source to `src/ravintio-zero/`. The last step, step 21, makes activation smoother for the human.
 **Branch:** initiative/0000360-backlog-sweep
 **Status:** active
-**Position:** 27
+**Position:** 28
 **Speed:** standard
 **Step CI fixes:** allowed
 **Concurrency:** 3
@@ -294,7 +294,7 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 24 | 0000440-driver-reads-reply-blocks | Driver reads blocks from the reply | 0000413 | minor | 0.79.0 | merged | driver | 22 |
 | 25 | 0000442-ready-file-helper | Ready file helper | 0000424 | minor | 0.84.0 | merged | driver | 24 |
 | 26 | 0000444-step-reads-its-queue-items | Steps read their queue items | 0000425 | minor | 0.89.0 | merged | driver | 25 |
-| 27 | 0000446-drain-ready-prs-after-a-stop | Merge ready PRs after a stop | 0000426 | minor |  | pending | driver | 26 |
+| 27 | 0000446-drain-ready-prs-after-a-stop | Merge ready PRs after a stop | 0000426 | minor | 0.91.0 | merged | driver | 26 |
 | 28 | 0000448-driver-runs-approved-setup-command | Driver runs the approved setup command | 0000427 | minor |  | pending | driver | 27 |
 | 29 | 0000450-coordinator-status-view | Coordinator status view | 0000428 | minor |  | pending | driver | 28 |
 | 30 | 0000452-ci-wait-before-archive | Ship waits for CI before it archives | 0000412 | minor | 0.78.0 | merged | ship | 22 |
@@ -349,3 +349,4 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 37 | #170 | tag v0.88.0 | 0.88.0 | 2026-11-10T22:18:06Z |
 | 26 | #171 | tag v0.89.0 | 0.89.0 | 2026-11-10T22:31:25Z |
 | 40 | #172 | tag v0.90.0 | 0.90.0 | 2026-11-10T23:13:30Z |
+| 27 | #173 | tag v0.91.0 | 0.91.0 | 2026-11-11T00:22:34Z |
