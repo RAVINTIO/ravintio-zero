@@ -38,8 +38,8 @@ The driver still requires status `active` before it runs a step.
 |-------|--------|-------|---------|--------------|
 | Chart | `I-A Chart:` | `ravintio-initiative` | `main` | Plan the initiative with the human and take their confirmation. |
 | Activate | `I-B Activate:` | `ravintio-initiative` | initiative branch | Cut the initiative branch, write the active initiative, and start the driver and the watch script. |
-| Run | `I-C Run:` | `ravintio-orchestrator` | feature branch | Run one step through P0 to P4. |
-| Advance | `I-D Advance:` | `ravintio-ship` | initiative branch | Merge the step PR into the initiative branch and tag it. |
+| Run | `I-C Run:` | `ravintio-orchestrator` | feature branch | Run one step through P0 to P4. Up to `**Concurrency:**` steps run at once, each in its own worktree. |
+| Advance | `I-D Advance:` | `ravintio-ship` | initiative branch | Raise the step PR and hand it to the merge queue, which merges it into the initiative branch and tags it. |
 | Delivery | `I-E Delivery:` | `ravintio-initiative` | initiative branch | Archive the initiative and raise the initiative PR to `main`. |
 
 #### Reply prefixes
@@ -64,16 +64,16 @@ Three parts run an initiative. The human talks only to their own session. Step s
 | Part | What it is | Runs where | Owns |
 |------|-----------|------------|------|
 | `ravintio-initiative` skill | The initiative coordinator | The human's session | Chart, activate, watching the steps, progress reports, and delivery |
-| Driver, `initiative-run.mjs` | A script with no AI | A background task that the initiative skill starts | Starting each step session in turn, and stopping on a `Blocked:` line |
-| `ravintio-orchestrator` skill | The feature coordinator | Each step session, a separate `claude -p` process | One feature from P0 to P4, then the merge into the initiative branch |
+| Driver, `initiative-run.mjs` | A script with no AI | A background task that the initiative skill starts | Starting step sessions in worktrees, running the merge queue, and stopping on a `Blocked:` line |
+| `ravintio-orchestrator` skill | The feature coordinator | Each step session, a separate `claude -p` process | One feature from P0 to P4, up to a step PR with green CI |
 
 An initiative runs in this sequence:
 
 1. **I-A Chart.** The initiative skill plans the steps with the human and takes their approval.
 2. **I-B Activate.** The initiative skill cuts the initiative branch and starts the driver.
-3. **I-C Run.** The driver starts a step session. It loads the orchestrator and builds one feature from P0 to P4.
-4. **I-D Advance.** The step session merges its feature PR into the initiative branch, tags the merge commit, and exits.
-5. The driver starts the next step session. Stages I-C and I-D repeat until no steps remain.
+3. **I-C Run.** The driver starts each step whose lane is free and whose `After` steps have merged, up to `**Concurrency:**` at once. Each step session runs in its own worktree. It loads the orchestrator and builds one feature from P0 to P4.
+4. **I-D Advance.** The step session raises its PR, waits for green CI, writes the PR number to its control folder, and exits. The driver runs the merge queue for each ready PR, one at a time. The queue sets the version, merges the PR into the initiative branch, and tags the merge commit.
+5. The driver starts more steps as lanes free up. Stages I-C and I-D repeat until every step has merged.
 6. While steps run, the initiative skill watches the build log and git, and reports to the human. It never edits the working tree.
 7. **I-E Delivery.** After the driver exits, the initiative skill archives the initiative and raises the initiative PR to `main`. It then gives the final report.
 
@@ -83,8 +83,8 @@ An initiative runs in this sequence:
 - The orchestrator never resumes an initiative. The initiative skill never resumes a step.
 - A step session has `RAVINTIO_INITIATIVE_STEP=1` in its environment. The auto-trigger hook and the strict-mode hook both name the orchestrator for it, and the initiative skill for any other session while `plan/current-initiative/initiative.md` has `status: active`. The driver lock and the contents of `plan/current/` play no part.
 - `plan/.initiative-ack` is git-ignored, so a step session never commits the human's ack. `plan/.orchestrator-ack` stays tracked.
-- While the driver lock `plan/.initiative-runner.lock` is held, the initiative skill holds new admin work in `plan/.initiative-queue/`. A step session commits the items that name it, and the coordinator lands any other item (see `## Coordinator PRs`).
-- A step session never moves, renames, or deletes the driver files `plan/.initiative-logs/`, `plan/.initiative-runner.lock`, or `plan/.initiative-queue/`. The driver and the watcher own them, and the coordinator reads the step logs as stop evidence. The phase guard skips `plan/.initiative-logs/`, so a step has no reason to move it.
+- While the driver lock `plan/.initiative-runner.lock` is held, the initiative skill holds new admin work in `plan/.initiative-queue/` of the main working tree. A step in a worktree reads it at `$RAVINTIO_INITIATIVE_ROOT/plan/.initiative-queue/`. A step session commits the items that name it, and the coordinator lands any other item (see `## Coordinator PRs`).
+- A step session never moves, renames, or deletes the driver files `plan/.initiative-logs/`, `plan/.initiative-runner.lock`, `plan/.initiative-queue/`, `plan/.initiative-worktrees/`, or `plan/.initiative-control/`. The driver and the watcher own them, and the coordinator reads the step logs as stop evidence. The phase guard skips `plan/.initiative-logs/`, so a step has no reason to move it.
 
 ### I-A Chart
 
@@ -99,6 +99,7 @@ Coach the human on these points:
 
 - the steps and their order
 - the bump for each step
+- the lane and `After` list of each step, and the `**Concurrency:**` field (see Chart-time lanes)
 - the stop conditions
 - the backlog entries for each step
 
@@ -122,7 +123,7 @@ Chart runs a guard check on each backlog entry of each step. A guard is `merge-g
 
 Before it coaches, Chart reads the latest records in `plan/retrospectives/`, newest first, and names any change they filed that is still open. If the folder is empty, Chart says so.
 
-Chart also collects the schema approvals the steps need. See Chart-time schema approval. It collects the dependency approvals too. See Chart-time dependency approval. It builds the `## Decisions`, `## Baselines`, and `## Criteria` tables. See Chart-time decisions. It lists the step confirmations. See Chart-time confirmations. It fills the `## P1 skips` table. See Chart-time P1 skips.
+Chart also collects the schema approvals the steps need. See Chart-time schema approval. It collects the dependency approvals too. See Chart-time dependency approval. It builds the `## Decisions`, `## Baselines`, and `## Criteria` tables. See Chart-time decisions. It lists the step confirmations. See Chart-time confirmations. It fills the `## P1 skips` table. See Chart-time P1 skips. It sets the lanes. See Chart-time lanes.
 
 ### Chart-time schema approval
 
@@ -213,6 +214,18 @@ A step skips P1 only when chart allowed it. Chart fills the `## P1 skips` table 
 - A step that changes code, such as a hook, a script, or a test, gets `no`.
 - The human's confirmation of the chart approves the column.
 
+### Chart-time lanes
+
+The driver runs steps at once when the chart allows it. Chart fills the `Lane` and `After` columns of `## Steps` and the `**Concurrency:**` field.
+
+- **Lane.** Steps that edit the same files share a lane. Steps in one lane run one at a time in chart order. An empty cell gives the step a lane of its own.
+- **After.** List the steps that must merge before this step starts, as numbers and ranges such as `6, 13` or `5-18`. An empty cell means no wait.
+- **A step that changes most files.** List every earlier step in its `After`, and every later step lists it in theirs. It then runs alone.
+- **Concurrency.** The most steps that run at once, a whole number from 1 to 9. The default is 3. A value of 1 runs one step at a time through the concurrent driver.
+- **No field.** A chart without `**Concurrency:**` runs on the serial driver path, one step at a time, as charts did before 0000379.
+
+The `Status` column holds `pending`, `running`, `ready`, or `merged`. The committed chart holds only `pending` and `merged`, and the merge queue writes `merged`. The driver derives `running` and `ready` from its control folders and never commits them. `scripts/initiative-chart.mjs` reads the table by header name.
+
 ### I-B Activate
 
 Activate turns a charted initiative into a live branch. Run these checks first:
@@ -237,9 +250,9 @@ A repo instruction that the human asks for while a step runs goes into the scope
 
 ### I-C Run
 
-Run executes one initiative step from `position`. Ship owns the merge that ends it (see I-D Advance under Ship stages). The step differs from a normal run in these ways:
+Run executes one initiative step. Concurrent steps are the normal flow: the driver starts each ready step in its own worktree (see Concurrent steps). A chart without `**Concurrency:**` runs one step at a time from `position`. Ship ends the step at a ready PR, and the merge queue merges it (see I-D Advance under Ship stages). The step differs from a normal run in these ways:
 
-- Cut the step's feature branch from the initiative branch, not from `main`.
+- Cut the step's feature branch from the initiative branch, not from `main`. Under the concurrent driver, the driver cuts it and the session starts on it in its worktree.
 - P0 writes `autonomous` to `plan/.run-mode` without asking the run-mode question.
 - P0 writes the initiative's `**Speed:**` field, `fast` or `standard`, to `plan/.run-speed` without asking the run-speed question. If the field is absent or holds another value, P0 writes `standard`.
 - P0 builds `feature-brief.md` from the backlog entries that the step's row lists. The brief title is the `Title` column of the row. It pulls each entry in and deletes its folder in the same commit. It does not ask pull-in, leave, or discard.
@@ -247,14 +260,47 @@ Run executes one initiative step from `position`. Ship owns the merge that ends 
 - A schema change that matches a chart-approved row does not stop the step. See Chart-time schema approval.
 - A fork that matches a `## Decisions` row does not stop the step. Apply the row's answer and its bump effect, and log `Decision applied (initiative chart): {fork}` in the build log. The downgrade block still applies. The step stops only for a fork no row covers. A missing table counts as an empty one.
 - A criterion marked `CI` in `## Criteria` counts as validated only after the step's first CI run.
-- The step reads `plan/.initiative-queue/` at P0 and again before P4 raises the PR. It acts only on an item whose `**Step:**` line names its number. If the destination or the content holds `{id}`, it reserves one id with `node ravintio-zero/scripts/reserve-id.mjs` on its feature branch and replaces each `{id}`. It writes the item's content to the item's `**Destination:**` path and commits that path by explicit path on its feature branch, so the squash carries it. The step never moves, renames, or deletes the queue or an item. The coordinator clears the items after the step merges.
+- The step reads the queue at P0 and again before P4 raises the PR. Under the concurrent driver the queue is `$RAVINTIO_INITIATIVE_ROOT/plan/.initiative-queue/`, and otherwise it is `plan/.initiative-queue/`. It acts only on an item whose `**Step:**` line names its number. If the destination or the content holds `{id}`, it reserves one id with `node ravintio-zero/scripts/reserve-id.mjs` on its feature branch and replaces each `{id}`. It writes the item's content to the item's `**Destination:**` path and commits that path by explicit path on its feature branch, so the squash carries it. The step never moves, renames, or deletes the queue or an item. The coordinator clears the items after the step merges.
 - A confirmation that a skill asks for counts as a fork. If a `Confirmation:` row in `## Decisions` names the skill, its step, and the exact command, run that command with no stop and log `Decision applied (initiative chart): {fork}`. If the command differs in any way, the step stops.
 - P1 runs unless the step's row in `## P1 skips` says `yes`. A step with no `yes` row that would skip P1 prints `I-C Run: Blocked: step {n} has no P1 skip row marked yes.` and stops. A missing table counts as an empty one.
 - If a step skips P1 on a `yes` row, the build log holds `Skipped: P1 (chart row: step {n}, {reason})`.
 - P0 stops only when a backlog entry is too vague to draft a brief from. Print `Blocked:` with the entry and what is missing. The exception stops in Exception Stops still apply, including the credential stop.
-- P0 applies the step's `Bump` (`major`, `minor`, or `patch`, default `minor`) to the initiative branch's version. That is the last known version from Discovery Start Actions step 8. The initiative branch's version comes from `product.yml`, or from `docs/about.md` when `product.yml` is absent. The downgrade block still applies.
+- P0 applies the step's `Bump` (`major`, `minor`, or `patch`, default `minor`) to the initiative branch's version to plan with. That is the last known version from Discovery Start Actions step 8. P4 writes no version. The merge queue sets the released version at merge, in merge order. The initiative branch's version comes from `product.yml`, or from `docs/about.md` when `product.yml` is absent. The downgrade block still applies.
 
 All messages use the `I-C Run:` prefix.
+
+### Concurrent steps
+
+The driver runs the scheduler when the chart holds `**Concurrency:**` (0000379 ADR-002). Without the field it runs the serial path, one step at a time.
+
+1. The driver reads the chart from `origin/{branch}`, or from the local branch when no origin ref exists. It fetches the branch before each read.
+2. A step may start when its row is `pending` and every step in its `After` has merged. No running or ready step may share its lane. The driver starts such steps in chart order until the running count equals `**Concurrency:**`.
+3. The driver cuts `feat/{feature-id}` from the initiative ref with `git worktree add` at `plan/.initiative-worktrees/step-{n}`. It copies `.claude/`, `CLAUDE.md`, `AGENTS.md`, and `.codex/` from the main root when present, and skips symlinks (0000379 ADR-004).
+4. The session runs with its working directory in the worktree. Its environment holds `RAVINTIO_INITIATIVE_STEP=1` and `RAVINTIO_INITIATIVE_QUEUE=1`. It also holds `RAVINTIO_INITIATIVE_ROOT`, the main root, and `RAVINTIO_INITIATIVE_CONTROL`, the step's control folder.
+5. The step ends at ready. It writes its PR number to `$RAVINTIO_INITIATIVE_CONTROL/ready` and prints `I-D Advance: Ready: PR #{n}` (see I-D Advance).
+6. The driver reads `ready`, removes the step worktree, and queues the PR. The queue runs `merge-queue.mjs run --step {n} --pr {k}` in `plan/.initiative-worktrees/queue`, one PR at a time in ready order. A merge prints `I-D Advance: Complete: step {n} merged`, and the driver deletes the step's control folder.
+7. The driver ends when every row has merged. It then prints the same `I-E Delivery:` lines as the serial path.
+
+The driver owns these paths in the main root. It adds each to `.git/info/exclude` and refuses a symlink at any of them.
+
+| Path | Holds |
+|------|-------|
+| `plan/.initiative-worktrees/step-{n}/` | The step's worktree, removed after the step merges |
+| `plan/.initiative-worktrees/queue/` | The queue worktree, detached at the initiative ref |
+| `plan/.initiative-control/step-{n}/` | `running`, with the driver pid, and `ready`, with the PR number |
+| `plan/.initiative-logs/step-{n}.log` | The step's stream, then the queue output for its PR |
+| `plan/.initiative-runner.lock` | The one driver lock. A step holds no lock. |
+
+On a restart, a `ready` file queues the step with no new session. A `running` file without `ready` restarts the session in the existing worktree. A step that exits without `ready` and without a block follows the resume rule.
+
+These events stop new starts:
+
+- a `Blocked:` or `Question:` line from any step
+- a failed session
+- a queue failure, printed as `I-D Advance: Blocked: queue stopped on step {n}`
+- a `Restart:` or `Setup:` hit after a merge
+
+The driver prints `I-C Run: Stopping:` and starts no new step. Running steps still reach ready or stop, and the queue still merges them unless the queue failed. Before it exits 1, the driver prints `I-C Run: Step {n}: {state}` for every step. The state is `pending`, `running`, `ready`, `merged`, or `stopped`. It then prints the first stop line with the log of the step that caused it. Worktrees and control folders of unmerged steps stay.
 
 ### Driver environment
 
@@ -290,6 +336,7 @@ The driver resumes a step that ends its turn early. A step session exits 0 when 
 - The cap is two resumes. If the step is still unmerged after the second, the driver prints `I-C Run: Blocked: step {n} exited without merging after 2 resumes` and exits 1.
 - A non-zero exit, an open `Blocked:` or `Question:` line, or a missing session id never resumes. A `Question:` line with no later `Resolved:` line stops the driver at once, and the stop line repeats it. The continue prompt names `Question:` as a valid place to end a turn.
 - A step session never ends its turn before `I-D Advance: Complete:`, a `Blocked:` line, or a `Question:` line. The orchestrator skill states the rule.
+- Under the concurrent driver, the step ends at `I-D Advance: Ready:` instead. The driver resumes a step that exits 0 with no `ready` file and no block.
 
 #### Restart stop
 
@@ -300,6 +347,7 @@ The driver loads its code once. After a merged step, it compares the initiative 
 - If git or the branch ref is unreadable, the driver skips the check.
 - The initiative skill treats the line as a restart and not a failure. If the line also holds `Setup:`, it follows the setup stop first. It then starts a new driver and a new watcher without asking.
 - The new driver reads the position from the branch ref and carries no other state. Its final report lists only the steps it ran.
+- Under the concurrent driver, the hit stops new starts first, and the line reads `so the next step runs the new code`. The driver exits after the running steps reach ready or stop. The new driver queues each `ready` step with no new session.
 
 #### Setup stop
 
@@ -327,6 +375,7 @@ The driver writes the child's stdout and stderr to `plan/.initiative-logs/step-{
 
 - If `step-{position}.log` exists when a step starts, the driver renames it to `step-{position}.attempt-{k}.log` first. `k` is the lowest number whose path is free. The driver then opens a fresh `step-{position}.log`, so a rerun keeps every earlier attempt and the latest attempt keeps the plain name.
 - If `plan/current/build-log.md` does not exist, the watcher prints `I-C Run: waiting for the build log` once and skips the stale check. It names the running step from the newest `step-{n}.log`, not from the chart position.
+- Under the concurrent driver, the watcher reads the log of every running step. It prints each step's activity lines with the step number.
 - The driver copies the child's stderr to its own stderr. It never prints the child's stdout or any log content.
 - The driver adds `plan/.initiative-logs/` to `.git/info/exclude`, not `.gitignore`, and adds the line once.
 - Every stop after a step starts ends with `Log: plan/.initiative-logs/step-{position}.log`. Stops before any step starts name no log. If attempt logs exist for the step, the stop line also names them as `Earlier: {paths}.` before the `Log:` field.
@@ -370,7 +419,7 @@ A step that changes a chart format updates the active `initiative.md` in the sam
 
 ## Merge queue
 
-`ravintio-zero/scripts/merge-queue.mjs` merges one ready step PR at a time and sets the step's version at merge. Two steps that run at once then never compute the same version. The driver calls it from step 3 of initiative 0000360. Until then, P4 sets the version and I-D Advance merges the PR, and the queue runs only by hand.
+`ravintio-zero/scripts/merge-queue.mjs` merges one ready step PR at a time and sets the step's version at merge. Two steps that run at once then never compute the same version. The concurrent driver calls `run` for each ready step, in the queue worktree. A step outside the concurrent driver calls `run` itself after green CI (see I-D Advance). P4 sets no version in either case.
 
 | Command | Action |
 |---------|--------|
@@ -385,7 +434,7 @@ A step that changes a chart format updates the active `initiative.md` in the sam
 3. Wait for CI with `gh pr checks {k} --watch --fail-fast`.
 4. Apply the row's `Bump` to the initiative branch version and write the result to every file in `version-files.txt`.
 5. Check that every version file holds the same version.
-6. Write the row's `Version` and the status `merged`, and add a row to the `## Merges` table. The `Merge commit` cell reads `tag v{version}`.
+6. Write the row's `Version` and the status `merged`, and add a row to the `## Merges` table. The `Merge commit` cell reads `tag v{version}`. Set `**Position:**` to the lowest step that has not merged.
 7. Commit those files by path, push, and squash-merge with `--delete-branch`.
 8. Tag the merge commit `v{version}` and push the tag.
 
@@ -416,14 +465,14 @@ The `merge-guard` hook is unchanged. It already allows a squash into `initiative
 
 These stages apply only when `plan/current-initiative/initiative.md` has `status: active`. Check the file before Step 6. Outside an initiative, ignore this section. A normal run keeps the order in the ship skill: clear sentinels at Step 8, PR at Step 9, and no merge by the agent. Step 7 creates no tag. CI tags the merge commit on `main` after the human merges.
 
-In an initiative step, Steps 1 to 5 run as written. Step 9 gives way to the two stages below. Step 8 (clear the sentinels) runs and its commit is pushed before the PR is raised, so the squash does not carry the sentinels onto the initiative branch and the next step's P0 does not see a stale feature id. The step's `Bump` column in `initiative.md` sets the version for Step 6, and the downgrade check still applies. The merge carve-out is governed by the merge rule and the merge-guard hook, which allows `gh pr merge --squash` only for a `initiative/*` base.
+In an initiative step, Steps 1 to 5 run as written. Step 9 gives way to the two stages below. Step 8 (clear the sentinels) runs and its commit is pushed before the PR is raised, so the squash does not carry the sentinels onto the initiative branch and the next step's P0 does not see a stale feature id. Step 6 sets no version. The merge queue applies the step's `Bump` at merge, and the downgrade check still applies. The merge carve-out is governed by the merge rule and the merge-guard hook, which allows `gh pr merge --squash` only for a `initiative/*` base.
 
 ### I-D Advance
 
-Every message in this stage begins with `I-D Advance:` after the `P4 Ship:` prefix.
+Every message in this stage begins with `I-D Advance:` after the `P4 Ship:` prefix. The step raises the PR and waits for CI. The merge queue then merges it.
 
-1. Update `plan/current-initiative/initiative.md` on the feature branch. Set the step's Status to `merged`, fill its Version with the released version, and move `position` to the next step.
-2. Run ship Step 8 now, then push the branch so the sentinel commit is on the remote. Raise the PR against the initiative branch only after that push and after the queue items that name the step are committed. The initiative update ships in the same PR, so the squash commit carries it.
+1. Leave `plan/current-initiative/initiative.md` alone. The step never sets its Status to `merged`, fills its Version, or moves `position`. The merge queue writes them in the same PR, before the squash. Step 6 bumps no version.
+2. Run ship Step 8 now, then push the branch so the sentinel commit is on the remote. Raise the PR against the initiative branch only after that push and after the queue items that name the step are committed.
 
    ```bash
    gh pr create --base initiative/{id}-{slug} --title "{feature-id}: {Feature title}"
@@ -445,26 +494,27 @@ Every message in this stage begins with `I-D Advance:` after the `P4 Ship:` pref
       I-D Advance: Blocked: CI failed on PR #{n}. Fix the failing check, then tell me to retry.
       ```
 
-5. If every check is green, check the PR title, then squash-merge the PR. Run `node ravintio-zero/scripts/merge-queue.mjs title --step {step} --title "{PR title}"`. If it exits 1, fix the PR title with `gh pr edit` and run it again. The `--delete-branch` flag removes the feature branch from `origin`. Write `{n}` as the literal PR number from the `gh pr create` output. Use no command substitution, variables, or pipes on this line, or `merge-guard` blocks it.
+5. If every check is green, check the PR title. Run `node ravintio-zero/scripts/merge-queue.mjs title --step {step} --title "{PR title}"`. If it exits 1, fix the PR title with `gh pr edit` and run it again.
+6. Hand the PR to the merge queue. Write `{n}` and `{k}` as the literal PR number from the `gh pr create` output.
+   - **Concurrent driver.** If `RAVINTIO_INITIATIVE_QUEUE` is `1`, write the PR number to `$RAVINTIO_INITIATIVE_CONTROL/ready` and print the line below. Then end the session. The driver removes the worktree and runs the queue.
 
-   ```bash
-   gh pr merge --squash --delete-branch {n}
-   ```
+     ```
+     I-D Advance: Ready: PR #{n}
+     ```
 
-6. Read the PR's merge commit, fetch the initiative branch, then tag that commit with the step's version and push the tag.
+   - **No concurrent driver.** If `RAVINTIO_INITIATIVE_QUEUE` is unset, run the queue yourself. On a failure it exits 1 and names the reason. Stop with `I-D Advance: Blocked:` and that reason.
 
-   ```bash
-   sha=$(gh pr view {n} --json mergeCommit -q .mergeCommit.oid)
-   git fetch origin initiative/{id}-{slug}
-   git tag v{version} -m "{feature-id}" "$sha"
-   git push origin v{version}
-   ```
+     ```bash
+     node ravintio-zero/scripts/merge-queue.mjs run --step {step} --pr {k}
+     ```
+
+The queue sets the version and merges the PR with `gh pr merge --squash --delete-branch {n}`. It then tags the merge commit `v{version}`. The `--delete-branch` flag removes the feature branch from `origin`. The tag comes after the merge because a squash creates a new commit. If a push or merge fails, the queue stops and reports the exact error. Nothing retries with force.
 
 Step 8 runs before the PR because the squash would otherwise carry `plan/.orchestrator-active`, `plan/.orchestrator-ack`, and `plan/.run-mode` onto the initiative branch. The next step's P0 would then see a stale feature id.
 
 Consumer CI must trigger on pull requests to `initiative/**`. The pack's workflow template `ravintio-zero/hooks/ravintio.yml` includes that branch pattern. A project with its own workflow adds it.
 
-7. Hand off to the next session.
+7. With no concurrent driver, hand off to the next session after the queue merges.
    1. Check out the initiative branch and run `git pull --ff-only origin initiative/{id}-{slug}`.
    2. If the local feature branch still exists, delete it with `git branch -D`. It is redundant once squash-merged, and `gh` may already have removed it.
    3. If a step with Status `pending` remains, end the session with the line below. The driver starts the next session.
@@ -477,11 +527,9 @@ Consumer CI must trigger on pull requests to `initiative/**`. The pack's workflo
 
 After the last step, `position` is one past the last step number. If a session starts in that state with `plan/current/` empty, the initiative skill runs I-E Delivery.
 
-The tag comes after the merge because a squash creates a new commit. A tag on the feature branch tip, or on the fetched branch tip, could point at the wrong commit. The merge commit is the exact commit the PR created. If a push or merge fails, stop and report the exact error. Do not retry with force.
-
 ### I-E Delivery
 
-The initiative skill runs this stage after the last step merges. Every message begins with `I-E Delivery:` after the `P4 Ship:` prefix. Nothing commits directly on the initiative branch. Land steps 1 and 2 as coordinator PRs into it, as in `## Coordinator PRs`.
+The initiative skill runs this stage after the last step merges. Every message begins with `I-E Delivery:` after the `P4 Ship:` prefix. Concurrent steps merge in the order they become ready, not in chart order. Each delivery script reads merge order from the ascending `Version` column. Nothing commits directly on the initiative branch. Land steps 1 and 2 as coordinator PRs into it, as in `## Coordinator PRs`.
 
 1. Move `plan/current-initiative/` to `plan/_archive/{id}-{slug}-initiative-{date}/` and set the initiative `status: delivered`. Update links that point at the old path. Land the move as a coordinator PR.
 2. Run `ravintio-retrospective` in initiative mode. It writes `plan/retrospectives/{id}-{slug}-initiative-{date}.md`. Land the record as a coordinator PR, so the initiative PR carries it. A missing retrospective never blocks delivery.

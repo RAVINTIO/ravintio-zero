@@ -98,6 +98,33 @@
 // value, wins. Each step session also gets RAVINTIO_INITIATIVE_STEP=1, which the
 // auto-trigger hook reads to load the orchestrator and not the initiative skill.
 //
+// Concurrent mode (0000379): the steps above describe the serial path. The driver takes it when the
+// chart has no **Concurrency:** field, or holds an unfilled "{{...}}" placeholder there. With the
+// field, the scheduler runs instead:
+//   - It reads the chart from origin/{branch}, or the local branch when no origin ref exists. It
+//     fetches the branch quietly before each read and before it cuts a worktree.
+//   - It starts the steps that readySteps in initiative-chart.mjs returns, in chart order, until
+//     the running count equals the cap. A ready step still holds its lane until it merges.
+//   - Each step gets the worktree plan/.initiative-worktrees/step-{n} on branch feat/{feature-id},
+//     cut from the initiative ref. The driver copies .claude, CLAUDE.md, AGENTS.md, and .codex from
+//     the root into it, skipping symlinks. The session runs with its cwd in the worktree and gets
+//     RAVINTIO_INITIATIVE_QUEUE=1, RAVINTIO_INITIATIVE_ROOT, and RAVINTIO_INITIATIVE_CONTROL.
+//   - The control folder plan/.initiative-control/step-{n}/ holds "running", the driver pid, and
+//     "ready", the PR number the step writes. A step succeeds when ready exists. The resume rule
+//     applies when it does not. On a driver restart, ready queues the step with no new session.
+//     A running file without ready restarts the session in the existing worktree.
+//   - The queue takes one ready step at a time, in ready order. It removes the step worktree and
+//     runs "node {merge-queue.mjs} run --step {n} --pr {k} --root {queue worktree}". MERGE_QUEUE_BIN
+//     overrides the script. The queue worktree is plan/.initiative-worktrees/queue, detached at the
+//     initiative ref. Its output goes to the step log. A merge prints "I-D Advance: Complete: step
+//     {n} merged" and deletes the control folder. The Restart and Setup checks then run.
+//   - A block, a failed session, a queue failure, or a Restart or Setup hit stops new starts. It
+//     prints "I-C Run: Stopping:". Running steps still reach ready or stop. The queue still merges
+//     them unless the queue failed. Before exit 1 the driver prints "I-C Run: Step {n}: {state}"
+//     for every step, then the first stop line with the log of the step that caused it.
+//   - The driver refuses a symlink at plan, at either folder, or at a step entry in either. Worktrees
+//     and control folders of unmerged steps stay on every exit.
+
 // Final report: the driver keeps a list of the steps it ran. At delivery it prints one
 // "I-E Delivery: Complete: step {n} merged" line per step, in order. The last line is
 // "I-E Delivery: Complete: initiative {id}-{slug} archived, driver done".
@@ -120,8 +147,10 @@
 // It has no dependencies beyond Node.
 
 import { spawn, spawnSync } from 'node:child_process';
-import { appendFileSync, chmodSync, closeSync, constants as fsConstants, existsSync, lstatSync, mkdirSync, openSync, readFileSync, readdirSync, realpathSync, renameSync, unlinkSync, writeFileSync, writeSync } from 'node:fs';
-import { isAbsolute, join, relative, resolve } from 'node:path';
+import { appendFileSync, chmodSync, closeSync, constants as fsConstants, cpSync, existsSync, lstatSync, mkdirSync, openSync, readFileSync, readdirSync, realpathSync, renameSync, rmSync, unlinkSync, writeFileSync, writeSync } from 'node:fs';
+import { dirname, isAbsolute, join, relative, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { parseChart, readySteps } from './initiative-chart.mjs';
 import { withInitiativeLabels } from './initiative-labels.mjs';
 
 const INITIATIVE = 'plan/current-initiative/initiative.md';
@@ -155,6 +184,14 @@ const SESSION = /^[A-Za-z0-9_-]{8,128}$/;
 const SESSION_FIELD = /"session_id"\s*:\s*"([^"]*)"/g;
 const MAX_RESUMES = 2;
 const CONTINUE_PROMPT = (n) => `Continue initiative step ${n}. Read plan/current/build-log.md first. Do not end your turn before I-D Advance: Complete:, a Blocked: line, or a Question: line.`;
+
+// The concurrent driver (0000379). It runs only when the chart holds a **Concurrency:** field.
+const WORKTREES = 'plan/.initiative-worktrees';
+const CONTROL = 'plan/.initiative-control';
+const FEATURE = /^[0-9]{7}-[a-z0-9]+(-[a-z0-9]+)*$/;
+const PR = /^[1-9][0-9]{0,6}$/;
+// Git-ignored setup output that a fresh worktree lacks (ADR-004).
+const SETUP_OUTPUT = ['.claude', 'CLAUDE.md', 'AGENTS.md', '.codex'];
 
 class Stop extends Error {}
 
@@ -241,7 +278,8 @@ function parseInitiative(text) {
 
 // Adds the lock path and the log folder to .git/info/exclude so a step session's
 // "stage everything" never commits either. Skips quietly outside a git work tree.
-function excludeLock(root) {
+// The concurrent driver passes the worktree and control folders as extra entries.
+function excludeLock(root, extra = []) {
   const git = (...args) => spawnSync('git', args, { cwd: root, encoding: 'utf8' });
   const inside = git('rev-parse', '--is-inside-work-tree');
   if (inside.error || inside.status !== 0 || inside.stdout.trim() !== 'true') return;
@@ -249,7 +287,7 @@ function excludeLock(root) {
   if (p.status !== 0) return;
   const file = resolve(root, p.stdout.trim());
   let text = existsSync(file) ? readFileSync(file, 'utf8') : '';
-  for (const entry of [LOCK, `${LOGS}/`, QUEUE]) {
+  for (const entry of [LOCK, `${LOGS}/`, QUEUE, ...extra]) {
     if (text.split(/\r?\n/).includes(entry)) continue;
     const add = (text === '' || text.endsWith('\n') ? '' : '\n') + entry + '\n';
     appendFileSync(file, add);
@@ -433,7 +471,8 @@ function delivered(root, id, slug) {
 
 // Runs one claude -p session for the step. With a session id it adds --resume and the continue
 // prompt. Returns the exit status and the last session_id the child printed, or '' if none.
-function runStep(root, position, cfg, fd, labels, resumeId) {
+// The concurrent driver passes opts.cwd, the step worktree, and opts.env, the extra variables.
+function runStep(root, position, cfg, fd, labels, resumeId, opts = {}) {
   return new Promise((resolveStep) => {
     const bin = process.env.CLAUDE_BIN || 'claude';
     const args = ['-p', '--output-format', 'stream-json', '--verbose', '--permission-mode', 'auto', '--model', cfg.model];
@@ -441,11 +480,12 @@ function runStep(root, position, cfg, fd, labels, resumeId) {
     if (resumeId) args.push('--resume', resumeId, CONTINUE_PROMPT(position));
     else args.push(`Run initiative step ${position}`);
     const child = spawn(bin, args, {
-      cwd: root,
-      env: { ...process.env, CLAUDE_CODE_PRINT_BG_WAIT_CEILING_MS: process.env.CLAUDE_CODE_PRINT_BG_WAIT_CEILING_MS ?? '0', RAVINTIO_INITIATIVE_STEP: '1', OTEL_RESOURCE_ATTRIBUTES: withInitiativeLabels(process.env.OTEL_RESOURCE_ATTRIBUTES, labels.id, labels.slug, position) },
+      cwd: opts.cwd ?? root,
+      env: { ...process.env, CLAUDE_CODE_PRINT_BG_WAIT_CEILING_MS: process.env.CLAUDE_CODE_PRINT_BG_WAIT_CEILING_MS ?? '0', RAVINTIO_INITIATIVE_STEP: '1', OTEL_RESOURCE_ATTRIBUTES: withInitiativeLabels(process.env.OTEL_RESOURCE_ATTRIBUTES, labels.id, labels.slug, position), ...(opts.env ?? {}) },
       stdio: ['ignore', 'pipe', 'pipe'],
     });
     activeChild = child;
+    track(child);
     let session = '';
     let rest = '';
     child.stdout.on('data', (chunk) => {
@@ -470,6 +510,13 @@ function runStep(root, position, cfg, fd, labels, resumeId) {
 }
 
 let activeChild = null;
+// Every live child, so a signal stops all of them when steps run at once.
+const children = new Set();
+function track(child) {
+  children.add(child);
+  child.on('close', () => children.delete(child));
+  child.on('error', () => children.delete(child));
+}
 let currentLog = null;
 let earlierLogs = [];
 
@@ -493,6 +540,7 @@ function releaseLock() {
 for (const sig of ['SIGINT', 'SIGTERM', 'SIGHUP']) {
   process.on(sig, () => {
     if (activeChild) activeChild.kill(sig);
+    for (const c of children) if (c !== activeChild) c.kill(sig);
     releaseLock();
     out(withLog(`I-C Run: Blocked: driver stopped by ${sig}`));
     process.exit(1);
@@ -507,8 +555,9 @@ async function main() {
   if (rm.status !== 'active') throw new Stop(`I-C Run: Blocked: initiative status is ${rm.status}, not active`);
   const { id, slug } = rm;
 
+  const concurrent = usesScheduler(root, rm);
   const lock = join(root, LOCK);
-  excludeLock(root);
+  excludeLock(root, concurrent ? [`${WORKTREES}/`, `${CONTROL}/`] : []);
   try {
     writeFileSync(lock, `${process.pid}\n`, { flag: 'wx' });
   } catch (e) {
@@ -516,6 +565,7 @@ async function main() {
     throw e;
   }
   lockPath = lock;
+  if (concurrent) return schedule(root, cfg, rm);
 
   const ran = [];
   for (;;) {
@@ -595,6 +645,486 @@ async function main() {
       throw new Stop(`I-D Advance: Restart: step ${position} changed ${restart.join(', ')}. Start a new driver so step ${rm.position} runs the new code.`);
     }
   }
+}
+
+// ---------------------------------------------------------------- concurrent driver (0000379)
+
+const gitIn = (cwd, args, env) => spawnSync('git', args, { cwd, encoding: 'utf8', env: env ?? process.env });
+const ran0 = (r) => !r.error && r.status === 0;
+const lastLine = (text) => (text || '').split(/\r?\n/).map((l) => l.trim()).filter(Boolean).pop() || '';
+
+// True when the chart in the working tree or on the initiative ref holds a **Concurrency:** field.
+// A chart that the parser rejects still counts when the field is there, so the scheduler names the
+// error. Without the field, the serial path runs as before (ADR-002). An unfilled template
+// placeholder, such as "{{1 to 9, default 3}}", counts as no field.
+function usesScheduler(root, rm) {
+  const texts = [rm.text];
+  for (const ref of [`refs/remotes/origin/${rm.branch}`, `refs/heads/${rm.branch}`]) {
+    const shown = gitIn(root, ['show', `${ref}:${INITIATIVE}`]);
+    if (ran0(shown)) texts.push(shown.stdout);
+  }
+  return texts.some((t) => {
+    const value = field(t, 'Concurrency');
+    if (value === '' || /^\{\{.*\}\}$/.test(value)) return false;
+    try {
+      return parseChart(t).hasConcurrency;
+    } catch {
+      return true;
+    }
+  });
+}
+
+// Fetches the initiative branch when an origin remote exists. A failed fetch is ignored.
+function fetchBranch(root, branch) {
+  if (!ran0(gitIn(root, ['remote', 'get-url', 'origin']))) return;
+  gitIn(root, ['fetch', '--quiet', 'origin', branch], { ...process.env, GIT_TERMINAL_PROMPT: '0' });
+}
+
+// Returns origin/{branch} when that ref exists, else the local branch, else ''.
+function initiativeRef(root, branch) {
+  for (const ref of [`refs/remotes/origin/${branch}`, `refs/heads/${branch}`]) {
+    if (ran0(gitIn(root, ['rev-parse', '--verify', '--quiet', `${ref}^{commit}`]))) return ref;
+  }
+  return '';
+}
+
+function refHead(root, ref) {
+  if (!ref) return '';
+  const r = gitIn(root, ['rev-parse', '--verify', '--quiet', `${ref}^{commit}`]);
+  return ran0(r) ? r.stdout.trim() : '';
+}
+
+// Reads the chart from the ref, or from the working tree when the ref is unreadable.
+function readChart(root, ref) {
+  let text = '';
+  if (ref) {
+    const shown = gitIn(root, ['show', `${ref}:${INITIATIVE}`]);
+    if (ran0(shown)) text = shown.stdout;
+  }
+  if (text.trim() === '') text = readFileSync(join(root, INITIATIVE), 'utf8');
+  try {
+    return parseChart(text);
+  } catch (e) {
+    throw new Stop(`I-C Run: Blocked: the chart is invalid. ${String(e.message).slice(0, MAX_LINE)}`);
+  }
+}
+
+const worktreeRefusal = () => new Stop('I-C Run: Blocked: refused a symlinked step worktree path');
+const controlRefusal = () => new Stop('I-C Run: Blocked: refused a symlinked step control path');
+
+// Makes the worktree or control folder under the root. Refuses a symlink at plan or at the folder,
+// and a folder whose real path leaves the real root.
+function ensureArea(root, base, refuse) {
+  const dir = join(root, base);
+  for (const part of [join(root, 'plan'), dir]) if (isLink(part)) throw refuse();
+  mkdirSync(dir, { recursive: true, mode: 0o700 });
+  const within = relative(realpathSync(root), realpathSync(dir));
+  if (within === '' || within.startsWith('..') || isAbsolute(within)) throw refuse();
+  return dir;
+}
+
+// Returns the path of one entry in an area, such as step-3 or queue. Refuses a symlink there.
+function areaPath(root, base, name, refuse) {
+  const dir = ensureArea(root, base, refuse);
+  const path = join(dir, name);
+  if (isLink(path)) throw refuse();
+  return path;
+}
+
+// Stops unless the folder is the top of a git worktree. This keeps a later git call from reaching
+// the main working tree through a plain folder.
+function checkWorktree(path, rel) {
+  const r = gitIn(path, ['rev-parse', '--show-toplevel']);
+  if (!ran0(r) || realpathSync(r.stdout.trim()) !== realpathSync(path)) {
+    throw new Stop(`I-C Run: Blocked: ${rel} is not a git worktree`);
+  }
+}
+
+// Copies the setup output from the root into a worktree. Skips symlinks and never follows one.
+function copySetup(root, wt, n) {
+  for (const name of SETUP_OUTPUT) {
+    const src = join(root, name);
+    const dest = join(wt, name);
+    if (!present(src) || isLink(src) || isLink(dest)) continue;
+    try {
+      cpSync(src, dest, { recursive: true, force: true, dereference: false, filter: (s) => !isLink(s) });
+    } catch {
+      throw new Stop(`I-C Run: Blocked: could not copy ${name} into the worktree of step ${n}`);
+    }
+  }
+}
+
+// Cuts or reuses the step worktree on branch feat/{featureId}. Returns its absolute path.
+function prepareWorktree(root, n, featureId, ref) {
+  const rel = `${WORKTREES}/step-${n}`;
+  const wt = areaPath(root, WORKTREES, `step-${n}`, worktreeRefusal);
+  if (present(wt)) {
+    checkWorktree(wt, rel);
+  } else {
+    const branch = `feat/${featureId}`;
+    const exists = ran0(gitIn(root, ['rev-parse', '--verify', '--quiet', `refs/heads/${branch}`]));
+    const args = exists ? ['worktree', 'add', '--quiet', wt, branch] : ['worktree', 'add', '--quiet', '--no-track', '-b', branch, wt, ref];
+    const r = gitIn(root, args);
+    if (!ran0(r)) throw new Stop(`I-C Run: Blocked: could not create the worktree of step ${n}. ${lastLine(r.stderr).slice(0, MAX_LINE)}`);
+  }
+  copySetup(root, wt, n);
+  return wt;
+}
+
+// Puts the queue worktree, detached, on the fresh initiative ref. Returns its absolute path.
+function prepareQueue(root, ref) {
+  const rel = `${WORKTREES}/queue`;
+  const q = areaPath(root, WORKTREES, 'queue', worktreeRefusal);
+  let r;
+  if (present(q)) {
+    checkWorktree(q, rel);
+    r = gitIn(q, ['checkout', '--quiet', '--force', '--detach', ref]);
+  } else {
+    r = gitIn(root, ['worktree', 'add', '--quiet', '--detach', q, ref]);
+  }
+  if (!ran0(r)) throw new Stop(`could not prepare ${rel}. ${lastLine(r.stderr)}`);
+  return q;
+}
+
+function removeWorktree(root, n) {
+  const wt = areaPath(root, WORKTREES, `step-${n}`, worktreeRefusal);
+  if (!present(wt)) return;
+  const r = gitIn(root, ['worktree', 'remove', '--force', wt]);
+  if (!ran0(r)) throw new Stop(`could not remove ${WORKTREES}/step-${n}. ${lastLine(r.stderr)}`);
+}
+
+function controlDir(root, n) {
+  const dir = areaPath(root, CONTROL, `step-${n}`, controlRefusal);
+  mkdirSync(dir, { recursive: true, mode: 0o700 });
+  return dir;
+}
+
+// Reads a step's control folder. Returns the PR number in ready, or '', and whether running exists.
+function readControl(root, n) {
+  const dir = areaPath(root, CONTROL, `step-${n}`, controlRefusal);
+  const file = (name) => {
+    const p = join(dir, name);
+    if (isLink(p)) throw controlRefusal();
+    return present(p) ? p : '';
+  };
+  if (!present(dir)) return { ready: '', running: false };
+  const readyFile = file('ready');
+  let ready = '';
+  if (readyFile) {
+    ready = lstatSync(readyFile).isFile() ? readFileSync(readyFile, 'utf8').trim() : '';
+    if (!PR.test(ready)) throw new Stop(`I-C Run: Blocked: step ${n} wrote an invalid ready file`);
+  }
+  return { ready, running: file('running') !== '' };
+}
+
+function removeControl(root, n) {
+  const dir = areaPath(root, CONTROL, `step-${n}`, controlRefusal);
+  rmSync(dir, { recursive: true, force: true });
+}
+
+// Opens the step log for append, with the same refusals as openLog and no rotation.
+function appendLog(root, position) {
+  const rel = `${LOGS}/step-${position}.log`;
+  const refuse = () => new Stop('I-C Run: Blocked: refused a symlinked step log path');
+  try {
+    const dir = join(root, LOGS);
+    for (const part of [join(root, 'plan'), dir]) if (isLink(part)) throw refuse();
+    mkdirSync(dir, { recursive: true, mode: 0o700 });
+    const within = relative(realpathSync(root), realpathSync(dir));
+    if (within.startsWith('..') || isAbsolute(within)) throw refuse();
+    const file = join(root, rel);
+    if (isLink(file)) throw refuse();
+    const { O_WRONLY, O_CREAT, O_APPEND, O_NOFOLLOW = 0 } = fsConstants;
+    return { fd: openSync(file, O_WRONLY | O_CREAT | O_APPEND | O_NOFOLLOW, 0o600), rel, earlier: attemptLogs(root, position) };
+  } catch (e) {
+    if (e instanceof Stop) throw e;
+    throw new Stop('I-C Run: Blocked: could not open the step log');
+  }
+}
+
+// Runs the merge queue for one PR in the queue worktree. Streams its output into the step log and
+// copies its stderr to the driver's stderr. Returns the exit status and the last output line.
+function runQueue(n, pr, queueDir, fd) {
+  return new Promise((done) => {
+    const bin = process.env.MERGE_QUEUE_BIN || join(dirname(fileURLToPath(import.meta.url)), 'merge-queue.mjs');
+    const child = spawn(process.execPath, [bin, 'run', '--step', String(n), '--pr', pr, '--root', queueDir], {
+      cwd: queueDir,
+      env: process.env,
+      stdio: ['ignore', 'pipe', 'pipe'],
+    });
+    track(child);
+    let tail = '';
+    const keep = (chunk) => {
+      writeSync(fd, chunk);
+      tail = (tail + chunk.toString('utf8')).slice(-8192);
+    };
+    child.stdout.on('data', keep);
+    child.stderr.on('data', (chunk) => {
+      keep(chunk);
+      writeSync(2, chunk);
+    });
+    child.on('error', (e) => done({ error: e.code || 'spawn error', last: '' }));
+    child.on('close', (code, signal) => done({ code, signal, last: lastLine(tail) }));
+  });
+}
+
+// Returns the Restart or Setup stop line for a merge that changed watched files, or ''.
+function restartLine(root, n, before, after) {
+  const restart = changedWatched(root, before, after);
+  const setup = changedSetup(root, before, after);
+  if (setup.length > 0) {
+    const files = nameFiles([...restart, ...setup.filter((f) => !restart.includes(f))]);
+    if (restart.length > 0) {
+      return `I-D Advance: Restart: Setup: step ${n} changed ${files}. Rerun setup, then start a new driver so the next step runs the new code.`;
+    }
+    return `I-D Advance: Setup: step ${n} changed ${files}. Rerun setup, then start a new driver.`;
+  }
+  if (restart.length > 0) {
+    return `I-D Advance: Restart: step ${n} changed ${restart.join(', ')}. Start a new driver so the next step runs the new code.`;
+  }
+  return '';
+}
+
+// Runs one step session in its worktree until the step writes ready. Applies the resume rule.
+// Returns the PR number from the ready file.
+async function runScheduledStep(root, rec, cfg, rm) {
+  const n = rec.n;
+  const position = String(n);
+  fetchBranch(root, rm.branch);
+  const ref = initiativeRef(root, rm.branch);
+  if (!ref) throw new Stop(`I-C Run: Blocked: the initiative branch ${rm.branch} has no readable ref`);
+  const log = openLog(root, position);
+  rec.log = { rel: log.rel, earlier: log.earlier };
+  try {
+    const wt = prepareWorktree(root, n, rec.featureId, ref);
+    const ctl = controlDir(root, n);
+    const runningFile = join(ctl, 'running');
+    if (isLink(runningFile)) throw controlRefusal();
+    writeFileSync(runningFile, `${process.pid}\n`, { mode: 0o600 });
+    out(`I-C Run: Starting: initiative step ${position} in a fresh session`);
+    const opts = {
+      cwd: wt,
+      env: { RAVINTIO_INITIATIVE_QUEUE: '1', RAVINTIO_INITIATIVE_ROOT: root, RAVINTIO_INITIATIVE_CONTROL: ctl },
+    };
+    const started = Date.now();
+    let session = '';
+    let resumes = 0;
+    for (;;) {
+      const res = await runStep(wt, position, cfg, log.fd, { id: rm.id, slug: rm.slug }, resumes > 0 ? session : '', opts);
+      if (res.error) throw new Stop(`I-C Run: Blocked: could not start claude (${res.error})`);
+      if (res.code !== 0) {
+        const cap = cfg.turns ? `. The step may have reached RAVINTIO_INITIATIVE_MAX_TURNS=${cfg.turns}` : '';
+        throw new Stop(`I-C Run: Blocked: claude exited ${res.code ?? res.signal} on step ${position}${cap}`);
+      }
+      if (res.session) session = res.session;
+      const block = openBlock(wt) || archivedBlock(wt, rec.featureId, started - 1000);
+      if (block) throw new Stop(`I-C Run: Blocked: step ${position} stopped. ${block}`);
+      const pr = readControl(root, n).ready;
+      if (pr) return pr;
+      if (!SESSION.test(session)) throw new Stop(`I-C Run: Blocked: step ${position} exited without reaching ready`);
+      if (resumes >= MAX_RESUMES) {
+        throw new Stop(`I-C Run: Blocked: step ${position} exited without reaching ready after ${MAX_RESUMES} resumes`);
+      }
+      resumes++;
+      out(`I-C Run: Resuming: step ${position} ended its turn before ready, resume ${resumes} of ${MAX_RESUMES}`);
+    }
+  } finally {
+    closeSync(log.fd);
+  }
+}
+
+// The scheduler. It starts ready steps up to the concurrency cap, each in its own worktree, and
+// merges ready steps through the merge queue one at a time. A stop ends new starts. Running steps
+// still reach ready or stop, and the queue still merges ready steps unless the queue failed.
+async function schedule(root, cfg, rm) {
+  const { id, slug, branch } = rm;
+  const merged = new Set();
+  const mergeOrder = [];
+  const readyOrder = [];
+  let chart;
+  const refresh = () => {
+    fetchBranch(root, branch);
+    chart = readChart(root, initiativeRef(root, branch));
+    for (const s of chart.steps) if (s.status === 'merged') merged.add(s.step);
+  };
+  refresh();
+  if (!initiativeRef(root, branch)) throw new Stop(`I-C Run: Blocked: the initiative branch ${branch} has no readable ref`);
+  if (chart.steps.length === 0) throw new Stop('I-C Run: Blocked: the chart has no steps');
+  ensureArea(root, WORKTREES, worktreeRefusal);
+  ensureArea(root, CONTROL, controlRefusal);
+
+  // One record per chart step. Driver restart: a ready file queues the step, and a running file
+  // without ready restarts its session in the existing worktree.
+  const recs = new Map();
+  const recFor = (s) => {
+    if (!POSITION.test(String(s.step))) throw new Stop(`I-C Run: Blocked: step ${String(s.step).slice(0, 40)} is not a valid step number`);
+    if (!FEATURE.test(s.featureId)) throw new Stop(`I-C Run: Blocked: step ${s.step} has an invalid feature id`);
+    if (!recs.has(s.step)) recs.set(s.step, { n: s.step, featureId: s.featureId, state: 'pending', resume: false, pr: '', log: null });
+    return recs.get(s.step);
+  };
+  for (const s of chart.steps) {
+    const rec = recFor(s);
+    if (merged.has(s.step)) {
+      rec.state = 'merged';
+      continue;
+    }
+    const c = readControl(root, s.step);
+    if (c.ready) {
+      rec.state = 'ready';
+      rec.pr = c.ready;
+      readyOrder.push(s.step);
+      out(`I-D Advance: Ready: step ${s.step} has PR #${c.ready} waiting for the queue`);
+    } else if (c.running) {
+      rec.resume = true;
+    }
+  }
+
+  const stop = { msg: '', log: null };
+  const setStop = (msg, rec) => {
+    if (stop.msg) return;
+    stop.msg = msg;
+    stop.log = rec ? rec.log : null;
+    out(`I-C Run: Stopping: no new step starts after step ${rec ? rec.n : 'none'}`);
+  };
+  let queueBusy = false;
+  let queueFailed = false;
+  let lastMerge = null;
+
+  // Wakes the loop when a task ends. The flag keeps a wake that comes before the wait.
+  let woken = false;
+  let waiter = null;
+  const notify = () => {
+    woken = true;
+    if (waiter) {
+      const w = waiter;
+      waiter = null;
+      w();
+    }
+  };
+  const wait = async () => {
+    if (!woken) await new Promise((r) => { waiter = r; });
+    woken = false;
+  };
+
+  const allMerged = () => chart.steps.every((s) => merged.has(s.step));
+  const running = () => [...recs.values()].filter((r) => r.state === 'running').length;
+
+  const startable = () => {
+    if (stop.msg) return [];
+    const free = chart.concurrency - running();
+    if (free <= 0) return [];
+    const states = new Map();
+    for (const r of recs.values()) {
+      if (r.state === 'running' || r.state === 'ready') states.set(r.n, r.state);
+      else if (r.state === 'stopped') states.set(r.n, 'stopped');
+      else if (r.resume && r.state === 'pending') states.set(r.n, 'running');
+    }
+    const steps = chart.steps.map((s) => (merged.has(s.step) ? { ...s, status: 'merged' } : s));
+    const resumes = chart.steps.map((s) => recs.get(s.step)).filter((r) => r && r.resume && r.state === 'pending');
+    const fresh = readySteps(steps, states).map((s) => recFor(s));
+    return [...resumes, ...fresh].slice(0, free);
+  };
+
+  const stepTask = async (rec) => {
+    rec.state = 'running';
+    rec.resume = false;
+    try {
+      rec.pr = await runScheduledStep(root, rec, cfg, rm);
+      rec.state = 'ready';
+      readyOrder.push(rec.n);
+      out(`I-D Advance: Ready: step ${rec.n} raised PR #${rec.pr}, waiting for the queue`);
+    } catch (e) {
+      rec.state = 'stopped';
+      setStop(e instanceof Stop ? e.message : `I-C Run: Blocked: driver error ${e.code || e.name}`, rec);
+    } finally {
+      notify();
+    }
+  };
+
+  const queueTask = async (rec) => {
+    queueBusy = true;
+    const n = rec.n;
+    let log = null;
+    try {
+      log = appendLog(root, String(n));
+      if (!rec.log) rec.log = { rel: log.rel, earlier: log.earlier };
+      const blocked = (why) => new Stop(`I-D Advance: Blocked: queue stopped on step ${n}${why ? `. ${why.slice(0, MAX_LINE)}` : ''}`);
+      let qdir;
+      let before;
+      try {
+        removeWorktree(root, n);
+        fetchBranch(root, branch);
+        const ref = initiativeRef(root, branch);
+        before = refHead(root, ref);
+        qdir = prepareQueue(root, ref);
+      } catch (e) {
+        throw blocked(e instanceof Stop ? e.message : `${e.code || e.name}`);
+      }
+      const res = await runQueue(n, rec.pr, qdir, log.fd);
+      if (res.error) throw blocked(`could not start the merge queue (${res.error})`);
+      if (res.code !== 0) throw blocked(res.last);
+      rec.state = 'merged';
+      merged.add(n);
+      mergeOrder.push(n);
+      out(`I-D Advance: Complete: step ${n} merged`);
+      removeControl(root, n);
+      refresh();
+      const after = refHead(root, initiativeRef(root, branch));
+      lastMerge = { rec, before, after };
+      // After the last merge the end runs the Setup check instead, as the serial path does.
+      if (!allMerged()) {
+        const line = restartLine(root, n, before, after);
+        if (line) setStop(line, rec);
+      }
+    } catch (e) {
+      queueFailed = true;
+      setStop(e instanceof Stop ? e.message : `I-C Run: Blocked: driver error ${e.code || e.name}`, rec);
+    } finally {
+      if (log) closeSync(log.fd);
+      queueBusy = false;
+      notify();
+    }
+  };
+
+  for (;;) {
+    for (const rec of startable()) stepTask(rec);
+    if (!queueBusy && !queueFailed && readyOrder.length > 0) queueTask(recs.get(readyOrder.shift()));
+    if (running() === 0 && !queueBusy) break;
+    await wait();
+  }
+
+  const report = () => {
+    for (const s of chart.steps) {
+      const r = recs.get(s.step);
+      const state = merged.has(s.step) ? 'merged' : r.state === 'pending' && r.resume ? 'running' : r.state;
+      out(`I-C Run: Step ${s.step}: ${state}`);
+    }
+  };
+  const stopWith = (msg, log) => {
+    currentLog = log ? log.rel : null;
+    earlierLogs = log ? log.earlier : [];
+    return new Stop(msg);
+  };
+  if (stop.msg) {
+    report();
+    throw stopWith(stop.msg, stop.log);
+  }
+  if (!allMerged()) {
+    report();
+    const left = chart.steps.filter((s) => !merged.has(s.step)).length;
+    throw stopWith(`I-C Run: Blocked: no step can start, ${left} steps are not merged`, null);
+  }
+  if (lastMerge) {
+    // The last merge may have changed pack files that setup installs (0000373).
+    const lastSetup = changedSetup(root, lastMerge.before, lastMerge.after);
+    if (lastSetup.length > 0) {
+      reportSteps(mergeOrder);
+      throw stopWith(`I-D Advance: Setup: step ${lastMerge.rec.n} changed ${nameFiles(lastSetup)}. Rerun setup, then start a new driver.`, lastMerge.rec.log);
+    }
+  }
+  reportSteps(mergeOrder);
+  if (delivered(root, id, slug)) out(`I-E Delivery: Complete: initiative ${id}-${slug} archived, driver done`);
+  else out(`I-E Delivery: Pending: all ${chart.steps.length} steps merged, initiative delivery runs from the initiative skill`);
 }
 
 function reportSteps(ran) {

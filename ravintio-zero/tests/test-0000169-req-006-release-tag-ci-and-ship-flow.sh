@@ -70,7 +70,7 @@ assert_equals "yes" "$(has 'I-D Advance' "$(section '## Initiative steps' "$SHIP
 
 SS="$(section '## Ship stages' "$STD")"
 assert_equals "no" "$(has 'tag at Step 7' "$SS")" "roadmap-standards no longer says Step 7 tags"
-assert_equals "yes" "$(has 'git tag v{version} -m "{feature-id}" "$sha"' "$(section '### I-D Advance' "$STD")")" "I-D Advance still tags the squash commit"
+assert_equals "yes" "$(has 'tags the merge commit `v{version}`' "$(section '### I-D Advance' "$STD")")" "I-D Advance: the merge queue still tags the squash commit (0000379)"
 assert_equals "yes" "$(has 'release-tag' "$(cat "$REF")")" "pipeline-reference names the release-tag job"
 assert_equals "yes" "$(has 'release-tag' "$(cat "$OPS")")" "project-operations names the release-tag job"
 assert_equals "no" "$(has 'and the release tag' "$(cat "$C004")")" "custom-004 drops the release tag push"

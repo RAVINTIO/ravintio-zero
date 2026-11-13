@@ -58,6 +58,16 @@
 //   heading), the last build log line cut to 200 characters, the time since the last change,
 //   and whether plan/.initiative-runner.lock is held. With --once it always prints one.
 //
+//   Concurrent run (0000379 REQ-006): when one or more plan/.initiative-control/step-{n}/running
+//   files exist, the watcher reports every step with a running or ready file, in step order, and
+//   no longer reads plan/current/build-log.md. Step numbers must match ^[1-9][0-9]{0,2}$. For each
+//   step it reads the worktree build log plan/.initiative-worktrees/step-{n}/plan/current/build-log.md
+//   and the stream log plan/.initiative-logs/step-{n}.log. It prints "I-C Run: event: step {n}: ..."
+//   and "I-C Run: activity: step {n}: ..." lines, and per step a heartbeat
+//   "I-C Run: heartbeat: step {n}, phase ..., last ..., last change ... ago". A step with a ready
+//   file prints "I-C Run: heartbeat: step {n}, ready PR #{k}" instead. Commit events still print.
+//   With no control folder the output is unchanged.
+//
 //   Delivery: when the lock file and the initiative file are both gone, it prints one
 //   "I-E Delivery: ..." line and exits 0.
 //
@@ -88,6 +98,9 @@ const MAX_COMMITS = 100;
 const INITIATIVE = 'plan/current-initiative/initiative.md';
 const LOCK = 'plan/.initiative-runner.lock';
 const BUILD_LOG = 'plan/current/build-log.md';
+const CONTROL = 'plan/.initiative-control';
+const WORKTREES = 'plan/.initiative-worktrees';
+const STEP_N = /^[1-9][0-9]{0,2}$/;
 const ARCHIVE = 'plan/_archive';
 
 class Stop extends Error {}
@@ -202,6 +215,32 @@ function runningStep(root) {
   }
 }
 
+// Concurrent steps: [{ n, running, ready }] in step order, for each control folder step-{n} that
+// holds a running or ready file. Returns [] when no running file exists (0000379 REQ-006).
+function controlSteps(root) {
+  refuseLinks(root, CONTROL);
+  const dir = join(root, CONTROL);
+  if (!existsSync(dir)) return [];
+  const steps = [];
+  for (const name of readdirSync(dir)) {
+    const m = name.match(/^step-(.+)$/);
+    if (!m || !STEP_N.test(m[1])) continue;
+    const rel = `${CONTROL}/${name}`;
+    refuseLinks(root, rel);
+    const running = existsSync(join(root, rel, 'running'));
+    if (running) refuseLinks(root, `${rel}/running`);
+    let ready = '';
+    if (existsSync(join(root, rel, 'ready'))) {
+      refuseLinks(root, `${rel}/ready`);
+      ready = readFileSync(join(root, rel, 'ready'), 'utf8').trim();
+      if (!/^[0-9]{1,9}$/.test(ready)) ready = '?';
+    }
+    if (running || ready) steps.push({ n: Number(m[1]), running, ready });
+  }
+  if (!steps.some((s) => s.running)) return [];
+  return steps.sort((a, b) => a.n - b.n);
+}
+
 function git(root, args) {
   const r = spawnSync('git', ['-C', root, ...args], { encoding: 'utf8' });
   return r.status === 0 ? r.stdout : '';
@@ -234,6 +273,8 @@ function ago(ms) {
   return m < 1 ? 'under 1 minute' : `${m} minute${m === 1 ? '' : 's'}`;
 }
 
+const stepStates = new Map();
+const newLogState = () => ({ logPath: null, logOffset: 0, logRest: '' });
 const state = { path: null, seen: 0, head: null, lastBeat: null, staleKey: null, logPath: null, logOffset: 0, logRest: '', waiting: false };
 
 // Collapses control characters and whitespace runs to one space.
@@ -269,32 +310,32 @@ function summarise(event) {
 }
 
 // Prints the activity lines for stream events added to the step log since the last pass.
-function activity(opts, rel) {
+function activity(opts, rel, st = state, tag = '') {
   if (!existsSync(join(opts.root, rel))) return;
   refuseLinks(opts.root, rel);
   const file = join(opts.root, rel);
   const size = statSync(file).size;
-  if (state.logPath !== rel) {
-    state.logPath = rel;
-    state.logOffset = Math.min(opts.sinceBytes ?? size, size);
-    state.logRest = '';
+  if (st.logPath !== rel) {
+    st.logPath = rel;
+    st.logOffset = Math.min(opts.sinceBytes ?? size, size);
+    st.logRest = '';
   }
-  if (size < state.logOffset) {
-    state.logOffset = 0;
-    state.logRest = '';
+  if (size < st.logOffset) {
+    st.logOffset = 0;
+    st.logRest = '';
   }
-  if (size === state.logOffset) return;
+  if (size === st.logOffset) return;
   const fd = openSync(file, 'r');
   let chunk;
   try {
-    chunk = Buffer.alloc(size - state.logOffset);
-    readSync(fd, chunk, 0, chunk.length, state.logOffset);
+    chunk = Buffer.alloc(size - st.logOffset);
+    readSync(fd, chunk, 0, chunk.length, st.logOffset);
   } finally {
     closeSync(fd);
   }
-  state.logOffset = size;
-  const lines = (state.logRest + chunk.toString('utf8')).split('\n');
-  state.logRest = lines.pop();
+  st.logOffset = size;
+  const lines = (st.logRest + chunk.toString('utf8')).split('\n');
+  st.logRest = lines.pop();
   for (const l of lines) {
     if (l.trim() === '') continue;
     let event;
@@ -303,7 +344,7 @@ function activity(opts, rel) {
     } catch {
       continue;
     }
-    for (const s of summarise(event)) out(cut(`I-C Run: activity: ${s}`, MAX_ACTIVITY));
+    for (const s of summarise(event)) out(cut(`I-C Run: activity: ${tag}${s}`, MAX_ACTIVITY));
   }
 }
 
@@ -323,9 +364,11 @@ function pass(opts) {
   // With no plan/current/build-log.md the step has not written one yet. The watcher still reads
   // the newest archived log for events, but it skips the stale check (0000354).
   const hasCurrentLog = existsSync(join(root, BUILD_LOG));
-  if (!hasCurrentLog && !state.waiting) out('I-C Run: waiting for the build log');
-  state.waiting = !hasCurrentLog;
-  let rel = hasCurrentLog ? BUILD_LOG : newestArchived(root);
+  const steps = controlSteps(root);
+  const conc = steps.length > 0;
+  if (!conc && !hasCurrentLog && !state.waiting) out('I-C Run: waiting for the build log');
+  state.waiting = !conc && !hasCurrentLog;
+  let rel = conc ? '' : hasCurrentLog ? BUILD_LOG : newestArchived(root);
   let logText = rel ? readText(root, rel) : null;
   if (logText === null) rel = '';
   const lines = logText === null ? [] : logText.split(/\r?\n/);
@@ -350,10 +393,31 @@ function pass(opts) {
     state.seen = lines.length;
   }
 
+  // Concurrent steps: events and activity per step, each tagged with the step number.
+  const stepLines = new Map();
+  for (const s of steps) {
+    const brel = `${WORKTREES}/step-${s.n}/${BUILD_LOG}`;
+    const text = readText(root, brel);
+    const sl = text === null ? [] : text.split(/\r?\n/);
+    while (sl.length && sl[sl.length - 1] === '') sl.pop();
+    stepLines.set(s.n, { lines: sl, mtime: text === null ? null : statSync(join(root, brel)).mtimeMs });
+    let st = stepStates.get(s.n);
+    if (!st) {
+      st = { ...newLogState(), seen: opts.sinceLines ?? sl.length, init: true };
+      stepStates.set(s.n, st);
+    }
+    for (const l of sl.slice(Math.min(st.seen, sl.length))) {
+      const e = eventLine(l);
+      if (e) out(`I-C Run: event: step ${s.n}: ${e}`);
+    }
+    st.seen = sl.length;
+    activity(opts, `${LOGS}/step-${s.n}.log`, st, `step ${s.n}: `);
+  }
+
   // Step log activity.
   const position = initText === null ? '' : field(initText, 'position');
   const running = runningStep(root) || position;
-  if (/^[0-9]{1,4}$/.test(running)) activity(opts, `${LOGS}/step-${running}.log`);
+  if (!conc && /^[0-9]{1,4}$/.test(running)) activity(opts, `${LOGS}/step-${running}.log`);
 
   // Commit events. A last-seen commit that is not an ancestor of HEAD means the branch changed.
   const head = git(root, ['rev-parse', 'HEAD']).trim();
@@ -372,7 +436,7 @@ function pass(opts) {
 
   // Stale log: report each stale state once.
   const [latest] = readCommits(root, null, 1);
-  if (hasCurrentLog && mtime !== null && latest && latest.time - mtime >= STALE_MS && now - mtime > STALE_MS) {
+  if (!conc && hasCurrentLog && mtime !== null && latest && latest.time - mtime >= STALE_MS && now - mtime > STALE_MS) {
     const key = `${mtime}:${latest.sha}`;
     if (key !== state.staleKey) {
       state.staleKey = key;
@@ -383,6 +447,23 @@ function pass(opts) {
   // Heartbeat.
   if (opts.once || state.lastBeat === null || now - state.lastBeat >= HEARTBEAT_MS) {
     state.lastBeat = now;
+    if (conc) {
+      for (const s of steps) {
+        if (s.ready) {
+          out(`I-C Run: heartbeat: step ${s.n}, ready PR #${s.ready}`);
+          continue;
+        }
+        const { lines: sl, mtime: sm } = stepLines.get(s.n);
+        let ph = 'none';
+        for (const l of sl) {
+          const m = l.match(/^###\s+(P[0-9]+):/);
+          if (m) ph = m[1];
+        }
+        const lastLine = cut([...sl].reverse().find((l) => l.trim() !== '') ?? '', MAX_TAIL);
+        out(`I-C Run: heartbeat: step ${s.n}, phase ${ph}, last "${lastLine}", last change ${sm === null ? 'unknown' : ago(now - sm)} ago, lock ${lockHeld ? 'held' : 'free'}`);
+      }
+      return false;
+    }
     const step = runningStep(root) || (initText === null ? 'none' : field(initText, 'position') || 'unknown');
     let phase = 'none';
     for (const l of lines) {
