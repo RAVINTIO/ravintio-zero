@@ -1,7 +1,7 @@
 ---
 title: "ADR 0342: Steps never stop on pending migrations"
 summary: "Chart collects the human's answer for each pending migration, and a step session records one it has no row for and carries on."
-status: "proposed"
+status: "accepted"
 component: "ravintio-zero"
 version: "0.1.0"
 ---

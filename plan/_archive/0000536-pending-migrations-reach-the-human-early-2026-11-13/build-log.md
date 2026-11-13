@@ -148,6 +148,7 @@ Run mode: autonomous (2026-11-13T04:20:00Z, initiative step)
 | Parallel task batches | 0 |
 | Notes | Initiative step. The merge queue sets the version. |
 
+- CI duration: 348s (run 43373466633, 2026-11-13T05:45:58Z)
 - Complete: P4 (2026-11-13T05:38:47Z)
 
 ---
