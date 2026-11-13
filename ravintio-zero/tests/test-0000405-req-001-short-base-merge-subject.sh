@@ -31,6 +31,10 @@ case "$sub" in
   view)
     if [[ "$*" == *mergeCommit* ]]; then
       printf '{"mergeCommit":{"oid":"%s"}}\n' "$(cat "$D/pr-$k.merge")"
+    elif [[ "$*" == *headRefOid* ]]; then
+      # 0000411: the queue waits for GitHub to show the pushed head and a mergeable PR.
+      printf '{"headRefOid":"%s","mergeable":"MERGEABLE","mergeStateStatus":"CLEAN"}\n' \
+        "$(git --git-dir "$FAKE_REMOTE" rev-parse "refs/heads/$(cat "$D/pr-$k.head")" 2>/dev/null)"
     else
       printf '{"title":"%s","headRefName":"%s","baseRefName":"%s"}\n' \
         "$(cat "$D/pr-$k.title")" "$(cat "$D/pr-$k.head")" "$(cat "$D/pr-$k.base")"

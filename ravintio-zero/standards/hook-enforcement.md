@@ -18,6 +18,7 @@ RAVINTIO installs these deterministic enforcement hooks via `setup.sh`:
 - **auto-trigger-orchestrator** (UserPromptSubmit): At the start of every session in a RAVINTIO project (`ravintio-zero/` present and `plan/.orchestrator-active` absent), automatically loads the `ravintio-orchestrator` skill before the first prompt is processed. It fires once per session and records the session id in `plan/.orchestrator-loaded`. This is the primary trigger mechanism for Claude Code.
 - **check-design** (UserPromptSubmit): Injects the local time as `hh:mm` and the active component scope from `design.md` as additional context.
 - **check-reply-prefix** (Stop): While a run is active, warns when a reply lacks a valid phase or stage prefix and logs the miss to `plan/.prefix-misses.log`. A reply may lead with `hh:mm` before the prefix. The check skips a coordinator session while `plan/.initiative-runner.lock` exists. It never blocks.
+- **check-reply-writing** (Stop): Warns when a reply has a sentence over 25 words or a blocklist word. It runs only when `.claude/output-styles/ravintio-writing.md` exists. The note quotes up to 3 sentences and is advisory. It never blocks.
 - **commit-msg** (git hook): Blocks commits that break `commit-standards.md`. Exit 1 on violation; use `git commit --no-verify` to bypass intentionally.
 - **ratchet-check** (PreToolUse: Write, Edit): While a loop is active (a `plan/current/loop-state-*.md` with `status: active`), blocks writes that remove acceptance-criteria or in-scope lines from `plan/current/` artifacts. Strengthening passes; intentional weakening needs a human-written `plan/current/.ratchet-approve` line (single-use). Agents must never write that marker.
 
@@ -49,6 +50,7 @@ Fallback hooks, which Codex does not run for RAVINTIO. Follow each rule as an in
 - **check-orchestrator-presence**: In strict mode (`plan/.orchestrator-strict` present), load the orchestrator and write your session ID to `plan/.orchestrator-ack` before you act.
 - **check-design**: At the start of each prompt, read the active component scope in `plan/current/design.md`.
 - **check-reply-prefix**: Begin every reply in an active run with a valid prefix, as the reply conventions in the boot file describe.
+- **check-reply-writing**: Keep sentences under 25 words and avoid the blocklist words in `standards/writing-standards.md`.
 - **commit-msg** (git hook): Blocks commits that break `commit-standards.md`. Exit 1 on violation. Use `git commit --no-verify` to bypass intentionally.
 
 Project hooks run only after a person trusts them. Run `/hooks` in Codex to review and trust the RAVINTIO hooks. Until a person trusts them, nothing blocks a merge or a forced add, including in `codex exec`. Never run a pull request merge command against `main` yourself.

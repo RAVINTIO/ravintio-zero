@@ -74,6 +74,8 @@ ALLOWLIST=(
   "^docs/decisions-index\\.md\$${TAB}framework-cut-down"
   # Index rows quote the title and summary of an ADR from history (0000384).
   "^docs/decisions-index\\.md\$${TAB}^\\| \\[ADR-[0-9]{4}\\]"
+  # The prose baseline keys name old ADR files, whose file names hold the word (0000390).
+  "^plan/state/prose-baseline\\.json\$${TAB}^    \"(docs/adr/[0-9]{4}|plan/changelog/[0-9]{7})-[a-z0-9-]+\\.md\": \\{\$"
   # The 0000160 brand guard allowlist names the old folder pattern.
   "^ravintio-zero/tests/test-0000160-req-006-brand-guard\\.sh\$${TAB}planifest.{1,8}framework"
   # The shared brand guard allowlist holds those entries (0000394).

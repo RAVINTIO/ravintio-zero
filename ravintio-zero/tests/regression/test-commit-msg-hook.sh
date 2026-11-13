@@ -36,7 +36,7 @@ assert_equals "0" "$code" "clean feat commit exits 0"
 code=$(exit_of "fix(setup): skip Tier 1 tools in install_enforcement_hooks")
 assert_equals "0" "$code" "clean fix commit exits 0"
 
-code=$(exit_of "$(printf 'docs(standards): update commit-msg hook to blocking\n\nBody text is allowed.')")
+code=$(exit_of "$(printf 'docs(standards): update commit-msg hook to blocking\n\nBody text stays allowed.')")
 assert_equals "0" "$code" "commit with body exits 0"
 
 # ── AI attribution blocks ─────────────────────────────────────────────────

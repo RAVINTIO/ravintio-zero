@@ -87,6 +87,16 @@ Per-criterion outcomes:
 
 Write `plan/current/verification-report.md`: what was started and how, then per criterion the method, outcome, and observation evidence.
 
+## Docs edit pass
+
+- <!-- rule: p3-docs-edit-pass --> Scope: changed user-facing docs. That means files under `docs/`, README files, and the changelog. Plan records under `plan/` are out of scope.
+- Dispatch a fresh-context subagent at the primary tier, per `ravintio-zero/standards/agent-dispatch-standards.md`.
+- It reviews each changed doc against `ravintio-zero/standards/writing-standards.md` for problems a script misses. Examples are items grouped in threes for rhythm, a definition packed into one sentence, and a fragment that restates the sentence before it.
+- The subagent fixes what it finds. You record each change in the build log.
+- Loop mechanics follow `ravintio-loop-runner`, with loop id `docs-edit` and a cap of 3. The pass ends only when `node ravintio-zero/scripts/prose-check.mjs check --files {changed docs}` exits 0.
+- After 3 failed cycles, escalate in both run modes, in the loop-runner format.
+- If no user-facing doc changed, write `Skipped: docs edit pass (no user-facing doc changed)` in the build log.
+
 ## Security review
 
 Produce `plan/current/security-report.md`. Every finding names a specific file, endpoint, or configuration. Generic advice is not acceptable. Cover:
@@ -113,6 +123,7 @@ Read `plan/.run-mode`. The evidence is the same in both modes:
 2. Security findings, led by critical and high
 3. Execution evidence: what was run, what was observed, any `not-verifiable` criteria
 4. Search evidence: for any program reported missing, the `PATH` check commands with a found or not-found result, and each unverified claim by name
+5. Docs edit pass result: the changed docs, the cycle count, and the final `prose-check.mjs` exit code
 
 In `gated`, this gate stops for the human. Present the evidence. The human accepts, requests changes, or rejects. Agreement follows rule `agree-explicit` in `ravintio-orchestrator/references/orchestrator-p0-coaching.md`.
 

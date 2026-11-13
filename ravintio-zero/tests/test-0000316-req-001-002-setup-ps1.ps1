@@ -43,7 +43,7 @@ $cmds = Get-AllHookCommands (Join-Path $ws '.claude\settings.json')
 Assert-Equal 0 @($cmds | Where-Object { $_ -like 'node ".claude/*' }).Count "req-002: no command is relative to the working directory"
 Assert-Equal 0 @($cmds | Where-Object { $_ -notlike '*${CLAUDE_PROJECT_DIR}*' }).Count "req-002: every command reads CLAUDE_PROJECT_DIR"
 Assert-Equal 9 @($cmds | Where-Object { $_ -like '* guard *' }).Count "req-002: nine PreToolUse commands run in guard mode"
-Assert-Equal 4 @($cmds | Where-Object { $_ -like '* advisory *' }).Count "req-002: four commands run in advisory mode"
+Assert-Equal 5 @($cmds | Where-Object { $_ -like '* advisory *' }).Count "req-002: five commands run in advisory mode"
 Assert-True (Test-Path (Join-Path $ws '.claude\hooks\enforcement\guard-run.mjs')) "req-002: guard-run.mjs is installed"
 Remove-SetupWorkspace $ws
 

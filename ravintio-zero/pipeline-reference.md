@@ -195,6 +195,7 @@ Setup wires the enforcement hooks into `.claude/settings.json` on every install.
 | `check-orchestrator-presence` | UserPromptSubmit | Injects a reminder banner while a pipeline is active. Hard-blocks under strict mode |
 | `auto-trigger-orchestrator` | UserPromptSubmit | Loads the orchestrator skill once per session when no pipeline is active yet |
 | `check-reply-prefix` | Stop | Warns when the final reply in an active run lacks a valid prefix, and logs each miss. Never blocks |
+| `check-reply-writing` | Stop | Reports long sentences and blocklist words in the final reply when the writing output style is installed. Never blocks |
 
 A blocking hook exits 2 with a human-readable message. Every hook fails open on an unexpected error, so a broken hook never stops a session.
 

@@ -599,7 +599,7 @@ function Merge-EnforcementHookSettings {
     # Merge the eight enforcement hooks into settings.json: gate-write,
     # ratchet-check, em-dash-guard, merge-guard, and block-forced-add (PreToolUse), plus gate-write on Bash, then
     # auto-trigger-orchestrator, check-orchestrator-presence, and check-design
-    # (UserPromptSubmit), then check-reply-prefix (Stop). Idempotent. The entries match setup.sh in event,
+    # (UserPromptSubmit), then check-reply-prefix and check-reply-writing (Stop). Idempotent. The entries match setup.sh in event,
     # matcher, and order (0000035 ADR-001), and a parity suite checks it.
     param(
         [string]$SettingsPath,
@@ -624,7 +624,8 @@ function Merge-EnforcementHookSettings {
         (New-HookEntry '.*' 'check-design' $HooksDir)
     )
     $stopEntries = @(
-        (New-HookEntry '.*' 'check-reply-prefix' $HooksDir)
+        (New-HookEntry '.*' 'check-reply-prefix' $HooksDir),
+        (New-HookEntry '.*' 'check-reply-writing' $HooksDir)
     )
 
     if (Test-Path $SettingsPath) {
@@ -710,7 +711,7 @@ function Merge-EnforcementHookSettings {
             $existing.hooks | Add-Member -NotePropertyName 'Stop' -NotePropertyValue @() -Force
         }
         $filtered = @(Remove-RavintioHookCommands -Entries $existing.hooks.Stop `
-            -Pattern '(^|[\s"''/\\])(check-reply-prefix)\.mjs\b')
+            -Pattern '(^|[\s"''/\\])(check-reply-prefix|check-reply-writing)\.mjs\b')
         $existing.hooks.Stop = $filtered + $stopEntries
 
         # Depth 100 keeps deep user values whole (0000039 req-003).
@@ -1093,7 +1094,7 @@ function Install-CodexHooks {
     Write-Host "    block-forced-add (PreToolUse: Bash)"
     Write-Host "  Fallback hooks, stated as instructions in AGENTS.md:"
     Write-Host "    gate-write, ratchet-check, em-dash-guard, auto-trigger-orchestrator,"
-    Write-Host "    check-orchestrator-presence, check-design, check-reply-prefix"
+    Write-Host "    check-orchestrator-presence, check-design, check-reply-prefix, check-reply-writing"
     Write-Host "  Review and trust the project hooks with /hooks in Codex."
     Write-Host "  Until you trust it, Codex skips merge-guard and block-forced-add, including in codex exec."
 }
