@@ -408,7 +408,7 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 42 | 0000481-regenerate-after-every-merge | Regenerate shared files after every base merge | 0000482 | minor | 0.95.0 | merged | queue | 22 |
 | 43 | 0000483-mergeability-before-ci-wait | Check mergeability before a CI wait | 0000484 | minor | 0.93.0 | merged | ship | 30 |
 | 44 | 0000485-adr-number-collision | Parallel steps reserve distinct ids | 0000479 | minor | 0.94.0 | merged | adr | 22 |
-| 45 | 0000487-steps-apply-decision-rows | Steps apply the chart's Decisions rows | 0000488 | minor |  | pending | skills | 22 |
+| 45 | 0000487-steps-apply-decision-rows | Steps apply the chart's Decisions rows | 0000488 | minor | 0.98.0 | merged | skills | 22 |
 | 46 | 0000489-question-only-for-questions | Steps use Question only for real questions | 0000490 | minor |  | pending | skills | 45 |
 | 47 | 0000491-driver-favours-critical-path | Driver favours the critical path | 0000492 | minor |  | pending | driver | 41 |
 | 48 | 0000493-driver-starts-after-restart | Driver keeps starting steps after a Restart | 0000494 | minor |  | pending | driver | 47 |
@@ -468,3 +468,4 @@ The pack has no `src/` component. Each row is a file format in the pack that a s
 | 42 | #177 | tag v0.95.0 | 0.95.0 | 2026-11-11T03:58:15Z |
 | 29 | #180 | tag v0.96.0 | 0.96.0 | 2026-11-11T04:33:24Z |
 | 54 | #181 | tag v0.97.0 | 0.97.0 | 2026-11-11T04:48:52Z |
+| 45 | #179 | tag v0.98.0 | 0.98.0 | 2026-11-11T07:03:07Z |

@@ -27,6 +27,13 @@
  *      requirement. Any other "Postmortem:" line covers one "Resolved:" line
  *      or one "Rework:" line that names no requirement.
  *
+ *   9. Every Decisions row of the initiative chart that names this step has a
+ *      "Decision applied (initiative chart): {fork}" line or a "Decision not
+ *      applicable (initiative chart): {fork}" line (0000487). The chart is
+ *      plan/current-initiative/initiative.md under the project root. The step is
+ *      the chart row whose Feature id equals the log's Feature ID. A missing
+ *      chart, an unreadable chart, or no matching row skips the check.
+ *
  * Every finding names the phase or the unit. Exit codes: 0 = clean, 1 = findings.
  */
 
@@ -34,6 +41,8 @@ import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, basename, join } from "node:path";
 import { checkRecord } from "./postmortem-check.mjs";
+import { parseChart } from "./initiative-chart.mjs";
+import { rowsForStep } from "./decision-rows.mjs";
 
 const file = process.argv[2] ?? join(process.cwd(), "plan", "current", "build-log.md");
 const findings = [];
@@ -196,6 +205,33 @@ function commitTimes(path) {
   }
   for (const r of [...reworkReqs].sort()) {
     if (!covered.has(r)) findings.push(`Postmortem: ${r} has a "Rework:" line and no "Postmortem:" line that names it`);
+  }
+}
+
+// Check 9: every Decisions row that names this step has a log line (0000487).
+{
+  const featureId = field(text, "Feature ID");
+  const root = dirname(dirname(dirname(file)));
+  const chartPath = join(root, "plan", "current-initiative", "initiative.md");
+  if (featureId && existsSync(chartPath)) {
+    try {
+      const chartText = readFileSync(chartPath, "utf-8");
+      const row = parseChart(chartText).steps.find((s) => s.featureId === featureId);
+      if (row) {
+        const logged = (fork) =>
+          text.split("\n").some((line) => {
+            const body = line.replace(/^\s*(?:[-*]\s*)?/, "");
+            return ["Decision applied (initiative chart):", "Decision not applicable (initiative chart):"].some(
+              (prefix) => body.startsWith(prefix) && body.slice(prefix.length).trim().startsWith(fork),
+            );
+          });
+        for (const r of rowsForStep(chartText, row.step)) {
+          if (!logged(r.fork)) findings.push(`Decisions: step ${row.step} has no log line for the row "${r.fork}"`);
+        }
+      }
+    } catch {
+      // An unreadable chart skips the check.
+    }
   }
 }
 
