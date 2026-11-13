@@ -47,5 +47,24 @@ Run mode: autonomous (2026-11-13T04:20:00Z, initiative step)
 - Scope Lock (cross-session continuity): The build log line survives a session change and the coordinator reads it [source: draft-accepted (initiative)]
 - Scope Lock complete. All four scenario paths captured.
 - Design confirmed: draft-accepted (initiative), version plan 0.113.0 (minor bump on 0.112.0)
+- P0 End: 2026-11-13T04:24:40Z
+
+---
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-13T04:24:40Z` |
+| End | `2026-11-13T04:24:40Z` |
+| Wall clock | 2 |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Artifacts written inline. The set is small and the requirements share one rule text. |
+
+- Plan gate: draft-accepted (initiative). No P1 skip row marks yes.
 
 ---
