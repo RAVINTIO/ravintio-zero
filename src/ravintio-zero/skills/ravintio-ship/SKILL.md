@@ -67,6 +67,7 @@ Stop if it exits non-zero, in both run modes. Fix each finding it names, then re
 4. Copy all of `plan/current/` to the archive path, then delete it with `git rm -r -q plan/current` from the repo root. Use that literal path, with no `cd` and no glob, because the Claude Code safety check refuses a plain recursive delete. Never use an atomic move.
 5. `git add` everything: the archive, the deletions, and the link updates. Untracked artifacts must not be left behind. Check with `git status --porcelain` before committing.
    - In an active initiative, stage by explicit path: `plan/current/`, `plan/changelog/`, `plan/_archive/`, and each link update. Never stage a `plan/backlog/` entry the step did not write. The initiative skill queues those, and they stay untracked.
+   - Run `git status --porcelain plan/backlog` in the step's worktree. In a step worktree, every untracked entry there is one the step filed. Stage each one by explicit path and commit it, so the squash carries it. The driver keeps a worktree that holds untracked backlog entries and stops the queue (ADR-0325).
 
 ### Step 5: Build assessment
 
