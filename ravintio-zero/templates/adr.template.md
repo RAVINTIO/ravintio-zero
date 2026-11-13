@@ -2,6 +2,7 @@
 title: "ADR {{NNN}}: {{title}}"
 summary: "One paragraph summary of the decision and its impact."
 status: "proposed | accepted | deprecated | superseded"
+component: "{{component-id}}"
 version: "0.1.0"
 ---
 # ADR-{{NNN}} - {{title}}
@@ -9,6 +10,7 @@ version: "0.1.0"
 **Skill:** [plan](../skills/ravintio-plan/SKILL.md)
 **Feature:** {{feature-id}}
 **Component:** {{component-id}} (if scoped to one)
+**File:** `docs/adr/{NNNN}-{slug}.md`. The number is repo-wide, four digits, reserved with `node ravintio-zero/scripts/reserve-id.mjs --file docs/adr/.next-id`.
 **Date:** {{ISO-8601}}
 
 ## Context
@@ -52,5 +54,5 @@ version: "0.1.0"
 
 ## Superseded By
 
-- {{ADR-id that superseded this, if any}}
+- Superseded by {number}
 

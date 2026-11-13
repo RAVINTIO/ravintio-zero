@@ -67,11 +67,11 @@ The plan skill's Test impact scan fills this table. Write `none found` in a row 
 
 ## Concurrency plan
 
-Units in one batch run at the same time. A unit alone in its batch gives its reason. See the [guide](execution-plan-guide.md).
+Units in one batch run at the same time. A unit alone in its batch gives its reason. See the [guide](execution-plan-guide.md). The optional Shared resources column lists build output, ports, and lock files. Two units in one batch must not name the same resource.
 
-| Unit | Depends on | Writes | Batch | Sequential reason |
-|------|-----------|--------|-------|-------------------|
-| {{unit-id}} | {{unit-ids in earlier batches, or none}} | {{files the unit writes}} | {{batch-number}} | {{reason, or none when the batch holds other units}} |
+| Unit | Depends on | Writes | Batch | Sequential reason | Shared resources |
+|------|-----------|--------|-------|-------------------|------------------|
+| {{unit-id}} | {{unit-ids in earlier batches, or none}} | {{files the unit writes}} | {{batch-number}} | {{reason, or none when the batch holds other units}} | {{for example port:4321, or none}} |
 
 ## Assumptions
 

@@ -23,7 +23,7 @@ echo "=== (b) zero live references to the old name ==="
 HITS=$(grep -rn "$OLD_NAME" "$REPO" \
   --exclude-dir=.git --exclude-dir=.claude --exclude-dir=_temp \
   --exclude-dir=node_modules 2>/dev/null \
-  | grep -v "$REPO/plan/\|$REPO/CLAUDE.md\|decisions-index.md" \
+  | grep -v "$REPO/plan/\|$REPO/docs/adr/\|$REPO/CLAUDE.md\|decisions-index.md" \
   | grep -v "ravintio/$OLD_NAME" | cut -d: -f1 | sort -u | wc -l | tr -d ' ')
 assert_equals "0" "$HITS" "live files referencing the old name"
 
