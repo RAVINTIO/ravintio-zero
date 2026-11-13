@@ -61,6 +61,10 @@ after the last. If a suite changes one, the run fails and names the path with
 `Tree changed during the run`. The check skips ignored files and skips itself
 outside a git repository.
 
+Git ignores `.claude/skills/`, so the tree check cannot see it. Both runners
+list that folder before the first suite and after the last. If a suite adds or
+removes a path, the run fails and names it with `Skills changed during the run`.
+
 You can also run a single suite directly:
 
 ```bash
