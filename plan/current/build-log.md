@@ -41,5 +41,11 @@ Run mode: autonomous (2026-11-13T04:20:00Z, initiative step)
 - Decisions: none name step 61
 - Adoption mode: standard-iterative (signal: `plan/_archive/` beside `src/`-less pack source)
 - Baseline suite started in a clean clone (output in `/tmp/s61/baseline.txt`)
+- Scope Lock (happy path): Chart lists pending migration 0010, the human approves it, and the first step runs it with no question [source: draft-accepted (initiative)]
+- Scope Lock (first-run path): A chart with no pending migration lists none and writes no row [source: draft-accepted (initiative)]
+- Scope Lock (error path): A migration with no row gets a `Migration pending:` line and the step carries on [source: draft-accepted (initiative)]
+- Scope Lock (cross-session continuity): The build log line survives a session change and the coordinator reads it [source: draft-accepted (initiative)]
+- Scope Lock complete. All four scenario paths captured.
+- Design confirmed: draft-accepted (initiative), version plan 0.113.0 (minor bump on 0.112.0)
 
 ---
