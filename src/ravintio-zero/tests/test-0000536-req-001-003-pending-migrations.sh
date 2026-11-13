@@ -33,6 +33,7 @@ assert_contains "A row never approves \`all\`" "$MIG" "S-001: the migrator refus
 
 echo "=== req-003: the coordinator raises recorded migrations ==="
 assert_contains "rule: coord-migration-raise" "$STD" "AC-1: the coordinator rule exists"
+assert_not_contains "with the options \`all\` and \`none\`" "$STD" "S-001: the coordinator never offers all"
 assert_contains "Migration pending:" "$SKILL" "AC-1: the skill reads the log line"
 
 echo "=== caps ==="
