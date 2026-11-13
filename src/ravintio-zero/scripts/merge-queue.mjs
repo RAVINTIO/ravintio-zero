@@ -418,6 +418,12 @@ function cmdRun(a) {
     throw new Stop(`gh pr view failed: ${failText(e)}`);
   }
   const { title, headRefName: head, baseRefName: base } = info;
+  // Git would read a name that starts with a dash as an option (0000400).
+  for (const [field, value] of [["headRefName", head], ["baseRefName", base]]) {
+    if (typeof value !== "string" || value.startsWith("-")) {
+      throw new Stop(`${field} must not start with a dash: ${value}`);
+    }
+  }
   git(root, ["fetch", "origin", base, head]);
   const baseChart = git(root, ["show", `origin/${base}:${chartRel}`]);
   const row = checkTitle(baseChart, step, title);
