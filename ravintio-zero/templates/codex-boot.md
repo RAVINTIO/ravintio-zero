@@ -26,7 +26,7 @@ Project hooks run only after a person trusts them. Run `/hooks` in Codex to trus
 
 ## Reply Conventions
 
-Begin every reply in an active run with the time and a prefix. Use the form `hh:mm {prefix} {Status}: {one-liner}`. The hook gives the time. The status is Starting, Resuming, Complete, Question, Blocked, or Skipped.
+Begin every reply in an active run with the time and a prefix. Use the form `hh:mm {prefix} {Status}: {one-liner}`. Take the time from `date +%H:%M`. The status is Starting, Resuming, Complete, Question, Blocked, or Skipped.
 
 | Prefix | Use for |
 |--------|---------|
