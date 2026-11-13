@@ -182,6 +182,15 @@
 // and the final lines with "I-E Delivery:". A stop line names the reason and,
 // for a block, repeats the Blocked: message cut to 500 characters.
 //
+// Summary: every run prints a block before its final line (0000511, ADR-0341). The stop line or the I-E Delivery: line stays last. Each line starts
+// with "I-C Run: Summary:". "merged this run:" lists the steps the run merged, in merge order, or none.
+// "driver fixes:" counts the repairs the driver made by itself, then one "fix:" line repeats each of the
+// first 10. "action for the human:" ends the block. It reads none after a clean end, "run initiative
+// delivery from the initiative skill" while delivery is pending, "start a new driver" after a Restart:
+// stop, "run the setup command in the stop line, then start a new driver" after a Setup: stop, and
+// "read the stop line and the step log, then start a new driver" after any other stop. The block
+// changes no exit code.
+//
 // Exit codes:
 //   0  Delivery is complete.
 //   1  A stop: invalid or inactive initiative, existing lock, block, stalled
@@ -264,7 +273,43 @@ const clock = () => {
   const d = new Date();
   return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
 };
-const out = (line) => writeSync(1, `${clock()} ${line}\n`);
+// The run record. out() notes each merge line, each line that names a driver fix, and a pending
+// delivery, so the summary block at the end of the run needs no new state (0000511 ADR-0341).
+const record = { merged: [], fixes: [], pending: false };
+const MERGE_LINE = /^I-D Advance: Complete: step (\d+) merged$/;
+const FIX_LINE = /^(I-C Run: Cleared: |I-D Advance: Ready: step \d+ recovered |I-D Advance: Setup: step \d+ ran the approved |I-C Run: Starting: lock named process )/;
+const out = (line) => {
+  const merge = MERGE_LINE.exec(line);
+  if (merge) record.merged.push(merge[1]);
+  else if (FIX_LINE.test(line)) record.fixes.push(line);
+  else if (line.startsWith('I-E Delivery: Pending:')) record.pending = true;
+  writeSync(1, `${clock()} ${line}\n`);
+};
+
+// The one action the human takes after a run ends. stopMsg is the stop line, or '' for a run with no stop.
+function humanAction(stopMsg) {
+  if (!stopMsg) return record.pending ? 'run initiative delivery from the initiative skill' : 'none';
+  if (stopMsg.startsWith('I-D Advance: Restart:')) return 'start a new driver';
+  if (stopMsg.startsWith('I-D Advance: Setup:')) return 'run the setup command in the stop line, then start a new driver';
+  return 'read the stop line and the step log, then start a new driver';
+}
+
+// Prints the summary block once, before the final line of a run, so the stop line or the
+// I-E Delivery: line stays last. It never throws and changes no exit code.
+const MAX_SUMMARY_FIXES = 10;
+let summaryDone = false;
+function printSummary(stopMsg) {
+  if (summaryDone) return;
+  summaryDone = true;
+  try {
+    out(`I-C Run: Summary: merged this run: ${record.merged.length > 0 ? record.merged.join(', ') : 'none'}`);
+    out(`I-C Run: Summary: driver fixes: ${record.fixes.length}`);
+    for (const fix of record.fixes.slice(0, MAX_SUMMARY_FIXES)) out(`I-C Run: Summary: fix: ${fix}`.slice(0, MAX_LINE));
+    out(`I-C Run: Summary: action for the human: ${humanAction(stopMsg)}`);
+  } catch {
+    // The summary is a courtesy. A write failure must not hide the stop or change the exit code.
+  }
+}
 
 function parseArgs(argv) {
   let root = process.cwd();
@@ -675,6 +720,7 @@ for (const sig of ['SIGINT', 'SIGTERM', 'SIGHUP']) {
     if (activeChild) activeChild.kill(sig);
     for (const c of children) if (c !== activeChild) c.kill(sig);
     releaseLock();
+    printSummary(`I-C Run: Blocked: driver stopped by ${sig}`);
     out(withLog(`I-C Run: Blocked: driver stopped by ${sig}`));
     process.exit(1);
   });
@@ -769,6 +815,8 @@ async function main() {
       if (res.session) session = res.session;
       if (delivered(root, id, slug)) {
         ran.push(position);
+        record.merged.push(String(position));
+        printSummary('');
         reportSteps(ran);
         out(`I-E Delivery: Complete: initiative ${id}-${slug} archived, driver done`);
         return;
@@ -790,6 +838,7 @@ async function main() {
       closeSync(log.fd);
     }
     ran.push(position);
+    record.merged.push(String(position));
     if (rm.status !== 'active') throw new Stop(`I-C Run: Blocked: initiative status is ${rm.status}, not active`);
     const total = countSteps(rm.text);
     if (total > 0 && Number(rm.position) > total) {
@@ -804,6 +853,8 @@ async function main() {
           throw new Stop(`I-D Advance: Setup: step ${position} changed ${nameFiles(lastSetup)}. ${setupNote(done)}Rerun setup, then start a new driver.`);
         }
       }
+      record.pending = true;
+      printSummary('');
       reportSteps(ran);
       out(`I-E Delivery: Pending: all ${total} steps merged, initiative delivery runs from the initiative skill`);
       return;
@@ -1675,6 +1726,7 @@ async function schedule(root, cfg, rm, handoff = 0) {
       earlierLogs = stop.log ? stop.log.earlier : [];
       throw new Stop(stop.msg);
     }
+    printSummary('');
     out('I-D Advance: Restart: the old driver has no sessions left and is done');
     return;
   }
@@ -1711,6 +1763,8 @@ async function schedule(root, cfg, rm, handoff = 0) {
       }
     }
   }
+  record.pending = !delivered(root, id, slug);
+  printSummary('');
   reportSteps(mergeOrder);
   if (delivered(root, id, slug)) out(`I-E Delivery: Complete: initiative ${id}-${slug} archived, driver done`);
   else out(`I-E Delivery: Pending: all ${chart.steps.length} steps merged, initiative delivery runs from the initiative skill`);
@@ -1721,8 +1775,12 @@ function reportSteps(ran) {
 }
 
 main().then(
-  () => process.exit(0),
+  () => {
+    printSummary('');
+    process.exit(0);
+  },
   (e) => {
+    printSummary(e instanceof Stop ? e.message : 'I-C Run: Blocked: driver error');
     out(e instanceof Stop ? withLog(e.message) : `I-C Run: Blocked: driver error ${e.code || e.name}`);
     process.exit(e instanceof Restart ? EXIT_PLANNED : 1);
   },
