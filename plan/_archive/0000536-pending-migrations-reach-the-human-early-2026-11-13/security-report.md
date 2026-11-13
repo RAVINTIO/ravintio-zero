@@ -18,7 +18,7 @@ The change edits Markdown skills, one standard, and one Bash test. It adds no sc
 
 | ID | Severity | Category | Component | Description | Recommendation | Status |
 |----|----------|----------|-----------|-------------|----------------|--------|
-| S-001 | low | config | ravintio-zero | `ravintio-zero/standards/roadmap-standards.md:318` lets a `Migration:` row with the answer `all` run a migration with no per-finding review. The human approves the row at chart time. | None. The chart confirmation covers the row, and the migrator still skips code identifiers and fenced blocks. | accepted |
+| S-001 | low | config | ravintio-zero | `ravintio-zero/standards/roadmap-standards.md:318` lets a `Migration:` row with the answer `all` run a migration with no per-finding review. The human approves the row at chart time. | The human chose on 2026-11-13 to remove `all`. A row lists each approved finding, and a step applies only those. | fixed |
 | S-002 | informational | config | ravintio-zero | No guard or hook widens. `merge-guard`, `gate-write`, and `ratchet-check` are unchanged. | None. | mitigated |
 
 ## Dependency Audit

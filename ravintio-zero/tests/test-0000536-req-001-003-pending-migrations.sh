@@ -26,6 +26,10 @@ assert_contains "Migration pending: {id}" "$REF" "AC-2: check 1 names the log li
 assert_contains "Pending migrations first.** Check \`ravintio-zero/migrations/\` for \`.md\` files not in \`_done/\`. If found, invoke \`ravintio-migrator\` for each before any other phase work." "$REF" "check 1 keeps its old line"
 assert_contains "A step session never asks the human" "$REF" "AC-1: a step never asks"
 assert_contains "Migration:" "$MIG" "AC-1: the migrator reads a chart row"
+assert_not_contains "The answer is \`all\`" "$STD" "S-001: chart never offers all"
+assert_contains "never holds \`all\`" "$STD" "S-001: a row lists each approved finding"
+assert_contains "apply only the findings the row lists" "$STD" "S-001: a step applies listed findings only"
+assert_contains "A row never approves \`all\`" "$MIG" "S-001: the migrator refuses all"
 
 echo "=== req-003: the coordinator raises recorded migrations ==="
 assert_contains "rule: coord-migration-raise" "$STD" "AC-1: the coordinator rule exists"

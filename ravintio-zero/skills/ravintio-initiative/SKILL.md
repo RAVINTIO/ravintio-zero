@@ -68,7 +68,7 @@ Before each report, run `node ravintio-zero/scripts/initiative-status.mjs`. It p
 
 End each report with two parts:
 
-- **Decisions for the human:** each open question or stop that needs the human, with the options. Include each `Migration pending:` line from a step build log, with the options `all` and `none`. Write `none` if there is none.
+- **Decisions for the human:** each open question or stop that needs the human, with the options. Include each `Migration pending:` line from a step build log. Show its findings and take the human's answer for each one. Write `none` if there is none.
 - **Routine fixes made:** each pre-approved fix the coordinator applied, such as a conflict, a CI rerun, or a setup rerun. Write `none` if there is none.
 
 ## Stops

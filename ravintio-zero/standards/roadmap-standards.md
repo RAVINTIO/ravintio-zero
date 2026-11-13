@@ -219,11 +219,11 @@ A pre-approval covers its exact command only. A step that would run a different 
 A step session has no human to answer a migration question. Chart takes each answer up front.
 
 <!-- rule: chart-migration-rows -->
-At Chart, run resume detection and list every `pending migration` finding. Skip a migration whose `Applies when:` condition is false. Ask the human one migration at a time. The answer is `all` to apply every finding or `none` to skip. Write each answer as a `## Decisions` row. The row's Fork starts with `Migration:` and names the migration id. The answer holds `all` or `none`. The human's confirmation of the chart approves every row. Chart starts no step while a pending migration has no answer.
+At Chart, run resume detection and list every `pending migration` finding. Skip a migration whose `Applies when:` condition is false. Ask the human one migration at a time. Show each finding the migration's scan returns, as `ravintio-migrator` Step 3 does. The human approves findings one by one. The answer lists each approved finding as `{file}:{line}`, or holds `none`. It never holds `all`. Write each answer as a `## Decisions` row. The row's Fork starts with `Migration:` and names the migration id. The human's confirmation of the chart approves every row. Chart starts no step while a pending migration has no answer.
 
 | Step | Fork | Pre-approved answer | Bump effect |
 |------|------|---------------------|-------------|
-| 1 | Migration: 0010 | all | none |
+| 1 | Migration: 0010 | docs/about.md:12, plan/backlog/index.md:4 | none |
 
 ### Chart-time P1 skips
 
@@ -315,7 +315,7 @@ Run executes one initiative step. Concurrent steps are the normal flow: the driv
 - <!-- rule: icrun-ci-criterion --> A criterion marked `CI` in `## Criteria` counts as validated only after the step's first CI run.
 - <!-- rule: icrun-queue --> The step reads the queue at P0 and again before P4 raises the PR. Under the concurrent driver the queue is `$RAVINTIO_INITIATIVE_ROOT/plan/.initiative-queue/`. Otherwise it is `plan/.initiative-queue/`. The start prompt lists the folder names of the items that name the step. The step also runs `node ravintio-zero/scripts/initiative-queue.mjs list --step {n}` and reads each `item.md` itself. It acts only on an item whose `**Step:**` line names its number. If the destination or the content holds `{id}`, it reserves one id on its feature branch with `node ravintio-zero/scripts/reserve-id.mjs`. It then replaces each `{id}`. It writes the item's content to the item's `**Destination:**` path. It commits that path by explicit path on its feature branch, so the squash carries it. The step never moves, renames, or deletes the queue or an item. The coordinator clears the items after the step merges.
 - <!-- rule: icrun-confirmation --> A confirmation that a skill asks for counts as a fork. If a `Confirmation:` row in `## Decisions` names the skill, its step, and the exact command, run that command with no stop and log `Decision applied (initiative chart): {fork}`. If the command differs in any way, the step stops.
-- <!-- rule: icrun-migration --> A pending migration never stops the step. If a `Migration:` row in `## Decisions` names the migration, run `ravintio-migrator` with the row's answer as the reply. Log `Decision applied (initiative chart): {fork}`. Otherwise write `Migration pending: {id}` in the build log under the P0 block and carry on. Never ask the human.
+- <!-- rule: icrun-migration --> A pending migration never stops the step. If a `Migration:` row in `## Decisions` names the migration, run `ravintio-migrator` and apply only the findings the row lists. Write `Migration pending: {id}` for any finding the row does not list. Log `Decision applied (initiative chart): {fork}`. Otherwise write `Migration pending: {id}` in the build log under the P0 block and carry on. Never ask the human.
 - <!-- rule: icrun-p1-skip --> P1 runs unless the step's row in `## P1 skips` says `yes`. A step with no `yes` row that would skip P1 prints `I-C Run: Blocked: step {n} has no P1 skip row marked yes.` and stops. A missing table counts as an empty one.
 - <!-- rule: icrun-p1-skipped-log --> If a step skips P1 on a `yes` row, the build log holds `Skipped: P1 (chart row: step {n}, {reason})`.
 - <!-- rule: icrun-p0-stops --> P0 stops only when a backlog entry is too vague to draft a brief from. Print `Blocked:` with the entry and what is missing. The exception stops in Exception Stops still apply, including the credential stop.

@@ -44,7 +44,7 @@ Batch 1 of {total_batches}:
 Apply all in this batch? (all / none / pick, enter numbers to apply selectively, e.g. "1 3 5")
 ```
 
-In an initiative step, a `Migration:` row in `## Decisions` gives the answer, `all` or `none`. Use it in place of the human's reply and ask no question.
+In an initiative step, a `Migration:` row in `## Decisions` gives the answer. It lists the approved findings as `{file}:{line}`, or holds `none`. Apply only the listed findings and ask no question. A row never approves `all`. If the scan returns a finding the row does not list, leave it and write `Migration pending: {id}` in the build log.
 
 ### Step 4: Apply confirmed changes
 
