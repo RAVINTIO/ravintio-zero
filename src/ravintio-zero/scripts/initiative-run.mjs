@@ -155,6 +155,7 @@ import { dirname, isAbsolute, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseChart, readySteps } from './initiative-chart.mjs';
 import { withInitiativeLabels } from './initiative-labels.mjs';
+import { namedItems } from './initiative-queue.mjs';
 
 const INITIATIVE = 'plan/current-initiative/initiative.md';
 const LOCK = 'plan/.initiative-runner.lock';
@@ -194,7 +195,7 @@ const SESSION = /^[A-Za-z0-9_-]{8,128}$/;
 const SESSION_FIELD = /"session_id"\s*:\s*"([^"]*)"/g;
 const MAX_RESUMES = 2;
 const REPLY_MAX = 4 * 1024 * 1024;
-const CONTINUE_PROMPT = (n, log) => `Continue initiative step ${n}. ${log}. Do not end your turn before I-D Advance: Complete:, a Blocked: line, or a Question: line.`;
+const CONTINUE_PROMPT = (n, log, queue = '') => `Continue initiative step ${n}. ${log}. Do not end your turn before I-D Advance: Complete:, a Blocked: line, or a Question: line.${queue}`;
 const LOG_LINE = 'Read plan/current/build-log.md first';
 
 // The concurrent driver (0000379). It runs only when the chart holds a **Concurrency:** field.
@@ -513,6 +514,19 @@ function logLine(root, featureId) {
 
 const WRITING_LINE = 'Write all prose to ravintio-zero/standards/writing-standards.md.';
 
+// Names the queue items that name the step (0000444). The sentence holds folder names that match
+// NAME and the queue path. It never holds item content. An empty queue adds nothing.
+function queueSentence(queueRoot, position) {
+  try {
+    const { items } = namedItems(queueRoot, position);
+    if (items.length === 0) return '';
+    const dir = join(queueRoot, 'plan', '.initiative-queue');
+    return ` Queue items name this step: ${items.map((i) => i.name).join(', ')}. Read item.md in each folder under ${dir}/, act on it, and commit its destination or log "Queue item {name}: {reason}" in the build log.`;
+  } catch {
+    return '';
+  }
+}
+
 // Runs one claude -p session for the step. With a session id it adds --resume and the continue
 // prompt. Returns the exit status and the last session_id the child printed, or '' if none.
 // The concurrent driver passes opts.cwd, the step worktree, and opts.env, the extra variables.
@@ -521,8 +535,9 @@ function runStep(root, position, cfg, fd, labels, resumeId, opts = {}) {
     const bin = process.env.CLAUDE_BIN || 'claude';
     const args = ['-p', '--output-format', 'stream-json', '--verbose', '--permission-mode', 'auto', '--append-system-prompt', WRITING_LINE, '--model', cfg.model];
     if (cfg.turns) args.push('--max-turns', cfg.turns);
-    if (resumeId) args.push('--resume', resumeId, CONTINUE_PROMPT(position, logLine(opts.cwd ?? root, opts.featureId)));
-    else args.push(`Run initiative step ${position}`);
+    const queue = queueSentence(opts.queueRoot ?? root, position);
+    if (resumeId) args.push('--resume', resumeId, CONTINUE_PROMPT(position, logLine(opts.cwd ?? root, opts.featureId), queue));
+    else args.push(queue ? `Run initiative step ${position}.${queue}` : `Run initiative step ${position}`);
     const child = spawn(bin, args, {
       cwd: opts.cwd ?? root,
       env: { ...process.env, CLAUDE_CODE_PRINT_BG_WAIT_CEILING_MS: process.env.CLAUDE_CODE_PRINT_BG_WAIT_CEILING_MS ?? '0', RAVINTIO_INITIATIVE_STEP: '1', OTEL_RESOURCE_ATTRIBUTES: withInitiativeLabels(process.env.OTEL_RESOURCE_ATTRIBUTES, labels.id, labels.slug, position), ...(opts.env ?? {}) },
@@ -1005,6 +1020,7 @@ async function runScheduledStep(root, rec, cfg, rm) {
     out(`I-C Run: Starting: initiative step ${position} in a fresh session`);
     const opts = {
       cwd: wt,
+      queueRoot: root,
       featureId: rec.featureId,
       env: { RAVINTIO_INITIATIVE_QUEUE: '1', RAVINTIO_INITIATIVE_ROOT: root, RAVINTIO_INITIATIVE_CONTROL: ctl },
     };
