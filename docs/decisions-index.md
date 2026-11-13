@@ -3,7 +3,7 @@
 > Change record. Index of all ADRs across all features. Updated after every pipeline run.
 > Do not archive this file. Update it in place.
 
-Last updated: 0000507-hook-check-after-setup
+Last updated: 0000509-clear-merged-ready-files
 
 ---
 
