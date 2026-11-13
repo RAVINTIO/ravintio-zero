@@ -40,6 +40,17 @@ Times are UTC. "Coordinator" marks a mistake by the coordinator session. A blame
 | 30 | 2026-11-10 | 26 | A clean base merge left `plan/backlog/index.md` stale, because the queue regenerates shared files only on a conflict. CI failed on PR #171 | PR #171, 22:24 | Coordinator regenerated the index. Step 42 |
 | 31 | 2026-11-10 | 40 | The step ignored the `25-41` Decisions row and ran its suites serially, about 30 minutes on the critical path | step 40 activity, 21:57 to 22:52 | Step 45 |
 
+| 32 | 2026-11-13 | 55 | The driver stopped while PR #195 was green. The coordinator merged it by hand with the merge queue | PR #195, v0.110.0 | Rule: merge ready PRs by hand after a stop |
+| 33 | 2026-11-13 | coordinator | The coordinator called entry 0000532 a duplicate of 0000531, and the human agreed to delete it. The entries differ, so the coordinator kept it | `plan/backlog/0000531-step-session-finds-unfinished-step`, `plan/backlog/0000532-self-matching-pgrep-wait` | Reversed before any delete |
+| 34 | 2026-11-13 | 57 | The new stop summary first printed after the final line and broke five suites. The step moved it before the final line | PR #197 | Fixed in the step. Entry 0000533 |
+| 35 | 2026-11-13 | coordinator | The first chart branch for step 60 reserved ids that later merges had taken. The coordinator rebuilt it as `feat/0000360-chart-steps-60-61` | PR #198 | Ids renumbered by hand |
+| 36 | 2026-11-13 | 60, 61 | Step replies stamped times about one hour behind the clock, for example 04:56 at 05:13 and 04:22 at 05:22 local time. Step 60 shipped the clock fix after both steps started | watcher activity lines, `step-60.log`, `step-61.log` | 0000534 for later steps |
+| 37 | 2026-11-13 | 60 | A `pgrep -f` wait matched its own shell again and ran to the time limit | `plan/retrospectives/0000534-step-sessions-receive-clock-2026-11-13.md` line 25 | Entry 0000532 open |
+| 38 | 2026-11-13 | 60, 61 | Parallel steps took the same ADR number and backlog id, and both tracked `plan/.feature-id`. The queue stopped with "conflict in plan/.feature-id, which the queue does not resolve" | driver output, PR #200 | Coordinator resolved by hand. Entry 0000479 open |
+| 39 | 2026-11-13 | 61 | Security finding S-001: a `Migration: … all` chart row ran a whole migration without review of each finding. The human chose to remove `all` | PR #200 security report | Fixed in #200 |
+| 40 | 2026-11-13 | 61 | The step first edited only the installed tree. Running `run-tests.sh` from the tests folder gave path failures | `step-61.log` | Entry 0000528 open |
+| 41 | 2026-11-13 | coordinator | The coordinator asked the human whether to start I-E Delivery, a stage the skill already defines. The human called the question unnecessary | coordinator session | Entry 0000541 open |
+
 ## Interim workarounds still in use
 
 The coordinator runs these on every step until fixes land:
