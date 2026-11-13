@@ -35,7 +35,7 @@ Wire `merge-guard` for `Bash`. State every other rule as an instruction in `AGEN
 ## Consequences
 
 **Positive:**
-- Every wired hook has a confirmed contract. Users see what is enforced.
+- Every wired hook has a confirmed contract. Users see what the hooks enforce.
 
 **Negative:**
 - Codex enforces less than Claude Code until a later feature confirms more contracts.

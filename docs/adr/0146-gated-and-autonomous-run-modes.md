@@ -54,7 +54,7 @@ Each stop prints a message that starts with `Blocked:` and names the action the 
 
 Each stop appends a `Blocked:` line to the build log, and the human's answer appends a `Resolved:` line. A resumed run does not pass an unresolved stop. P3 added this record for security finding F-002.
 
-**Resume rule.** On resume, a missing or unknown `plan/.run-mode` makes the orchestrator ask the run-mode question. It names the value it found, or says the file is missing. It then writes the answer and logs it. A valid value restores that mode without a question. The fresh-start stale check is unchanged.
+**Resume rule.** On resume, a missing or unknown `plan/.run-mode` makes the orchestrator ask the run-mode question. It names the value it found, or says the file is missing. It then writes the answer and logs it. A valid value restores that mode without a question. The fresh-start stale check stays the same.
 
 **Data ownership.** The orchestrator alone writes `plan/.run-mode`. Phase skills read it and never write it.
 

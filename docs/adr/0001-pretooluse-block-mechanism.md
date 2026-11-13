@@ -22,12 +22,12 @@ feature: "0000001-context-mode-enforcement-hooks"
 
 Claude Code `PreToolUse` hooks have two distinct mechanisms for blocking a tool call:
 
-1. **Exit code 2** — the script exits with code 2; Claude Code ignores stdout and feeds stderr text back to Claude as a raw error message.
-2. **hookSpecificOutput JSON** — the script exits 0 and outputs `{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"..."}}` to stdout. Claude Code presents the `permissionDecisionReason` to the agent as the block rationale.
+1. **Exit code 2**: the script exits with code 2. Claude Code ignores stdout and feeds stderr text back to Claude as a raw error message.
+2. **hookSpecificOutput JSON**: the script exits 0 and outputs `{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"..."}}` to stdout. Claude Code presents the `permissionDecisionReason` to the agent as the block rationale.
 
-The primary goal of this feature is not just to prevent the tool call — it is to redirect the agent to the correct `ctx_*` replacement tool. The block message must be actionable, not an error.
+This feature does more than prevent the tool call. It redirects the agent to the correct `ctx_*` replacement tool. The block message must be actionable, not an error.
 
-A third option — top-level `decision: "block"` / `reason` — exists in the docs but is marked deprecated for `PreToolUse`. It must not be used.
+A third option, top-level `decision: "block"` / `reason`, exists in the docs but the docs mark it deprecated for `PreToolUse`. Do not use it.
 
 ---
 
@@ -40,7 +40,7 @@ The `permissionDecisionReason` must include:
 - The exact `ctx_*` replacement with call syntax
 - The original input (command / URL / pattern) so the agent can reconstruct the equivalent call without re-reading the tool invocation
 
-Exit 0 in all cases — including the deny path.
+Exit 0 in all cases, including the deny path.
 
 ---
 
@@ -66,22 +66,22 @@ Exit 0 in all cases — including the deny path.
 ## Consequences
 
 **Positive:**
-- The agent receives an actionable redirect instruction, not a raw error — it can immediately construct and call the correct `ctx_*` tool
+- The agent receives an actionable redirect instruction, not a raw error, so it can immediately construct and call the correct `ctx_*` tool
 - Using the current (non-deprecated) API ensures compatibility with future Claude Code versions
 - Exit 0 in all paths means no risk of the hook process being interpreted as a system error
 
 **Negative:**
-- Scripts must parse and emit JSON — more code than a simple `exit 2` + `echo "error"` approach
-- The `hookSpecificOutput` envelope adds verbosity; the JSON structure must be exact or Claude Code will ignore it
+- Scripts must parse and emit JSON, which takes more code than a plain `exit 2` + `echo "error"` approach
+- The `hookSpecificOutput` envelope adds verbosity. The JSON structure must be exact or Claude Code will ignore it
 
 **Risks:**
-- If Claude Code silently changes the `hookSpecificOutput` schema in a future version, blocks will fail silently (exit 0 with unrecognised JSON = allow). Mitigated by: smoke test in validate phase that confirms a deny is actually surfaced to the agent.
+- If Claude Code silently changes the `hookSpecificOutput` schema in a future version, blocks will fail silently (exit 0 with unrecognised JSON = allow). Mitigated by: smoke test in validate phase that confirms the agent actually receives the deny.
 
 ---
 
 ## Related ADRs
 
-- ADR-0002 - related-to (allowlist affects what the deny path is triggered on for Bash)
+- ADR-0002 - related-to (the allowlist affects which Bash calls trigger the deny path)
 - ADR-0003 - depends-on (blocking strategy determines how often this output format fires)
 
 ---

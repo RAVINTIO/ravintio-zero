@@ -24,7 +24,7 @@ The write gate must answer two questions before allowing a file write to proceed
 1. Has a confirmed design been produced (i.e. is there a `plan/current/design.md`)?
 2. Is the target file path within the approved component scope of that design?
 
-Several approaches exist for answering question 2. The choice affects how easy it is to correctly configure scope, how brittle the gate is, and whether the gate can be fooled or bypassed.
+Several approaches exist for answering question 2. The choice affects how hard it is to configure scope correctly, how brittle the gate is, and whether the gate can be fooled or bypassed.
 
 The gate runs as a hook script with no LLM access, no network, and no npm dependencies. It must complete in milliseconds.
 
@@ -32,15 +32,15 @@ The gate runs as a hook script with no LLM access, no network, and no npm depend
 
 ## Decision
 
-**Check 1 — Always-permitted paths:** `plan/`, `docs/`, `CLAUDE.md`, `AGENTS.md` pass immediately. These are planning and documentation artefacts that must never be blocked (otherwise plan-phase work becomes self-blocking).
+**Check 1 (always-permitted paths):** `plan/`, `docs/`, `CLAUDE.md`, `AGENTS.md` pass immediately. These are planning and documentation artefacts that must never be blocked (otherwise plan-phase work becomes self-blocking).
 
-**Check 2 — Design existence:** If the target is not always-permitted and `plan/current/design.md` does not exist, block with exit code 2.
+**Check 2 (design existence):** If the target is not always-permitted and `plan/current/design.md` does not exist, block with exit code 2.
 
-**Check 3 — Path prefix membership:** If `design.md` exists, extract the component paths list from the design (canonical heading: `## Component Paths` or `## Scope`). The target path must match at least one listed prefix (case-insensitive, normalised separators). If no match, block with exit code 2.
+**Check 3 (path prefix membership):** If `design.md` exists, extract the component paths list from the design (canonical heading: `## Component Paths` or `## Scope`). The target path must match at least one listed prefix (case-insensitive, normalised separators). If no match, block with exit code 2.
 
-Path matching uses prefix comparison: a listed path of `planifest-framework/hooks/` permits any file under that directory. The target path is resolved to an absolute path and compared against `{cwd}/{listed_prefix}`.
+Path matching uses prefix comparison: a listed path of `planifest-framework/hooks/` permits any file under that directory. The gate resolves the target path to an absolute path and compares it against `{cwd}/{listed_prefix}`.
 
-**Failure fallback:** If `design.md` exists but the component paths section cannot be parsed (unrecognised heading format), the gate logs a warning to stderr and passes through (does not block). This prevents misconfigured design files from blocking all writes.
+**Failure fallback:** If `design.md` exists but the gate cannot parse its component paths section (unrecognised heading format), the gate logs a warning to stderr. It then passes through and does not block. This prevents misconfigured design files from blocking all writes.
 
 ---
 
@@ -70,14 +70,14 @@ Path matching uses prefix comparison: a listed path of `planifest-framework/hook
 ## Consequences
 
 **Positive:**
-- Deterministic, fast, zero LLM dependency — runs in microseconds
+- Deterministic and fast, with zero LLM dependency. Runs in microseconds
 - Single source of truth: component paths in design.md drive both documentation and enforcement
-- Prefix matching is intuitive: declare `src/payments/` and all files under it are permitted
+- Prefix matching is intuitive: declare `src/payments/` and the gate permits all files under it
 
 **Negative:**
 - Gate depends on design.md being correctly formatted with the canonical heading. A typo in the heading silently disables path-membership enforcement (falls through to pass-through mode)
-- Cannot understand semantic scope — a file path that "should" be out of scope but happens to be under a permitted prefix will pass. E.g. `planifest-framework/hooks/unrelated-experiment.mjs` passes if `planifest-framework/hooks/` is listed
-- Always-permitted list (`plan/`, `docs/`) is hardcoded; if the project layout changes, the list must be updated in the script
+- Cannot understand semantic scope: a file path that "should" be out of scope but happens to be under a permitted prefix will pass. E.g. `planifest-framework/hooks/unrelated-experiment.mjs` passes if the design lists `planifest-framework/hooks/`
+- The script hardcodes the always-permitted list (`plan/`, `docs/`). If the project layout changes, the list needs updating in the script
 
 **Risks:**
 - Design.md heading format must be documented and enforced in the codegen-agent SKILL.md. If the format diverges, the gate silently degrades to pass-through mode (R-006 in risk register).
@@ -87,7 +87,7 @@ Path matching uses prefix comparison: a listed path of `planifest-framework/hook
 ## Related ADRs
 
 - ADR-0005 - related-to (gate applies to all tiers via shared script)
-- ADR-0006 - depends-on (cwd from common envelope is required for path resolution)
+- ADR-0006 - depends-on (path resolution requires cwd from the common envelope)
 - ADR-0009 - related-to (parse failure falls through to pass-through per exit-0 policy)
 
 ---

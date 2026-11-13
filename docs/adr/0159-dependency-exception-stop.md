@@ -49,7 +49,7 @@ Add a sixth row to the Exception Stops table in the orchestrator skill.
 
 **Positive:**
 - No run adds a library or service that a human has not approved.
-- The approval is recorded in a `Resolved:` line.
+- A `Resolved:` line records the approval.
 
 **Negative:**
 - An interactive run can stop for a dependency the human considers trivial.

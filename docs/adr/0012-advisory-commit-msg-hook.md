@@ -8,11 +8,11 @@ deciders: [human-on-the-loop]
 component: "ravintio-zero"
 feature: "0000003-hook-based-enforcement"
 ---
-# ADR-0012 — Blocking commit-msg hook
+# ADR-0012 - Blocking commit-msg hook
 
 ## Context
 
-REQ-023 requires a commit message standard enforced via a `commit-msg` Git hook. The original decision (20 Apr 2026) made the hook advisory (exit 0). This was amended after AI agents were observed appending `Co-Authored-By` attribution lines that violate the standard — advisory warnings were insufficient to change agent behavior.
+REQ-023 requires a commit message standard enforced via a `commit-msg` Git hook. The original decision (20 Apr 2026) made the hook advisory (exit 0). The team amended this after observing AI agents append `Co-Authored-By` attribution lines that violate the standard. Advisory warnings did not change agent behavior.
 
 ## Decision
 
@@ -20,18 +20,18 @@ The `commit-msg` hook is **blocking**: it exits 1 on any violation, preventing t
 
 ## Rationale
 
-1. **Advisory hooks don't change agent behavior.** AI agents follow system-level instructions to append attribution; a warning printed after the fact is invisible to that decision path. Only a hard block at commit time is effective.
+1. **Advisory hooks don't change agent behavior.** AI agents follow system-level instructions to append attribution. A warning printed after the fact is invisible to that decision path. Only a hard block at commit time is effective.
 2. **`--no-verify` is a deliberate opt-out.** A human who needs to bypass for an emergency can do so explicitly. The original "bypass parity" argument conflated ease of bypass with reason to not enforce.
-3. **CLAUDE.md reinforces the rule.** The blocking hook is a second layer — `CLAUDE.md` states the rule, the hook enforces it mechanically.
-4. **Consistent with gate-write philosophy.** Planifest already uses blocking hooks for write enforcement; commit message enforcement should follow the same model.
+3. **CLAUDE.md reinforces the rule.** The blocking hook is a second layer: `CLAUDE.md` states the rule and the hook enforces it mechanically.
+4. **Consistent with gate-write philosophy.** Planifest already uses blocking hooks for write enforcement, so commit message enforcement should follow the same model.
 
 ## Alternatives considered
 
-- **Advisory hook (exit 0):** Original decision. Insufficient — AI agents ignore warnings appended post-commit.
+- **Advisory hook (exit 0):** Original decision. Insufficient: AI agents ignore warnings appended post-commit.
 - **No hook, documentation only:** Rejected. No feedback loop at commit time.
 
 ## Consequences
 
-- Commits with AI attribution, affirmatory language, or >72-char subjects will fail until the message is corrected.
-- `git commit --no-verify` bypasses the hook — this is intentional for human emergencies.
-- The `CLAUDE.md` rule is the primary agent-facing enforcement; this hook is the mechanical backstop.
+- Commits with AI attribution, affirmatory language, or >72-char subjects will fail until you correct the message.
+- `git commit --no-verify` bypasses the hook. This is intentional for human emergencies.
+- The `CLAUDE.md` rule is the primary agent-facing enforcement, and this hook is the mechanical backstop.

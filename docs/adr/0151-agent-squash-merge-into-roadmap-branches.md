@@ -17,7 +17,7 @@ feature: "0000043-autonomous-roadmaps"
 
 The 0000042 run-mode ADR says the agent never merges a pull request and never commits to `main`. That rule holds in every run mode. A roadmap chain breaks against it. Step two builds on step one, so step one must be on the roadmap branch before step two starts. If a human merges every step, the chain stops after each one.
 
-The human asked for this narrow change: the agent may run `gh pr merge --squash` only into `roadmap/*`, only after a clean P3 with green CI, and a hook must enforce it. The human also chose squash merges for steps and a merge commit for the roadmap PR, so each feature keeps one commit on `main`. The human limited merging to `gh`, so no local-git path exists.
+The human asked for this narrow change. The agent may run `gh pr merge --squash` only into `roadmap/*`, only after a clean P3 with green CI. A hook must enforce it. The human also chose squash merges for steps and a merge commit for the roadmap PR, so each feature keeps one commit on `main`. The human limited merging to `gh`, so no local-git path exists.
 
 This decision amends the merge rule of the 0000042 run-mode ADR. The exception stops in that ADR still apply to every step.
 

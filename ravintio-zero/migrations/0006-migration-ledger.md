@@ -1,6 +1,6 @@
 # Migration 0006 - migration ledger
 
-**Target standard:** `plan/state/migrations.md`, the migration ledger
+**Target standard:** `plan/state/migrations.md`, the migration ledger.
 **Scope:** `ravintio-zero/migrations/_done/` and `plan/state/`
 **Applies when:** a `ravintio-zero/migrations/_done/` folder holds a migration file whose ledger row is missing from `plan/state/migrations.md`.
 **Detect:** exists ravintio-zero/migrations/_done

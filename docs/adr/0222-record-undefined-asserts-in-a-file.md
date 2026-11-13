@@ -15,7 +15,7 @@ feature: "0000239-test-suite-reliability"
 
 ## Context
 
-macOS ships Bash 3.2, which has no `command_not_found_handle`. Bash 4 and later run that handler in a forked child, so a counter there is lost. The plan first chose a handler with a temp file. Implementation found the Bash 3.2 gap and replaced it.
+macOS ships Bash 3.2, which has no `command_not_found_handle`. Bash 4 and later run that handler in a forked child, so the parent never sees a counter there. The plan first chose a handler with a temp file. Implementation found the Bash 3.2 gap and replaced it.
 
 ## Decision
 
@@ -41,10 +41,10 @@ macOS ships Bash 3.2, which has no `command_not_found_handle`. Bash 4 and later 
 - An undefined assert fails every suite.
 
 **Negative:**
-- A call inside `$(...)` or after `&&` on the same line is not scanned.
+- The scan skips a call inside `$(...)` or after `&&` on the same line.
 
 **Risks:**
-- A mention of `assert_x` at the start of a heredoc line is scanned as a call.
+- The scan treats a mention of `assert_x` at the start of a heredoc line as a call.
 
 ## Related ADRs
 

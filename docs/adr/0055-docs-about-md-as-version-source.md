@@ -20,13 +20,13 @@ feature: "0000014-improve-adoption-mode-selection"
 
 ## Context
 
-To support the adoption mode selection and version suggestion protocol (REQ-003, REQ-004), a single authoritative source of the current project version is required. This source must be:
-1. Readable at P0 before any plan/ artifacts are written
+To support the adoption mode selection and version suggestion protocol (REQ-003, REQ-004), the pipeline requires a single authoritative source of the current project version. This source must be:
+1. Readable at P0 before the pipeline writes any plan/ artifacts
 2. Writable at P7 as part of the close-out sequence
 3. Human-readable and not coupled to a specific component
 4. Stable across pipeline runs (not a transient plan/ artifact)
 
-Several candidates were considered: `planifest-framework/component.yml`, git tags, `plan/` artifacts, and a new dedicated file.
+The design weighed several candidates: `planifest-framework/component.yml`, git tags, `plan/` artifacts, and a new dedicated file.
 
 ---
 
@@ -34,7 +34,7 @@ Several candidates were considered: `planifest-framework/component.yml`, git tag
 
 **`docs/about.md` is the canonical version source**, with YAML frontmatter fields: `version`, `feature`, `updated`.
 
-`docs/` is the living state layer — it reflects what the repo currently is. This aligns with the existing Planifest convention where `docs/` holds current-state artifacts and `plan/` holds change artifacts. A file in `docs/about.md` is:
+`docs/` is the living state layer. It reflects what the repo currently is. This aligns with the existing Planifest convention where `docs/` holds current-state artifacts and `plan/` holds change artifacts. A file in `docs/about.md` is:
 - Persistent across pipeline runs (not archived with `plan/current/`)
 - Not component-specific (unlike `component.yml`)
 - Always-permitted by the gate-write hook (docs/ prefix)
@@ -73,18 +73,18 @@ Several candidates were considered: `planifest-framework/component.yml`, git tag
 
 **Negative:**
 - Existing projects require a one-time migration to create `docs/about.md`
-- A new file type and lifecycle obligation are introduced
+- The decision introduces a new file type and lifecycle obligation
 
 **Risks:**
-- If `docs/about.md` is manually edited to an incorrect version, the regression guard (REQ-009) will block the next pipeline run; human must understand they need to re-version archives to reset
+- If someone manually edits `docs/about.md` to an incorrect version, the regression guard (REQ-009) blocks the next pipeline run. The human must understand that they need to re-version archives to reset.
 
 ---
 
 ## Related ADRs
 
-- ADR-0053 — depends-on (Standard Iterative mode is signalled by docs/about.md existence)
-- ADR-0056 — depends-on (version bump rules read from this source)
-- ADR-0062 — related-to (docs/ lifecycle initialisation)
+- ADR-0053: depends-on (the existence of docs/about.md signals Standard Iterative mode)
+- ADR-0056: depends-on (version bump rules read from this source)
+- ADR-0062: related-to (docs/ lifecycle initialisation)
 
 ---
 

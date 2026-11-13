@@ -20,13 +20,13 @@ feature: "0000015-pipeline-session-cleanup"
 
 ## Context
 
-`plan/.run-mode` is written at P0 and read throughout the pipeline. Two components could own its deletion: P9 (as part of pipeline close-out cleanup) or P0 (as part of each fresh-start pre-flight). The choice determines where responsibility lives and what happens if P9 is skipped.
+P0 writes `plan/.run-mode` and the pipeline reads it throughout. Two components could own its deletion: P9 (as part of pipeline close-out cleanup) or P0 (as part of each fresh-start pre-flight). The choice determines where responsibility lives and what happens if the pipeline skips P9.
 
 ---
 
 ## Decision
 
-P9 owns deletion. `plan/.run-mode` is deleted in ship-agent Step 6 alongside `.orchestrator-active` and `.orchestrator-ack`. P0 handles the stale case (file present at fresh start) as a recovery path — not the primary deletion path.
+P9 owns deletion. Ship-agent Step 6 deletes `plan/.run-mode` alongside `.orchestrator-active` and `.orchestrator-ack`. P0 handles the stale case (file present at fresh start) as a recovery path, not the primary deletion path.
 
 This keeps lifecycle ownership clear: P9 opens and closes the pipeline state. P0 reads state it does not own. Recovery at P0 handles the edge case where P9 did not complete.
 
@@ -55,19 +55,19 @@ This keeps lifecycle ownership clear: P9 opens and closes the pipeline state. P0
 
 **Positive:**
 - Clear single ownership: P9 closes what P0 opens
-- Ship-agent Step 6 is the canonical cleanup step — one place to look for all sentinel cleanup
+- Ship-agent Step 6 is the canonical cleanup step, so there is one place to look for all sentinel cleanup
 
 **Negative:**
-- If P9 is skipped (via `.skips`), run-mode persists and is only recovered at the next P0 start
+- If a run skips P9 (via `.skips`), run-mode persists until the next P0 start recovers it
 
 **Risks:**
-- Low: P9 skip is an explicit human action; the P0 recovery path handles it cleanly
+- Low: P9 skip is an explicit human action. The P0 recovery path handles it cleanly
 
 ---
 
 ## Related ADRs
 
-- ADR-0065 — related-to (P0 stale detection is the recovery path for this deletion)
+- ADR-0065: related-to (P0 stale detection is the recovery path for this deletion)
 
 ---
 

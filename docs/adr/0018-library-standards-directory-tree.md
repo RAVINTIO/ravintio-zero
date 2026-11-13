@@ -17,7 +17,7 @@ feature: "0000005-framework-governance"
 
 ## Context
 
-Agents scaffolding dependency manifests apply their own judgment on library choices, reaching for deprecated or unsuitable libraries with no standard to check against. A machine-readable library standards document is needed that agents can look up before writing any manifest. The question is how to structure that document — as a single file covering all languages, or as a directory tree.
+Agents scaffolding dependency manifests apply their own judgment on library choices, reaching for deprecated or unsuitable libraries with no standard to check against. Agents need a machine-readable library standards document to look up before writing any manifest. The question is how to structure that document: as a single file covering all languages, or as a directory tree.
 
 ---
 
@@ -53,19 +53,19 @@ The human-owned parallel tree lives at `planifest-overrides/library-standards/{l
 ## Consequences
 
 **Positive:**
-- Agents load only the language subdir relevant to the current stack — no unnecessary context
+- Agents load only the language subdir relevant to the current stack, with no unnecessary context
 - Humans can extend any language or add new languages without modifying framework files
-- 16 unpopulated language stubs degrade gracefully — agents skip audit rather than erroring
+- 16 unpopulated language stubs degrade gracefully, and agents skip audit rather than erroring
 
 **Negative:**
 - More files to maintain than a single document
-- P3 must populate 6 languages fully and stub 16 — non-trivial initial content effort
+- P3 must populate 6 languages fully and stub 16, which is a non-trivial initial content effort
 
 **Risks:**
-- Language subdirs may diverge from each other in format over time — mitigated by `_version-policy.md` and consistent template per subdir
+- Language subdirs may diverge from each other in format over time. `_version-policy.md` and a consistent template per subdir mitigate this
 
 ---
 
 ## Related ADRs
 
-- ADR-0019 — depends-on (planifest-overrides structure governs where human overrides live)
+- ADR-0019 - depends-on (planifest-overrides structure governs where human overrides live)

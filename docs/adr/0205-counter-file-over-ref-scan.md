@@ -17,7 +17,7 @@ The folder scan misses ids on other branches, ids that pickup deleted, and ids t
 
 ## Decision
 
-`plan/backlog/.next-id` holds the next free id. `reserve-id.mjs` takes an exclusive lock with `open(..., 'wx')` on `.next-id.lock`, reads the number, writes the new number to a temporary file, renames it over the counter, and releases the lock. Backlog, feature, and initiative ids all reserve from it. A copied entry reserves a local id and names its source id. `--init` bootstraps a repo that has no counter with one scan.
+`plan/backlog/.next-id` holds the next free id. `reserve-id.mjs` takes an exclusive lock with `open(..., 'wx')` on `.next-id.lock` and reads the number. It writes the new number to a temporary file, renames it over the counter, and releases the lock. Backlog, feature, and initiative ids all reserve from it. A copied entry reserves a local id and names its source id. `--init` bootstraps a repo that has no counter with one scan.
 
 ## Alternatives Considered
 

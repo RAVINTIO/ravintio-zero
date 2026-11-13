@@ -20,9 +20,9 @@ feature: "0000003-hook-based-enforcement"
 
 ## Context
 
-Planifest pipeline runs involve multiple agents across 8 phases (P0–P7) plus a Change Pipeline route. Humans working on a feature may lose track of which phase they are in, particularly after context resets, multi-day sessions, or phase skips. There is no ambient UI indicator of the current phase — the agent's text response is the only channel available.
+Planifest pipeline runs involve multiple agents across 8 phases (P0–P7) plus a Change Pipeline route. Humans working on a feature may lose track of which phase they are in, particularly after context resets, multi-day sessions, or phase skips. There is no ambient UI indicator of the current phase. The agent's text response is the only channel available.
 
-The problem is compounded in multi-agent pipelines where different SKILL.md files load at different phases: the human cannot tell from the response alone whether they are talking to the spec-agent, codegen-agent, or ship-agent.
+Multi-agent pipelines compound the problem because different SKILL.md files load at different phases. The human cannot tell from the response alone whether they are talking to the spec-agent, codegen-agent, or ship-agent.
 
 ---
 
@@ -49,7 +49,7 @@ Standard formats:
 - Skip: `Px: Skipped by human direction.`
 - Resume: `Px: Resuming {feature-id} — {phase-name} in progress.`
 
-The convention is specified in every agent SKILL.md and documented in `getting-started.md`.
+Every agent SKILL.md specifies the convention, and `getting-started.md` documents it.
 
 ---
 
@@ -82,21 +82,21 @@ The convention is specified in every agent SKILL.md and documented in `getting-s
 - Humans can immediately identify which phase they are in from any response
 - Phase open/close formats provide a consistent rhythm to pipeline execution
 - `Px: ⚠` escalations are visually distinct and searchable in session history
-- Convention is self-documenting — seeing `P3:` tells the human "codegen is running"
+- Convention is self-documenting: seeing `P3:` tells the human "codegen is running"
 
 **Negative:**
-- Every SKILL.md file must be updated and kept in sync; if a new agent is added without the prefix rule, the convention breaks down
-- LLM instruction compliance is still required — there is no hook that forces the prefix. A non-compliant response has no deterministic catch mechanism
+- Every SKILL.md file needs updating and must stay in sync. If someone adds a new agent without the prefix rule, the convention breaks down
+- The convention still depends on LLM instruction compliance, because no hook forces the prefix. A non-compliant response has no deterministic catch mechanism
 - Once humans become accustomed to the convention, removing or changing it is disruptive
 
 **Risks:**
-- Claude Code may occasionally omit the prefix on short conversational responses. The SKILL.md should specify the prefix is required on **every** response, including single-line acknowledgements.
+- Claude Code may occasionally omit the prefix on short conversational responses. The SKILL.md should require the prefix on **every** response, including single-line acknowledgements.
 
 ---
 
 ## Related ADRs
 
-- ADR-0010 - related-to (ship-agent resume detection uses phase state which is communicated via Px)
+- ADR-0010 - related-to (ship-agent resume detection uses phase state that Px communicates)
 
 ---
 

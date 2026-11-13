@@ -38,7 +38,7 @@ Use the declared stack. CodeQL runs as the GitHub-hosted `github/codeql-action`,
 - No new dependency to approve.
 
 **Negative:**
-- Workflow behaviour is checked by text tests, not by a run, until CI runs.
+- Text tests check workflow behaviour, not a run, until CI runs.
 
 **Risks:**
 - A text test passes while the workflow fails on GitHub.

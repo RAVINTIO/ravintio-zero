@@ -26,9 +26,9 @@ If P9 failed to clean up `plan/.run-mode`, the next P0 will find a stale value. 
 
 ## Decision
 
-Warn and clear. The orchestrator surfaces a visible warning, deletes the file, and continues P0 without blocking. The human is informed but does not need to take action.
+Warn and clear. The orchestrator surfaces a visible warning, deletes the file, and continues P0 without blocking. The human sees the warning but does not need to take action.
 
-Rationale: stale run-mode is not a data integrity issue — it's a cleanup miss. The correct remediation is automatic. Blocking would penalise the human for a framework bug. Silent acceptance would silently impose a preference the human may not want.
+Rationale: stale run-mode is not a data integrity issue. It's a cleanup miss. The correct remediation is automatic. Blocking would penalise the human for a framework bug. Silent acceptance would silently impose a preference the human may not want.
 
 ---
 
@@ -53,8 +53,8 @@ Rationale: stale run-mode is not a data integrity issue — it's a cleanup miss.
 ## Consequences
 
 **Positive:**
-- Stale run-mode is always detected and cleared — no silent session contamination
-- No human action required; P0 proceeds normally
+- Stale run-mode is always detected and cleared, with no silent session contamination
+- No human action required. P0 proceeds normally
 
 **Negative:**
 - Human sees an unexpected warning that requires understanding the run-mode concept
@@ -66,7 +66,7 @@ Rationale: stale run-mode is not a data integrity issue — it's a cleanup miss.
 
 ## Related ADRs
 
-- ADR-0066 — related-to (run-mode deletion at P9 is the complement to this stale detection at P0)
+- ADR-0066: related-to (run-mode deletion at P9 is the complement to this stale detection at P0)
 
 ---
 

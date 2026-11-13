@@ -40,7 +40,7 @@ assert_contains '{id}-{slug}: {summary} (#{n})' "$CPR" "req-002 AC-1: names the 
 assert_contains 'local suite' "$CPR" "req-002 AC-1: names the local suite"
 assert_contains 'green' "$CPR" "req-002 AC-1: names green CI"
 assert_contains 'gh pr merge --squash' "$CPR" "req-002 AC-1: names the squash"
-assert_contains 'driver is stopped' "$CPR" "req-002 AC-1: raised only while the driver is stopped"
+assert_contains 'driver has stopped' "$CPR" "req-002 AC-1: raised only while the driver is stopped"
 assert_contains 'plan/.initiative-queue/' "$CPR" "req-002 AC-1: queue while a step runs"
 
 echo ""
@@ -53,7 +53,7 @@ assert_contains 'green CI' "$CARVE" "req-002 AC-2: carve-out keeps green CI"
 echo ""
 echo "=== req-002 AC-3: the skill points to the section ==="
 assert_contains 'Coordinator PRs' "$SKILL_TEXT" "req-002 AC-3: skill names the section"
-assert_contains 'driver is stopped' "$SKILL_TEXT" "req-002 AC-3: skill names the stopped driver"
+assert_contains 'driver has stopped' "$SKILL_TEXT" "req-002 AC-3: skill names the stopped driver"
 
 echo ""
 echo "=== req-003 AC-2: PR number commit comes before the squash ==="

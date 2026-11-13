@@ -41,20 +41,20 @@ Write every user-facing sentence to the Google developer documentation style gui
 - Treat "is", "are", "was", or "were" plus a past participle as passive voice. Name the actor and put it before the verb.
 - Do not use em dashes or semicolons. End the sentence and start a new one.
 - Do not group things into threes for rhythm. Use three items only when exactly three exist. Pull a list of three or more items into bullets.
-- No exclamation marks. No "please note". No "as you can see".
+- No exclamation marks. No `please note`. No `as you can see`.
 
 ## Words
 
-- Never call anything "simple", "simply", "easy", "just", or "obviously".
-- Never label your own prose "honest", "frankly", "candidly", or "to be fair".
-- Never write "load-bearing", "the crux", or "the linchpin". Say what depends on it.
-- Never write an aside about your own answer, such as "that's not nothing" or "that's on me".
-- Write "allowlist" and "blocklist". Write "replica" for "slave". Name the real role instead of "master".
-- Cut ableist wording. Write "final check" for "sanity check". The same goes for "crazy", "insane", "dumb", "lame", "blind to", and "cripple".
+- Never call anything `simple`, `simply`, `easy`, `just`, or `obviously`.
+- Never label your own prose `honest`, `frankly`, `candidly`, or `to be fair`.
+- Never write `load-bearing`, `the crux`, or `the linchpin`. Say what depends on it.
+- Never write an aside about your own answer, such as `that's not nothing` or `that's on me`.
+- Write "allowlist" and "blocklist". Write "replica" for `slave`. Name the real role instead of "master".
+- Cut ableist wording. Write "final check" for `sanity check`. The same goes for `crazy`, `insane`, `dumb`, `lame`, `blind to`, and `cripple`.
 - Cut violent metaphors. Write "stop the process" for "kill it", "doesn't respond" for "hangs", and "click" for "hit".
-- Cut needless gender. Write "person-hours" for "man-hours". Use "they" for a person whose pronouns you don't know.
-- Never call a figurative statement "literal" or "literally".
-- Use the shorter word: "use" not "utilise", "to" not "in order to", "before" not "prior to", "also" not "additionally", "help" not "facilitate".
+- Cut needless gender. Write "person-hours" for `man-hours`. Use "they" for a person whose pronouns you don't know.
+- Never call a figurative statement `literal` or `literally`.
+- Use the shorter word: "use" not `utilise`, "to" not `in order to`, "before" not `prior to`, "also" not `additionally`, "help" not `facilitate`.
 
 ## Mechanics
 
@@ -73,7 +73,7 @@ Write every user-facing sentence to the Google developer documentation style gui
 - Use British English spelling, except in code identifiers, API names, and quoted output.
 - Do not use em dashes or semicolons. Use no exclamation marks.
 - Write dates as 2026-08-18 or "August 18, 2026".
-- Never write "simple", "simply", "easy", "just", or "obviously".
+- Never write `simple`, `simply`, `easy`, `just`, or `obviously`.
 - Use "allowlist" and "blocklist". Cut ableist wording and violent metaphors.
 <!-- END summary -->
 

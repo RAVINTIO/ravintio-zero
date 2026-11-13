@@ -6,7 +6,7 @@ version: "0.1.0"
 component: "ravintio-zero"
 feature: "0000004-tdd-regression-test-quality"
 ---
-# ADR-0016 - Sub-agent model tier — recommended_model frontmatter convention
+# ADR-0016 - Sub-agent model tier: recommended_model frontmatter convention
 
 **Feature:** 0000004-tdd-regression-test-quality
 **Status:** accepted
@@ -25,13 +25,13 @@ The three TDD sub-agents have narrow, well-defined tasks:
 
 These tasks do not require the full reasoning capacity of the orchestrator model tier. A cheaper, faster model (e.g. claude-haiku) is well-suited to them.
 
-The question is how to communicate the preferred model tier to the orchestrator in a way that is portable, inspectable, and consistent with the Planifest skill convention.
+The question is how to tell the orchestrator the preferred model tier. The method must be portable, inspectable, and consistent with the Planifest skill convention.
 
 ---
 
 ## Decision
 
-Each TDD sub-agent SKILL.md MUST include a `recommended_model` field in its YAML frontmatter with value `haiku` (or equivalent cheaper tier for the active tool's model naming scheme). Example:
+Each TDD sub-agent SKILL.md MUST include a `recommended_model` field with value `haiku` in its YAML frontmatter. For tools with a different model naming scheme, use the equivalent cheaper tier. Example:
 
 ```yaml
 ---
@@ -40,12 +40,12 @@ recommended_model: haiku
 ---
 ```
 
-The orchestrating codegen-agent reads this field and SHOULD invoke the sub-agent at the recommended model tier when the tool supports per-invocation model override. The field is **advisory**: if the tool does not support model override, the sub-agent runs at the default tier — the pipeline is not blocked.
+The orchestrating codegen-agent reads this field and SHOULD invoke the sub-agent at the recommended model tier when the tool supports per-invocation model override. The field is **advisory**: if the tool does not support model override, the sub-agent runs at the default tier and the pipeline continues.
 
 A rationale section in each SKILL.md explains why the cheaper tier is appropriate for that skill's task.
 
-This approach was chosen because:
-- It is declarative and co-located with the skill definition — no separate configuration file.
+Reasons for this approach:
+- It is declarative and co-located with the skill definition, with no separate configuration file.
 - It is inspectable: any agent or human reading the SKILL.md immediately sees the model intent.
 - It is non-blocking: unsupported environments degrade gracefully (higher cost, same correctness).
 - It establishes a reusable convention for future narrow sub-agent skills.
@@ -82,15 +82,15 @@ This approach was chosen because:
 - Cost intent is inspectable in version control without additional tooling.
 
 **Negative:**
-- If tool does not support model override, cost benefit is not realised — the field is advisory only.
-- `haiku` is Anthropic-specific naming; other tools may use different tier labels. The SKILL.md rationale section should describe the tier in capability terms (not just model name) to remain portable.
+- If tool does not support model override, the cost benefit does not materialise, because the field is advisory only.
+- `haiku` is Anthropic-specific naming. Other tools may use different tier labels. The SKILL.md rationale section should describe the tier in capability terms (not only the model name) to remain portable.
 
 **Risks:**
-- Agent SDK model override support varies. If unsupported, all sub-agents run at full model tier — cost mitigation is lost but correctness is unaffected.
+- Agent SDK model override support varies. If unsupported, all sub-agents run at full model tier, so the cost mitigation disappears but correctness remains intact.
 - Future model naming changes (e.g. haiku → haiku-next) may require updating three SKILL.md files. Mitigation: use the most stable tier label available (e.g. `haiku` as a family name).
 
 ---
 
 ## Related ADRs
 
-- ADR-0015 — depends-on (sub-agents only exist because of the TDD inner loop decision)
+- ADR-0015 - depends-on (sub-agents only exist because of the TDD inner loop decision)

@@ -20,9 +20,9 @@ Use a plain Markdown file at `plan/current/build-log.md`, created from a templat
 
 ## Consequences
 
-- **Consistent with existing artefacts**: all `plan/current/` files are Markdown; no new format to learn
+- **Consistent with existing artefacts**: all `plan/current/` files are Markdown, so there is no new format to learn
 - **Survives session changes**: committed to the repo alongside other plan artefacts
 - **Human-readable**: developers can inspect mid-run without tooling
 - **Committed with the archive**: filed alongside the build report in `plan/archive/`
 - **No structured-telemetry-mcp dependency**: works with or without the MCP server running
-- **Trade-off**: manual append by orchestrator means entries can be missed if the orchestrator skips the update instruction; mitigated by placing the instruction prominently per phase
+- **Trade-off**: manual append by orchestrator means entries can be missed if the orchestrator skips the update instruction. Placing the instruction prominently per phase mitigates this

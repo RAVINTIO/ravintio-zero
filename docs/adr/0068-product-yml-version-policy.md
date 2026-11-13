@@ -20,13 +20,13 @@ feature: "0000016-pipeline-governance-and-loop-engineering"
 
 ## Context
 
-The framework versions single components (`component.yml`) but has no representation of one release version across multiple components, so multi-component consumer projects have no defined P9 tagging story. The concept originates from bug-bounty-hunter PR #4 and is adopted generically (concept only — no code copied).
+The framework versions single components (`component.yml`) but cannot represent one release version across multiple components. Multi-component consumer projects therefore have no defined P9 tagging story. The concept originates from bug-bounty-hunter PR #4. The framework adopts it generically (concept only, with no code copied).
 
 ---
 
 ## Decision
 
-A `product.yml` at the project root: `id`, `name`, `version`, `versionPolicy`, `feature`, `components` (list of `{id, version}`). `versionPolicy` is a closed enum: `max-component-version` (derive = highest component version; the default), `explicit` (human-set), `external` (anchor dictates; integrates with External Anchor adoption mode). **Data ownership:** ship-agent writes/creates it at P9; orchestrator reads it at P0 for version suggestions. Projects with exactly one component need no `product.yml` — the existing `component.yml` path is the fallback, keeping this repo's own tagging unchanged.
+A `product.yml` at the project root: `id`, `name`, `version`, `versionPolicy`, `feature`, `components` (list of `{id, version}`). `versionPolicy` is a closed enum. The value `max-component-version` derives the highest component version and is the default. The value `explicit` is human-set. The value `external` lets the anchor dictate the version and integrates with External Anchor adoption mode. **Data ownership:** ship-agent writes/creates it at P9. The orchestrator reads it at P0 for version suggestions. Projects with exactly one component need no `product.yml`. The existing `component.yml` path is the fallback, keeping this repo's own tagging unchanged.
 
 ---
 
@@ -52,13 +52,13 @@ A `product.yml` at the project root: `id`, `name`, `version`, `versionPolicy`, `
 
 **Positive:**
 - Multi-component projects get a deterministic, auditable tagging story with one owner
-- Single-component projects (including this repo) are provably unaffected (NFR-003)
+- Single-component projects (including this repo) stay provably unchanged (NFR-003)
 
 **Negative:**
-- One more root manifest to keep consistent — component version bumps must be reflected in `components[]` at P9
+- One more root manifest to keep consistent. P9 must reflect component version bumps in `components[]`
 
 **Risks:**
-- Auto-creation guessing wrong on first multi-component use — mitigated by validation + human prompt on any invalid/lower version (REQ-004)
+- Auto-creation guessing wrong on first multi-component use. Validation and a human prompt on any invalid/lower version mitigate this (REQ-004)
 
 ---
 

@@ -17,7 +17,7 @@ The entry asks for a run retrospective at ship and an initiative retrospective a
 
 ## Decision
 
-Ship one `ravintio-retrospective` skill with a run mode and an initiative mode. Write each record to `plan/retrospectives/`. A run record is `{feature-id}-{date}.md`. An initiative record is `{id}-{slug}-initiative-{date}.md`. The initiative record is committed on the initiative branch before the PR, so the PR to `main` carries it.
+Ship one `ravintio-retrospective` skill with a run mode and an initiative mode. Write each record to `plan/retrospectives/`. A run record is `{feature-id}-{date}.md`. An initiative record is `{id}-{slug}-initiative-{date}.md`. The skill commits the initiative record on the initiative branch before the PR, so the PR to `main` carries it.
 
 ## Alternatives Considered
 

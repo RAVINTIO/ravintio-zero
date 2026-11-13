@@ -62,7 +62,7 @@ The step leaves the file unchanged and exits 1. The line never includes the pars
 
 - 0000033 req-004 - depends-on (setup never logs `settings.json` contents)
 - ADR-0119 - depends-on (settings writes stay atomic)
-- ADR-0133 - related-to (the stack is unchanged)
+- ADR-0133 - related-to (the stack stays the same)
 
 ## Supersedes
 

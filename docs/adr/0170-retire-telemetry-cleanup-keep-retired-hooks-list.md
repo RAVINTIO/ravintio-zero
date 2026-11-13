@@ -15,7 +15,7 @@ feature: "0000164-hardening-and-backlog-skill"
 
 ## Context
 
-ADR-0116 made setup remove telemetry wiring on every run. That wiring came from `setup.sh --structured-telemetry-mcp`, which the pack removed in 0000033. The cleanup now runs in each setup for a case that no live consumer is known to have.
+ADR-0116 made setup remove telemetry wiring on every run. That wiring came from `setup.sh --structured-telemetry-mcp`, which the pack removed in 0000033. The cleanup now runs in each setup for a case that no known live consumer has.
 
 The cleanup code lives in `remove_legacy_telemetry_wiring` and `Remove-LegacyTelemetryWiring`, with a matcher constant and a list of ten module names. The module list also feeds retired-hook pruning (the 0000151 retired-hooks ADR (decision 7)). Deleting the list with the cleanup would break pruning.
 

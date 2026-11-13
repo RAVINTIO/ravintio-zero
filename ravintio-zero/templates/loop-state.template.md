@@ -8,7 +8,7 @@ status: "active | done | escalated"
 > Path: `plan/current/loop-state-{loop-id}.md`. Git-tracked, and committed after
 > every update so iteration counters survive interrupt/resume. Resume convention:
 > see `pause.template.md`. While a loop-state file has `status: active`, the
-> ratchet hook is armed for `plan/current/` artifact writes.
+> ratchet hook guards `plan/current/` artifact writes.
 
 | Field | Value |
 |-------|-------|
@@ -27,7 +27,7 @@ Append-only: one record per iteration. Never rewrite a prior record.
 
 ### Iteration {{n}} ({{ISO-8601 UTC}})
 - **Action:** {{what the loop did this iteration}}
-- **Observation:** {{what was found/measured, findings, check results, evidence}}
+- **Observation:** {{what the loop found or measured, findings, check results, evidence}}
 - **Decision:** {{continue | done | escalate}}: {{one-line reason}}
 
 ---
@@ -38,5 +38,5 @@ Populated only when `status: escalated`.
 
 - **Stop rule hit:** {{iteration cap | no-progress (same finding 2 consecutive iterations)}}
 - **Outstanding gap/finding:** {{exact statement}}
-- **What was attempted:** {{summary across iterations}}
+- **What the loop attempted:** {{summary across iterations}}
 - **Recommended next step:** {{for the human}}

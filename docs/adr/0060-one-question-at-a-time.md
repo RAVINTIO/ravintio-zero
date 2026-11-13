@@ -20,21 +20,21 @@ feature: "0000014-improve-adoption-mode-selection"
 
 ## Context
 
-Agent interactions that present multiple questions in a single response create cognitive load for the human, especially in sessions that may run long or involve context-switching. Analysis of prior pipeline runs showed inconsistency: the orchestrator skill stated the one-question principle but did not enforce it, and phase skills (spec-agent, adr-agent, etc.) had no equivalent instruction. For users with ADHD specifically, multiple simultaneous open questions are difficult to track — saving items up for later loses context, and answering partially creates ambiguity about what was addressed.
+Agent interactions that present multiple questions in a single response create cognitive load for the human. The load grows in sessions that run long or involve context-switching. Analysis of prior pipeline runs showed inconsistency. The orchestrator skill stated the one-question principle but did not enforce it. Phase skills (spec-agent, adr-agent, etc.) had no equivalent instruction. For users with ADHD specifically, multiple simultaneous open questions are difficult to track. Saving items up for later loses context, and answering partially creates ambiguity about what the human addressed.
 
-The principle "ask one question, wait for the answer, ask the next" is well-established in UX and therapeutic communication. It was identified during P0 coaching for this feature as a requirement that should apply across all phases, not just P0.
+The principle "ask one question, wait for the answer, ask the next" is well-established in UX and therapeutic communication. P0 coaching for this feature identified it as a requirement that should apply across all phases, not only P0.
 
 ---
 
 ## Decision
 
-**One-question-at-a-time is a named, explicit instruction in every phase skill.** The rule is stated verbatim in each of the 9 skills:
+**One-question-at-a-time is a named, explicit instruction in every phase skill.** Each of the 9 skills states the rule in these words:
 
-> **One-question rule:** Never ask more than one question per response. Wait for the answer before proceeding. Frame every question as a recommendation with a confirmation request — not an open-ended "what do you want to do?"
+> **One-question rule:** Never ask more than one question per response. Wait for the answer before proceeding. Frame every question as a recommendation with a confirmation request, not an open-ended "what do you want to do?"
 
 The recommend-then-confirm pattern is a companion: the agent assesses and recommends, then asks the human to confirm or override. This replaces open-ended questions ("Which adoption mode?") with directed ones ("I recommend Standard Iterative based on `docs/about.md`. Does that work?").
 
-Exception: informational multi-item output (lists, tables, summaries) is not a question — multi-item informational output is permitted.
+Exception: informational multi-item output (lists, tables, summaries) is not a question, so the rule permits it.
 
 ---
 
@@ -73,17 +73,17 @@ Exception: informational multi-item output (lists, tables, summaries) is not a q
 
 **Negative:**
 - More turns required for complex coaching conversations
-- Future skill authors must be aware of the rule; it is not enforced by tooling
+- Future skill authors must be aware of the rule. Tooling does not enforce it
 
 **Risks:**
-- New skills written without the rule create inconsistency that is invisible until a user notices; mitigated by including the rule in the skill creation checklist
+- New skills written without the rule create inconsistency that is invisible until a user notices. Including the rule in the skill creation checklist mitigates this
 
 ---
 
 ## Related ADRs
 
-- ADR-0059 — related-to (Scope Lock Challenge applies this rule throughout)
-- ADR-0061 — extends (incremental audit trail depends on discrete question-answer events this rule creates)
+- ADR-0059: related-to (Scope Lock Challenge applies this rule throughout)
+- ADR-0061: extends (incremental audit trail depends on discrete question-answer events this rule creates)
 
 ---
 

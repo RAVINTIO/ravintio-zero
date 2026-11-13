@@ -20,9 +20,9 @@ feature: "0000012-docs-restructure-commit-directives"
 
 ## Context
 
-The repository has no git tags for previous releases (v0.1 through v0.10). These need to be applied retroactively to the merge-to-main commits for each release. The question is the delivery mechanism: a standalone script, manual instructions in a README, or a Planifest migration file.
+The repository has no git tags for previous releases (v0.1 through v0.10). Someone must apply them retroactively to the merge-to-main commits for each release. The question is the delivery mechanism: a standalone script, manual instructions in a README, or a Planifest migration file.
 
-The tagging operation is a one-time, destructive-if-wrong action (tags cannot be silently overwritten) that requires human confirmation of the commit→version mapping before execution. It is exactly the class of operation Planifest migrations are designed for.
+The tagging operation is a one-time, destructive-if-wrong action (tags cannot be silently overwritten) that requires human confirmation of the commit→version mapping before execution. It is the class of operation that Planifest migrations exist to handle.
 
 ---
 
@@ -59,16 +59,16 @@ The migration:
 ## Consequences
 
 **Positive:**
-- Human confirmation is built into the migration protocol — tags are never created without review
-- Migration is idiomatic Planifest — other framework maintainers will recognise the pattern
-- Migration is automatically detected by the orchestrator at the next session start (pending migrations check)
+- The migration protocol builds in human confirmation, so the migrator never creates tags without review
+- Migration is idiomatic Planifest, so other framework maintainers will recognise the pattern
+- The orchestrator detects the migration automatically at the next session start (pending migrations check)
 
 **Negative:**
-- Requires the planifest-migrator skill to be available; cannot be executed without the Planifest toolchain
+- Requires the planifest-migrator skill to be available. You cannot execute it without the Planifest toolchain.
 - One additional file in planifest-framework/migrations/ that must be moved to _done/ after execution
 
 **Risks:**
-- If `git log --merges` output is ambiguous (e.g. squash merges without "Merge" in the message), the human may not be able to identify all release commits — mitigated by the explicit confirmation step
+- If `git log --merges` output is ambiguous (e.g. squash merges without "Merge" in the message), the human may not be able to identify all release commits. The explicit confirmation step mitigates this.
 
 ---
 

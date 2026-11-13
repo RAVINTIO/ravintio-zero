@@ -20,7 +20,7 @@ feature: "0000014-improve-adoption-mode-selection"
 
 ## Context
 
-With four adoption modes detected by filesystem signals, a conflict is possible: a project could have both `docs/about.md` (Standard Iterative signal) and `planifest-overrides/instructions/external-versioning.md` (External Anchor signal) present simultaneously. Without an explicit priority order, the orchestrator's mode recommendation would be undefined or dependent on file discovery order.
+Filesystem signals detect four adoption modes, so a conflict is possible. A project could have both `docs/about.md` (Standard Iterative signal) and `planifest-overrides/instructions/external-versioning.md` (External Anchor signal) present at once. Without an explicit priority order, the orchestrator's mode recommendation would be undefined or would depend on file discovery order.
 
 ---
 
@@ -29,11 +29,11 @@ With four adoption modes detected by filesystem signals, a conflict is possible:
 **Priority order: External Anchor > Standard Iterative > Retrofit > Greenfield.**
 
 - External Anchor is absolute: if `external-versioning.md` is present, this mode activates regardless of all other signals. It cannot be overridden by the human.
-- Standard Iterative beats Retrofit: if `docs/about.md` is present and External Anchor is absent, Standard Iterative is selected even if codebase files also exist (which they always will for an ongoing project).
+- Standard Iterative beats Retrofit. If `docs/about.md` is present and External Anchor is absent, the orchestrator selects Standard Iterative. It does so even if codebase files also exist (they always do for an ongoing project).
 - Retrofit beats Greenfield: if codebase files exist and no `docs/about.md`, this is Retrofit.
 - Greenfield is the default when no other signal is present.
 
-External Anchor cannot be overridden because the override file (`external-versioning.md`) is a deliberate, explicit instruction placed by the user in `planifest-overrides/`. Choosing it means the user has already made the decision; allowing a human to override it in the coaching conversation would silently contradict their own configuration.
+External Anchor cannot be overridden because the override file (`external-versioning.md`) is a deliberate, explicit instruction that the user places in `planifest-overrides/`. Choosing it means the user has already made the decision. Allowing a human to override it in the coaching conversation would silently contradict their own configuration.
 
 ---
 
@@ -59,20 +59,20 @@ External Anchor cannot be overridden because the override file (`external-versio
 ## Consequences
 
 **Positive:**
-- Mode detection is deterministic and auditable — the same signals always produce the same mode
+- Mode detection is deterministic and auditable. The same signals always produce the same mode
 - External Anchor's priority reflects its intent as an override instruction
 
 **Negative:**
-- If a user has `external-versioning.md` and forgets it's there, they cannot override to Standard Iterative without deleting the file — this may feel surprising
+- If a user has `external-versioning.md` and forgets it's there, they cannot override to Standard Iterative without deleting the file. This may feel surprising
 
 **Risks:**
-- A stale `external-versioning.md` left in `planifest-overrides/instructions/` from a past constraint that no longer applies will silently activate External Anchor mode; mitigated by the orchestrator surfacing the file contents and asking the human to confirm before proceeding
+- A stale `external-versioning.md` left in `planifest-overrides/instructions/` from a past constraint that no longer applies will silently activate External Anchor mode. The orchestrator mitigates this by surfacing the file contents and asking the human to confirm before proceeding
 
 ---
 
 ## Related ADRs
 
-- ADR-0053 — depends-on (four modes must be defined before priority can be set)
+- ADR-0053: depends-on (four modes must be defined before priority can be set)
 
 ---
 

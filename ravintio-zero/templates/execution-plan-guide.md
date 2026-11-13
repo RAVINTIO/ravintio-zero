@@ -21,8 +21,8 @@ The **plan skill** produces this document during the plan phase (P1). It reads t
 ## When It's Produced
 
 - **After** the orchestrator confirms the design (end of discovery)
-- **Before** ADRs are written (they read it as input)
-- **One per feature**, or one per wave if the feature is waved (`execution-plan-wave-2.md`)
+- **Before** the plan skill writes the ADRs (they read it as input)
+- **One per feature**, or one per wave if the feature has waves (`execution-plan-wave-2.md`)
 
 ---
 
@@ -42,7 +42,7 @@ Each requirement must be:
 
 ### Non-Functional Requirements
 
-Same rule - measurable targets only. These are derived from the NFR section of the Feature Brief, not invented.
+Same rule - measurable targets only. The plan skill takes these from the NFR section of the Feature Brief and does not invent them.
 
 ### API Summary
 
@@ -77,7 +77,7 @@ U1 to U3 share no write target, so they run together in batch 1. U4 depends on U
 
 ### Open Questions
 
-Material gaps the plan skill could not resolve from the brief. These are **not** filled by assumption - they're reported to the orchestrator, which surfaces them to the human.
+Material gaps the plan skill could not resolve from the brief. The plan skill does **not** fill these by assumption - it reports them to the orchestrator, which surfaces them to the human.
 
 ---
 

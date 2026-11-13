@@ -12,7 +12,7 @@
 
 The backlog entry template now carries a `priority` key and a `theme` key in its frontmatter. Entries filed earlier lack both.
 
-The helper adds `priority: "medium"` and `theme: "unsorted"` to each `plan/backlog/*/entry.md` that lacks them. It writes each key as a new line just before the closing `---` of the first frontmatter block. It adds a key only if that key is absent, so an existing value stays. It changes nothing else, skips an entry with no frontmatter, and skips a symlink.
+The helper adds `priority: "medium"` and `theme: "unsorted"` to each `plan/backlog/*/entry.md` that lacks them. It writes each key as a new line immediately before the closing `---` of the first frontmatter block. It adds a key only if that key is absent, so an existing value stays. It changes nothing else, skips an entry with no frontmatter, and skips a symlink.
 
 When `ravintio-zero/scripts/backlog-index.mjs` exists, the helper then regenerates the index with `node ravintio-zero/scripts/backlog-index.mjs`.
 

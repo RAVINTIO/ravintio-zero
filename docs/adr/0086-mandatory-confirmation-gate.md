@@ -20,11 +20,11 @@ feature: "0000020-setup-refresh-skill"
 
 ## Context
 
-The original backlog entry (`0000013-setup-refresh-skill-preserving-settings`) framed the skill as removing manual reverse-engineering work. It would be tempting to let the skill proceed automatically when its flag reconstruction is high confidence, since that is the common case once `.claude/.planifest-setup-flags` exists (REQ-002/ADR-0085). This is a convenience-versus-safety trade-off: automatic proceed on high confidence saves one interaction per refresh, but removes the last check before an irreversible deletion (ADR-0084) and a re-invocation of `setup.sh`/`setup.ps1` with flags that change install behaviour.
+The original backlog entry (`0000013-setup-refresh-skill-preserving-settings`) framed the skill as removing manual reverse-engineering work. It would be tempting to let the skill proceed automatically when its flag reconstruction is high confidence. That is the common case once `.claude/.planifest-setup-flags` exists (REQ-002/ADR-0085). This is a convenience-versus-safety trade-off. Automatic proceed on high confidence saves one interaction per refresh. It also removes the last check before an irreversible deletion (ADR-0084) and a re-invocation of `setup.sh`/`setup.ps1` with flags that change install behaviour.
 
 ## Decision
 
-The skill always halts for an explicit human affirmative before REQ-004's deletion step, in every run, regardless of whether every flag was reconstructed at high confidence from the marker file or inferred at lower confidence from hook wiring. The confirmation prompt always shows the full flag set, its source (marker vs inferred), confidence per flag, and the exact command about to run (REQ-003).
+The skill always halts for an explicit human affirmative before REQ-004's deletion step, in every run. This holds whether the skill reconstructed every flag at high confidence from the marker file or inferred it at lower confidence from hook wiring. The confirmation prompt always shows the full flag set, its source (marker vs inferred), confidence per flag, and the exact command about to run (REQ-003).
 
 ## Alternatives Considered
 
@@ -44,13 +44,13 @@ The skill always halts for an explicit human affirmative before REQ-004's deleti
 
 **Positive:**
 - No run, regardless of confidence, can delete a boot file or re-run setup without the human on the loop having seen the exact command first
-- Simple to reason about and test: one gate, no conditional bypass logic to get wrong
+- Short to reason about and test: one gate, no conditional bypass logic to get wrong
 
 **Negative:**
 - Every refresh costs one confirmation interaction, even for the routine, high-confidence, already-installed case
 
 **Risks:**
-- An inattentive human on the loop could rubber-stamp a wrong high-confidence flag without reading it; this ADR does not eliminate that risk, it only guarantees the opportunity to catch it exists (R-004 in the risk register)
+- An inattentive human on the loop could rubber-stamp a wrong high-confidence flag without reading it. This ADR does not eliminate that risk. It only guarantees the opportunity to catch it (R-004 in the risk register)
 
 ---
 

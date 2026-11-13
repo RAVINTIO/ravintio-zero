@@ -20,9 +20,9 @@ feature: "0000008-context-mode-plugin-routing-rules"
 
 ## Context
 
-Planifest previously maintained a `context-mode-agents.md` template containing instructions for agents to prefer `ctx_*` MCP tools over native tools (Grep, Bash, WebFetch). This file was copied to `AGENTS.md` in the project root by `setup.sh` / `setup.ps1` when `--context-mode-mcp` was passed. The intent was to give agents routing rules they would follow cooperatively — advisory guidance layered beneath the hard enforcement hooks.
+Planifest previously maintained a `context-mode-agents.md` template containing instructions for agents to prefer `ctx_*` MCP tools over native tools (Grep, Bash, WebFetch). `setup.sh` / `setup.ps1` copied this file to `AGENTS.md` in the project root when the human passed `--context-mode-mcp`. The intent was to give agents routing rules they would follow cooperatively: advisory guidance layered beneath the hard enforcement hooks.
 
-With the release of context-mode as a marketplace plugin (v1.0.111+), the plugin injects its own routing rules directly into the agent's system prompt via the plugin's `<system-reminder>` mechanism at session start. This means any project with the plugin installed receives routing rules automatically — without any file being copied by setup.
+With the release of context-mode as a marketplace plugin (v1.0.111+), the plugin injects its own routing rules directly into the agent's system prompt. It does this via the plugin's `<system-reminder>` mechanism at session start. This means any project with the plugin installed receives routing rules automatically, without setup copying any file.
 
 Two sources of routing rules now exist simultaneously: the framework-managed `AGENTS.md` and the plugin system prompt. These can diverge as the plugin evolves independently. The framework has no mechanism to track the plugin's version or sync its template to the plugin's current rules.
 
@@ -32,14 +32,14 @@ The question: should Planifest continue to own and maintain a routing rules temp
 
 ## Decision
 
-Planifest delegates routing rules entirely to the context-mode plugin's system prompt. The `context-mode-agents.md` template is deleted, the `AGENTS.md` routing rules copy step is removed from setup scripts, and all documentation is updated to describe the plugin as the canonical source.
+Planifest delegates routing rules entirely to the context-mode plugin's system prompt. This change deletes the `context-mode-agents.md` template. It also removes the `AGENTS.md` routing rules copy step from setup scripts. All documentation now describes the plugin as the canonical source.
 
-Planifest retains ownership of enforcement hooks (`block-grep.sh`, `block-bash.sh`, `block-webfetch.sh`) — these are a Claude Code platform-specific feature that the plugin cannot provide, and they remain installed by `--context-mode-mcp`.
+Planifest retains ownership of enforcement hooks (`block-grep.sh`, `block-bash.sh`, `block-webfetch.sh`). These are a Claude Code platform-specific feature that the plugin cannot provide. `--context-mode-mcp` still installs them.
 
 **Rationale:**
 - The plugin is the authoritative source for what `ctx_*` tools exist and how they should be used. As the plugin evolves (new tools, changed semantics), its system prompt tracks those changes immediately. A framework-maintained copy cannot.
 - Dual sources of routing rules create a maintenance liability: any divergence silently gives agents conflicting or stale instructions.
-- The plugin system prompt is injected at a higher trust level than a copied file — it is always present, cannot be accidentally deleted, and does not depend on the human remembering to re-run setup after plugin updates.
+- The plugin injects its system prompt at a higher trust level than a copied file. The prompt is always present and cannot be accidentally deleted. It does not depend on the human remembering to re-run setup after plugin updates.
 - Enforcement hooks provide hard guarantees independent of routing rules. Even if routing rules are absent, the hooks block disallowed tool calls. The advisory layer is therefore a usability enhancement, not a safety mechanism.
 
 ---
@@ -72,19 +72,19 @@ Planifest retains ownership of enforcement hooks (`block-grep.sh`, `block-bash.s
 ## Consequences
 
 **Positive:**
-- Routing rules are always current — they track the plugin version, not the framework version
+- Routing rules are always current: they track the plugin version, not the framework version
 - Eliminates drift risk between framework template and plugin behaviour
 - Reduces framework maintenance surface by one concern
 - Agents receive routing rules at a higher trust level (system prompt vs. file in context)
 - Setup is simpler: `--context-mode-mcp` installs one thing (enforcement hooks), not two
 
 **Negative:**
-- Tools that cannot receive the plugin's system prompt (Cursor, Windsurf, Copilot, Cline, Codex) no longer receive routing rules from any source after setup — they previously received advisory routing rules via the copied `AGENTS.md`
+- Tools that cannot receive the plugin's system prompt (Cursor, Windsurf, Copilot, Cline, Codex) no longer receive routing rules from any source after setup. They previously received advisory routing rules via the copied `AGENTS.md`
 - Framework loses the ability to customise or extend routing rules without forking the plugin
 
 **Risks:**
-- If the plugin's system prompt is ever absent (plugin disabled, tool incompatibility, plugin version regression), agents have no routing rules and will use native tools — enforcement hooks remain as the last line of defence
-- Non-Claude Code tool compatibility with the plugin system prompt is unconfirmed; these tools may silently receive no routing rules (tracked in risk register R-001)
+- If the plugin's system prompt is ever absent (plugin disabled, tool incompatibility, plugin version regression), agents have no routing rules and use native tools. Enforcement hooks remain as the last line of defence
+- Nobody has confirmed compatibility between non-Claude Code tools and the plugin system prompt. These tools may silently receive no routing rules (tracked in risk register R-001)
 
 ---
 

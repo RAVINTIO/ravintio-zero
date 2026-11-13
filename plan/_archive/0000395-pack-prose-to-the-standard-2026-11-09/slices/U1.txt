@@ -1,0 +1,16 @@
+docs/adr/0001-pretooluse-block-mechanism.md
+docs/adr/0002-allowlist-hardcoded-vs-configurable.md
+docs/adr/0003-unconditional-vs-pattern-based-blocking.md
+docs/adr/0004-hook-script-ownership-split.md
+docs/adr/0005-three-tier-enforcement-model.md
+docs/adr/0006-common-envelope-shape.md
+docs/adr/0007-flag-file-deduplication.md
+docs/adr/0008-two-check-gate-model.md
+docs/adr/0009-exit-zero-failure-mode.md
+docs/adr/0010-copy-then-delete-archive.md
+docs/adr/0011-px-prefix-convention.md
+docs/adr/0012-advisory-commit-msg-hook.md
+docs/adr/0013-anthropic-first-skill-trust-model.md
+docs/adr/0014-plan-scoped-skill-lifecycle.md
+docs/adr/0015-tdd-inner-loop-as-codegen-subloop.md
+docs/adr/0016-subagent-model-tier-convention.md

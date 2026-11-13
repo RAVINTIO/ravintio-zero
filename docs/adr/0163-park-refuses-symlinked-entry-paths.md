@@ -48,7 +48,7 @@ A refusal prints a fixed message and writes nothing.
 
 **Positive:**
 - Park cannot write or delete outside the repo through a symlink.
-- The rule is easy to state and test.
+- The rule is quick to state and test.
 
 **Negative:**
 - A user who symlinks `plan/backlog/` on purpose, such as to a shared folder, can no longer park.

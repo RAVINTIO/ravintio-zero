@@ -20,14 +20,21 @@ feature: "0000025-pipeline-gate-and-config-fixes-and-ship-agent-fixes"
 
 ## Context
 
-`ADR-0077` ("Scope Lock Suggested Answers via On-Demand Subagent") established that the orchestrator's Scope Lock Challenge always asks each of the four scenario-path questions (happy path, first-run path, error/sad path, cross-session continuity) one at a time, and always offers "want me to suggest an answer first?" in the same turn — but only dispatches `planifest-scope-lock-agent` on explicit human request, never pre-emptively. That decision was made to guard against passive rubber-stamping of unrequested drafts.
+`ADR-0077` ("Scope Lock Suggested Answers via On-Demand Subagent") established that the orchestrator's Scope Lock Challenge always asks each scenario-path question one at a time. The four questions are happy path, first-run path, error/sad path, and cross-session continuity. It also always offers "want me to suggest an answer first?" in the same turn. It dispatches `planifest-scope-lock-agent` only on explicit human request, never pre-emptively. The decision guarded against passive rubber-stamping of unrequested drafts.
 
 Two backlog entries subsequently reversed that judgment from lived experience:
 
-- `plan/backlog/0000029-scope-lock-drafts-always-presented/entry.md` (filed from feature 0000022's own P0): the offer-then-opt-in flow adds a round trip per question — up to eight exchanges for four answers — "with no governance benefit: the human's explicit per-item accept/edit/reject remains the only thing that counts either way." The human directed that the draft should simply always be there when the question is asked.
-- `plan/backlog/0000040-scope-lock-default-to-drafted-answers/entry.md` (filed from feature 0000017's own P0): the human called the opt-in-only default "a bug," and separately asked that all four drafts be presented together in one batch rather than one-at-a-time sequencing waiting for a per-question answer before drafting/showing the next.
+- `plan/backlog/0000029-scope-lock-drafts-always-presented/entry.md` (filed from feature 0000022's own P0). The offer-then-opt-in flow adds a round trip per question. That means up to eight exchanges for four answers. The entry says the cost comes `with no governance benefit: the human's explicit per-item accept/edit/reject remains the only thing that counts either way`. The human directed that the draft should always be there when the orchestrator asks the question.
+- `plan/backlog/0000040-scope-lock-default-to-drafted-answers/entry.md` (filed from feature 0000017's own P0): the human called the opt-in-only default "a bug". They separately asked the orchestrator to present all four drafts together in one batch. The alternative was one-at-a-time sequencing, which waits for a per-question answer before drafting or showing the next.
 
-`req-007-scope-lock-default-drafted-batch.md` (this feature) merges both entries into a single requirement: dispatch `planifest-scope-lock-agent` for all four scenario-path questions in parallel by default, present all four together, and have the human complete one review pass while still giving a separate explicit accept/edit/reject per item, with each item's `build-log.md` entry written immediately on that item's own confirmation. req-007 explicitly assigns authoring the superseding ADR to P2 (this ADR) as a hard dependency, and explicitly calls out that the reversal must be scoped narrowly against `ADR-0060` (One-Question-at-a-Time as Framework-Wide Instruction) so it does not read as a silent framework-wide reversal of that convention.
+`req-007-scope-lock-default-drafted-batch.md` (this feature) merges both entries into a single requirement with four parts:
+
+- Dispatch `planifest-scope-lock-agent` for all four scenario-path questions in parallel by default.
+- Present all four together.
+- Have the human complete one review pass while still giving a separate explicit accept/edit/reject per item.
+- Write each item's `build-log.md` entry immediately on that item's own confirmation.
+
+req-007 explicitly assigns authoring the superseding ADR to P2 (this ADR) as a hard dependency. It also explicitly calls out that the reversal must be scoped narrowly against `ADR-0060` (One-Question-at-a-Time as Framework-Wide Instruction). That keeps it from reading as a silent framework-wide reversal of that convention.
 
 This ADR supersedes `ADR-0077` for the Scope Lock Challenge specifically.
 
@@ -37,13 +44,20 @@ This ADR supersedes `ADR-0077` for the Scope Lock Challenge specifically.
 
 The Scope Lock Challenge changes from sequential, opt-in-per-question drafting to default-drafted, batch-presented drafting:
 
-1. **Default parallel dispatch, no opt-in.** The orchestrator dispatches `planifest-scope-lock-agent` for all four scenario-path questions (happy path, first-run path, error/sad path, cross-session continuity) in parallel, by default, before presenting any question to the human. The per-question "want me to suggest an answer first? yes/no" offer is removed — drafting is no longer gated on a human request. Each dispatch remains a fresh-context subagent scoped to exactly one question, receiving the same inputs the prior on-request dispatch received (the scenario-path question, feature brief, requirements/ADRs confirmed so far, and latest confirmed decisions to check against, if any exist yet) — not the coaching conversation history.
-2. **Batch presentation.** The orchestrator presents all four questions together with their labelled drafts in a single turn, not one question at a time waiting for an answer before drafting or showing the next.
-3. **Per-item confirmation is unchanged and non-negotiable.** The human reviews the batch in one pass but still gives a separate, explicit accept / edit / reject for each of the four items individually. No blanket or implied confirmation across multiple items is ever read as approval for any of them. The moment the human gives that explicit affirmative for one item, it is recorded to `plan/current/build-log.md` immediately — using the existing capture format and source labels (`agent-draft-accepted` / `agent-draft-edited` / `human`) — not deferred until the whole batch is confirmed.
-4. **Partial-failure fallback.** If one of the four parallel dispatches fails, the orchestrator presents the three successful drafts plus a clear failure marker for the fourth, and falls back to the original blank-question, opt-in flow for that one item only. A single failed dispatch never blocks or discards the rest of the batch.
-5. **`planifest-scope-lock-agent`'s invocation contract is unchanged.** Fresh-context subagent, single-question scope, never self-confirms, never advances the Scope Lock sequence, never writes `build-log.md` itself. Only the trigger (automatic-by-default vs. on-explicit-request) and the batch cardinality (four dispatched together vs. one at a time) change. The five drafting rules in `planifest-scope-lock-agent/SKILL.md` — usage-only framing, outcome not action, N/A recognition, consistency check, no implicit confirmation — are unchanged and remain fully authoritative.
+1. **Default parallel dispatch, no opt-in.** The orchestrator dispatches `planifest-scope-lock-agent` for all four scenario-path questions in parallel, by default. The four are happy path, first-run path, error/sad path, and cross-session continuity. The dispatch happens before the orchestrator presents any question to the human. The orchestrator no longer makes the per-question "want me to suggest an answer first? yes/no" offer. A human request no longer gates drafting. Each dispatch remains a fresh-context subagent scoped to exactly one question. It receives the same inputs as the prior on-request dispatch. These are the scenario-path question, the feature brief, and the requirements/ADRs confirmed so far. They also include the latest confirmed decisions to check against, if any exist yet. It does not receive the coaching conversation history.
+2. **Batch presentation.** The orchestrator presents all four questions together with their labelled drafts in a single turn. It does not present one question at a time, waiting for an answer before drafting or showing the next.
+3. **Per-item confirmation remains unchanged and non-negotiable.** The human reviews the batch in one pass but still gives a separate, explicit accept / edit / reject for each of the four items individually. The orchestrator never reads a blanket or implied confirmation across multiple items as approval for any of them. The moment the human gives that explicit affirmative for one item, the orchestrator records it to `plan/current/build-log.md` immediately. It uses the existing capture format and source labels (`agent-draft-accepted` / `agent-draft-edited` / `human`). It does not defer the write until the human confirms the whole batch.
+4. **Partial-failure fallback.** If one of the four parallel dispatches fails, the orchestrator presents the three successful drafts plus a clear failure marker for the fourth. It falls back to the original blank-question, opt-in flow for that one item only. A single failed dispatch never blocks or discards the rest of the batch.
+5. **`planifest-scope-lock-agent`'s invocation contract remains unchanged.** Fresh-context subagent, single-question scope, never self-confirms, never advances the Scope Lock sequence, never writes `build-log.md` itself. Only the trigger (automatic-by-default vs. on-explicit-request) and the batch cardinality (four dispatched together vs. one at a time) change. The five drafting rules in `planifest-scope-lock-agent/SKILL.md` stay as they were and remain fully authoritative. They are usage-only framing, outcome not action, N/A recognition, consistency check, and no implicit confirmation.
 
-**Explicit scope bound against `ADR-0060`:** This change applies **only** to the Scope Lock Challenge's four scenario-path questions. `ADR-0060`'s one-question-at-a-time convention remains in force everywhere else in the framework — coaching Q&A, clarifying questions raised when a Scope Lock answer reveals a gap, phase gates, and every other human-interaction point in the pipeline still ask one question at a time with recommend-then-confirm. The Scope Lock Challenge's four questions are a fixed, enumerable, non-branching set uniquely suited to batching (unlike open-ended coaching, whose next question depends on the prior answer); batching their drafting and presentation does not weaken confirmation into a blanket approval, because per-item accept/edit/reject remains individually gated and individually recorded. This is a narrow, named exception, not a framework-wide reversal.
+**Explicit scope bound against `ADR-0060`:** This change applies **only** to the Scope Lock Challenge's four scenario-path questions. `ADR-0060`'s one-question-at-a-time convention remains in force everywhere else in the framework. These points still ask one question at a time with recommend-then-confirm:
+
+- Coaching Q&A.
+- Clarifying questions raised when a Scope Lock answer reveals a gap.
+- Phase gates.
+- Every other human-interaction point in the pipeline.
+
+The Scope Lock Challenge's four questions are a fixed, enumerable, non-branching set uniquely suited to batching. Open-ended coaching differs because its next question depends on the prior answer. Batching drafting and presentation does not weaken confirmation into a blanket approval. Per-item accept/edit/reject remains individually gated and individually recorded. This is a narrow, named exception, not a framework-wide reversal.
 
 ---
 
@@ -70,30 +84,30 @@ The Scope Lock Challenge changes from sequential, opt-in-per-question drafting t
 ## Consequences
 
 **Positive:**
-- Eliminates up to eight sequential exchanges (offer, then possible request, times four) down to one dispatch batch plus one review pass — directly resolving the friction the human called "a bug" in backlog 0000040 and the redundant round-trips flagged in backlog 0000029.
-- Scope Lock's per-item governance discipline — fresh-context subagent per question, usage-only framing, consistency-check flagging, explicit accept/edit/reject, immediate build-log write — is fully preserved; only drafting trigger and presentation cadence change, not the confirmation mechanism itself.
+- Eliminates up to eight sequential exchanges (offer, then possible request, times four) down to one dispatch batch plus one review pass. This directly resolves the friction the human called "a bug" in backlog 0000040. It also resolves the redundant round-trips backlog 0000029 flagged.
+- This ADR fully preserves Scope Lock's per-item governance discipline: fresh-context subagent per question, usage-only framing, consistency-check flagging, explicit accept/edit/reject, and immediate build-log write. Only the drafting trigger and presentation cadence change, not the confirmation mechanism itself.
 
 **Negative:**
-- Four parallel subagent dispatches now happen on every Scope Lock Challenge run unconditionally, even for items where the human would have declined a draft under the old opt-in flow — a real, if small, increase in agent/token spend versus the zero-dispatches-unless-requested baseline.
-- The new partial-failure fallback (three successful drafts plus a failure marker for the fourth, reverting only that item to the blank-question opt-in flow) is a more complex failure mode to implement and test correctly than the uniform single-question flow it replaces.
+- Four parallel subagent dispatches now happen on every Scope Lock Challenge run, unconditionally. This includes items where the human would have declined a draft under the old opt-in flow. That is a real, if small, increase in agent/token spend versus the zero-dispatches-unless-requested baseline.
+- The new partial-failure fallback is a more complex failure mode to implement and test correctly than the uniform single-question flow it replaces. It shows three successful drafts plus a failure marker for the fourth. It reverts only that item to the blank-question opt-in flow.
 
 **Risks:**
-- If the single batch-review turn is ever misread — by the human or by a future implementer — as inviting one blanket approval across all four items, the "no implicit confirmation" rule could silently erode; mitigated by req-007's explicit acceptance criterion and by `planifest-scope-lock-agent/SKILL.md` rule 5 remaining unchanged and fully authoritative.
-- Without this ADR's explicit boundary, a future reader could misread the reversal as license to batch other one-question-at-a-time flows (coaching Q&A, phase gates); the Decision section above forecloses that reading by name.
+- The human or a future implementer could misread the single batch-review turn as inviting one blanket approval across all four items. If so, the "no implicit confirmation" rule could silently erode. req-007's explicit acceptance criterion mitigates this. So does rule 5 of `planifest-scope-lock-agent/SKILL.md`, which remains unchanged and fully authoritative.
+- Without this ADR's explicit boundary, a future reader could misread the reversal as license to batch other one-question-at-a-time flows (coaching Q&A, phase gates). The Decision section above forecloses that reading by name.
 
 ---
 
 ## Related ADRs
 
-- ADR-0077 (Scope Lock Suggested Answers via On-Demand Subagent) - conflicts-with (this decision reverses its never-pre-draft, offer-then-opt-in default for the Scope Lock Challenge specifically; see Supersedes below)
-- ADR-0060 (One-Question-at-a-Time as Framework-Wide Instruction) - related-to (this ADR carves a narrow, explicitly bounded exception for the Scope Lock Challenge's four scenario-path questions only; ADR-008's convention remains in force everywhere else in the framework)
-- ADR-0059 (Derived Scope Lock Scenarios over Fixed Checklist) - related-to (unaffected — this ADR changes only the drafting/presentation cadence of the four scenario questions, not how they are derived)
+- ADR-0077 (Scope Lock Suggested Answers via On-Demand Subagent) - conflicts-with (this decision reverses its never-pre-draft, offer-then-opt-in default for the Scope Lock Challenge specifically. See Supersedes below)
+- ADR-0060 (One-Question-at-a-Time as Framework-Wide Instruction) - related-to (this ADR carves a narrow, explicitly bounded exception for the Scope Lock Challenge's four scenario-path questions only. ADR-008's convention remains in force everywhere else in the framework)
+- ADR-0059 (Derived Scope Lock Scenarios over Fixed Checklist) - related-to (unaffected. This ADR changes only the drafting/presentation cadence of the four scenario questions, not how the framework derives them)
 
 ---
 
 ## Supersedes
 
-- ADR-0077 - Scope Lock Suggested Answers via On-Demand Subagent (superseded for the Scope Lock Challenge specifically; see `docs/decisions-index.md` for the cross-feature status update)
+- ADR-0077 - Scope Lock Suggested Answers via On-Demand Subagent (this ADR supersedes it for the Scope Lock Challenge specifically. See `docs/decisions-index.md` for the cross-feature status update)
 
 ## Superseded By
 

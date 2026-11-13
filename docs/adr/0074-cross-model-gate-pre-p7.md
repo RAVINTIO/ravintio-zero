@@ -20,13 +20,13 @@ feature: "0000016-pipeline-governance-and-loop-engineering"
 
 ## Context
 
-The pre-ship review needs a reviewer with different blind spots from the maker, and its fix loop (implement→review→fix) must be able to edit the implementation. The original research brief placed this "before P9" — but P7 already archives and deletes `plan/current/`, and the ship-agent's Hard Limit forbids touching code after archive. A gate between P7 and P9 would review work it is forbidden to fix. (Risk R-003, corrected at P0.)
+The pre-ship review needs a reviewer with different blind spots from the maker, and its fix loop (implement→review→fix) must be able to edit the implementation. The original research brief placed this "before P9". But P7 already archives and deletes `plan/current/`, and the ship-agent's Hard Limit forbids touching code after archive. A gate between P7 and P9 would review work the ship-agent cannot fix. (Risk R-003, corrected at P0.)
 
 ---
 
 ## Decision
 
-The gate runs at the **end of P6, before any P7 archive action begins**. Orchestrator control flow makes the ordering structural: the ship-agent (P7) is only invoked after the gate reports approval (or the toggle is off). The reviewer is a fresh-context subagent (per ADR-0072) on a different model id than the implementer, resolved from the Model Tier table; the verdict records both model ids. On approval → proceed to P7. On findings → fix loop per loop-runner (cap 3, no-progress halt); cap without approval blocks P7 and escalates to the human with outstanding findings. Toggle `cross_model_review`, default off.
+The gate runs at the **end of P6, before any P7 archive action begins**. Orchestrator control flow makes the ordering structural. The orchestrator invokes the ship-agent (P7) only after the gate reports approval or the toggle is off. The reviewer is a fresh-context subagent (per ADR-0072) on a different model id than the implementer, resolved from the Model Tier table. The verdict records both model ids. On approval, proceed to P7. On findings, run the fix loop per loop-runner (cap 3, no-progress halt). If the cap passes without approval, the gate blocks P7 and escalates to the human with outstanding findings. Toggle `cross_model_review`, default off.
 
 ---
 
@@ -51,20 +51,20 @@ The gate runs at the **end of P6, before any P7 archive action begins**. Orchest
 ## Consequences
 
 **Positive:**
-- The fix loop always operates on live, editable state; the archive lock is never challenged
+- The fix loop always operates on live, editable state, and the archive lock is never challenged
 - Different-model review gives the final gate genuinely different failure modes from the maker
 
 **Negative:**
 - Full-diff second-model reviews are the most token-expensive loop in the feature (bounded by cap 3, measured by P8)
 
 **Risks:**
-- Model-id availability varies by tool — if no second id is resolvable, the gate degrades to same-model fresh-context review and records the degradation in the verdict (assumption A-004)
+- Model-id availability varies by tool. If no second id is resolvable, the gate degrades to same-model fresh-context review and records the degradation in the verdict (assumption A-004)
 
 ---
 
 ## Related ADRs
 
-- ADR-0072 - extends (fresh-context REJECT-default contract); ADR-0067 - related-to (P7 lock line)
+- ADR-0072 - extends (fresh-context REJECT-default contract). ADR-0067 - related-to (P7 lock line)
 
 ---
 

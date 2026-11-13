@@ -52,9 +52,9 @@ RAVINTIO agents default to the **shortest response that fully communicates the o
 
 ### Rules
 
-1. **Brevity is the default.** Partial sentences and single-line confirmations are correct when no explanation is needed.
+1. **Brevity is the default.** Partial sentences and single-line confirmations are correct when the reader needs no explanation.
 2. **Explain when the why is non-obvious.** A constraint being applied, a decision that could surprise the human, or a requirement conflict all warrant explanation.
-3. **Do not narrate.** Do not describe what you are about to do before doing it, or summarise what you just did after doing it.
+3. **Do not narrate.** Do not describe what you are about to do before doing it, or summarise what you did after doing it.
 4. **No affirmatory padding.** Do not open responses with "Certainly!", "Great question!", "Of course!", "As requested,", or similar.
 5. **The human can always ask for more.** If they want detail, they will ask. Default to less.
 
@@ -70,19 +70,19 @@ RAVINTIO agents default to the **shortest response that fully communicates the o
 
 - Applying a constraint that the human did not explicitly request (cite the constraint)
 - Deviating from the spec (cite the requirement and explain why)
-- Blocking due to a hard limit (state what is blocked and why)
+- Blocking due to a hard limit (state what the limit blocks and why)
 - Answering a direct question (answer it)
 
 ---
 
 ## 4. Em Dash Prohibition
 
-The em dash character (U+2014) is not permitted in RAVINTIO artifacts. Use a comma, colon, full stop and new sentence, or parentheses instead, depending on the sentence. The writing standard bans semicolons.
+RAVINTIO artifacts must not contain the em dash character (U+2014). Use a comma, colon, full stop and new sentence, or parentheses instead, depending on the sentence. The writing standard bans semicolons.
 
 ### Enforcement (req-006, ADR-003, feature 0000028)
 
-`em-dash-guard.mjs` (`ravintio-zero/hooks/enforcement/em-dash-guard.mjs`), a `PreToolUse(Write, Edit)` hook sibling to `gate-write.mjs` and `ratchet-check.mjs`, blocks a write containing U+2014 within `plan/current/`, `docs/`, `ravintio-zero/skills/`, `ravintio-zero/templates/`, and `ravintio-zero/standards/`. Paths outside that set, including `plan/_archive/` and `plan/changelog/` (historical record), are not scanned.
+`em-dash-guard.mjs` (`ravintio-zero/hooks/enforcement/em-dash-guard.mjs`), a `PreToolUse(Write, Edit)` hook sibling to `gate-write.mjs` and `ratchet-check.mjs`, blocks a write containing U+2014 within `plan/current/`, `docs/`, `ravintio-zero/skills/`, `ravintio-zero/templates/`, and `ravintio-zero/standards/`. The hook does not scan paths outside that set, including `plan/_archive/` and `plan/changelog/` (historical record).
 
 ### Bypass
 
-A single-line sentinel comment, `<!-- ravintio-em-dash-allow -->`, present anywhere in the content being written, allows that write through regardless of em dash matches. The sentinel is reusable, not single-use, and either a human or an agent may write it: an em dash carries no weakening semantics, so it does not need the human-only, single-use marker `plan/current/.ratchet-approve` uses for ratchet approvals.
+A single-line sentinel comment, `<!-- ravintio-em-dash-allow -->`, present anywhere in the content being written, allows that write through regardless of em dash matches. The sentinel is reusable, not single-use, and either a human or an agent may write it. An em dash carries no weakening semantics, so it does not need the human-only, single-use marker that `plan/current/.ratchet-approve` uses for ratchet approvals.

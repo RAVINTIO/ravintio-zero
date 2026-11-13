@@ -55,7 +55,7 @@ The agent pushes the tag with the branch when it raises the PR. This overrides t
 - A reader must learn the new step numbers.
 
 **Risks:**
-- If the run mode is read after the clear, Step 10 takes the wrong gate. The order of Step 8 guards this and a test pins it.
+- If Step 10 reads the run mode after the clear, it takes the wrong gate. The order of Step 8 guards this and a test pins it.
 - A failed push after the tag exists leaves a local tag. The ship skill reports the exact error and stops.
 
 ## Related ADRs

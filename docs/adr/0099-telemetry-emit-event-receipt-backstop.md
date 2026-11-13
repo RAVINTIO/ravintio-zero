@@ -15,11 +15,11 @@ feature: "0000027-backlog-batch-governance-tooling-fixes"
 
 ## Context
 
-Backlog `0000044` (this feature's req-004) reported two related findings from feature `0000025`'s own P0-P2 self-audit: (1) the orchestrator missed an unacknowledged `plan/.telemetry-failures/` marker at a phase boundary, and (2) agent-driven `emit_event` calls (`spec_gap`, `adr_decision`, etc., specified in each phase skill's own `## Telemetry` section) were never actually invoked despite build-log recording `Telemetry: emitted`. Feature `0000026` (folded in from the same backlog entry) already shipped `check-telemetry-failures.mjs`, a read-only `UserPromptSubmit` hook that surfaces an `additionalContext` reminder when an unacknowledged failure marker exists — this closes finding (1). Finding (2) remains open: nothing today verifies that a phase's claimed `emitted` status corresponds to an actual tool call having occurred, consistent with `ADR-0073`'s "deterministic caps/budgets/ratchets, never skill prose alone" precedent.
+Backlog `0000044` (this feature's req-004) reported two related findings from feature `0000025`'s own P0-P2 self-audit. First, the orchestrator missed an unacknowledged `plan/.telemetry-failures/` marker at a phase boundary. Second, agent-driven `emit_event` calls (`spec_gap`, `adr_decision`, etc.) never ran, although build-log recorded `Telemetry: emitted`. Each phase skill's own `## Telemetry` section specifies those calls. Feature `0000026` (folded in from the same backlog entry) already shipped `check-telemetry-failures.mjs`. That read-only `UserPromptSubmit` hook surfaces an `additionalContext` reminder when an unacknowledged failure marker exists, which closes finding 1. Finding 2 remains open. Nothing today verifies that a phase's claimed `emitted` status corresponds to an actual tool call. This is consistent with `ADR-0073`'s "deterministic caps/budgets/ratchets, never skill prose alone" precedent.
 
 ## Decision
 
-Add a `PostToolUse` hook matched on the `emit_event` MCP tool call (`mcp__structured-telemetry-mcp__emit_event`, per the tool's actual invocation name) that, on a successful call, writes a durable local receipt file under `plan/.telemetry-receipts/{phase}-{event_type}-{ISO-8601-timestamp}.marker` containing the event envelope's `phase_name`/`event_type` fields. Extend `check-telemetry-failures.mjs` (or add a narrowly-scoped sibling hook in the same family, implementer's choice at P3 based on what keeps the diff smallest) to cross-reference, at each `UserPromptSubmit`, the current phase's expected agent-driven event types (read from the invoking phase skill's own `## Telemetry` section, or a small static table derived from it) against receipts present for that phase; inject an `additionalContext` reminder if an expected event type has no corresponding receipt once the phase has otherwise completed its build-log entry. This is read-only and advisory like its sibling, per the existing hook family's design (never blocks, never decides, only surfaces).
+Add a `PostToolUse` hook matched on the `emit_event` MCP tool call (`mcp__structured-telemetry-mcp__emit_event`, per the tool's actual invocation name). On a successful call, the hook writes a durable local receipt file under `plan/.telemetry-receipts/{phase}-{event_type}-{ISO-8601-timestamp}.marker`. The file contains the event envelope's `phase_name`/`event_type` fields. Extend `check-telemetry-failures.mjs` to cross-reference, at each `UserPromptSubmit`, the current phase's expected agent-driven event types against receipts present for that phase. Alternatively, add a narrowly-scoped sibling hook in the same family. The implementer chooses at P3 based on what keeps the diff smallest. The expected event types come from the invoking phase skill's own `## Telemetry` section, or from a small static table derived from it. Inject an `additionalContext` reminder if an expected event type has no corresponding receipt once the phase has otherwise completed its build-log entry. This hook is read-only and advisory like its sibling, per the existing hook family's design: it never blocks, never decides, and only surfaces.
 
 ## Alternatives Considered
 
@@ -39,13 +39,13 @@ Add a `PostToolUse` hook matched on the `emit_event` MCP tool call (`mcp__struct
 ## Consequences
 
 **Positive:**
-- Closes the second half of backlog `0000044` without introducing a new hook family — the orchestrator's `Telemetry: emitted` claim becomes independently checkable rather than self-attested.
+- Closes the second half of backlog `0000044` without introducing a new hook family. The orchestrator's `Telemetry: emitted` claim becomes independently checkable rather than self-attested.
 
 **Negative:**
-- One more hook entry to install, register, and keep in parity across `setup.sh`/`setup.ps1` — a small addition to the surface `req-001` is already touching in this same feature.
+- One more hook entry to install, register, and keep in parity across `setup.sh`/`setup.ps1`. This is a small addition to the surface `req-001` already touches in this same feature.
 
 **Risks:**
-- If the receipt-writing hook itself fails silently (e.g. the MCP tool name changes), the cross-reference check would have nothing to compare against and could produce false-negative reminders (looks compliant when it isn't) — mitigate by having the receipt hook's own failure route through the existing `plan/.telemetry-failures/` marker mechanism, consistent with how other telemetry hooks already report their own failures.
+- If the receipt-writing hook itself fails silently (e.g. the MCP tool name changes), the cross-reference check would have nothing to compare against. It could then produce false-negative reminders (looks compliant when it isn't). Mitigate by routing the receipt hook's own failure through the existing `plan/.telemetry-failures/` marker mechanism, consistent with how other telemetry hooks already report their own failures.
 
 ## Related ADRs
 

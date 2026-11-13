@@ -24,7 +24,7 @@ LOOP=$(sed -n '/^## TDD inner loop/,/^## Rules/p' "$IMPL")
 assert_contains 'recommended_model' "$LOOP" "TDD loop names recommended_model"
 assert_contains 'fails twice' "$LOOP" "haiku unit failing twice is covered"
 assert_contains 'retry' "$LOOP" "retry on sonnet is covered"
-assert_contains 'five-attempt escalation is unchanged' "$LOOP" "five-attempt escalation unchanged"
+assert_contains 'five-attempt escalation stays the same' "$LOOP" "five-attempt escalation unchanged"
 
 echo "=== (b) model frontmatter and installed copies ==="
 for s in test-writer implementer refactor; do

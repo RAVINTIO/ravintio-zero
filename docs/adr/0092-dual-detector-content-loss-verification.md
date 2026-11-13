@@ -6,7 +6,7 @@ feature: "0000022-orchestrator-redundancy-removal"
 ---
 ﻿---
 title: "ADR 002: Dual-Detector Content-Loss Verification"
-summary: "This feature verifies zero enforcement-content loss with two detectors, not one: the existing regression pack, and the mandatory P4 diff review formally named as the systematic check for what the pack does not pin. Both resolve a finding the same way - relocate the pointer or restore the content, never weaken the check."
+summary: "This feature verifies zero enforcement-content loss with two detectors, not one. The detectors are the existing regression pack and the mandatory P4 diff review. This ADR names the review as the systematic check for what the pack does not pin. Both resolve a finding the same way - relocate the pointer or restore the content, never weaken the check."
 status: "accepted"
 version: "0.1.0"
 ---
@@ -19,19 +19,19 @@ version: "0.1.0"
 
 ## Context
 
-This feature removes and relocates roughly ten distinct content areas from `planifest-framework/skills/planifest-orchestrator/SKILL.md`, operating under ADR-0090's mandate that a guardrailed baseline-gated trim must produce zero enforcement-content loss. The regression pack at `planifest-framework/tests/regression/` (22 tests) is the safety net that mandate assumes. Inspection at P0 estimated only 4 of the 22 tests grep or assert against orchestrator-specific content; req-001's actual baseline run (`plan/current/regression-baseline.md`) corrected this to 10 of 22 - the P0 estimate was wrong. Even at the corrected count, three trim areas (Fast Path criteria/execution, the reversal execute/assess mechanics, the Change Pipeline confirm questions) remain confirmed-unpinned by any test. A cut that removes the sole statement of a rule from one of those areas would not turn the pack red - it would ship silently.
+This feature removes and relocates roughly ten distinct content areas from `planifest-framework/skills/planifest-orchestrator/SKILL.md`. It operates under ADR-0090's mandate that a guardrailed baseline-gated trim must produce zero enforcement-content loss. The regression pack at `planifest-framework/tests/regression/` (22 tests) is the safety net that mandate assumes. Inspection at P0 estimated only 4 of the 22 tests grep or assert against orchestrator-specific content. The actual baseline run for req-001 (`plan/current/regression-baseline.md`) corrected this to 10 of 22. The P0 estimate was wrong. Even at the corrected count, no test pins three trim areas: Fast Path criteria/execution, the reversal execute/assess mechanics, and the Change Pipeline confirm questions. A cut that removes the sole statement of a rule from one of those areas would not turn the pack red. It would ship silently.
 
-This gap was surfaced during the P0 Scope Lock Challenge, specifically the error/sad-path question, by the scope-lock agent. The human on the loop confirmed the closure: this feature's plan already requires a P4 diff review ("every removed instruction verifiably stated in exactly one canonical file") as an acceptance criterion, but that review was not named as a detector or given a defined resolution rule for what happens when it finds a problem.
+The scope-lock agent found this gap during the P0 Scope Lock Challenge, on the error/sad-path question. The human on the loop confirmed the closure. This feature's plan already requires a P4 diff review ("every removed instruction verifiably stated in exactly one canonical file") as an acceptance criterion. The plan did not name that review as a detector or give it a resolution rule for what happens when it finds a problem.
 
 ## Decision
 
 This feature verifies content loss with two detectors, not one.
 
-Detector 1 is the existing regression pack: it catches any orchestrator content loss that one of the 4 orchestrator-pinning tests happens to assert against.
+Detector 1 is the existing regression pack. It catches any orchestrator content loss that one of the 4 orchestrator-pinning tests happens to assert against.
 
-Detector 2 is the mandatory P4 diff review already required by this feature's acceptance criteria. It is formally named here as the systematic detector for the remaining trim areas the regression pack does not pin - a full diff of every removal against the destination files, confirming each removed instruction is verifiably stated in exactly one canonical file.
+Detector 2 is the mandatory P4 diff review already required by this feature's acceptance criteria. This ADR formally names it as the systematic detector for the remaining trim areas the regression pack does not pin. It is a full diff of every removal against the destination files, confirming each removed instruction appears in exactly one canonical file.
 
-Both detectors resolve a finding the same way: if the content was relocated, update the pointer (or the test, if one exists) to the new canonical location; if the content was the sole statement of a rule and no relocation target holds it, the cut was wrong and the content is restored. Neither detector's finding may be resolved by weakening or deleting a check, in either the regression pack or the diff review's own criteria.
+Both detectors resolve a finding the same way. If the content moved, update the pointer (or the test, if one exists) to the new canonical location. If the content was the sole statement of a rule and no relocation target holds it, the cut was wrong and you restore the content. Never resolve a finding from either detector by weakening or deleting a check, in either the regression pack or the diff review's own criteria.
 
 ## Alternatives Considered
 
@@ -50,18 +50,18 @@ Both detectors resolve a finding the same way: if the content was relocated, upd
 ## Consequences
 
 **Positive:**
-- Every one of the 10 content areas in scope now has an explicit, defined verification path, not just the roughly 70% covered by existing regression tests (corrected from an initial P0 estimate of 40%).
-- The resolution rule (restore the content, or relocate the pointer - never rationalise a finding away) is recorded and citable rather than left implicit in the acceptance criteria.
+- Every one of the 10 content areas in scope now has an explicit, defined verification path. Existing regression tests cover only roughly 70% of them (corrected from an initial P0 estimate of 40%).
+- This ADR records the resolution rule (restore the content, or relocate the pointer, and never rationalise a finding away). It is citable rather than left implicit in the acceptance criteria.
 
 **Negative:**
-- The P4 diff review is a manual, human-and-agent judgement step rather than a deterministic test, making it slower and dependent on reviewer thoroughness in a way an automated regression test is not.
+- The P4 diff review is a manual, human-and-agent judgement step rather than a deterministic test. It is slower and depends on reviewer thoroughness in a way an automated regression test does not.
 
 **Risks:**
-- A rushed or incomplete diff review could still miss a lost rule in the 3 trim areas the regression pack does not pin, since Detector 2 is not enforced by a deterministic gate the way `ratchet-check.mjs` enforces scope-weakening elsewhere in the framework.
+- A rushed or incomplete diff review could still miss a lost rule in the 3 trim areas the regression pack does not pin. No deterministic gate backs Detector 2, unlike the way `ratchet-check.mjs` guards against scope-weakening elsewhere in the framework.
 
 ## Related ADRs
 
-- ADR-0091 (agent-dispatch-standards-file) - related-to (both are P2 decisions for this same feature; no dependency between them)
+- ADR-0091 (agent-dispatch-standards-file) - related-to (both are P2 decisions for this same feature, with no dependency between them)
 - ADR-0090 (guardrailed baseline-gated trim process) - depends-on (this ADR operates within that upstream process)
 
 ## Supersedes

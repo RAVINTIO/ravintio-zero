@@ -63,7 +63,7 @@ A real failure still warns and continues. A real failure is a read or write erro
 
 **Risks:**
 - The cleanup's shape test drifts from the install step's test. Both scripts assert the exact output for the same inputs, so a drift fails a test.
-- The PowerShell reading of 0000128 is untested locally. CI runs the PowerShell suite before acceptance.
+- The PowerShell reading of 0000128 has no local test. CI runs the PowerShell suite before acceptance.
 
 ## Related ADRs
 

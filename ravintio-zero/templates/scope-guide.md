@@ -10,7 +10,7 @@
 
 The Scope document is the boundary fence. It tells the agent what to build, what NOT to build, and what's been deliberately pushed to later. Without it, agents drift - they add features not asked for, miss features that were, or build deferred items prematurely.
 
-All three sections must be present. If nothing is deferred, state "Nothing deferred."
+All three sections must be present. If the scope defers nothing, state "Nothing deferred."
 
 ---
 
@@ -24,7 +24,7 @@ The **plan skill** produces this during the plan phase (P1), derived from the Fe
 
 ### In Scope
 
-What this feature or phase **will** deliver. Be specific - "authentication" is vague; "JWT-based auth with refresh tokens, scoped to the auth-service component" is clear.
+What this feature or phase **will** deliver. Be specific - "authentication" is vague, while "JWT-based auth with refresh tokens, scoped to the auth-service component" is clear.
 
 Each item should be traceable to a feature in the Feature Brief.
 
@@ -39,10 +39,10 @@ Good "Out of Scope" items are things someone might reasonably expect to be inclu
 
 ### Deferred
 
-What might be delivered later but not now. The critical addition: note what is **blocked** until each deferred item is resolved.
+What might be delivered later but not now. The critical addition: note what each deferred item **blocks** until you resolve it.
 
 - "Database migration tooling - deferred to Wave 2. Blocked: no automated rollback until this ships."
-- "Rate limiting - deferred. Blocked: the API is unprotected against abuse until this ships."
+- "Rate limiting - deferred. Blocked: the API has no protection against abuse until this ships."
 
 This turns deferred items into tracked risks.
 

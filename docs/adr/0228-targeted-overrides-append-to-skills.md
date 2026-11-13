@@ -19,7 +19,7 @@ Every override lands in the boot file, which every session loads. Task-bound rul
 
 ## Decision
 
-An override with `target: {skill}` is appended to the installed `{skill}/SKILL.md` between marker comments. The frontmatter is stripped. The value must match `^[a-z0-9][a-z0-9-]*$` and name an installed skill. Otherwise setup warns and uses the boot file. An override with no target is unchanged. GUTD and branch cleanup become capability skills.
+Setup appends an override with `target: {skill}` to the installed `{skill}/SKILL.md` between marker comments. It strips the frontmatter. The value must match `^[a-z0-9][a-z0-9-]*$` and name an installed skill. Otherwise setup warns and uses the boot file. Setup leaves an override with no target alone. GUTD and branch cleanup become capability skills.
 
 ## Alternatives Considered
 

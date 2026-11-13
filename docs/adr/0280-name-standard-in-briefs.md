@@ -15,7 +15,7 @@ version: "0.1.0"
 
 ## Context
 
-The Claude Code docs state that subagents run their own system prompt, so an output style does not reach them. A step session is a main session, but its prompt is fixed text that tests pin.
+The Claude Code docs state that subagents run their own system prompt, so an output style does not reach them. A step session is a main session, but it uses fixed prompt text that tests pin.
 
 ## Decision
 

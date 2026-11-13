@@ -19,7 +19,7 @@ The coordinator holds new backlog entries in `plan/.initiative-queue/` while a s
 
 ## Decision
 
-A queue item is a folder. Its `item.md` holds `**Step:** {n}` and `**Destination:** {repo path}`, and the other files in the folder are the content. A step reads the queue at P0 and before P4, writes the content of each item that names its number to the destination, and commits that path by explicit path. If the destination or content holds `{id}`, the step reserves the id, because the coordinator never edits the working tree while the driver runs. The coordinator clears the items after the step merges. Admin that fits no step lands through a `chore/` PR.
+A queue item is a folder. Its `item.md` holds `**Step:** {n}` and `**Destination:** {repo path}`, and the other files in the folder are the content. A step reads the queue at P0 and before P4. It writes the content of each item that names its number to the destination and commits that path by explicit path. If the destination or content holds `{id}`, the step reserves the id, because the coordinator never edits the working tree while the driver runs. The coordinator clears the items after the step merges. Admin that fits no step lands through a `chore/` PR.
 
 ## Alternatives Considered
 
@@ -43,7 +43,7 @@ A queue item is a folder. Its `item.md` holds `**Step:** {n}` and `**Destination
 
 **Negative:**
 - The step carries admin that is not part of its feature. The PR diff shows it.
-- The queue is ignored by git, so a lost queue loses the items. The coordinator can queue them again.
+- Git ignores the queue, so a lost queue loses the items. The coordinator can queue them again.
 
 **Risks:**
 - A step commits an item that names another step. The rule and the diff catch it.

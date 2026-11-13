@@ -7,7 +7,7 @@
 - All infrastructure must be defined in code - no manual console changes
 - Use the IaC tool declared in the stack (Terraform, Pulumi, CDK)
 - IaC files live at `src/{component-id}/infra/` or a dedicated infrastructure component
-- All configuration is parameterized - no hardcoded values for environment, region, or credentials
+- Parameterize all configuration - no hardcoded values for environment, region, or credentials
 
 ---
 

@@ -20,17 +20,17 @@ feature: "0000010-framework-quality-improvements"
 
 ## Context
 
-Feature 0000009's S-001 security finding (prompt injection via `featureId` read from filesystem) had a root cause in the spec: `req-008-orchestrator-presence-check.md` did not include an input validation acceptance criterion for the `featureId` field. The P8 build report recommended adding an input validation AC template to `requirement.template.md`.
+Feature 0000009's S-001 security finding (prompt injection via `featureId` read from filesystem) had a root cause in the spec. `req-008-orchestrator-presence-check.md` did not include an input validation acceptance criterion for the `featureId` field. The P8 build report recommended adding an input validation AC template to `requirement.template.md`.
 
-The design question: should the `## Input Validation` section be mandatory in every requirement file, or conditional (only included when the requirement involves untrusted external input)?
+The design question: should every requirement file have a mandatory `## Input Validation` section? Or should the section be conditional, included only when the requirement involves untrusted external input?
 
 ---
 
 ## Decision
 
-The `## Input Validation` section is conditional. It is included in a requirement file only when the requirement involves reading content from an untrusted source (filesystem, hook stdin, environment variables, HTTP responses) and using that content in output visible to the model or end user (banners, logs, displayed text, model context injection).
+The `## Input Validation` section is conditional. A requirement file includes it only when the requirement reads content from an untrusted source. The requirement must also use that content in output visible to the model or end user. Untrusted sources are the filesystem, hook stdin, environment variables, and HTTP responses. Visible output includes banners, logs, displayed text, and model context injection.
 
-The template marks the section with a conditional comment. The spec-agent instruction (also in the template) says: "Include this section whenever the requirement reads untrusted content and uses it in output visible to the model or user."
+The template marks the section with a conditional comment. The template also holds a spec-agent instruction. It reads: "Include this section whenever the requirement reads untrusted content and uses it in output visible to the model or user."
 
 ---
 
@@ -58,15 +58,15 @@ The template marks the section with a conditional comment. The spec-agent instru
 
 **Positive:**
 - Future requirements that read filesystem content will have explicit input validation ACs, closing the spec gap that caused S-001
-- Existing requirement files that don't involve external input are unaffected
-- The pattern is documented with a concrete example in the template, so spec-agents have a reference
+- Existing requirement files that don't involve external input stay unchanged
+- The template documents the pattern with a concrete example, so spec-agents have a reference
 
 **Negative:**
-- The spec-agent must exercise judgement to identify which requirements need the section — there is no automated enforcement at requirement-write time
+- The spec-agent must exercise judgement to identify which requirements need the section. No automated enforcement exists at requirement-write time.
 - A spec-agent that misses an applicable requirement will produce the same gap as the one that caused S-001
 
 **Risks:**
-- The conditional instruction may be ignored by a spec-agent under context pressure; mitigated by placing the instruction prominently in the template and by the security review (P5) catching any missed validations at implementation time
+- A spec-agent under context pressure may ignore the conditional instruction. Two things mitigate this. The template places the instruction prominently, and the security review (P5) catches any missed validations at implementation time.
 
 ---
 

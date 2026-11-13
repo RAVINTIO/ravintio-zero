@@ -5,7 +5,7 @@
 **Wave:** {{wave-number}} (if waved)
 **Version:** {{semver}}
 
-> It is advisory - no code changes are made. All findings require human review before action.
+> It is advisory - the review makes no code changes. All findings require human review before action.
 
 ## Summary
 

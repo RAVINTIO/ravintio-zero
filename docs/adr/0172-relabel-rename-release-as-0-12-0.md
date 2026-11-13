@@ -21,7 +21,7 @@ ADR-0164 chose 1.0.0 because the rename breaks consumer paths. Semantic versioni
 
 ## Decision
 
-- 0000160 is relabelled 0.12.0. Ship tags `v0.12.0` on the commit that `v1.0.0` points at, then deletes `v1.0.0` from `origin`.
+- The pack relabels 0000160 as 0.12.0. Ship tags `v0.12.0` on the commit that `v1.0.0` points at, then deletes `v1.0.0` from `origin`.
 - This release is 0.13.0.
 - The legacy fallbacks from ADR-0165 stay through 0.x and go at 1.0.0.
 - The orchestrator's downgrade block does not apply. The human overrode it on 2026-10-25, and the build log records the override.

@@ -29,7 +29,7 @@ Historical narrative lives exclusively in change records: `plan/changelog/`, `pl
 
 Two exemptions apply, stated explicitly:
 
-- `docs/decisions-index.md` is by nature an index of decisions across features, so it is treated as a change record and keeps its historical entries.
+- `docs/decisions-index.md` is by nature an index of decisions across features, so the framework treats it as a change record. It keeps its historical entries.
 - `docs/about.md` keeps its version field, which is the live version record, and a feature field that points to the change that produced that version.
 
 Code comments may keep short req/ADR citation tags where they cite a binding decision, such as a constraint that would otherwise look arbitrary. Narrative history sentences do not belong in code comments either.
@@ -54,9 +54,9 @@ Code comments may keep short req/ADR citation tags where they cite a binding dec
 ## Consequences
 
 **Positive:**
-- A reader of any living doc sees only what is true now, with no need to check when a fact was introduced.
+- A reader of any living doc sees only what is true now, with no need to check when someone introduced a fact.
 - Provenance stays recoverable through `plan/changelog/`, `plan/_archive/`, ADRs, and git history.
-- Docs shrink, since repeated "as of feature NNNN" asides are removed.
+- Docs shrink, since the rewrite removes repeated "as of feature NNNN" asides.
 
 **Negative:**
 - A reader who wants the history of a decision must leave the living doc and open the changelog or the relevant ADR.
@@ -68,7 +68,7 @@ Code comments may keep short req/ADR citation tags where they cite a binding dec
 
 ## Related ADRs
 
-- ADR-0109 - related-to. Historical records are exempt from the rename sweep for the same reason they are exempt here: a change record must describe what was true when it was written.
+- ADR-0109 - related-to. Historical records are exempt from the rename sweep for the same reason they are exempt here. A change record must describe what was true when its author wrote it.
 
 ## Supersedes
 

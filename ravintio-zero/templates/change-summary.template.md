@@ -1,6 +1,6 @@
 ﻿---
 title: "Change Summary - {{change-title}}"
-summary: "High-level summary of what was accomplished in this iteration."
+summary: "High-level summary of what this iteration accomplished."
 status: "active"
 version: "0.1.0"
 ---
@@ -14,8 +14,8 @@ version: "0.1.0"
 ## Change Request
 
 **Requested by:** {{human / agent}}
-**Description:** {{what was requested}}
-**Reason:** {{why the change is needed}}
+**Description:** {{what the requester asked for}}
+**Reason:** {{why you need the change}}
 **Classification:** bug-fix | enhancement | refactor | dependency-update | security-patch
 
 ## Blast Radius

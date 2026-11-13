@@ -1,7 +1,7 @@
 # JavaScript, Node.js: Library Standards
 
 > See `_version-policy.md` for pinning rules. Check `ravintio-overrides/library-standards/javascript/nodejs/prefer-avoid.md` first.
-> TypeScript Node.js projects should additionally follow `typescript/prefer-avoid.md`.
+> TypeScript Node.js projects should also follow `typescript/prefer-avoid.md`.
 
 ---
 

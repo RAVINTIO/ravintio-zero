@@ -10,7 +10,7 @@ last_artifact: "{path to the last file written or action completed}"
 
 ## In-Progress State
 
-{Free-text description of what was partially completed, requirement/task, steps
+{Free-text description of the partially completed work, requirement/task, steps
 done, steps remaining, blockers or decisions pending. This section must be
 detailed enough for the orchestrator to reconstruct full execution context on
 resume without re-reading prior conversation.}

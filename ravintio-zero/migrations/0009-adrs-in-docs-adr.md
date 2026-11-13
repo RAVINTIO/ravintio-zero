@@ -1,6 +1,6 @@
 # Migration 0009 - ADRs in docs/adr
 
-**Target standard:** `ravintio-zero/templates/adr.template.md` and `docs/adr/`, the repo-wide home of every ADR
+**Target standard:** `ravintio-zero/templates/adr.template.md` and `docs/adr/`, the repo-wide home of every ADR.
 **Scope:** `plan/_archive/*/adr/`, `docs/adr/`, and `docs/decisions-index.md`
 **Applies when:** a `plan/_archive/*/adr/ADR-*.md` file exists, or `ravintio-zero/` is the pack source in this repo.
 **Detect:** exists plan/_archive

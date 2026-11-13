@@ -28,7 +28,7 @@ model: haiku
 ## What You Produce
 
 Implementation code:
-- Is placed in the correct source location for the stack (e.g. `src/{component-id}/`, `ravintio-zero/scripts/`)
+- Goes in the correct source location for the stack (e.g. `src/{component-id}/`, `ravintio-zero/scripts/`)
 - Does not introduce imports or dependencies not already in the stack declaration
 
 ## Process

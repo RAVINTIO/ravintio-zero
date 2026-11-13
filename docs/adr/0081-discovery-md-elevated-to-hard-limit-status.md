@@ -20,13 +20,16 @@ feature: "0000018-telemetry-emission-consistency"
 
 ## Context
 
-0000017 (req-006) introduced a structured P0 discovery pass, writing findings to `plan/current/discovery.md` before coaching begins, for every adoption mode. The instruction lived as step "3d" in `planifest-orchestrator/SKILL.md`'s Phase 0 Start Actions numbered list, with no enforcement mechanism. During this very feature's own P0 (0000018), the step was silently skipped — the orchestrator executed steps 0, 1, 2, 3c, then went straight into coaching, missing 3d entirely, and only caught the omission by chance while writing `design.md`. This is the identical failure class as 0000018's own core problem: a correctly-specified requirement with no enforcement, silently skipped, unnoticed.
+0000017 (req-006) introduced a structured P0 discovery pass, writing findings to `plan/current/discovery.md` before coaching begins, for every adoption mode. The instruction lived as step "3d" in `planifest-orchestrator/SKILL.md`'s Phase 0 Start Actions numbered list, with no enforcement mechanism. During this very feature's own P0 (0000018), the orchestrator silently skipped the step. It executed steps 0, 1, 2, 3c, then went straight into coaching, missing 3d entirely. It caught the omission only by chance while writing `design.md`. This is the identical failure class as 0000018's own core problem: a correctly-specified requirement with no enforcement, silently skipped, unnoticed.
 
 ---
 
 ## Decision
 
-Elevate discovery.md's existence-and-completeness requirement to Hard Limit status in `planifest-orchestrator/SKILL.md`, matching the exact pattern already used for `build-log.md` (Hard Limit 8): stated prominently in the Hard Limits list at the top of the skill file, with explicit teeth ("a missing or incomplete discovery.md before coaching begins is a pipeline error — stop and write it before proceeding"), cross-referenced back at Phase 0 Start Actions step 3d (matching how step 2 already cross-references Hard Limit 8), and added as a redundant catch in the Phase 0 → Phase 1 Gate Checklist.
+Elevate discovery.md's existence-and-completeness requirement to Hard Limit status in `planifest-orchestrator/SKILL.md`, matching the exact pattern already used for `build-log.md` (Hard Limit 8). The change has three parts:
+- State the requirement prominently in the Hard Limits list at the top of the skill file, with explicit teeth (`a missing or incomplete discovery.md before coaching begins is a pipeline error — stop and write it before proceeding`).
+- Cross-reference it back at Phase 0 Start Actions step 3d (matching how step 2 already cross-references Hard Limit 8).
+- Add it as a redundant catch in the Phase 0 → Phase 1 Gate Checklist.
 
 ---
 
@@ -55,10 +58,10 @@ Elevate discovery.md's existence-and-completeness requirement to Hard Limit stat
 - Closes a self-identified real gap from this very session
 
 **Negative:**
-- Adds another entry to an already-long Hard Limits list — marginal increase in skill file length/complexity, though matching an established, working pattern
+- Adds another entry to an already-long Hard Limits list. This marginally increases skill file length/complexity, though it matches an established, working pattern
 
 **Risks:**
-- None significant — this is a low-risk, mechanical elevation of an existing (correct) requirement's enforcement level, not a new behavior
+- None significant. This is a low-risk, mechanical elevation of an existing (correct) requirement's enforcement level, not a new behavior
 
 ---
 

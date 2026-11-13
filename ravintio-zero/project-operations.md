@@ -17,7 +17,7 @@ The setup script activates a **three-tier Progressive Guardrail System** that pr
 
 A `commit-msg` hook also validates every commit message. It blocks AI attribution, affirmatory language, and subjects over 72 characters.
 
-Hooks live in `ravintio-zero/hooks/` and are wired via `git config core.hooksPath`. No `.git/` modifications required. The CI workflow is copied to `.github/workflows/ravintio.yml` on first setup.
+Hooks live in `ravintio-zero/hooks/` and `git config core.hooksPath` wires them. No `.git/` modifications required. Setup copies the CI workflow to `.github/workflows/ravintio.yml` on first run.
 
 → [Detailed guardrail mechanics and hook file locations](pipeline-reference.md#git-guardrails)
 
@@ -38,9 +38,9 @@ When discovery starts, the orchestrator writes `plan/.orchestrator-active` conta
 | **merge-guard** (PreToolUse, Bash) | Blocks `gh pr merge` unless it is a squash into an `initiative/*` branch. Merging into `main` stays human-only |
 | **block-forced-add** (PreToolUse, Bash) | Blocks `git add -f` and `git add --force`. Leave an ignored file out, or add a negation rule to `.gitignore` |
 
-The sentinel is deleted last during ship, after the archive is confirmed complete. You never create or delete it manually.
+Ship deletes the sentinel last, after the archive completes. You never create or delete it manually.
 
-**If a pipeline run is interrupted** and you want to start fresh: delete `plan/.orchestrator-active` and `plan/current/feature-brief.md`, then reload the orchestrator.
+**If a pipeline run stops part-way** and you want to start fresh: delete `plan/.orchestrator-active` and `plan/current/feature-brief.md`, then reload the orchestrator.
 
 → [Full sentinel lifecycle, hook internals, gate-write interaction with design.md, and manual recovery](pipeline-reference.md#orchestrator-sentinel)
 
@@ -122,7 +122,7 @@ An initiative runs in this sequence:
 
 ## Customising with ravintio-overrides
 
-`ravintio-overrides/` is your customisation layer. It is committed to the repo and never overwritten by setup scripts.
+`ravintio-overrides/` is your customisation layer. It lives in the repo, and the setup scripts never overwrite it.
 
 | Directory | Purpose |
 |-----------|---------|
@@ -207,6 +207,6 @@ Run the RAVINTIO pipeline in retrofit mode.
 Feature brief: plan/current/feature-brief.md
 ```
 
-In retrofit mode, discovery includes a codebase scan before coaching. The orchestrator scans entry points, maps data ownership, discovers API contracts, and surfaces tech debt, then uses those findings to reduce the coaching questions you need to answer.
+In retrofit mode, discovery includes a codebase scan before coaching. The orchestrator scans entry points, maps data ownership, discovers API contracts, and surfaces tech debt. It uses those findings to cut the coaching questions you need to answer.
 
 → [Retrofit discovery scan details](pipeline-reference.md#retrofit-an-existing-project)

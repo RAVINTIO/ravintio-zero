@@ -42,7 +42,7 @@ Add a Bash guard, `block-forced-add.mjs`, wired through `guard-run.mjs guard`. L
 - CI catches any other route.
 
 **Negative:**
-- A command that only mentions `git add -f` in text is blocked.
+- The hook blocks a command that only mentions `git add -f` in text.
 - A tracked file that matches an ignore rule on purpose needs a negation rule.
 
 **Risks:**

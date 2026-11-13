@@ -81,7 +81,7 @@ This run's own build log keeps P1 to P5 headings. The 0.8.0 skills drive this ru
 - The prefixes are longer than the letter codes.
 - Every phase cite changes, so this is a breaking change for anyone who reads the old numbers.
 - The 23 test files that assert old numbers need rewriting.
-- This run's build log uses P1 to P5 while its messages use P0 to P4, so a reader maps one to the other for this run.
+- This run's build log uses P1 to P5 while its messages use P0 to P4. A reader maps one to the other for this run.
 
 **Risks:**
 - A cite outside the guard test's scope keeps an old number. The test covers skills, docs, templates, hooks, and standards, and a review of the diff covers the rest.

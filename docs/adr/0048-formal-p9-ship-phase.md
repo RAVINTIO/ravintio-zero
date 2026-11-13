@@ -6,7 +6,7 @@ version: "0.1.0"
 component: "ravintio-zero"
 feature: "0000012-docs-restructure-commit-directives"
 ---
-# ADR-0048 - Formal P9 Ship phase — pipeline extended to P0–P9
+# ADR-0048 - Formal P9 Ship phase: pipeline extended to P0–P9
 
 **Skill:** [adr-agent](../../planifest-framework/skills/planifest-adr-agent/SKILL.md)
 **Tool:** Claude Code
@@ -20,11 +20,11 @@ feature: "0000012-docs-restructure-commit-directives"
 
 ## Context
 
-The original pipeline ran P0–P8. P7 (Ship) was responsible for archiving `plan/current/`, writing the changelog, invoking P8 (Build Assessment) as a sub-call, and raising the PR via `gh pr create` — all in one phase. This created three problems:
+The original pipeline ran P0–P8. P7 (Ship) archived `plan/current/`, wrote the changelog, invoked P8 (Build Assessment) as a sub-call, and raised the PR via `gh pr create`, all in one phase. This created three problems:
 
-1. **Phase boundary ambiguity:** P7 wrapped P8, making the phase sequence unclear to agents. Some agents inferred a "P9" to describe the PR step that happened after P8, even though it was never defined.
-2. **Semantic mismatch:** "Ship" describes the act of shipping (raising the PR), but P7 spent most of its work archiving and tidying — not shipping.
-3. **Inflexibility:** `gh pr create` was hardcoded; users who push and raise PRs themselves (e.g. due to SSH passphrase requirements) had no clean path.
+1. **Phase boundary ambiguity:** P7 wrapped P8, making the phase sequence unclear to agents. Some agents inferred a "P9" to describe the PR step that happened after P8, even though nobody had defined it.
+2. **Semantic mismatch:** "Ship" describes the act of shipping (raising the PR), but P7 spent most of its work archiving and tidying, not shipping.
+3. **Inflexibility:** the pipeline hardcoded `gh pr create`. Users who push and raise PRs themselves (e.g. due to SSH passphrase requirements) had no clean path.
 
 ---
 
@@ -40,7 +40,7 @@ Extend the pipeline to P0–P9 with explicit phase names:
 
 P7 handles all close-out groundwork (changelog, archive, `.feature-id`). P8 analyses the build. P9 is the explicit shipping act (git tag + PR).
 
-The Response Prefix Convention table in the orchestrator is annotated as the **complete and exhaustive** list of phases. A Hard Limit is added: no phase number outside P0–P9 may appear in agent output.
+The ADR annotates the Response Prefix Convention table in the orchestrator as the **complete and exhaustive** list of phases. It also adds a Hard Limit: no phase number outside P0–P9 may appear in agent output.
 
 ---
 
@@ -68,23 +68,23 @@ The Response Prefix Convention table in the orchestrator is annotated as the **c
 ## Consequences
 
 **Positive:**
-- Phase sequence is unambiguous — agents cannot invent phases because the table is exhaustive and a Hard Limit enforces it
-- "Ship" now semantically means the shipping act; "Archive" means the close-out groundwork
-- Human push/PR path is explicitly supported in P9
+- Phase sequence is unambiguous. Agents cannot invent phases because the table is exhaustive and a Hard Limit enforces it.
+- "Ship" now semantically means the shipping act. "Archive" means the close-out groundwork.
+- P9 explicitly supports the human push/PR path
 
 **Negative:**
 - All existing documentation and training material referencing P0–P8 requires updating
 - Users familiar with the old model must re-learn that P7 is no longer "Ship"
 
 **Risks:**
-- If agents read cached/stale skill content, they may continue to use the old P7 Ship label — mitigated by setup.sh re-run after framework update
+- If agents read cached/stale skill content, they may continue to use the old P7 Ship label. Re-running setup.sh after a framework update mitigates this.
 
 ---
 
 ## Related ADRs
 
-- ADR-0049 — depends-on (ship-agent orchestration depends on this phase structure)
-- ADR-0050 — depends-on (P9 PR protocol depends on P9 being a formal phase)
+- ADR-0049: depends-on (ship-agent orchestration depends on this phase structure)
+- ADR-0050: depends-on (P9 PR protocol depends on P9 being a formal phase)
 
 ---
 

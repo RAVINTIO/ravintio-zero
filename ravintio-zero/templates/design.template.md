@@ -36,7 +36,7 @@
 ## Scope
 - In: {list}
 - Out: {list}
-- Deferred: {list - with notes on what is blocked until resolved}
+- Deferred: {list - with notes on what each deferred item blocks until resolved}
 
 ## Assumptions
 - {assumption} - impact if wrong: {what breaks}

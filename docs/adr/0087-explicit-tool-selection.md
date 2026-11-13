@@ -20,11 +20,11 @@ feature: "0000020-setup-refresh-skill"
 
 ## Context
 
-A repo can legitimately have more than one Planifest-managed tool installed at once (for example both `.claude/` and `.cursor/` present). An early draft of the error/sad-path Scope Lock answer treated this as a detection-time ambiguity that should halt the skill for clarification, the same halt-and-confirm pattern used for low-confidence flag reconstruction. During P0 review, the human on the loop corrected this framing: naming which tool to refresh is a normal input to the skill, the same way `setup.sh <tool>`/`setup.ps1 <tool>` already require a tool argument, not an error condition discovered partway through a run (see build-log.md, Scope Lock, Happy path amendment).
+A repo can legitimately have more than one Planifest-managed tool installed at once (for example both `.claude/` and `.cursor/` present). An early draft of the error/sad-path Scope Lock answer treated this as a detection-time ambiguity that should halt the skill for clarification. This is the same halt-and-confirm pattern used for low-confidence flag reconstruction. During P0 review, the human on the loop corrected this framing. Naming which tool to refresh is a normal input to the skill, the same way `setup.sh <tool>`/`setup.ps1 <tool>` already require a tool argument. It is not an error condition discovered partway through a run (see build-log.md, Scope Lock, Happy path amendment).
 
 ## Decision
 
-The skill takes the target tool as an explicit input up front. If the human on the loop names a tool, the skill proceeds with that tool directly. If no tool is named and exactly one install is present, the skill proceeds with it without asking. If no tool is named and more than one install is present, the skill asks which tool before doing anything else, as the very first step, not as a failure branch reached after partial work. This is REQ-001, and it is deliberately positioned before REQ-002's detection logic even runs.
+The skill takes the target tool as an explicit input up front. If the human on the loop names a tool, the skill proceeds with that tool directly. If the human names no tool and exactly one install is present, the skill proceeds with it without asking. If the human names no tool and more than one install is present, the skill asks which tool before doing anything else. This is the very first step, not a failure branch reached after partial work. This is REQ-001, and the design deliberately places it before REQ-002's detection logic even runs.
 
 ## Alternatives Considered
 
@@ -44,19 +44,19 @@ The skill takes the target tool as an explicit input up front. If the human on t
 
 **Positive:**
 - The skill's input contract matches `setup.sh`/`setup.ps1`'s existing convention (tool as an explicit argument), so the mental model carries over
-- Multi-tool repos are supported cleanly, with one question asked only when genuinely needed
+- The skill supports multi-tool repos cleanly, asking one question only when genuinely needed
 
 **Negative:**
-- The skill's invocation surface has one more input to specify (or be asked) compared to a fully automatic "just figure it out" design
+- The skill's invocation surface has one more input to specify (or be asked) compared to a fully automatic "figure it out" design
 
 **Risks:**
-- None beyond the general risk that a human on the loop names the wrong tool by mistake, which REQ-007 catches (no install found for that tool) rather than silently proceeding
+- None beyond the general risk that a human on the loop names the wrong tool by mistake. REQ-007 catches that case (no install found for that tool) rather than proceeding silently
 
 ---
 
 ## Related ADRs
 
-- ADR-0086 - related-to (both ADRs establish that ambiguity is resolved by asking, never by guessing)
+- ADR-0086 - related-to (both ADRs establish that the skill resolves ambiguity by asking, never by guessing)
 
 ---
 

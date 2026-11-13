@@ -31,7 +31,7 @@ Hard Limit 10 fixes the phase numbers P0 to P4. The new labels must not read as 
 
 **Single approval.** The human's confirmation at R-A Chart is the one approval for the chain. A runtime check reads `plan/current-roadmap/roadmap.md` with `status: active` before P0 may self-confirm. Outside an active roadmap, P0 keeps both human confirmations.
 
-**Chart-time schema approval.** Amended 2026-10-24, after the live acceptance run stopped at migration M-003 in step 1. Chart predicts each step's schema change into a `## Schema changes` table in `roadmap.md`. The human approves, edits, or strikes each row. The chart confirmation approves the rows left. That approval meets Hard Limit 3 for a step proposal that matches a row: same step, component, field names, and types, and Kind `additive`. The step still writes the proposal and marks it `approved (roadmap chart)`. Chart also asks an opt-in fallback question that pre-approves additive changes it didn't predict. Any other proposal takes the normal exception stop. Hard Limit 4 is unchanged, so a destructive change always stops, even when a row lists it.
+**Chart-time schema approval.** Amended 2026-10-24, after the live acceptance run stopped at migration M-003 in step 1. Chart predicts each step's schema change into a `## Schema changes` table in `roadmap.md`. The human approves, edits, or strikes each row. The chart confirmation approves the rows left. That approval meets Hard Limit 3 for a step proposal that matches a row: same step, component, field names, and types, and Kind `additive`. The step still writes the proposal and marks it `approved (roadmap chart)`. Chart also asks an opt-in fallback question that pre-approves additive changes it didn't predict. Any other proposal takes the normal exception stop. Hard Limit 4 stays the same, so a destructive change always stops, even when a row lists it.
 
 **Stage prefixes.** The stages use these prefixes beside the phase prefixes:
 
@@ -67,7 +67,7 @@ Both sets use the form `{prefix} {Status}: {one-liner}`. The letters A to E are 
 **Positive:**
 - A chain of steps runs with no coaching stops after one human approval.
 - A vague entry still stops the run, so the agent does not guess.
-- Stage prefixes make roadmap lines easy to find and never clash with a phase prefix.
+- Stage prefixes make roadmap lines quick to find and never clash with a phase prefix.
 - The human approves predicted schema changes by name while present, so an additive change does not stop the chain.
 
 **Negative:**

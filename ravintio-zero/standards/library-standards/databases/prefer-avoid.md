@@ -1,6 +1,6 @@
 # Database Client Standards
 
-> Covers preferred and avoided client libraries per database paradigm across languages. See `database-standards.md` for schema/query guidance; overrides take precedence at `ravintio-overrides/library-standards/databases/prefer-avoid.md`.
+> Covers preferred and avoided client libraries per database paradigm across languages. See `database-standards.md` for schema/query guidance. Overrides take precedence at `ravintio-overrides/library-standards/databases/prefer-avoid.md`.
 
 ---
 

@@ -5,7 +5,7 @@ date: "04 May 2026"
 feature: "0000007-agent-optimisation"
 component: "ravintio-zero"
 ---
-# ADR-0030 — Optimise-agent is suggestion-only; never auto-applies changes
+# ADR-0030 - Optimise-agent is suggestion-only and never auto-applies changes
 
 ## Context
 
@@ -25,22 +25,22 @@ The optimise-agent never modifies files. It presents suggestions, accumulates co
 
 ## Affected Components
 
-- `planifest-framework/skills/planifest-optimise-agent/SKILL.md` — hard constraint: no Write/Edit tool calls
+- `planifest-framework/skills/planifest-optimise-agent/SKILL.md`: hard constraint: no Write/Edit tool calls
 
 ## Consequences
 
 **Positive:**
-- All confirmed removals are tested (the Change Pipeline runs the test suite)
+- The Change Pipeline tests all confirmed removals by running the test suite
 - A P8 Build Assessment runs on the resulting changes
 - Human sees the full confirmed list before anything changes
-- No accidental partial application if the session is interrupted
+- No accidental partial application if the session stops
 
 **Negative:**
 - Two steps required: optimise-agent session + Change Pipeline run
 - Human must manually initiate the Change Pipeline with the summary
 
 **Risks:**
-- Human may lose the confirmed-changes summary between sessions — mitigated by the summary being the last output of the session and clearly formatted for copy-paste
+- Human may lose the confirmed-changes summary between sessions. The summary comes last in the session output and has a clear copy-paste format, which mitigates this
 
 ## Related ADRs
 

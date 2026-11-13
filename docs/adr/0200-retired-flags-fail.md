@@ -19,7 +19,7 @@ Feature ADR-0118 chose a warning for retired flags, so that an old refresh comma
 
 ## Decision
 
-A retired flag exits 1 during argument parsing, before any other processing. The error names the flag only, says it was removed and does nothing, and tells the user to remove it. The tool check runs straight after parsing. The refresh skill reports a retired flag from a record or marker and omits it from its proposed command.
+A retired flag exits 1 during argument parsing, before any other processing. The error names the flag only, says the pack removed it and it does nothing, and tells the user to remove it. The tool check runs straight after parsing. The refresh skill reports a retired flag from a record or marker and omits it from its proposed command.
 
 ## Alternatives Considered
 

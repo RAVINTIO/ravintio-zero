@@ -5,11 +5,11 @@ date: "04 May 2026"
 feature: "0000007-agent-optimisation"
 component: "ravintio-zero"
 ---
-# ADR-0029 — Telemetry guidance centralised in telemetry-standards.md
+# ADR-0029 - Telemetry guidance centralised in telemetry-standards.md
 
 ## Context
 
-The telemetry envelope structure, emission gate conditions, and phase_start/phase_end ownership note were duplicated verbatim across 9 skill files. Any change to the envelope (e.g. adding a new field) required editing 9 files. There was a real risk of drift between files if one was updated and others were not.
+The telemetry envelope structure, emission gate conditions, and phase_start/phase_end ownership note appeared verbatim across 9 skill files. Any change to the envelope (e.g. adding a new field) required editing 9 files. There was a real risk of drift between files if someone updated one and not the others.
 
 ## Decision
 
@@ -25,8 +25,8 @@ Extract the shared telemetry content (envelope, gate conditions, phase_start/pha
 
 ## Affected Components
 
-- `planifest-framework/standards/telemetry-standards.md` — new file, single source of truth
-- `planifest-orchestrator/SKILL.md`, `planifest-spec-agent/SKILL.md`, `planifest-adr-agent/SKILL.md`, `planifest-codegen-agent/SKILL.md`, `planifest-validate-agent/SKILL.md`, `planifest-security-agent/SKILL.md`, `planifest-docs-agent/SKILL.md`, `planifest-ship-agent/SKILL.md`, `planifest-change-agent/SKILL.md` — pointer line replaces three blocks
+- `planifest-framework/standards/telemetry-standards.md`: new file, single source of truth
+- `planifest-orchestrator/SKILL.md`, `planifest-spec-agent/SKILL.md`, `planifest-adr-agent/SKILL.md`, `planifest-codegen-agent/SKILL.md`, `planifest-validate-agent/SKILL.md`, `planifest-security-agent/SKILL.md`, `planifest-docs-agent/SKILL.md`, `planifest-ship-agent/SKILL.md`, `planifest-change-agent/SKILL.md`: pointer line replaces three blocks
 
 ## Consequences
 
@@ -40,7 +40,7 @@ Extract the shared telemetry content (envelope, gate conditions, phase_start/pha
 - `telemetry-standards.md` must be added to `bundle_standards` for all 9 skills to ensure it is always available
 
 **Risks:**
-- If `bundle_standards` is not updated, agents may not find the standards file — mitigated by including it in the acceptance criteria
+- If nobody updates `bundle_standards`, agents may not find the standards file. Including it in the acceptance criteria mitigates this
 
 ## Related ADRs
 

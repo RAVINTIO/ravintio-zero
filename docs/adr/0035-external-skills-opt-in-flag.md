@@ -20,21 +20,21 @@ feature: "0000009-framework-rail-tightening"
 
 ## Context
 
-Planifest is adding a curated library of open-source Claude Code SKILL.md-format skills to `planifest-framework/external-skills/`. These skills are sourced from third-party repos and carry their own licences. A decision is needed: should these skills be copied to the tool's skill directory by default on every setup run, or should they be opt-in?
+Planifest is adding a curated library of open-source Claude Code SKILL.md-format skills to `planifest-framework/external-skills/`. These skills come from third-party repos and carry their own licences. The design must decide: should setup copy these skills to the tool's skill directory by default on every run, or should they be opt-in?
 
 The key tensions are:
 - **Discovery vs noise:** Shipping all skills by default maximises discoverability but pollutes the tool's skill picker with skills the user may never want.
 - **Trust:** External skills are third-party code. Copying them without consent may surprise users.
-- **Maintenance:** If skills are copied by default, any skill that becomes unmaintained or inappropriate still ships unless the user re-runs setup without it.
+- **Maintenance:** If setup copies skills by default, any skill that becomes unmaintained or inappropriate still ships unless the user re-runs setup without it.
 - **Context window:** Every skill copied to the tool dir contributes to the agent's context overhead on session start. Copying unused skills wastes tokens.
 
 ---
 
 ## Decision
 
-External skills are opt-in. Setup scripts (`setup.sh` and `setup.ps1`) accept a new flag `--include-full-skill-library`. Without this flag, nothing in `planifest-framework/external-skills/` is copied to the tool's skill directory. With the flag, all skills in `external-skills/` are copied.
+External skills are opt-in. Setup scripts (`setup.sh` and `setup.ps1`) accept a new flag `--include-full-skill-library`. Without this flag, setup copies nothing in `planifest-framework/external-skills/` to the tool's skill directory. With the flag, setup copies all skills in `external-skills/`.
 
-The flag is additive — it can be combined with any existing flag. Re-running setup with the flag is idempotent (existing skill directories are cleaned via the manifest before re-copy).
+The flag is additive: it can be combined with any existing flag. Re-running setup with the flag is idempotent (setup cleans existing skill directories via the manifest before re-copy).
 
 ---
 
@@ -60,17 +60,17 @@ The flag is additive — it can be combined with any existing flag. Re-running s
 ## Consequences
 
 **Positive:**
-- Users who want external skills get them with a single flag; those who don't are unaffected
+- Users who want external skills get them with a single flag. Those who don't see no change
 - Token overhead is zero for users who don't opt in
 - Explicit opt-in means informed consent for third-party code
 - Flag can be added to a project's setup invocation script once and forgotten
 
 **Negative:**
-- External skills are less discoverable — users must know the flag exists
+- External skills are less discoverable: users must know the flag exists
 - Documentation must explain the flag clearly or users miss the library entirely
 
 **Risks:**
-- Users who would benefit from external skills never discover them because they don't read the flag documentation; mitigated by surfacing the flag in `--help` output and getting-started docs
+- Users who would gain from external skills never discover them because they don't read the flag documentation. Surfacing the flag in `--help` output and getting-started docs mitigates this
 
 ---
 

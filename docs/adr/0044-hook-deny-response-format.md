@@ -6,7 +6,7 @@ version: "0.1.0"
 component: "ravintio-zero"
 feature: "0000011-setup-parity-and-consistency"
 ---
-# ADR-0044 - Hook deny response format — translation in the adapter layer
+# ADR-0044 - Hook deny response format: translation in the adapter layer
 
 **Skill:** adr-agent
 **Tool:** Claude Code
@@ -21,8 +21,8 @@ feature: "0000011-setup-parity-and-consistency"
 
 Planifest's hook enforcement is split into two layers:
 
-1. **Shared enforcement scripts** (`gate-write.mjs`, `check-design.mjs`) — implement the enforcement logic (check design.md, check sentinel, check path scope) and signal their decision via exit code: `0` = allow, `2` = block.
-2. **Adapters** (`copilot.mjs`, `cursor.mjs`, `windsurf.mjs`, `codex.mjs`) — translate the tool's native hook envelope to the common format, invoke the enforcement script, and return a result to the tool.
+1. **Shared enforcement scripts** (`gate-write.mjs`, `check-design.mjs`): implement the enforcement logic (check design.md, check sentinel, check path scope). They signal their decision via exit code: `0` = allow, `2` = block.
+2. **Adapters** (`copilot.mjs`, `cursor.mjs`, `windsurf.mjs`, `codex.mjs`): translate the tool's native hook envelope to the common format. They then invoke the enforcement script and return a result to the tool.
 
 The problem: each tool requires a different response shape when blocking a `PreToolUse`-equivalent event:
 
@@ -42,11 +42,11 @@ Shared enforcement scripts cannot emit tool-specific output because they have no
 
 **Shared enforcement scripts communicate via exit code only.** They exit 2 to signal a block and write a human-readable reason to stdout. They never emit tool-specific JSON.
 
-**Adapters are responsible for translating exit code 2 into the tool's required block format.** After invoking the enforcement script via `spawnSync`, the adapter:
+**Adapters translate exit code 2 into the tool's required block format.** After invoking the enforcement script via `spawnSync`, the adapter:
 - For tools where exit code 2 suffices (Cursor, Windsurf, Claude Code): passes through the exit code directly.
-- For tools requiring JSON output (Codex, Copilot): captures stdout from the enforcement script (the human-readable reason), constructs the tool-specific JSON, writes it to the adapter's stdout, and exits 0.
+- For tools requiring JSON output (Codex, Copilot): captures stdout from the enforcement script (the human-readable reason) and constructs the tool-specific JSON. It then writes the JSON to the adapter's stdout and exits 0.
 
-This preserves the enforcement scripts as tool-agnostic contracts while keeping format concerns in the adapter.
+This keeps the enforcement scripts as tool-agnostic contracts and keeps format concerns in the adapter.
 
 ---
 
@@ -76,23 +76,23 @@ This preserves the enforcement scripts as tool-agnostic contracts while keeping 
 ## Consequences
 
 **Positive:**
-- Enforcement scripts remain tool-agnostic and have a single implementation; bug fixes propagate to all tools automatically.
-- Adding support for a new tool only requires writing a new adapter — enforcement scripts are untouched.
-- The exit-code-2 contract between enforcement scripts and adapters is simple and testable.
+- Enforcement scripts remain tool-agnostic and have a single implementation. Bug fixes propagate to all tools automatically.
+- Adding support for a new tool needs only a new adapter. Enforcement scripts stay unchanged.
+- The exit-code-2 contract between enforcement scripts and adapters is small and testable.
 
 **Negative:**
-- Adapters for Codex and Copilot are more complex than adapters for exit-code-2 tools; they must understand the enforcement script's stdout format to extract the reason string.
+- Adapters for Codex and Copilot are more complex than adapters for exit-code-2 tools. They must understand the enforcement script's stdout format to extract the reason string.
 - If an enforcement script changes its stdout format (e.g. adds JSON wrapping), Codex and Copilot adapters must be updated.
 
 **Risks:**
-- Future tools may require yet another deny format; each new format adds adapter complexity without changing enforcement scripts.
+- Future tools may require yet another deny format. Each new format adds adapter complexity without changing enforcement scripts.
 - The enforcement script stdout format is an implicit contract. If it changes silently, Codex and Copilot adapters will construct deny responses with garbled reason strings.
 
 ---
 
 ## Related ADRs
 
-- ADR-0046 — depends-on (this decision assumes the delegating adapter architecture from ADR-0046)
+- ADR-0046: depends-on (this decision assumes the delegating adapter architecture from ADR-0046)
 
 ---
 

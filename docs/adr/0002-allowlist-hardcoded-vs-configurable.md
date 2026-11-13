@@ -6,7 +6,7 @@ version: "0.1.0"
 component: "ravintio-zero"
 feature: "0000001-context-mode-enforcement-hooks"
 ---
-# ADR-0002 - Bash Allowlist — Hardcoded vs Per-Project Configurable
+# ADR-0002 - Bash Allowlist: Hardcoded vs Per-Project Configurable
 
 **Skill:** adr-agent
 **Tool:** claude-code
@@ -20,7 +20,7 @@ feature: "0000001-context-mode-enforcement-hooks"
 
 ## Context
 
-The `block-bash.sh` hook intercepts Bash tool calls and blocks those matching context-flooding patterns (`grep`, `rg`, `curl`, `wget`, inline HTTP). However, not all commands should be blocked — common low-output operations like `git`, `mkdir`, `rm`, `mv`, `cd`, `ls`, and package installs are safe and necessary for normal agent operation.
+The `block-bash.sh` hook intercepts Bash tool calls and blocks those matching context-flooding patterns (`grep`, `rg`, `curl`, `wget`, inline HTTP). However, not all commands should be blocked. Common low-output operations like `git`, `mkdir`, `rm`, `mv`, `cd`, `ls`, and package installs are safe and necessary for normal agent operation.
 
 The question is whether this allowlist should be:
 - **Hardcoded** in the script (same for all projects using planifest-framework)
@@ -34,7 +34,7 @@ This decision directly constrains how projects with non-standard toolchains (e.g
 
 **Hardcode the allowlist in `block-bash.sh` for v1.** The allowlist covers universally safe, low-output commands: `git`, `mkdir`, `rm`, `mv`, `cd`, `ls`, `npm install`, `pip install`.
 
-Per-project configuration is deferred. The allowlist is clearly commented in the script and extending it requires only editing that file — a low-friction override for projects that need it.
+This ADR defers per-project configuration. The script comments the allowlist clearly. Extending it requires only editing that file, which gives projects that need it a low-friction override.
 
 ---
 
@@ -61,17 +61,17 @@ Per-project configuration is deferred. The allowlist is clearly commented in the
 ## Consequences
 
 **Positive:**
-- Hook remains fully stateless — no disk reads, no config parsing; NFR-001 latency budget is easily met
-- Simple to audit: the complete set of allowed commands is visible in one place in the script
+- Hook remains fully stateless, with no disk reads and no config parsing. The NFR-001 latency budget has ample room
+- Quick to audit: the script shows the complete set of allowed commands in one place
 - No new config file or schema to maintain in v1
 
 **Negative:**
-- Projects using `pnpm`, `yarn`, `cargo`, `make`, `dotnet`, `go`, or other build tools will have those commands blocked if they appear as the leading token — users must edit `block-bash.sh` to extend the allowlist
-- The allowlist is shared across all projects using the same installed hook script; per-project differentiation requires maintaining separate copies
+- Projects using `pnpm`, `yarn`, `cargo`, `make`, `dotnet`, `go`, or other build tools get those commands blocked when they lead the command. Users must edit `block-bash.sh` to extend the allowlist
+- All projects using the same installed hook script share the allowlist. Per-project differentiation requires maintaining separate copies
 
 **Risks:**
-- Allowlist too narrow → legitimate build commands blocked → agent stalls (R-001 in risk register). Mitigated by: conservative default list covering universal commands; allowlist is a one-line edit to extend; flagged in validate phase.
-- Allowlist too broad → an allowlisted prefix is used to smuggle a blocked command (e.g. `git log | grep secret`) → hook passes when it should deny. Mitigated by: the allowlist checks the *leading command token* only, not the full pipeline; `git log | grep` is allowed by design (git output piped to grep is bounded and intentional).
+- Allowlist too narrow → legitimate build commands blocked → agent stalls (R-001 in risk register). Mitigated by: conservative default list covering universal commands. The allowlist needs a one-line edit to extend. The validate phase flags it.
+- Allowlist too broad → an allowlisted prefix smuggles a blocked command (e.g. `git log | grep secret`) → hook passes when it should deny. Mitigated by: the allowlist checks the *leading command token* only, not the full pipeline. The design allows `git log | grep` because git output piped to grep stays bounded and intentional.
 
 ---
 

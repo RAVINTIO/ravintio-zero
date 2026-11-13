@@ -20,13 +20,13 @@ feature: "0000016-pipeline-governance-and-loop-engineering"
 
 ## Context
 
-Resolves execution-plan Q-001. Each loop must be independently toggleable (`off | report-only | on`, default off — NFR-002 zero-regression). The toggle store needs to be: user-owned (agents must not flip their own loops on), tool-agnostic (Cursor/Windsurf/Cline have no .claude/settings.json), and feature-independent (toggles outlive any single pipeline run).
+Resolves execution-plan Q-001. Each loop must be independently toggleable (`off | report-only | on`, default off for NFR-002 zero-regression). The toggle store needs three properties. It is user-owned (agents must not flip their own loops on). It is tool-agnostic (Cursor/Windsurf/Cline have no .claude/settings.json). It is feature-independent (toggles outlive any single pipeline run).
 
 ---
 
 ## Decision
 
-`planifest-overrides/loop-toggles.yml` — one key per loop (`p0_completeness`, `design_critic`, `verify_by_execution`, `cross_model_review`, `reversal_protocol`), each `off | report-only | on`. Absent file or absent key = `off`. `planifest-overrides/` is already the user-owned directory the framework never writes to (component.yml exception: "Does not write to planifest-overrides/"), which makes agent self-enablement a hard-limit violation rather than a possibility. Skills read the file at loop entry; unreadable/invalid values are treated as `off` with a one-line warning.
+`planifest-overrides/loop-toggles.yml` holds one key per loop (`p0_completeness`, `design_critic`, `verify_by_execution`, `cross_model_review`, `reversal_protocol`), each `off | report-only | on`. Absent file or absent key = `off`. `planifest-overrides/` is already the user-owned directory the framework never writes to (component.yml exception: "Does not write to planifest-overrides/"). This makes agent self-enablement a hard-limit violation rather than a possibility. Skills read the file at loop entry. Skills treat unreadable/invalid values as `off` with a one-line warning.
 
 ---
 
@@ -52,14 +52,14 @@ Resolves execution-plan Q-001. Each loop must be independently toggleable (`off 
 ## Consequences
 
 **Positive:**
-- Agents cannot enable their own loops; enablement is a deliberate, git-diffable human act
+- Agents cannot enable their own loops. Enablement is a deliberate, git-diffable human act
 - Same file works across every supported tool
 
 **Negative:**
-- One more overrides file for humans to know about — documented in loop-runner and the template
+- One more overrides file for humans to know about. Loop-runner and the template document it
 
 **Risks:**
-- Typo'd key silently means "off" — mitigated by the one-line warning on unknown keys
+- Typo'd key silently means "off". The one-line warning on unknown keys mitigates this
 
 ---
 

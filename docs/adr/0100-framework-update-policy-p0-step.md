@@ -15,11 +15,11 @@ feature: "0000027-backlog-batch-governance-tooling-fixes"
 
 ## Context
 
-Backlog `0000046` (this feature's req-005) reported that downstream repo workflows have no distinct treatment for "the `planifest-framework/` folder is being updated to a newer version" versus "unrecognised code is being pushed from an unknown source." Two downstream-filed backlog entries (`0000040`, `0000041`) already reference "this repo's Framework Update Policy" by name, but no canonical mechanism defines it. `planifest-migrator` exists but its scope is narrowly "read one pending migration file, present findings, apply confirmed changes, archive it" — a single-migration-file I/O shape. A framework-folder update (an entire `planifest-framework/` copy arriving from an upstream release) is a different-shaped problem: detecting that an update occurred at all, and confirming its provenance, precede and are independent of whether any migration files happen to accompany it.
+Backlog `0000046` (this feature's req-005) reported that downstream repo workflows lack distinct treatment of two cases. One case is "the `planifest-framework/` folder is being updated to a newer version". The other is "unrecognised code is being pushed from an unknown source". Two downstream-filed backlog entries (`0000040`, `0000041`) already reference "this repo's Framework Update Policy" by name, but no canonical mechanism defines it. `planifest-migrator` exists, but its scope is narrow: "read one pending migration file, present findings, apply confirmed changes, archive it". That is a single-migration-file I/O shape. A framework-folder update (an entire `planifest-framework/` copy arriving from an upstream release) is a different-shaped problem. Detecting that an update occurred at all, and confirming its provenance, precede any migration files that happen to accompany it. Both steps are independent of those files.
 
 ## Decision
 
-Add a new P0 Start Actions step to the orchestrator (`planifest-orchestrator/SKILL.md`), positioned alongside the existing migration-scan step, that: (1) detects a `planifest-framework/` dependency update (e.g. a version mismatch between the installed `planifest-framework/component.yml` version and a previously recorded value, or the arrival of framework files with a newer declared version than what the repo last ran a pipeline against), (2) surfaces this to the human as its own distinct decision — never silently applied, never conflated with ordinary feature-brief coaching — and (3) requires explicit human confirmation of both the update itself and its stated provenance (upstream release, commit, or migration that produced the files) before treating the new files as trusted. Document the resulting mechanism in a new `planifest-framework/standards/framework-update-policy.md`, so `0000040`/`0000041`-style references resolve to something real. `planifest-migrator` is unchanged — it continues to own the narrower "process one pending migration file" flow, invoked from this same P0 area when a migration happens to exist.
+Add a new P0 Start Actions step to the orchestrator (`planifest-orchestrator/SKILL.md`), positioned alongside the existing migration-scan step. The step does three things. First, it detects a `planifest-framework/` dependency update. One example is a version mismatch between the installed `planifest-framework/component.yml` version and a previously recorded value. Another is the arrival of framework files with a newer declared version than the repo last ran a pipeline against. Second, it surfaces the update to the human as its own distinct decision, never silently applied and never conflated with ordinary feature-brief coaching. Third, it requires explicit human confirmation of both the update itself and its stated provenance before treating the new files as trusted. Provenance means the upstream release, commit, or migration that produced the files. Document the resulting mechanism in a new `planifest-framework/standards/framework-update-policy.md`, so `0000040`/`0000041`-style references resolve to something real. `planifest-migrator` does not change. It continues to own the narrower "process one pending migration file" flow, invoked from this same P0 area when a migration happens to exist.
 
 ## Alternatives Considered
 
@@ -42,14 +42,14 @@ Add a new P0 Start Actions step to the orchestrator (`planifest-orchestrator/SKI
 - Keeps `planifest-migrator` focused on its existing, working contract rather than overloading it.
 
 **Negative:**
-- One more P0 Start Actions step for every pipeline run to execute (mitigated: it's a cheap detection check, a no-op when no update is present, consistent with the framework's existing pattern of several small P0 pre-flight checks).
+- One more P0 Start Actions step for every pipeline run to execute. The cost is low: it is a cheap detection check and a no-op when no update is present. It is consistent with the framework's existing pattern of several small P0 pre-flight checks.
 
 **Risks:**
-- Version-mismatch detection could false-positive on a repo that manually edited `component.yml`'s version field without an actual framework update — mitigate by keying detection on the presence of new/changed files under `planifest-framework/` since the last recorded pipeline run, not solely the version string, at P3 implementation time.
+- Version-mismatch detection could false-positive on a repo that manually edited `component.yml`'s version field without an actual framework update. Mitigate at P3 implementation time by keying detection on new or changed files under `planifest-framework/` since the last recorded pipeline run. Do not key on the version string alone.
 
 ## Related ADRs
 
-- ADR-0068 - related-to (product.yml as versioning source of truth — the detection signal this ADR's mechanism reads)
+- ADR-0068 - related-to (product.yml as versioning source of truth, the detection signal this ADR's mechanism reads)
 - ADR-0073 - depends-on (deterministic enforcement precedent, same rationale as ADR-0099 in this feature)
 
 ## Supersedes

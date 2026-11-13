@@ -26,9 +26,9 @@ Move rarely used sections verbatim into `references/orchestrator-*.md` files und
 - **Index.** The Pack Index lists each reference file with a one-line purpose, so the orchestrator loads one on demand.
 - **Inline.** Core sections stay in `SKILL.md`. The Exception Stops table stays inline.
 - **Verbatim.** The move changes no wording.
-- **Check.** A line-preservation test confirms every moved line appears in a reference file. The test fails if a line is lost.
-- **Tests.** Tests that grep `SKILL.md` read the new file instead. No assertion is dropped.
-- **Measure.** The starting context is measured before and after.
+- **Check.** A line-preservation test confirms every moved line appears in a reference file. The test fails if any line goes missing.
+- **Tests.** Tests that grep `SKILL.md` read the new file instead. The tests keep every assertion.
+- **Measure.** The run measures the starting context before and after.
 
 ## Alternatives Considered
 

@@ -19,7 +19,7 @@ The watcher read the last 100 commits and treated an unknown last-seen commit as
 
 ## Decision
 
-The watcher runs `git merge-base --is-ancestor {last-seen} HEAD`. If true, it lists `git log {last-seen}..HEAD`. If false, it prints one branch-change line. A stale line needs the commit to be `STALE_MS` newer than the log, and a stale key of log time and commit sha limits it to one line per state.
+The watcher runs `git merge-base --is-ancestor {last-seen} HEAD`. If true, it lists `git log {last-seen}..HEAD`. If false, it prints one branch-change line. A stale line needs the commit to be `STALE_MS` newer than the log. A stale key of log time and commit sha limits it to one line per state.
 
 ## Alternatives Considered
 

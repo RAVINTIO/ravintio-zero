@@ -82,7 +82,7 @@ Read the archived `build-log.md`. It is now the only copy. Write `build-report.m
 
 Then run `node ravintio-zero/scripts/workflow-metrics.mjs "{archive-folder}"` and append its output to `build-report.md`. If it exits non-zero, write `Workflow governance: not measured ({reason})` instead. The reason is `build log unreadable` or `thresholds invalid`, never a path or error text. A breach does not stop ship in either run mode.
 
-Source every metric from the build log. Never infer or fabricate. If routing or parallelism is not evidenced, treat it as not applied.
+Source every metric from the build log. Never infer or fabricate. If the build log shows no evidence of routing or parallelism, treat it as not applied.
 
 Last, run `ravintio-retrospective` in run mode. It writes the record to `plan/retrospectives/`. Append `Retrospective: {path}` to `build-report.md`, or `Retrospective: none` if the skill wrote no record. A missing retrospective never blocks ship.
 
@@ -142,7 +142,7 @@ gh pr create
 
 In option [1], capture the PR number and URL, and update the changelog's `**PR:**` field.
 
-In option [2], print the PR title and description. The human pushes the branch later. CI tags the merge commit on `main`. In the local-git-only case, also print the tag commands for the human to run on the merge commit after merging, or note that the CI `release-tag` job does it:
+In option [2], print the PR title and description. The human pushes the branch later. CI tags the merge commit on `main`. In the local-git-only case, print the tag commands for the human to run on the merge commit after merging. You may instead note that the CI `release-tag` job does it:
 
 ```bash
 git tag v{version} -m "{feature-id}" {merge-commit}

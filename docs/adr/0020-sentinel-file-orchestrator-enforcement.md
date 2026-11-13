@@ -17,13 +17,13 @@ feature: "0000005-framework-governance"
 
 ## Context
 
-Nothing currently prevents an agent from writing to `plan/current/` without loading the orchestrator skill. As demonstrated on 02 May 2026, an agent can produce plan artefacts directly, bypassing P0 coaching and the confirmed design gate. A hard enforcement mechanism is needed that works within the existing hook infrastructure.
+Nothing currently prevents an agent from writing to `plan/current/` without loading the orchestrator skill. As demonstrated on 02 May 2026, an agent can produce plan artefacts directly, bypassing P0 coaching and the confirmed design gate. The design needs a hard enforcement mechanism that works within the existing hook infrastructure.
 
 ---
 
 ## Decision
 
-The orchestrator writes a sentinel file `plan/.orchestrator-active` containing the current feature-id at P0 start. `gate-write.mjs` checks for this file before allowing any write to `plan/current/**` (except `plan/current/feature-brief.md`). Exit 2 if absent. The ship-agent deletes it at P7. Stale sentinel (feature-id mismatch) also blocks with a warning.
+The orchestrator writes a sentinel file `plan/.orchestrator-active` containing the current feature-id at P0 start. `gate-write.mjs` checks for this file before allowing any write to `plan/current/**` (except `plan/current/feature-brief.md`). Exit 2 if absent. The ship-agent deletes it at P7. A stale sentinel (feature-id mismatch) also blocks with a warning.
 
 ---
 
@@ -52,20 +52,20 @@ The orchestrator writes a sentinel file `plan/.orchestrator-active` containing t
 ## Consequences
 
 **Positive:**
-- Hard gate — agents cannot write plan artefacts without the orchestrator having been loaded
-- Lightweight — a single `fs.existsSync` call per Write/Edit; < 5ms overhead
-- Self-clearing — ship-agent deletes it, so no manual cleanup between runs
+- Hard gate: agents cannot write plan artefacts unless the orchestrator has loaded
+- Lightweight: a single `fs.existsSync` call per Write/Edit adds < 5ms overhead
+- Self-clearing: the ship-agent deletes it, so no manual cleanup between runs
 
 **Negative:**
 - Stale sentinel after a failed P7 or clean checkout will block the next session until cleared manually
-- feature-brief.md must be explicitly exempted — any path-matching error could prevent P0 from starting
+- feature-brief.md must have an explicit exemption. Any path-matching error could prevent P0 from starting
 
 **Risks:**
-- Clean git checkout loses `plan/.orchestrator-active` (it should not be committed) — next session P0 start recreates it; only a problem if an agent tries to resume mid-run without re-running P0
+- A clean git checkout loses `plan/.orchestrator-active` (it should not be committed). The next session's P0 start recreates it. This is only a problem if an agent tries to resume mid-run without re-running P0
 
 ---
 
 ## Related ADRs
 
-- ADR-0021 — related-to (both extend the design.md shared state model)
+- ADR-0021 - related-to (both extend the design.md shared state model)
 </content>

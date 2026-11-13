@@ -29,7 +29,7 @@ assert_contains 'plan/state/{tool}.md' "$STEP3" \
   "req-004: Step 3 names plan/state/{tool}.md as the first source checked"
 assert_contains "high" "$STEP3" \
   "req-004: a valid record is reported at high confidence"
-assert_contains "is not consulted" "$STEP3" \
+assert_contains "Do not consult the marker file" "$STEP3" \
   "req-004: the marker is not consulted when the record is valid"
 
 echo ""

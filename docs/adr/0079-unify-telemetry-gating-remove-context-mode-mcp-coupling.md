@@ -20,13 +20,17 @@ feature: "0000018-telemetry-emission-consistency"
 
 ## Context
 
-Two independent signals currently gate Planifest's telemetry emission: `.claude/telemetry-enabled` (a sentinel file written whenever `--structured-telemetry-mcp` is passed to `setup.sh`, gating agent-driven MCP `emit_event` calls) and a per-hook-embedded `PLANIFEST_TELEMETRY_URL` (written into each hook's command string in `.claude/settings.json`, but only when BOTH `--structured-telemetry-mcp` AND `--context-mode-mcp` are passed together — an existing gate). This feature's own P0 discovered directly that a project with only `--structured-telemetry-mcp` passed gets the sentinel but never gets the hooks wired at all — `phase_start`/`phase_end` telemetry silently never fires, indefinitely, with no way to notice short of reading `settings.json` by hand.
+Two independent signals currently gate Planifest's telemetry emission:
+- `.claude/telemetry-enabled` is a sentinel file. `setup.sh` writes it whenever you pass `--structured-telemetry-mcp`, and it gates agent-driven MCP `emit_event` calls.
+- `PLANIFEST_TELEMETRY_URL` lives in each hook. `setup.sh` writes it into each hook's command string in `.claude/settings.json`, but only when you pass BOTH `--structured-telemetry-mcp` AND `--context-mode-mcp` together. This is an existing gate.
+
+This feature's own P0 discovered directly that a project with only `--structured-telemetry-mcp` gets the sentinel but never gets the hooks wired at all. The `phase_start`/`phase_end` telemetry silently never fires, indefinitely, with no way to notice short of reading `settings.json` by hand.
 
 ---
 
 ## Decision
 
-Remove the `--context-mode-mcp` AND-condition from telemetry hook installation entirely. `--structured-telemetry-mcp` alone becomes sufficient to wire the hooks (with the backend URL embedded), matching the same single flag that already gates the sentinel. No migration mechanism is built for projects currently in the old coupled state, since no practical legacy install base exists for this framework (human-confirmed: effectively zero external users).
+Remove the `--context-mode-mcp` AND-condition from telemetry hook installation entirely. `--structured-telemetry-mcp` alone becomes sufficient to wire the hooks (with the backend URL embedded), matching the same single flag that already gates the sentinel. The decision builds no migration mechanism for projects currently in the old coupled state. No practical legacy install base exists for this framework (human-confirmed: effectively zero external users).
 
 ---
 
@@ -57,10 +61,10 @@ Remove the `--context-mode-mcp` AND-condition from telemetry hook installation e
 - No new config format or detection logic to build or maintain
 
 **Negative:**
-- The two signals remain two technically different mechanisms (sentinel file vs. embedded URL) — now always set/unset together, but not literally merged into one artifact. A future reader could still be confused seeing two different-looking signals, even though they're now always consistent.
+- The two signals remain two technically different mechanisms (sentinel file vs. embedded URL). They are now always set/unset together, but not merged into one artifact. A future reader could still be confused seeing two different-looking signals, even though they're now always consistent.
 
 **Risks:**
-- If a future feature adds a new telemetry-gated behavior, a developer could accidentally gate it on only one of the two (now-always-consistent) mechanisms and reintroduce a similarly-shaped gap. Mitigated by req-006 documenting both signals' relationship clearly in `telemetry-standards.md` as the canonical reference.
+- If a future feature adds a new telemetry-gated behavior, a developer could accidentally gate it on only one of the two mechanisms (now always consistent). That would reintroduce a similarly-shaped gap. Req-006 mitigates this by documenting both signals' relationship in `telemetry-standards.md` as the canonical reference.
 
 ---
 
@@ -72,7 +76,7 @@ Remove the `--context-mode-mcp` AND-condition from telemetry hook installation e
 
 ## Supersedes
 
-- None — this corrects an existing installer gating condition (0000009 vintage), not a formal decision reversal of a documented ADR.
+- None. This corrects an existing installer gating condition (0000009 vintage), not a formal decision reversal of a documented ADR.
 
 ## Superseded By
 

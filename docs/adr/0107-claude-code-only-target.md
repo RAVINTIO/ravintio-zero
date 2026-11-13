@@ -19,13 +19,13 @@ The framework supported nine tool targets: Claude Code, Cursor, Windsurf, Cline,
 
 That breadth cost more than it returned. `setup.sh` ran to 1557 lines, of which roughly a third existed to branch by tool tier. Only Claude Code was in real use.
 
-Two other subsystems had already started to rot. `external-skills/` vendored over 400 third-party skills, installed only behind `--include-full-skill-library`. The context-mode integration shipped three PreToolUse hooks behind `--context-mode-mcp`, and commit 6a50af1 had already dropped context-mode from the boot templates, leaving the flag installing hooks nothing else referenced.
+Two other subsystems had already started to rot. `external-skills/` vendored over 400 third-party skills, installed only behind `--include-full-skill-library`. The context-mode integration shipped three PreToolUse hooks behind `--context-mode-mcp`. Commit 6a50af1 had already dropped context-mode from the boot templates, leaving the flag installing hooks nothing else referenced.
 
 ## Decision
 
 Support Claude Code alone.
 
-`VALID_TOOLS` becomes `claude-code`. The eight other setup scripts, the six hook adapters, and the four non-Claude ignore files are deleted. `tool-setup-reference.md` and `templates/cursor-boot.md` go with them.
+`VALID_TOOLS` becomes `claude-code`. The change deletes the eight other setup scripts, the six hook adapters, and the four non-Claude ignore files. `tool-setup-reference.md` and `templates/cursor-boot.md` go with them.
 
 The flag surface drops from five to three:
 
@@ -70,7 +70,7 @@ The `all` pseudo-target and the `add-skill` family of subcommands go, since neit
 
 **Risks:**
 - A context-mode reference could survive somewhere the sweep missed. The full test suite passes, but grep coverage is not proof.
-- `refresh-planifest-framework-dir.ps1` still hardcodes `C:\d\planifest\framework\`. It was left as-is by explicit decision and breaks on any other path.
+- `refresh-planifest-framework-dir.ps1` still hardcodes `C:\d\planifest\framework\`. The team left it as-is by explicit decision. It breaks on any other path.
 
 ## Related ADRs
 

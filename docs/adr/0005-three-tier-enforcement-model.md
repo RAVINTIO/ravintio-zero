@@ -34,10 +34,10 @@ A single uniform implementation cannot cover all tools. The architecture must wo
 
 Group tools into three enforcement tiers based on hook capability, with a shared core of `.mjs` scripts that run regardless of tier:
 
-- **Tier 1 (native shell, full interception):** claude-code, cursor, windsurf, cline — per-tool adapter `.mjs` translates the tool's native hook envelope to the Planifest common envelope, then delegates to shared `gate-write.mjs` and `emit-phase-*.mjs` scripts. Exit code 2 propagates as a block.
-- **Tier 1b (native shell, Bash-only):** codex-cli — same pattern as Tier 1 but gating is limited to Bash environments. Activated by `features.codex_hooks = true`.
-- **Tier 2 (plugin shim):** opencode — a dedicated `@planifest/opencode-hooks` npm package implements the OpenCode plugin interface and delegates to shared scripts via `Bun.spawnSync`.
-- **Tier 3 (instructions fallback):** copilot, antigravity, roo-code — no hook registration. Setup scripts print a warning; enforcement is instruction-based only.
+- **Tier 1 (native shell, full interception):** claude-code, cursor, windsurf, cline. A per-tool adapter `.mjs` translates the tool's native hook envelope to the Planifest common envelope. It then delegates to shared `gate-write.mjs` and `emit-phase-*.mjs` scripts. Exit code 2 propagates as a block.
+- **Tier 1b (native shell, Bash-only):** codex-cli. It follows the same pattern as Tier 1, but gating covers Bash environments only. Setting `features.codex_hooks = true` activates it.
+- **Tier 2 (plugin shim):** opencode. A dedicated `@planifest/opencode-hooks` npm package implements the OpenCode plugin interface and delegates to shared scripts via `Bun.spawnSync`.
+- **Tier 3 (instructions fallback):** copilot, antigravity, roo-code. These tools have no hook registration. Setup scripts print a warning, and enforcement is instruction-based only.
 
 The shared scripts (`gate-write.mjs`, `emit-phase-start.mjs`, `emit-phase-end.mjs`, `check-design.mjs`) are tool-agnostic. Adapters absorb all tool-specific differences.
 
@@ -71,24 +71,24 @@ The shared scripts (`gate-write.mjs`, `emit-phase-start.mjs`, `emit-phase-end.mj
 
 **Positive:**
 - Deterministic enforcement available for 6 of 9 tools (Tier 1 + 1b + 2)
-- Shared core scripts means enforcement logic is written and tested once
-- Adapters are thin; bugs in enforcement logic require only core script changes
-- Tier 3 tools are supported with a clear, documented limitation rather than silently broken
+- Shared core scripts mean you write and test enforcement logic once
+- Adapters are thin, so bugs in enforcement logic require only core script changes
+- Tier 3 tools carry a clear, documented limitation rather than silently breaking
 
 **Negative:**
-- Adapter layer adds indirection; debugging a hook firing requires tracing through adapter → shared script
+- Adapter layer adds indirection. Debugging a hook firing requires tracing through adapter → shared script
 - Tier 1b (codex-cli) has a platform limitation (no Windows write gate) that cannot be resolved without upstream changes
-- Tier 3 tools receive materially weaker enforcement — humans working with copilot/antigravity/roo-code have a lower confidence level
+- Tier 3 tools receive materially weaker enforcement, so humans working with copilot/antigravity/roo-code have a lower confidence level
 
 **Risks:**
-- OpenCode plugin API (Tier 2) is in active development; breaking changes could silently disable Tier 2 enforcement (R-004 in risk register)
-- Tier detection in Phase 0 must stay in sync with this tier assignment; if a tool moves tiers, the orchestrator SKILL.md and setup scripts both need updating
+- OpenCode plugin API (Tier 2) is in active development. Breaking changes could silently disable Tier 2 enforcement (R-004 in risk register)
+- Tier detection in Phase 0 must stay in sync with this tier assignment. If a tool moves tiers, the orchestrator SKILL.md and setup scripts both need updating
 
 ---
 
 ## Related ADRs
 
-- ADR-0006 - depends-on (common envelope is required for the adapter pattern to work)
+- ADR-0006 - depends-on (the adapter pattern requires the common envelope to work)
 - ADR-0009 - related-to (exit-0 failure mode applies to all tiers)
 
 ---

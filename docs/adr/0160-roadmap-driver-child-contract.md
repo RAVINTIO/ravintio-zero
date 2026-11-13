@@ -23,7 +23,7 @@ The driver also runs in user projects. Edits to a user's `.gitignore` would show
 
 The driver defines four parts of the contract with each child.
 
-- **Model.** `--model` comes from `PLANIFEST_ROADMAP_MODEL` and defaults to `sonnet`. The value is validated and passed as one argument, never through a shell.
+- **Model.** `--model` comes from `PLANIFEST_ROADMAP_MODEL` and defaults to `sonnet`. The driver validates the value and passes it as one argument, never through a shell.
 - **Turn cap.** `--max-turns` comes from `PLANIFEST_ROADMAP_MAX_TURNS`. If unset, no cap applies and no default ships. A non-zero exit with a cap set stops with `R-C Run: Blocked:` and names the cap.
 - **Logs.** Each step writes stdout and stderr to `plan/.roadmap-logs/step-{position}.log`. The driver excludes the folder through `.git/info/exclude`, not `.gitignore`, so the user's `.gitignore` stays untouched. Every stop after a step starts names the log.
 - **Labels.** The driver appends `work.kind=roadmap`, `planifest.roadmap={id}-{slug}`, and `planifest.step={position}` to `OTEL_RESOURCE_ATTRIBUTES` in the child environment only. A named function percent-encodes each value and keeps the old value byte for byte.

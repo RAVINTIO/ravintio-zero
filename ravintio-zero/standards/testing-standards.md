@@ -14,7 +14,7 @@ Every component must have tests at three levels:
 | **Integration** | API endpoints, database queries, service interactions | Medium (< 5s each) | Single component boundary | Every endpoint, every query |
 | **Contract** | Cross-component interface agreements | Medium | Component boundary pair | Every consumed interface |
 
-E2E tests are recommended but not required at the component level.
+We recommend E2E tests at the component level but do not require them.
 
 ---
 
@@ -62,19 +62,19 @@ Use factories or builders, not raw object literals repeated across tests. Test d
 
 ## 5. Mocking
 
-Contract tests verify the mock matches reality: if a consumer test mocks a service, the provider must have a corresponding contract test that verifies the mock's behaviour.
+Contract tests verify the mock matches reality. If a consumer test mocks a service, the provider must have a corresponding contract test that verifies the mock's behaviour.
 
 ---
 
 ## 6. Flakiness Policy
 
-A flaky test is worse than no test - it erodes trust in the suite. If a test fails intermittently, fix it or delete it; do not retry-and-ignore. All tests must be deterministic - use dependency injection for time, randomness, and external state.
+A flaky test is worse than no test - it erodes trust in the suite. If a test fails intermittently, fix it or delete it. Do not retry-and-ignore. All tests must be deterministic - use dependency injection for time, randomness, and external state.
 
 ---
 
 ## 7. Coverage
 
-Coverage is a proxy, not a target. The goal is confidence that the requirements are implemented correctly.
+Coverage is a proxy, not a target. The goal is confidence that the code meets the requirements.
 
 | Metric | Minimum | Target |
 |--------|---------|--------|

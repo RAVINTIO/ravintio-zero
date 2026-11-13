@@ -12,7 +12,7 @@ feature: "0000019-self-description-and-session-hygiene-fixes"
 **Tool:** Claude Code
 **Model:** claude-sonnet-5
 **Feature:** 0000019-self-description-and-session-hygiene-fixes
-**Component:** N/A — repository-scoped tooling, not a `src/{component-id}`
+**Component:** N/A (repository-scoped tooling, not a `src/{component-id}`)
 **Status:** accepted
 **Date:** 2026-07-31
 
@@ -20,22 +20,22 @@ feature: "0000019-self-description-and-session-hygiene-fixes"
 
 ## Context
 
-req-001 (0000014) fixes README drift that had gone undetected: wrong counts on five of seven table rows, and two structure-diagram paths that don't resolve. req-005 (0000018) exists so this class of defect doesn't recur silently — CI must fail when the README's structural claims diverge from the repository.
+req-001 (0000014) fixes README drift that had gone undetected. Five of seven table rows had wrong counts, and two structure-diagram paths don't resolve. req-005 (0000018) exists so this class of defect doesn't recur silently. CI must fail when the README's structural claims diverge from the repository.
 
-The framework already has `planifest-framework/scripts/consistency-check.mjs`, invoked by the `planifest-design-critic` skill during a feature run to validate `plan/current/` — story traceability, acceptance-criteria counts, ADR resolution, risk mitigations, design scope. The question was whether the new check belongs inside that script or as its own.
+The framework already has `planifest-framework/scripts/consistency-check.mjs`. The `planifest-design-critic` skill invokes it during a feature run to validate `plan/current/`: story traceability, acceptance-criteria counts, ADR resolution, risk mitigations, and design scope. The question was whether the new check belongs inside that script or as its own.
 
-The source review's first edition proposed extending `consistency-check.mjs`; its corrected edition reversed that recommendation after examining what the script actually validates and when it runs.
+The source review's first edition proposed extending `consistency-check.mjs`. Its corrected edition reversed that recommendation after examining what the script actually validates and when it runs.
 
 ## Decision
 
-Implement the self-description check as a **new, separate, repository-scoped script**, wired into `.github/workflows/planifest.yml` to run on every pull request — not as an added check inside `consistency-check.mjs`.
+Implement the self-description check as a **new, separate, repository-scoped script**. Wire it into `.github/workflows/planifest.yml` to run on every pull request. Do not add it as a check inside `consistency-check.mjs`.
 
 The two checks differ on every axis that matters for where logic should live:
-- **Subject**: `consistency-check.mjs` validates the artifacts of an in-flight feature (`plan/current/`); the new check validates the repository's own self-description (`README.md` against the filesystem it describes).
-- **Lifecycle**: `consistency-check.mjs` only has something to say while a feature is in flight, invoked by the design-critic with exit-code semantics tied to that role. Self-description accuracy is a standing repository invariant, checked on every PR regardless of whether a feature is in flight — including PRs that touch no `plan/current/` content at all.
-- **Caller**: `consistency-check.mjs` is invoked by an agent skill mid-pipeline. The new check is invoked by CI directly, with no pipeline-phase context.
+- **Subject**: `consistency-check.mjs` validates the artifacts of an in-flight feature (`plan/current/`). The new check validates the repository's own self-description (`README.md` against the filesystem it describes).
+- **Lifecycle**: `consistency-check.mjs` only has something to say while a feature is in flight. The design-critic invokes it with exit-code semantics tied to that role. Self-description accuracy is a standing repository invariant. CI checks it on every PR regardless of whether a feature is in flight, including PRs that touch no `plan/current/` content at all.
+- **Caller**: an agent skill invokes `consistency-check.mjs` mid-pipeline. CI invokes the new check directly, with no pipeline-phase context.
 
-Combining them would couple a per-feature gate to repository metadata, and would make `consistency-check.mjs` fail (or need to be skipped) in contexts — like a docs-only PR outside any pipeline run — where it currently has nothing to say.
+Combining them would couple a per-feature gate to repository metadata. It would also make `consistency-check.mjs` fail (or need skipping) where it currently has nothing to say, like a docs-only PR outside any pipeline run.
 
 ## Alternatives Considered
 
@@ -54,14 +54,14 @@ Combining them would couple a per-feature gate to repository metadata, and would
 ## Consequences
 
 **Positive:**
-- README structural drift is caught automatically on every PR, closing the exact gap that let req-001's defects accumulate undetected.
-- `consistency-check.mjs`'s scope and exit-code semantics stay clean — it continues to mean exactly one thing (P1/P2 artifact validation during a feature run).
+- CI catches README structural drift automatically on every PR, closing the exact gap that let req-001's defects accumulate undetected.
+- `consistency-check.mjs`'s scope and exit-code semantics stay clean. It continues to mean exactly one thing (P1/P2 artifact validation during a feature run).
 
 **Negative:**
 - One more script to maintain, with its own small surface area (path-existence + table-coverage checks) separate from the existing consistency-check tooling.
 
 **Risks:**
-- If the new script's path-resolution logic diverges in behaviour from `consistency-check.mjs`'s (e.g. different handling of symlinks or relative paths), the two checks could disagree about what "exists" someday. Low likelihood given both are simple filesystem checks; not mitigated further here as out of scope for this ADR.
+- If the new script resolves paths differently from `consistency-check.mjs` (for example, symlink or relative path handling), the two checks could disagree about "exists". Likelihood is low given both are plain filesystem checks. This ADR does not mitigate it further because it is out of scope.
 
 ---
 
