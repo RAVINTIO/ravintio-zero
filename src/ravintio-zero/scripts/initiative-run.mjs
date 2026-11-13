@@ -136,6 +136,10 @@
 //     and the head is on origin/feat/{feature-id} or that branch is gone. Otherwise it keeps the
 //     worktree and prints "I-C Run: Kept: step {n} {reason}". A kept worktree never stops the run
 //     (0000501, ADR-0326).
+//   - At start, the driver also clears the ready file of each merged step in the chart. It prints
+//     "I-C Run: Cleared: step {n} ready file of a merged step" for each. It keeps the file while a live
+//     pid sits in the step's running file, or when the removal fails, and prints "I-C Run: Kept: step
+//     {n} {reason}". It removes no other control file (0000509, ADR-0340).
 //   - The queue takes one ready step at a time, in ready order. It removes the step worktree and
 //     runs "node {merge-queue.mjs} run --step {n} --pr {k} --root {queue worktree}". MERGE_QUEUE_BIN
 //     overrides the script. The queue worktree is plan/.initiative-worktrees/queue, detached at the
@@ -1034,6 +1038,33 @@ function sweepMergedWorktrees(root, steps, merged) {
   }
 }
 
+// Removes the ready file of each merged step once at start. The queue deletes the control folder of the
+// step it merges, so only a step that merged by hand or under an earlier driver leaves one. It keeps the
+// file while a session runs, prints one Kept line for each file it leaves, and never stops the run
+// (0000509 ADR-0340).
+function clearMergedReadyFiles(root, steps, merged) {
+  for (const s of steps) {
+    if (!merged.has(s.step)) continue;
+    const n = s.step;
+    const keep = (why) => out(`I-C Run: Kept: step ${n} ${why}`.slice(0, MAX_LINE));
+    try {
+      const dir = areaPath(root, CONTROL, `step-${n}`, controlRefusal);
+      const ready = join(dir, 'ready');
+      if (!present(dir) || !present(ready)) continue;
+      if (isLink(ready)) throw controlRefusal();
+      const pid = runningPid(root, n);
+      if (pid && alive(pid)) {
+        keep('a session still runs');
+        continue;
+      }
+      rmSync(ready);
+      out(`I-C Run: Cleared: step ${n} ready file of a merged step`);
+    } catch (e) {
+      keep(`ready file could not be cleared: ${e instanceof Stop ? e.message : e.code || e.name}`);
+    }
+  }
+}
+
 function controlDir(root, n) {
   const dir = areaPath(root, CONTROL, `step-${n}`, controlRefusal);
   mkdirSync(dir, { recursive: true, mode: 0o700 });
@@ -1423,6 +1454,8 @@ async function schedule(root, cfg, rm, handoff = 0) {
   }
   // A driver that did not take over from another sweeps the worktrees of merged steps (0000501).
   if (!handoff) sweepMergedWorktrees(root, chart.steps, merged);
+  // It also clears the ready files that merged steps left behind (0000509).
+  if (!handoff) clearMergedReadyFiles(root, chart.steps, merged);
 
   const stop = { msg: '', log: null, failed: false };
   const setStop = (msg, rec) => {
