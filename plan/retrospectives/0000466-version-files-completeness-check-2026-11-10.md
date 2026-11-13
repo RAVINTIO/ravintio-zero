@@ -15,7 +15,7 @@ The suite now fails when `version-files.txt` omits a tracked file that carries t
 
 ## What helped
 
-- The chart row for steps 25 to 41 named the two known failures and the four-shard run. The step skipped the long base run (plan/current-initiative/initiative.md, `## Decisions`).
+- The chart row for steps 25 to 41 named the two known failures and the four-shard run. The step skipped the long base run (plan/_archive/0000360-backlog-sweep-initiative-2026-11-13/initiative.md, `## Decisions`).
 - Fixture repos with `git update-index --add` needed no git identity, so the test stays safe on runners without one (`src/ravintio-zero/tests/test-0000466-req-001-version-list-complete.sh`).
 
 ## What slowed the work

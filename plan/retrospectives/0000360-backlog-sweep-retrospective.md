@@ -15,7 +15,7 @@ status: "open"
 
 ## Summary
 
-Initiative 0000360 ran 21 steps and added step 22 for this record. The 27 rows of `plan/current-initiative/coordinator-evidence.md` group into 19 findings.
+Initiative 0000360 ran 21 steps and added step 22 for this record. The 27 rows of `plan/_archive/0000360-backlog-sweep-initiative-2026-11-13/coordinator-evidence.md` group into 19 findings.
 
 - Two findings (D and I) have a fix that covers the cause.
 - Four findings (A, C, K, and O) have a fix for the symptom only.
@@ -330,7 +330,7 @@ Guard widening: none.
 ## Keep
 
 - Decision rows written at chart time (PR #139).
-- One evidence file that lists each stop with its evidence (`plan/current-initiative/coordinator-evidence.md`).
+- One evidence file that lists each stop with its evidence (`plan/_archive/0000360-backlog-sweep-initiative-2026-11-13/coordinator-evidence.md`).
 - Merge-time versioning through the queue.
 
 ## Change

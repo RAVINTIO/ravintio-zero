@@ -22,6 +22,8 @@ Step 56 wrote three such loops between 01:40 and 01:50 on 2026-11-13. Each one w
 
 Evidence: `plan/.initiative-logs/step-56.log`, between 01:40 and 02:01 on 2026-11-13. At 01:50, process 45773 had run one such loop for 9 minutes 52 seconds.
 
+Step 60 hit the same wait on 2026-11-13. Its retrospective, `plan/retrospectives/0000534-step-sessions-receive-clock-2026-11-13.md` line 25, records that the wait ran to the time limit.
+
 ## Suggested Action
 
 The skills that run the suite tell a step session to wait on an end marker in the output file, such as a `done` line. Step 56 used that form for its full suite run, and it ended on time. A wait on a process uses the process id that the run returned, not `pgrep -f` on a name.
