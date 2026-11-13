@@ -21,9 +21,18 @@ As the human, I want the pack docs to describe the summary block, so I know what
 - ADR-0341 records the decision, and `docs/decisions-index.md` lists it.
 
 ## Acceptance Criteria
-- [ ] AC-1: the driver header names the `I-C Run: Summary:` lines
-- [ ] AC-2: `roadmap-standards.md` names the `I-C Run: Summary:` lines
-- [ ] AC-3: the ADR exists and names the lines
+- [ ] AC-1: the driver header names the summary
+  - Given the driver script
+  - When a reader opens its header comment
+  - Then it names the `I-C Run: Summary:` lines
+- [ ] AC-2: the standards name the summary
+  - Given `roadmap-standards.md`
+  - When a reader opens "Concurrent steps"
+  - Then it names the `I-C Run: Summary:` lines
+- [ ] AC-3: the ADR exists
+  - Given `docs/adr/0341-driver-stop-summary.md`
+  - When a reader opens it
+  - Then it names the `I-C Run: Summary:` lines
 
 ## Dependencies
 - REQ-001 and REQ-002.

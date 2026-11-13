@@ -9,7 +9,7 @@
 - Every driver run now prints a summary block before its final line. The stop line or the `I-E Delivery:` line stays last. Each line starts with `I-C Run: Summary:`.
 - `merged this run:` lists the steps the run merged, or `none`.
 - `driver fixes:` counts the repairs the driver made by itself. One `fix:` line repeats each of the first 10.
-- `action for the human:` ends the block. It reads `none` after a clean end, and names one action for a pending delivery, a `Restart:` stop, a `Setup:` stop, or any other stop.
+- `action for the human:` ends the block. It reads `none` after a clean end. At a stop or a pending delivery, it names one action for that case.
 - The summary changes no exit code and no existing line.
 - The driver header and the "Concurrent steps" section of the roadmap standards state the rule.
 - A new suite, `test-0000511-req-001-003-stop-summary`, covers the behaviour and the text.
