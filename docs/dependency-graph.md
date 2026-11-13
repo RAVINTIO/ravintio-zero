@@ -1,6 +1,6 @@
 # Dependency Graph
 
-Last updated: 0000397-pack-source-in-src
+Last updated: 0000440-driver-reads-reply-blocks
 
 ## Component dependency diagram
 
@@ -84,7 +84,7 @@ graph TD
 
 **Two components make network calls, both on request.** `merge-guard` runs `gh pr view` to read a PR base before a merge. `initiative-run.mjs` starts `claude`, `gh`, and `git` child processes, and runs `merge-queue.mjs`, which calls `gh`. No other hook or script makes an outbound network call. `node` is the only dependency of the pack itself.
 
-**The driver depends on `claude` and `gh`.** `initiative-run.mjs` uses Node built-ins, `initiative-labels.mjs`, the `claude` command, and `gh`. It reads `plan/current-initiative/initiative.md` from the initiative branch ref, and `plan/current/build-log.md` and the newest archived build log for a `Blocked:` line. It never edits the main working tree. Under `**Concurrency:**` it creates and removes step worktrees in `plan/.initiative-worktrees/`, reads the chart through `initiative-chart.mjs`, and runs `merge-queue.mjs` in a queue worktree. It also runs `git rev-parse` and `git diff --name-only` with argument arrays to see whether a step changed the driver, the watcher, or the initiative skill. `initiative-watch.mjs` uses Node built-ins and `git log`, and it only reads.
+**The driver depends on `claude` and `gh`.** `initiative-run.mjs` uses Node built-ins, `initiative-labels.mjs`, the `claude` command, and `gh`. It reads `plan/current-initiative/initiative.md` from the initiative branch ref, and `plan/current/build-log.md` for a `Blocked:` line. It reads the newest archived build log and the `result` text of each session the same way. It never edits the main working tree. Under `**Concurrency:**` it creates and removes step worktrees in `plan/.initiative-worktrees/`, reads the chart through `initiative-chart.mjs`, and runs `merge-queue.mjs` in a queue worktree. It also runs `git rev-parse` and `git diff --name-only` with argument arrays to see whether a step changed the driver, the watcher, or the initiative skill. `initiative-watch.mjs` uses Node built-ins and `git log`, and it only reads.
 
 **The driver passes a model and labels to each child.** It passes `--model` from `RAVINTIO_INITIATIVE_MODEL`, which defaults to `sonnet`. It passes `--max-turns` only when you set `RAVINTIO_INITIATIVE_MAX_TURNS`. If a `RAVINTIO_*` name is unset, the driver reads the legacy `PLANIFEST_ROADMAP_MODEL` or `PLANIFEST_ROADMAP_MAX_TURNS` in 0.x. If both exist, the `RAVINTIO_*` value wins. It appends `work.kind`, `ravintio.initiative`, and `ravintio.step` labels to `OTEL_RESOURCE_ATTRIBUTES` in the child environment.
 
