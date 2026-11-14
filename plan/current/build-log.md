@@ -84,7 +84,7 @@ Run mode: autonomous (2026-11-14T15:08:00Z, initiative step)
 |-------|-------|
 | Start | `2026-11-14T15:11:30Z` |
 | End | `2026-11-14T16:43:20Z` |
-| Wall clock | 1 |
+| Wall clock | 92 |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 0 |
@@ -95,12 +95,16 @@ Run mode: autonomous (2026-11-14T15:08:00Z, initiative step)
 - In progress: U-2 (2026-11-14T15:11:53Z)
 - RED: U-2 (2026-11-14T15:12:43Z)
 - In progress: U-1 (2026-11-14T15:12:43Z)
+- RED: U-1 (2026-11-14T15:12:43Z)
 - GREEN: U-2 (2026-11-14T15:12:44Z)
 - GREEN: U-1 (2026-11-14T15:12:44Z)
 - Done: U-2 (content, inline, none, 2026-11-14T15:12:44Z)
 - Done: U-1 (content, inline, none, 2026-11-14T15:12:44Z)
 - Tests run: REQ-001: ravintio-zero/tests/test-0000547-req-001-002-index-rebuild-rule.sh (2026-11-14T15:12:44Z)
 - Tests run: REQ-002: ravintio-zero/tests/test-0000547-req-001-002-index-rebuild-rule.sh (2026-11-14T15:12:44Z)
+- In progress: U-3 (2026-11-14T15:12:44Z)
+- RED: U-3 (2026-11-14T15:12:43Z)
+- GREEN: U-3 (2026-11-14T15:12:44Z)
 - Done: U-3 (content, inline, none, 2026-11-14T16:43:20Z)
 - Complete: P2 (2026-11-14T16:43:20Z)
 
@@ -112,7 +116,7 @@ Run mode: autonomous (2026-11-14T15:08:00Z, initiative step)
 |-------|-------|
 | Start | `2026-11-14T16:43:20Z` |
 | End | `2026-11-14T17:23:45Z` |
-| Wall clock | 30 |
+| Wall clock | 40 |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | 0 |
