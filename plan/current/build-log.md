@@ -26,8 +26,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-14T15:09:54Z` |
-| End | |
-| Wall clock | |
+| End | `2026-11-14T15:10:55Z` |
+| Wall clock | 2 |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -48,6 +48,23 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Decision applied (initiative chart): Guard cut-back: the `run-tests.sh` tree check (0000476, ack write)
 - Decision applied (initiative chart): Fast batches
 - Queue: no item names step 4
+- Track: light (chart accepts). Design self-confirmed [source: draft-accepted (initiative)]
+- Baseline run: started in the background, recorded when it ends
+- Complete: P0 (2026-11-14T15:10:55Z)
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-14T15:10:55Z` |
+| End | |
+| Wall clock | |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | none |
 
 ---
 
