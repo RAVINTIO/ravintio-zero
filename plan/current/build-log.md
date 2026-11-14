@@ -90,3 +90,4 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Tests run: REQ-002: test-0000562-req-001-003-pack-file-edit-cause.sh, test-0000493-req-004-handoff-text.sh (2026-11-14T15:12:23Z)
 - Tests run: REQ-003: test-0000562-req-001-003-pack-file-edit-cause.sh, test-0000151-req-011-orchestrator-references-split.sh (2026-11-14T15:12:23Z)
 - Done: U1, U2, U3, U4 (content, inline, none, 2026-11-14T15:12:23Z)
+- Done: U5, U6 (content, inline, none, 2026-11-14T15:12:41Z)
