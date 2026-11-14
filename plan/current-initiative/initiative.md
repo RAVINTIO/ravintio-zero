@@ -17,7 +17,7 @@ status: "active"  # proposed | charted | active | delivered | blocked
 
 **Step CI fixes:** allowed
 
-**Concurrency:** 4
+**Concurrency:** 6
 
 The human chose on 2026-11-14 to leave out 0000174, 0000220, 0000221, and 0000254. Each needs a paid service, an account, or a human partway through a step.
 
@@ -28,6 +28,7 @@ The human confirmed the chart on 2026-11-14 with "build the initiative as fast a
 - The confirmation approves the sharpened outcomes below. Each one is now the `## Wanted outcome` section of its entry. The coordinator closed entry 0000513, because 0000536 covers it.
 - The confirmation approves no guard widening. The coordinator cut back each possible widening to a fix that widens nothing, in `## Decisions`.
 - "As fast as possible" sets `**Speed:** fast` and `**Concurrency:** 4`. Lanes keep steps that share files in order.
+- On 2026-11-14 the human raised `**Concurrency:**` from 4 to 6 to run as many steps as practical.
 
 | Entry | Wanted outcome and check |
 |-------|--------------------------|
