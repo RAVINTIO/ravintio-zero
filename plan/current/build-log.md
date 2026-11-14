@@ -50,3 +50,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Pulled in: 0000514-clear-feature-id-at-ship (backlog entry folder deleted in the discovery commit)
 - Version: last known 0.114.0 (product.yml), step Bump minor, planned 0.115.0
 - Migration pending: none
+- Scope Lock (happy path): A step ships and its PR carries no plan/.feature-id. [source: draft-accepted (initiative)]
+- Scope Lock (first-run path): A first step finds no plan/.feature-id and writes its own. [source: draft-accepted (initiative)]
+- Scope Lock (error path): A conflict on plan/.feature-id at a base merge resolves in the queue without a stop. [source: draft-accepted (initiative)]
+- Scope Lock (cross-session continuity): An interrupted step restarts from the build log and loses no id state. [source: draft-accepted (initiative)]
+- Scope Lock complete. All four scenario paths captured.
