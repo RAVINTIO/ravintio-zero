@@ -74,8 +74,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-14T15:11:27Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-14T17:36:56Z` |
+| Wall clock | `145` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 0 |
@@ -91,3 +91,18 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Tests run: REQ-003: test-0000562-req-001-003-pack-file-edit-cause.sh, test-0000151-req-011-orchestrator-references-split.sh (2026-11-14T15:12:23Z)
 - Done: U1, U2, U3, U4 (content, inline, none, 2026-11-14T15:12:23Z)
 - Done: U5, U6 (content, inline, none, 2026-11-14T15:12:41Z)
+- Complete: P2 (2026-11-14T17:36:56Z)
+
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-14T17:36:56Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-validate-and-accept |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | text change, checks run inline |
