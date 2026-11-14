@@ -68,9 +68,9 @@ flowchart LR
 
 | Unit | Depends on | Writes | Batch | Sequential reason | Shared resources |
 |------|-----------|--------|-------|-------------------|------------------|
-| U1 hook and test | none | hook, new test | 1 | The test drives the runner change in U2, so TDD runs red to green in order | none |
-| U2 runners | U1 | run-tests.sh, run-tests.ps1, .gitignore | 2 | Needs the red test from U1 | none |
-| U3 docs | U2 | docs/, README, component.yml, mirror | 3 | Documents the built behaviour | none |
+| U1 | none | hook, new test | 1 | The test drives the runner change in U2, so TDD runs red to green in order | none |
+| U2 | U1 | run-tests.sh, run-tests.ps1, .gitignore | 2 | Needs the red test from U1 | none |
+| U3 | U2 | docs/, README, component.yml, mirror | 3 | Documents the built behaviour | none |
 
 ## Assumptions
 

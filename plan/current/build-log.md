@@ -57,10 +57,26 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-14T15:10:55Z` |
+| End | `2026-11-14T15:11:47Z` |
+| Wall clock | 2 |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Light track, one requirement, one ADR (0344) |
+
+- Complete: P1 (2026-11-14T15:11:47Z)
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-14T15:11:47Z` |
 | End | |
 | Wall clock | |
 | Model tier | primary |
-| Skills loaded | ravintio-plan |
+| Skills loaded | ravintio-implement |
 | Agents spawned | 0 |
 | MCP calls | 0 |
 | Parallel task batches | 0 |
