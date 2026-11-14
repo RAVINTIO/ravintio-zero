@@ -158,7 +158,7 @@ The human confirmed the chart on 2026-11-14 with "build the initiative as fast a
 |------|------------|-------|-----------------|------|---------|--------|------|-------|
 | 1 | 0000545-clear-feature-id-at-ship | Ship leaves plan/.feature-id behind | 0000514 | minor | | pending | queue |  |
 | 2 | 0000546-queue-failure-leaves-dirty-files | A failed queue run can leave written files in the queue worktree | 0000477 | minor | | pending | queue |  |
-| 3 | 0000547-step-merge-regenerates-index | Step base merge regenerates the backlog index | 0000517 | minor | | pending | coord |  |
+| 3 | 0000547-step-merge-regenerates-index | Step base merge regenerates the backlog index | 0000517 | minor | 0.115.0 | merged | coord | |
 | 4 | 0000548-ack-write-mid-suite-fails-run | Strict-mode ack write mid-suite fails the suite run | 0000476-ack-write-mid-suite-fails-run | minor | | pending | tests |  |
 | 5 | 0000549-baseline-record-checks | Baseline record checks its input and its file | 0000525, 0000515 | minor | | pending | baseline |  |
 | 6 | 0000550-no-head-diffs-in-tests | No HEAD diffs in tests | 0000416 | minor | | pending | tests |  |
@@ -201,3 +201,4 @@ The merge queue adds one row for each step it merges. See the merge queue sectio
 
 | Step | PR | Merge commit | Version | Merged at |
 |------|----|--------------|---------|-----------|
+| 3 | #214 | tag v0.115.0 | 0.115.0 | 2026-11-14T17:36:45Z |
