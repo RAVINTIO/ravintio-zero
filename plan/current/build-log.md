@@ -60,11 +60,13 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-14T15:24:11Z` |
-| End | |
-| Wall clock | |
+| End | `2026-11-14T15:24:38Z` |
+| Wall clock | 1 |
 | Model tier | primary |
 | Skills loaded | ravintio-plan |
 | Agents spawned | 0 |
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | inline, one requirement |
+
+- Complete: P1 (2026-11-14T15:24:38Z)
