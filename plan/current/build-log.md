@@ -50,3 +50,9 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Queue: no items name step 5.
 - Feature id: plan/.feature-id held 0000536-pending-migrations-reach-the-human-early. Step 1 (0000545) deletes that tracked file. This step overwrites it with its own id.
 
+- Scope Lock (happy path): A finished run records its failures and check compares against them. [source: draft-accepted (initiative)]
+- Scope Lock (first-run path): With no baseline file, check exits 1 with no baseline recorded. [source: draft-accepted (initiative)]
+- Scope Lock (error path): Runner output with no totals line makes record exit 2 and write no file. [source: draft-accepted (initiative)]
+- Scope Lock (cross-session continuity): The baseline file is a committed artifact, so a resumed session reads it or check reports it missing. [source: draft-accepted (initiative)]
+- Scope Lock complete. All four scenario paths captured.
+- Design confirmed: draft-accepted (initiative) (2026-11-14T15:24:11Z)
