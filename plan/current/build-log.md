@@ -89,3 +89,4 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 
 - Batches: 3, sequential, each depends on the one before it. No parallel batch applies.
 - In progress: REQ-001 U2 test (2026-11-14T15:24:50Z)
+- RED: REQ-001 U2 test (2026-11-14T15:25:02Z)
