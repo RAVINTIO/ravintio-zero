@@ -549,6 +549,7 @@ Every merged step edits a few files that other open step PRs also edit. `ravinti
 |------|------------|
 | `plan/backlog/.next-id`, `docs/adr/.next-id` | The higher number wins |
 | `plan/backlog/index.md` | Rebuilt with `backlog-index.mjs` from the merged entries |
+| `plan/.feature-id` | A file the PR branch deleted stays deleted. A file the PR branch holds keeps the PR branch text. |
 | `docs/decisions-index.md`, `docs/architecture-overview.md` | The PR branch keeps its `Last updated:` line. Rows that either side added stay. |
 
 - The queue prints `resolved: {path}` for each file, then commits the merge with its usual subject.

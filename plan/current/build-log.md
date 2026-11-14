@@ -71,3 +71,28 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Notes | Plan written inline. Ranges too small for subagents. |
 
 - Complete: P1 (2026-11-14T15:11:55Z)
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-14T15:12:18Z` |
+| End | |
+| Wall clock | |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 1 |
+| Notes | Units are inline content units. Run inline in one context. |
+
+- In progress: U1 (2026-11-14T15:12:18Z)
+- In progress: U2 (2026-11-14T15:12:18Z)
+- RED: U1 (2026-11-14T15:12:18Z)
+- RED: U2 (2026-11-14T15:12:18Z)
+- GREEN: U1 (2026-11-14T15:13:30Z)
+- GREEN: U2 (2026-11-14T15:13:30Z)
+- Done: U1 (content, inline, none, 2026-11-14T15:13:30Z)
+- Done: U2 (content, inline, none, 2026-11-14T15:13:30Z)
+- Tests run: REQ-001: test-0000545-req-001-ship-deletes-feature-id.sh, test-0000151-req-002-ship-sentinels-before-pr.sh (2026-11-14T15:13:30Z)
+- Tests run: REQ-002: test-0000545-req-002-queue-resolves-feature-id.sh, test-0000456-req-001-shared-files.sh (2026-11-14T15:13:30Z)
