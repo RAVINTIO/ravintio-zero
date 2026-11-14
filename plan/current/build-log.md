@@ -82,3 +82,11 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | units run inline, text change |
+- In progress: U4 (req 001-003 suite) (2026-11-14T15:11:51Z)
+- RED: REQ-001..003 suite (2026-11-14T15:11:51Z)
+- GREEN: REQ-001..003 suite (2026-11-14T15:12:23Z)
+- Rework: REQ-001: pins in three suites read the scan from SKILL.md, updated to read the reference file (2026-11-14T15:12:23Z)
+- Tests run: REQ-001: test-0000562-req-001-003-pack-file-edit-cause.sh, test-0000246-req-001-test-impact-scan.sh, test-0000355-req-003-workflow-marker.sh, test-0000383-req-001-005-test-impact-causes.sh (2026-11-14T15:12:23Z)
+- Tests run: REQ-002: test-0000562-req-001-003-pack-file-edit-cause.sh, test-0000493-req-004-handoff-text.sh (2026-11-14T15:12:23Z)
+- Tests run: REQ-003: test-0000562-req-001-003-pack-file-edit-cause.sh, test-0000151-req-011-orchestrator-references-split.sh (2026-11-14T15:12:23Z)
+- Done: U1, U2, U3, U4 (content, inline, none, 2026-11-14T15:12:23Z)
