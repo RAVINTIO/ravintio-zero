@@ -94,3 +94,4 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - GREEN: REQ-001 U1 rule (2026-11-14T15:25:14Z)
 - Tests run: REQ-001: ravintio-zero/tests/test-0000573-req-001-unit-report-fields.sh, test-0000386-req-002, test-0000043-req-012, test-0000172-req-002 (2026-11-14T15:25:14Z)
 - Done: REQ-001 U1 rule (content, inline, none, 2026-11-14T15:25:14Z)
+- Done: REQ-001 U3 docs (content, inline, none, 2026-11-14T15:25:24Z)

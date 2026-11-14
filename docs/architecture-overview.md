@@ -1,6 +1,6 @@
 # Architecture Overview
 
-Last updated: 0000536-pending-migrations-reach-the-human-early
+Last updated: 0000573-require-unit-reports
 
 ## What this repo is
 
@@ -86,7 +86,7 @@ No mode merges a PR or commits to `main`. The human merges every PR.
 
 **Orchestrator references.** The orchestrator `SKILL.md` is 9,000 bytes or fewer. It keeps the Hard Limits, the prefix table, a short Resume Detection rule, and the Pack Index. Fifteen files under `skills/ravintio-orchestrator/references/` hold the sections that apply at one moment of a run. They cover adoption modes, discovery coaching, discovery records, mid-pipeline changes, run speed, scope lock, and session commands. They also cover the skills catalogue, resume detection, P0 coaching, the fresh P0 start, the P0 gate, phase invocation, exception stops, and context hygiene. Each moved section keeps its lines word for word. The initiative stage prefix block sits in `ravintio-zero/standards/roadmap-standards.md`. The Pack Index names one trigger for each file and one rule for template reads. A line-preservation test fails if a moved line is missing.
 
-**Model tiers.** Every Agent call passes `model`, set to `sonnet` or `haiku`. The three TDD skills set `model: haiku`. A haiku unit that fails twice retries on sonnet. A table in the dispatch standards gives each implementation unit a class (`content`, `code`, `test`, or `config`), a tier, and an effort level. The class and three signals set them. The table's tier replaces the skill's `model` for that dispatch, and the `Done:` line records `{class}, {tier}, {effort}`. A `content` unit that applies agreed text or changes one file runs inline. It writes a `RED:` marker before a `GREEN:` marker, and `build-log-check.mjs` checks the pair (0000386 ADR-0285). A WebFetch of a full reference page goes through a sonnet or haiku subagent that returns an extract.
+**Model tiers.** Every Agent call passes `model`, set to `sonnet` or `haiku`. The three TDD skills set `model: haiku`. A haiku unit that fails twice retries on sonnet. A table in the dispatch standards gives each implementation unit a class (`content`, `code`, `test`, or `config`), a tier, and an effort level. The class and three signals set them. The table's tier replaces the skill's `model` for that dispatch, and the `Done:` line records `{class}, {tier}, {effort}`. A `content` unit that applies agreed text or changes one file runs inline. It writes a `RED:` marker before a `GREEN:` marker, and `build-log-check.mjs` checks the pair (0000386 ADR-0285). A WebFetch of a full reference page goes through a sonnet or haiku subagent that returns an extract. A unit report holds four fields: the RED line, the GREEN line, the commit hash, and any deviation. The orchestrator rejects a report that lacks one and resumes the unit once (0000573 ADR-0344).
 
 ### Release sizing
 

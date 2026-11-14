@@ -1,7 +1,7 @@
 ---
 title: "ADR 0344: Unit report fields"
 summary: "A unit report holds a RED line, a GREEN line, a commit hash, and any deviation. The orchestrator rejects a report without one and resumes the unit once."
-status: "proposed"
+status: "accepted"
 component: "ravintio-zero"
 version: "0.1.0"
 ---
