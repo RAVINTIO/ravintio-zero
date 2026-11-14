@@ -1,7 +1,7 @@
 ---
 title: "Initiative: 0000544 - priority backlog"
 summary: "Builds 39 open backlog entries in 36 steps, in the priority order the human set on 2026-11-14, four at a time."
-status: "charted"  # proposed | charted | active | delivered | blocked
+status: "active"  # proposed | charted | active | delivered | blocked
 ---
 # Initiative: 0000544 - priority backlog
 
@@ -9,7 +9,7 @@ status: "charted"  # proposed | charted | active | delivered | blocked
 
 **Branch:** initiative/0000544-priority-backlog
 
-**Status:** charted
+**Status:** active
 
 **Position:** 1
 
