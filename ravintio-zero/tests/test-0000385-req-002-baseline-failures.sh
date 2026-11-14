@@ -48,6 +48,15 @@ assert_equals "" "$OUT" "a green run prints nothing"
 node "$SCRIPT" check "$WORK/missing.txt" --file "$BASE" >/dev/null 2>&1; RC=$?
 assert_equals "2" "$RC" "an unreadable runner output exits 2"
 
+echo "=== REQ-001 (0000549): record needs a finished run ==="
+printf 'running suite test-a.sh\n' > "$WORK/partial.txt"
+rm -f "$WORK/partial-baseline.md"
+ERR="$(node "$SCRIPT" record "$WORK/partial.txt" --file "$WORK/partial-baseline.md" 2>&1 >/dev/null)"; RC=$?
+assert_equals "2" "$RC" "record exits 2 when the output has no totals line"
+assert_contains "Feature suites:" "$ERR" "the error line names the missing totals line"
+assert_equals "1" "$(printf '%s\n' "$ERR" | wc -l | tr -d ' ')" "the error is one line"
+assert_equals "no" "$([ -e "$WORK/partial-baseline.md" ] && echo yes || echo no)" "record writes no file for partial output"
+
 echo "=== skill text ==="
 assert_rule p0-start-baseline "baseline-failures.mjs" "baseline-failures.md" "base commit"
 assert_rule p3-baseline-check "baseline-failures.mjs check" "inherited"

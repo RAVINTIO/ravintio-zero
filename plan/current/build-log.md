@@ -89,3 +89,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Notes | Both units are class content and share one script, so they run inline in sequence. The concurrency plan puts them in separate batches. |
 
 - In progress: U-001 REQ-001 inline (2026-11-14T15:25:36Z)
+- RED: U-001 REQ-001 (2026-11-14T15:25:42Z)
+- GREEN: U-001 REQ-001 (2026-11-14T15:25:52Z)
+- Tests run: REQ-001: ravintio-zero/tests/test-0000385-req-002-baseline-failures.sh (2026-11-14T15:25:52Z)
+- Done: U-001 REQ-001 (content, inline, none, 2026-11-14T15:25:52Z)
+- In progress: U-002 REQ-002 inline (2026-11-14T15:25:52Z)
