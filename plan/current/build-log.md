@@ -129,3 +129,37 @@ Run mode: autonomous (2026-11-14T15:08:00Z, initiative step)
 - OS gap: local macos, CI ubuntu, windows
 - Skipped: docs edit pass cycles (prose-check.mjs exit 0 on the 2 changed docs, no change needed)
 - Complete: P3 (2026-11-14T17:23:45Z)
+
+---
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-14T17:24:16Z` |
+| End | `2026-11-14T17:24:16Z` |
+| Wall clock | 1 |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Initiative step. The merge queue sets the version. |
+
+- Complete: P4 (2026-11-14T17:24:16Z)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | 5 |
+| Total wall clock | 137 |
+| Total agents spawned | 0 |
+| Total MCP calls | 0 |
+| Phases using parallelism | 0 |
+| Primary tier agent calls | 0 |
+| Cheaper tier agent calls | 0 |
+| Self-corrections | 0 |
+| Phases skipped | none |

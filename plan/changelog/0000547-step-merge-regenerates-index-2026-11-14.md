@@ -6,14 +6,14 @@
 
 ## What changed
 
-- `### I-D Advance` in the roadmap standards gains the rule `advance-index-rebuild`. After a manual merge of the base branch, a step runs `backlog-index.mjs` and commits the result before the push.
-- The rule names the `Check the backlog index` step of the `validate-branch` job as the check that fails on a stale index.
-- The suite `test-0000547-req-001-002` covers the rule in both pack trees.
-- The architecture overview names the rule in its merge queue paragraph.
+- The I-D Advance rules in `ravintio-zero/standards/roadmap-standards.md` gain the rule `advance-index-rebuild`. After a manual merge of the base branch, a step runs `node ravintio-zero/scripts/backlog-index.mjs` and commits the result before the push.
+- The rule names the CI check `Check the backlog index` that fails on a stale index.
+- The suite `test-0000547-req-001-002-index-rebuild-rule.sh` checks the rule and the mirrored `src/ravintio-zero/` tree.
+- The living docs record the change.
 
 ## Why
 
-On 2026-11-11 step 29 merged the initiative branch by hand and left `plan/backlog/index.md` stale. CI failed twice and one more commit fixed it.
+The merge queue rebuilds the index after its own base merges. A step that merges the base by hand got no such help, so `Check the backlog index` failed on its PR. Backlog entry 0000517 reported it.
 
 ## Deviations
 
@@ -21,8 +21,9 @@ None.
 
 ## Validation results
 
-- The new suite passes.
-- The full suite result is in the verification report.
+- Full suite in a clean clone: 450 feature suites passed and 3 failed. The 3 are the inherited baseline from the chart.
+- No security finding above informational.
+- `prose-check.mjs` exits 0 on the changed docs.
 
 ## Skipped phases
 
