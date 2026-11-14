@@ -95,3 +95,4 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Tests run: REQ-001: ravintio-zero/tests/test-0000573-req-001-unit-report-fields.sh, test-0000386-req-002, test-0000043-req-012, test-0000172-req-002 (2026-11-14T15:25:14Z)
 - Done: REQ-001 U1 rule (content, inline, none, 2026-11-14T15:25:14Z)
 - Done: REQ-001 U3 docs (content, inline, none, 2026-11-14T15:25:24Z)
+- Baseline: the clean-clone run printed no Failed suites list (output ended after test-0000037-req-004, exit 1). The baseline file lists the three known failures from the chart Decisions row (2026-11-14T15:46:05Z)
