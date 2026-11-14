@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Test: 0000385 req-002 baseline-failures
+# Test: 0000385 req-002 baseline-failures (0000549 REQ-001 and REQ-002)
 # baseline-failures.mjs records the failed suites on the base commit. P3 stops only
 # on a failed suite that the baseline does not list.
 
@@ -34,10 +34,11 @@ assert_equals "1" "$RC" "check exits 1 when a suite is new"
 assert_contains "new: test-b.sh" "$OUT" "check names the new suite"
 assert_contains "inherited: test-a.sh" "$OUT" "check still lists the inherited suite"
 
-echo "=== AC-3: no baseline file means an empty baseline ==="
-OUT="$(node "$SCRIPT" check "$WORK/now.txt" --file "$WORK/none.md")"; RC=$?
+echo "=== AC-3 (0000549 REQ-002): no baseline file is an error ==="
+OUT="$(node "$SCRIPT" check "$WORK/now.txt" --file "$WORK/none.md" 2>"$WORK/err.txt")"; RC=$?
 assert_equals "1" "$RC" "check exits 1 with no baseline file"
-assert_contains "new: test-a.sh" "$OUT" "every failure is new"
+assert_contains "no baseline recorded" "$(cat "$WORK/err.txt")" "check says no baseline recorded"
+assert_equals "" "$OUT" "check prints no suite line without a baseline"
 
 echo "=== a green run records an empty baseline ==="
 printf 'Feature suites:    9 passed, 0 failed.\n' > "$WORK/green.txt"

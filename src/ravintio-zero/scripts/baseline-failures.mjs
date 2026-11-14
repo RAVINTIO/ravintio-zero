@@ -13,8 +13,9 @@
 //           finish. record then exits 2 and writes no file (0000549 REQ-001).
 //   check   prints "inherited: {name}" for a suite the baseline lists and
 //           "new: {name}" for any other, and exits 1 when any suite is new.
-// A missing baseline file counts as an empty baseline. On any other failure the
-// script prints one line to stderr and exits 2.
+//           A missing baseline file is an error: check prints "no baseline
+//           recorded" to stderr and exits 1 (0000549 REQ-002).
+// On any other failure the script prints one line to stderr and exits 2.
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -95,6 +96,8 @@ function main(argv) {
     baseline = parseBaseline(fs.readFileSync(file, 'utf8'));
   } catch (err) {
     if (err.code !== 'ENOENT') fail(`cannot read ${file}: ${err.code || err.message}`);
+    process.stderr.write(`baseline-failures: no baseline recorded at ${file}\n`);
+    return 1;
   }
   let fresh = 0;
   for (const name of current) {
