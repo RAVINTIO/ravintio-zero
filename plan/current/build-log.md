@@ -99,3 +99,4 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Tests run: REQ-002: ravintio-zero/tests/test-0000385-req-002-baseline-failures.sh (2026-11-14T15:26:04Z)
 - Done: U-002 REQ-002 (content, inline, none, 2026-11-14T15:26:04Z)
 - In progress: U-003 docs inline (2026-11-14T15:26:04Z)
+- Done: U-003 docs (content, inline, none, 2026-11-14T15:26:11Z)

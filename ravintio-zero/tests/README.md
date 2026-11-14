@@ -42,7 +42,8 @@ Both runners give each suite a temporary global git config that holds `user.useC
 A TDD cycle runs the new test and the tests that cover the changed files. P3 runs
 the full suite once, in a clean clone of `HEAD`, with `scripts/clean-clone-test.mjs`.
 `scripts/baseline-failures.mjs` compares the failed suites with the ones P0
-recorded, so P3 stops only on a new failure. `testing-standards.md` section 9
+recorded, so P3 stops only on a new failure. `record` refuses runner output with no
+`Feature suites:` line, and `check` refuses a missing baseline file. `testing-standards.md` section 9
 holds the rules.
 
 ## Running the tests
