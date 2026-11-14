@@ -73,8 +73,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-14T15:11:47Z` |
-| End | |
-| Wall clock | |
+| End | `2026-11-14T15:22:37Z` |
+| Wall clock | 11 |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 0 |
@@ -88,6 +88,21 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Done: U1-U3 REQ-001 (content, inline, none, 2026-11-14T15:13:50Z)
 - Tests run: REQ-001: test-0000548-req-001-suite-marker.sh, test-0000205, test-0000315, test-0000251, test-0000185, test-0000320, test-0000399-req-007, test-0000409, test-0000245, test-0000036, test-0000164-req-008 (2026-11-14T15:13:50Z)
 - Batches: 3 units run in order, U2 needs the red test from U1, U3 documents the result. Mirror copied to ravintio-zero/.
+- Complete: P2 (2026-11-14T15:22:37Z)
+
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-14T15:22:37Z` |
+| End | |
+| Wall clock | |
+| Model tier | primary |
+| Skills loaded | ravintio-validate-and-accept |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | none |
 
 ---
 
