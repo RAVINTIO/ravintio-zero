@@ -163,3 +163,4 @@ Run mode: autonomous (2026-11-14T15:08:00Z, initiative step)
 | Cheaper tier agent calls | 0 |
 | Self-corrections | 0 |
 | Phases skipped | none |
+- CI duration: 293s (run 43620989602, 2026-11-14T17:30:08Z)
