@@ -55,3 +55,19 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Scope Lock (error path): A conflict on plan/.feature-id at a base merge resolves in the queue without a stop. [source: draft-accepted (initiative)]
 - Scope Lock (cross-session continuity): An interrupted step restarts from the build log and loses no id state. [source: draft-accepted (initiative)]
 - Scope Lock complete. All four scenario paths captured.
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-14T15:10:33Z` |
+| End | `2026-11-14T15:11:55Z` |
+| Wall clock | 1 |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Plan written inline. Ranges too small for subagents. |
+
+- Complete: P1 (2026-11-14T15:11:55Z)
