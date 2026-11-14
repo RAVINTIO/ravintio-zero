@@ -79,8 +79,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-14T15:25:36Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-14T16:43:13Z` |
+| Wall clock | `78` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator, ravintio-implement |
 | Agents spawned | `0` |
@@ -100,3 +100,4 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Done: U-002 REQ-002 (content, inline, none, 2026-11-14T15:26:04Z)
 - In progress: U-003 docs inline (2026-11-14T15:26:04Z)
 - Done: U-003 docs (content, inline, none, 2026-11-14T15:26:11Z)
+- Complete: P2 (2026-11-14T16:43:13Z)
