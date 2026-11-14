@@ -70,3 +70,22 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Notes | inline, one requirement |
 
 - Complete: P1 (2026-11-14T15:24:38Z)
+
+---
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-14T15:24:50Z` |
+| End | |
+| Wall clock | |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | inline units, batches are sequential (U2 test, U1 rule, U3 docs) |
+
+- Batches: 3, sequential, each depends on the one before it. No parallel batch applies.
+- In progress: REQ-001 U2 test (2026-11-14T15:24:50Z)
