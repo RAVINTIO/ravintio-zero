@@ -82,6 +82,13 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Parallel task batches | 0 |
 | Notes | none |
 
+- In progress: U1-U3 REQ-001 (2026-11-14T15:13:50Z)
+- RED: U1-U3 REQ-001 (2026-11-14T15:13:50Z)
+- GREEN: U1-U3 REQ-001 (2026-11-14T15:13:50Z)
+- Done: U1-U3 REQ-001 (content, inline, none, 2026-11-14T15:13:50Z)
+- Tests run: REQ-001: test-0000548-req-001-suite-marker.sh, test-0000205, test-0000315, test-0000251, test-0000185, test-0000320, test-0000399-req-007, test-0000409, test-0000245, test-0000036, test-0000164-req-008 (2026-11-14T15:13:50Z)
+- Batches: 3 units run in order, U2 needs the red test from U1, U3 documents the result. Mirror copied to ravintio-zero/.
+
 ---
 
 ## Summary (filled at ship, P4)

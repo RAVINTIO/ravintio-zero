@@ -78,6 +78,12 @@ after the last. If a suite changes one, the run fails and names the path with
 `Tree changed during the run`. The check skips ignored files and skips itself
 outside a git repository.
 
+Both runners write the git-ignored marker `plan/.suite-running` with their pid
+before the first snapshot and remove it on exit. The strict-mode hook stays
+quiet for a step session while the marker names a live process. An ack prompt
+then cannot change `plan/.orchestrator-ack` mid-run. The tree check never
+exempts that file (0000548 ADR-0344).
+
 Git ignores `.claude/skills/`, so the tree check cannot see it. Both runners
 list that folder before the first suite and after the last. If a suite adds or
 removes a path, the run fails and names it with `Skills changed during the run`.
