@@ -48,3 +48,10 @@ Run mode: autonomous (2026-11-14T15:08:00Z, initiative step)
 - Decision not applicable (initiative chart): The step PR fails CI or conflicts after ship archived the run: no failure has occurred
 - Adoption mode: standard-iterative (signal: `plan/_archive/` beside the pack source)
 - Baseline suite started in a clean clone (output in `/tmp/s3/baseline.txt`)
+- Backlog entry 0000517 pulled into the brief, folder deleted, index rebuilt
+- Scope Lock (happy path): The PR conflicts, the step merges the base by hand, rebuilds the index, and CI passes [source: draft-accepted (initiative)]
+- Scope Lock (first-run path): The PR does not conflict, so the rule does not apply [source: draft-accepted (initiative)]
+- Scope Lock (error path): The step skips the rebuild and `Check the backlog index` fails [source: draft-accepted (initiative)]
+- Scope Lock (cross-session continuity): The rule lives in the standards, so a resumed session reads the same text [source: draft-accepted (initiative)]
+- Scope Lock complete. All four scenario paths captured.
+- Design confirmed: draft-accepted (initiative), version plan 0.115.0 (minor bump on 0.114.0)
