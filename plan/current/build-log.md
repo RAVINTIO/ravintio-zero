@@ -111,11 +111,17 @@ Run mode: autonomous (2026-11-14T15:08:00Z, initiative step)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-14T16:43:20Z` |
-| End | |
-| Wall clock | |
+| End | `2026-11-14T17:23:45Z` |
+| Wall clock | 30 |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | 0 |
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | |
+
+- Tests run: full suite in a clean clone, 450 passed, 3 inherited failures (2026-11-14T17:23:45Z)
+- Baseline: 3 inherited suites recorded from the chart list (2026-11-14T17:23:45Z)
+- OS gap: local macos, CI ubuntu, windows
+- Skipped: docs edit pass cycles (prose-check.mjs exit 0 on the 2 changed docs, no change needed)
+- Complete: P3 (2026-11-14T17:23:45Z)
