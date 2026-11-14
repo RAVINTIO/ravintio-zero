@@ -55,7 +55,7 @@ None.
 ### In Scope
 - One rule in `### I-D Advance` of `roadmap-standards.md`, in `src/ravintio-zero/` and mirrored to `ravintio-zero/`.
 - A standards test that reads the rule.
-- The living docs and an ADR.
+- The living docs.
 
 ### Out of Scope
 - Any change to `merge-queue.mjs`, `shared-files.mjs`, or `backlog-index.mjs`.

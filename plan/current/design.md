@@ -37,7 +37,7 @@
 - plan/
 
 ## Scope
-- In: one rule in the I-D Advance section of the roadmap standards, a standards test, docs, an ADR.
+- In: one rule in the I-D Advance section of the roadmap standards, a standards test, docs.
 - Out: `merge-queue.mjs`, `shared-files.mjs`, `backlog-index.mjs`, hooks, CI workflow.
 - Deferred: nothing deferred.
 

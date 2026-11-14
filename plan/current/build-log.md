@@ -28,8 +28,8 @@ Run mode: autonomous (2026-11-14T15:08:00Z, initiative step)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-14T15:08:00Z` |
-| End | |
-| Wall clock | |
+| End | `2026-11-14T15:10:30Z` |
+| Wall clock | 3 |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -55,3 +55,25 @@ Run mode: autonomous (2026-11-14T15:08:00Z, initiative step)
 - Scope Lock (cross-session continuity): The rule lives in the standards, so a resumed session reads the same text [source: draft-accepted (initiative)]
 - Scope Lock complete. All four scenario paths captured.
 - Design confirmed: draft-accepted (initiative), version plan 0.115.0 (minor bump on 0.114.0)
+- Complete: P0 (2026-11-14T15:10:30Z)
+
+---
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-14T15:10:30Z` |
+| End | `2026-11-14T15:11:45Z` |
+| Wall clock | 1 |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Artifacts written inline. The set is small and both requirements share one rule text. No ADR, because the rule records no new decision. |
+
+- Plan gate: draft-accepted (initiative). No P1 skip row marks yes.
+- Complete: P1 (2026-11-14T15:11:45Z)
+
+---
