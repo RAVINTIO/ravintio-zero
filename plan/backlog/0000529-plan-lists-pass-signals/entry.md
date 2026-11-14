@@ -25,6 +25,12 @@ The hook check first treated exit 2 as a pass for a guard. `guard-run.mjs` also 
 
 Add a step to the plan skill. For a requirement that judges another component by its exit code, the planner lists each path that produces the pass signal. The list includes the failure paths of any launcher in between. Each path gets an acceptance criterion.
 
+## Wanted outcome
+
+The plan skill has a step that lists every path producing a pass signal, including launcher failures. A test checks for the step.
+
+The human approved this outcome at the chart of initiative 0000544 on 2026-11-14.
+
 ## Why Deferred
 
 The change edits a skill and its size-cap tests. It needs its own design decision and stays outside the scope of step 55.

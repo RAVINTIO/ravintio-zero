@@ -26,6 +26,12 @@ Start by reviewing context use per session in the Claude OpenTelemetry data. Tha
 
 On 2026-11-12 the coordinator session's context seemed high while step 55 ran. The coordinator tracked each step tool call and read step test output that the step already checks. Nobody has measured how high the context went.
 
+## Wanted outcome
+
+The initiative skill relays watcher activity only at phase events, blocks, and stops. The coordinator reads step test output only after a stop. A test checks the skill text. The chart drops the OpenTelemetry baseline, because that data lives outside the repo.
+
+The human approved this outcome at the chart of initiative 0000544 on 2026-11-14.
+
 ## Why Deferred
 
 Step 56 changes the driver, not the initiative skills. The work needs its own feature.

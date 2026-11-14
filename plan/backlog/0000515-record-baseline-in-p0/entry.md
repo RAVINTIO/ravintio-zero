@@ -27,6 +27,12 @@ Step 25 started the baseline run in P0 and saved its output. It never ran `basel
 
 Make `clean-clone-test.mjs` or the P0 start action run `baseline-failures.mjs record` when the run ends. Alternatively, let `check` report a missing baseline file as an error and not as an empty baseline.
 
+## Wanted outcome
+
+Take the second option. `baseline-failures.mjs check` exits 1 with "no baseline recorded" when the file is missing. A test covers the missing-file case.
+
+The human approved this outcome at the chart of initiative 0000544 on 2026-11-14.
+
 ## Why Deferred
 
 The step scope covers the ready file only. The fix touches P0 and P3 tooling and needs its own design.

@@ -27,6 +27,12 @@ Add a cause to the Test impact scan in `ravintio-plan`: the run adds, removes, o
 - The `expected-after.txt` fixture and `pack-facts`.
 - The margin or status text the hook checks.
 
+## Wanted outcome
+
+The plan scan has a `Hook change` cause covering the four grep targets the entry lists. A test checks for the cause.
+
+The human approved this outcome at the chart of initiative 0000544 on 2026-11-14.
+
 ## Why Deferred
 
 Found in the step 51 P2 rework. The plan skill is outside the step's scope.
