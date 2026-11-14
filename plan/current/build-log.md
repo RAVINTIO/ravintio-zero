@@ -40,3 +40,13 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Adoption mode: standard-iterative (signal: source in `src/` beside an archive)
 - Track: light (chart accepts the track)
 - Stale feature id: `plan/.feature-id` held 0000536-pending-migrations-reach-the-human-early. Overwritten with 0000573-require-unit-reports.
+- Decision applied (initiative chart): Confirmation: setup rerun at each `Setup:` stop
+- Decision applied (initiative chart): The step PR fails CI or conflicts after ship archived the run
+- Decision applied (initiative chart): When to write `ready`
+- Decision applied (initiative chart): A test pins text that the step edits
+- Decision applied (initiative chart): Pack edits
+- Decision applied (initiative chart): Known baseline failures
+- Decision applied (initiative chart): Fast batches
+- Queue: no items name step 29
+- Bump: minor (row), version to plan with 0.114.0 to 0.115.0
+- Scope Lock: skipped on the light track. The chart accepted the draft [source: draft-accepted (initiative)]
