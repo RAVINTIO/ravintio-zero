@@ -2,7 +2,7 @@
 
 **Feature:** Step base merge regenerates the backlog index
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** 214
 
 ## What changed
 
