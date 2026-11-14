@@ -77,8 +77,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-14T15:12:18Z` |
-| End | |
-| Wall clock | |
+| End | `2026-11-14T15:22:45Z` |
+| Wall clock | 1 |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 0 |
@@ -96,3 +96,6 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Done: U2 (content, inline, none, 2026-11-14T15:13:30Z)
 - Tests run: REQ-001: test-0000545-req-001-ship-deletes-feature-id.sh, test-0000151-req-002-ship-sentinels-before-pr.sh (2026-11-14T15:13:30Z)
 - Tests run: REQ-002: test-0000545-req-002-queue-resolves-feature-id.sh, test-0000456-req-001-shared-files.sh (2026-11-14T15:13:30Z)
+- Done: U3 (removal, inline, none, 2026-11-14T15:22:42Z)
+- Done: U4 (docs already landed with the plan commits, inline, none, 2026-11-14T15:22:42Z)
+- Complete: P2 (2026-11-14T15:22:42Z)
