@@ -24,8 +24,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-14T15:09:29Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-14T15:10:32Z` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -52,3 +52,33 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Scope lock, error path: a missing Pack Index row fails a test [source: draft-accepted (initiative)]
 - Scope lock, cross-session path: committed text only [source: draft-accepted (initiative)]
 - Design confirmation: draft-accepted (initiative)
+- Complete: P0 (2026-11-14T15:10:32Z)
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-14T15:10:32Z` |
+| End | `2026-11-14T15:11:27Z` |
+| Wall clock | `1` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | small change, units written inline |
+- Complete: P1 (2026-11-14T15:11:27Z)
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-14T15:11:27Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | units run inline, text change |
