@@ -27,6 +27,12 @@ Since 0000481 the merge queue regenerates shared files after every base merge. A
 
 Add one line to the I-D Advance text in `roadmap-standards.md`. After a manual base merge, run `node ravintio-zero/scripts/backlog-index.mjs` and commit the result before the push. Name the check that fails if the index is stale.
 
+## Wanted outcome
+
+I-D Advance says to run `backlog-index.mjs` after a manual base merge, and it names the CI check that fails otherwise. A standards test checks the line.
+
+The human approved this outcome at the chart of initiative 0000544 on 2026-11-14.
+
 ## Why Deferred
 
 The step's scope is the coordinator status view. The CI failure cost one extra push and no data.

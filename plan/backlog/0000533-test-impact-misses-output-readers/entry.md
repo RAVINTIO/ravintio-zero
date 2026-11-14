@@ -22,6 +22,12 @@ Step 57 added a summary block to the driver output. The plan's test impact table
 
 Add a test impact cause for output order to the plan skill. A change to printed lines names each suite that matches the line text or reads the last line. A search of the tests folder finds them.
 
+## Wanted outcome
+
+The plan scan has an `Output order` cause that lists suites reading changed lines or the last line. A test checks for the cause.
+
+The human approved this outcome at the chart of initiative 0000544 on 2026-11-14.
+
 ## Why Deferred
 
 The fix changes the plan skill. It is outside the driver change in step 57.

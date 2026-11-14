@@ -25,6 +25,12 @@ Step 19 rewrote prose in about 370 files. Seven tests and two fixtures grepped t
 
 Add a cause to the test impact scan in `ravintio-zero/skills/ravintio-plan/SKILL.md`. For a run that rewrites prose, grep `ravintio-zero/tests/` for each changed sentence, and list the matches in the execution plan. A script could print the matches for a slice list.
 
+## Wanted outcome
+
+The plan scan has a `Prose rewrite` cause that greps the tests for each changed sentence. A test checks that the plan skill names the cause.
+
+The human approved this outcome at the chart of initiative 0000544 on 2026-11-14.
+
 ## Why Deferred
 
 The change edits the plan skill, which is outside the scope of a prose rewrite.
