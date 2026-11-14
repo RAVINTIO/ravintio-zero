@@ -101,3 +101,17 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - In progress: U-003 docs inline (2026-11-14T15:26:04Z)
 - Done: U-003 docs (content, inline, none, 2026-11-14T15:26:11Z)
 - Complete: P2 (2026-11-14T16:43:13Z)
+
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-14T16:43:29Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-orchestrator, ravintio-validate-and-accept |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | none |
