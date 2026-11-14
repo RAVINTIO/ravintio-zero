@@ -73,3 +73,19 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Notes | none |
 
 - Complete: P1 (2026-11-14T15:25:13Z)
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-14T15:25:36Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-orchestrator, ravintio-implement |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Both units are class content and share one script, so they run inline in sequence. The concurrency plan puts them in separate batches. |
+
+- In progress: U-001 REQ-001 inline (2026-11-14T15:25:36Z)
