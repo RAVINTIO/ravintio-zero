@@ -97,3 +97,9 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - GREEN: REQ-001 U1 script (2026-11-15T19:22:00Z)
 - Tests run: REQ-001: test-0000546-req-001-restore-written-files.sh, test-0000454-req-001, test-0000493-req-004, test-0000446-req-001, test-0000450-req-003, test-0000379-req-004, test-0000164-req-008, and every suite that names merge-queue, all passed (2026-11-15T19:22:00Z)
 - Done: REQ-001 U1 script (code, inline, none, 2026-11-15T19:22:00Z)
+- In progress: REQ-001 U3 docs (2026-11-15T19:22:16Z)
+- RED: REQ-001 U3 docs (2026-11-15T19:22:16Z). The docs unit has no executable check (0000410, chart Decisions row).
+- GREEN: REQ-001 U3 docs (2026-11-15T19:22:16Z). The consistency check and the prose check pass.
+- Deviation: U3 writes `docs/decisions-index.md` and not `docs/about.md`. The about file says not to edit it by hand, and the queue sets the version. The execution plan names the written files (2026-11-15T19:22:16Z)
+- Deviation: ADR-0347 has status accepted now, not at ship, because the decisions index row needs the status (2026-11-15T19:22:16Z)
+- Done: REQ-001 U3 docs (content, inline, none, 2026-11-15T19:22:16Z)

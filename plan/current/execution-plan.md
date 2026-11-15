@@ -62,7 +62,7 @@ flowchart LR
 | ravintio-zero/scripts/merge-queue.mjs | da687860 | U1 |
 | ravintio-zero/tests/test-0000546-req-001-restore-written-files.sh | new | U2 |
 | docs/architecture-overview.md | 152adeba | U3 |
-| docs/about.md | 152adeba | U3 |
+| docs/decisions-index.md | 004052d3 | U3 |
 
 ## Concurrency plan
 
@@ -70,7 +70,7 @@ flowchart LR
 |------|-----------|--------|-------|-------------------|------------------|
 | U2 | none | ravintio-zero/tests/test-0000546-req-001-restore-written-files.sh | 1 | The test goes first so it can fail | none |
 | U1 | U2 | src/ravintio-zero/scripts/merge-queue.mjs, ravintio-zero/scripts/merge-queue.mjs | 2 | The change makes the test pass | none |
-| U3 | U1 | docs/architecture-overview.md, docs/about.md | 3 | Living docs follow the code | none |
+| U3 | U1 | docs/architecture-overview.md, docs/decisions-index.md | 3 | Living docs follow the code | none |
 
 ## Assumptions
 

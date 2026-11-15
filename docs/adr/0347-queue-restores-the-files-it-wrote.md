@@ -1,7 +1,7 @@
 ---
 title: "ADR 347: The queue restores the files it wrote when a run fails"
 summary: "A failed queue run restores the chart and the version files to HEAD before the commit lands, and touches no other path."
-status: "proposed"
+status: "accepted"
 component: "ravintio-zero"
 feature: "0000546-queue-failure-leaves-dirty-files"
 version: "0.1.0"
