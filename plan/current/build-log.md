@@ -110,4 +110,6 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Skipped: docs edit pass subagent. One changed doc, `prose-check.mjs` exits 0, the new sentences are short (2026-11-15T04:25:21Z)
 - Blocked: full clean-clone suite did not finish. Two runs hit the background limit at load average 26 from other steps' suites (2026-11-15T04:25:21Z)
 - Resolved: full clean-clone suite did not finish (2026-11-15T12:53:29Z, reran and finished, 5 failed suites outside the changed files, see acceptance-evidence.md)
+- Postmortem: plan/postmortems/2026-11-15-clean-clone-suite-did-not-finish.md (2026-11-15T12:54:00Z)
+- Postmortem: plan/postmortems/2026-11-15-scan-moved-to-reference-file.md REQ-001 (2026-11-15T12:54:00Z)
 - Complete: P3 (2026-11-15T04:25:21Z)
