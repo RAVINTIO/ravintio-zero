@@ -2,7 +2,7 @@
 
 **Feature:** Baseline record checks its input and its file
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** 218
 
 ## What changed
 
