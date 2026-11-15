@@ -23,7 +23,8 @@ None.
 ## Validation results
 
 - The suite `test-0000385-req-002-baseline-failures.sh` passes with 20 checks.
-- The full suite result is in the verification report.
+- The full suite in a clean clone shows 449 feature suites passed and 3 failed. The 3 failures also fail in a clean clone of the base commit.
+- The verification report and security report show no failed criterion and no critical or high finding.
 
 ## Skipped phases
 

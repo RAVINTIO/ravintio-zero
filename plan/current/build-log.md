@@ -99,6 +99,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Tests run: REQ-002: ravintio-zero/tests/test-0000385-req-002-baseline-failures.sh (2026-11-14T15:26:04Z)
 - Done: U-002 REQ-002 (content, inline, none, 2026-11-14T15:26:04Z)
 - In progress: U-003 docs inline (2026-11-14T15:26:04Z)
+- RED: U-003 docs (2026-11-15T12:30:23Z). The docs unit has no executable check. Logged at ship to satisfy build-log-check (backlog 0000410).
+- GREEN: U-003 docs (2026-11-15T12:30:23Z). The prose check exits 0.
 - Done: U-003 docs (content, inline, none, 2026-11-14T15:26:11Z)
 - Complete: P2 (2026-11-14T16:43:13Z)
 
@@ -119,3 +121,35 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Tests run: full suite in a clean clone, 3 inherited failures (2026-11-15T12:09:04Z)
 - Skipped: docs edit pass (no user-facing doc needed edits, prose-check exit 0)
 - Complete: P3 (2026-11-15T12:09:04Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-15T12:09:22Z` |
+| End | `2026-11-15T12:09:23Z` |
+| Wall clock | `0` |
+| Model tier | primary |
+| Skills loaded | ravintio-orchestrator, ravintio-ship |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | The step runs Steps 4, 5, and 8 after green CI. |
+
+- Complete: P4 (2026-11-15T12:09:23Z)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `1245` |
+| Total agents spawned | `0` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `0` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `0` |
+| Phases skipped | none |
