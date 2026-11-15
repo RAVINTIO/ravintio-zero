@@ -2,7 +2,7 @@
 
 **Feature:** A failed queue run can leave written files in the queue worktree
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** #230
 
 ## What changed
 
