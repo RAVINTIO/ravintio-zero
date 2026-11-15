@@ -16,7 +16,7 @@ One unit ended with the report "placeholder". The orchestrator could not log its
 
 ## Deviations
 
-- The build log has no RED or GREEN marker for unit U3 (docs). The log cannot state them without inventing a time.
+- Unit U3 (docs) has no executable check. The coordinator logged its RED and GREEN markers at the human's request on 2026-11-15, and the postmortem 2026-11-15-docs-unit-no-red-green-marker records the gap. Backlog 0000410 tracks the rule.
 
 ## Validation results
 

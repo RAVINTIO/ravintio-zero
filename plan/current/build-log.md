@@ -132,8 +132,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-15T14:31:52Z` |
-| End | |
-| Wall clock | |
+| End | `2026-11-15T17:09:40Z` |
+| Wall clock | 158 |
 | Model tier | primary |
 | Skills loaded | ravintio-ship |
 | Agents spawned | 0 |
@@ -143,3 +143,20 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Blocked: ship check fails, build-log-check reports no RED or GREEN line for REQ-001 U3 docs (2026-11-15T14:32:06Z)
 - Resolved: ship check fails on missing RED or GREEN for REQ-001 U3 docs (2026-11-15T17:09:23Z, the human had the coordinator log the U3 markers in 89ff7782)
 - Postmortem: plan/postmortems/2026-11-15-docs-unit-no-red-green-marker.md (2026-11-15T17:09:14Z)
+- Complete: P4 (2026-11-15T17:09:40Z)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `1546` |
+| Total agents spawned | `0` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `0` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `0` |
+| Phases skipped | `none` |
