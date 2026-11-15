@@ -6,9 +6,15 @@
 - `consistency-check.mjs` exits 0.
 - Self-correction cycles: 0.
 
-## Gap: full suite
+## Full suite
 
-The full suite in a clean clone did not finish. Two runs stopped at the background time limit while other initiative steps ran their own suites (load average 26). The first partial output showed `test-0000037-req-004-remove-old-folder.sh` failing on `core.hooksPath` in the clone and `test-0000171-req-004-no-skill-bundling.sh` failing AC-2. Neither suite touches the changed files. The baseline check did not run because no complete output exists. CI on the pull request must run the full suite before merge.
+The rerun in a clean clone finished at load average 2 to 7 with five failed suites. None touches a changed file.
+
+- `test-0000037-req-004-remove-old-folder.sh` and `test-0000318-req-004-merge-guard-pinned.sh` fail in the clone and pass in the worktree. The clone has no `core.hooksPath` and no `origin/initiative/*` ref.
+- `test-0000171-req-004-no-skill-bundling.sh` and its `.ps1` twin fail AC-2, because a bundled references folder exists.
+- `test-0000450-req-004-report-format.sh` reads `docs/` two levels above the pack and finds nothing. The path assumption is the 0000419 `Path move` cause.
+
+CI on the pull request runs the full suite before merge.
 
 ## build-log-check findings for ship
 
