@@ -98,10 +98,28 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-15T22:23:54Z` |
+| End | `2026-11-15T22:47:40Z` |
+| Wall clock | 84 |
+| Model tier | primary |
+| Skills loaded | ravintio-validate-and-accept |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | none |
+- OS gap: local macos, CI ubuntu, windows
+- Tests run: full suite: 467 passed, 3 failed, all inherited (2026-11-15T22:47:40Z)
+- Docs edit pass: 1 doc changed, prose-check exit 0, 0 cycles (2026-11-15T22:47:40Z)
+- Complete: P3 (2026-11-15T22:47:40Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-15T22:47:40Z` |
 | End | |
 | Wall clock | |
 | Model tier | primary |
-| Skills loaded | ravintio-validate-and-accept |
+| Skills loaded | ravintio-ship |
 | Agents spawned | 0 |
 | MCP calls | 0 |
 | Parallel task batches | 0 |
