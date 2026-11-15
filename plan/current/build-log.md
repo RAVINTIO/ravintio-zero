@@ -26,8 +26,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-15T19:17:07Z` |
-| End | `pending` |
-| Wall clock | pending |
+| End | `2026-11-15T19:18:58Z` |
+| Wall clock | 3 |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -51,3 +51,25 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Queue: no items name step 2
 - Bump: minor (row), version to plan with 0.125.0 to 0.126.0
 - Scope Lock: skipped on the light track. The chart accepted the draft [source: draft-accepted (initiative)]
+
+- Complete: P0 (2026-11-15T19:18:58Z)
+
+---
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-15T19:18:58Z` |
+| End | `2026-11-15T19:19:01Z` |
+| Wall clock | 1 |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | inline, one requirement |
+
+- Complete: P1 (2026-11-15T19:19:01Z)
+
+---
