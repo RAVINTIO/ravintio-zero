@@ -167,7 +167,7 @@ The human confirmed the chart on 2026-11-14 with "build the initiative as fast a
 | 7 | 0000551-refuse-symlink-style-outputs | Refuse a symlink at the writing style output paths | 0000408 | minor | | pending | setup |  |
 | 8 | 0000552-duplicate-backlog-ids | Two open entries share one backlog id | 0000542 | minor | | pending | queue |  |
 | 9 | 0000553-coordinator-oversight-not-micromanagement | Initiative skills do not micromanage | 0000530 | minor | 0.120.0 | merged | coord | |
-| 10 | 0000554-coordinator-starts-defined-stages | Coordinator starts a defined stage without asking | 0000541 | minor | | pending | coord |  |
+| 10 | 0000554-coordinator-starts-defined-stages | Coordinator starts a defined stage without asking | 0000541 | minor | 0.127.0 | merged | coord | |
 | 11 | 0000555-initiative-pause-reaches-every-step | Initiative pause reaches every step | 0000538 | minor | | pending | coord |  |
 | 12 | 0000556-step-session-finds-unfinished-step | A step session finds an unfinished step | 0000531 | minor | | pending | resume |  |
 | 13 | 0000557-self-matching-pgrep-wait | Step sessions wait on a suite without matching their own shell | 0000532 | minor | | pending | baseline |  |
@@ -215,3 +215,4 @@ The merge queue adds one row for each step it merges. See the merge queue sectio
 | 22 | #226 | tag v0.124.0 | 0.124.0 | 2026-11-15T18:22:23Z |
 | 29 | #225 | tag v0.125.0 | 0.125.0 | 2026-11-15T18:35:08Z |
 | 23 | #227 | tag v0.126.0 | 0.126.0 | 2026-11-15T19:10:38Z |
+| 10 | #229 | tag v0.127.0 | 0.127.0 | 2026-11-15T20:10:52Z |
