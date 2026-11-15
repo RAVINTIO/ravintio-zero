@@ -2,7 +2,7 @@
 
 **Feature:** Initiative skills do not micromanage
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** 220
 
 ## What changed
 
