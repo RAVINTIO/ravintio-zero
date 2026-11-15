@@ -31,7 +31,7 @@ description: Coordinates an initiative from chart to delivery in the human's ses
 3. Read `plan/current-initiative/initiative.md`. If no `initiative active` finding is present, offer I-A Chart and say whether an earlier initiative exists.
 4. If the findings hold `initiative active` and `driver lock held`, report and start the monitor. Do not start a second driver.
 5. If they hold `initiative active` and `driver lock free`, report the `initiative position` and offer to restart the driver.
-6. If `position` is past the last step and `initiative.md` remains, run I-E Delivery.
+6. If `position` is past the last step and `initiative.md` remains, run I-E Delivery. Start I-E Delivery with no question after the driver's clean end, and report the start as a status.
 
 ## I-A Chart and I-B Activate
 
