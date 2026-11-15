@@ -55,3 +55,18 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Design confirmation: draft-accepted (initiative)
 - Finding: entry 0000526 says 3800 for the boot cap, and the suite holds 4000 (0000521). The cause names the suite and not the number.
 - Complete: P0 (2026-11-15T18:30:53Z)
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-15T18:30:53Z` |
+| End | `2026-11-15T18:31:25Z` |
+| Wall clock | `1` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | small change, artifacts written inline |
+- Complete: P1 (2026-11-15T18:31:25Z)
