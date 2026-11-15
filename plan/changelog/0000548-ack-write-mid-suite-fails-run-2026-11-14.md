@@ -2,7 +2,7 @@
 
 **Feature:** Strict-mode ack write mid-suite fails the suite run
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** 215
 
 ## What changed
 
