@@ -87,3 +87,15 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | MCP calls | `0` |
 | Parallel task batches | `0` |
 | Notes | REQ-001 and REQ-002 edit one section of one file, so they run inline in one unit. |
+
+- In progress: U-001 REQ-001 REQ-002 inline (2026-11-15T13:20:40Z)
+- RED: U-001 REQ-001 REQ-002 (2026-11-15T13:20:56Z)
+- GREEN: U-001 REQ-001 REQ-002 (2026-11-15T13:21:24Z)
+- Tests run: REQ-001: ravintio-zero/tests/test-0000553-req-001-002-oversight.sh, ravintio-zero/tests/test-0000240-req-002-activity-lines.sh (2026-11-15T13:21:24Z)
+- Tests run: REQ-002: ravintio-zero/tests/test-0000553-req-001-002-oversight.sh (2026-11-15T13:21:24Z)
+- Rework: REQ-001: test-0000240 pinned "Relay each one", updated the pin to "Do not relay them" (2026-11-15T13:21:24Z)
+- Done: U-001 REQ-001 REQ-002 (content, inline, none, 2026-11-15T13:21:24Z)
+- In progress: U-003 docs inline (2026-11-15T13:21:24Z)
+- RED: U-003 docs (2026-11-15T13:21:24Z). The docs unit has no executable check. Logged to satisfy build-log-check (backlog 0000410).
+- GREEN: U-003 docs (2026-11-15T13:21:24Z). The 0000240 standards pins and the prose check exit 0.
+- Done: U-003 docs (content, inline, none, 2026-11-15T13:21:24Z)
