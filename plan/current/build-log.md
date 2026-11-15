@@ -114,3 +114,33 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Tests run: full suite: 465 passed, 1 failed, inherited (2026-11-15T21:06:41Z)
 - Skipped: docs edit pass subagent. One changed doc, the commit hook ran prose-check and passed (2026-11-15T21:06:41Z)
 - Complete: P3 (2026-11-15T21:06:41Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-15T21:06:48Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | initiative step |
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `` |
+| Total wall clock | `` |
+| Total agents spawned | `0` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `0` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `0` |
+| Phases skipped | `none` |
