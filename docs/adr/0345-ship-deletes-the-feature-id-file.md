@@ -1,7 +1,7 @@
 ---
 title: "ADR 0345: Ship deletes the feature id file"
 summary: "Ship Step 8 deletes plan/.feature-id and the merge queue resolves it as a shared file, so no squash carries a stale id."
-status: "proposed"
+status: "accepted"
 component: "ravintio-zero"
 version: "0.1.0"
 ---
