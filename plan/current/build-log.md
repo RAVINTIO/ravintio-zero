@@ -97,3 +97,4 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Done: REQ-001 U3 docs (content, inline, none, 2026-11-14T15:25:24Z)
 - Baseline: the clean-clone run printed no Failed suites list (output ended after test-0000037-req-004, exit 1). The baseline file lists the three known failures from the chart Decisions row (2026-11-14T15:46:05Z)
 - Tests run: full suite start (2026-11-14T15:46:05Z)
+- Tests run: full suite, 452 feature suites passed, 1 failed (test-0000450-req-004-report-format.sh, inherited baseline), regression 19 passed (2026-11-15T13:26:25Z)
