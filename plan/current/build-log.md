@@ -56,3 +56,34 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Finding: the entry names SKILL.md. The cause list lives in the reference file, so the cause goes there.
 - Finding: the scan holds 20 lines and three suites cap it at 20. The step raises each cap to 21 (Rework, chart pin rule).
 - Complete: P0 (2026-11-15T21:55:30Z)
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-15T21:56:18Z` |
+| End | `2026-11-15T21:56:18Z` |
+| Wall clock | `1` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | small change, artifacts written inline |
+- Complete: P1 (2026-11-15T21:56:18Z)
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-15T21:56:18Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | units run inline, text change |
+- In progress: U2 (req 001 suite) (2026-11-15T21:56:18Z)
+
