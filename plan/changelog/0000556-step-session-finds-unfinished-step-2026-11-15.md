@@ -2,7 +2,7 @@
 
 **Feature:** A step session finds an unfinished step
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** 234
 
 ## What changed
 
