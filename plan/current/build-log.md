@@ -131,3 +131,21 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Notes | the full suite ran once in P2 on the committed tree |
 - Skipped: docs edit pass by subagent, prose-check exit 0 on the 2 changed docs
 - Complete: P3 (2026-11-15T21:24:46Z)
+
+---
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-15T21:24:53Z` |
+| End | `{{pending}}` |
+| Wall clock | {{pending}} |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | initiative step, the merge queue sets the version |
+
+- Skipped: P4 Step 6 version bump, the merge queue sets the version
