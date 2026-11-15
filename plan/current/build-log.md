@@ -47,3 +47,25 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Decision applied (initiative chart): Known baseline failures
 - Decision applied (initiative chart): A docs unit has no failing test, so `build-log-check.mjs` finds no `RED:` or `GREEN:` for it (0000410)
 - Decision applied (initiative chart): Fast batches
+- Backlog: folded entry 0000418 into the brief and deleted its folder (2026-11-15T20:36:26Z)
+- Scope lock, happy path: the scan names the cause and what to grep [source: draft-accepted (initiative)]
+- Scope lock, first-run path: static text, no state [source: draft-accepted (initiative)]
+- Scope lock, error path: lost wording fails a test [source: draft-accepted (initiative)]
+- Scope lock, cross-session path: committed text only [source: draft-accepted (initiative)]
+- Design confirmation: draft-accepted (initiative)
+- Finding: the entry names SKILL.md. The cause list lives in the reference file, so the cause goes there.
+- Complete: P0 (2026-11-15T20:36:26Z)
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-15T20:36:26Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | small change, artifacts written inline |
