@@ -28,6 +28,12 @@ assert_contains "initiative-activate.mjs" "$SKILL" "skill names the activate com
 assert_contains "initiative-add-step.mjs" "$SKILL" "skill names add-step"
 assert_contains "coordinator-pr-check.mjs" "$SKILL" "skill names the plan-only check"
 
+echo "=== 0000554: a defined stage starts without a question ==="
+assert_contains "rule: coord-defined-stage" "$STD" "AC-1: standards anchor coord-defined-stage"
+assert_contains "starts it and reports the start as a status" "$STD" "AC-1: the coordinator starts the stage and reports a status"
+assert_contains "asks only at a real fork or before a human-only action" "$STD" "AC-1: asks only at a fork or a human-only action"
+assert_contains "Start I-E Delivery with no question after the driver's clean end" "$SKILL" "AC-2: the skill starts delivery without a question"
+
 echo "=== the skill stays under 120 lines ==="
 LINES="$(wc -l < "$ZERO_DIR/skills/ravintio-initiative/SKILL.md" | tr -d ' ')"
 assert_equals "ok" "$([ "$LINES" -lt 120 ] && echo ok || echo long)" "skill has $LINES lines"

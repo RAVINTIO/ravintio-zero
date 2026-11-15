@@ -72,3 +72,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Notes | inline, two requirements |
 
 - Branch-point reread: origin/initiative/0000544-priority-backlog (2026-11-15T19:13:28Z)
+- In progress: U-1 (2026-11-15T19:13:37Z)
+- RED: U-1 (2026-11-15T19:13:42Z)
+- GREEN: U-1 (2026-11-15T19:13:51Z)
+- Tests run: REQ-001: test-0000399-req-003-004-question-rule.sh, test-0000205-req-004, test-0000313-req-002, test-0000314-req-002, test-0000536-req-001-003, test-0000493-req-004 (2026-11-15T19:13:51Z)
+- Done: U-1 (content, inline, none, 2026-11-15T19:13:51Z)
