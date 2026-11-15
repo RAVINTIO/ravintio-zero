@@ -100,11 +100,14 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-15T15:18:06Z` |
-| End | `PENDING_END` |
-| Wall clock | `PENDING_WC` |
+| End | `2026-11-15T15:40:40Z` |
+| Wall clock | `22` |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | 0 |
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | text change, checks run inline |
+- Tests run: full suite: 457 passed, 3 failed, all 3 inherited (2026-11-15T15:40:40Z)
+- Skipped: docs edit pass subagent. One changed doc, `prose-check.mjs` exits 0, the new sentence is short (2026-11-15T15:40:40Z)
+- Complete: P3 (2026-11-15T15:40:40Z)
