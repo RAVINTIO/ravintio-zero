@@ -95,14 +95,14 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-14T15:22:37Z` |
-| End | |
-| Wall clock | |
+| End | `2026-11-15T07:15:32Z` |
+| Wall clock | 15h 53m |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | 0 |
 | MCP calls | 0 |
 | Parallel task batches | 0 |
-| Notes | none |
+| Notes | The full suite took about 4 hours, because four step suites shared the machine. It ended with one failure, `test-0000450-req-004-report-format.sh`. That suite fails the same way on the merge base, so it is inherited. Docs edit pass: `prose-check.mjs` exits 0 on 6 changed docs in 0 cycles. |
 
 ---
 
