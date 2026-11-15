@@ -82,6 +82,16 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Parallel task batches | 0 |
 | Notes | none |
 
+- RED: U1 safe-suite-wait test (2026-11-15T23:14:39Z)
+- GREEN: U2 start action 15 and U3 validate fast batch (2026-11-15T23:15:13Z)
+- Done: U1 (content, inline, none, 2026-11-15T23:15:20Z)
+- Done: U2 (content, inline, none, 2026-11-15T23:15:20Z)
+- Done: U3 (content, inline, none, 2026-11-15T23:15:20Z)
+- Done: U4 architecture-overview (content, inline, none, 2026-11-15T23:15:20Z)
+- RED: U4 docs unit has no executable check (0000410) (2026-11-15T23:15:20Z)
+- GREEN: U4 passed the prose check on commit (2026-11-15T23:15:20Z)
+- Tests run: REQ-001: test-0000557-req-001-safe-suite-wait.sh, test-0000151, test-0000321, test-0000352, test-0000385, test-0000391, test-0000383, test-0000493, test-0000164, test-0000042, test-0000390, test-0000031 (2026-11-15T23:15:20Z)
+
 ---
 
 ## Summary (filled at ship, P4)

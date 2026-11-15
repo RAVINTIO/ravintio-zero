@@ -151,6 +151,7 @@ When `plan/.run-speed` holds `fast`, dispatch batch 1 in one message:
 - Execution verification in one unit.
 - The security review in one unit.
 - The full test suite in the background.
+  - Wait for it on its end marker or on the process id that the launch returned. Never wait with `pgrep -f`, because the pattern also matches the shell that runs the loop.
 
 Then run inline: CI checks in order, self-correct cycles one at a time, and the acceptance gate or evidence.
 
