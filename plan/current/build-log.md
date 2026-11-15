@@ -94,3 +94,17 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - GREEN: U4 (sync-installed.mjs --check exits 0, 0000410) (2026-11-15T17:11:13Z)
 - Done: U4 (sync, inline, none, 2026-11-15T17:11:13Z)
 - Complete: P2 (2026-11-15T17:11:13Z)
+
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-15T17:11:35Z` |
+| End | `{{pending}}` |
+| Wall clock | `{{pending}}` |
+| Model tier | primary |
+| Skills loaded | ravintio-validate-and-accept |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | text change, checks run inline |
