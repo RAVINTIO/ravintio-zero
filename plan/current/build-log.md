@@ -122,3 +122,19 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Library audit: no library added. Archetype gates: no gates installed. Security: low, no findings above informational
 - Skipped: docs edit subagent (`prose-check.mjs` exits 0 for the four changed docs and the standard, no change needed)
 - Complete: P3 (2026-11-15T13:49:30Z)
+
+---
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-15T14:31:52Z` |
+| End | |
+| Wall clock | |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | initiative step, PR before archive |
