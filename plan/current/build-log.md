@@ -79,8 +79,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-15T13:20:46Z` |
-| End | `pending` |
-| Wall clock | `pending` |
+| End | `2026-11-15T13:43:54Z` |
+| Wall clock | `22` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator, ravintio-implement |
 | Agents spawned | `0` |
@@ -99,3 +99,19 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - RED: U-003 docs (2026-11-15T13:21:24Z). The docs unit has no executable check. Logged to satisfy build-log-check (backlog 0000410).
 - GREEN: U-003 docs (2026-11-15T13:21:24Z). The 0000240 standards pins and the prose check exit 0.
 - Done: U-003 docs (content, inline, none, 2026-11-15T13:21:24Z)
+- Tests run: full suite: 456 passed, 1 failed (2026-11-15T13:43:54Z)
+- Complete: P2 (2026-11-15T13:43:54Z)
+
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-15T13:43:54Z` |
+| End | `pending` |
+| Wall clock | `pending` |
+| Model tier | primary |
+| Skills loaded | ravintio-orchestrator, ravintio-validate-and-accept |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | none |
