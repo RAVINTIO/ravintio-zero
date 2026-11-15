@@ -79,3 +79,21 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Done: U-001 and U-002 (content, inline, none, 2026-11-15T18:33:21Z)
 - Tests run: REQ-001, REQ-002: test-0000550-req-002-no-head-diffs.sh (2026-11-15T18:33:21Z)
 - Departure: the single full suite run happens in the P3 clean clone. P3 runs it on the same tree. (2026-11-15T18:34:00Z)
+
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-15T18:34:30Z` |
+| End | `2026-11-15T18:59:16Z` |
+| Wall clock | 25 |
+| Model tier | primary |
+| Skills loaded | ravintio-validate-and-accept |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Full suite in a clean clone passed apart from 3 inherited failures. |
+
+- OS gap: local macos, CI ubuntu and windows.
+- Tests run: full suite: 479 passed, 3 failed (2026-11-15T18:59:16Z).
+- Skipped: docs edit pass (prose-check exited 0 on the 3 changed docs, no subagent needed).
