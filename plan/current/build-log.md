@@ -117,14 +117,15 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-15T16:46:59Z` |
-| End | `PENDING` |
-| Wall clock | `PENDING` |
+| End | `2026-11-15T16:47:04Z` |
+| Wall clock | `0` |
 | Model tier | primary |
 | Skills loaded | ravintio-ship |
 | Agents spawned | 0 |
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | initiative step |
+- Complete: P4 (2026-11-15T16:47:04Z)
 
 ---
 
@@ -132,8 +133,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 
 | Metric | Value |
 |--------|-------|
-| Total phases completed | `PENDING` |
-| Total wall clock | `PENDING` |
+| Total phases completed | `5` |
+| Total wall clock | `43` |
 | Total agents spawned | `0` |
 | Total MCP calls | `0` |
 | Phases using parallelism | `0` |
