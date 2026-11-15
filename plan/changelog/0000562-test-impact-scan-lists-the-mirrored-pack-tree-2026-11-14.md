@@ -22,7 +22,7 @@ None.
 ## Validation results
 
 - The new suite passes with 21 checks.
-- The full suite result is in the verification report.
+- The full suite in a clean clone finished with five failed suites outside the changed files. See the acceptance evidence.
 
 ## Skipped phases
 

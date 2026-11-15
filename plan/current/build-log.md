@@ -117,3 +117,17 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Postmortem: plan/postmortems/2026-11-15-clean-clone-suite-did-not-finish.md (2026-11-15T12:54:00Z)
 - Postmortem: plan/postmortems/2026-11-15-scan-moved-to-reference-file.md REQ-001 (2026-11-15T12:54:00Z)
 - Complete: P3 (2026-11-15T04:25:21Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-15T12:54:46Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | initiative step, closing push after green CI |
