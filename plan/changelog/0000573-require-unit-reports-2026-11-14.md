@@ -16,12 +16,14 @@ One unit ended with the report "placeholder". The orchestrator could not log its
 
 ## Deviations
 
-None.
+- The build log has no RED or GREEN marker for unit U3 (docs). The log cannot state them without inventing a time.
 
 ## Validation results
 
 - The new suite passes with 3 checks.
-- The full suite result is in the verification report.
+- The clean-clone suite shows 450 passed and 3 failed. All 3 also fail on the base commit.
+- The regression suite shows 19 passed.
+- Security risk is low. The verification report covers AC-1, AC-2, and NFR-001.
 
 ## Skipped phases
 
