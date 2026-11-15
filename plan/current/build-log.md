@@ -79,3 +79,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Notes | inline units, batches are sequential (U1 test, U2 code, U3 docs) |
 
 - In progress: REQ-001 test-writer (2026-11-15T21:56:57Z)
+- RED: REQ-001 test-writer (2026-11-15T21:57:04Z)
+- Done: REQ-001 test-writer (code, primary, medium, 2026-11-15T21:57:04Z)
+- Tests run: REQ-001: test-0000556-req-001-unfinished-step-finding.sh (2026-11-15T21:57:04Z)
+- In progress: REQ-001 implementer (2026-11-15T21:57:04Z)
