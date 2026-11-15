@@ -2,7 +2,7 @@
 
 **Feature:** No HEAD diffs in tests
 **Version:** set by the merge queue at merge
-**PR:** set at ship
+**PR:** pending
 
 ## What changed
 

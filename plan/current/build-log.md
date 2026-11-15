@@ -35,15 +35,17 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Parallel task batches | 0 |
 | Notes | initiative 0000544 step 6 |
 
+Complete: P0 (discovery done).
+
 - Run mode: autonomous (2026-11-15T18:30:27Z, initiative step).
-- Decisions: none name step 6 beyond the standing rows below.
+- Decisions: rows 1-36 name step 6, each logged below.
 - Decision applied (initiative chart): Confirmation: setup rerun at each `Setup:` stop.
 - Decision not applicable (initiative chart): The step PR fails CI or conflicts after ship archived the run: no failure has occurred yet.
 - Decision applied (initiative chart): When to write `ready`.
 - Decision applied (initiative chart): A test pins text that the step edits.
 - Decision applied (initiative chart): Pack edits.
 - Decision applied (initiative chart): Known baseline failures.
-- Decision not applicable (initiative chart): A docs unit has no failing test: applies only if a docs unit arises.
+- Decision not applicable (initiative chart): A docs unit has no failing test, so `build-log-check.mjs` finds no `RED:` or `GREEN:` for it (0000410).
 - Decision applied (initiative chart): Fast batches.
 
 ### P1: Plan
@@ -59,6 +61,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | autonomous run, plan written inline because the feature has two small requirements |
+
+Complete: P1 (plan done).
 
 ### P2: Implement
 
@@ -80,6 +84,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Tests run: REQ-001, REQ-002: test-0000550-req-002-no-head-diffs.sh (2026-11-15T18:33:21Z)
 - Departure: the single full suite run happens in the P3 clean clone. P3 runs it on the same tree. (2026-11-15T18:34:00Z)
 
+Complete: P2 (implementation done).
+
 ### P3: Validate and Accept
 
 | Field | Value |
@@ -94,6 +100,40 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Parallel task batches | 0 |
 | Notes | Full suite in a clean clone passed apart from 3 inherited failures. |
 
+Complete: P3 (validation done).
+
 - OS gap: local macos, CI ubuntu and windows.
 - Tests run: full suite: 479 passed, 3 failed (2026-11-15T18:59:16Z).
 - Skipped: docs edit pass (prose-check exited 0 on the 3 changed docs, no subagent needed).
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-15T18:59:24Z` |
+| End | `2026-11-15T18:59:24Z` |
+| Wall clock | 1 |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Initiative step. CI wait and closing push follow the PR. |
+
+Complete: P4 (ship in progress).
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | 5 |
+| Total wall clock | 30 |
+| Total agents spawned | 0 |
+| Total MCP calls | 0 |
+| Phases using parallelism | 0 |
+| Primary tier agent calls | 0 |
+| Cheaper tier agent calls | 0 |
+| Self-corrections | 2 |
+| Phases skipped | none |
