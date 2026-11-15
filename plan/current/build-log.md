@@ -111,3 +111,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | Verification and security reports written. Full suite running. |
+- Tests run: full suite in clean clone, 451 passed, 3 failed, all environment gaps (0000037, 0000318, 0000450 req-004). Each passes outside the clone. (2026-11-15T12:08:47Z)
+- OS gap: local macos, CI ubuntu, windows (2026-11-15T12:08:47Z)
+- Skipped: docs edit pass, prose-check exit 0 on changed standards and skill (2026-11-15T12:08:47Z)
+- Complete: P3 (2026-11-15T12:08:47Z)
