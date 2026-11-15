@@ -80,7 +80,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 |-------|-------|
 | Start | `2026-11-15T13:20:46Z` |
 | End | `2026-11-15T13:43:54Z` |
-| Wall clock | `22` |
+| Wall clock | `23` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator, ravintio-implement |
 | Agents spawned | `0` |
@@ -124,11 +124,30 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-15T14:05:15Z` |
-| End | `pending` |
-| Wall clock | `pending` |
+| End | `2026-11-15T14:06:00Z` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator, ravintio-ship |
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
 | Notes | none |
+
+- Postmortem: plan/postmortems/2026-11-15-planned-pin-update-logged-as-rework.md (2026-11-15T14:06:00Z) REQ-001
+- Complete: P4 (2026-11-15T14:06:00Z)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `48` |
+| Total agents spawned | `0` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `0` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `0` |
+| Phases skipped | `none` |
