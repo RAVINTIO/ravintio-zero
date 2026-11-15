@@ -79,8 +79,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-15T19:19:28Z` |
-| End | `pending` |
-| Wall clock | pending |
+| End | `2026-11-15T19:45:32Z` |
+| Wall clock | 27 |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 0 |
@@ -104,3 +104,22 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Deviation: ADR-0347 has status accepted now, not at ship, because the decisions index row needs the status (2026-11-15T19:22:16Z)
 - Done: REQ-001 U3 docs (content, inline, none, 2026-11-15T19:22:16Z)
 - Tests run: full suite start (2026-11-15T19:22:29Z)
+- Tests run: full suite, 463 feature suites passed, 1 failed (test-0000450-req-004-report-format.sh, inherited baseline), regression 19 passed (2026-11-15T19:45:32Z)
+- Complete: P2 (2026-11-15T19:45:32Z)
+
+---
+
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-15T19:45:32Z` |
+| End | `pending` |
+| Wall clock | pending |
+| Model tier | primary |
+| Skills loaded | ravintio-validate-and-accept |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | inline, clean-clone suite in the background |
+
