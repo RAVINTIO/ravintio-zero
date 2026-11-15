@@ -2,7 +2,7 @@
 
 **Feature:** Test impact scan covers size caps and frozen lines
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** 227
 
 ## What changed
 
