@@ -43,6 +43,10 @@
  * with shared-files.mjs. If a file changes, it commits the change before the push and prints a
  * `regenerated:` line for each (feature 0000481, ADR-0313).
  *
+ * If the run fails after it writes the chart and the version files and before the set-version commit lands,
+ * the queue restores those paths to HEAD and prints a `restored:` line, so the next run starts on a clean
+ * tree. It restores named paths only (feature 0000546, ADR-0347).
+ *
  * The chart `Merge commit` cell holds `tag v{version}`. The queue never commits
  * after the squash, so the sha lives in the tag and in the printed output.
  */
@@ -515,6 +519,22 @@ function regenerateAfterMerge({ root, base, head, featureId }) {
   for (const file of changed) console.log(`regenerated: ${file}`);
 }
 
+/**
+ * Restore the written paths to HEAD in the index and the working tree. It names each path and never resets
+ * or cleans anything else. The caller rethrows the original failure, so this never throws (0000546).
+ */
+function restoreWrittenFiles(root, paths) {
+  try {
+    const changed = git(root, ["status", "--porcelain", "--untracked-files=no", "--", ...paths])
+      .split("\n").filter(Boolean).map((l) => l.slice(3));
+    if (changed.length === 0) return;
+    git(root, ["restore", "--source=HEAD", "--staged", "--worktree", "--", ...paths]);
+    console.log(`restored: ${changed.join(", ")}`);
+  } catch {
+    // The original failure stays the exit message.
+  }
+}
+
 /** Steps 2 to 6 of `run`, on the PR branch that the caller checked out. */
 function mergeAndRelease({ root, list, chartAbs, chartRel, step, pr, base, head, featureId, bumpKind }) {
   // Take back the version commits of an earlier failed run when the base version has moved (0000454).
@@ -549,18 +569,24 @@ function mergeAndRelease({ root, list, chartAbs, chartRel, step, pr, base, head,
     && treeChart.cells[treeChart.header.indexOf("Version")] === next
     && agreed(readVersions({ root, list })) === next;
   if (!done) {
-    try {
-      setVersions(next, { root, list });
-    } catch (e) {
-      throw new Stop(`set version failed: ${e.message}`);
-    }
-    cmdVersions({ root, list });
-    const mergedAt = new Date().toISOString().replace(/\.\d+Z$/, "Z");
-    writeFileSync(chartAbs, updateChart(readChartText(chartAbs), { step, pr, version: next, mergedAt }));
     // Stage only the listed files that exist, so an optional file a repo lacks is left out (0000420).
     const paths = [chartRel, ...presentPaths(root, list)];
-    git(root, ["add", "--", ...paths]);
-    git(root, ["commit", "-m", `chore(${featureId.slice(0, 7)}): set version ${next} for step ${step}`, "--", ...paths]);
+    try {
+      try {
+        setVersions(next, { root, list });
+      } catch (e) {
+        throw new Stop(`set version failed: ${e.message}`);
+      }
+      cmdVersions({ root, list });
+      const mergedAt = new Date().toISOString().replace(/\.\d+Z$/, "Z");
+      writeFileSync(chartAbs, updateChart(readChartText(chartAbs), { step, pr, version: next, mergedAt }));
+      git(root, ["add", "--", ...paths]);
+      git(root, ["commit", "-m", `chore(${featureId.slice(0, 7)}): set version ${next} for step ${step}`, "--", ...paths]);
+    } catch (e) {
+      // The commit never landed, so put back the files this run wrote (0000546, ADR-0347).
+      restoreWrittenFiles(root, paths);
+      throw e;
+    }
     git(root, ["push", "origin", `${head}:${head}`]);
     // The push restarts CI on the new head. Wait for GitHub to see it, then for CI.
     waitForHeadChecks(root, pr, git(root, ["rev-parse", "HEAD"]).trim());

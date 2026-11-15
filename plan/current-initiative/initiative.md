@@ -11,7 +11,7 @@ status: "active"  # proposed | charted | active | delivered | blocked
 
 **Status:** active
 
-**Position:** 2
+**Position:** 6
 
 **Speed:** fast
 
@@ -159,7 +159,7 @@ The human confirmed the chart on 2026-11-14 with "build the initiative as fast a
 | Step | Feature id | Title | Backlog entries | Bump | Version | Status | Lane | After |
 |------|------------|-------|-----------------|------|---------|--------|------|-------|
 | 1 | 0000545-clear-feature-id-at-ship | Ship leaves plan/.feature-id behind | 0000514 | minor | 0.117.0 | merged | queue | |
-| 2 | 0000546-queue-failure-leaves-dirty-files | A failed queue run can leave written files in the queue worktree | 0000477 | minor | | pending | queue |  |
+| 2 | 0000546-queue-failure-leaves-dirty-files | A failed queue run can leave written files in the queue worktree | 0000477 | minor | 0.128.0 | merged | queue | |
 | 3 | 0000547-step-merge-regenerates-index | Step base merge regenerates the backlog index | 0000517 | minor | 0.115.0 | merged | coord | |
 | 4 | 0000548-ack-write-mid-suite-fails-run | Strict-mode ack write mid-suite fails the suite run | 0000476-ack-write-mid-suite-fails-run | minor | 0.116.0 | merged | tests | |
 | 5 | 0000549-baseline-record-checks | Baseline record checks its input and its file | 0000525, 0000515 | minor | 0.118.0 | merged | baseline | |
@@ -216,3 +216,4 @@ The merge queue adds one row for each step it merges. See the merge queue sectio
 | 29 | #225 | tag v0.125.0 | 0.125.0 | 2026-11-15T18:35:08Z |
 | 23 | #227 | tag v0.126.0 | 0.126.0 | 2026-11-15T19:10:38Z |
 | 10 | #229 | tag v0.127.0 | 0.127.0 | 2026-11-15T20:10:52Z |
+| 2 | #230 | tag v0.128.0 | 0.128.0 | 2026-11-15T20:28:00Z |
