@@ -141,3 +141,5 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Parallel task batches | 0 |
 | Notes | initiative step, PR before archive |
 - Blocked: ship check fails, build-log-check reports no RED or GREEN line for REQ-001 U3 docs (2026-11-15T14:32:06Z)
+- Resolved: ship check fails on missing RED or GREEN for REQ-001 U3 docs (2026-11-15T17:09:23Z, the human had the coordinator log the U3 markers in 89ff7782)
+- Postmortem: plan/postmortems/2026-11-15-docs-unit-no-red-green-marker.md (2026-11-15T17:09:14Z)
