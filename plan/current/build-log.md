@@ -69,8 +69,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-15T21:56:57Z` |
-| End | |
-| Wall clock | |
+| End | `2026-11-15T22:23:54Z` |
+| Wall clock | 26 |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 0 |
@@ -90,3 +90,19 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - RED: REQ-001 U3 docs (2026-11-15T21:57:47Z). The docs unit has no executable check (backlog 0000410).
 - GREEN: REQ-001 U3 docs (2026-11-15T21:57:47Z). The prose check passed at commit.
 - Done: REQ-001 U3 docs (content, inline, none, 2026-11-15T21:57:47Z)
+- Complete: P2 (2026-11-15T22:23:54Z)
+- Baseline: three inherited failures recorded in baseline-failures.md (2026-11-15T22:23:54Z)
+
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-15T22:23:54Z` |
+| End | |
+| Wall clock | |
+| Model tier | primary |
+| Skills loaded | ravintio-validate-and-accept |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | none |
