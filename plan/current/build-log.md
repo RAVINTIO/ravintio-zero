@@ -73,3 +73,20 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Complete: P1 (2026-11-15T19:19:01Z)
 
 ---
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-15T19:19:28Z` |
+| End | `pending` |
+| Wall clock | pending |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | inline units, batches are sequential (U2 test, U1 script, U3 docs) |
+
+- Batches: 3, sequential, each depends on the one before it. No parallel batch applies.
+- Baseline: the clean-clone run stopped after test-0000037-req-004 with no Failed suites list. The baseline file lists the three known failures from the chart Decisions row (2026-11-15T19:19:28Z)
