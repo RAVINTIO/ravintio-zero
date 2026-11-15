@@ -42,7 +42,8 @@ Both runners give each suite a temporary global git config that holds `user.useC
 A TDD cycle runs the new test and the tests that cover the changed files. P3 runs
 the full suite once, in a clean clone of `HEAD`, with `scripts/clean-clone-test.mjs`.
 `scripts/baseline-failures.mjs` compares the failed suites with the ones P0
-recorded, so P3 stops only on a new failure. `testing-standards.md` section 9
+recorded, so P3 stops only on a new failure. `record` refuses runner output with no
+`Feature suites:` line, and `check` refuses a missing baseline file. `testing-standards.md` section 9
 holds the rules.
 
 ## Running the tests
@@ -77,6 +78,12 @@ Both runners also compare tracked and untracked files before the first suite and
 after the last. If a suite changes one, the run fails and names the path with
 `Tree changed during the run`. The check skips ignored files and skips itself
 outside a git repository.
+
+Both runners write the git-ignored marker `plan/.suite-running` with their pid
+before the first snapshot and remove it on exit. The strict-mode hook stays
+quiet for a step session while the marker names a live process. An ack prompt
+then cannot change `plan/.orchestrator-ack` mid-run. The tree check never
+exempts that file (0000548 ADR-0344).
 
 Git ignores `.claude/skills/`, so the tree check cannot see it. Both runners
 list that folder before the first suite and after the last. If a suite adds or
@@ -149,5 +156,5 @@ The runner picks the file up automatically. Nothing else needs registering.
 ### Step activity
 
 - `test-0000240-req-001-driver-stream-args.sh` checks the driver passes `--output-format stream-json --verbose`, keeps the log at mode 600, and prints no step content.
-- `test-0000534-req-001-003-step-clock.sh` checks the driver passes `--include-hook-events` on a first run and a resume, and that `step-clock-check.mjs` fails a step log with tool calls and no clock output.
-- `test-0000240-req-002-activity-lines.sh` checks that the watcher prints one `I-C Run: activity:` line per event, in order, at 200 characters or fewer. It also checks that the skill and standards describe them. The flag `--since-bytes {n}` treats the first n bytes of the step log as seen.
+- `test-0000534-req-001-003-step-clock.sh` checks the driver passes `--include-hook-events` on a first run and a resume. It also checks that `step-clock-check.mjs` fails a step log with tool calls and no clock output.
+- `test-0000240-req-002-activity-lines.sh` checks that the watcher prints one `I-C Run: activity:` line per event, in order. Each line has 200 characters or fewer. It also checks that the skill and standards describe them. The flag `--since-bytes {n}` treats the first n bytes of the step log as seen.
