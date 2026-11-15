@@ -2,7 +2,7 @@
 
 **Feature:** Ship leaves plan/.feature-id behind
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** #217
 
 ## What changed
 
