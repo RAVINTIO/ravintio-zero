@@ -117,6 +117,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Postmortem: plan/postmortems/2026-11-15-clean-clone-suite-did-not-finish.md (2026-11-15T12:54:00Z)
 - Postmortem: plan/postmortems/2026-11-15-scan-moved-to-reference-file.md REQ-001 (2026-11-15T12:54:00Z)
 - Complete: P3 (2026-11-15T04:25:21Z)
+- Rework: REQ-001: `test-0000171-req-004-no-skill-bundling` asserted that `ravintio-plan/references` is absent and failed in CI on PR 219. The new reference file broke it. The assertion now checks the bundled file only (2026-11-15T13:02:05Z)
 
 ### P4: Ship
 
