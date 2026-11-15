@@ -34,7 +34,7 @@ echo ""
 echo "=== REQ-002 AC-1: a clean end names its action and the final line stays last ==="
 assert_contains "I-C Run: Summary: action for the human: " "$(action_line "$OUT")" "REQ-002 AC-1: prints the action line"
 assert_contains "I-E Delivery: Pending:" "$(last_line "$OUT")" "REQ-002 AC-1: the final line stays the Pending line"
-assert_contains "run initiative delivery from the initiative skill" "$(action_line "$OUT")" "REQ-002 AC-1: delivery is pending, so the action says so"
+assert_contains "none, the coordinator runs I-E Delivery" "$(action_line "$OUT")" "REQ-002 AC-1: delivery is pending, so the action says so"
 
 echo ""
 echo "=== REQ-001 AC-3: a run that merges nothing says none ==="
