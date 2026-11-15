@@ -114,8 +114,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-15T19:45:32Z` |
-| End | `pending` |
-| Wall clock | pending |
+| End | `2026-11-15T20:07:48Z` |
+| Wall clock | 22 |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | 0 |
@@ -123,3 +123,24 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Parallel task batches | 0 |
 | Notes | inline, clean-clone suite in the background |
 
+- Tests run: clean clone, 461 feature suites passed, 3 failed, all inherited (test-0000037-req-004, test-0000318-req-004, test-0000450-req-004), regression 19 passed. `baseline-failures.mjs check` exit 0 (2026-11-15T20:07:48Z)
+- OS gap: local macos, CI ubuntu, windows
+- Library audit: no library added. Archetype gates: no gates installed. Security: low, no findings above informational
+- Skipped: docs edit subagent (`prose-check.mjs` exits 0 for the three changed docs)
+- Complete: P3 (2026-11-15T20:07:48Z)
+
+---
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-15T20:07:48Z` |
+| End | `pending` |
+| Wall clock | pending |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | initiative step, PR before archive |
