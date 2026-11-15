@@ -24,7 +24,14 @@
  * joined by ` | `: `exists {path}`, `contains {path} {text}`, and
  * `child-exists {dir} {name}`. Paths are relative to the project root. An
  * absolute path or a `..` segment makes an item false.
+ *
+ * Unfinished step: a step session on a branch `feat/{id}` or `hotfix/{id}`
+ * with no plan/current/build-log.md and no plan/_archive/{id}-* folder prints
+ * `unfinished step: no build log and no archive, start P0`. A second line,
+ * `step branch commits: {n}`, counts the commits the initiative branch lacks.
+ * An unreadable branch or a git failure prints neither line.
  */
+import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { isAbsolute, join } from "node:path";
 
@@ -84,6 +91,15 @@ function hasDetect(text) {
 function detectTrue(text) {
   const m = /^\*\*Detect:\*\*[ \t]*(.*)$/m.exec(text || "");
   return m !== null && m[1].split(" | ").some(itemTrue);
+}
+
+// Run git in the project root. Returns trimmed stdout, or null on any failure.
+function git(...args) {
+  try {
+    return execFileSync("git", args, { cwd: root, encoding: "utf-8", stdio: ["ignore", "pipe", "ignore"], timeout: 1500 }).trim();
+  } catch {
+    return null;
+  }
 }
 
 function packVersion() {
@@ -154,6 +170,18 @@ try {
     if (existsSync(p("plan", "current-initiative", "pause.md"))) out.push("initiative pause record present");
   }
   if (artifacts) out.push("plan/current has artifacts");
+
+  // Unfinished step: a step session with no build log and no archive.
+  if (process.env.RAVINTIO_INITIATIVE_STEP === "1" && !existsSync(p("plan", "current", "build-log.md"))) {
+    const branch = git("rev-parse", "--abbrev-ref", "HEAD");
+    const id = branch === null ? null : /^(?:feat|hotfix)\/(\d{7}-[a-z0-9-]+)$/.exec(branch)?.[1];
+    if (id && !list(p("plan", "_archive")).some((n) => n.startsWith(`${id}-`))) {
+      out.push("unfinished step: no build log and no archive, start P0");
+      const b = /^\*\*Branch:\*\*[ \t]*(initiative\/[A-Za-z0-9._-]+)[ \t]*$/m.exec(init || "")?.[1];
+      const n = b === undefined ? null : [`origin/${b}`, b].map((r) => git("rev-list", "--count", `${r}..HEAD`)).find((c) => c !== null && /^\d{1,6}$/.test(c));
+      if (n !== null && n !== undefined) out.push(`step branch commits: ${n}`);
+    }
+  }
 
   // 4. Interrupted ship.
   if (sentinel && !artifacts) out.push("interrupted ship: sentinel present, plan/current empty");
