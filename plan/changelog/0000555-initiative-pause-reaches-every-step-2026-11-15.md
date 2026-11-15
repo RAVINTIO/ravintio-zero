@@ -2,7 +2,7 @@
 
 **Feature:** Initiative pause reaches every step
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** #232
 
 ## What changed
 
