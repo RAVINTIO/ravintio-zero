@@ -63,3 +63,19 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Notes | inline, the artifacts are small |
 
 - Complete: P1 (2026-11-15T21:56:40Z)
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-15T21:56:57Z` |
+| End | |
+| Wall clock | |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | inline units, batches are sequential (U1 test, U2 code, U3 docs) |
+
+- In progress: REQ-001 test-writer (2026-11-15T21:56:57Z)
