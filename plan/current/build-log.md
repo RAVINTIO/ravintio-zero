@@ -110,3 +110,4 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - GREEN: U-4 (2026-11-15T20:50:25Z) The prose check passed on the docs (0000410).
 - Decision applied (initiative chart): A docs unit has no failing test, so `build-log-check.mjs` finds no `RED:` or `GREEN:` for it (0000410)
 - Done: U-4 (content, inline, none, 2026-11-15T20:50:25Z)
+- Baseline: clean-clone suite on the base commit, 3 failed, all 3 known (2026-11-15T21:01:42Z)
