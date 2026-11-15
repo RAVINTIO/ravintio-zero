@@ -75,6 +75,13 @@ A human does not override a tier. Effort maps to the Agent tool `effort` value o
 <!-- rule: dispatch-done-line -->
 The unit's `Done:` line takes the form `- Done: {unit} ({class}, {tier}, {effort}, {ISO-8601 timestamp})`. An inline unit logs tier `inline` and effort `none`.
 
+### Unit report
+
+<!-- rule: dispatch-unit-report -->
+A unit report holds four fields: the RED line, the GREEN line, the commit hash, and any deviation. The orchestrator rejects a report that lacks a field. It resumes the unit once and asks for the missing field. A second bad report takes the unit's normal failure path.
+
+The orchestrator logs the unit from the report alone. It never reads the commit or reruns the suite to find a missing field.
+
 ---
 
 ## WebFetch of a reference page
