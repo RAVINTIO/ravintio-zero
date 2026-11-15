@@ -137,3 +137,5 @@ Complete: P4 (ship in progress).
 | Cheaper tier agent calls | 0 |
 | Self-corrections | 2 |
 | Phases skipped | none |
+
+CI duration: 571s (run 43749919714, 2026-11-15T19:10:23Z)
