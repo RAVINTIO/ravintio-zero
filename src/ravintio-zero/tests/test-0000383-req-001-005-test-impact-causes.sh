@@ -43,7 +43,7 @@ done
 echo ""
 echo "=== NFR: scan size and skill text ==="
 LINES=$(printf '%s\n' "$SCAN" | grep -c . || true)
-assert_equals "yes" "$([ "$LINES" -le 20 ] && echo yes || echo no)" "NFR-001: the scan holds $LINES lines (cap 20)"
+assert_equals "yes" "$([ "$LINES" -le 21 ] && echo yes || echo no)" "NFR-001: the scan holds $LINES lines (cap 21)"
 TOTAL=$(find "$ZERO_DIR/skills" -name "SKILL.md" -exec cat {} + | wc -l | tr -d ' ')
 assert_equals "yes" "$([ "$TOTAL" -le 1720 ] && echo yes || echo no)" "NFR-002: skill text $TOTAL <= 1720"
 

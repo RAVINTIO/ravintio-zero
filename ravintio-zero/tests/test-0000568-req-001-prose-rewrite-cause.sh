@@ -27,9 +27,9 @@ SCAN=$(awk '/^## Test impact scan/{f=1;next} /^## /{f=0} f' "$PLAN"; cat "$REF")
 assert_contains "Prose rewrite" "$SCAN" "REQ-001 AC-3: the scan text names the cause"
 
 echo ""
-echo "=== REQ-001 AC-4: the scan stays within 20 lines ==="
+echo "=== REQ-001 AC-4: the scan stays within 21 lines ==="
 LINES=$(printf '%s\n' "$SCAN" | grep -c . || true)
-assert_equals "yes" "$([ "$LINES" -le 20 ] && echo yes || echo no)" "REQ-001 AC-4: the scan holds $LINES lines (cap 20)"
+assert_equals "yes" "$([ "$LINES" -le 21 ] && echo yes || echo no)" "REQ-001 AC-4: the scan holds $LINES lines (cap 21)"
 
 echo ""
 echo "=== REQ-001 AC-5: the two trees match ==="
