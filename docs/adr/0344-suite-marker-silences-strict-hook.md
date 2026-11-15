@@ -1,7 +1,7 @@
 ---
 title: "ADR 0344: Suite marker silences the strict hook for a step session"
 summary: "The runners write plan/.suite-running and the strict hook stays quiet for a step session while it names a live pid."
-status: "proposed"
+status: "accepted"
 component: "ravintio-zero"
 version: "0.1.0"
 ---
