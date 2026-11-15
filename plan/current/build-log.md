@@ -24,8 +24,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-15T21:55:02Z` |
-| End | |
-| Wall clock | |
+| End | `2026-11-15T21:56:36Z` |
+| Wall clock | 2 |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -40,13 +40,14 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Decision not applicable (initiative chart): A test pins text that the step edits: applied if a pin breaks
 - Decision applied (initiative chart): Pack edits: edit `src/ravintio-zero/` and mirror to `ravintio-zero/`
 - Decision applied (initiative chart): Known baseline failures: three known failures are not new
-- Decision applied (initiative chart): A docs unit has no failing test: unit U3 logs RED and GREEN lines that name 0000410
+- Decision applied (initiative chart): A docs unit has no failing test, so `build-log-check.mjs` finds no `RED:` or `GREEN:` for it (0000410)
 - Decision applied (initiative chart): Fast batches: `**Speed:** fast`
 - Scope Lock (happy path): a step session with no build log and no archive prints a finding that says to start P0 [source: draft-accepted (initiative)]
 - Scope Lock (first-run path): a first session has no build log, so it prints the same finding and starts P0 [source: draft-accepted (initiative)]
 - Scope Lock (error path): an unreadable branch name or a git failure prints no finding, and resume detection still exits 0 [source: draft-accepted (initiative)]
 - Scope Lock (cross-session continuity): a resume finds commits and no record, so the finding names the count [source: draft-accepted (initiative)]
 - Scope Lock complete. All four scenario paths captured.
+- Complete: P0 (2026-11-15T21:56:36Z)
 
 ### P1: Plan
 
@@ -83,6 +84,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Done: REQ-001 test-writer (code, primary, medium, 2026-11-15T21:57:04Z)
 - Tests run: REQ-001: test-0000556-req-001-unfinished-step-finding.sh (2026-11-15T21:57:04Z)
 - In progress: REQ-001 implementer (2026-11-15T21:57:04Z)
+- RED: REQ-001 implementer (the test failed before the code existed, 2026-11-15T21:57:04Z)
 - GREEN: REQ-001 implementer (2026-11-15T21:57:39Z)
 - Done: REQ-001 implementer (code, primary, medium, 2026-11-15T21:57:39Z)
 - Tests run: REQ-001: test-0000556-req-001-unfinished-step-finding.sh, test-0000243-req-001-002-006-resume-detect.sh, test-0000555-req-003-resume-finding.sh, test-0000151-req-011-orchestrator-references-split.sh (2026-11-15T21:57:39Z)
@@ -99,7 +101,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 |-------|-------|
 | Start | `2026-11-15T22:23:54Z` |
 | End | `2026-11-15T22:47:40Z` |
-| Wall clock | 84 |
+| Wall clock | 24 |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | 0 |
@@ -116,11 +118,29 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-15T22:47:40Z` |
-| End | |
-| Wall clock | |
+| End | `2026-11-15T22:47:53Z` |
+| Wall clock | 1 |
 | Model tier | primary |
 | Skills loaded | ravintio-ship |
 | Agents spawned | 0 |
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | none |
+
+- Complete: P4 (2026-11-15T22:47:53Z)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | 5 |
+| Total wall clock | 112 |
+| Total agents spawned | 0 |
+| Total MCP calls | 0 |
+| Phases using parallelism | 0 |
+| Primary tier agent calls | 0 |
+| Cheaper tier agent calls | 0 |
+| Self-corrections | 0 |
+| Phases skipped | none |
