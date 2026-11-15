@@ -2,7 +2,7 @@
 
 **Feature:** Test impact scan names hook pins
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** 223
 
 ## What changed
 
