@@ -26,8 +26,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-15T20:36:40Z` |
-| End | `{{pending}}` |
-| Wall clock | {{pending}} |
+| End | `2026-11-15T20:37:30Z` |
+| Wall clock | 2 |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -52,3 +52,24 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Backlog: pulled in 0000538, folder deleted with the index rebuilt
 - Bump: minor (row), version to plan with 0.128.0 to 0.129.0
 - Scope Lock: skipped on the light track. The chart accepted the draft [source: draft-accepted (initiative)]
+
+- Complete: P0 (2026-11-15T20:37:30Z)
+
+---
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-15T20:37:30Z` |
+| End | `2026-11-15T20:38:44Z` |
+| Wall clock | 2 |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | inline, three requirements |
+
+- Branch-point reread: origin/initiative/0000544-priority-backlog (2026-11-15T20:38:44Z)
+- Complete: P1 (2026-11-15T20:38:44Z)
