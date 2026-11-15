@@ -9,7 +9,7 @@
 - Ship Step 8 deletes `plan/.feature-id` with the other sentinels.
 - `scripts/shared-files.mjs` resolves a base-merge conflict on `plan/.feature-id`. A file the PR branch deleted stays deleted. A file the PR branch holds keeps the PR branch text.
 - The roadmap standards list the new shared file.
-- The suites `test-0000545-req-001` and `test-0000545-req-002` cover the change. ADR 0344 records the decision.
+- The suites `test-0000545-req-001` and `test-0000545-req-002` cover the change. ADR 0345 records the decision.
 
 ## Why
 

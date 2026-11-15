@@ -1,16 +1,16 @@
 ---
-title: "ADR 0344: Ship deletes the feature id file"
+title: "ADR 0345: Ship deletes the feature id file"
 summary: "Ship Step 8 deletes plan/.feature-id and the merge queue resolves it as a shared file, so no squash carries a stale id."
 status: "proposed"
 component: "ravintio-zero"
 version: "0.1.0"
 ---
-# ADR-0344 - Ship deletes the feature id file
+# ADR-0345 - Ship deletes the feature id file
 
 **Skill:** [plan](../../ravintio-zero/skills/ravintio-plan/SKILL.md)
 **Feature:** 0000545-clear-feature-id-at-ship
 **Component:** ravintio-zero
-**File:** `docs/adr/0344-ship-deletes-the-feature-id-file.md`
+**File:** `docs/adr/0345-ship-deletes-the-feature-id-file.md`
 **Date:** 2026-11-14
 
 ## Context
