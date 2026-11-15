@@ -100,11 +100,29 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-15T14:34:07Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `T` |
+| Wall clock | `22` |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | 0 |
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | text change, checks run inline |
+- Tests run: REQ-001: test-0000563-req-001-output-order-cause.sh, test-0000246-req-001-test-impact-scan.sh, test-0000355-req-003-workflow-marker.sh, test-0000383-req-001-005-test-impact-causes.sh (2026-11-15T14:56:36Z)
+- Tests run: full suite: 456 passed, 3 failed, all 3 inherited (2026-11-15T14:56:36Z)
+- Skipped: docs edit pass subagent. One changed doc, `prose-check.mjs` exits 0, the new sentence is short (2026-11-15T14:56:36Z)
+- Complete: P3 (2026-11-15T14:56:36Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-15T14:56:36Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | initiative step |
