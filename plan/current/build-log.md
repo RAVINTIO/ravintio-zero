@@ -70,8 +70,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-15T23:14:05Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-15T23:45:07Z` |
+| Wall clock | `31` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | `0` |
@@ -84,6 +84,22 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - GREEN: U1 sibling-copy line (2026-11-15T23:14:31Z)
 - Done: U1 sibling-copy line (content, inline, none, 2026-11-15T23:14:31Z)
 - Tests run: REQ-001: test-0000570-req-001-sibling-copy-line.sh, test-0000246, test-0000383, test-0000567, test-0000568, test-0000569, test-0000384, test-0000493, test-0000164, test-0000042 (2026-11-15T23:14:31Z)
+- Tests run: full suite: 469 passed, 3 failed (2026-11-15T23:45:07Z)
+- Complete: P2 (2026-11-15T23:45:07Z)
+
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-15T23:45:07Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-validate-and-accept |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | none |
 
 ---
 
