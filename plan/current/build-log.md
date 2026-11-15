@@ -103,3 +103,4 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Deviation: U3 writes `docs/decisions-index.md` and not `docs/about.md`. The about file says not to edit it by hand, and the queue sets the version. The execution plan names the written files (2026-11-15T19:22:16Z)
 - Deviation: ADR-0347 has status accepted now, not at ship, because the decisions index row needs the status (2026-11-15T19:22:16Z)
 - Done: REQ-001 U3 docs (content, inline, none, 2026-11-15T19:22:16Z)
+- Tests run: full suite start (2026-11-15T19:22:29Z)
