@@ -2,7 +2,7 @@
 
 **Feature:** Scan new pack files for the wording allowlist
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** 233
 
 ## What changed
 
