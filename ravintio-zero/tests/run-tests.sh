@@ -66,6 +66,21 @@ skills_listing() {
   (cd "$top" && find .claude/skills -mindepth 1 -print 2>/dev/null | LC_ALL=C sort)
 }
 
+# Marks a live run (0000548 ADR-0344). The strict hook stays quiet for a step session while the
+# marker names a live process, so an ack prompt cannot change a tracked file mid-run. The runner
+# writes it before the first snapshot and removes it on exit. The marker is git-ignored.
+SUITE_MARKER=""
+SUITE_TOP="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel 2>/dev/null)" || SUITE_TOP=""
+# A live marker of another runner stays as it is, and this runner then removes nothing.
+if [ -n "$SUITE_TOP" ] && [ -d "$SUITE_TOP/plan" ] && [ ! -L "$SUITE_TOP/plan" ] && [ ! -L "$SUITE_TOP/plan/.suite-running" ] \
+  && ! kill -0 "$(cat "$SUITE_TOP/plan/.suite-running" 2>/dev/null)" 2>/dev/null; then
+  if printf '%s\n' "$$" > "$SUITE_TOP/plan/.suite-running" 2>/dev/null; then
+    SUITE_MARKER="$SUITE_TOP/plan/.suite-running"
+  fi
+fi
+remove_suite_marker() { [ -z "$SUITE_MARKER" ] || rm -f "$SUITE_MARKER"; }
+trap 'remove_suite_marker; remove_git_isolation' EXIT
+
 SKILLS_BEFORE="$(skills_listing)"
 TREE_BEFORE=""
 TREE_CHECK=0
