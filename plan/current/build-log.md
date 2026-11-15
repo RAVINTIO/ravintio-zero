@@ -98,11 +98,15 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-14T17:36:56Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-15T04:25:21Z` |
+| Wall clock | `649` |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | 0 |
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | text change, checks run inline |
+- Tests run: six suites named in the P2 block pass in the worktree, consistency-check exits 0 (2026-11-15T04:25:21Z)
+- Skipped: docs edit pass subagent. One changed doc, `prose-check.mjs` exits 0, the new sentences are short (2026-11-15T04:25:21Z)
+- Blocked: full clean-clone suite did not finish. Two runs hit the background limit at load average 26 from other steps' suites (2026-11-15T04:25:21Z)
+- Complete: P3 (2026-11-15T04:25:21Z)
