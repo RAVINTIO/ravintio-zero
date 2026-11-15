@@ -63,11 +63,27 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-15T13:19:59Z` |
-| End | `pending` |
-| Wall clock | `pending` |
+| End | `2026-11-15T13:20:46Z` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator, ravintio-plan |
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
 | Notes | none |
+
+- Complete: P1 (2026-11-15T13:20:46Z)
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-15T13:20:46Z` |
+| End | `pending` |
+| Wall clock | `pending` |
+| Model tier | primary |
+| Skills loaded | ravintio-orchestrator, ravintio-implement |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | REQ-001 and REQ-002 edit one section of one file, so they run inline in one unit. |
