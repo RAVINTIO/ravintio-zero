@@ -76,8 +76,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-15T18:31:25Z` |
-| End | `{{filled when the phase completes}}` |
-| Wall clock | `{{filled when the phase completes}}` |
+| End | `2026-11-15T18:32:00Z` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 0 |
@@ -96,3 +96,4 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - GREEN: U4 (sync-installed.mjs --check exits 0, 0000410) (2026-11-15T18:31:55Z)
 - Done: U4 (sync, inline, none, 2026-11-15T18:31:55Z)
 - Deviation: entry 0000526 names a 3800 byte boot cap. The cause names the suite and says to read the cap, because the suite holds 4000.
+- Complete: P2 (2026-11-15T18:32:00Z)
