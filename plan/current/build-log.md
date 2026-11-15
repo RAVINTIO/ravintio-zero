@@ -24,8 +24,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-15T23:12:27Z` |
-| End | `PENDING` |
-| Wall clock | PENDING |
+| End | `2026-11-15T23:13:15Z` |
+| Wall clock | 2 |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -49,6 +49,22 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Scope Lock (cross-session continuity): a resumed session reads the same rule in the skill text, with no state to restore [source: draft-accepted (initiative)]
 - Scope Lock complete. All four scenario paths captured.
 - Baseline run started in the background: /tmp/step13-baseline.out (2026-11-15T23:12:27Z)
+
+- Complete: P0 (2026-11-15T23:13:15Z)
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-15T23:13:15Z` |
+| End | `PENDING` |
+| Wall clock | PENDING |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | none |
 
 ---
 
