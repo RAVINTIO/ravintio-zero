@@ -58,7 +58,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 |-------|-------|
 | Start | `2026-11-14T15:10:55Z` |
 | End | `2026-11-14T15:11:47Z` |
-| Wall clock | 2 |
+| Wall clock | 1 |
 | Model tier | primary |
 | Skills loaded | ravintio-plan |
 | Agents spawned | 0 |
@@ -96,7 +96,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 |-------|-------|
 | Start | `2026-11-14T15:22:37Z` |
 | End | `2026-11-15T07:15:32Z` |
-| Wall clock | 15h 53m |
+| Wall clock | 953 |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | 0 |
@@ -104,18 +104,38 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Parallel task batches | 0 |
 | Notes | The full suite took about 4 hours, because four step suites shared the machine. It ended with one failure, `test-0000450-req-004-report-format.sh`. That suite fails the same way on the merge base, so it is inherited. Docs edit pass: `prose-check.mjs` exits 0 on 6 changed docs in 0 cycles. |
 
+- Complete: P3 (2026-11-15T07:15:32Z)
+
+---
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-15T07:16:12Z` |
+| End | `2026-11-15T07:16:19Z` |
+| Wall clock | 1 |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Initiative step. The queue sets the version at merge. |
+
+- Complete: P4 (2026-11-15T07:16:19Z)
+
 ---
 
 ## Summary (filled at ship, P4)
 
 | Metric | Value |
 |--------|-------|
-| Total phases completed | |
-| Total wall clock | |
-| Total agents spawned | |
-| Total MCP calls | |
-| Phases using parallelism | |
-| Primary tier agent calls | |
-| Cheaper tier agent calls | |
-| Self-corrections | |
+| Total phases completed | 5 |
+| Total wall clock | about 16 hours, mostly the full suite wait |
+| Total agents spawned | 0 |
+| Total MCP calls | 0 |
+| Phases using parallelism | none |
+| Primary tier agent calls | 0 |
+| Cheaper tier agent calls | 0 |
+| Self-corrections | 0 |
 | Phases skipped | none |
