@@ -65,6 +65,26 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Skipped: ADRs (no decision meets an ADR criterion)
 - Complete: P1 (2026-11-15T23:13:52Z)
 
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-15T23:14:05Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | none |
+
+- In progress: U1 sibling-copy line (2026-11-15T23:14:05Z)
+- RED: U1 sibling-copy line (2026-11-15T23:14:16Z)
+- GREEN: U1 sibling-copy line (2026-11-15T23:14:31Z)
+- Done: U1 sibling-copy line (content, inline, none, 2026-11-15T23:14:31Z)
+- Tests run: REQ-001: test-0000570-req-001-sibling-copy-line.sh, test-0000246, test-0000383, test-0000567, test-0000568, test-0000569, test-0000384, test-0000493, test-0000164, test-0000042 (2026-11-15T23:14:31Z)
+
 ---
 
 ## Summary (filled at ship, P4)
