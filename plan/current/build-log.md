@@ -89,7 +89,11 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Tests run: REQ-001: test-0000562-req-001-003-pack-file-edit-cause.sh, test-0000246-req-001-test-impact-scan.sh, test-0000355-req-003-workflow-marker.sh, test-0000383-req-001-005-test-impact-causes.sh (2026-11-14T15:12:23Z)
 - Tests run: REQ-002: test-0000562-req-001-003-pack-file-edit-cause.sh, test-0000493-req-004-handoff-text.sh (2026-11-14T15:12:23Z)
 - Tests run: REQ-003: test-0000562-req-001-003-pack-file-edit-cause.sh, test-0000151-req-011-orchestrator-references-split.sh (2026-11-14T15:12:23Z)
+- RED: U1, U2, U3, U4 (2026-11-15T12:54:26Z)
+- GREEN: U1, U2, U3, U4 (2026-11-15T12:54:26Z)
 - Done: U1, U2, U3, U4 (content, inline, none, 2026-11-14T15:12:23Z)
+- RED: U5, U6 (2026-11-15T12:54:26Z)
+- GREEN: U5, U6 (2026-11-15T12:54:26Z)
 - Done: U5, U6 (content, inline, none, 2026-11-14T15:12:41Z)
 - Complete: P2 (2026-11-14T17:36:56Z)
 

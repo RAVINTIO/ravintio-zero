@@ -33,3 +33,7 @@ All criteria verified by CLI or file checks. See `plan/current/verification-repo
 ## Docs edit pass
 
 One changed doc, `docs/architecture-overview.md`. `prose-check.mjs` exits 0. The agent skipped the subagent review and the build log records it.
+
+## RED and GREEN for U1 to U6
+
+The P2 block had no unit-level markers. During the P3 resume the agent checked the base commit and `HEAD`. `Pack file edit` and `test-impact-causes` are absent from `docs/architecture-overview.md` and `component.yml` at the base (RED) and present at `HEAD` (GREEN). The `RED:` and `GREEN:` lines for U1 to U6 record that check and the suite run at 2026-11-14T15:11:51Z.
