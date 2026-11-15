@@ -2,7 +2,7 @@
 
 **Feature:** Require unit reports
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** #225
 
 ## What changed
 
