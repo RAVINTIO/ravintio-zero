@@ -46,7 +46,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Decision applied (initiative chart): A test pins text that the step edits
 - Decision applied (initiative chart): Pack edits
 - Decision applied (initiative chart): Known baseline failures
-- Decision applied (initiative chart): A docs unit has no failing test
+- Decision applied (initiative chart): A docs unit has no failing test, so `build-log-check.mjs` finds no `RED:` or `GREEN:` for it (0000410)
 - Decision applied (initiative chart): Fast batches
 - Queue: no items name step 10
 - Backlog: pulled in 0000541, folder deleted with the index rebuilt
@@ -62,8 +62,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-15T19:13:28Z` |
-| End | `PENDING` |
-| Wall clock | PENDING |
+| End | `2026-11-15T19:13:37Z` |
+| Wall clock | 1 |
 | Model tier | primary |
 | Skills loaded | ravintio-plan |
 | Agents spawned | 0 |
@@ -72,6 +72,24 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Notes | inline, two requirements |
 
 - Branch-point reread: origin/initiative/0000544-priority-backlog (2026-11-15T19:13:28Z)
+- Complete: P1 (2026-11-15T19:13:37Z)
+
+---
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-15T19:13:37Z` |
+| End | `PENDING` |
+| Wall clock | PENDING |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | inline units, batches run in turn because U-1 and U-2 both write roadmap-standards.md |
+
 - In progress: U-1 (2026-11-15T19:13:37Z)
 - RED: U-1 (2026-11-15T19:13:42Z)
 - GREEN: U-1 (2026-11-15T19:13:51Z)
@@ -82,4 +100,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - GREEN: U-2 (2026-11-15T19:14:37Z)
 - Tests run: REQ-002: test-0000511-req-001-003-stop-summary.sh, test-0000493-req-004, test-0000250-req-002, test-0000043-req-007 (2026-11-15T19:14:37Z)
 - Done: U-2 (content, inline, none, 2026-11-15T19:14:37Z)
-- Done: U-3 (content, inline, none, 2026-11-15T19:14:49Z)
+- RED: U-3 (2026-11-15T19:15:00Z) No executable check exists for the docs unit (0000410).
+- GREEN: U-3 (2026-11-15T19:15:00Z) The prose check passed on the docs (0000410).
+- Decision applied (initiative chart): A docs unit has no failing test, so `build-log-check.mjs` finds no `RED:` or `GREEN:` for it (0000410)
+- Done: U-3 (content, inline, none, 2026-11-15T19:15:13Z)
