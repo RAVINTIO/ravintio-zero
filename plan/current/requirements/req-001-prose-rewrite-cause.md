@@ -22,23 +22,15 @@ As a plan author, I grep the tests for each changed sentence, so that I list eve
 - The cause says to list the matches in the execution plan.
 
 ## Acceptance Criteria
-- [ ] AC-1: the cause exists
+- [ ] AC-1: the cause greps and lists
   - Given the reference file
-  - When a reader looks for the `Prose rewrite` cause
-  - Then the cause says to grep `ravintio-zero/tests/` for each changed sentence
-- [ ] AC-2: the cause asks for a list of matches
-  - Given the cause
-  - When a run rewrites prose
-  - Then the cause says to list the matches in the execution plan
-- [ ] AC-3: the plan skill names the cause
+  - When a reader looks at the `Prose rewrite` cause
+  - Then it says to grep `ravintio-zero/tests/` for each changed sentence and list the matches in the execution plan
+- [ ] AC-2: the scan names the cause and stays small
   - Given the scan text of the plan skill and its reference
-  - When a test reads it
-  - Then the text names `Prose rewrite`
-- [ ] AC-4: the scan stays small
-  - Given the scan text
-  - When a test counts its lines
-  - Then the count is 20 or fewer
-- [ ] AC-5: both trees match
+  - When a test reads and counts it
+  - Then the text names `Prose rewrite` and holds 20 lines or fewer
+- [ ] AC-3: both trees match
   - Given the two pack trees
   - When a reader compares the reference file
   - Then the files are identical
