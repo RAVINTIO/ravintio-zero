@@ -69,3 +69,18 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | small change, artifacts written inline |
+- Complete: P1 (2026-11-15T20:37:15Z)
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-15T20:37:15Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | units run inline, text change |
