@@ -137,6 +137,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Notes | The step runs Steps 4, 5, and 8 after green CI. |
 
 - Complete: P4 (2026-11-15T12:09:23Z)
+- CI duration: 376s (run 43714299274, 2026-11-15T12:38:24Z)
 
 ---
 
