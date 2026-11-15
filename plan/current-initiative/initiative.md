@@ -88,6 +88,7 @@ The human confirmed the chart on 2026-11-14 with "build the initiative as fast a
 | 14 | Guard cut-back: CI on a plan-only push (0000476) | Every push still runs every suite. The step may cancel a superseded run on the same PR and may avoid an extra push, but skips no suite. | none |
 | 17 | Guard cut-back: the old-name guard (0000527) | Keep the allowlist as it is. Make the guard read a stable copy of the tree, or fix the earlier suite that changes it. | none |
 | 36 | Guard cut-back: `build-log-check.mjs` (0000410) | Every unit still logs `RED:` and `GREEN:`. The step records the class next to the markers and relaxes no check. | none |
+| 1-38 | A docs unit has no failing test, so `build-log-check.mjs` finds no `RED:` or `GREEN:` for it (0000410) | Log a `RED:` and a `GREEN:` line for the unit at the real time. Each line says the unit has no executable check and names 0000410. The `GREEN:` line names the check that passed, such as the prose check. Never state a test run that did not happen. | none |
 | 35 | Rule anchors touch most tests (0000401) | Step 35 runs after steps 1 to 34, and step 36 runs after it | none |
 | 1-36 | Fast batches | `**Speed:** fast`. Each phase dispatches its listed fast batch. Every gate and exception stop stays. | none |
 | 37 | none | none | none |
