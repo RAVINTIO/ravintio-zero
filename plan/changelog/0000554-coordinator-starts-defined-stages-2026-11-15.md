@@ -22,7 +22,10 @@ After the last step of initiative 0000360 merged, the coordinator asked "Go?" be
 
 ## Validation results
 
-Recorded at P3.
+- The clean-clone suite shows 460 passed and 3 failed. All 3 also fail on the base commit.
+- The regression suite shows 19 passed.
+- The two changed suites pass: `test-0000399-req-003-004` and `test-0000511-req-001-003`.
+- Security risk is low. The verification report covers AC-1 to AC-4 and NFR-001.
 
 ## Skipped phases
 
