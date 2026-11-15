@@ -87,9 +87,9 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Notes | units run inline, text change |
 - In progress: U2 (req 001 suite) (2026-11-15T21:56:18Z)
 
-- RED: U2 (REQ-001 suite, 4 of 6 checks failed before the cause edit) (2026-11-15T21:56:58Z)
+- RED: U1, U2 (REQ-001 suite, 4 of 6 checks failed before the cause edit) (2026-11-15T21:56:58Z)
 - GREEN: U1, U2 (REQ-001 suite, 6 of 6 checks pass in both trees) (2026-11-15T21:56:58Z)
-- Rework: U1 raised the scan cap from 20 to 21 in test-0000383, test-0000567, and test-0000568, per the chart pin rule (2026-11-15T21:56:58Z)
+- Pin update: U1 raised the scan cap from 20 to 21 in test-0000383, test-0000567, and test-0000568, per the chart pin rule (2026-11-15T21:56:58Z)
 - Tests run: REQ-001: test-0000569-req-001-pack-content-cause.sh, test-0000246-req-001-test-impact-scan.sh, test-0000355-req-003-workflow-marker.sh, test-0000383-req-001-005-test-impact-causes.sh, test-0000562-req-001-003-pack-file-edit-cause.sh, test-0000563-req-001-output-order-cause.sh, test-0000564-req-001-hook-change-cause.sh, test-0000565-req-001-path-move-cause.sh, test-0000566-req-001-history-move-cause.sh, test-0000567-req-001-002-size-cap-frozen-lines.sh, test-0000568-req-001-prose-rewrite-cause.sh, test-0000493-req-004-handoff-text.sh, test-0000164-req-008-no-process-substitution-loops.sh, test-0000042-req-010-pack-wording-allowlist.sh (2026-11-15T21:56:58Z)
 - Done: U1, U2 (content, inline, none, 2026-11-15T21:56:58Z)
 - RED: U3 (no executable check, sync unit, 0000410) (2026-11-15T21:56:58Z)
@@ -115,3 +115,34 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Skipped: docs edit pass subagent. One changed doc, the commit hook ran prose-check and passed (2026-11-15T22:26:45Z)
 - Complete: P3 (2026-11-15T22:26:45Z)
 
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-15T22:26:55Z` |
+| End | `2026-11-15T22:26:55Z` |
+| Wall clock | `0` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | initiative step |
+
+- Complete: P4 (2026-11-15T22:26:55Z)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `30` |
+| Total agents spawned | `0` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `0` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `0` |
+| Phases skipped | `none` |
