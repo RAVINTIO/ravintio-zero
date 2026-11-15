@@ -34,6 +34,7 @@
 - ravintio-zero/scripts/
 - src/ravintio-zero/docs/
 - ravintio-zero/tests/
+- src/ravintio-zero/tests/
 - docs/
 - plan/
 - src/ravintio-zero/component.yml
@@ -47,6 +48,7 @@
 
 ## Assumptions
 - The files the queue writes are the chart and the paths in `version-files.txt` - impact if wrong: the reset leaves a written file dirty.
+- The tests live in both `src/ravintio-zero/tests/` and `ravintio-zero/tests/` - impact if wrong: the sync check fails.
 - The queue worktree holds no other tracked change when `run` starts. The clean-tree check enforces this. Impact if wrong: the reset discards the change.
 
 ## Risks

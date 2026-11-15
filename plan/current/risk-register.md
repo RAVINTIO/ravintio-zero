@@ -22,4 +22,5 @@ version: "0.1.0"
 
 | ID | Assumption | Impact if Wrong | Status |
 |----|-----------|----------------|--------|
+| A-002 | The tests live in both `src/ravintio-zero/tests/` and `ravintio-zero/tests/`. | The sync check fails in CI. | closed |
 | A-001 | The queue writes only the chart and the files in `version-files.txt`. | The restore leaves a written file dirty. | open |

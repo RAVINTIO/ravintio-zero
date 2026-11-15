@@ -144,6 +144,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | initiative step, PR before archive |
+- Deviation: CI `validate-branch` failed the sync check because the new test sat only in `ravintio-zero/tests/`. The agent copied it to `src/ravintio-zero/tests/` and updated the plan records (2026-11-15T20:09:57Z)
 - Complete: P4 (2026-11-15T20:07:54Z)
 
 ---
