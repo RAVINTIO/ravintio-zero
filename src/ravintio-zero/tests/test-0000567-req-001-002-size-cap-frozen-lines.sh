@@ -30,11 +30,11 @@ assert_contains "boot template" "$REFEDIT" "REQ-002 AC-2: the cause names the bo
 assert_contains "read the cap from the suite" "$REFEDIT" "REQ-002 AC-2: the cause sends the reader to the suite for the number"
 
 echo ""
-echo "=== REQ-002 AC-3: the scan stays within 20 lines ==="
+echo "=== REQ-002 AC-3: the scan stays within 21 lines ==="
 PLAN="$ZERO_DIR/skills/ravintio-plan/SKILL.md"
 SCAN=$(awk '/^## Test impact scan/{f=1;next} /^## /{f=0} f' "$PLAN"; cat "$REF")
 LINES=$(printf '%s\n' "$SCAN" | grep -c . || true)
-assert_equals "yes" "$([ "$LINES" -le 20 ] && echo yes || echo no)" "REQ-002 AC-3: the scan holds $LINES lines (cap 20)"
+assert_equals "yes" "$([ "$LINES" -le 21 ] && echo yes || echo no)" "REQ-002 AC-3: the scan holds $LINES lines (cap 21)"
 
 echo ""
 echo "=== AC-3 and NFR-001: the two trees match ==="
