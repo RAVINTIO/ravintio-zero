@@ -62,7 +62,7 @@ None.
 |------|-----------|--------|-------|-------------------|------------------|
 | U-001 | none | src/ravintio-zero/standards/testing-standards.md | 1 | none | none |
 | U-002 | none | src/ravintio-zero/tests/test-0000550-req-002-no-head-diffs.sh | 1 | none | none |
-| U-003 | U-001, U-002 | docs/architecture-overview.md | 5152ebe3 | Documents the finished change | none |
+| U-003 | U-001, U-002 | docs/architecture-overview.md | 2 | Documents the finished change | none |
 
 ## Assumptions
 
