@@ -82,3 +82,4 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - GREEN: U-2 (2026-11-15T19:14:37Z)
 - Tests run: REQ-002: test-0000511-req-001-003-stop-summary.sh, test-0000493-req-004, test-0000250-req-002, test-0000043-req-007 (2026-11-15T19:14:37Z)
 - Done: U-2 (content, inline, none, 2026-11-15T19:14:37Z)
+- Done: U-3 (content, inline, none, 2026-11-15T19:14:49Z)
