@@ -2,7 +2,7 @@
 
 **Feature:** List sibling copies of a pinned test in the impact scan
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** 235
 
 ## What changed
 
