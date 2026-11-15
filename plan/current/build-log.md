@@ -95,6 +95,37 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Done: U4 (sync, inline, none, 2026-11-15T16:05:58Z)
 - Complete: P2 (2026-11-15T16:05:58Z)
 
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-15T16:25:30Z` |
+| End | `2026-11-15T16:46:59Z` |
+| Wall clock | `21` |
+| Model tier | primary |
+| Skills loaded | ravintio-validate-and-accept |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | text change, checks run inline |
+- Tests run: full suite: 458 passed, 3 failed, all 3 inherited (2026-11-15T16:46:59Z)
+- Skipped: docs edit pass subagent. One changed doc, `prose-check.mjs` exits 0, the new sentences are short (2026-11-15T16:46:59Z)
+- Complete: P3 (2026-11-15T16:46:59Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-15T16:46:59Z` |
+| End | `PENDING` |
+| Wall clock | `PENDING` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | initiative step |
+
 ---
 
 ## Summary (filled at ship, P4)
