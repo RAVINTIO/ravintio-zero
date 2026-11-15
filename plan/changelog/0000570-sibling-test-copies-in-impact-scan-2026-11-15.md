@@ -18,7 +18,7 @@ The entry suggests a line in the scan. The scan held 21 lines, the cap in four s
 
 ## Validation results
 
-Pending the full suite. This step folds in backlog entry 0000407.
+The full suite passes apart from three inherited failures. This step folds in backlog entry 0000407.
 
 ## Skipped phases
 
