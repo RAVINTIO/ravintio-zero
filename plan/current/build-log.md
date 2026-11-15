@@ -74,8 +74,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-15T17:10:50Z` |
-| End | `{{pending}}` |
-| Wall clock | `{{pending}}` |
+| End | `2026-11-15T17:11:13Z` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 0 |
@@ -83,3 +83,14 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Parallel task batches | 0 |
 | Notes | units run inline, text change |
 - In progress: U2 (req 001 suite) (2026-11-15T17:10:50Z)
+- RED: U1, U2 (REQ-001 suite, 5 of 6 checks failed before the cause existed) (2026-11-15T17:11:13Z)
+- GREEN: U1, U2 (REQ-001 suite, 6 of 6 checks pass in both trees) (2026-11-15T17:11:13Z)
+- Tests run: REQ-001: test-0000566-req-001-history-move-cause.sh, test-0000565-req-001-path-move-cause.sh, test-0000564-req-001-hook-change-cause.sh, test-0000246-req-001-test-impact-scan.sh, test-0000355-req-003-workflow-marker.sh, test-0000383-req-001-005-test-impact-causes.sh, test-0000562-req-001-003-pack-file-edit-cause.sh, test-0000563-req-001-output-order-cause.sh, test-0000493-req-004-handoff-text.sh, test-0000164-req-008-no-process-substitution-loops.sh (2026-11-15T17:11:13Z)
+- Done: U1, U2 (content, inline, none, 2026-11-15T17:11:13Z)
+- RED: U3 (no executable check, docs unit, 0000410) (2026-11-15T17:11:13Z)
+- GREEN: U3 (the prose check passed, 0000410) (2026-11-15T17:11:13Z)
+- Done: U3 (docs, inline, none, 2026-11-15T17:11:13Z)
+- RED: U4 (no executable check, sync unit, 0000410) (2026-11-15T17:11:13Z)
+- GREEN: U4 (sync-installed.mjs --check exits 0, 0000410) (2026-11-15T17:11:13Z)
+- Done: U4 (sync, inline, none, 2026-11-15T17:11:13Z)
+- Complete: P2 (2026-11-15T17:11:13Z)
