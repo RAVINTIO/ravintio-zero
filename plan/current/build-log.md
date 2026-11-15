@@ -27,7 +27,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 |-------|-------|
 | Start | `2026-11-15T20:36:40Z` |
 | End | `2026-11-15T20:37:30Z` |
-| Wall clock | 2 |
+| Wall clock | 1 |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -63,7 +63,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 |-------|-------|
 | Start | `2026-11-15T20:37:30Z` |
 | End | `2026-11-15T20:38:44Z` |
-| Wall clock | 2 |
+| Wall clock | 1 |
 | Model tier | primary |
 | Skills loaded | ravintio-plan |
 | Agents spawned | 0 |
@@ -81,8 +81,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-15T20:39:26Z` |
-| End | `{{pending}}` |
-| Wall clock | {{pending}} |
+| End | `2026-11-15T21:24:23Z` |
+| Wall clock | 45 |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 0 |
@@ -111,3 +111,23 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Decision applied (initiative chart): A docs unit has no failing test, so `build-log-check.mjs` finds no `RED:` or `GREEN:` for it (0000410)
 - Done: U-4 (content, inline, none, 2026-11-15T20:50:25Z)
 - Baseline: clean-clone suite on the base commit, 3 failed, all 3 known (2026-11-15T21:01:42Z)
+- Tests run: full suite: 465 passed, 3 failed, all 3 inherited (2026-11-15T21:24:23Z)
+- Complete: P2 (2026-11-15T21:24:23Z)
+
+---
+
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-15T21:24:23Z` |
+| End | `2026-11-15T21:24:46Z` |
+| Wall clock | 1 |
+| Model tier | primary |
+| Skills loaded | ravintio-validate-and-accept |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | the full suite ran once in P2 on the committed tree |
+- Skipped: docs edit pass by subagent, prose-check exit 0 on the 2 changed docs
+- Complete: P3 (2026-11-15T21:24:46Z)
