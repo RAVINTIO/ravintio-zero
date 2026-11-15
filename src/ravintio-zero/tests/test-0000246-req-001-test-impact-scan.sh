@@ -14,7 +14,9 @@ TEMPLATE="$ZERO_DIR/templates/execution-plan.template.md"
 
 echo ""
 echo "=== req-001 AC-1: the plan skill carries the scan ==="
-SCAN=$(awk '/^## Test impact scan/{f=1;next} /^## /{f=0} f' "$PLAN")
+SECTION_TEXT=$(awk '/^## Test impact scan/{f=1;next} /^## /{f=0} f' "$PLAN")
+SCAN="$SECTION_TEXT
+$(cat "$ZERO_DIR/skills/ravintio-plan/references/test-impact-causes.md")"
 assert_contains "Skill count" "$SCAN" "req-001 AC-1: the scan names the skill count"
 assert_contains "Skill-text budget" "$SCAN" "req-001 AC-1: the scan names the skill-text budget"
 assert_contains "Size cap" "$SCAN" "req-001 AC-1: the scan names the size cap"
@@ -33,7 +35,7 @@ assert_equals "before" "$ORDER" "req-001 AC-2: the section sits before the Concu
 
 echo ""
 echo "=== req-001 AC-3: the scan stays small ==="
-LINES=$(printf '%s\n' "$SCAN" | grep -c . || true)
+LINES=$(printf '%s\n' "$SECTION_TEXT" | grep -c . || true)
 assert_equals "yes" "$([ "$LINES" -gt 0 ] && [ "$LINES" -le 15 ] && echo yes || echo no)" "req-001 AC-3: the scan holds 1 to 15 lines ($LINES)"
 
 print_summary

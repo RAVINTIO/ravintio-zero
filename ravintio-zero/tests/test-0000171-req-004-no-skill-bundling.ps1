@@ -76,7 +76,7 @@ foreach ($p in $planned) { Write-OldFile (Join-Path $sk $p) }
 $run = Invoke-Setup $ws @('claude-code')
 Assert-Equal 0 $run.Code "AC-2: the rerun exits 0"
 Assert-True (-not [System.IO.Directory]::Exists((Join-Path $sk 'ravintio-plan\assets'))) "AC-2: the bundled assets folder is gone"
-Assert-True (-not [System.IO.Directory]::Exists((Join-Path $sk 'ravintio-plan\references'))) "AC-2: the bundled references folder is gone"
+Assert-True (-not [System.IO.File]::Exists((Join-Path $sk 'ravintio-plan\references\formatting-standards.md'))) "AC-2: the bundled references file is gone"
 Assert-True (-not [System.IO.Directory]::Exists((Join-Path $sk 'ravintio-orchestrator\assets\templates'))) "AC-2: the orchestrator's bundled templates are gone"
 Assert-True (-not [System.IO.File]::Exists((Join-Path $sk 'ravintio-orchestrator\references\code-quality-standards.md'))) "AC-2: the orchestrator's bundled standard is gone"
 Assert-True ([System.IO.File]::Exists((Join-Path $sk 'ravintio-orchestrator\assets\.gitkeep'))) "AC-2: the orchestrator's own assets file remains"
