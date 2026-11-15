@@ -107,11 +107,15 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-14T16:43:29Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-15T12:09:04Z` |
+| Wall clock | `1165` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator, ravintio-validate-and-accept |
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
 | Notes | none |
+
+- Tests run: full suite in a clean clone, 3 inherited failures (2026-11-15T12:09:04Z)
+- Skipped: docs edit pass (no user-facing doc needed edits, prose-check exit 0)
+- Complete: P3 (2026-11-15T12:09:04Z)
