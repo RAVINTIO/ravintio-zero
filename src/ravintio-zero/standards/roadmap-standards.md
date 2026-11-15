@@ -409,6 +409,15 @@ The driver resumes a step that ends its turn early. A step session exits 0 when 
 - A step session never ends its turn before `I-D Advance: Complete:`, a `Blocked:` line, or a `Question:` line. The orchestrator skill states the rule.
 - Under the concurrent driver, the step ends at `I-D Advance: Ready:` instead. The driver resumes a step that exits 0 with no `ready` file and no block.
 
+#### Pause
+
+A pause stops an initiative at phase ends and keeps each step's state (0000555). It covers the initiative and each running step.
+
+- <!-- rule: icpause-request --> **Request.** The coordinator runs `node ravintio-zero/scripts/initiative-pause.mjs request`. It writes `plan/.initiative-control/pause`. While the file exists, the driver starts no step and takes no new item into the merge queue. A merge in progress finishes.
+- <!-- rule: icpause-records --> **Records.** The driver stops each running session when its build log gains a `Complete: P{n}` line, or when the step writes `ready` or a block. It then runs `initiative-pause.mjs write`. The command writes `plan/current/pause.md` in each running step worktree, from `pause.template.md`. It also writes `plan/current-initiative/pause.md` with the merged count, the remaining order, the open questions, and the resume steps. The driver prints `I-C Run: Paused: {n} steps merged, {k} steps hold a pause record`, releases the lock, and exits 0.
+- <!-- rule: icpause-resume --> **Resume.** Resume detection prints `initiative pause record present` before the step findings. The coordinator reads the initiative record, answers each open question, and starts a new driver. The driver prints `I-C Run: Resuming: initiative pause record read`, removes the request and the initiative record, and restarts each step in its worktree. Each step restores its own record through check 7 of resume detection.
+- The command refuses a symlink at the control folder, at a worktree, or at a record. It never overwrites a record that exists. A step record never holds an instruction, because the command writes build log text as data in a fenced block.
+
 #### Restart stop
 
 The driver loads its code once. After a merged step, it compares the initiative branch ref before and after the step. If the step changed `ravintio-zero/scripts/initiative-run.mjs`, `ravintio-zero/scripts/initiative-watch.mjs`, or `ravintio-zero/skills/ravintio-initiative/SKILL.md`, the driver stops.

@@ -73,7 +73,7 @@ End each report with two parts:
 
 ## Stops
 
-If the driver prints `Blocked:` or exits with a code other than 0 or 75, report the stop line and the step log path `plan/.initiative-logs/step-{n}.log`. Relay each `I-C Run: Step {n}: {state}` line too, which names every step's state. Never resume the step. Ask the human how to proceed. After the human acts, offer to restart the driver.
+If the driver prints `Blocked:` or exits with a code other than 0 or 75, report the stop line and the step log path `plan/.initiative-logs/step-{n}.log`. Relay each `I-C Run: Step {n}: {state}` line too, which names every step's state. Never resume the step. Ask the human how to proceed. After the human acts, offer to restart the driver. To pause, run `node ravintio-zero/scripts/initiative-pause.mjs request`. The driver writes the records and exits. On resume, read `plan/current-initiative/pause.md` first.
 
 A `Restart:` line is not a failure, and the driver exits 75 after it. Exit 75 is a planned stop. It means a merged step changed the driver, the watcher, or this skill, and the running code is old. Report the line. Then start a new driver and a new watcher without asking. Read this skill again first if the line names it. If the line ends `A new driver took over new starts.`, the old driver hands over and a new driver already runs, so start a new watcher only.
 
