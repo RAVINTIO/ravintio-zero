@@ -137,7 +137,7 @@ run_mq run --step 1 --pr 11 --root "$QUEUE"
 assert_equals "1" "$CODE" "REQ-001 AC-1: the run fails on the rejected commit ($OUT)"
 assert_equals "" "$(git -C "$QUEUE" status --porcelain --untracked-files=no)" "REQ-001 AC-1: the chart and the version files equal HEAD and the index holds no change"
 assert_contains "restored:" "$OUT" "REQ-001 AC-1: the queue prints a restored line"
-assert_contains "restored: $CHART_REL" "$OUT" "REQ-001 AC-1: the restored line starts with the chart"
+assert_contains "$CHART_REL" "$(printf "%s\n" "$OUT" | grep "^restored:")" "REQ-001 AC-1: the restored line names the chart"
 assert_equals "keep me" "$(cat "$QUEUE/untracked.txt" 2>/dev/null)" "REQ-001 AC-2: the untracked file stays with its content"
 
 # ---------------------------------------------------------------- REQ-001 AC-3: the rerun starts clean

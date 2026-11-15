@@ -92,3 +92,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Baseline: the clean-clone run stopped after test-0000037-req-004 with no Failed suites list. The baseline file lists the three known failures from the chart Decisions row (2026-11-15T19:19:28Z)
 - In progress: REQ-001 U2 test (2026-11-15T19:19:52Z)
 - RED: REQ-001 U2 test (2026-11-15T19:19:52Z)
+- In progress: REQ-001 U1 script (2026-11-15T19:22:00Z)
+- RED: REQ-001 U1 script (the U2 test failed before the change, 2026-11-15T19:22:00Z)
+- GREEN: REQ-001 U1 script (2026-11-15T19:22:00Z)
+- Tests run: REQ-001: test-0000546-req-001-restore-written-files.sh, test-0000454-req-001, test-0000493-req-004, test-0000446-req-001, test-0000450-req-003, test-0000379-req-004, test-0000164-req-008, and every suite that names merge-queue, all passed (2026-11-15T19:22:00Z)
+- Done: REQ-001 U1 script (code, inline, none, 2026-11-15T19:22:00Z)
