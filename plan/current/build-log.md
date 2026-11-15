@@ -74,7 +74,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-15T14:33:24Z` |
-| End | `T` |
+| End | `2026-11-15T14:34:07Z` |
 | Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
@@ -83,8 +83,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Parallel task batches | 0 |
 | Notes | units run inline, text change |
 - In progress: U2 (req 001 suite) (2026-11-15T14:34:07Z)
-- RED: REQ-001 suite, 4 of 5 checks failed before the cause existed (2026-11-15T14:34:07Z)
-- GREEN: REQ-001 suite, 5 of 5 checks pass in both trees (2026-11-15T14:34:07Z)
+- RED: U1, U2 (REQ-001 suite, 4 of 5 checks failed before the cause existed) (2026-11-15T14:34:07Z)
+- GREEN: U1, U2 (REQ-001 suite, 5 of 5 checks pass in both trees) (2026-11-15T14:34:07Z)
 - Tests run: REQ-001: test-0000563-req-001-output-order-cause.sh, test-0000246-req-001-test-impact-scan.sh, test-0000355-req-003-workflow-marker.sh, test-0000383-req-001-005-test-impact-causes.sh, test-0000562-req-001-003-pack-file-edit-cause.sh, test-0000493-req-004-handoff-text.sh, test-0000164-req-008-no-process-substitution-loops.sh (2026-11-15T14:34:07Z)
 - Done: U1, U2 (content, inline, none, 2026-11-15T14:34:07Z)
 - RED: U3 (no executable check, docs unit, 0000410) (2026-11-15T14:34:07Z)
@@ -100,7 +100,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-15T14:34:07Z` |
-| End | `T` |
+| End | `2026-11-15T14:56:42Z` |
 | Wall clock | `22` |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
@@ -118,11 +118,28 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-15T14:56:36Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-15T14:56:42Z` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-ship |
 | Agents spawned | 0 |
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | initiative step |
+- Complete: P4 (2026-11-15T14:56:42Z)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `25` |
+| Total agents spawned | `0` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `0` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `0` |
+| Phases skipped | `none` |
