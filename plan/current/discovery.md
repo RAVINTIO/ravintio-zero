@@ -12,7 +12,7 @@ summary: "Raw discovery-pass findings: what the orchestrator knew before coachin
 | Detection signal | Source in `src/` beside an archive in `plan/_archive/` |
 | Git pre-flight | Branch `feat/0000550-no-head-diffs-in-tests`, cut by the driver from the initiative branch |
 | Skills inbox | empty |
-| Track | full |
+| Track | light |
 
 ## Mode Findings
 
