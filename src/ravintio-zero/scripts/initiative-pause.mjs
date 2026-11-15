@@ -3,7 +3,11 @@
 //
 // Usage, run from the repository root:
 //   node initiative-pause.mjs request [--root <dir>]   write plan/.initiative-control/pause
-//   node initiative-pause.mjs write [--root <dir>]     write the step records and the initiative record
+//   node initiative-pause.mjs write [--root <dir>] [--merged <list>]
+//                                                      write the step records and the initiative record
+//
+// --merged names the merged steps, as 1,2,3. The driver passes it, because it reads the chart from
+// the initiative branch and the chart in the root can lag. Without it the command reads the chart.
 //
 // The driver reads the pause request, starts no step, and stops each session at a phase end. It
 // then runs "write". The command writes plan/current/pause.md in the worktree of each running step,
@@ -136,7 +140,7 @@ function stepRecord(template, n, featureId, log) {
     .replace('{phase-id}: Resuming: {active_task}', `${log.phase}: Resuming: step ${n} after the last build log line`);
 }
 
-function write(root) {
+function write(root, mergedFlag) {
   const chartText = readText(under(root, INITIATIVE));
   if (!chartText) fail(`no initiative record at ${INITIATIVE}`);
   let chart;
@@ -170,8 +174,9 @@ function write(root) {
     fs.writeFileSync(p.target, stepRecord(template, p.n, p.featureId, p.log), { mode: 0o600, flag: 'wx' });
   }
 
-  const merged = chart.steps.filter((s) => s.status === 'merged').length;
-  const remaining = chart.steps.filter((s) => s.status !== 'merged').map((s) => s.step);
+  const mergedSet = mergedFlag === null ? new Set(chart.steps.filter((s) => s.status === 'merged').map((s) => s.step)) : mergedFlag;
+  const merged = chart.steps.filter((s) => mergedSet.has(s.step)).length;
+  const remaining = chart.steps.filter((s) => !mergedSet.has(s.step)).map((s) => s.step);
   const questions = plans.filter((p) => p.log.open).map((p) => `- Step ${p.n}: ${p.log.open}`);
   const time = new Date().toISOString().replace(/\.\d+Z$/, 'Z');
   const record = [
@@ -205,6 +210,13 @@ if (i >= 0) {
   if (!args[i + 1]) fail('--root needs a folder');
   root = path.resolve(args[i + 1]);
 }
+let mergedFlag = null;
+const m = args.indexOf('--merged');
+if (m >= 0) {
+  const list = args[m + 1] ?? '';
+  if (!/^([0-9]{1,3}(,[0-9]{1,3})*)?$/.test(list)) fail('--merged needs a comma list of step numbers');
+  mergedFlag = new Set(list === '' ? [] : list.split(',').map(Number));
+}
 if (command === 'request') request(root);
-else if (command === 'write') write(root);
+else if (command === 'write') write(root, mergedFlag);
 else fail('usage: initiative-pause.mjs request|write [--root <dir>]');

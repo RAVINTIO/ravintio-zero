@@ -19,7 +19,8 @@ As the human on the loop, I see the driver start no step. It waits for each sess
 - `initiative-pause.mjs request --root {dir}` writes `plan/.initiative-control/pause`.
 - While that file exists, the driver starts no step and takes no new item into the merge queue. A merge in progress finishes.
 - The driver stops each running session when its build log gains a `Complete: P{n}` line, or after the step writes `ready` or a block.
-- The driver then runs `initiative-pause.mjs write`, releases the lock, prints `I-C Run: Paused: {n} steps merged, {k} steps hold a pause record`, and exits 0.
+- The driver then runs `initiative-pause.mjs write --merged {list}`. The list comes from the initiative branch, because the chart in the root can lag.
+- The driver releases the lock, prints `I-C Run: Paused: {n} steps merged, {k} steps hold a pause record`, and exits 0.
 - At the next start the driver reads the initiative pause record and prints `I-C Run: Resuming: initiative pause record read`.
 - It then removes the request and the initiative record, and starts each step in its worktree.
 

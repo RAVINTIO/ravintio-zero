@@ -18,7 +18,7 @@ As the human on the loop, I restart the driver and each step resumes from its ow
 ## Functional Requirements
 - `resume-detect.mjs` prints `initiative pause record present` when `plan/current-initiative/pause.md` exists. The line comes before the step findings.
 - `orchestrator-resume-detection.md` maps the finding to check 3 and says the orchestrator reads the initiative record first.
-- `roadmap-standards.md` holds a section on pause with rule `icpause-records`.
+- `roadmap-standards.md` holds a section on pause with rules `icpause-request`, `icpause-records`, and `icpause-resume`.
 - The initiative skill says how the coordinator pauses and resumes, in one line.
 
 ## Acceptance Criteria

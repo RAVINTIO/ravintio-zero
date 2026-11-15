@@ -101,3 +101,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Tests run: REQ-003: test-0000555-req-003-resume-finding.sh, test-0000243-req-001-002-006, test-0000151-req-011, test-0000205-req-004, test-0000313-req-002, test-0000314-req-002, test-0000399-req-003-004, test-0000536-req-001-003, test-0000493-req-004 (2026-11-15T20:41:10Z)
 - Done: U-3 (content, inline, none, 2026-11-15T20:41:10Z)
 - In progress: U-2 (2026-11-15T20:41:10Z)
+- RED: U-2 (2026-11-15T20:42:07Z)
+- GREEN: U-2 (2026-11-15T20:50:01Z)
+- Tests run: REQ-002: test-0000555-req-002-driver-pause.sh and 58 driver suites. test-0000511 failed until the pause note moved below the Summary text (2026-11-15T20:50:01Z)
+- Done: U-2 (code, inline, none, 2026-11-15T20:50:01Z)
