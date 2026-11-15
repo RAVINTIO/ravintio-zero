@@ -86,7 +86,7 @@ responsibilities:
   - "Check the gates of each installed archetype at P3 with scripts/archetype-gates.mjs, and exit 1 on a failed gate"
   - "Keep the pack source in src/ravintio-zero/ and a plain installed copy in ravintio-zero/, which hooks, the driver, and skills run, while consumer installs keep ravintio-zero/"
   - "Refresh the installed copy from the source with scripts/sync-installed.mjs, and check byte parity with its --check flag"
-  - "Hold the plan Test impact scan causes in skills/ravintio-plan/references/test-impact-causes.md, with a Pack file edit cause that lists the handoff suite, tell P0 to list src/ravintio-zero/ in Component Paths for a pack file edit, add an Output order cause for suites that read changed lines or the last line, and add a Hook change cause that lists four hook pins to grep for"
+  - "Hold the plan Test impact scan causes in skills/ravintio-plan/references/test-impact-causes.md, with a Pack file edit cause that lists the handoff suite, tell P0 to list src/ravintio-zero/ in Component Paths for a pack file edit, add an Output order cause for suites that read changed lines or the last line, add a Hook change cause that lists four hook pins to grep for, and add a Path move cause that lists depth-based root lookups and path-keyed state files"
 
 exceptions:
   - "Does not generate application code. That is the implement phase's job in consumer projects."
