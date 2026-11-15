@@ -26,8 +26,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-14T15:09:57Z` |
-| End | |
-| Wall clock | |
+| End | `2026-11-14T15:10:33Z` |
+| Wall clock | 1 |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -35,6 +35,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Parallel task batches | 0 |
 | Notes | initiative 0000544 step 1 |
 
+- Complete: P0 (2026-11-14T15:10:33Z)
 - Run mode: autonomous (2026-11-14T15:09:57Z)
 - Run speed: fast (2026-11-14T15:09:57Z)
 - Adoption mode: standard-iterative, assumed. Signal: archive in plan/_archive beside source in src/.
@@ -78,7 +79,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 |-------|-------|
 | Start | `2026-11-14T15:12:18Z` |
 | End | `2026-11-14T15:22:45Z` |
-| Wall clock | 1 |
+| Wall clock | 10 |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 0 |
@@ -96,8 +97,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Done: U2 (content, inline, none, 2026-11-14T15:13:30Z)
 - Tests run: REQ-001: test-0000545-req-001-ship-deletes-feature-id.sh, test-0000151-req-002-ship-sentinels-before-pr.sh (2026-11-14T15:13:30Z)
 - Tests run: REQ-002: test-0000545-req-002-queue-resolves-feature-id.sh, test-0000456-req-001-shared-files.sh (2026-11-14T15:13:30Z)
-- Done: U3 (removal, inline, none, 2026-11-14T15:22:42Z)
-- Done: U4 (docs already landed with the plan commits, inline, none, 2026-11-14T15:22:42Z)
+- Done: U3 (removal, direct, none, 2026-11-14T15:22:42Z)
+- Done: U4 (docs already landed with the plan commits, direct, none, 2026-11-14T15:22:42Z)
 - Complete: P2 (2026-11-14T15:22:42Z)
 
 ### P3: Validate and Accept
@@ -105,6 +106,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-14T16:47:34Z` |
+| End | `2026-11-15T12:08:47Z` |
+| Wall clock | 1161 |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | 0 |
@@ -115,3 +118,32 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - OS gap: local macos, CI ubuntu, windows (2026-11-15T12:08:47Z)
 - Skipped: docs edit pass, prose-check exit 0 on changed standards and skill (2026-11-15T12:08:47Z)
 - Complete: P3 (2026-11-15T12:08:47Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-15T12:10:23Z` |
+| End | `2026-11-15T12:10:28Z` |
+| Wall clock | 1 |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Base merge renumbered the ADR from 0344 to 0345. |
+- Complete: P4 (2026-11-15T12:10:28Z)
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `1161 minutes, including an overnight pause before P3` |
+| Total agents spawned | `0` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `0` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `0` |
+| Phases skipped | `none` |

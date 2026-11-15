@@ -22,7 +22,8 @@ None.
 ## Validation results
 
 - Both new suites pass.
-- The full suite result is in the verification report.
+- The full suite ran in a clean clone: 451 feature suites passed and 3 failed. The regression suite passed 19 of 19.
+- The 3 failures come from the clean clone. Each passes in the working tree.
 
 ## Skipped phases
 
