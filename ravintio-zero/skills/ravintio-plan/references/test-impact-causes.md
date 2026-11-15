@@ -4,10 +4,10 @@
 
 - **Skill count:** the run adds or removes a skill. Grep for `skills/` with `wc -l`.
 - **Skill-text budget:** the run edits any `SKILL.md`. Grep for the line cap.
-- **Size cap:** the run edits a skill that a cap test measures, such as the orchestrator. Grep for the skill name and `-le`.
+- **Size cap:** the run edits a skill that a cap test measures, such as the orchestrator. Grep for the skill name and `-le`. List every test that measures the skill with each cap value, not the first match. Plan the unit's growth against the lowest cap.
 - **Backlog entry id:** the run pulls in an entry. Grep for the entry id.
 - **Workflow job or step edit:** the run adds or edits a job or step in a workflow file. Grep for `ravintio.yml`.
-- **Reference file edit:** the run edits a file in a skill's `references/` folder. Grep for the file name to find frozen-line tests.
+- **Reference file edit:** the run edits a file in a skill's `references/` folder. Grep for the file name to find frozen-line tests. For an orchestrator reference, also list `test-0000151-req-011-orchestrator-references-split.sh`. It freezes every base line of the skill and caps the boot template, so read the cap from the suite.
 - **New test file:** the run adds a test file. List the repo-wide style tests, such as `test-0000164-req-008`.
 - **Non-suite file:** the run adds a file under `ravintio-zero/tests/` that is not a `test-*.sh` suite. List `run-tests.sh` and `run-tests.ps1`.
 - **Fixture-pinned line:** the run edits an existing pack line. Grep `ravintio-zero/tests/fixtures/` for the line.
