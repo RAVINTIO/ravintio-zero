@@ -78,8 +78,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-14T15:24:50Z` |
-| End | |
-| Wall clock | |
+| End | `2026-11-15T13:48:46Z` |
+| Wall clock | 1344 |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 0 |
@@ -91,6 +91,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - In progress: REQ-001 U2 test (2026-11-14T15:24:50Z)
 - RED: REQ-001 U2 test (2026-11-14T15:25:02Z)
 - In progress: REQ-001 U1 rule (2026-11-14T15:25:02Z)
+- RED: REQ-001 U1 rule (the U2 test failed before the rule existed, 2026-11-14T15:25:02Z)
 - GREEN: REQ-001 U1 rule (2026-11-14T15:25:14Z)
 - Tests run: REQ-001: ravintio-zero/tests/test-0000573-req-001-unit-report-fields.sh, test-0000386-req-002, test-0000043-req-012, test-0000172-req-002 (2026-11-14T15:25:14Z)
 - Done: REQ-001 U1 rule (content, inline, none, 2026-11-14T15:25:14Z)
@@ -98,3 +99,26 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Baseline: the clean-clone run printed no Failed suites list (output ended after test-0000037-req-004, exit 1). The baseline file lists the three known failures from the chart Decisions row (2026-11-14T15:46:05Z)
 - Tests run: full suite start (2026-11-14T15:46:05Z)
 - Tests run: full suite, 452 feature suites passed, 1 failed (test-0000450-req-004-report-format.sh, inherited baseline), regression 19 passed (2026-11-15T13:26:25Z)
+- Deviation: the build log has no RED or GREEN marker for REQ-001 U3 docs. The unit ran before any docs test failed, and the log cannot state a RED time without inventing it. The human decides whether to accept the gap (2026-11-15T13:49:04Z)
+- Complete: P2 (2026-11-15T13:48:46Z)
+
+---
+
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-15T13:26:25Z` |
+| End | `2026-11-15T13:49:30Z` |
+| Wall clock | 23 |
+| Model tier | primary |
+| Skills loaded | ravintio-validate-and-accept |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | inline, the docs edit pass ran as one prose-check over four docs |
+
+- Tests run: clean clone, 450 feature suites passed, 3 failed, all inherited (test-0000037-req-004, test-0000318-req-004, test-0000450-req-004), regression 19 passed. `baseline-failures.mjs check` exit 0 (2026-11-15T13:48:00Z)
+- Library audit: no library added. Archetype gates: no gates installed. Security: low, no findings above informational
+- Skipped: docs edit subagent (`prose-check.mjs` exits 0 for the four changed docs and the standard, no change needed)
+- Complete: P3 (2026-11-15T13:49:30Z)
