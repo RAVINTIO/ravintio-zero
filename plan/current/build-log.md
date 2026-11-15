@@ -65,8 +65,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-15T18:32:49Z` |
-| End | |
-| Wall clock | |
+| End | `2026-11-15T18:34:00Z` |
+| Wall clock | 1 |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 0 |
@@ -78,3 +78,4 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - GREEN: U-001 and U-002 (2026-11-15T18:33:21Z)
 - Done: U-001 and U-002 (content, inline, none, 2026-11-15T18:33:21Z)
 - Tests run: REQ-001, REQ-002: test-0000550-req-002-no-head-diffs.sh (2026-11-15T18:33:21Z)
+- Departure: the single full suite run happens in the P3 clean clone. P3 runs it on the same tree. (2026-11-15T18:34:00Z)
