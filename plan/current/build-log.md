@@ -105,3 +105,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - GREEN: U-2 (2026-11-15T20:50:01Z)
 - Tests run: REQ-002: test-0000555-req-002-driver-pause.sh and 58 driver suites. test-0000511 failed until the pause note moved below the Summary text (2026-11-15T20:50:01Z)
 - Done: U-2 (code, inline, none, 2026-11-15T20:50:01Z)
+- In progress: U-4 (2026-11-15T20:50:13Z)
+- RED: U-4 (2026-11-15T20:50:25Z) No executable check exists for the docs unit (0000410).
+- GREEN: U-4 (2026-11-15T20:50:25Z) The prose check passed on the docs (0000410).
+- Decision applied (initiative chart): A docs unit has no failing test, so `build-log-check.mjs` finds no `RED:` or `GREEN:` for it (0000410)
+- Done: U-4 (content, inline, none, 2026-11-15T20:50:25Z)
