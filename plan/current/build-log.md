@@ -138,3 +138,4 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | initiative step, PR before archive |
+- Blocked: ship check fails, build-log-check reports no RED or GREEN line for REQ-001 U3 docs (2026-11-15T14:32:06Z)
