@@ -110,3 +110,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | text change, checks run inline |
+- OS gap: local macos, CI ubuntu, windows
+- Tests run: full suite: 465 passed, 1 failed, inherited (2026-11-15T21:06:41Z)
+- Skipped: docs edit pass subagent. One changed doc, the commit hook ran prose-check and passed (2026-11-15T21:06:41Z)
+- Complete: P3 (2026-11-15T21:06:41Z)
