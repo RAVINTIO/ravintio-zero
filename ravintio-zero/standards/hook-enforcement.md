@@ -48,7 +48,7 @@ Fallback hooks, which Codex does not run for RAVINTIO. Follow each rule as an in
 - **ratchet-check**: While a loop is active (a `plan/current/loop-state-*.md` with `status: active`), never remove acceptance-criteria or in-scope lines from `plan/current/` artifacts. Never write `plan/current/.ratchet-approve`.
 - **em-dash-guard**: Write no em dash (U+2014) in RAVINTIO prose paths.
 - **auto-trigger-orchestrator**: At the start of every session in a RAVINTIO project (`ravintio-zero/` present and `plan/.orchestrator-active` absent), load the `ravintio-orchestrator` skill before the first prompt.
-- **check-orchestrator-presence**: In strict mode (`plan/.orchestrator-strict` present), load the orchestrator and write your session ID to `plan/.orchestrator-ack` before you act.
+- **check-orchestrator-presence**: In strict mode (`plan/.orchestrator-strict` present), load the orchestrator and write your session ID to `plan/.orchestrator-ack` before you act. A step session gets no strict banner while `plan/.suite-running` names a live process. The test runners write that git-ignored marker with their pid and remove it on exit. This stops an ack prompt from changing a tracked file mid-run (0000548 ADR-0344).
 - **check-design**: At the start of each prompt, read the active component scope in `plan/current/design.md`.
 - **check-reply-prefix**: Begin every reply in an active run with a valid prefix, as the reply conventions in the boot file describe.
 - **clock-context**: Write every time from the latest clock hook value or `date +%H:%M`. Never estimate a time.

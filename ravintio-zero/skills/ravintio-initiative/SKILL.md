@@ -55,7 +55,7 @@ A host monitor expires after 30 minutes. Start a new one until the driver exits.
 
 Report at least every 5 minutes while the driver runs, at each phase end, and on request. Report an event at once when the build log gains a phase `Complete:`, `Blocked:`, or `Resolved:` line. When the build log changes to a new step, also report the `Complete:` lines already in it. An interval report names each running step and its phase. It gives the last build log line with its age, the commits since the last report, any stop, and whether the driver runs.
 
-While steps run, the monitor also prints `I-C Run: activity:` lines with the step number, one per tool call, subagent start, or assistant text. Relay each one to the human at once, in the order received. Do not wait for the next interval report.
+While steps run, the monitor also prints `I-C Run: activity:` lines with the step number. Do not relay them. Relay watcher lines only at phase events, blocks, and stops. Read step test output only after a stop, because each step already checks its own tests.
 
 If nothing changed, say so and give the time since the last change. If the step keeps committing and its build log has not changed for 15 minutes, say the log is stale.
 

@@ -462,7 +462,7 @@ The driver writes the child's stdout and stderr to `plan/.initiative-logs/step-{
 - <!-- rule: step-clock-check --> `node ravintio-zero/scripts/step-clock-check.mjs plan/.initiative-logs/step-{n}.log` shows whether a step received the clock. It exits 1 and prints `Blocked:` if the log holds tool calls and no `PostToolUse` output with `Local time: hh:mm`. It exits 0 if the log holds clock output or no tool calls, and 2 for a usage error. It reads one file and prints counts only (0000534 ADR-0342).
 - `initiative-watch.mjs` reads new bytes of the current step's log every 10 seconds. It prints one `I-C Run: activity:` line per tool call, subagent start, and assistant text, in the order received. Each line is 200 characters or fewer. It never prints tool results.
 - The watcher prints a stale line only when a commit is at least 15 minutes newer than the last build log write. It prints each stale state once. If the last-seen commit is not an ancestor of `HEAD`, it prints one `branch changed` line instead of a line for each commit. Each heartbeat reads the lock file again.
-- The initiative skill relays each activity line to the human.
+- The initiative skill does not relay activity lines. It relays watcher lines only at phase events, blocks, and stops, and it reads step test output only after a stop.
 
 - If `step-{position}.log` exists when a step starts, the driver renames it to `step-{position}.attempt-{k}.log` first. `k` is the lowest number whose path is free. The driver then opens a fresh `step-{position}.log`, so a rerun keeps every earlier attempt and the latest attempt keeps the plain name.
 - If `plan/current/build-log.md` does not exist, the watcher prints `I-C Run: waiting for the build log` once and skips the stale check. It names the running step from the newest `step-{n}.log`, not from the chart position.
@@ -549,6 +549,7 @@ Every merged step edits a few files that other open step PRs also edit. `ravinti
 |------|------------|
 | `plan/backlog/.next-id`, `docs/adr/.next-id` | The higher number wins |
 | `plan/backlog/index.md` | Rebuilt with `backlog-index.mjs` from the merged entries |
+| `plan/.feature-id` | A file the PR branch deleted stays deleted. A file the PR branch holds keeps the PR branch text. |
 | `docs/decisions-index.md`, `docs/architecture-overview.md` | The PR branch keeps its `Last updated:` line. Rows that either side added stay. |
 
 - The queue prints `resolved: {path}` for each file, then commits the merge with its usual subject.
@@ -617,6 +618,9 @@ Every message in this stage begins with `I-D Advance:` after the `P4 Ship:` pref
    ```
    I-D Advance: Blocked: PR #{n} conflicts with the initiative branch.
    ```
+
+   <!-- rule: advance-index-rebuild -->
+   After every manual merge of the base branch, run `node ravintio-zero/scripts/backlog-index.mjs` and commit the result before the push. The queue does this after its own base merges, but a manual merge gets no such help. If the index is stale, the `Check the backlog index` step of the `validate-branch` job fails.
 
    1. Poll `gh pr checks {n}` until it lists at least one check, for up to 2 minutes. Checks are always pending straight after `gh pr create`, so pending is not a stop. If none appears, push the branch, print the line below, and exit:
 

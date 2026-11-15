@@ -8,7 +8,7 @@
 
 - The dispatch standard gains the rule `dispatch-unit-report`. A unit report holds the RED line, the GREEN line, the commit hash, and any deviation.
 - The orchestrator rejects a report that lacks a field and resumes the unit once.
-- The suite `test-0000573-req-001` reads the rule and checks that both copies of the standard match. ADR 0344 records the decision.
+- The suite `test-0000573-req-001` reads the rule and checks that both copies of the standard match. ADR 0346 records the decision.
 
 ## Why
 

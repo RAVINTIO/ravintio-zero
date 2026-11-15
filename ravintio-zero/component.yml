@@ -2,7 +2,7 @@
 id: "ravintio-zero"
 name: "RAVINTIO Zero"
 feature: "0000397-pack-source-in-src"
-version: "0.114.0"
+version: "0.123.0"
 status: "active"
 type: "component-pack"
 domain: "developer-tooling"
@@ -56,6 +56,7 @@ responsibilities:
   - "Plan concurrent work in every execution plan with a Concurrency plan table of units, dependencies, write targets, and batches, check it in the consistency check, and dispatch by its batches"
   - "Coordinate an initiative from the human's session with the ravintio-initiative skill, and report progress from the read-only initiative-watch.mjs script"
   - "Keep one ack file per session kind, plan/.initiative-ack and plan/.orchestrator-ack, and accept either in the strict-mode hook"
+  - "Write the git-ignored marker plan/.suite-running from both test runners, and keep the strict-mode hook quiet for a step session while the marker names a live process, so an ack prompt cannot fail a suite run"
   - "Stop the initiative driver on a Blocked: line in the newest archived build log, advance only after the merge, and keep step subagents running"
   - "Run each initiative step with a model, an optional turn cap, a step log, and telemetry labels"
   - "Stop every run, gated or autonomous, when work adds a library or service that is not on the approved list"
@@ -85,6 +86,7 @@ responsibilities:
   - "Check the gates of each installed archetype at P3 with scripts/archetype-gates.mjs, and exit 1 on a failed gate"
   - "Keep the pack source in src/ravintio-zero/ and a plain installed copy in ravintio-zero/, which hooks, the driver, and skills run, while consumer installs keep ravintio-zero/"
   - "Refresh the installed copy from the source with scripts/sync-installed.mjs, and check byte parity with its --check flag"
+  - "Hold the plan Test impact scan causes in skills/ravintio-plan/references/test-impact-causes.md, with a Pack file edit cause that lists the handoff suite, tell P0 to list src/ravintio-zero/ in Component Paths for a pack file edit, add an Output order cause for suites that read changed lines or the last line, add a Hook change cause that lists four hook pins to grep for, and add a Path move cause that lists depth-based root lookups and path-keyed state files"
 
 exceptions:
   - "Does not generate application code. That is the implement phase's job in consumer projects."

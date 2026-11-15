@@ -87,6 +87,33 @@ function Get-SkillsListing {
     }
 }
 
+# Marks a live run (0000548 ADR-0344). The strict hook stays quiet for a step session while the
+# marker names a live process. The runner writes it before the first snapshot and removes it
+# after the last. The marker is git-ignored.
+$suiteMarker = $null
+function Test-SuiteMarkerLive($path) {
+    # A live marker of another runner stays as it is, and this runner then removes nothing.
+    if (-not (Test-Path -LiteralPath $path -PathType Leaf)) { return $false }
+    $text = (Get-Content -LiteralPath $path -Raw -ErrorAction SilentlyContinue)
+    if ($null -eq $text -or $text.Trim() -notmatch '^[0-9]{1,10}$') { return $false }
+    return [bool](Get-Process -Id ([int]$text.Trim()) -ErrorAction SilentlyContinue)
+}
+$savedPreference = $ErrorActionPreference
+$ErrorActionPreference = 'Continue'
+try {
+    $suiteTop = & git -C $here rev-parse --show-toplevel 2>$null
+    if ($LASTEXITCODE -eq 0 -and $suiteTop) {
+        $planDir = Join-Path $suiteTop 'plan'
+        $candidate = Join-Path $planDir '.suite-running'
+        if ((Test-Path -LiteralPath $planDir -PathType Container) -and -not (Get-Item -LiteralPath $planDir -Force).LinkType -and -not (Test-SuiteMarkerLive $candidate)) {
+            Set-Content -LiteralPath $candidate -Value $PID -Encoding ascii
+            $suiteMarker = $candidate
+        }
+    }
+}
+catch { $suiteMarker = $null }
+finally { $ErrorActionPreference = $savedPreference }
+
 $skillsBefore = Get-SkillsListing
 $treeBefore = Get-TreeSnapshot
 $hostExe = (Get-Process -Id $PID).Path
@@ -174,6 +201,7 @@ if (@($skillsBefore).Count -gt 0 -or @($skillsAfter).Count -gt 0) {
     $skillsChanged = @(Compare-Object -ReferenceObject @($skillsBefore) -DifferenceObject @($skillsAfter) | ForEach-Object { $_.InputObject })
 }
 foreach ($path in $skillsChanged) { Write-Host "Skills changed during the run: $path" }
+if ($suiteMarker) { Remove-Item -LiteralPath $suiteMarker -Force -ErrorAction SilentlyContinue }
 
 Write-Host ""
 Write-Host "================================"

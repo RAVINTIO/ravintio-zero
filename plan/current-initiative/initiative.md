@@ -11,13 +11,13 @@ status: "active"  # proposed | charted | active | delivered | blocked
 
 **Status:** active
 
-**Position:** 1
+**Position:** 2
 
 **Speed:** fast
 
 **Step CI fixes:** allowed
 
-**Concurrency:** 6
+**Concurrency:** 2
 
 The human chose on 2026-11-14 to leave out 0000174, 0000220, 0000221, and 0000254. Each needs a paid service, an account, or a human partway through a step.
 
@@ -29,6 +29,8 @@ The human confirmed the chart on 2026-11-14 with "build the initiative as fast a
 - The confirmation approves no guard widening. The coordinator cut back each possible widening to a fix that widens nothing, in `## Decisions`.
 - "As fast as possible" sets `**Speed:** fast` and `**Concurrency:** 4`. Lanes keep steps that share files in order.
 - On 2026-11-14 the human raised `**Concurrency:**` from 4 to 6 to run as many steps as practical.
+- At 6, parallel suite runs passed the 10-minute tool limit and steps reran them. The human returned `**Concurrency:**` to 4 on 2026-11-14.
+- On 2026-11-15 the human lowered `**Concurrency:**` from 4 to 2. At 4, local suites passed the 2-hour background limit, and steps 1, 5, and 18 stopped in P3.
 
 | Entry | Wanted outcome and check |
 |-------|--------------------------|
@@ -58,6 +60,7 @@ The human confirmed the chart on 2026-11-14 with "build the initiative as fast a
 |------|-----------|--------|------|
 | 1-36 | none | none | none |
 | 37 | none | none | none |
+| 38 | none | none | none |
 
 ## Dependencies
 
@@ -65,6 +68,7 @@ The human confirmed the chart on 2026-11-14 with "build the initiative as fast a
 |------|------|------|---------|
 | 1-36 | none | none | none |
 | 37 | none | none | none |
+| 38 | none | none | none |
 
 ## Decisions
 
@@ -84,9 +88,11 @@ The human confirmed the chart on 2026-11-14 with "build the initiative as fast a
 | 14 | Guard cut-back: CI on a plan-only push (0000476) | Every push still runs every suite. The step may cancel a superseded run on the same PR and may avoid an extra push, but skips no suite. | none |
 | 17 | Guard cut-back: the old-name guard (0000527) | Keep the allowlist as it is. Make the guard read a stable copy of the tree, or fix the earlier suite that changes it. | none |
 | 36 | Guard cut-back: `build-log-check.mjs` (0000410) | Every unit still logs `RED:` and `GREEN:`. The step records the class next to the markers and relaxes no check. | none |
+| 1-38 | A docs unit has no failing test, so `build-log-check.mjs` finds no `RED:` or `GREEN:` for it (0000410) | Log a `RED:` and a `GREEN:` line for the unit at the real time. Each line says the unit has no executable check and names 0000410. The `GREEN:` line names the check that passed, such as the prose check. Never state a test run that did not happen. | none |
 | 35 | Rule anchors touch most tests (0000401) | Step 35 runs after steps 1 to 34, and step 36 runs after it | none |
 | 1-36 | Fast batches | `**Speed:** fast`. Each phase dispatches its listed fast batch. Every gate and exception stop stays. | none |
 | 37 | none | none | none |
+| 38 | none | none | none |
 
 ## Baselines
 
@@ -94,6 +100,7 @@ The human confirmed the chart on 2026-11-14 with "build the initiative as fast a
 |------|--------|----------|--------|
 | 1-36 | none | none | none |
 | 37 | none | none | none |
+| 38 | none | none | none |
 
 ## Criteria
 
@@ -102,6 +109,7 @@ The human confirmed the chart on 2026-11-14 with "build the initiative as fast a
 | 14 | A plan-only push runs fewer suites | Count of jobs, no noise | CI |
 | 1-36 | The full suite passes apart from the known baseline failures | Known flaky: `test-0000169-req-003` and `test-0000040-req-002-003` under parallel shards | local |
 | 37 | none | none | none |
+| 38 | none | none | none |
 
 ## P1 skips
 
@@ -144,20 +152,21 @@ The human confirmed the chart on 2026-11-14 with "build the initiative as fast a
 | 35 | no | The step changes a script, a skill with a test, or a test |
 | 36 | no | The step changes a script, a skill with a test, or a test |
 | 37 | no | Added after the chart. The human sets this at P1. |
+| 38 | no | Added after the chart. The human sets this at P1. |
 
 ## Steps
 
 | Step | Feature id | Title | Backlog entries | Bump | Version | Status | Lane | After |
 |------|------------|-------|-----------------|------|---------|--------|------|-------|
-| 1 | 0000545-clear-feature-id-at-ship | Ship leaves plan/.feature-id behind | 0000514 | minor | | pending | queue |  |
+| 1 | 0000545-clear-feature-id-at-ship | Ship leaves plan/.feature-id behind | 0000514 | minor | 0.117.0 | merged | queue | |
 | 2 | 0000546-queue-failure-leaves-dirty-files | A failed queue run can leave written files in the queue worktree | 0000477 | minor | | pending | queue |  |
-| 3 | 0000547-step-merge-regenerates-index | Step base merge regenerates the backlog index | 0000517 | minor | | pending | coord |  |
-| 4 | 0000548-ack-write-mid-suite-fails-run | Strict-mode ack write mid-suite fails the suite run | 0000476-ack-write-mid-suite-fails-run | minor | | pending | tests |  |
-| 5 | 0000549-baseline-record-checks | Baseline record checks its input and its file | 0000525, 0000515 | minor | | pending | baseline |  |
+| 3 | 0000547-step-merge-regenerates-index | Step base merge regenerates the backlog index | 0000517 | minor | 0.115.0 | merged | coord | |
+| 4 | 0000548-ack-write-mid-suite-fails-run | Strict-mode ack write mid-suite fails the suite run | 0000476-ack-write-mid-suite-fails-run | minor | 0.116.0 | merged | tests | |
+| 5 | 0000549-baseline-record-checks | Baseline record checks its input and its file | 0000525, 0000515 | minor | 0.118.0 | merged | baseline | |
 | 6 | 0000550-no-head-diffs-in-tests | No HEAD diffs in tests | 0000416 | minor | | pending | tests |  |
 | 7 | 0000551-refuse-symlink-style-outputs | Refuse a symlink at the writing style output paths | 0000408 | minor | | pending | setup |  |
 | 8 | 0000552-duplicate-backlog-ids | Two open entries share one backlog id | 0000542 | minor | | pending | queue |  |
-| 9 | 0000553-coordinator-oversight-not-micromanagement | Initiative skills do not micromanage | 0000530 | minor | | pending | coord |  |
+| 9 | 0000553-coordinator-oversight-not-micromanagement | Initiative skills do not micromanage | 0000530 | minor | 0.120.0 | merged | coord | |
 | 10 | 0000554-coordinator-starts-defined-stages | Coordinator starts a defined stage without asking | 0000541 | minor | | pending | coord |  |
 | 11 | 0000555-initiative-pause-reaches-every-step | Initiative pause reaches every step | 0000538 | minor | | pending | coord |  |
 | 12 | 0000556-step-session-finds-unfinished-step | A step session finds an unfinished step | 0000531 | minor | | pending | resume |  |
@@ -166,10 +175,10 @@ The human confirmed the chart on 2026-11-14 with "build the initiative as fast a
 | 15 | 0000559-start-baseline-first | Start the baseline run before the P0 artifacts | 0000478 | minor | | pending | baseline |  |
 | 16 | 0000560-step-sessions-and-pending-migrations | Step sessions meet pending migrations | 0000403 | minor | | pending | resume |  |
 | 17 | 0000561-old-name-guard-fails-in-full-suite | Old-name guard fails in the full suite | 0000527 | minor | | pending | tests |  |
-| 18 | 0000562-test-impact-scan-lists-the-mirrored-pack-tree | Test impact scan lists the mirrored pack tree | 0000540 | minor | | pending | plan |  |
-| 19 | 0000563-test-impact-misses-output-readers | Plan test impact misses suites that read driver output order | 0000533 | minor | | pending | plan |  |
-| 20 | 0000564-test-impact-hook-pins | Test impact scan names hook pins | 0000523 | minor | | pending | plan |  |
-| 21 | 0000565-layout-move-test-impact | Test impact scan for layout moves | 0000419 | minor | | pending | plan |  |
+| 18 | 0000562-test-impact-scan-lists-the-mirrored-pack-tree | Test impact scan lists the mirrored pack tree | 0000540 | minor | 0.119.0 | merged | plan | |
+| 19 | 0000563-test-impact-misses-output-readers | Plan test impact misses suites that read driver output order | 0000533 | minor | 0.121.0 | merged | plan | |
+| 20 | 0000564-test-impact-hook-pins | Test impact scan names hook pins | 0000523 | minor | 0.122.0 | merged | plan | |
+| 21 | 0000565-layout-move-test-impact | Test impact scan for layout moves | 0000419 | minor | 0.123.0 | merged | plan | |
 | 22 | 0000566-test-impact-for-history-moves | Test impact scan misses suites that scan live files | 0000405 | minor | | pending | plan |  |
 | 23 | 0000567-test-impact-size-caps-and-frozen-lines | Test impact scan covers size caps and frozen lines | 0000406, 0000526 | minor | | pending | plan |  |
 | 24 | 0000568-wording-pin-scan | Scan for wording pins before a prose rewrite | 0000418 | minor | | pending | plan |  |
@@ -186,6 +195,7 @@ The human confirmed the chart on 2026-11-14 with "build the initiative as fast a
 | 35 | 0000579-convert-remaining-suites-to-rule-anchors | Convert remaining suites to rule anchors | 0000401 | minor | | pending | anchors | 1-34 |
 | 36 | 0000580-log-non-tdd-units | Log a non-TDD unit with a class | 0000410 | minor | | pending | anchors | 35 |
 | 37 | 0000581-delivery-cleans-up-driver-state | Delivery cleans up driver state | 0000582 | minor |  | pending | coord | 35 |
+| 38 | 0000583-step-temp-cleanup-after-merge | Clean up step temp files after each merge | 0000584 | minor |  | pending | cleanup |  |
 
 ## Merges
 
@@ -193,3 +203,12 @@ The merge queue adds one row for each step it merges. See the merge queue sectio
 
 | Step | PR | Merge commit | Version | Merged at |
 |------|----|--------------|---------|-----------|
+| 3 | #214 | tag v0.115.0 | 0.115.0 | 2026-11-14T17:36:45Z |
+| 4 | #215 | tag v0.116.0 | 0.116.0 | 2026-11-15T07:31:42Z |
+| 1 | #217 | tag v0.117.0 | 0.117.0 | 2026-11-15T12:24:18Z |
+| 5 | #218 | tag v0.118.0 | 0.118.0 | 2026-11-15T12:44:44Z |
+| 18 | #219 | tag v0.119.0 | 0.119.0 | 2026-11-15T13:18:06Z |
+| 9 | #220 | tag v0.120.0 | 0.120.0 | 2026-11-15T14:19:26Z |
+| 19 | #222 | tag v0.121.0 | 0.121.0 | 2026-11-15T15:09:36Z |
+| 20 | #223 | tag v0.122.0 | 0.122.0 | 2026-11-15T15:54:43Z |
+| 21 | #224 | tag v0.123.0 | 0.123.0 | 2026-11-15T16:59:56Z |
