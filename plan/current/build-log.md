@@ -102,11 +102,16 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-15T21:56:58Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-15T22:26:45Z` |
+| Wall clock | `30` |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | 0 |
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | text change, checks run inline |
+- OS gap: local macos, CI ubuntu, windows
+- Tests run: full suite: 467 passed, 3 failed, inherited (2026-11-15T22:26:45Z)
+- Skipped: docs edit pass subagent. One changed doc, the commit hook ran prose-check and passed (2026-11-15T22:26:45Z)
+- Complete: P3 (2026-11-15T22:26:45Z)
+
