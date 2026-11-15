@@ -2,7 +2,7 @@
 
 **Feature:** Coordinator starts a defined stage without asking
 **Version:** set by the merge queue at merge
-**PR:** raised at ship
+**PR:** #229
 
 ## What changed
 
