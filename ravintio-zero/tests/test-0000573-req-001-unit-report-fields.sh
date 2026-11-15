@@ -16,9 +16,10 @@ echo "=== AC-2: reject and resume once ==="
 assert_rule dispatch-unit-report "rejects" "resumes the unit once"
 
 echo "=== NFR-001: the source and the mirror match ==="
-SRC_STD="$ZERO_DIR/../src/ravintio-zero/standards/agent-dispatch-standards.md"
+REPO="$(cd "$SCRIPT_DIR" && git rev-parse --show-toplevel)"
+rel=standards/agent-dispatch-standards.md
 same=1
-cmp -s "$SRC_STD" "$STD" && same=0
+cmp -s "$REPO/src/ravintio-zero/$rel" "$REPO/ravintio-zero/$rel" && same=0
 assert_equals "0" "$same" "both copies of the standard match"
 
 print_summary
