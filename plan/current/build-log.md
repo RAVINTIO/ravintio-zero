@@ -124,11 +124,19 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-15T12:54:46Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-15T13:09:32Z` |
+| Wall clock | `15` |
 | Model tier | primary |
 | Skills loaded | ravintio-ship |
 | Agents spawned | 0 |
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | initiative step, closing push after green CI |
+- CI duration: 480s (run 43716886516, 2026-11-15T13:09:32Z)
+- Complete: P4 (2026-11-15T13:09:32Z)
+
+## Summary
+
+| Field | Value |
+|-------|-------|
+| Total wall clock | `1320` |
