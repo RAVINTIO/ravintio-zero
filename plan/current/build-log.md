@@ -49,3 +49,10 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Version: last known 0.118.0 in product.yml and docs/about.md. Step bump minor, plan version 0.119.0. The merge queue sets the released version.
 - Queue: no items name step 9.
 - Feature id: plan/.feature-id was absent. This step writes its own id.
+
+- Scope Lock (happy path): Activity lines pass unrelayed and the coordinator relays at phase events. [source: draft-accepted (initiative)]
+- Scope Lock (first-run path): The rules live in the skill file, so no state needs a seed. [source: draft-accepted (initiative)]
+- Scope Lock (error path): After a stop, the coordinator reads the step test output to explain it. [source: draft-accepted (initiative)]
+- Scope Lock (cross-session continuity): A new coordinator session reads the skill at start. [source: draft-accepted (initiative)]
+- Scope Lock complete. All four scenario paths captured.
+- Design confirmed: draft-accepted (initiative) (2026-11-15T13:19:47Z)
