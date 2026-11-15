@@ -59,11 +59,26 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-15T15:17:02Z` |
-| End | `PENDING_END` |
-| Wall clock | `PENDING_WC` |
+| End | `2026-11-15T15:17:31Z` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-plan |
 | Agents spawned | 0 |
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | small change, units written inline |
+- Complete: P1 (2026-11-15T15:17:31Z)
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-15T15:17:31Z` |
+| End | `PENDING_END` |
+| Wall clock | `PENDING_WC` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | units run inline, text change |
