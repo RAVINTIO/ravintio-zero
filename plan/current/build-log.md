@@ -24,8 +24,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-15T20:35:50Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-15T20:36:26Z` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -61,8 +61,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-15T20:36:26Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-15T20:37:15Z` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-plan |
 | Agents spawned | 0 |
@@ -76,8 +76,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-15T20:37:15Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-15T20:37:45Z` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 0 |
@@ -102,8 +102,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-15T20:38:06Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-15T21:06:41Z` |
+| Wall clock | `29` |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | 0 |
@@ -120,8 +120,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-15T21:06:48Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-15T21:06:55Z` |
+| Wall clock | `0` |
 | Model tier | primary |
 | Skills loaded | ravintio-ship |
 | Agents spawned | 0 |
@@ -129,14 +129,16 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Parallel task batches | 0 |
 | Notes | initiative step |
 
+- Complete: P4 (2026-11-15T21:06:55Z)
+
 ---
 
 ## Summary (filled at ship, P4)
 
 | Metric | Value |
 |--------|-------|
-| Total phases completed | `` |
-| Total wall clock | `` |
+| Total phases completed | `5` |
+| Total wall clock | `32` |
 | Total agents spawned | `0` |
 | Total MCP calls | `0` |
 | Phases using parallelism | `0` |
