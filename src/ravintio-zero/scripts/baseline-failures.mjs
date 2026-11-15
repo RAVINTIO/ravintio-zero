@@ -9,10 +9,13 @@
 // the argument is "-". The script reads the suite names listed under
 // "Failed suites:" (ADR-001: match by suite name).
 //   record  writes the names to plan/current/baseline-failures.md and exits 0.
+//           If the input has no "Feature suites:" totals line, the run did not
+//           finish. record then exits 2 and writes no file (0000549 REQ-001).
 //   check   prints "inherited: {name}" for a suite the baseline lists and
 //           "new: {name}" for any other, and exits 1 when any suite is new.
-// A missing baseline file counts as an empty baseline. On any other failure the
-// script prints one line to stderr and exits 2.
+//           A missing baseline file is an error: check prints "no baseline
+//           recorded" to stderr and exits 1 (0000549 REQ-002).
+// On any other failure the script prints one line to stderr and exits 2.
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -35,6 +38,10 @@ export function parseFailedSuites(text) {
     else inList = false;
   }
   return [...new Set(names)];
+}
+
+export function hasTotalsLine(text) {
+  return /^Feature suites:/m.test(text);
 }
 
 export function parseBaseline(text) {
@@ -65,9 +72,11 @@ function main(argv) {
     } else fail(`unknown argument ${rest[i]}`);
   }
   if (mode !== 'record' && mode !== 'check') fail('first argument must be record or check');
-  const current = parseFailedSuites(readInput(input));
+  const text = readInput(input);
+  const current = parseFailedSuites(text);
 
   if (mode === 'record') {
+    if (!hasTotalsLine(text)) fail('the runner output has no "Feature suites:" totals line, so the run did not finish');
     const body = [
       '# Baseline failures',
       '',
@@ -87,6 +96,8 @@ function main(argv) {
     baseline = parseBaseline(fs.readFileSync(file, 'utf8'));
   } catch (err) {
     if (err.code !== 'ENOENT') fail(`cannot read ${file}: ${err.code || err.message}`);
+    process.stderr.write(`baseline-failures: no baseline recorded at ${file}\n`);
+    return 1;
   }
   let fresh = 0;
   for (const name of current) {
