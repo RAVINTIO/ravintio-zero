@@ -90,3 +90,5 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 
 - Batches: 3, sequential, each depends on the one before it. No parallel batch applies.
 - Baseline: the clean-clone run stopped after test-0000037-req-004 with no Failed suites list. The baseline file lists the three known failures from the chart Decisions row (2026-11-15T19:19:28Z)
+- In progress: REQ-001 U2 test (2026-11-15T19:19:52Z)
+- RED: REQ-001 U2 test (2026-11-15T19:19:52Z)
