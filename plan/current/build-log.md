@@ -55,3 +55,18 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Scope Lock (cross-session continuity): not applicable, the script writes no state besides the new branch [source: draft-accepted (initiative)]
 - Version: plan 0.143.0 (minor on 0.142.0)
 - Complete: P0 (2026-11-16T07:05:23Z)
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-16T07:05:52Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | none |
+
