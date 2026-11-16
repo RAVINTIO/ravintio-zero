@@ -2,7 +2,7 @@
 
 **Feature:** Build log marker helper
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** #237
 
 ## What changed
 
