@@ -74,8 +74,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-16T05:36:39Z` |
-| End | `{{filled when the phase completes}}` |
-| Wall clock | `{{filled}}` |
+| End | `2026-11-16T05:57:00Z` |
+| Wall clock | `20` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | `0` |
@@ -92,3 +92,25 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Rework: `test-0000151-req-011` and `test-0000321-req-004-pickup-text` pinned start action numbers. Both pins updated in this step (chart decision row, 2026-11-16T05:39:03Z)
 - GREEN: U4 docs (no executable check, 0000410, passed: prose check) (2026-11-16T05:39:03Z)
 - Done: U4 docs (content, primary, none, 2026-11-16T05:39:03Z)
+
+- Tests run: full suite: 479 passed, 3 failed, all inherited (2026-11-16T06:20:00Z)
+- Complete: P2 (2026-11-16T05:57:00Z)
+
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-16T05:57:00Z` |
+| End | `2026-11-16T06:20:10Z` |
+| Wall clock | `23` |
+| Model tier | primary |
+| Skills loaded | ravintio-validate-and-accept |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | none |
+
+- Skipped: docs edit pass subagent (one sentence added, `prose-check.mjs check` exits 0)
+- Tests run: full suite: 479 passed, 3 failed, all inherited (2026-11-16T06:19:00Z)
+
+- Complete: P3 (2026-11-16T06:20:10Z)
