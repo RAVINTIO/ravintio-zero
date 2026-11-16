@@ -24,8 +24,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-16T04:02:26Z` |
-| End | `pending` |
-| Wall clock | `pending` |
+| End | `2026-11-16T04:03:52Z` |
+| Wall clock | `3` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | `0` |
@@ -46,6 +46,20 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Run mode: autonomous (2026-11-16T04:03:06Z, initiative step)
 - Design: draft accepted via initiative chart. Check lives in --check only because the merge queue runs the generate mode before renumbering.
 - Complete: P0 (2026-11-16T04:03:06Z)
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-16T04:03:52Z` |
+| End | `pending` |
+| Wall clock | `pending` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Fast batch not dispatched. The feature has one requirement and one ADR, so subagent overhead outweighs the gain. |
 
 ---
 
