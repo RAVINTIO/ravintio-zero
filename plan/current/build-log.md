@@ -48,3 +48,19 @@ Track: light (chart accepts the track)
 Complete: P0 (2026-11-16T00:31:27Z)
 
 - Backlog pickup: pulled in 0000524, folder deleted, index regenerated
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-16T00:31:55Z` |
+| End | `2026-11-16T00:32:42Z` |
+| Wall clock | `1` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | the artifact set is small, so the agent writes it inline |
+
+Complete: P1 (2026-11-16T00:32:42Z)
