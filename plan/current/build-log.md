@@ -24,8 +24,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-16T00:30:46Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-16T00:31:27Z` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -45,4 +45,6 @@ Track: light (chart accepts the track)
 - Decision applied (initiative chart): Known baseline failures: three named suites fail on the base
 - Decision applied (initiative chart): A docs unit has no failing test (0000410): log a RED line and a GREEN line for it
 - Decision applied (initiative chart): Fast batches: `**Speed:** fast`
+Complete: P0 (2026-11-16T00:31:27Z)
+
 - Backlog pickup: pulled in 0000524, folder deleted, index regenerated
