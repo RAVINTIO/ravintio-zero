@@ -2,7 +2,7 @@
 
 **Feature:** Safe suite wait for step sessions
 **Version:** set by the merge queue at merge
-**PR:** pending, updated at Step 9
+**PR:** 236
 
 ## What changed
 
