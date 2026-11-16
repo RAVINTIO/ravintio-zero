@@ -1,7 +1,7 @@
 ---
 title: "ADR 0348: Build log marker script"
 summary: "A script reads the clock and appends a RED, GREEN, or Done line to the build log, so no session types a marker time."
-status: "proposed"
+status: "accepted"
 component: "ravintio-zero"
 version: "0.1.0"
 ---
