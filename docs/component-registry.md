@@ -1,6 +1,6 @@
 # Component Registry
 
-Last updated: 0000507-hook-check-after-setup
+Last updated: 0000558-plan-only-push-short-ci
 
 ## Registry
 
