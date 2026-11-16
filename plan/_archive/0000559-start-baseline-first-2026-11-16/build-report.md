@@ -51,3 +51,5 @@ Breaches: 0. The gate reports and does not block. Counts come from marker lines 
 |-------|------|-------|--------|
 | content | primary | 4 | 0 |
 | unclassified | unclassified | 0 | 1 |
+
+Retrospective: plan/retrospectives/0000559-start-baseline-first-2026-11-16.md
