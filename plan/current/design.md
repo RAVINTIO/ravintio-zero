@@ -18,7 +18,7 @@
 - Latency target: deferred - recorded in scope
 - Availability target: deferred - recorded in scope
 - Scalability target: deferred - recorded in scope
-- Security: No new permission. The `concurrency` block reads only `github.event_name`, `github.event.action`, `github.event.pull_request.number`, and `github.ref`. None holds user-controlled text.
+- Security: No new permission. The `concurrency` block reads only `github.event_name`, `github.event.action`, `github.event.pull_request.number`, and `github.sha`. None holds user-controlled text.
 - Data privacy: no regulated data
 - Observability: standard defaults
 - Cost boundary: not constrained
@@ -38,7 +38,7 @@
 - plan/
 
 ## Scope
-- In: A `concurrency` block in `.github/workflows/ravintio.yml`. The group key holds the workflow name, the pull request number or the ref, and a `closed` flag. Only `pull_request` events cancel an older run. Tests for each.
+- In: A `concurrency` block in `.github/workflows/ravintio.yml`. The group key holds the workflow name, the pull request number or the commit, and a `closed` flag. Only `pull_request` events cancel an older run. Tests for each.
 - Out: The consumer copy `hooks/ravintio.yml`, which needs a consumer migration. Skipping a suite or a job. A path filter. A change to the ship skill.
 - Deferred: Nothing deferred.
 

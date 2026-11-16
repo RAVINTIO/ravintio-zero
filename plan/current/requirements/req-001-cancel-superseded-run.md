@@ -17,7 +17,7 @@ As a step session, I want CI to cancel an older run on a newer push, so that onl
 
 ## Functional Requirements
 - The workflow holds a top-level `concurrency` block.
-- The group key holds the workflow name and the pull request number, or the ref for a push.
+- The group key holds the workflow name and the pull request number, or the commit for a push. A push run never shares a group.
 - Only a `pull_request` event cancels an older run.
 - A push to `main` or `master` never cancels an older run.
 - A `closed` event uses a group of its own.
@@ -30,7 +30,7 @@ As a step session, I want CI to cancel an older run on a newer push, so that onl
 - [ ] AC-2: Push runs never cancel
   - Given the workflow file
   - When a reader parses its `cancel-in-progress` expression
-  - Then the expression is false for a `push` event
+  - Then the expression is false for a `push` event, and the group holds the commit
 - [ ] AC-3: A closed event has its own group
   - Given the workflow file
   - When a reader parses its `group` expression

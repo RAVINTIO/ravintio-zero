@@ -101,6 +101,9 @@ Scope Lock complete. All four scenario paths captured.
 | Notes | U-1 runs inline. U-2 follows. |
 
 ---
+- RED: U-1 (2026-11-16T04:05:14Z)
+- GREEN: U-1 (2026-11-16T04:05:22Z)
+- Done: U-1 (content, inline, none, 2026-11-16T04:05:36Z)
 
 ## Summary (filled at ship, P4)
 

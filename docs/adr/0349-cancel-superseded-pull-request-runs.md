@@ -19,13 +19,14 @@ A step pushes more than once to one pull request, and each push starts a full ru
 
 ## Decision
 
-Add a top-level `concurrency` block to `.github/workflows/ravintio.yml`. The group holds the workflow name, the pull request number or the ref, and a flag for the `closed` action. `cancel-in-progress` is true for a `pull_request` event and false for any other event. No job gains a path filter.
+Add a top-level `concurrency` block to `.github/workflows/ravintio.yml`. The group holds the workflow name, the pull request number or the commit, and a flag for the `closed` action. `cancel-in-progress` is true for a `pull_request` event and false for any other event. No job gains a path filter.
 
 ## Alternatives Considered
 
 | Alternative | Pros | Cons | Why Rejected |
 |-------------|------|------|-------------|
 | Skip the shards on a plan-only push | Fewer jobs | Passes a form the full run blocks | The chart row forbids it |
+| Group a push by its branch ref | Matches a branch | A pending run is replaced by a newer pending run, which drops a release tag | A merge needs its tag |
 | Cancel on every event | One rule | Cancels the release tag job | A merge needs its tag |
 
 ## Affected Components
