@@ -53,8 +53,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-16T00:32:04Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-16T00:32:18Z` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-plan |
 | Agents spawned | `0` |
@@ -62,3 +62,25 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Parallel task batches | `0` |
 | Notes | none |
 
+- Skipped: ADRs (no decision meets an ADR criterion)
+- Complete: P1 (2026-11-16T00:32:18Z)
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-16T00:32:18Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | none |
+
+- In progress: U1 skill-wide pin sentence (2026-11-16T00:32:18Z)
+- RED: U1 skill-wide pin sentence (2026-11-16T00:32:57Z)
+- GREEN: U1 skill-wide pin sentence (2026-11-16T00:32:57Z)
+- Done: U1 skill-wide pin sentence (content, inline, none, 2026-11-16T00:32:57Z)
+- Tests run: REQ-001: test-0000571-req-001-skill-wide-grep-pin.sh, test-0000246, test-0000383, test-0000567, test-0000568, test-0000569, test-0000570, test-0000562, test-0000384, test-0000493, test-0000042, test-0000151-req-008 (2026-11-16T00:32:57Z)
