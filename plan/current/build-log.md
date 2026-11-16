@@ -121,8 +121,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-16T03:26:07Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-16T03:26:12Z` |
+| Wall clock | `0` |
 | Model tier | primary |
 | Skills loaded | ravintio-ship |
 | Agents spawned | `0` |
@@ -130,14 +130,16 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Parallel task batches | `0` |
 | Notes | none |
 
+- Complete: P4 (2026-11-16T03:26:12Z)
+
 ---
 
 ## Summary (filled at ship, P4)
 
 | Metric | Value |
 |--------|-------|
-| Total phases completed | `` |
-| Total wall clock | `` |
+| Total phases completed | `5` |
+| Total wall clock | `35` |
 | Total agents spawned | `0` |
 | Total MCP calls | `0` |
 | Phases using parallelism | `0` |
