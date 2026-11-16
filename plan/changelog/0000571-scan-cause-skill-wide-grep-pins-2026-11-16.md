@@ -2,7 +2,7 @@
 
 **Feature:** Test impact scan covers skill-wide grep pins
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** 238
 
 ## What changed
 
