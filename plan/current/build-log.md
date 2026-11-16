@@ -86,6 +86,20 @@ Scope Lock complete. All four scenario paths captured.
 | Parallel task batches | 0 |
 | Notes | Inline plan. The artifact set is too small to justify subagent overhead. |
 
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-16T04:05:01Z` |
+| End | `pending` |
+| Wall clock | `pending` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 2 |
+| Notes | U-1 runs inline. U-2 follows. |
+
 ---
 
 ## Summary (filled at ship, P4)
