@@ -14,7 +14,7 @@ Entries 0000476-ack-write-mid-suite-fails-run and 0000476-plan-only-push-short-c
 
 ## Deviations
 
-The backlog entry also asked to renumber one entry. The base holds no duplicate now, so nothing needs a renumber. The entry also implied a failure in every mode. The check runs in `--check` only, because the merge queue runs the generate mode before `id-collisions.mjs` renumbers a duplicate (ADR-0349).
+The backlog entry also asked to renumber one entry. The base holds no duplicate now, so nothing needs a renumber. The entry also implied a failure in every mode. The check runs in `--check` only, because the merge queue runs the generate mode before `id-collisions.mjs` renumbers a duplicate (ADR-0350).
 
 ## Validation results
 

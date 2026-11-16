@@ -11,7 +11,7 @@
 // It reads only the first frontmatter block and the `**Date filed:**` line of each entry.
 // It treats entry text as data and never prints body text.
 // A malformed entry makes it exit 1 with a `check:` line on stderr and write nothing.
-// Only --check reports a duplicate id (0000552 ADR-0349). The merge queue runs the generate mode before it
+// Only --check reports a duplicate id (0000552 ADR-0350). The merge queue runs the generate mode before it
 // renumbers a duplicate, so the generate mode and --review ignore one.
 
 import fs from 'node:fs';

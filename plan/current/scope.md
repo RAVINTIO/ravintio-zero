@@ -14,7 +14,7 @@ version: "0.1.0"
 
 - A duplicate id check in `backlog-index.mjs --check`.
 - One new suite with two folders that share an id.
-- ADR 0349 that records why the check stays out of the generate mode.
+- ADR 0350 that records why the check stays out of the generate mode.
 
 ## Out of Scope
 

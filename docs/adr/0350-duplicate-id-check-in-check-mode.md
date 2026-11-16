@@ -5,12 +5,12 @@ status: "accepted"
 component: "ravintio-zero"
 version: "0.1.0"
 ---
-# ADR-0349 - Duplicate id check in check mode only
+# ADR-0350 - Duplicate id check in check mode only
 
 **Skill:** [plan](../skills/ravintio-plan/SKILL.md)
 **Feature:** 0000552-duplicate-backlog-ids
 **Component:** ravintio-zero
-**File:** `docs/adr/0349-duplicate-id-check-in-check-mode.md`
+**File:** `docs/adr/0350-duplicate-id-check-in-check-mode.md`
 **Date:** 2026-11-16T04:03:53Z
 
 ## Context
