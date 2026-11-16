@@ -73,7 +73,7 @@ The table's tier replaces the skill's `recommended_model` for that dispatch. The
 A human does not override a tier. Effort maps to the Agent tool `effort` value on Claude Code. A host with no effort control records the effort and passes nothing.
 
 <!-- rule: dispatch-done-line -->
-The unit's `Done:` line takes the form `- Done: {unit} ({class}, {tier}, {effort}, {ISO-8601 timestamp})`. An inline unit logs tier `inline` and effort `none`.
+The unit's `Done:` line takes the form `- Done: {unit} ({class}, {tier}, {effort}, {ISO-8601 timestamp})`. An inline unit logs tier `inline` and effort `none`. `ravintio-zero/scripts/build-log-mark.mjs` appends the line with a clock-read time.
 
 ### Unit report
 
