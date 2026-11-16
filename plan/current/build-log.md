@@ -83,13 +83,17 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Parallel task batches | `0` |
 | Notes | none |
 - RED: U1 order suite (2026-11-16T05:36:44Z)
+- RED: U2 start order edit (no executable check, 0000410) (2026-11-16T05:36:44Z)
 - GREEN: U2 start order edit (2026-11-16T05:36:44Z)
 - GREEN: U1 order suite (2026-11-16T05:37:04Z)
 - Done: U1 order suite (content, primary, none, 2026-11-16T05:37:04Z)
 - Done: U2 start order edit (content, primary, none, 2026-11-16T05:37:04Z)
+- RED: U3 sync both trees (no executable check, 0000410) (2026-11-16T05:37:04Z)
 - GREEN: U3 sync both trees (passed: sync-installed.mjs --check exit 0) (2026-11-16T05:37:04Z)
 - Done: U3 sync both trees (content, primary, none, 2026-11-16T05:37:04Z)
-- Rework: `test-0000151-req-011` and `test-0000321-req-004-pickup-text` pinned start action numbers. Both pins updated in this step (chart decision row, 2026-11-16T05:39:03Z)
+- Rework: REQ-001: `test-0000151-req-011` and `test-0000321-req-004-pickup-text` pinned start action numbers, so the step updated both pins (2026-11-16T05:38:30Z)
+- Postmortem: plan/postmortems/2026-11-16-pin-update-after-renumbering-logged-as-rework.md REQ-001 (2026-11-16T06:21:00Z)
+- RED: U4 docs (no executable check, 0000410) (2026-11-16T05:39:03Z)
 - GREEN: U4 docs (no executable check, 0000410, passed: prose check) (2026-11-16T05:39:03Z)
 - Done: U4 docs (content, primary, none, 2026-11-16T05:39:03Z)
 
@@ -114,3 +118,35 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Tests run: full suite: 479 passed, 3 failed, all inherited (2026-11-16T06:19:00Z)
 
 - Complete: P3 (2026-11-16T06:20:10Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-16T06:20:10Z` |
+| End | `2026-11-16T06:20:37Z` |
+| Wall clock | `1` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | none |
+
+- Complete: P4 (2026-11-16T06:20:37Z)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `48` |
+| Total agents spawned | `0` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `0` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `1` |
+| Phases skipped | `none` |
