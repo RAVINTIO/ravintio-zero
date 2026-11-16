@@ -88,4 +88,18 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | MCP calls | `0` |
 | Parallel task batches | `0` |
 | Notes | Units are small and share files with their tests, so the agent ran both inline. |
-
+- RED: U2-rule-6-order (2026-11-16T07:09:08Z)
+- RED: U1-printed-table (2026-11-16T07:09:08Z)
+- GREEN: U2-rule-6-order (2026-11-16T07:09:09Z)
+- GREEN: U1-printed-table (2026-11-16T07:09:09Z)
+- Done: U2-rule-6-order (content, inline, none, 2026-11-16T07:09:09Z)
+- Done: U1-printed-table (content, inline, none, 2026-11-16T07:09:09Z)
+- RED: U3 sync both trees (no executable check, 0000410) (2026-11-16T07:09:22Z)
+- GREEN: U3 sync both trees (no executable check, 0000410, passed: sync-installed.mjs --check exit 0) (2026-11-16T07:09:23Z)
+- Done: U3 sync both trees (content, inline, none, 2026-11-16T07:09:23Z)
+- RED: U4 living docs (no executable check, 0000410) (2026-11-16T07:09:23Z)
+- GREEN: U4 living docs (no executable check, 0000410, passed: the prose check on commit) (2026-11-16T07:09:23Z)
+- Done: U4 living docs (content, inline, none, 2026-11-16T07:09:23Z)
+- Note: the agent wrote the U1 and U2 markers after the unit runs. The suites showed 8 FAIL lines at 2026-11-16T07:08Z before the edits and 0 after. The marker times show when the agent logged them.
+- Tests run: REQ-001: test-0000574-req-001-rule-6-order.sh (2026-11-16T07:09:23Z)
+- Tests run: REQ-002, REQ-003: test-0000574-req-002-003-printed-table.sh, test-0000353-req-001-004-reshape-script.sh, test-0000378-req-004-merge-order.sh, test-0000378-req-005-reshape-folds.sh (2026-11-16T07:09:23Z)
