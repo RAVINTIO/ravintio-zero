@@ -7,7 +7,7 @@
 
 ## Full suite
 
-The local full run passed 479 feature suites and failed 1, the inherited `test-0000450-req-004-report-format.sh`. The regression suite passed 19 of 19. The clean-clone result is below.
+The local full run passed 479 feature suites and failed 1, the inherited `test-0000450-req-004-report-format.sh`. The regression suite passed 19 of 19. The clean-clone run failed only the three inherited suites.
 
 ## Security
 

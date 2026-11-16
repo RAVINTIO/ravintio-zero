@@ -93,14 +93,14 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-16T04:51:45Z` |
-| End | `pending` |
-| Wall clock | `pending` |
+| End | `2026-11-16T05:13:48Z` |
+| Wall clock | `22` |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
-| Notes | pending |
+| Notes | Clean clone ran the baseline suite. Execution checks ran by CLI. |
 
 ---
 - RED: U3 (2026-11-16T04:52:28Z)

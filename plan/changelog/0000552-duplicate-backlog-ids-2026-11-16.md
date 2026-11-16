@@ -18,7 +18,7 @@ The backlog entry also asked to renumber one entry. The base holds no duplicate 
 
 ## Validation results
 
-See the build log. This step folds in backlog entry 0000542.
+The full suite passes apart from the three inherited suites. The clean-clone run, the CLI checks, and the prose check pass. This step folds in backlog entry 0000542.
 
 ## Skipped phases
 
