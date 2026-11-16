@@ -18,7 +18,7 @@ The chart criterion "A plan-only push runs fewer suites" holds only as fewer run
 
 ## Validation results
 
-See the build log.
+The full suite in a clean clone shows 477 passed and 3 failed. The base already fails those 3. The new suite passes 18 of 18 assertions. The security review finds nothing above low.
 
 ## Skipped phases
 

@@ -135,18 +135,34 @@ Complete: P2
 
 Complete: P3
 
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-16T04:33:52Z` |
+| End | `2026-11-16T04:33:52Z` |
+| Wall clock | `0` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Initiative step. Steps 4, 5, and 8 run after green CI. |
+
+Complete: P4
+
 ---
 
 ## Summary (filled at ship, P4)
 
 | Metric | Value |
 |--------|-------|
-| Total phases completed | `pending` |
-| Total wall clock | `pending` |
-| Total agents spawned | `pending` |
-| Total MCP calls | `pending` |
-| Phases using parallelism | `pending` |
-| Primary tier agent calls | `pending` |
-| Cheaper tier agent calls | `pending` |
-| Self-corrections | `pending` |
+| Total phases completed | `5` |
+| Total wall clock | `32` |
+| Total agents spawned | `1` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `1` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `0` |
 | Phases skipped | `none` |
