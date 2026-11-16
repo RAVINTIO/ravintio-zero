@@ -190,7 +190,7 @@ The human confirmed the chart on 2026-11-14 with "build the initiative as fast a
 | 30 | 0000574-delivery-pr-lists-steps-in-version-order | Delivery PR lists steps in version order | 0000543 | minor | | pending | coord |  |
 | 31 | 0000575-build-log-marker-helper | Build log marker helper | 0000524 | minor | 0.135.0 | merged | dispatch | |
 | 32 | 0000576-phase-start-time-at-phase-start | Record each phase start time when the phase begins | 0000402 | minor | | pending | dispatch |  |
-| 33 | 0000577-plan-lists-change-shapes | Plan lists the change shapes a diff reader must handle | 0000516 | minor | | pending | plan |  |
+| 33 | 0000577-plan-lists-change-shapes | Plan lists the change shapes a diff reader must handle | 0000516 | minor | 0.138.0 | merged | plan | |
 | 34 | 0000578-plan-lists-pass-signals | Plan lists every way a check can pass | 0000529 | minor | | pending | plan |  |
 | 35 | 0000579-convert-remaining-suites-to-rule-anchors | Convert remaining suites to rule anchors | 0000401 | minor | | pending | anchors | 1-34 |
 | 36 | 0000580-log-non-tdd-units | Log a non-TDD unit with a class | 0000410 | minor | | pending | anchors | 35 |
@@ -226,3 +226,4 @@ The merge queue adds one row for each step it merges. See the merge queue sectio
 | 31 | #237 | tag v0.135.0 | 0.135.0 | 2026-11-16T01:37:14Z |
 | 27 | #238 | tag v0.136.0 | 0.136.0 | 2026-11-16T02:41:18Z |
 | 7 | #239 | tag v0.137.0 | 0.137.0 | 2026-11-16T03:39:15Z |
+| 33 | #240 | tag v0.138.0 | 0.138.0 | 2026-11-16T03:54:02Z |
