@@ -26,7 +26,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-16T05:34:07Z` |
-| End | `2026-11-16T05:36:10Z` |
+| End | `2026-11-16T05:36:04Z` |
 | Wall clock | `2` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
@@ -49,14 +49,14 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Run mode: autonomous (initiative step)
 - Run speed: fast (2026-11-16T05:34:07Z)
 
-- Complete: P0 (2026-11-16T05:36:10Z)
+- Complete: P0 (2026-11-16T05:36:04Z)
 
 ### P1: Plan
 
 | Field | Value |
 |-------|-------|
-| Start | `2026-11-16T05:36:10Z` |
-| End | `2026-11-16T05:36:20Z` |
+| Start | `2026-11-16T05:36:04Z` |
+| End | `2026-11-16T05:36:07Z` |
 | Wall clock | `0` |
 | Model tier | primary |
 | Skills loaded | ravintio-plan |
@@ -67,4 +67,4 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 
 - Skipped: ADRs (no decision meets an ADR criterion)
 
-- Complete: P1 (2026-11-16T05:36:20Z)
+- Complete: P1 (2026-11-16T05:36:07Z)
