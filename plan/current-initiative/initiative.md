@@ -184,7 +184,7 @@ The human confirmed the chart on 2026-11-14 with "build the initiative as fast a
 | 24 | 0000568-wording-pin-scan | Scan for wording pins before a prose rewrite | 0000418 | minor | 0.129.0 | merged | plan | |
 | 25 | 0000569-scan-new-pack-files-for-wording-allowlist | Scan new pack files for the wording allowlist | 0000415 | minor | 0.131.0 | merged | plan | |
 | 26 | 0000570-sibling-test-copies-in-impact-scan | List sibling copies of a pinned test in the impact scan | 0000407 | minor | 0.133.0 | merged | plan | |
-| 27 | 0000571-scan-cause-skill-wide-grep-pins | Test impact scan covers skill-wide grep pins | 0000404 | minor | | pending | plan |  |
+| 27 | 0000571-scan-cause-skill-wide-grep-pins | Test impact scan covers skill-wide grep pins | 0000404 | minor | 0.136.0 | merged | plan | |
 | 28 | 0000572-tests-share-a-repo-root-helper | Tests share a repo-root helper for both pack trees | 0000528, 0000539 | minor | | pending | tests |  |
 | 29 | 0000573-require-unit-reports | Require unit reports | 0000417 | minor | 0.125.0 | merged | dispatch | |
 | 30 | 0000574-delivery-pr-lists-steps-in-version-order | Delivery PR lists steps in version order | 0000543 | minor | | pending | coord |  |
@@ -224,3 +224,4 @@ The merge queue adds one row for each step it merges. See the merge queue sectio
 | 26 | #235 | tag v0.133.0 | 0.133.0 | 2026-11-15T23:59:38Z |
 | 13 | #236 | tag v0.134.0 | 0.134.0 | 2026-11-16T00:24:30Z |
 | 31 | #237 | tag v0.135.0 | 0.135.0 | 2026-11-16T01:37:14Z |
+| 27 | #238 | tag v0.136.0 | 0.136.0 | 2026-11-16T02:41:18Z |
