@@ -56,8 +56,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-16T02:51:33Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-16T02:51:37Z` |
+| Wall clock | `0` |
 | Model tier | primary |
 | Skills loaded | ravintio-plan |
 | Agents spawned | `0` |
@@ -67,7 +67,25 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 
 - Skipped: ADRs (no decision meets an ADR criterion)
 
+- Complete: P1 (2026-11-16T02:51:37Z)
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-16T02:51:37Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | none |
+
 ---
+- In progress: U2 diff reader suite (2026-11-16T02:53:53Z)
+- RED: U2 diff reader suite (2026-11-16T02:51:44Z)
 
 ## Summary (filled at ship, P4)
 
