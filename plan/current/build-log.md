@@ -74,8 +74,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-16T05:36:00Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-16T06:19:57Z` |
+| Wall clock | `24` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | `0` |
@@ -85,3 +85,6 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - RED: U1 (2026-11-16T05:36:00Z)
 - GREEN: U1 (2026-11-16T05:36:20Z)
 - Done: U1 (content, inline, none, 2026-11-16T05:36:20Z)
+- Tests run: REQ-001: test-0000560-req-001-ledger-rows-with-detect.sh (2026-11-16T05:36:20Z)
+- Tests run: full suite: 481 passed, 1 failed (2026-11-16T06:19:57Z). The failure is the known baseline suite test-0000450-req-004-report-format.sh.
+- Complete: P2 (2026-11-16T06:19:57Z)
