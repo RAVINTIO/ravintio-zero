@@ -68,3 +68,20 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Notes | one requirement, so no batch to dispatch. No ADR, because the run adds no decision. |
 
 - Complete: P1 (2026-11-16T05:35:45Z)
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-16T05:36:00Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | one inline unit. The suite pins existing behaviour, so RED runs against a mutant copy of the script. |
+- RED: U1 (2026-11-16T05:36:00Z)
+- GREEN: U1 (2026-11-16T05:36:20Z)
+- Done: U1 (content, inline, none, 2026-11-16T05:36:20Z)
