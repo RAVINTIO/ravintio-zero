@@ -110,7 +110,7 @@ Phase Skip Protocol, Pause Command, and Park Command are in the Pack Index row f
 
 ## P0: Discovery
 
-The Pack Index lists files for Opening Briefing, Decomposition, Adoption Modes, Scope Lock Challenge, Discovery Audit Trail, and Skill Map. Step 7 uses the Adoption Modes table. Read each file before you act on its topic.
+The Pack Index lists files for Opening Briefing, Decomposition, Adoption Modes, Scope Lock Challenge, Discovery Audit Trail, and Skill Map. Step 9 uses the Adoption Modes table. Read each file before you act on its topic.
 
 Mid-Pipeline Requirement Changes is in the Pack Index row for `orchestrator-mid-pipeline-changes.md`.
 
