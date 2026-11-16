@@ -68,3 +68,19 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Skipped: ADRs (no decision meets an ADR criterion)
 
 - Complete: P1 (2026-11-16T05:36:07Z)
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-16T05:36:39Z` |
+| End | `{{filled when the phase completes}}` |
+| Wall clock | `{{filled}}` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | none |
+- RED: U1 order suite (2026-11-16T05:36:44Z)
+- GREEN: U2 start order edit (2026-11-16T05:36:44Z)
