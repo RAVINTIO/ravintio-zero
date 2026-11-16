@@ -25,7 +25,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 |-------|-------|
 | Start | `2026-11-15T23:12:27Z` |
 | End | `2026-11-15T23:13:15Z` |
-| Wall clock | 2 |
+| Wall clock | 1 |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -82,14 +82,19 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Parallel task batches | 0 |
 | Notes | none |
 
-- RED: U1 safe-suite-wait test (2026-11-15T23:14:39Z)
-- GREEN: U2 start action 15 and U3 validate fast batch (2026-11-15T23:15:13Z)
+- RED: U1 (2026-11-15T23:14:39Z)
+- RED: U2 (2026-11-15T23:14:39Z)
+- RED: U3 (2026-11-15T23:14:39Z)
+- GREEN: U1 (2026-11-15T23:15:13Z)
+- GREEN: U2 (2026-11-15T23:15:13Z)
+- GREEN: U3 (2026-11-15T23:15:13Z)
 - Done: U1 (content, inline, none, 2026-11-15T23:15:20Z)
 - Done: U2 (content, inline, none, 2026-11-15T23:15:20Z)
 - Done: U3 (content, inline, none, 2026-11-15T23:15:20Z)
+- Note: U4 has no executable check (0000410). Its RED and GREEN lines record the prose check.
+- RED: U4 architecture-overview (2026-11-15T23:15:20Z)
+- GREEN: U4 architecture-overview (2026-11-15T23:15:20Z)
 - Done: U4 architecture-overview (content, inline, none, 2026-11-15T23:15:20Z)
-- RED: U4 docs unit has no executable check (0000410) (2026-11-15T23:15:20Z)
-- GREEN: U4 passed the prose check on commit (2026-11-15T23:15:20Z)
 - Tests run: REQ-001: test-0000557-req-001-safe-suite-wait.sh, test-0000151, test-0000321, test-0000352, test-0000385, test-0000391, test-0000383, test-0000493, test-0000164, test-0000042, test-0000390, test-0000031 (2026-11-15T23:15:20Z)
 - Tests run: full suite: 471 passed, 1 failed (2026-11-15T23:45:44Z)
 - Complete: P2 (2026-11-15T23:45:44Z)
@@ -100,7 +105,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 |-------|-------|
 | Start | `2026-11-15T23:45:44Z` |
 | End | `2026-11-16T00:09:06Z` |
-| Wall clock | 144 |
+| Wall clock | 23 |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | 0 |
@@ -115,14 +120,15 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-16T00:09:06Z` |
-| End | `PENDING` |
-| Wall clock | PENDING |
+| End | `2026-11-16T00:09:33Z` |
+| Wall clock | 1 |
 | Model tier | primary |
 | Skills loaded | ravintio-ship |
 | Agents spawned | 0 |
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | none |
+- Complete: P4 (2026-11-16T00:09:33Z)
 
 ---
 
@@ -130,4 +136,12 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 
 | Metric | Value |
 |--------|-------|
-| Total phases completed | PENDING |
+| Total phases completed | 4 |
+| Total wall clock | 57 |
+| Total agents spawned | 0 |
+| Total MCP calls | 0 |
+| Phases using parallelism | 0 |
+| Primary tier agent calls | 0 |
+| Cheaper tier agent calls | 0 |
+| Self-corrections | 0 |
+| Phases skipped | none |
