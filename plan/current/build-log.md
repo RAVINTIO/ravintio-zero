@@ -70,8 +70,8 @@ Complete: P1 (2026-11-16T00:32:42Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-16T00:33:01Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-16T01:22:50Z` |
+| Wall clock | `50` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 0 |
@@ -91,3 +91,6 @@ Complete: P1 (2026-11-16T00:32:42Z)
 - Done: U3 living docs (content, inline, none, 2026-11-16T00:35:31Z)
 - Tests run: REQ-001: test-0000575-req-001-marker-script.sh (2026-11-16T00:35:31Z)
 - Tests run: REQ-002: test-0000575-req-002-skill-wiring.sh (2026-11-16T00:35:31Z)
+- Tests run: full suite: 472 passed, 3 failed (2026-11-16T01:22:50Z)
+
+Complete: P2 (2026-11-16T01:22:50Z)
