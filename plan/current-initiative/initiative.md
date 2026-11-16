@@ -172,7 +172,7 @@ The human confirmed the chart on 2026-11-14 with "build the initiative as fast a
 | 12 | 0000556-step-session-finds-unfinished-step | A step session finds an unfinished step | 0000531 | minor | 0.132.0 | merged | resume | |
 | 13 | 0000557-self-matching-pgrep-wait | Step sessions wait on a suite without matching their own shell | 0000532 | minor | 0.134.0 | merged | baseline | |
 | 14 | 0000558-plan-only-push-short-ci | CI avoids extra runs on a plan-only push | 0000476-plan-only-push-short-ci | minor | 0.139.0 | merged | ci | |
-| 15 | 0000559-start-baseline-first | Start the baseline run before the P0 artifacts | 0000478 | minor | | pending | baseline |  |
+| 15 | 0000559-start-baseline-first | Start the baseline run before the P0 artifacts | 0000478 | minor | 0.141.0 | merged | baseline | |
 | 16 | 0000560-step-sessions-and-pending-migrations | Step sessions meet pending migrations | 0000403 | minor | | pending | resume |  |
 | 17 | 0000561-old-name-guard-fails-in-full-suite | Old-name guard fails in the full suite | 0000527 | minor | | pending | tests |  |
 | 18 | 0000562-test-impact-scan-lists-the-mirrored-pack-tree | Test impact scan lists the mirrored pack tree | 0000540 | minor | 0.119.0 | merged | plan | |
@@ -229,3 +229,4 @@ The merge queue adds one row for each step it merges. See the merge queue sectio
 | 33 | #240 | tag v0.138.0 | 0.138.0 | 2026-11-16T03:54:02Z |
 | 14 | #241 | tag v0.139.0 | 0.139.0 | 2026-11-16T04:46:23Z |
 | 8 | #242 | tag v0.140.0 | 0.140.0 | 2026-11-16T05:26:36Z |
+| 15 | #243 | tag v0.141.0 | 0.141.0 | 2026-11-16T06:33:24Z |

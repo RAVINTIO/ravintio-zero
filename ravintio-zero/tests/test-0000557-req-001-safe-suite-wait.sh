@@ -13,11 +13,11 @@ P0="$ZERO_DIR/skills/ravintio-orchestrator/references/orchestrator-p0-start-acti
 VA="$ZERO_DIR/skills/ravintio-validate-and-accept/SKILL.md"
 
 echo ""
-echo "=== AC-1: P0 start action 15 names the wait ==="
+echo "=== AC-1: P0 baseline start action names the wait ==="
 STEP="$(grep -A4 'rule: p0-start-baseline' "$P0")"
-assert_contains "end marker" "$STEP" "AC-1: step 15 names the end marker"
-assert_contains "process id" "$STEP" "AC-1: step 15 names the process id"
-assert_contains "pgrep -f" "$STEP" "AC-1: step 15 names the pgrep -f ban"
+assert_contains "end marker" "$STEP" "AC-1: the baseline action names the end marker"
+assert_contains "process id" "$STEP" "AC-1: the baseline action names the process id"
+assert_contains "pgrep -f" "$STEP" "AC-1: the baseline action names the pgrep -f ban"
 
 echo ""
 echo "=== AC-2: the validate fast batch names the wait ==="
