@@ -108,6 +108,10 @@ Setup copies only committed files in `ravintio-zero/` and `ravintio-overrides/`,
 
 **Park.** When the human says "park", the orchestrator shelves the feature on its branch. It writes `plan/current/park.md`, pushes the branch, and raises a `chore/park-{feature-id}` PR. That PR files a backlog entry with status `parked`. The working tree then returns to `main`. The git and `gh` steps live in the orchestrator's `scripts/park.mjs`. If a local add or commit fails on the chore branch, park unstages and deletes the entry, then returns to the feature branch. Park refuses an `--entry` that is the target path, so that cleanup never deletes the only copy. Park also refuses any symlink in the entry path. It checks each part with `lstat` and the real path against the real `plan/backlog/`, before it creates, writes, or removes anything. At a later discovery, backlog pickup offers resume or discard for a parked entry. Park and pickup never merge a PR, never commit to `main`, and never force-push.
 
+### CI concurrency
+
+The repo workflow `.github/workflows/ravintio.yml` holds a top-level `concurrency` block (0000558 ADR-0349). A newer push to a pull request cancels the older run of that pull request. A push run keys on its commit, so no newer push cancels it. A `closed` event has a group of its own. Every push still runs every suite.
+
 ### Workflow governance
 
 The pipeline measures its own workflow as well as the product. Phase skills write four fixed marker lines to the build log: `Rework:`, `Blocked:`, `Requirement change:`, and `Gate revised:`. Ship adds a fifth, `CI duration:`, when the CI wait ends, read with `gh run view`. At ship, `scripts/workflow-metrics.mjs` counts them in the archived build log and loop-state files. It reports the longest CI run against the 420-second target. It compares each count against a threshold in `standards/workflow-governance-standards.md` (0000472 ADR-0308). It also reports units and rework by class and tier from the `Done:` lines, and never blocks on that report (0000386).
