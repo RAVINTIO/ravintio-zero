@@ -26,8 +26,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-16T05:33:55Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-16T05:35:00Z` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | `0` |
@@ -50,3 +50,21 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Run mode: autonomous (initiative step)
 - Run speed: fast (2026-11-16T05:35:00Z)
 - Track: light (chart accepts the track)
+
+- Complete: P0 (2026-11-16T05:35:00Z)
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-16T05:35:00Z` |
+| End | `2026-11-16T05:35:45Z` |
+| Wall clock | `1` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | one requirement, so no batch to dispatch. No ADR, because the run adds no decision. |
+
+- Complete: P1 (2026-11-16T05:35:45Z)
