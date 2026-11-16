@@ -65,8 +65,8 @@ Run mode: autonomous (2026-11-16T02:49:58Z, initiative step 7)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-16T02:52:33Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-16T03:24:32Z` |
+| Wall clock | `32` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | `0` |
@@ -90,3 +90,4 @@ Run mode: autonomous (2026-11-16T02:49:58Z, initiative step 7)
 - Done: U4 (content, inline, none, 2026-11-16T02:55:49Z)
 - Tests run: REQ-001, REQ-002: test-0000551-req-001-002-setup-sh.sh, test-0000551-req-001-002-setup-ps1.ps1 (2026-11-16T02:55:49Z)
 - Units U2 and U3 take the U1 red run. Both scripts failed it before the edit.
+- Tests run: full suite: 475 passed, 3 failed (2026-11-16T03:24:32Z)
