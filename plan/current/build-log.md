@@ -79,3 +79,6 @@ Complete: P1 (2026-11-16T07:07:34Z)
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | the units are small, so the agent runs them inline in one tree and dispatches no subagent |
+- RED: U1 start-time check (2026-11-16T07:08:11Z)
+- GREEN: U1 start-time check (2026-11-16T07:08:38Z)
+- Done: U1 start-time check (code, inline, none, 2026-11-16T07:08:38Z)
