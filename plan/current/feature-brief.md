@@ -29,7 +29,7 @@ One wave.
 
 | Component | Type | New or Existing | Responsibility |
 |-----------|------|-----------------|---------------|
-| ravintio-zero | component-pack | existing | Holds the workflow, its consumer copy, and the tests |
+| ravintio-zero | component-pack | existing | Holds the workflow and the tests |
 
 ### Data Ownership
 
@@ -49,12 +49,13 @@ Bash tests, YAML workflow, Node scripts. Build target: none.
 
 ### In Scope
 
-- A `concurrency` block in `.github/workflows/ravintio.yml` and in its consumer copy `src/ravintio-zero/hooks/ravintio.yml`.
+- A `concurrency` block in `.github/workflows/ravintio.yml`.
 - Tests for the block.
 
 ### Out of Scope
 
 - A change to the ship skill. The closing push is already one push.
+- The consumer copy `hooks/ravintio.yml`, which needs a consumer migration.
 - Skipping any suite or job on a plan-only push.
 - Path filters on any job.
 

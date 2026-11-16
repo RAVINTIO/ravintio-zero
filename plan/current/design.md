@@ -25,7 +25,7 @@
 
 ## Engineering Layer
 - Stack: GitHub Actions YAML, Bash tests, Node scripts. CI: GitHub Actions. Build target: none.
-- Components: `ravintio-zero`, the one component pack. It holds the workflow, its consumer copy, and the tests.
+- Components: `ravintio-zero`, the one component pack. It holds the workflow and the tests.
 - Data ownership: `ravintio-zero` owns the workflow files.
 - Deployment: none
 - API versioning: not applicable
@@ -38,8 +38,8 @@
 - plan/
 
 ## Scope
-- In: A `concurrency` block in both workflow files. The group key holds the workflow name, the pull request number or the ref, and a `closed` flag. Only `pull_request` events cancel an older run. Tests for each.
-- Out: Skipping a suite or a job. A path filter. A change to the ship skill.
+- In: A `concurrency` block in `.github/workflows/ravintio.yml`. The group key holds the workflow name, the pull request number or the ref, and a `closed` flag. Only `pull_request` events cancel an older run. Tests for each.
+- Out: The consumer copy `hooks/ravintio.yml`, which needs a consumer migration. Skipping a suite or a job. A path filter. A change to the ship skill.
 - Deferred: Nothing deferred.
 
 ## Assumptions
