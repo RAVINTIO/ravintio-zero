@@ -62,6 +62,16 @@ Version plan: 0.138.0 plus minor bump (0.139.0 planned, the merge queue sets the
 Criterion note: the chart criterion "A plan-only push runs fewer suites" conflicts with the Decisions row "Every push still runs every suite". The row wins. The step meets the criterion as fewer runs: the workflow cancels a superseded run. No suite drops out.
 
 
+Scope Lock (happy path): A step pushes twice in a row and CI cancels the first run [source: draft-accepted (initiative)]
+
+Scope Lock (first-run path): The first push to a pull request starts a run with none to cancel [source: draft-accepted (initiative)]
+
+Scope Lock (error path): A cancelled run leaves no required check red, because the newer run reports the checks [source: draft-accepted (initiative)]
+
+Scope Lock (cross-session continuity): The group key reads the pull request number, so a resumed session joins the same group [source: draft-accepted (initiative)]
+
+Scope Lock complete. All four scenario paths captured.
+
 ---
 
 ## Summary (filled at ship, P4)
