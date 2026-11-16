@@ -2,7 +2,7 @@
 
 **Feature:** Two open entries share one backlog id
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** 242
 
 ## What changed
 
