@@ -61,8 +61,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-16T07:05:52Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-16T07:07:18Z` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-plan |
 | Agents spawned | `0` |
@@ -70,3 +70,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Parallel task batches | `0` |
 | Notes | none |
 
+- Skipped: ADRs (no decision meets an ADR criterion)
+- Audit: no advisory requirement
+
+- Complete: P1 (2026-11-16T07:07:18Z)
