@@ -86,6 +86,12 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Done: U2 (content, inline, none, 2026-11-16T04:04:39Z)
 - Tests run: REQ-001: test-0000552-req-001-duplicate-id-check.sh, test-0000321-req-002-index-generator.sh, test-0000321-req-003-ci-index-check.sh, test-0000321-req-004-review-mode.sh, test-0000481-req-001-regenerate.sh, test-0000547-req-001-002-index-rebuild-rule.sh (2026-11-16T04:04:39Z)
 - Tests run: full suite: 479 passed, 1 failed (2026-11-16T04:51:45Z)
+- RED: U3 (2026-11-16T04:52:28Z)
+- GREEN: U3 (2026-11-16T04:52:28Z)
+- Done: U3 (content, inline, none, 2026-11-16T04:52:28Z)
+- RED: U4 (2026-11-16T04:52:28Z)
+- GREEN: U4 (2026-11-16T04:52:28Z)
+- Done: U4 (content, inline, none, 2026-11-16T04:52:28Z)
 - Complete: P2 (2026-11-16T04:51:45Z)
 
 ### P3: Validate and Accept
@@ -102,16 +108,38 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Parallel task batches | `0` |
 | Notes | Clean clone ran the baseline suite. Execution checks ran by CLI. |
 
+- Tests run: full suite: 477 passed, 3 failed, all inherited (2026-11-16T05:13:48Z)
+- Skipped: docs edit pass (prose-check exits 0 on the three changed docs, no subagent needed)
+- Complete: P3 (2026-11-16T05:13:48Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-16T05:13:48Z` |
+| End | `2026-11-16T05:14:10Z` |
+| Wall clock | `0` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Initiative step. The closing push archives after green CI. |
+
+- Complete: P4 (2026-11-16T05:14:10Z)
+
 ---
-- RED: U3 (2026-11-16T04:52:28Z)
-- GREEN: U3 (2026-11-16T04:52:28Z)
-- Done: U3 (content, inline, none, 2026-11-16T04:52:28Z)
-- RED: U4 (2026-11-16T04:52:28Z)
-- GREEN: U4 (2026-11-16T04:52:28Z)
-- Done: U4 (content, inline, none, 2026-11-16T04:52:28Z)
 
 ## Summary (filled at ship, P4)
 
 | Metric | Value |
 |--------|-------|
-| Total phases completed | `pending` |
+| Total phases completed | `5` |
+| Total wall clock | `72` |
+| Total agents spawned | `0` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `0` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `1` |
+| Phases skipped | none |
