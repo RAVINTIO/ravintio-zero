@@ -55,11 +55,13 @@ Complete: P0 (2026-11-16T07:05:35Z)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-16T07:05:55Z` |
-| End | `{{filled when the phase completes}}` |
-| Wall clock | `{{filled when the phase completes}}` |
+| End | `2026-11-16T07:07:34Z` |
+| Wall clock | `2` |
 | Model tier | primary |
 | Skills loaded | ravintio-plan |
 | Agents spawned | 0 |
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | the artifact set is small, so the agent writes it inline |
+
+Complete: P1 (2026-11-16T07:07:34Z)
