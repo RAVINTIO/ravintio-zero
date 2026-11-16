@@ -83,9 +83,20 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Parallel task batches | `0` |
 | Notes | none |
 
+- In progress: U2 diff reader suite (2026-11-16T02:54:04Z)
+- RED: U2 diff reader suite (2026-11-16T02:54:04Z)
+- GREEN: U2 diff reader suite (2026-11-16T02:54:04Z)
+- Done: U2 diff reader suite (content, primary, none, 2026-11-16T02:54:04Z)
+- In progress: U1 diff reader cause (2026-11-16T02:54:04Z)
+- RED: U1 diff reader cause (no executable check beyond U2, 0000410) (2026-11-16T02:54:04Z)
+- GREEN: U1 diff reader cause (passed: test-0000577 and impacted suites) (2026-11-16T02:54:04Z)
+- Done: U1 diff reader cause (content, primary, none, 2026-11-16T02:54:04Z)
+- In progress: U3 sync both trees (2026-11-16T02:54:04Z)
+- RED: U3 sync both trees (no executable check, 0000410) (2026-11-16T02:54:04Z)
+- GREEN: U3 sync both trees (no executable check, 0000410, passed: sync-installed.mjs --check exit 0) (2026-11-16T02:54:05Z)
+- Done: U3 sync both trees (content, primary, none, 2026-11-16T02:54:05Z)
+
 ---
-- In progress: U2 diff reader suite (2026-11-16T02:53:53Z)
-- RED: U2 diff reader suite (2026-11-16T02:51:44Z)
 
 ## Summary (filled at ship, P4)
 
