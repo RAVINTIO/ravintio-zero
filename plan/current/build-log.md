@@ -72,6 +72,20 @@ Scope Lock (cross-session continuity): The group key reads the pull request numb
 
 Scope Lock complete. All four scenario paths captured.
 
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-16T04:03:57Z` |
+| End | `2026-11-16T04:04:50Z` |
+| Wall clock | `1` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Inline plan. The artifact set is too small to justify subagent overhead. |
+
 ---
 
 ## Summary (filled at ship, P4)
