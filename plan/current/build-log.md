@@ -64,3 +64,19 @@ Complete: P0 (2026-11-16T00:31:27Z)
 | Notes | the artifact set is small, so the agent writes it inline |
 
 Complete: P1 (2026-11-16T00:32:42Z)
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-16T00:33:01Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | both units are small, so the agent runs them inline in one tree and dispatches no subagent |
+
+- In progress: U1 marker script (2026-11-16T00:33:01Z)
