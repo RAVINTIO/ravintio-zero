@@ -43,7 +43,7 @@ Run mode: autonomous (2026-11-16T02:49:58Z, initiative step 7)
 - Decision applied (initiative chart): A test pins text that the step edits
 - Decision applied (initiative chart): Pack edits
 - Decision applied (initiative chart): Known baseline failures
-- Decision not applicable (initiative chart): A docs unit has no failing test (0000410): every unit here has one
+- Decision applied (initiative chart): A docs unit has no failing test, so `build-log-check.mjs` finds no `RED:` or `GREEN:` for it (0000410)
 - Decision applied (initiative chart): Fast batches
 
 ### P1: Plan
@@ -59,3 +59,34 @@ Run mode: autonomous (2026-11-16T02:49:58Z, initiative step 7)
 | MCP calls | `0` |
 | Parallel task batches | `0` |
 | Notes | Artifacts written inline. Consistency check clean. Initiative gate self-confirmed. |
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-16T02:52:33Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Four small units ran inline. Batches 1 to 3 ran in order because each unit is small. |
+
+- RED: U1 (2026-11-16T02:52:33Z)
+- GREEN: U1 (2026-11-16T02:54:16Z)
+- Done: U1 (content, inline, none, 2026-11-16T02:54:16Z)
+- RED: U2 (2026-11-16T02:54:17Z)
+- GREEN: U2 (2026-11-16T02:54:17Z)
+- Done: U2 (content, inline, none, 2026-11-16T02:54:17Z)
+- RED: U3 (2026-11-16T02:54:17Z)
+- GREEN: U3 (2026-11-16T02:54:17Z)
+- Done: U3 (content, inline, none, 2026-11-16T02:54:17Z)
+- RED: U4 (2026-11-16T02:55:49Z)
+  - U4 has no executable check (0000410). The unit edits one living doc.
+- GREEN: U4 (2026-11-16T02:55:49Z)
+  - U4 passed the prose check on the living doc (0000410).
+- Done: U4 (content, inline, none, 2026-11-16T02:55:49Z)
+- Tests run: REQ-001, REQ-002: test-0000551-req-001-002-setup-sh.sh, test-0000551-req-001-002-setup-ps1.ps1 (2026-11-16T02:55:49Z)
+- Units U2 and U3 take the U1 red run. Both scripts failed it before the edit.
