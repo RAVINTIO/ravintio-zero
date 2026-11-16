@@ -49,3 +49,17 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Decision applied (initiative chart): Fast batches: `**Speed:** fast`
 - Backlog pickup: pulled in 0000402, folder deleted, index regenerated
 Complete: P0 (2026-11-16T07:05:35Z)
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-16T07:05:55Z` |
+| End | `{{filled when the phase completes}}` |
+| Wall clock | `{{filled when the phase completes}}` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | the artifact set is small, so the agent writes it inline |
