@@ -52,14 +52,30 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-16T04:03:52Z` |
-| End | `pending` |
-| Wall clock | `pending` |
+| End | `2026-11-16T04:04:12Z` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-plan |
 | Agents spawned | `0` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
 | Notes | Fast batch not dispatched. The feature has one requirement and one ADR, so subagent overhead outweighs the gain. |
+
+- Complete: P1 (2026-11-16T04:04:12Z)
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-16T04:04:12Z` |
+| End | `pending` |
+| Wall clock | `pending` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Inline units. Each unit is one file edit, so subagents add overhead only. |
 
 ---
 
