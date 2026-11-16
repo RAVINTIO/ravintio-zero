@@ -129,6 +129,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Parallel task batches | 0 |
 | Notes | none |
 - Complete: P4 (2026-11-16T00:09:33Z)
+- CI duration: 327s (run 43778836572, 2026-11-16T00:16:40Z)
 
 ---
 
