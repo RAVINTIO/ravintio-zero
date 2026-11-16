@@ -2,7 +2,7 @@
 
 **Feature:** Refuse a symlink at the writing style output paths
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** #239
 
 ## What changed
 
