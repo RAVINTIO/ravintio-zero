@@ -104,6 +104,9 @@ Scope Lock complete. All four scenario paths captured.
 - RED: U-1 (2026-11-16T04:05:14Z)
 - GREEN: U-1 (2026-11-16T04:05:22Z)
 - Done: U-1 (content, inline, none, 2026-11-16T04:05:36Z)
+- RED: U-2 (2026-11-16T04:06:03Z)
+- GREEN: U-2 (2026-11-16T04:06:03Z)
+- Done: U-2 (content, inline, none, 2026-11-16T04:06:03Z)
 
 ## Summary (filled at ship, P4)
 
