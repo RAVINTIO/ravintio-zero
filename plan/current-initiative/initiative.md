@@ -165,7 +165,7 @@ The human confirmed the chart on 2026-11-14 with "build the initiative as fast a
 | 5 | 0000549-baseline-record-checks | Baseline record checks its input and its file | 0000525, 0000515 | minor | 0.118.0 | merged | baseline | |
 | 6 | 0000550-no-head-diffs-in-tests | No HEAD diffs in tests | 0000416 | minor | | pending | tests |  |
 | 7 | 0000551-refuse-symlink-style-outputs | Refuse a symlink at the writing style output paths | 0000408 | minor | 0.137.0 | merged | setup | |
-| 8 | 0000552-duplicate-backlog-ids | Two open entries share one backlog id | 0000542 | minor | | pending | queue |  |
+| 8 | 0000552-duplicate-backlog-ids | Two open entries share one backlog id | 0000542 | minor | 0.140.0 | merged | queue | |
 | 9 | 0000553-coordinator-oversight-not-micromanagement | Initiative skills do not micromanage | 0000530 | minor | 0.120.0 | merged | coord | |
 | 10 | 0000554-coordinator-starts-defined-stages | Coordinator starts a defined stage without asking | 0000541 | minor | 0.127.0 | merged | coord | |
 | 11 | 0000555-initiative-pause-reaches-every-step | Initiative pause reaches every step | 0000538 | minor | 0.130.0 | merged | coord | |
@@ -228,3 +228,4 @@ The merge queue adds one row for each step it merges. See the merge queue sectio
 | 7 | #239 | tag v0.137.0 | 0.137.0 | 2026-11-16T03:39:15Z |
 | 33 | #240 | tag v0.138.0 | 0.138.0 | 2026-11-16T03:54:02Z |
 | 14 | #241 | tag v0.139.0 | 0.139.0 | 2026-11-16T04:46:23Z |
+| 8 | #242 | tag v0.140.0 | 0.140.0 | 2026-11-16T05:26:36Z |
