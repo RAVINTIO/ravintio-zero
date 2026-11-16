@@ -91,8 +91,8 @@ Scope Lock complete. All four scenario paths captured.
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-16T04:05:01Z` |
-| End | `pending` |
-| Wall clock | `pending` |
+| End | `2026-11-16T04:32:18Z` |
+| Wall clock | `27` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 0 |
