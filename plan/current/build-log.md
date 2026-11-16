@@ -74,3 +74,18 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Audit: no advisory requirement
 
 - Complete: P1 (2026-11-16T07:07:18Z)
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-16T07:07:31Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Units are small and share files with their tests, so the agent ran both inline. |
+
