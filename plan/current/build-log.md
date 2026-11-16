@@ -95,3 +95,23 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Tests run: REQ-001: test-0000560-req-001-ledger-rows-with-detect.sh (2026-11-16T05:36:20Z)
 - Tests run: full suite: 481 passed, 1 failed (2026-11-16T06:19:57Z). The failure is the known baseline suite test-0000450-req-004-report-format.sh.
 - Complete: P2 (2026-11-16T06:20:28Z)
+
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-16T06:20:28Z` |
+| End | `2026-11-16T06:42:18Z` |
+| Wall clock | `22` |
+| Model tier | primary |
+| Skills loaded | ravintio-validate-and-accept |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | none |
+
+- Skipped: docs edit pass subagent (one sentence changed, prose-check exit 0)
+- OS gap: local macos, CI ubuntu, windows
+- Tests run: full suite: 479 passed, 3 failed, all inherited (2026-11-16T06:42:18Z)
+
+- Complete: P3 (2026-11-16T06:42:18Z)
