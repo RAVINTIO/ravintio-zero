@@ -26,8 +26,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-16T07:03:00Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-16T07:05:23Z` |
+| Wall clock | `3` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | `0` |
@@ -48,3 +48,10 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Adoption mode: standard-iterative (signal: archive beside source in `plan/_archive/`)
 - Run mode: autonomous (initiative step)
 - Run speed: fast (2026-11-16T07:05:00Z)
+- Backlog: pulled in 0000543 (initiative row), folder deleted, index regenerated
+- Scope Lock (happy path): the coordinator runs the script and pastes the version-ordered table [source: draft-accepted (initiative)]
+- Scope Lock (first-run path): not applicable, the script keeps no state [source: draft-accepted (initiative)]
+- Scope Lock (error path): a chart with no usable Version fails before any table prints [source: draft-accepted (initiative)]
+- Scope Lock (cross-session continuity): not applicable, the script writes no state besides the new branch [source: draft-accepted (initiative)]
+- Version: plan 0.143.0 (minor on 0.142.0)
+- Complete: P0 (2026-11-16T07:05:23Z)
