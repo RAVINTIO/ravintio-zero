@@ -26,8 +26,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-16T02:50:23Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-16T02:51:33Z` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | `0` |
@@ -48,6 +48,24 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Adoption mode: standard-iterative (signal: archive beside source in `plan/_archive/`)
 - Run mode: autonomous (initiative step)
 - Run speed: fast (2026-11-16T02:50:23Z)
+
+- Complete: P0 (2026-11-16T02:51:33Z)
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-16T02:51:33Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | none |
+
+- Skipped: ADRs (no decision meets an ADR criterion)
 
 ---
 
