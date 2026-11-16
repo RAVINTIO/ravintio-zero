@@ -43,7 +43,7 @@ Track: light (chart accepts the track)
 - Decision not applicable (initiative chart): A test pins text that the step edits: no pin found yet
 - Decision applied (initiative chart): Pack edits: edit `src/ravintio-zero/` and mirror to `ravintio-zero/`
 - Decision applied (initiative chart): Known baseline failures: three named suites fail on the base
-- Decision applied (initiative chart): A docs unit has no failing test (0000410): log a RED line and a GREEN line for it
+- Decision applied (initiative chart): A docs unit has no failing test, so `build-log-check.mjs` finds no `RED:` or `GREEN:` for it (0000410). U3 has no executable check. 0000410 tracks the rule.
 - Decision applied (initiative chart): Fast batches: `**Speed:** fast`
 Complete: P0 (2026-11-16T00:31:27Z)
 
@@ -86,8 +86,8 @@ Complete: P1 (2026-11-16T00:32:42Z)
 - RED: U2 skill wiring (2026-11-16T00:33:44Z)
 - GREEN: U2 skill wiring (2026-11-16T00:34:05Z)
 - Done: U2 skill wiring (content, inline, none, 2026-11-16T00:34:05Z)
-- RED: U3 living docs: no executable check, see 0000410 (2026-11-16T00:34:10Z)
-- GREEN: U3 living docs: prose check passed, no executable check, see 0000410 (2026-11-16T00:35:31Z)
+- RED: U3 living docs (2026-11-16T00:34:10Z)
+- GREEN: U3 living docs (2026-11-16T00:35:31Z)
 - Done: U3 living docs (content, inline, none, 2026-11-16T00:35:31Z)
 - Tests run: REQ-001: test-0000575-req-001-marker-script.sh (2026-11-16T00:35:31Z)
 - Tests run: REQ-002: test-0000575-req-002-skill-wiring.sh (2026-11-16T00:35:31Z)
@@ -112,3 +112,35 @@ Complete: P2 (2026-11-16T01:22:50Z)
 - OS gap: local macos, CI ubuntu, windows
 
 Complete: P3 (2026-11-16T01:23:17Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-16T01:23:28Z` |
+| End | `2026-11-16T01:23:33Z` |
+| Wall clock | `0` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | initiative step, so the PR comes before the archive |
+
+Complete: P4 (2026-11-16T01:23:33Z)
+
+---
+
+## Summary
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `53` |
+| Total agents spawned | `0` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `0` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `0` |
+| Phases skipped | `none` |

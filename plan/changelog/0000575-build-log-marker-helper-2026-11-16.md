@@ -21,7 +21,9 @@ Step 51 of an earlier initiative typed its RED and GREEN times by hand. The time
 
 ## Validation results
 
-Recorded at P3.
+- The clean-clone suite shows 472 feature suites passed and 3 failed, and 19 regression suites passed. All 3 failures also fail on the base commit.
+- The new suites pass with 12 and 3 checks.
+- The agent verified every criterion by execution. Security risk is low.
 
 ## Skipped phases
 
