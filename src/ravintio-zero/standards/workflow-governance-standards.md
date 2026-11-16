@@ -30,7 +30,7 @@ Read this file when you write a marker line or read a workflow governance sectio
 - `RED: {unit} ({ISO-8601 timestamp})`
 - `GREEN: {unit} ({ISO-8601 timestamp})`
 
-The implement skill writes the `RED:` and `GREEN:` markers for an inline unit. `workflow-metrics.mjs` does not count them. `build-log-check.mjs` checks that each `GREEN:` follows a `RED:` for the same unit.
+The implement skill writes the `RED:` and `GREEN:` markers for an inline unit. It runs `ravintio-zero/scripts/build-log-mark.mjs`, which reads the clock and appends the line. `workflow-metrics.mjs` does not count them. `build-log-check.mjs` checks that each `GREEN:` follows a `RED:` for the same unit.
 
 The implement skill writes the `Improve:` markers, one per improvement cycle. `workflow-metrics.mjs` does not count them, and no threshold applies. They record the gain for a human to read.
 

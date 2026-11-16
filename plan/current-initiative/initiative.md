@@ -188,7 +188,7 @@ The human confirmed the chart on 2026-11-14 with "build the initiative as fast a
 | 28 | 0000572-tests-share-a-repo-root-helper | Tests share a repo-root helper for both pack trees | 0000528, 0000539 | minor | | pending | tests |  |
 | 29 | 0000573-require-unit-reports | Require unit reports | 0000417 | minor | 0.125.0 | merged | dispatch | |
 | 30 | 0000574-delivery-pr-lists-steps-in-version-order | Delivery PR lists steps in version order | 0000543 | minor | | pending | coord |  |
-| 31 | 0000575-build-log-marker-helper | Build log marker helper | 0000524 | minor | | pending | dispatch |  |
+| 31 | 0000575-build-log-marker-helper | Build log marker helper | 0000524 | minor | 0.135.0 | merged | dispatch | |
 | 32 | 0000576-phase-start-time-at-phase-start | Record each phase start time when the phase begins | 0000402 | minor | | pending | dispatch |  |
 | 33 | 0000577-plan-lists-change-shapes | Plan lists the change shapes a diff reader must handle | 0000516 | minor | | pending | plan |  |
 | 34 | 0000578-plan-lists-pass-signals | Plan lists every way a check can pass | 0000529 | minor | | pending | plan |  |
@@ -223,3 +223,4 @@ The merge queue adds one row for each step it merges. See the merge queue sectio
 | 12 | #234 | tag v0.132.0 | 0.132.0 | 2026-11-15T23:03:46Z |
 | 26 | #235 | tag v0.133.0 | 0.133.0 | 2026-11-15T23:59:38Z |
 | 13 | #236 | tag v0.134.0 | 0.134.0 | 2026-11-16T00:24:30Z |
+| 31 | #237 | tag v0.135.0 | 0.135.0 | 2026-11-16T01:37:14Z |
