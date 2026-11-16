@@ -80,3 +80,6 @@ Complete: P1 (2026-11-16T00:32:42Z)
 | Notes | both units are small, so the agent runs them inline in one tree and dispatches no subagent |
 
 - In progress: U1 marker script (2026-11-16T00:33:01Z)
+- RED: U1 marker script (2026-11-16T00:33:30Z)
+- GREEN: U1 marker script (2026-11-16T00:33:37Z)
+- Done: U1 marker script (code, inline, none, 2026-11-16T00:33:37Z)
