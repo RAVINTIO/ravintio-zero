@@ -18,7 +18,7 @@ As the ship phase, I fail a phase block whose `Start` follows its first artifact
 ## Functional Requirements
 - Check 10 finds the commit that added the build log. It then lists later commits that touch each phase's artifact paths.
 - P1 paths are `requirements/`, `scope.md`, `execution-plan.md`, `risk-register.md`, `story-map.md`, and `domain-glossary.md` under `plan/current/`.
-- P2 paths are any path outside `plan/`.
+- P2 paths are any path outside `plan/` and `docs/`.
 - P3 paths are `verification-report.md`, `security-report.md`, and `acceptance-evidence.md` under `plan/current/`.
 - P4 paths are `build-report.md` under `plan/current/`.
 - The check fails a phase when its `Start` is more than one minute later than the oldest listed commit. The finding names the phase.

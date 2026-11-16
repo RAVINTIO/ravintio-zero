@@ -29,7 +29,7 @@
 - Data ownership: the build log belongs to the orchestrator and the check only reads it
 - Deployment: pack files in `src/ravintio-zero/`, mirrored to `ravintio-zero/`
 - API versioning: not applicable
-- Method: the first artifact commit of a phase is the oldest commit after the commit that added the build log. It touches that phase's artifact paths, listed in `build-log-check.mjs`. P2 uses any path outside `plan/`.
+- Method: the first artifact commit of a phase is the oldest commit after the commit that added the build log. It touches that phase's artifact paths, listed in `build-log-check.mjs`. P2 uses any path outside `plan/` and `docs/`, because the ADR counter lands at P1.
 
 ## Component Paths
 - src/ravintio-zero/
