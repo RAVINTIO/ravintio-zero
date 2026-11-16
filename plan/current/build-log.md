@@ -37,6 +37,8 @@ Run mode: autonomous (2026-11-16T02:49:58Z, initiative step 7)
 | Parallel task batches | `0` |
 | Notes | Initiative 0000544 step 7. Baseline suite runs in a clean clone. |
 
+Complete: P0 (2026-11-16T02:50:26Z)
+
 - Decision applied (initiative chart): Confirmation: setup rerun at each `Setup:` stop
 - Decision not applicable (initiative chart): The step PR fails CI or conflicts after ship archived the run: no PR exists yet
 - Decision applied (initiative chart): When to write `ready`
@@ -60,6 +62,8 @@ Run mode: autonomous (2026-11-16T02:49:58Z, initiative step 7)
 | Parallel task batches | `0` |
 | Notes | Artifacts written inline. Consistency check clean. Initiative gate self-confirmed. |
 
+Complete: P1 (2026-11-16T02:51:56Z)
+
 ### P2: Implement
 
 | Field | Value |
@@ -73,6 +77,8 @@ Run mode: autonomous (2026-11-16T02:49:58Z, initiative step 7)
 | MCP calls | `0` |
 | Parallel task batches | `0` |
 | Notes | Four small units ran inline. Batches 1 to 3 ran in order because each unit is small. |
+
+Complete: P2 (2026-11-16T03:24:32Z)
 
 - RED: U1 (2026-11-16T02:52:33Z)
 - GREEN: U1 (2026-11-16T02:54:16Z)
@@ -106,4 +112,38 @@ Run mode: autonomous (2026-11-16T02:49:58Z, initiative step 7)
 | Parallel task batches | `0` |
 | Notes | OS gap: local macos, CI ubuntu, windows. Docs edit pass ran inline, prose check exit 0. |
 
+Complete: P3 (2026-11-16T03:25:10Z)
+
 - Tests run: full suite: 475 passed, 3 failed (2026-11-16T03:25:10Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-16T03:25:35Z` |
+| End | `2026-11-16T03:25:35Z` |
+| Wall clock | `1` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Initiative step. Archive runs after green CI. |
+
+Complete: P4 (2026-11-16T03:25:35Z)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `45` |
+| Total agents spawned | `0` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `0` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `0` |
+| Phases skipped | none |

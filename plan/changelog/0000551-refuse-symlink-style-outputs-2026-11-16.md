@@ -22,7 +22,9 @@ A link at a style output path redirected the setup write to another file. Backlo
 
 ## Validation results
 
-Recorded at P3.
+- The clean-clone suite shows 475 feature suites passed and 3 failed, and 19 regression suites passed. All 3 failures also fail on the base commit.
+- The new suites pass with 20 checks in bash and 16 in PowerShell.
+- The agent verified every criterion by running `setup.sh` with planted links. Security risk is low.
 
 ## Skipped phases
 
