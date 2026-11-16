@@ -68,8 +68,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-16T04:04:12Z` |
-| End | `pending` |
-| Wall clock | `pending` |
+| End | `2026-11-16T04:51:45Z` |
+| Wall clock | `46` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | `0` |
