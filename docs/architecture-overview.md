@@ -1,6 +1,6 @@
 # Architecture Overview
 
-Last updated: 0000558-plan-only-push-short-ci
+Last updated: 0000552-duplicate-backlog-ids
 
 ## What this repo is
 
@@ -47,7 +47,7 @@ The load instruction fires once per session. The hook writes the `session_id` to
 
 Migration findings come from the ledger `plan/state/migrations.md`, which sits outside the pack. Each row holds a migration id, a result (`done` or `not applicable`), and the pack version. A `done` row gives no finding. A `not applicable` row gives none at the same pack version, unless a `**Detect:**` line in the migration file shows its condition is now true. The migrator appends rows and edits nothing inside `ravintio-zero/`. Migration 0006 copies the pack's `_done/` records into the ledger.
 
-Each backlog entry carries `priority` (`high`, `medium`, or `low`) and `theme` in its frontmatter. A missing field reads as `medium` and `unsorted`. `scripts/backlog-index.mjs` writes `plan/backlog/index.md`, grouped by theme and ordered by priority. With `--check` it exits 1 when the committed index differs from a fresh run, and CI runs that check. With `--review` it lists entries older than `backlogReviewDays` in `product.yml` (default 5), counted from **Date filed**. Discovery Start Actions step 10 runs the review and offers entries in index order. Migration 0007 sets the defaults on existing entries.
+Each backlog entry carries `priority` (`high`, `medium`, or `low`) and `theme` in its frontmatter. A missing field reads as `medium` and `unsorted`. `scripts/backlog-index.mjs` writes `plan/backlog/index.md`, grouped by theme and ordered by priority. With `--check` it exits 1 when two entry folders share an id, and prints one `check: duplicate backlog id` line for each. It also exits 1 when the committed index differs from a fresh run, and CI runs that check. The generate mode and `--review` ignore a duplicate, because the merge queue builds the index before `id-collisions.mjs` renumbers (0000552 ADR-0350). With `--review` it lists entries older than `backlogReviewDays` in `product.yml` (default 5), counted from **Date filed**. Discovery Start Actions step 10 runs the review and offers entries in index order. Migration 0007 sets the defaults on existing entries.
 
 `check-reply-prefix.mjs` checks `last_assistant_message` from the Stop payload. If the field is absent, it reads the last assistant message that follows the last user prompt and holds no `tool_use` block. It rereads the transcript up to 4 times. If it finds no final reply, it stays silent. It compares a leading `hh:mm` with the local clock, taking the shorter way round the day. A difference over 2 minutes is a miss, as is a missing prefix. `RAVINTIO_REPLY_CLOCK` and `RAVINTIO_REPLY_MARGIN_MIN` override the clock and the margin. The hook still only warns (0000468 ADR-0305). It also warns on a final reply whose `Question:` status line holds no question mark. It logs a `question:` line for each one (0000489 ADR-0318). A status outside Starting, Resuming, Complete, Question, Blocked, Skipped, Ready, and Restart draws a Status check warning and a `status:` log line. The `PostToolUse` hook `clock-context.mjs` returns the local `hh:mm` after every tool call, so an agent reads a time and never estimates one (0000499 ADR-0319).
 
