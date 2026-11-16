@@ -25,7 +25,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 |-------|-------|
 | Start | `2026-11-16T04:02:41Z` |
 | End | `2026-11-16T04:03:53Z` |
-| Wall clock | `3` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -39,23 +39,23 @@ Run speed: fast (2026-11-16T04:02:41Z, initiative step).
 
 Adoption mode: standard-iterative (signal: source in src/ beside an archive).
 
-Decision applied (initiative chart): Guard cut-back: CI on a plan-only push (0000476)
-
-Decision applied (initiative chart): A docs unit has no failing test, so build-log-check.mjs finds no RED: or GREEN: for it (0000410)
-
-Decision applied (initiative chart): Fast batches
-
-Decision applied (initiative chart): Pack edits
+Decision not applicable (initiative chart): Confirmation: setup rerun at each `Setup:` stop: step 14 raises no Setup: stop
 
 Decision applied (initiative chart): The step PR fails CI or conflicts after ship archived the run
 
-Decision applied (initiative chart): When to write ready
+Decision applied (initiative chart): When to write `ready`
 
 Decision applied (initiative chart): A test pins text that the step edits
 
-Decision not applicable (initiative chart): Confirmation: setup rerun at each Setup: stop: step 14 raises no Setup: stop
+Decision applied (initiative chart): Pack edits
 
-Decision not applicable (initiative chart): Known baseline failures: recorded in baseline-failures.md instead
+Decision not applicable (initiative chart): Known baseline failures: the baseline record holds the failures
+
+Decision applied (initiative chart): Guard cut-back: CI on a plan-only push (0000476)
+
+Decision applied (initiative chart): A docs unit has no failing test, so `build-log-check.mjs` finds no `RED:` or `GREEN:` for it (0000410)
+
+Decision applied (initiative chart): Fast batches
 
 Version plan: 0.138.0 plus minor bump (0.139.0 planned, the merge queue sets the released version).
 
@@ -72,6 +72,8 @@ Scope Lock (cross-session continuity): The group key reads the pull request numb
 
 Scope Lock complete. All four scenario paths captured.
 
+Complete: P0
+
 ### P1: Plan
 
 | Field | Value |
@@ -85,6 +87,8 @@ Scope Lock complete. All four scenario paths captured.
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | Inline plan. The artifact set is too small to justify subagent overhead. |
+
+Complete: P1
 
 ### P2: Implement
 
@@ -100,13 +104,38 @@ Scope Lock complete. All four scenario paths captured.
 | Parallel task batches | 2 |
 | Notes | U-1 runs inline. U-2 follows. |
 
----
 - RED: U-1 (2026-11-16T04:05:14Z)
 - GREEN: U-1 (2026-11-16T04:05:22Z)
 - Done: U-1 (content, inline, none, 2026-11-16T04:05:36Z)
 - RED: U-2 (2026-11-16T04:06:03Z)
 - GREEN: U-2 (2026-11-16T04:06:03Z)
 - Done: U-2 (content, inline, none, 2026-11-16T04:06:03Z)
+
+U-2 has no executable check, per backlog entry 0000410 and the chart row for docs units. Its RED line and GREEN line record no test run. The prose check passed on the docs at commit.
+
+Tests run: REQ-001: ravintio-zero/tests/test-0000558-req-001-concurrency.sh (2026-11-16T04:05:22Z)
+
+Tests run: full suite: 477 passed, 3 failed (2026-11-16T04:32:18Z)
+
+Complete: P2
+
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-16T04:32:25Z` |
+| End | `2026-11-16T04:33:33Z` |
+| Wall clock | `1` |
+| Model tier | primary |
+| Skills loaded | ravintio-validate-and-accept |
+| Agents spawned | 1 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Docs edit pass ran one cycle and changed one row. Archetype gates: none installed. |
+
+Complete: P3
+
+---
 
 ## Summary (filled at ship, P4)
 
