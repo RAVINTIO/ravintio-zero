@@ -25,7 +25,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 |-------|-------|
 | Start | `2026-11-16T04:02:26Z` |
 | End | `2026-11-16T04:03:52Z` |
-| Wall clock | `3` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | `0` |
@@ -39,7 +39,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Decision not applicable (initiative chart): A test pins text that the step edits: no pinned text expected, checked at P1
 - Decision applied (initiative chart): Pack edits
 - Decision applied (initiative chart): Known baseline failures
-- Decision applied (initiative chart): A docs unit has no failing test
+- Decision applied (initiative chart): A docs unit has no failing test, so `build-log-check.mjs` finds no `RED:` or `GREEN:` for it (0000410). U3 is a sync unit and U4 is a docs unit. Neither has an executable check. Their markers carry the time of logging.
 - Decision applied (initiative chart): Fast batches
 - Adoption mode: standard-iterative (signal: source in src/ beside plan/_archive/)
 - Backlog pickup: 0000542 pulled in from the step row. No open duplicate id exists now, so the renumber action needs no work.
@@ -69,7 +69,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 |-------|-------|
 | Start | `2026-11-16T04:04:12Z` |
 | End | `2026-11-16T04:51:45Z` |
-| Wall clock | `46` |
+| Wall clock | `48` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | `0` |
@@ -77,13 +77,38 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Parallel task batches | `0` |
 | Notes | Inline units. Each unit is one file edit, so subagents add overhead only. |
 
----
+
 - RED: U1 (2026-11-16T04:04:23Z)
+- RED: U2 (2026-11-16T04:04:23Z)
+- GREEN: U1 (2026-11-16T04:04:29Z)
 - GREEN: U2 (2026-11-16T04:04:29Z)
 - Done: U1 (content, inline, none, 2026-11-16T04:04:39Z)
 - Done: U2 (content, inline, none, 2026-11-16T04:04:39Z)
-- Done: U3 (content, inline, none, 2026-11-16T04:05:05Z)
-- Done: U4 (content, inline, none, 2026-11-16T04:05:05Z)
+- Tests run: REQ-001: test-0000552-req-001-duplicate-id-check.sh, test-0000321-req-002-index-generator.sh, test-0000321-req-003-ci-index-check.sh, test-0000321-req-004-review-mode.sh, test-0000481-req-001-regenerate.sh, test-0000547-req-001-002-index-rebuild-rule.sh (2026-11-16T04:04:39Z)
+- Tests run: full suite: 479 passed, 1 failed (2026-11-16T04:51:45Z)
+- Complete: P2 (2026-11-16T04:51:45Z)
+
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-16T04:51:45Z` |
+| End | `pending` |
+| Wall clock | `pending` |
+| Model tier | primary |
+| Skills loaded | ravintio-validate-and-accept |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | pending |
+
+---
+- RED: U3 (2026-11-16T04:52:28Z)
+- GREEN: U3 (2026-11-16T04:52:28Z)
+- Done: U3 (content, inline, none, 2026-11-16T04:52:28Z)
+- RED: U4 (2026-11-16T04:52:28Z)
+- GREEN: U4 (2026-11-16T04:52:28Z)
+- Done: U4 (content, inline, none, 2026-11-16T04:52:28Z)
 
 ## Summary (filled at ship, P4)
 
