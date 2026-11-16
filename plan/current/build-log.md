@@ -84,3 +84,11 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Notes | none |
 - RED: U1 order suite (2026-11-16T05:36:44Z)
 - GREEN: U2 start order edit (2026-11-16T05:36:44Z)
+- GREEN: U1 order suite (2026-11-16T05:37:04Z)
+- Done: U1 order suite (content, primary, none, 2026-11-16T05:37:04Z)
+- Done: U2 start order edit (content, primary, none, 2026-11-16T05:37:04Z)
+- GREEN: U3 sync both trees (passed: sync-installed.mjs --check exit 0) (2026-11-16T05:37:04Z)
+- Done: U3 sync both trees (content, primary, none, 2026-11-16T05:37:04Z)
+- Rework: `test-0000151-req-011` and `test-0000321-req-004-pickup-text` pinned start action numbers. Both pins updated in this step (chart decision row, 2026-11-16T05:39:03Z)
+- GREEN: U4 docs (no executable check, 0000410, passed: prose check) (2026-11-16T05:39:03Z)
+- Done: U4 docs (content, primary, none, 2026-11-16T05:39:03Z)
