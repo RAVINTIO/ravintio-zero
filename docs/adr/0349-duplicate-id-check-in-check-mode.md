@@ -1,7 +1,7 @@
 ---
 title: "ADR 0349: Duplicate id check in check mode only"
 summary: "backlog-index.mjs --check exits 1 on a duplicate id. The generate mode does not, so the merge queue can renumber."
-status: "proposed"
+status: "accepted"
 component: "ravintio-zero"
 version: "0.1.0"
 ---

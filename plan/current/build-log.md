@@ -78,6 +78,12 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Notes | Inline units. Each unit is one file edit, so subagents add overhead only. |
 
 ---
+- RED: U1 (2026-11-16T04:04:23Z)
+- GREEN: U2 (2026-11-16T04:04:29Z)
+- Done: U1 (content, inline, none, 2026-11-16T04:04:39Z)
+- Done: U2 (content, inline, none, 2026-11-16T04:04:39Z)
+- Done: U3 (content, inline, none, 2026-11-16T04:05:05Z)
+- Done: U4 (content, inline, none, 2026-11-16T04:05:05Z)
 
 ## Summary (filled at ship, P4)
 
