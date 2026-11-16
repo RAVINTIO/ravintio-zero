@@ -2,7 +2,7 @@
 
 **Feature:** Step sessions meet pending migrations
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** 244
 
 ## What changed
 
