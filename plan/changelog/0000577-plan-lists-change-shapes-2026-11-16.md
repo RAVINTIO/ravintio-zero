@@ -2,7 +2,7 @@
 
 **Feature:** Plan lists the change shapes a diff reader must handle
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** 240
 
 ## What changed
 
