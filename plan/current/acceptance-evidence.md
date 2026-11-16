@@ -1,6 +1,6 @@
 # Acceptance evidence
 
-- Checks: the requirement test passes (7 of 7). The local full suite shows 471 feature suites passed and 1 failed. The failure also fails on the base commit. The regression suite shows 19 passed.
+- Checks: the requirement test passes (7 of 7). The clean-clone suite shows 469 feature suites passed and 3 failed. All 3 failures also fail on the base commit. The regression suite shows 19 passed.
 - Self-correction cycles: 0.
 - Security: low risk. One informational finding, marked false-positive (`plan/current/security-report.md`).
 - Execution: AC-1, AC-2, AC-3, and NFR-001 verified by running the new suite and a negative probe.
