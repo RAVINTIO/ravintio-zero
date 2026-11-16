@@ -1,7 +1,7 @@
 ---
 title: "ADR 0349: Cancel superseded pull request runs"
 summary: "The workflow cancels an older run on a newer push to the same pull request and keeps every suite on every push."
-status: "proposed"
+status: "accepted"
 component: "ravintio-zero"
 version: "0.1.0"
 ---
