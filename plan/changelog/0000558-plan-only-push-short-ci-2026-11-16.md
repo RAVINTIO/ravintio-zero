@@ -2,7 +2,7 @@
 
 **Feature:** CI avoids extra runs on a plan-only push
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** 241
 
 ## What changed
 
