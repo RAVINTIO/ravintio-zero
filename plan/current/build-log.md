@@ -26,8 +26,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-16T00:31:06Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-16T00:32:04Z` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | `0` |
@@ -46,3 +46,19 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Queue: no item names step 27
 - Baseline: clean-clone suite started at 2026-11-16T00:30:32Z, output in `/tmp/step27/baseline.out`
 - Adoption mode: standard-iterative (signal: archive beside source in `plan/_archive/`)
+- Complete: P0 (2026-11-16T00:32:04Z)
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-16T00:32:04Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | none |
+
