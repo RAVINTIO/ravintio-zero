@@ -43,6 +43,9 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Decision applied (initiative chart): Fast batches
 - Adoption mode: standard-iterative (signal: source in src/ beside plan/_archive/)
 - Backlog pickup: 0000542 pulled in from the step row. No open duplicate id exists now, so the renumber action needs no work.
+- Run mode: autonomous (2026-11-16T04:03:06Z, initiative step)
+- Design: draft accepted via initiative chart. Check lives in --check only because the merge queue runs the generate mode before renumbering.
+- Complete: P0 (2026-11-16T04:03:06Z)
 
 ---
 
