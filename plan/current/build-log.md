@@ -90,6 +90,27 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Baseline: clean-clone suite ended with 3 inherited failures, recorded in `plan/current/baseline-failures.md`
 - Complete: P2 (2026-11-18T08:35:19Z)
 
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-18T08:35:19Z` |
+| End | `2026-11-18T08:36:22Z` |
+| Wall clock | `2` |
+| Model tier | primary |
+| Skills loaded | ravintio-validate-and-accept |
+| Agents spawned | `1` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Fast batch not used: the full suite had already run in P2 on the same commit. Docs edit pass ran 1 cycle on a sonnet subagent. |
+
+- Tests run: full suite: 500 passed, 3 failed, all 3 inherited (2026-11-18T08:35:19Z)
+- Docs edit pass: changelog split one sentence, ADR-0196 paragraph unchanged, prose-check exit 0
+- Execution verification: 15 solo guard runs passed, see `plan/current/verification-report.md`
+- Security: 0 critical or high findings
+- Acceptance: autonomous, evidence in `plan/current/acceptance-evidence.md`
+- Complete: P3 (2026-11-18T08:36:22Z)
+
 ---
 
 ## Summary (filled at ship, P4)

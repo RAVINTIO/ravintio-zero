@@ -10,7 +10,7 @@
 
 ## Why
 
-A full-suite run sometimes reported a hit on an allowlisted file, such as `ravintio-zero/migrations/0005-initiative-rename.md`. The suite passed alone. The piped `grep -q` can end early, and under `pipefail` that ended the match with a failure. The hit path and line changed from run to run.
+A full-suite run sometimes reported a hit on an allowlisted file, such as `ravintio-zero/migrations/0005-initiative-rename.md`. The suite passed alone. The piped `grep -q` can end early. Under `pipefail`, that early exit made the match fail. The hit path and line changed from run to run.
 
 ## Deviations
 
@@ -18,7 +18,7 @@ The chart row named a stable copy of the tree or a fix to an earlier suite. No s
 
 ## Validation results
 
-See the build log for the full-suite result.
+The full suite in a clean clone shows only the 3 inherited failures: `test-0000037-req-004-remove-old-folder.sh`, `test-0000318-req-004-merge-guard-pinned.sh`, and `test-0000450-req-004-report-format.sh`. The guard suite passed 15 of 15 solo runs and passed in the full run. The flake does not reproduce on demand.
 
 ## Skipped phases
 
