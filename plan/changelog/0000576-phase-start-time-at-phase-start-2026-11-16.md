@@ -22,7 +22,7 @@ An earlier run wrote the P1 to P3 blocks at phase end. Their wall clock read 0 m
 
 ## Validation results
 
-Filled at P3.
+The clean-clone full suite passes apart from the three inherited baseline suites: `test-0000037-req-004-remove-old-folder.sh`, `test-0000318-req-004-merge-guard-pinned.sh`, and `test-0000450-req-004-report-format.sh`. The security review finds no critical or high issue. The first full-suite run hit the background time limit before it printed a summary, so the agent reran it with a longer limit.
 
 ## Skipped phases
 

@@ -105,3 +105,34 @@ Complete: P2 (2026-11-16T07:27:35Z)
 | Notes | initiative 0000544 step 32 |
 Skipped: docs edit pass subagent (two short docs, prose-check exit 0)
 Complete: P3 (2026-11-18T08:15:30Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-18T08:15:57Z` |
+| End | `2026-11-18T08:15:57Z` |
+| Wall clock | `0` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | initiative step: the agent skips the version bump, and the merge queue merges |
+Complete: P4 (2026-11-18T08:15:57Z)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `2952` |
+| Total agents spawned | `0` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `0` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `0` |
+| Phases skipped | `none` |
