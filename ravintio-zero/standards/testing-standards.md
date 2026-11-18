@@ -52,6 +52,9 @@ describe("req-001-auth: user login flow", () => {
 
 Always test the happy path for every acceptance criterion, error cases, boundary conditions, and state transitions. Never test framework internals, private implementation details, or third-party library behaviour.
 
+<!-- rule: tests-no-head-diff -->
+A test never compares the working tree with `HEAD` or another moving ref. After someone commits the work, the diff is empty and the test passes with no check. Diff against a fixed base commit, or plant a fixture in a scratch repo and diff that. `test-0000550-req-002-no-head-diffs.sh` fails any suite that runs `git diff` against `HEAD`, `HEAD~n`, `HEAD^`, `@`, `ORIG_HEAD`, or `FETCH_HEAD`.
+
 ---
 
 ## 4. Test Data
