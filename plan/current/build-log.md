@@ -67,10 +67,30 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 
 - Complete: P1 (2026-11-18T07:51:39Z)
 
----
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-18T07:51:39Z` |
+| End | `2026-11-18T08:35:19Z` |
+| Wall clock | `44` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | U1 inline. No batch departs from the plan. Units are sequential: the sync, the docs, and the full run depend on U1. Deviation: the cause is a flaky allowlist match, not a changed tree. The design, REQ-001, REQ-002, ADR-0196, and the changelog record it. |
+
 - RED: U1 (2026-11-18T07:54:59Z)
 - GREEN: U1 (2026-11-18T07:55:09Z)
 - Done: U1 (content, inline, none, 2026-11-18T07:55:09Z)
+- Tests run: REQ-001: test-0000189-req-007-old-name-guard.sh (2026-11-18T07:55:09Z)
+- Tests run: REQ-002: test-0000189-req-007-old-name-guard.sh (2026-11-18T07:55:09Z)
+- Tests run: full suite: 500 passed, 3 failed (2026-11-18T08:35:19Z)
+- Baseline: clean-clone suite ended with 3 inherited failures, recorded in `plan/current/baseline-failures.md`
+- Complete: P2 (2026-11-18T08:35:19Z)
+
+---
 
 ## Summary (filled at ship, P4)
 
