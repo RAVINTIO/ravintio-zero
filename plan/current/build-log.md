@@ -81,7 +81,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 |-------|-------|
 | Start | `2026-11-16T07:07:31Z` |
 | End | `2026-11-18T07:31:29Z` |
-| Wall clock | `2d 0h 24m (session paused between 2026-11-16 and 2026-11-18)` |
+| Wall clock | `2904` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | `0` |
@@ -111,7 +111,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 |-------|-------|
 | Start | `2026-11-18T07:31:29Z` |
 | End | `2026-11-18T07:31:29Z` |
-| Wall clock | `0m` |
+| Wall clock | `0` |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | `0` |
@@ -124,3 +124,33 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Security: 2 informational findings, none open
 - Skipped: docs edit pass rerun (prose check passed on the one changed doc at commit)
 - Complete: P3 (2026-11-18T07:31:29Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-18T07:31:59Z` |
+| End | `2026-11-18T07:31:59Z` |
+| Wall clock | `0` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Initiative step. The agent raises the PR first and archives after green CI. |
+
+- Complete: P4 (2026-11-18T07:31:59Z)
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `2909` |
+| Total agents spawned | `0` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `0` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `0` |
+| Phases skipped | `none` |

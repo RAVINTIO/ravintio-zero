@@ -18,7 +18,7 @@ None. The replay already sorted by version, so only the table and the rule text 
 
 ## Validation results
 
-Pending P3.
+Impacted suites pass. The full suite shows 3 inherited failures and no new ones. The security review found 2 informational items. See the acceptance evidence in the PR description.
 
 ## Skipped phases
 
