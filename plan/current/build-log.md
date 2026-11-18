@@ -93,3 +93,10 @@ Complete: P1 (2026-11-18T08:56:50Z)
 - GREEN: U-002 (2026-11-18T09:04:15Z)
 - Done: U-001 (code, inline, none, 2026-11-18T09:05:48Z)
 - Done: U-002 (code, inline, none, 2026-11-18T09:05:48Z)
+- In progress: U-003 (2026-11-18T09:06:04Z)
+- RED: U-003 (2026-11-18T09:06:04Z), the docs unit has no executable check, per 0000410
+- GREEN: U-003 (2026-11-18T09:06:04Z), the prose check passed at commit, per 0000410
+- Done: U-003 (content, inline, none, 2026-11-18T09:06:04Z)
+- Tests run: REQ-001: test-0000583-req-001-driver-removes-step-temp.sh, test-0000501-req-001-004-sweep.sh, test-0000509-req-001-003-clear-ready.sh, test-0000511-req-001-003-stop-summary.sh (2026-11-18T09:06:04Z)
+- Tests run: REQ-002: test-0000583-req-002-suites-remove-temp-on-exit.sh, test-0000462-req-001-git-identity-isolation.sh (2026-11-18T09:06:04Z)
+- Parallel batches: 2 planned. The agent ran all units inline in one tree, because each unit is small.
