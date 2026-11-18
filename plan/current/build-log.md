@@ -26,8 +26,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-18T07:48:23Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-18T07:50:14Z` |
+| Wall clock | `4` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | `0` |
@@ -49,6 +49,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Adoption mode: standard-iterative (signal: archive beside source in `plan/_archive/`)
 - Run mode: autonomous (initiative step)
 - Run speed: fast (2026-11-18T07:49:00Z)
+- Complete: P0 (2026-11-18T07:50:14Z)
 
 ---
 
