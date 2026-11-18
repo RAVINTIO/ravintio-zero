@@ -51,6 +51,22 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Run speed: fast (2026-11-18T07:49:00Z)
 - Complete: P0 (2026-11-18T07:50:14Z)
 
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-18T07:50:14Z` |
+| End | `2026-11-18T07:51:39Z` |
+| Wall clock | `2` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | 2 requirements, no ADR (no decision meets an ADR criterion), consistency check clean, human-settings-check passed |
+
+- Complete: P1 (2026-11-18T07:51:39Z)
+
 ---
 
 ## Summary (filled at ship, P4)
