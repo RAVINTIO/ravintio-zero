@@ -74,6 +74,39 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 
 - Complete: P1 (2026-11-18T08:35:26Z)
 
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-18T08:35:26Z` |
+| End | `2026-11-18T08:36:17Z` |
+| Wall clock | `0` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | none |
+
+- In progress: U2 pass signal paths suite (2026-11-18T08:36:17Z)
+- RED: U2 pass signal paths suite (7 of 9 checks failed before the section existed) (2026-11-18T08:36:17Z)
+- GREEN: U2 pass signal paths suite (9 passed) (2026-11-18T08:36:17Z)
+- Done: U2 pass signal paths suite (content, primary, none, 2026-11-18T08:36:17Z)
+- In progress: U1 pass signal paths section (2026-11-18T08:36:17Z)
+- RED: U1 pass signal paths section (checked by U2) (2026-11-18T08:36:17Z)
+- GREEN: U1 pass signal paths section (passed: test-0000578 and 11 impacted suites) (2026-11-18T08:36:17Z)
+- Done: U1 pass signal paths section (content, primary, none, 2026-11-18T08:36:17Z)
+- In progress: U3 sync both trees (2026-11-18T08:36:17Z)
+- RED: U3 sync both trees (no executable check, 0000410) (2026-11-18T08:36:17Z)
+- GREEN: U3 sync both trees (no executable check, 0000410, passed: sync-installed.mjs --check exit 0) (2026-11-18T08:36:17Z)
+- Done: U3 sync both trees (content, primary, none, 2026-11-18T08:36:17Z)
+- In progress: U4 docs (2026-11-18T08:36:17Z)
+- RED: U4 docs (no executable check, 0000410) (2026-11-18T08:36:17Z)
+- GREEN: U4 docs (no executable check, 0000410, passed: prose check at commit) (2026-11-18T08:36:17Z)
+- Done: U4 docs (content, primary, none, 2026-11-18T08:36:17Z)
+
+- Complete: P2 (2026-11-18T08:36:17Z)
+
 ---
 
 ## Summary (filled at ship, P4)
