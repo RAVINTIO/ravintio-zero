@@ -708,7 +708,7 @@ The initiative skill runs this stage after the last step merges. Every message b
    gh pr create --base main --head initiative/{id}-{slug}-reshaped
    ```
 
-6. Make the first line of the body say to merge with a merge commit, not a squash, so each step tag stays reachable from `main`. Then list each step with its version and tag, and name the retrospective record. Scan the body for credential patterns before you raise the PR, as in Step 9.
+6. Make the first line of the body say to merge with a merge commit, not a squash, so each step tag stays reachable from `main`. Then add the step table that `reshape-initiative.mjs` prints. It lists each step with its version and tag in ascending `Version` order, which is merge order. Name the retrospective record. Scan the body for credential patterns before you raise the PR, as in Step 9.
 7. Report the PR URL and end the run. After the human merges the PR, delete the old branch, `initiative/{id}-{slug}`, locally and on `origin`.
 
 The `main` ruleset allows only the merge commit method. See `ravintio-zero/docs/main-ruleset.md`.
