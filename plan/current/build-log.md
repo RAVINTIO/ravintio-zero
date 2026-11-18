@@ -125,6 +125,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Parallel task batches | `0` |
 | Notes | Initiative step: PR and CI wait run before the archive. The version is set by the merge queue. |
 
+- CI duration: 363s (run 44268599394, 2026-11-18T08:43:47Z)
 - Complete: P4 (2026-11-18T08:36:37Z)
 
 ---
