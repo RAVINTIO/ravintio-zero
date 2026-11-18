@@ -56,6 +56,24 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Scope Lock complete. All four scenario paths captured.
 - Complete: P0 (2026-11-18T08:34:26Z)
 
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-18T08:35:19Z` |
+| End | `2026-11-18T08:35:26Z` |
+| Wall clock | `0` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | none |
+
+- Skipped: ADRs (no decision meets an ADR criterion)
+
+- Complete: P1 (2026-11-18T08:35:26Z)
+
 ---
 
 ## Summary (filled at ship, P4)
