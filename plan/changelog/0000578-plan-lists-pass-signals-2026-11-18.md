@@ -2,7 +2,7 @@
 
 **Feature:** Plan lists every way a check can pass
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** 248
 
 ## What changed
 
