@@ -80,8 +80,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-16T07:07:31Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-18T07:31:29Z` |
+| Wall clock | `2d 0h 24m (session paused between 2026-11-16 and 2026-11-18)` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | `0` |
@@ -103,3 +103,24 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Note: the agent wrote the U1 and U2 markers after the unit runs. The suites showed 8 FAIL lines at 2026-11-16T07:08Z before the edits and 0 after. The marker times show when the agent logged them.
 - Tests run: REQ-001: test-0000574-req-001-rule-6-order.sh (2026-11-16T07:09:23Z)
 - Tests run: REQ-002, REQ-003: test-0000574-req-002-003-printed-table.sh, test-0000353-req-001-004-reshape-script.sh, test-0000378-req-004-merge-order.sh, test-0000378-req-005-reshape-folds.sh (2026-11-16T07:09:23Z)
+- Complete: P2 (2026-11-18T07:31:29Z)
+
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-18T07:31:29Z` |
+| End | `2026-11-18T07:31:29Z` |
+| Wall clock | `0m` |
+| Model tier | primary |
+| Skills loaded | ravintio-validate-and-accept |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | Resumed with the reports already written. The agent reran the impacted suites, the sync check, and the archetype gates. |
+
+- Checks: 5 impacted suites exit 0, `sync-installed.mjs --check` exit 0, `archetype-gates.mjs` exit 0
+- Full suite: clean clone of the final commit, 3 inherited failures, 0 new (see `acceptance-evidence.md`)
+- Security: 2 informational findings, none open
+- Skipped: docs edit pass rerun (prose check passed on the one changed doc at commit)
+- Complete: P3 (2026-11-18T07:31:29Z)
