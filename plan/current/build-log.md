@@ -68,6 +68,9 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Complete: P1 (2026-11-18T07:51:39Z)
 
 ---
+- RED: U1 (2026-11-18T07:54:59Z)
+- GREEN: U1 (2026-11-18T07:55:09Z)
+- Done: U1 (content, inline, none, 2026-11-18T07:55:09Z)
 
 ## Summary (filled at ship, P4)
 
