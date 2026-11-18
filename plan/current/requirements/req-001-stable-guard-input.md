@@ -16,8 +16,8 @@ version: "0.1.0"
 As a maintainer, I run the full suite, so that the old-name guard gives the result it gives alone.
 
 ## Functional Requirements
-- P2 reproduces the failure first and names the earlier suite or the cause. The build log records it.
-- The guard reads a stable copy of the tree, or the earlier suite stops changing the tree. The reproduction decides which.
+- The cause is a flaky allowlist match. The guard piped the allowlist to `grep -q` under `pipefail`, so an early grep exit made an allowlisted file a hit. The paths and lines of the logged hits differ from run to run, which fits a random failure and not a changed tree.
+- The guard matches the allowlist in Bash and starts no grep for it. No earlier suite changes the tree, so the guard needs no stable copy.
 - The allowlist and the old-name pattern keep their current entries.
 - The guard still prints each hit as `path:line`.
 

@@ -16,13 +16,13 @@ version: "0.1.0"
 As a maintainer, I plant the earlier suite's change, so that a test proves the guard ignores it.
 
 ## Functional Requirements
-- The guard suite holds a case that plants the change the reproduction found, in a scratch repo.
+- The guard suite holds a case that plants a failing grep and an old name in an allowlisted file, in a scratch repo.
 - The case expects the guard to pass.
 - The planted-name cases from 0000189 and 0000192 keep their checks.
 
 ## Acceptance Criteria
 - [ ] AC-1: the planted change passes
-  - Given a scratch repo with the earlier suite's change planted
+  - Given a scratch repo with a failing grep and a planted old name in an allowlisted file
   - When the guard runs on it
   - Then the guard reports no hit and passes
 - [ ] AC-2: a planted old name still fails

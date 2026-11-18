@@ -31,7 +31,8 @@
 - Data ownership: the pack owns no data.
 - Deployment: none. The pack ships as files.
 - API versioning: not applicable
-- Approach: reproduce the failure first. Then make the guard read a stable copy of the tree, or fix the earlier suite that changes it. Add a test that plants that suite's change.
+- Approach: the cause is a flaky allowlist match, not a changed tree. The guard matches the allowlist in Bash with no pipe to grep. A test plants a failing grep and an old name in an allowlisted file.
+- Deviation: the chart row offered a stable copy or a suite fix. Neither applies, because no suite changes the tree. The fix removes the cause and keeps the allowlist as it is.
 
 ## Component Paths
 <!-- List every folder the plan writes. gate-write blocks writes outside this list. -->

@@ -57,7 +57,7 @@ None. The change is one test suite in one component.
 
 ## Units
 
-- U1: reproduce the failure, change the guard suite for REQ-001, and add the planted-change case for REQ-002.
+- U1: change the guard suite for REQ-001, and add the planted-change cases for REQ-002.
 - U2: run `sync-installed.mjs` to copy U1 into `ravintio-zero/`.
 - U3: update the docs that name the guard.
 
