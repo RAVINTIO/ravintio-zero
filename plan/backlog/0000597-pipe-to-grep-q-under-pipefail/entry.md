@@ -1,11 +1,11 @@
 ---
-title: "Backlog Entry: 0000596 - Pipe to grep -q under pipefail"
+title: "Backlog Entry: 0000597 - Pipe to grep -q under pipefail"
 summary: "58 suites pipe to grep -q under pipefail. The pattern made the old-name guard fail at random in 0000561."
 status: "open"
 priority: "low"
 theme: "tests"
 ---
-# Backlog Entry: 0000596 - Pipe to grep -q under pipefail
+# Backlog Entry: 0000597 - Pipe to grep -q under pipefail
 
 **Source feature:** 0000561-old-name-guard-fails-in-full-suite
 **Source phase:** P2

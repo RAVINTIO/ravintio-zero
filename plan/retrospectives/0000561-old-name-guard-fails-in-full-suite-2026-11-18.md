@@ -30,10 +30,10 @@ Step 17 removed a random failure from the old-name guard. The guard now matches 
 
 ## Change
 
-- Other suites may hold the same pipe pattern. A search finds 58 suites that set `pipefail` and hold a `| grep -q` line (backlog entry 0000596).
+- Other suites may hold the same pipe pattern. A search finds 58 suites that set `pipefail` and hold a `| grep -q` line (backlog entry 0000597).
 
 ## Actions
 
 | Change | Owner | Lives in | Verified by | Filed as |
 |--------|-------|----------|-------------|----------|
-| Flag `| grep -q` under `pipefail` in a style test and fix the real hits | the pack maintainers | `ravintio-zero/tests/` | the new style test | `plan/backlog/0000596-pipe-to-grep-q-under-pipefail/entry.md`, from this retrospective |
+| Flag `| grep -q` under `pipefail` in a style test and fix the real hits | the pack maintainers | `ravintio-zero/tests/` | the new style test | `plan/backlog/0000597-pipe-to-grep-q-under-pipefail/entry.md`, from this retrospective |
