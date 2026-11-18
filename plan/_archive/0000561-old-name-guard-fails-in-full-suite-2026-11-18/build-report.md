@@ -56,3 +56,4 @@ Breaches: 0. The gate reports and does not block. Counts come from marker lines 
 | Class | Tier | Units | Rework |
 |-------|------|-------|--------|
 | content | inline | 1 | 0 |
+Retrospective: plan/retrospectives/0000561-old-name-guard-fails-in-full-suite-2026-11-18.md
