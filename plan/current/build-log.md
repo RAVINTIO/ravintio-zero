@@ -107,6 +107,39 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 
 - Complete: P2 (2026-11-18T08:36:17Z)
 
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-18T08:36:17Z` |
+| End | `2026-11-18T09:00:19Z` |
+| Wall clock | `24` |
+| Model tier | primary |
+| Skills loaded | ravintio-validate-and-accept |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | none |
+
+- Tests run: full suite: 484 passed, 3 failed, all three inherited (2026-11-18T09:00:19Z)
+- Skipped: docs edit pass subagent (one doc sentence, prose-check exit 0)
+
+- Complete: P3 (2026-11-18T09:00:19Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-18T09:00:19Z` |
+| End | `PENDING` |
+| Wall clock | `PENDING` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | none |
+
 ---
 
 ## Summary (filled at ship, P4)
