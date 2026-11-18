@@ -45,7 +45,13 @@ allowed() {
   local f="$1" d
   # The source copy under src/ shares the allowlist of the installed copy (0000397).
   case "$f" in src/ravintio-zero/*) f="${f#src/}" ;; esac
-  if printf '%s\n' "$ALLOW_FILES" | grep -qxF -- "$f"; then return 0; fi
+  # Match in Bash, with no pipe to grep. A pipe to grep -q can end early, and
+  # under pipefail the early end turns an allowlisted file into a hit (0000561).
+  while IFS= read -r d; do
+    [ "$f" = "$d" ] && return 0
+  done <<EOF
+$ALLOW_FILES
+EOF
   while IFS= read -r d; do
     case "$f" in "$d"*) return 0 ;; esac
   done <<EOF
@@ -99,5 +105,34 @@ git -C "$TMP" add ravintio-zero/skills/demo/SKILL.md
 ok=1
 if guard "$TMP" >/dev/null; then ok=0; fi
 check "0000192 req-003: a real archive folder name does not match" "$ok"
+
+# 0000561: the allowlist match never depends on a pipe to grep. A grep that
+# exits early, as one can on a busy machine, must not turn an allowlisted file
+# into a hit. The shim stands in for that grep.
+SHIM="$TMP/shim"
+mkdir -p "$SHIM" "$TMP/ravintio-zero/migrations"
+printf '#!/bin/sh\nexit 2\n' > "$SHIM/grep"
+chmod +x "$SHIM/grep"
+git -C "$TMP" rm -q --cached ravintio-zero/skills/demo/SKILL.md
+rm -f "$TMP/ravintio-zero/skills/demo/SKILL.md"
+printf 'line one\nSee plan/current-roadmap/ for the old name.\n' > "$TMP/ravintio-zero/migrations/0005-initiative-rename.md"
+git -C "$TMP" add ravintio-zero/migrations/0005-initiative-rename.md
+ok=1
+if PATH="$SHIM:$PATH" guard "$TMP" >/dev/null; then ok=0; fi
+check "0000561 req-001 AC-1: an allowlisted hit passes when grep fails" "$ok"
+
+# The planted change: a working-tree edit that adds a second old name to an allowlisted file.
+printf 'line one\nSee plan/current-roadmap/ and roadmap-run.mjs.\n' > "$TMP/ravintio-zero/migrations/0005-initiative-rename.md"
+ok=1
+if PATH="$SHIM:$PATH" guard "$TMP" >/dev/null; then ok=0; fi
+check "0000561 req-002 AC-1: a planted change in an allowlisted file passes" "$ok"
+
+mkdir -p "$TMP/ravintio-zero/skills/demo"
+printf 'line one\nSee plan/current-roadmap/.\n' > "$TMP/ravintio-zero/skills/demo/SKILL.md"
+git -C "$TMP" add ravintio-zero/skills/demo/SKILL.md
+out="$(PATH="$SHIM:$PATH" guard "$TMP")"; rc=$?
+ok=1
+if [ "$rc" -ne 0 ] && printf '%s\n' "$out" | grep -qF 'ravintio-zero/skills/demo/SKILL.md:2'; then ok=0; fi
+check "0000561 req-002 AC-2: a planted old name still fails when grep fails" "$ok"
 
 print_summary
