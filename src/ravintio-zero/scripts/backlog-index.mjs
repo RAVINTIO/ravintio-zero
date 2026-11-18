@@ -3,7 +3,7 @@
 //
 // Usage: node backlog-index.mjs [--root dir] [--check] [--review] [--today YYYY-MM-DD]
 //   --root   the repository folder. Default is the current folder.
-//   --check  write nothing. Exit 1 if plan/backlog/index.md is missing or stale.
+//   --check  write nothing. Exit 1 if two entry folders share an id, or if plan/backlog/index.md is missing or stale.
 //   --review write nothing. List entries older than backlogReviewDays in product.yml (default 5).
 //   --today  fixes the clock for --review. Default is today in UTC.
 //
@@ -11,6 +11,8 @@
 // It reads only the first frontmatter block and the `**Date filed:**` line of each entry.
 // It treats entry text as data and never prints body text.
 // A malformed entry makes it exit 1 with a `check:` line on stderr and write nothing.
+// Only --check reports a duplicate id (0000552 ADR-0350). The merge queue runs the generate mode before it
+// renumbers a duplicate, so the generate mode and --review ignore one.
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -206,6 +208,13 @@ const text = render(entries);
 const indexFile = path.join(root, 'plan', 'backlog', 'index.md');
 
 if (opts.check) {
+  const byId = new Map();
+  for (const e of entries) byId.set(e.id, [...(byId.get(e.id) || []), e.name]);
+  const duplicates = [...byId].filter(([, names]) => names.length > 1);
+  if (duplicates.length > 0) {
+    for (const [id, names] of duplicates) process.stderr.write(`check: duplicate backlog id ${id}: ${names.join(', ')}\n`);
+    process.exit(1);
+  }
   let current = null;
   try {
     current = fs.readFileSync(indexFile, 'utf8');

@@ -3,7 +3,7 @@
 > Change record. Index of all ADRs across all features. Updated after every pipeline run.
 > Do not archive this file. Update it in place.
 
-Last updated: 0000545-clear-feature-id-at-ship
+Last updated: 0000552-duplicate-backlog-ids
 
 ---
 
@@ -365,3 +365,7 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 | [ADR-0344](adr/0344-suite-marker-silences-strict-hook.md) | Suite marker silences the strict hook for a step session | accepted | The runners write plan/.suite-running, and the strict hook stays quiet for a step session while it names a live pid. | 0000548-ack-write-mid-suite-fails-run |
 | [ADR-0345](adr/0345-ship-deletes-the-feature-id-file.md) | Ship deletes the feature id file | accepted | Ship Step 8 deletes plan/.feature-id and the queue resolves it as a shared file. | 0000545-clear-feature-id-at-ship |
 | [ADR-0346](adr/0346-unit-report-fields.md) | Unit report fields | accepted | A unit report holds a RED line, a GREEN line, a commit hash, and any deviation. The orchestrator rejects a report without one and resumes the unit once. | 0000573-require-unit-reports |
+| [ADR-0347](adr/0347-queue-restores-the-files-it-wrote.md) | The queue restores the files it wrote when a run fails | accepted | A failed run restores the chart and the version files to HEAD before the commit lands, and touches no other path. | 0000546-queue-failure-leaves-dirty-files |
+| [ADR-0348](adr/0348-build-log-marker-script.md) | Build log marker script | accepted | A script reads the clock and appends a RED, GREEN, or Done line to the build log. | 0000575-build-log-marker-helper |
+| [ADR-0350](adr/0350-duplicate-id-check-in-check-mode.md) | Duplicate id check in check mode only | accepted | `backlog-index.mjs --check` exits 1 on a duplicate id. The generate mode ignores it so the merge queue can renumber. | 0000552-duplicate-backlog-ids |
+| [ADR-0349](adr/0349-cancel-superseded-pull-request-runs.md) | Cancel superseded pull request runs | accepted | The repo workflow cancels an older run on a newer push to the same pull request. A push run never shares a group, so a newer push cancels no push run. Every push still runs every suite. | 0000558-plan-only-push-short-ci |

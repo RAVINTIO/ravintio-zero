@@ -151,6 +151,15 @@ function Copy-RavintioSkills {
 }
 
 # True when the path exists and is a link or junction.
+# True when the path is a link or junction, including a broken one (0000551).
+function Test-LinkAtPath {
+    param([string]$Path)
+    $item = Get-Item -LiteralPath $Path -Force -ErrorAction SilentlyContinue
+    if ($null -eq $item) { return $false }
+    $link = [System.IO.FileAttributes]::ReparsePoint
+    return (($item.Attributes -band $link) -eq $link)
+}
+
 function Test-RavintioLink {
     param([string]$Path)
     if (-not ([System.IO.File]::Exists($Path) -or [System.IO.Directory]::Exists($Path))) { return $false }
@@ -854,12 +863,17 @@ function Install-ClaudeWritingStyle {
         Write-Host "  - writing style skipped (--no-writing-style)"
         return
     }
+    $styleRel = '.claude/output-styles/ravintio-writing.md'
+    $stylePath = Join-Path $ProjectRoot $styleRel
+    # A link at the file or its folder would redirect the write (0000551 req-001).
+    if ((Test-LinkAtPath (Split-Path -Parent $stylePath)) -or (Test-LinkAtPath $stylePath)) {
+        Write-Host "  ! Refused: $styleRel is a link, writing style not installed"
+        return
+    }
     $content = Get-WritingStyleOutput -StyleTool 'claude-code'
     if ($null -eq $content) { return }
 
     $utf8 = New-Object System.Text.UTF8Encoding $false
-    $styleRel = '.claude/output-styles/ravintio-writing.md'
-    $stylePath = Join-Path $ProjectRoot $styleRel
     $state = 'created'
     if ([System.IO.File]::Exists($stylePath)) {
         $state = if ([System.IO.File]::ReadAllText($stylePath, $utf8) -ceq $content) { 'unchanged' } else { 'updated' }
@@ -908,6 +922,11 @@ function Install-CodexWritingBlock {
 
     if ($NoWritingStyle) {
         Write-Host "  - writing style skipped (--no-writing-style)"
+        return
+    }
+    # A link at the boot file would send the block to its target (0000551 req-002).
+    if (Test-LinkAtPath $BootFilePath) {
+        Write-Host "  ! Refused: AGENTS.md is a link, writing section not installed"
         return
     }
     $block = Get-WritingStyleOutput -StyleTool 'codex'

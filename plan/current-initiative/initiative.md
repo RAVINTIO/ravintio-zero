@@ -11,7 +11,7 @@ status: "active"  # proposed | charted | active | delivered | blocked
 
 **Status:** active
 
-**Position:** 2
+**Position:** 6
 
 **Speed:** fast
 
@@ -159,38 +159,38 @@ The human confirmed the chart on 2026-11-14 with "build the initiative as fast a
 | Step | Feature id | Title | Backlog entries | Bump | Version | Status | Lane | After |
 |------|------------|-------|-----------------|------|---------|--------|------|-------|
 | 1 | 0000545-clear-feature-id-at-ship | Ship leaves plan/.feature-id behind | 0000514 | minor | 0.117.0 | merged | queue | |
-| 2 | 0000546-queue-failure-leaves-dirty-files | A failed queue run can leave written files in the queue worktree | 0000477 | minor | | pending | queue |  |
+| 2 | 0000546-queue-failure-leaves-dirty-files | A failed queue run can leave written files in the queue worktree | 0000477 | minor | 0.128.0 | merged | queue | |
 | 3 | 0000547-step-merge-regenerates-index | Step base merge regenerates the backlog index | 0000517 | minor | 0.115.0 | merged | coord | |
 | 4 | 0000548-ack-write-mid-suite-fails-run | Strict-mode ack write mid-suite fails the suite run | 0000476-ack-write-mid-suite-fails-run | minor | 0.116.0 | merged | tests | |
 | 5 | 0000549-baseline-record-checks | Baseline record checks its input and its file | 0000525, 0000515 | minor | 0.118.0 | merged | baseline | |
 | 6 | 0000550-no-head-diffs-in-tests | No HEAD diffs in tests | 0000416 | minor | | pending | tests |  |
-| 7 | 0000551-refuse-symlink-style-outputs | Refuse a symlink at the writing style output paths | 0000408 | minor | | pending | setup |  |
-| 8 | 0000552-duplicate-backlog-ids | Two open entries share one backlog id | 0000542 | minor | | pending | queue |  |
+| 7 | 0000551-refuse-symlink-style-outputs | Refuse a symlink at the writing style output paths | 0000408 | minor | 0.137.0 | merged | setup | |
+| 8 | 0000552-duplicate-backlog-ids | Two open entries share one backlog id | 0000542 | minor | 0.140.0 | merged | queue | |
 | 9 | 0000553-coordinator-oversight-not-micromanagement | Initiative skills do not micromanage | 0000530 | minor | 0.120.0 | merged | coord | |
-| 10 | 0000554-coordinator-starts-defined-stages | Coordinator starts a defined stage without asking | 0000541 | minor | | pending | coord |  |
-| 11 | 0000555-initiative-pause-reaches-every-step | Initiative pause reaches every step | 0000538 | minor | | pending | coord |  |
-| 12 | 0000556-step-session-finds-unfinished-step | A step session finds an unfinished step | 0000531 | minor | | pending | resume |  |
-| 13 | 0000557-self-matching-pgrep-wait | Step sessions wait on a suite without matching their own shell | 0000532 | minor | | pending | baseline |  |
-| 14 | 0000558-plan-only-push-short-ci | CI avoids extra runs on a plan-only push | 0000476-plan-only-push-short-ci | minor | | pending | ci |  |
-| 15 | 0000559-start-baseline-first | Start the baseline run before the P0 artifacts | 0000478 | minor | | pending | baseline |  |
-| 16 | 0000560-step-sessions-and-pending-migrations | Step sessions meet pending migrations | 0000403 | minor | | pending | resume |  |
+| 10 | 0000554-coordinator-starts-defined-stages | Coordinator starts a defined stage without asking | 0000541 | minor | 0.127.0 | merged | coord | |
+| 11 | 0000555-initiative-pause-reaches-every-step | Initiative pause reaches every step | 0000538 | minor | 0.130.0 | merged | coord | |
+| 12 | 0000556-step-session-finds-unfinished-step | A step session finds an unfinished step | 0000531 | minor | 0.132.0 | merged | resume | |
+| 13 | 0000557-self-matching-pgrep-wait | Step sessions wait on a suite without matching their own shell | 0000532 | minor | 0.134.0 | merged | baseline | |
+| 14 | 0000558-plan-only-push-short-ci | CI avoids extra runs on a plan-only push | 0000476-plan-only-push-short-ci | minor | 0.139.0 | merged | ci | |
+| 15 | 0000559-start-baseline-first | Start the baseline run before the P0 artifacts | 0000478 | minor | 0.141.0 | merged | baseline | |
+| 16 | 0000560-step-sessions-and-pending-migrations | Step sessions meet pending migrations | 0000403 | minor | 0.142.0 | merged | resume | |
 | 17 | 0000561-old-name-guard-fails-in-full-suite | Old-name guard fails in the full suite | 0000527 | minor | | pending | tests |  |
 | 18 | 0000562-test-impact-scan-lists-the-mirrored-pack-tree | Test impact scan lists the mirrored pack tree | 0000540 | minor | 0.119.0 | merged | plan | |
 | 19 | 0000563-test-impact-misses-output-readers | Plan test impact misses suites that read driver output order | 0000533 | minor | 0.121.0 | merged | plan | |
 | 20 | 0000564-test-impact-hook-pins | Test impact scan names hook pins | 0000523 | minor | 0.122.0 | merged | plan | |
 | 21 | 0000565-layout-move-test-impact | Test impact scan for layout moves | 0000419 | minor | 0.123.0 | merged | plan | |
 | 22 | 0000566-test-impact-for-history-moves | Test impact scan misses suites that scan live files | 0000405 | minor | 0.124.0 | merged | plan | |
-| 23 | 0000567-test-impact-size-caps-and-frozen-lines | Test impact scan covers size caps and frozen lines | 0000406, 0000526 | minor | | pending | plan |  |
-| 24 | 0000568-wording-pin-scan | Scan for wording pins before a prose rewrite | 0000418 | minor | | pending | plan |  |
-| 25 | 0000569-scan-new-pack-files-for-wording-allowlist | Scan new pack files for the wording allowlist | 0000415 | minor | | pending | plan |  |
-| 26 | 0000570-sibling-test-copies-in-impact-scan | List sibling copies of a pinned test in the impact scan | 0000407 | minor | | pending | plan |  |
-| 27 | 0000571-scan-cause-skill-wide-grep-pins | Test impact scan covers skill-wide grep pins | 0000404 | minor | | pending | plan |  |
+| 23 | 0000567-test-impact-size-caps-and-frozen-lines | Test impact scan covers size caps and frozen lines | 0000406, 0000526 | minor | 0.126.0 | merged | plan | |
+| 24 | 0000568-wording-pin-scan | Scan for wording pins before a prose rewrite | 0000418 | minor | 0.129.0 | merged | plan | |
+| 25 | 0000569-scan-new-pack-files-for-wording-allowlist | Scan new pack files for the wording allowlist | 0000415 | minor | 0.131.0 | merged | plan | |
+| 26 | 0000570-sibling-test-copies-in-impact-scan | List sibling copies of a pinned test in the impact scan | 0000407 | minor | 0.133.0 | merged | plan | |
+| 27 | 0000571-scan-cause-skill-wide-grep-pins | Test impact scan covers skill-wide grep pins | 0000404 | minor | 0.136.0 | merged | plan | |
 | 28 | 0000572-tests-share-a-repo-root-helper | Tests share a repo-root helper for both pack trees | 0000528, 0000539 | minor | | pending | tests |  |
 | 29 | 0000573-require-unit-reports | Require unit reports | 0000417 | minor | 0.125.0 | merged | dispatch | |
 | 30 | 0000574-delivery-pr-lists-steps-in-version-order | Delivery PR lists steps in version order | 0000543 | minor | | pending | coord |  |
-| 31 | 0000575-build-log-marker-helper | Build log marker helper | 0000524 | minor | | pending | dispatch |  |
+| 31 | 0000575-build-log-marker-helper | Build log marker helper | 0000524 | minor | 0.135.0 | merged | dispatch | |
 | 32 | 0000576-phase-start-time-at-phase-start | Record each phase start time when the phase begins | 0000402 | minor | | pending | dispatch |  |
-| 33 | 0000577-plan-lists-change-shapes | Plan lists the change shapes a diff reader must handle | 0000516 | minor | | pending | plan |  |
+| 33 | 0000577-plan-lists-change-shapes | Plan lists the change shapes a diff reader must handle | 0000516 | minor | 0.138.0 | merged | plan | |
 | 34 | 0000578-plan-lists-pass-signals | Plan lists every way a check can pass | 0000529 | minor | | pending | plan |  |
 | 35 | 0000579-convert-remaining-suites-to-rule-anchors | Convert remaining suites to rule anchors | 0000401 | minor | | pending | anchors | 1-34 |
 | 36 | 0000580-log-non-tdd-units | Log a non-TDD unit with a class | 0000410 | minor | | pending | anchors | 35 |
@@ -214,3 +214,20 @@ The merge queue adds one row for each step it merges. See the merge queue sectio
 | 21 | #224 | tag v0.123.0 | 0.123.0 | 2026-11-15T16:59:56Z |
 | 22 | #226 | tag v0.124.0 | 0.124.0 | 2026-11-15T18:22:23Z |
 | 29 | #225 | tag v0.125.0 | 0.125.0 | 2026-11-15T18:35:08Z |
+| 23 | #227 | tag v0.126.0 | 0.126.0 | 2026-11-15T19:10:38Z |
+| 10 | #229 | tag v0.127.0 | 0.127.0 | 2026-11-15T20:10:52Z |
+| 2 | #230 | tag v0.128.0 | 0.128.0 | 2026-11-15T20:28:00Z |
+| 24 | #231 | tag v0.129.0 | 0.129.0 | 2026-11-15T21:28:08Z |
+| 11 | #232 | tag v0.130.0 | 0.130.0 | 2026-11-15T21:45:40Z |
+| 25 | #233 | tag v0.131.0 | 0.131.0 | 2026-11-15T22:42:24Z |
+| 12 | #234 | tag v0.132.0 | 0.132.0 | 2026-11-15T23:03:46Z |
+| 26 | #235 | tag v0.133.0 | 0.133.0 | 2026-11-15T23:59:38Z |
+| 13 | #236 | tag v0.134.0 | 0.134.0 | 2026-11-16T00:24:30Z |
+| 31 | #237 | tag v0.135.0 | 0.135.0 | 2026-11-16T01:37:14Z |
+| 27 | #238 | tag v0.136.0 | 0.136.0 | 2026-11-16T02:41:18Z |
+| 7 | #239 | tag v0.137.0 | 0.137.0 | 2026-11-16T03:39:15Z |
+| 33 | #240 | tag v0.138.0 | 0.138.0 | 2026-11-16T03:54:02Z |
+| 14 | #241 | tag v0.139.0 | 0.139.0 | 2026-11-16T04:46:23Z |
+| 8 | #242 | tag v0.140.0 | 0.140.0 | 2026-11-16T05:26:36Z |
+| 15 | #243 | tag v0.141.0 | 0.141.0 | 2026-11-16T06:33:24Z |
+| 16 | #244 | tag v0.142.0 | 0.142.0 | 2026-11-16T06:56:06Z |

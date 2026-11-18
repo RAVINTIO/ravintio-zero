@@ -880,6 +880,11 @@ install_writing_style_claude() {
     echo "  - writing style skipped (--no-writing-style)"
     return 0
   fi
+  # A link at the file or its folder would redirect the write (0000551 req-001).
+  if [ -L "$PROJECT_ROOT/${style_rel%/*}" ] || [ -L "$PROJECT_ROOT/$style_rel" ]; then
+    echo "  ! Refused: $style_rel is a link, writing style not installed"
+    return 0
+  fi
   if ! command -v node >/dev/null 2>&1; then
     echo "  ! Warning: node not found, skipping the writing style install"
     return 0
@@ -947,6 +952,11 @@ install_writing_style_codex() {
 
   if [ "$NO_WRITING_STYLE" = true ]; then
     echo "  - writing style skipped (--no-writing-style)"
+    return 0
+  fi
+  # A link at the boot file would send the block to its target (0000551 req-002).
+  if [ -L "$boot" ]; then
+    echo "  ! Refused: AGENTS.md is a link, writing section not installed"
     return 0
   fi
   if ! command -v node >/dev/null 2>&1; then

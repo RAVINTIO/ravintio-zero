@@ -87,7 +87,7 @@ Read this file before you act on its topic.
 
 ## Test impact scan
 
-Run this scan before you write the execution plan. For each cause in the reference file that the run triggers, grep `ravintio-zero/tests/` and the repo's own test folders. Take those folders from the stack declaration, or use `tests/`, `test/`, and `__tests__/`. List every match under `## Test impact` in the execution plan, in the unit that edits the file.
+Run this scan before you write the execution plan. For each cause in the reference file that the run triggers, grep `ravintio-zero/tests/` and the repo's own test folders. Take those folders from the stack declaration, or use `tests/`, `test/`, and `__tests__/`. List every match under `## Test impact` in the execution plan, in the unit that edits the file. For each test you list, grep `ravintio-zero/tests/regression/` for a file with the same name, and list the match.
 
 Read `references/test-impact-causes.md` for the causes and what to grep for each.
 

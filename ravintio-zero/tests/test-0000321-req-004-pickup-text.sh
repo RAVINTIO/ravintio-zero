@@ -11,15 +11,16 @@ REF="$ZERO_DIR/skills/ravintio-orchestrator/references/orchestrator-p0-start-act
 TEMPLATE="$ZERO_DIR/templates/product.template.yml"
 PRODUCT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)/product.yml"
 
-STEP=$(grep -A6 -E "^10\. " "$REF")
+# 0000559 moved the pickup from step 10 to step 12. Find it by its rule anchor.
+STEP=$(grep -A6 -F "rule: p0-start-backlog-pickup" "$REF")
 
-echo "=== AC-3: step 10 pickup text ==="
-assert_contains 'backlog-index.mjs --review' "$STEP" "step 10 names the review mode"
-assert_contains 'plan/backlog/index.md' "$STEP" "step 10 names the index"
-assert_contains 'priority' "$STEP" "step 10 names priority order"
-assert_contains 'theme' "$STEP" "step 10 names theme order"
-assert_contains 'node ravintio-zero/scripts/backlog-index.mjs`' "$STEP" "step 10 names the regenerate command"
-assert_contains 'same commit' "$STEP" "step 10 regenerates the index in the same commit"
+echo "=== AC-3: the pickup text ==="
+assert_contains 'backlog-index.mjs --review' "$STEP" "the pickup names the review mode"
+assert_contains 'plan/backlog/index.md' "$STEP" "the pickup names the index"
+assert_contains 'priority' "$STEP" "the pickup names priority order"
+assert_contains 'theme' "$STEP" "the pickup names theme order"
+assert_contains 'node ravintio-zero/scripts/backlog-index.mjs`' "$STEP" "the pickup names the regenerate command"
+assert_contains 'same commit' "$STEP" "the pickup regenerates the index in the same commit"
 
 echo "=== backlogReviewDays setting ==="
 assert_contains 'backlogReviewDays' "$(cat "$TEMPLATE")" "template documents backlogReviewDays"

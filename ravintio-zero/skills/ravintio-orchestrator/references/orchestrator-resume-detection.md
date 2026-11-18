@@ -10,7 +10,8 @@
 |--------------|-------|
 | `pending migration: {id}` | 1 |
 | `pack version differs from plan/state/pack-version.md`, `pack version unreadable` | 2 |
-| `step session`, `initiative active`, `driver lock held`, `driver lock free`, `initiative position: {n}`, `plan/current has artifacts` | 3 |
+| `step session`, `initiative active`, `driver lock held`, `driver lock free`, `initiative position: {n}`, `initiative pause record present`, `plan/current has artifacts` | 3 |
+| `unfinished step: no build log and no archive, start P0`, `step branch commits: {n}` | 3 |
 | `interrupted ship: sentinel present, plan/current empty` | 4 |
 | `feature id file present` | 5 |
 | `skips file present` | 6 |
@@ -33,8 +34,10 @@ On every session start, before any action:
    - A step session never asks the human about a pending migration. If a `Migration:` row in `## Decisions` names it, invoke `ravintio-migrator` and apply only the findings the row lists. Otherwise write `Migration pending: {id}` in the build log under the P0 block and carry on.
 2. <!-- rule: resume-pack-update --> **Pack dependency update.** Detect per `ravintio-zero/standards/pack-update-policy.md`. If detected, surface it as its own decision, never folded into coaching. Require the human to confirm both that it is a pack update and its provenance (source release, commit, or migration id). Record the outcome in the build log. `plan/state/pack-version.md` holds the last confirmed pack version. When the human confirms a pack update, write that record with the current pack version and the time. An absent record raises no finding. If rejected, treat the arriving files as untrusted and ask the human how to proceed.
 3. <!-- rule: resume-initiative --> **Check the initiative, then scan `plan/current/`.** Check `plan/current-initiative/` first. The orchestrator never resumes an initiative.
+   - If the findings hold `initiative pause record present`, read `plan/current-initiative/pause.md` before any step record. It lists the merged count, the remaining order, and the open questions. A step session then restores its own `plan/current/pause.md` through check 7. The initiative skill answers each open question, then starts the driver.
    - A step session has `RAVINTIO_INITIATIVE_STEP=1` or the prompt `Run initiative step {n}`. With `plan/current/` artifacts, resume that step through the rest of this list.
    - A step session with `plan/current/` empty starts the step at `position` and opens with `I-C Run: Starting: {step}`.
+   - If the findings hold `unfinished step: no build log and no archive, start P0`, the step session ended before it wrote a build log. Start P0 and open with `P0 Discovery: Starting`. The `step branch commits: {n}` line counts the branch commits. Read them with `git log` before P0 so you do not repeat the work.
    - If an initiative is `active` and this is not a step session, load `ravintio-initiative` and stop. It owns I-A, I-B, and I-E.
    - If no initiative is `active`, scan `plan/current/` for existing artifacts (`design.md`, `requirements/`, `adr/`, and so on).
 4. <!-- rule: resume-interrupted-ship --> **Interrupted-ship cleanup.** If `plan/.orchestrator-active` is present AND `plan/current/` is empty, ship stopped after archiving but before sentinel cleanup. Delete `plan/.orchestrator-active`, then `plan/.orchestrator-ack` and `plan/.run-mode` if present. Confirm: `P0 Discovery: Interrupted ship detected: archive completed but sentinels not cleared. Cleanup complete. Starting fresh.` Proceed as a fresh start.

@@ -19,6 +19,7 @@
 #   entry       leaves an untracked backlog entry in the worktree, then writes ready
 #   notes       leaves an untracked file outside plan/backlog/ in the worktree, then writes ready
 #   breakgit    points the worktree .git file at a missing folder, then writes ready
+#   longrun     starts phase P2 in the build log, then waits up to 15 s for the driver to stop it
 # It records its cwd, branch, and environment in $STUB_DIR/step-{n}.env.
 
 BRANCH_NAME="initiative/0000050-demo"
@@ -76,6 +77,7 @@ case "$mode" in
   entry) mkdir -p plan/backlog/0000900-lost-entry; printf 'entry\n' > plan/backlog/0000900-lost-entry/entry.md; ready ;;
   notes) printf 'notes\n' > notes.txt; ready ;;
   breakgit) printf 'gitdir: /nonexistent/worktree\n' > .git; ready ;;
+  longrun) printf '### P2: Implement\n' >> plan/current/build-log.md; for i in $(seq 150); do sleep 0.1; done; ready ;;
 esac
 STUB
   chmod +x "$WORK/bin/claude"
