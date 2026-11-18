@@ -34,6 +34,10 @@
  *      the chart row whose Feature id equals the log's Feature ID. A missing
  *      chart, an unreadable chart, or no matching row skips the check.
  *
+ *  10. A phase Start is not later than the first commit of that phase's
+ *      artifacts, with a one-minute margin (0000576). The commit counts only
+ *      after the one that added the log. Without git or an artifact, it skips.
+ *
  * Every finding names the phase or the unit. Exit codes: 0 = clean, 1 = findings.
  */
 
@@ -232,6 +236,43 @@ function commitTimes(path) {
     } catch {
       // An unreadable chart skips the check.
     }
+  }
+}
+
+// Check 10: a phase Start is not later than the first commit of its artifacts (0000576).
+// The first artifact commit is the oldest commit after the one that added the log
+// that touches the phase's artifact paths. P2 counts any path outside plan/ and docs/.
+// A phase with no such commit, a skipped phase, and a log outside git are skipped.
+{
+  const PHASE_PATHS = {
+    1: ["requirements", "scope.md", "execution-plan.md", "risk-register.md", "story-map.md", "domain-glossary.md"]
+      .map((p) => `:(top)plan/current/${p}`),
+    2: [":(top)", ":(top,exclude)plan", ":(top,exclude)docs"],
+    3: ["verification-report.md", "security-report.md", "acceptance-evidence.md"].map((p) => `:(top)plan/current/${p}`),
+    4: [":(top)plan/current/build-report.md"],
+  };
+  const git = (cwd, args) =>
+    execFileSync("git", args, { cwd, encoding: "utf-8", stdio: ["ignore", "pipe", "ignore"] }).trim();
+  try {
+    const dir = dirname(file);
+    const added = git(dir, ["log", "--diff-filter=A", "--format=%H", "-1", "--", basename(file)]);
+    if (added) {
+      for (const [n, paths] of Object.entries(PHASE_PATHS)) {
+        const body = blocks.get(Number(n));
+        if (body === undefined || skipped.has(Number(n))) continue;
+        const start = field(body, "Start");
+        if (blank(start) || !ISO.test(start)) continue;
+        const first = git(dir, ["log", "--reverse", "--format=%ct", `${added}..HEAD`, "--", ...paths]).split("\n")[0];
+        if (!first) continue;
+        const firstMs = Number(first) * 1000;
+        const startMs = Date.parse(start.length === 17 ? start.replace("Z", ":00Z") : start);
+        if (startMs > firstMs + 60000) {
+          findings.push(`P${n}: Start ${start} is later than the first artifact commit at ${new Date(firstMs).toISOString().replace(".000", "")}`);
+        }
+      }
+    }
+  } catch {
+    // A log outside git, or a git failure, skips the check.
   }
 }
 

@@ -3,7 +3,7 @@
 > Change record. Index of all ADRs across all features. Updated after every pipeline run.
 > Do not archive this file. Update it in place.
 
-Last updated: 0000552-duplicate-backlog-ids
+Last updated: 0000576-phase-start-time-at-phase-start
 
 ---
 
@@ -369,3 +369,4 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 | [ADR-0348](adr/0348-build-log-marker-script.md) | Build log marker script | accepted | A script reads the clock and appends a RED, GREEN, or Done line to the build log. | 0000575-build-log-marker-helper |
 | [ADR-0350](adr/0350-duplicate-id-check-in-check-mode.md) | Duplicate id check in check mode only | accepted | `backlog-index.mjs --check` exits 1 on a duplicate id. The generate mode ignores it so the merge queue can renumber. | 0000552-duplicate-backlog-ids |
 | [ADR-0349](adr/0349-cancel-superseded-pull-request-runs.md) | Cancel superseded pull request runs | accepted | The repo workflow cancels an older run on a newer push to the same pull request. A push run never shares a group, so a newer push cancels no push run. Every push still runs every suite. | 0000558-plan-only-push-short-ci |
+| [ADR-0351](adr/0351-check-phase-start-against-first-commit.md) | Check each phase Start against its first artifact commit | accepted | Check 10 of build-log-check.mjs fails a phase block whose Start is later than the first commit of that phase's artifacts. | 0000576-phase-start-time-at-phase-start |

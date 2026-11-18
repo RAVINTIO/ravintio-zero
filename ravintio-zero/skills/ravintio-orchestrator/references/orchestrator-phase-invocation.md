@@ -14,6 +14,7 @@ Conventions for every downstream phase:
 - <!-- rule: phase-run-mode --> **Run mode:** read `plan/.run-mode` at each transition and apply that phase's STOP rule below.
 - <!-- rule: phase-run-speed --> **Run speed:** read `plan/.run-speed`. At `fast`, dispatch the phase's fast batch.
 - <!-- rule: phase-close-block --> **Close the block:** when a phase completes, read the clock with `date -u +%Y-%m-%dT%H:%M:%SZ`, fill `End` and `Wall clock`, and add a `Complete: P<n> ({time})` line. Never type a time.
+- <!-- rule: phase-start-time-check --> **Start time:** write the block with the `Start` time you read when the phase begins. `build-log-check.mjs` fails a `Start` later than the first artifact commit of that phase and names the phase.
 
 | Phase | Invoke | Gate condition | STOP rule |
 |-------|--------|----------------|-----------|
