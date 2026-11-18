@@ -32,6 +32,8 @@ cleanup() {
   done
 }
 trap cleanup EXIT
+trap 'exit 143' TERM
+trap 'exit 130' INT HUP
 
 run_setup() {
   (cd "$1" && GIT_CEILING_DIRECTORIES="$(dirname "$1")" bash ravintio-zero/setup.sh claude-code \

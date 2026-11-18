@@ -42,6 +42,7 @@ done <<< "$(compgen -e | grep '^RAVINTIO_' || true)"
 # identity, so a commit with no identity fails here as it does on a CI runner.
 source "$SCRIPT_DIR/helpers/git-isolation.sh"
 isolate_git_env
+exit_on_signal
 trap remove_git_isolation EXIT
 
 # Prints one "path<TAB>hash" line per modified, deleted, or untracked file. Fails outside a git repository.

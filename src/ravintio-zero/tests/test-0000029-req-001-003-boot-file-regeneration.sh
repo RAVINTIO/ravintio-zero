@@ -43,6 +43,9 @@ echo ""
 echo "=== (a) req-001: setup.sh claude-code creates CLAUDE.md on fresh workspace ==="
 
 WS=$(make_workspace); cd "$WS"
+trap 'cd /; rm -rf "$WS"' EXIT
+trap 'exit 143' TERM
+trap 'exit 130' INT HUP
 bash ravintio-zero/setup.sh claude-code >/tmp/ravintio_0000029_a.log 2>&1
 assert_exit_zero "$?" "(a): setup.sh claude-code exits 0 on fresh workspace"
 assert_equals "yes" "$(file_exists "CLAUDE.md")" "(a): CLAUDE.md created"

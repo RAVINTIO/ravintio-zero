@@ -13,6 +13,8 @@ ZERO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 TMPS=("")
 trap 'for d in "${TMPS[@]}"; do rm -rf "$d"; done' EXIT
+trap 'exit 143' TERM
+trap 'exit 130' INT HUP
 
 make_workspace() {
   local dir
