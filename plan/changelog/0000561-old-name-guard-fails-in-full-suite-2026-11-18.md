@@ -2,7 +2,7 @@
 
 **Feature:** Old-name guard fails in the full suite
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** 247
 
 ## What changed
 
