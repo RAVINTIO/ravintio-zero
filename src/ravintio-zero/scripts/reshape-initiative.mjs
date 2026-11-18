@@ -27,6 +27,7 @@
 // the old head tree, and check-initiative-history.mjs passes on the result. It prints `fold: {hash} {subject} into step N`
 // for each kept fold. It never drops or edits a hunk. If no fold clears the conflict, it names the first conflicting commit.
 // A conflict, a missing tag, a bad name, or an existing target branch exits 1 and writes no branch.
+// It prints the step table (step, title, version, tag) in replay order after the `wrote` lines (0000574).
 // The script never force-pushes. It moves a tag on a remote by deleting it, then pushing a new tag.
 
 import { execFileSync, spawnSync } from 'node:child_process';
@@ -313,6 +314,10 @@ const { tip, created } = result;
 
 git(['update-ref', `refs/heads/${newBranch}`, tip, '']);
 process.stdout.write(`reshape-initiative: wrote ${newBranch} with ${created.length} commit(s)\n${created.join('\n')}\n`);
+
+// The step table for the delivery PR body, in replay order (0000574). `steps` is sorted by ascending Version.
+process.stdout.write(['| Step | Title | Version | Tag |', '|------|-------|---------|-----|',
+  ...steps.map((step) => `| ${step.n} | ${step.title} | ${step.tag.slice(1)} | ${step.tag} |`)].join('\n') + '\n');
 
 // Check the shape against the chart.
 const check = spawnSync('node', checkArgs(newBranch), { encoding: 'utf8' });
