@@ -121,6 +121,8 @@ Complete: P3 (2026-11-18T08:15:30Z)
 | Notes | initiative step: the agent skips the version bump, and the merge queue merges |
 Complete: P4 (2026-11-18T08:15:57Z)
 
+CI duration: 68s (run 44265835796, 2026-11-18T08:25:21Z)
+
 ---
 
 ## Summary (filled at ship, P4)

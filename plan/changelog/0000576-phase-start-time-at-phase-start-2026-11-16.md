@@ -18,6 +18,7 @@ An earlier run wrote the P1 to P3 blocks at phase end. Their wall clock read 0 m
 
 - The agent ran units U1 to U3 inline in one tree and dispatched no subagent, because each unit is small.
 - Unit U3 (docs) has no executable check. Backlog 0000410 tracks the rule.
+- The agent first added the two tests to `ravintio-zero/tests/` only. The first CI run failed `sync-installed.mjs --check`, so the agent copied them to `src/ravintio-zero/tests/`.
 - P2 counts paths outside `plan/` and `docs/`, because the ADR counter lands at P1. The design and the requirement say so.
 
 ## Validation results
