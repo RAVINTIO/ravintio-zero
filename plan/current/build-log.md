@@ -88,7 +88,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Skills loaded | ravintio-implement |
 | Agents spawned | 0 |
 | MCP calls | 0 |
-| Parallel task batches | 1 |
+| Parallel task batches | 0 |
 | Notes | Units run inline in one tree. Each unit is one small file change, so a subagent costs more than it saves. |
 
 - In progress: U-001 (2026-11-26T10:05:46Z)
