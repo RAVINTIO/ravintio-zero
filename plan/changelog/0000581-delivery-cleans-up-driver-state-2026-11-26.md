@@ -8,8 +8,9 @@
 
 - `scripts/initiative-cleanup.mjs` cleans up the driver state after the human merges the initiative PR.
 - The script refuses while `plan/.initiative-runner.lock` exists.
-- It moves `plan/.initiative-logs/` and `plan/.initiative-control/` to `.git/ravintio-archive/{id}-{slug}/`. A numeric suffix keeps an existing target.
-- It removes each worktree under `plan/.initiative-worktrees/`, runs `git worktree prune`, and prints a `Kept:` line for each item left in `plan/.initiative-queue/`.
+- It moves `plan/.initiative-logs/` and `plan/.initiative-control/` to `.git/ravintio-archive/{id}-{slug}/`. If the target exists, the script adds a numeric suffix.
+- It removes each worktree under `plan/.initiative-worktrees/` and runs `git worktree prune`.
+- It prints a `Kept:` line for each item left in `plan/.initiative-queue/`.
 - I-E Delivery has a new step 8 (`rm-delivery-cleanup`), and the initiative skill and final report name the cleanup.
 - Two suites cover the script and the text. ADR 0353 records the decision.
 

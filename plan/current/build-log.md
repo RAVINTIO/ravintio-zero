@@ -99,11 +99,14 @@ Run mode: autonomous (2026-11-26T10:01:40Z, initiative step 37)
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-26T11:10:46Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-26T11:11:26Z` |
+| Wall clock | `2` |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
-| Agents spawned | `0` |
+| Agents spawned | `1` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
 | Notes | none |
+
+- Docs edit pass: 3 docs changed, 1 cycle, prose-check exit 0 (2026-11-26T11:11:26Z)
+- Acceptance: autonomous run, evidence in plan/current/acceptance-evidence.md (2026-11-26T11:11:26Z)
