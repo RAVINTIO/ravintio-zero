@@ -88,3 +88,6 @@ Run mode: autonomous (2026-11-26T10:01:40Z, initiative step 37)
 - RED: U-003 (2026-11-26T10:08:48Z), the docs unit has no executable check, per 0000410
 - GREEN: U-003 (2026-11-26T10:08:48Z), the prose check passed at commit, per 0000410
 - Done: U-003 (content, inline, none, 2026-11-26T10:08:48Z)
+- Baseline: the local run on base 1b8907e7 did not finish within 1 hour. It listed 12 failing suites, all with sandbox write errors (baseline-failures.md). The same 12 failed on the finished tree. CI runs the whole suite on the PR.
+- Tests run: full suite: partial, 12 failing suites, same as the base, not finished (2026-11-26T11:10:41Z)
+- Deviation: the sandbox blocks the full local suite, so P3 relies on the affected suites and on CI.
