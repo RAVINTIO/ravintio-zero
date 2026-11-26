@@ -2,7 +2,7 @@
 
 **Feature:** Tests share a repo-root helper for both pack trees
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** 251
 
 ## What changed
 
