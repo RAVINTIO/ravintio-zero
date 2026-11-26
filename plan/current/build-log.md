@@ -79,13 +79,13 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-26T08:20:28Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-26T09:10:08Z` |
+| Wall clock | `49` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
-| Agents spawned | `0` |
+| Agents spawned | `8` |
 | MCP calls | `0` |
-| Parallel task batches | `0` |
+| Parallel task batches | `2` |
 | Notes | fast batch: seven conversion agents in batch 1, then U2, U8, U9, U10 |
 - RED: U1 roadmap suites part one (no failing test first: the conversion keeps existing checks, 0000410) (2026-11-26T08:45:39Z)
 - GREEN: U1 roadmap suites part one (30 converted, 4 structure, each ran green alone) (2026-11-26T08:45:39Z)
@@ -120,3 +120,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Tests run: REQ-001: the 160 converted suites, each run alone by its batch agent (2026-11-26T08:45:49Z)
 - Tests run: REQ-002: test-0000579-req-001-anchor-conversion-guard.sh, 9 passed (2026-11-26T08:45:49Z)
 - Full suite: clean-clone run started at 2026-11-26T08:45:25Z, output in /tmp/ravintio-s35-private/full.out
+- Tests run: full suite: 3 inherited failures plus 3 new (0000017-req-001, 0000036-req-001-003, and the PowerShell cap suite 0000151-req-011), all fixed after the run (2026-11-26T09:10:08Z)
+- Rework: 0000016 reverted to its original text because the ratchet compares its assertion count with the regression copy (2026-11-26T09:10:08Z)
+- Rework: boot templates carry no anchors because setup copies them into installs (2026-11-26T09:10:08Z)
+- Rework: byte caps on the orchestrator SKILL.md count its text without anchors (2026-11-26T09:10:08Z)
+- Complete: P2 (2026-11-26T09:10:08Z)
