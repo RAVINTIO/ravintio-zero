@@ -145,11 +145,6 @@
 //     "I-C Run: Cleared: step {n} ready file of a merged step" for each. It keeps the file while a live
 //     pid sits in the step's running file, or when the removal fails, and prints "I-C Run: Kept: step
 //     {n} {reason}". It removes no other control file (0000509, ADR-0340).
-//   - After the queue merges a step, and at start for each merged step, the driver removes the temp
-//     paths and extra worktrees of the step: entries named step{n} in the temp folders, and git worktrees
-//     outside the root with such a name. step1 never matches step10. It then runs "git worktree prune".
-//     A path it cannot remove prints "I-C Run: Kept: step {n} {reason}" and never stops the run
-//     (0000583, ADR-0352). RAVINTIO_STEP_TEMP_DIRS replaces the temp folders.
 //   - The queue takes one ready step at a time, in ready order. It removes the step worktree and
 //     runs "node {merge-queue.mjs} run --step {n} --pr {k} --root {queue worktree}". MERGE_QUEUE_BIN
 //     overrides the script. The queue worktree is plan/.initiative-worktrees/queue, detached at the
@@ -224,8 +219,7 @@
 
 import { spawn, spawnSync } from 'node:child_process';
 import { appendFileSync, chmodSync, closeSync, constants as fsConstants, cpSync, existsSync, lstatSync, mkdirSync, openSync, readFileSync, readdirSync, realpathSync, renameSync, rmSync, unlinkSync, writeFileSync, writeSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import { basename, delimiter, dirname, isAbsolute, join, relative, resolve } from 'node:path';
+import { dirname, isAbsolute, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseChart, readySteps } from './initiative-chart.mjs';
 import { withInitiativeLabels } from './initiative-labels.mjs';
@@ -1144,60 +1138,6 @@ function clearMergedReadyFiles(root, steps, merged) {
   }
 }
 
-// Removes the temp paths and extra worktrees of one merged step: each entry of the temp folders whose name
-// starts with step{n}, and each git worktree outside the root with such a name. A longer step number never
-// matches, so step1 keeps step10. It unlinks a symlink and never follows it, prints one Kept line for each
-// path it leaves, and never stops the run. RAVINTIO_STEP_TEMP_DIRS replaces the folders (0000583 ADR-0352).
-function cleanStepTemp(root, n) {
-  const keep = (why) => out(`I-C Run: Kept: step ${n} ${why}`.slice(0, MAX_LINE));
-  const mine = new RegExp(`^step${n}(?![0-9])`);
-  try {
-    const set = process.env.RAVINTIO_STEP_TEMP_DIRS;
-    const dirs = set ? set.split(delimiter).filter(Boolean) : [tmpdir(), '/tmp'];
-    const listed = gitIn(root, ['worktree', 'list', '--porcelain']);
-    if (ran0(listed)) {
-      const top = resolve(root);
-      for (const line of listed.stdout.split('\n')) {
-        if (!line.startsWith('worktree ')) continue;
-        const wt = line.slice('worktree '.length);
-        if (!mine.test(basename(wt)) || resolve(wt) === top || relative(top, wt).split(/[\\/]/)[0] !== '..') continue;
-        const r = gitIn(root, ['worktree', 'remove', '--force', wt]);
-        if (!ran0(r)) keep(`worktree ${basename(wt)} could not be removed: ${lastLine(r.stderr)}`);
-      }
-    }
-    gitIn(root, ['worktree', 'prune']);
-    const seen = new Set();
-    for (const dir of dirs) {
-      let names;
-      try {
-        names = readdirSync(dir);
-      } catch {
-        continue;
-      }
-      for (const name of names) {
-        if (!mine.test(name)) continue;
-        const path = join(dir, name);
-        if (seen.has(path)) continue;
-        seen.add(path);
-        try {
-          rmSync(path, { recursive: true, force: true });
-        } catch (e) {
-          keep(`temp path ${name} could not be removed: ${e.code || e.name}`);
-          continue;
-        }
-        if (present(path)) keep(`temp path ${name} could not be removed`);
-      }
-    }
-  } catch (e) {
-    keep(`temp cleanup failed: ${e instanceof Stop ? e.message : e.code || e.name}`);
-  }
-}
-
-// Runs the temp cleanup once at start for each merged step in the chart (0000583 ADR-0352).
-function cleanMergedStepTemp(root, steps, merged) {
-  for (const s of steps) if (merged.has(s.step)) cleanStepTemp(root, s.step);
-}
-
 function controlDir(root, n) {
   const dir = areaPath(root, CONTROL, `step-${n}`, controlRefusal);
   mkdirSync(dir, { recursive: true, mode: 0o700 });
@@ -1627,7 +1567,6 @@ async function schedule(root, cfg, rm, handoff = 0) {
   // A driver that did not take over from another sweeps the worktrees of merged steps (0000501).
   if (!handoff) {
     sweepMergedWorktrees(root, chart.steps, merged);
-    cleanMergedStepTemp(root, chart.steps, merged);
   }
   // It also clears the ready files that merged steps left behind (0000509).
   if (!handoff) clearMergedReadyFiles(root, chart.steps, merged);
@@ -1822,7 +1761,6 @@ async function schedule(root, cfg, rm, handoff = 0) {
       mergeOrder.push(n);
       out(`I-D Advance: Complete: step ${n} merged`);
       removeControl(root, n);
-      cleanStepTemp(root, n);
       refresh();
       const after = refHead(root, initiativeRef(root, branch));
       lastMerge = { rec, before, after };
