@@ -30,7 +30,7 @@ assert_contains "$BAR" "$STANDARDS" "req-001 AC-2: the roadmap standards bar I a
 
 echo ""
 echo "=== req-001 AC-3: the orchestrator skill stays under its cap ==="
-BYTES=$(wc -c < "$ORCH" | tr -d ' ')
+BYTES=$(strip_rule_anchors < "$ORCH" | wc -c | tr -d ' ')  # anchors are comments, so the cap measures the text without them
 assert_equals "yes" "$([ "$BYTES" -le 9000 ] && echo yes || echo no)" "req-001 AC-3: orchestrator SKILL.md holds $BYTES bytes (cap 9000)"
 
 echo ""

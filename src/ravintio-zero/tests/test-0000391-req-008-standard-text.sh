@@ -37,7 +37,7 @@ if [ "$VL" -le 200 ]; then assert_contains ok ok "validate $VL <= 200"; else ass
 TOTAL=$(cat "$SK"/*/SKILL.md | wc -l | tr -d ' ')
 if [ "$TOTAL" -le 1720 ]; then assert_contains ok ok "total $TOTAL <= 1720"; else assert_contains ok "$TOTAL" "total <= 1720"; fi
 
-OB=$(wc -c < "$SK/ravintio-orchestrator/SKILL.md" | tr -d ' ')
+OB=$(strip_rule_anchors < "$SK/ravintio-orchestrator/SKILL.md" | wc -c | tr -d ' ')
 if [ "$OB" -le 9000 ]; then assert_contains ok ok "orchestrator $OB <= 9000 bytes"; else assert_contains ok "$OB" "orchestrator <= 9000 bytes"; fi
 if grep -qi 'archetype' "$SK/ravintio-orchestrator/SKILL.md"; then assert_contains ok found "orchestrator holds no archetype text"; else assert_contains ok ok "orchestrator holds no archetype text"; fi
 

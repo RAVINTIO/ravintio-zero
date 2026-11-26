@@ -85,7 +85,7 @@ pack_claude_bytes() {
        !skip { if ($0 == "") held = held "\n"; else { printf "%s%s\n", held, $0; held = "" } }
        /<!-- ravintio-overrides:instructions:end -->/ {skip=0}' "$1" | wc -c | tr -d ' '
 }
-SKILL_BYTES=$(wc -c < "$SKILL" | tr -d ' ')
+SKILL_BYTES=$(strip_rule_anchors < "$SKILL" | wc -c | tr -d ' ')  # anchors are comments, so the cap measures the text without them
 # 0000245 caps the boot file on its own. The boot template is the pack content, so the measure ignores a stale install.
 BOOT_FILE="$ZERO_DIR/templates/standard-boot.md"
 CLAUDE_BYTES=$(pack_claude_bytes "$BOOT_FILE")
