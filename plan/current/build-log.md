@@ -51,3 +51,21 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Version: last known 0.146.0, minor bump plans 0.147.0
 
 - Complete: P0 (2026-11-26T07:06:17Z)
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-26T07:06:17Z` |
+| End | `2026-11-26T07:07:38Z` |
+| Wall clock | `1` |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | none |
+
+- Skipped: ADRs (no decision meets an ADR criterion)
+
+- Complete: P1 (2026-11-26T07:07:38Z)
