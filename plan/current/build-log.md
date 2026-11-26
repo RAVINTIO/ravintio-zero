@@ -146,6 +146,22 @@ Complete: P3 (2026-11-26T11:08:55Z)
 
 ---
 
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-26T11:09:15Z` |
+| End | |
+| Wall clock | |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Initiative step: PR and CI wait come before the archive. |
+
+---
+
 ## Summary (filled at ship, P4)
 
 | Metric | Value |
