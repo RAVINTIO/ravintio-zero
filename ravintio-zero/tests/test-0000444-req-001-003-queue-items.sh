@@ -79,7 +79,7 @@ echo "=== req-002: driver prompts ==="
 mkdir -p "$WORK/bin"
 cat > "$WORK/bin/claude" <<'STUB'
 #!/usr/bin/env bash
-printf '%s\n' "$*" >> "$STUB_LOG"
+printf '%s\n' "$*" | sed 's/ --settings {[^ ]*}//' >> "$STUB_LOG"
 mkdir -p plan/_archive
 mv plan/current-initiative "plan/_archive/0000050-demo-initiative-2026-10-23"
 STUB

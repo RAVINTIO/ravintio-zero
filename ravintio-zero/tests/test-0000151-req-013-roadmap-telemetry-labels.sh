@@ -75,8 +75,8 @@ R="$(make_fixture c-iso)"
 (cd "$R" && env | grep -v '^_=' | grep -v '^SHLVL=' | grep -v '^PWD=' | grep -v '^OTEL_RESOURCE_ATTRIBUTES=' | LC_ALL=C sort > "$R/parent.env"
  OTEL_RESOURCE_ATTRIBUTES='service.name=x' PATH="$WORK/bin:$PATH" STUB_LOG="$R/stub.log" node "$DRIVER" --root "$R" >/dev/null 2>&1)
 # The driver and the stub add PATH and STUB_LOG, which the parent snapshot lacks. Compare the rest.
-grep -v -e '^PATH=' -e '^STUB_LOG=' -e '^CLAUDE_CODE_PRINT_BG_WAIT_CEILING_MS=' -e '^RAVINTIO_INITIATIVE_STEP=' -e '^OLDPWD=' -e '^__CF_' "$R/parent.env" > "$R/p.env"
-grep -v -e '^PATH=' -e '^STUB_LOG=' -e '^CLAUDE_CODE_PRINT_BG_WAIT_CEILING_MS=' -e '^RAVINTIO_INITIATIVE_STEP=' -e '^OLDPWD=' -e '^__CF_' "$R/stub.log.env" > "$R/c.env"
+grep -v -e '^PATH=' -e '^STUB_LOG=' -e '^CLAUDE_CODE_PRINT_BG_WAIT_CEILING_MS=' -e '^RAVINTIO_INITIATIVE_STEP=' -e '^OLDPWD=' -e '^TMPDIR=' -e '^GIT_CEILING_DIRECTORIES=' -e '^__CF_' "$R/parent.env" > "$R/p.env"
+grep -v -e '^PATH=' -e '^STUB_LOG=' -e '^CLAUDE_CODE_PRINT_BG_WAIT_CEILING_MS=' -e '^RAVINTIO_INITIATIVE_STEP=' -e '^OLDPWD=' -e '^TMPDIR=' -e '^GIT_CEILING_DIRECTORIES=' -e '^__CF_' "$R/stub.log.env" > "$R/c.env"
 assert_equals "0" "$(diff "$R/p.env" "$R/c.env" | grep -c '^[<>]')" "req-013 (c): no other child variable differs"
 # The driver passes the labels through spawn's env option and never assigns
 # to its own process.env, so its environment stays as it was.

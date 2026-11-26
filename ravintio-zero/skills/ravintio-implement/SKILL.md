@@ -118,6 +118,7 @@ Every requirement must have a mapped test whose name includes the requirement ID
 - **Data ownership.** Never write to data owned by another component. Create a data contract before writing any schema code for a component that owns data.
 - **Rollbacks are human-initiated, never automatic.** No agent rolls back a deployment, migration, or artifact on its own.
 - **Deviation.** If implementation deviates from the spec, plan, or design, update the affected `plan/` or `docs/` artifacts in the same commit. Record the deviation in `docs/quirks.md` and the component manifest, or stop and ask when continuing would be wasteful.
+- **Scratch files** go under `$TMPDIR`. Never write to a hard-coded `/tmp` path, and never delete a path outside the repo. A suite that makes a temp folder removes it with a trap on `EXIT` (rule `scratch-under-tmpdir` in `ravintio-zero/standards/testing-standards.md`).
 - **Quirks and tech debt** go to `src/{component-id}/docs/quirks.md` and `tech-debt.md`, mirrored in the `quality` section of `component.yml`. Never silently work around them.
 - **Component manifest close-out.** After the build, update `component.yml`: `data`, `quality`, `pipeline`, `metadata`, and `version`.
 
