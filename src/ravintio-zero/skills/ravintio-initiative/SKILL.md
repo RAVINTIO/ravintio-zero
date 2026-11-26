@@ -22,7 +22,7 @@ description: Coordinates an initiative from chart to delivery in the human's ses
 2. Never edit the working tree while the driver holds the lock `plan/.initiative-runner.lock`.
 3. Never merge into `main` and never commit to `main`. The human merges the initiative PR.
 4. Write `plan/.initiative-ack` with your session id. Never write `plan/.orchestrator-ack`.
-5. A step session never moves, renames, or deletes `plan/.initiative-logs/`, `plan/.initiative-runner.lock`, `plan/.initiative-queue/`, `plan/.initiative-worktrees/`, or `plan/.initiative-control/`. The driver and the watcher own them.
+5. <!-- rule: rm-ini-driver-files --> A step session never moves, renames, or deletes `plan/.initiative-logs/`, `plan/.initiative-runner.lock`, `plan/.initiative-queue/`, `plan/.initiative-worktrees/`, or `plan/.initiative-control/`. The driver and the watcher own them.
 6. The hard limits of the orchestrator apply here too.
 
 ## Session start
@@ -35,12 +35,12 @@ description: Coordinates an initiative from chart to delivery in the human's ses
 
 ## I-A Chart and I-B Activate
 
-Follow the I-A Chart and I-B Activate sections of the roadmap standards. Activation lands as a coordinator PR. Chart builds the `## Decisions`, `## Baselines`, `## Criteria`, and `## P1 skips` tables. Chart also does these:
+<!-- rule: rm-ini-chart-intro --> Follow the I-A Chart and I-B Activate sections of the roadmap standards. Activation lands as a coordinator PR. Chart builds the `## Decisions`, `## Baselines`, `## Criteria`, and `## P1 skips` tables. Chart also does these:
 
-- **Guard.** Run a guard check on each entry. Check whether it widens a guard, such as `merge-guard`, `gate-write`, `ratchet-check`, or another fail-closed hook. Name the guard and the new forms it would allow. Ask for a separate approval for each widening, apart from the chart confirmation.
+- <!-- rule: rm-ini-guard --> **Guard.** Run a guard check on each entry. Check whether it widens a guard, such as `merge-guard`, `gate-write`, `ratchet-check`, or another fail-closed hook. Name the guard and the new forms it would allow. Ask for a separate approval for each widening, apart from the chart confirmation.
 - **Lanes.** Coach a `Lane` and an `After` list for each step, and the `**Concurrency:**` field (default 3). Steps that edit the same files share a lane. A step that changes most files lists every earlier step in `After`, and every later step lists it. See Chart-time lanes.
 - **Migrations.** List every pending migration from resume detection and take the human's answer for each, per `Chart-time migrations`. Chart starts no step before then.
-- **Confirmation.** Plan each step confirmation, per rule `agree-explicit` in `orchestrator-p0-coaching.md`. List each one that a step's skills ask for. Record the exact command as a `Confirmation:` row in `## Decisions`, or plan a human stop for that step.
+- <!-- rule: rm-ini-confirmation --> **Confirmation.** Plan each step confirmation, per rule `agree-explicit` in `orchestrator-p0-coaching.md`. List each one that a step's skills ask for. Record the exact command as a `Confirmation:` row in `## Decisions`, or plan a human stop for that step.
 
 **Questions.** Restate the human's words as one concrete plan, name the default, and ask "Go?". Offer other options only for a real fork. Ask at most one question per reply. Never ask about what the human already said. **Activate.** Run `node ravintio-zero/scripts/initiative-activate.mjs --yes` after one "Go?". Add a step with `node ravintio-zero/scripts/initiative-add-step.mjs`. For a coordinator PR, run `node ravintio-zero/scripts/coordinator-pr-check.mjs {base}`. If it prints `plan-only`, skip the full suite. See Coordinator questions and commands in the roadmap standards.
 
@@ -53,9 +53,9 @@ A host monitor expires after 30 minutes. Start a new one until the driver exits.
 
 ## Reports
 
-Report at least every 5 minutes while the driver runs, at each phase end, and on request. Report an event at once when the build log gains a phase `Complete:`, `Blocked:`, or `Resolved:` line. When the build log changes to a new step, also report the `Complete:` lines already in it. An interval report names each running step and its phase. It gives the last build log line with its age, the commits since the last report, any stop, and whether the driver runs.
+<!-- rule: ini-report-cadence -->Report at least every 5 minutes while the driver runs, at each phase end, and on request. Report an event at once when the build log gains a phase `Complete:`, `Blocked:`, or `Resolved:` line. When the build log changes to a new step, also report the `Complete:` lines already in it. An interval report names each running step and its phase. It gives the last build log line with its age, the commits since the last report, any stop, and whether the driver runs.
 
-While steps run, the monitor also prints `I-C Run: activity:` lines with the step number. Do not relay them. Relay watcher lines only at phase events, blocks, and stops. Read step test output only after a stop, because each step already checks its own tests.
+<!-- rule: ini-relay-events -->While steps run, the monitor also prints `I-C Run: activity:` lines with the step number. Do not relay them. Relay watcher lines only at phase events, blocks, and stops. Read step test output only after a stop, because each step already checks its own tests.
 
 If nothing changed, say so and give the time since the last change. If the step keeps committing and its build log has not changed for 15 minutes, say the log is stale.
 
@@ -64,7 +64,7 @@ A progress report, on request and at each phase end, has two parts:
 - **Initiative:** steps merged out of the total, backlog entries done out of the total, and a table of each step's feature, entries, version, and status.
 - **Current step:** report each running step and each ready step waiting for the queue. For each running step, give the phase, the progress within it, and what comes next. Progress is units done out of planned in P2, and criteria verified out of total from P3. Add highlights, such as what the step changes for the user, and any risk.
 
-Before each report, run `node ravintio-zero/scripts/initiative-status.mjs`. It prints the driver state, the step counts, each ready PR, each running step, and each live stop. A stop for a merged step does not show. Report from its output and never from memory. Relay each `I-C Run: event:` line for a ready step, a queue stop, or a driver exit at once. Run the status script after a queue stop or a driver exit.
+<!-- rule: ini-status-before-report -->Before each report, run `node ravintio-zero/scripts/initiative-status.mjs`. It prints the driver state, the step counts, each ready PR, each running step, and each live stop. A stop for a merged step does not show. Report from its output and never from memory. Relay each `I-C Run: event:` line for a ready step, a queue stop, or a driver exit at once. Run the status script after a queue stop or a driver exit.
 
 End each report with two parts:
 
@@ -75,32 +75,32 @@ End each report with two parts:
 
 If the driver prints `Blocked:` or exits with a code other than 0 or 75, report the stop line and the step log path `plan/.initiative-logs/step-{n}.log`. Relay each `I-C Run: Step {n}: {state}` line too, which names every step's state. Never resume the step. Ask the human how to proceed. After the human acts, offer to restart the driver. To pause, run `node ravintio-zero/scripts/initiative-pause.mjs request`. The driver writes the records and exits. On resume, read `plan/current-initiative/pause.md` first.
 
-A `Restart:` line is not a failure, and the driver exits 75 after it. Exit 75 is a planned stop. It means a merged step changed the driver, the watcher, or this skill, and the running code is old. Report the line. Then start a new driver and a new watcher without asking. Read this skill again first if the line names it. If the line ends `A new driver took over new starts.`, the old driver hands over and a new driver already runs, so start a new watcher only.
+<!-- rule: rm-ini-restart-stop --> A `Restart:` line is not a failure, and the driver exits 75 after it. Exit 75 is a planned stop. It means a merged step changed the driver, the watcher, or this skill, and the running code is old. Report the line. Then start a new driver and a new watcher without asking. Read this skill again first if the line names it. If the line ends `A new driver took over new starts.`, the old driver hands over and a new driver already runs, so start a new watcher only.
 
-The driver runs the approved setup command itself when the `Confirmation:` row names it, and prints `ran the approved setup command`. A `Setup:` line (`I-D Advance: Setup: step {n} changed {files}. Rerun setup, then start a new driver.`) means the driver did not run it. The line is a planned stop, not a failure. Report the line, then:
+<!-- rule: ini-setup-stop -->The driver runs the approved setup command itself when the `Confirmation:` row names it, and prints `ran the approved setup command`. A `Setup:` line (`I-D Advance: Setup: step {n} changed {files}. Rerun setup, then start a new driver.`) means the driver did not run it. The line is a planned stop, not a failure. Report the line, then:
 
-1. Read the setup command from the `Confirmation:` row in `## Decisions` of `plan/current-initiative/initiative.md`.
-2. Run that exact command. If no row names it, or the command differs in any way, stop and ask the human.
-3. Check that every hook in `.claude/settings.json` resolves and runs. If one fails, stop and report the hook.
-4. Start a new driver and a new watcher.
+1. <!-- rule: ini-setup-command -->Read the setup command from the `Confirmation:` row in `## Decisions` of `plan/current-initiative/initiative.md`.
+2. <!-- rule: ini-setup-exact -->Run that exact command. If no row names it, or the command differs in any way, stop and ask the human.
+3. <!-- rule: ini-setup-hooks -->Check that every hook in `.claude/settings.json` resolves and runs. If one fails, stop and report the hook.
+4. <!-- rule: ini-setup-restart -->Start a new driver and a new watcher.
 
-A line that starts `Restart: Setup:` names both. Rerun setup first. Read this skill again if the line names it. Then start one new driver.
+<!-- rule: ini-restart-setup -->A line that starts `Restart: Setup:` names both. Rerun setup first. Read this skill again if the line names it. Then start one new driver.
 
 ## Backlog queue
 
-While the driver holds the lock, queue admin work. Do not edit the working tree and do not reserve an id. Write each item as a folder in `plan/.initiative-queue/`. Its `item.md` holds `**Step:** {n}` and `**Destination:** {repo path}`, and the other files are the content. For a new backlog entry, set the destination to `plan/backlog/{id}-{slug}/entry.md` and write `{id}` where the id goes. The step reserves the id and fills it in.
+<!-- rule: orc-init-queue-item --> While the driver holds the lock, queue admin work. Do not edit the working tree and do not reserve an id. Write each item as a folder in `plan/.initiative-queue/`. Its `item.md` holds `**Step:** {n}` and `**Destination:** {repo path}`, and the other files are the content. For a new backlog entry, set the destination to `plan/backlog/{id}-{slug}/entry.md` and write `{id}` where the id goes. The step reserves the id and fills it in.
 
-Name the step that the work aligns with, or the next pending step. After a step merges, run `node ravintio-zero/scripts/initiative-queue.mjs drain --step {n}`. For a repeated or compound shell task, follow rule `coord-shell-tasks` in the roadmap standards. Write a script with the Write tool and run it with `bash`. Never move or delete an item while a step runs. Admin that fits no step waits until the driver stops, then lands through a `chore/` PR.
+<!-- rule: orc-init-queue-route --> Name the step that the work aligns with, or the next pending step. After a step merges, run `node ravintio-zero/scripts/initiative-queue.mjs drain --step {n}`. For a repeated or compound shell task, follow rule `coord-shell-tasks` in the roadmap standards. Write a script with the Write tool and run it with `bash`. Never move or delete an item while a step runs. Admin that fits no step waits until the driver stops, then lands through a `chore/` PR.
 
-`reserve-id.mjs --commit` refuses on `initiative/*`. When the driver has stopped, run it on a `feat/` branch so the counter commit rides in the coordinator PR.
+<!-- rule: ob-reserve-commit-initiative --> `reserve-id.mjs --commit` refuses on `initiative/*`. When the driver has stopped, run it on a `feat/` branch so the counter commit rides in the coordinator PR.
 
-Nothing commits directly on the initiative branch. Activation, scope edits, and the I-E Delivery archive and retrospective follow `## Coordinator PRs` in the roadmap standards. Raise one only after the driver has stopped, and merge it with `gh pr merge --squash --delete-branch {n}`.
+<!-- rule: orc-init-squash-delete --> Nothing commits directly on the initiative branch. Activation, scope edits, and the I-E Delivery archive and retrospective follow `## Coordinator PRs` in the roadmap standards. Raise one only after the driver has stopped, and merge it with `gh pr merge --squash --delete-branch {n}`.
 
 ## Repo instructions during a run
 
-If the human asks for a repo instruction while a step runs, add it to a step's scope in `plan/current-initiative/initiative.md`. Pick the current or next pending step. The skill never writes the override from the initiative session, because `gate-write` blocks that write. The step writes the file.
+<!-- rule: rm-ini-route --> If the human asks for a repo instruction while a step runs, add it to a step's scope in `plan/current-initiative/initiative.md`. Pick the current or next pending step. The skill never writes the override from the initiative session, because `gate-write` blocks that write. The step writes the file.
 
-- If the driver holds the lock, queue the instruction in `plan/.initiative-queue/{slug}/instruction.md`. The step that runs has already read its scope, so the instruction goes to the next pending step.
+- <!-- rule: rm-ini-route-queue --> If the driver holds the lock, queue the instruction in `plan/.initiative-queue/{slug}/instruction.md`. The step that runs has already read its scope, so the instruction goes to the next pending step.
 - When the driver is between steps or has exited, add the instruction to that step's scope in `initiative.md`. Land the edit as a coordinator PR.
 - Tell the human which step took the instruction.
 

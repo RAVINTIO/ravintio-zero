@@ -1,0 +1,27 @@
+converted: test-0000005-pack-governance.sh
+converted: test-0000007-agent-optimisation.sh
+converted: test-0000016-pipeline-governance.sh
+structure: test-0000019-req-005-self-description-check.sh: script exit codes and scratch fixtures only
+converted: test-0000020-req-001-010-refresh-setup-skill.sh
+structure: test-0000028-req-006-em-dash-guard.sh: hook behaviour with fixtures only
+structure: test-0000029-req-001-003-boot-file-regeneration.sh: setup runs, absence greps, override file outside tree
+structure: test-0000031-req-002-single-route.sh: file counts and absence greps only
+structure: test-0000031-req-003-five-phases.sh: skill folder list, pipeline-reference, line cap
+structure: test-0000031-req-004-setup-execution.sh: setup.sh execution and install tree checks
+converted: test-0000032-req-004-refresh-setup-reads-record-first.sh
+converted: test-0000034-req-005-006-housekeeping.sh
+structure: test-0000042-req-006-phase-guard-and-stale-cites.sh: stale-cite scan with fixtures
+structure: test-0000042-req-010-pack-wording-allowlist.sh: wording allowlist scan
+converted: test-0000151-req-010-webfetch-via-subagent.sh
+structure: test-0000160-req-001-pack-identifiers.sh: names, manifest paths, history folders
+structure: test-0000160-req-002-runtime-names.sh: hook and setup behaviour with fixtures
+structure: test-0000160-req-005-consumer-migration.sh: migration script behaviour with fixtures
+structure: test-0000164-req-007-gate-write-doc-correction.sh: pins docs outside anchorable tree, stripped-copy fixture
+structure: test-0000171-req-004-no-skill-bundling.sh: setup install and prune behaviour
+converted: test-0000173-req-002-thresholds-gate.sh
+structure: test-0000189-req-007-old-name-guard.sh: repo-wide old-name grep guard
+converted: test-0000196-req-003-refresh-names-retired-flag.sh
+structure: test-0000200-req-004-setup-wires-the-stop-hook.sh: hook wiring and docs name listings
+converted: test-0000202-req-002-improve-marker.sh
+converted: test-0000203-req-001-postmortem-skill.sh
+converted: test-0000204-req-001-retrospective-skill.sh

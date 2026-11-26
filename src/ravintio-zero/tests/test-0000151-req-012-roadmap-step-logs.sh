@@ -10,7 +10,6 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
 DRIVER="$SCRIPT_DIR/../scripts/initiative-run.mjs"
-STANDARDS="$SCRIPT_DIR/../standards/roadmap-standards.md"
 WORK="$(mktemp -d)"
 trap 'rm -rf "$WORK"' EXIT
 
@@ -164,7 +163,8 @@ assert_equals "600" "$(mode_of "$R/plan/.initiative-logs/step-1.log")" "req-012 
 echo ""
 echo "=== req-012 (c): documentation ==="
 HEAD_TXT="$(sed -n '1,60p' "$DRIVER")"
-for f in "$HEAD_TXT" "$(cat "$STANDARDS")"; do
+STD_DOC="$(rule_text rm-steplog-path)"$'\n'"$(rule_text rm-steplog-attempt)"$'\n'"$(rule_text rm-steplog-symlink)"$'\n'"$(rule_text rm-steplog-private)"
+for f in "$HEAD_TXT" "$STD_DOC"; do
   assert_contains "plan/.initiative-logs/" "$f" "req-012 (c): names the log folder"
   assert_contains "attempt" "$f" "req-012 (c): names the attempt rule"
   assert_contains "symlink" "$f" "req-012 (c): names the symlink refusal"

@@ -16,7 +16,7 @@ When the human explicitly asks to skip a phase:
 2. Append to `plan/current/.skips` in the same turn: `{phase}: skipped by human on {ISO-8601 date} ({reason, or "no reason given"})`
 3. Continue to the next phase. The ship phase reads `.skips` into the changelog.
 
-An initiative step session has no human to ask. It skips P1 only when its row in the `## P1 skips` table of `initiative.md` says `yes`. With no `yes` row, it prints `I-C Run: Blocked:` and stops. When it skips, the build log holds `Skipped: P1` and names the chart row.
+<!-- rule: rm-skip-protocol-initiative --> An initiative step session has no human to ask. It skips P1 only when its row in the `## P1 skips` table of `initiative.md` says `yes`. With no `yes` row, it prints `I-C Run: Blocked:` and stops. When it skips, the build log holds `Skipped: P1` and names the chart row.
 
 ## Pause Command
 

@@ -9,18 +9,10 @@ source "$SCRIPT_DIR/helpers/assert.sh"
 
 ZERO_DIR="$SCRIPT_DIR/.."
 REF="$ZERO_DIR/skills/ravintio-plan/references/test-impact-causes.md"
-CAUSE=$(grep -F '**Path move:**' "$REF" 2>/dev/null || true)
 
 echo ""
-echo "=== REQ-001 AC-1: the reference file names the cause ==="
-assert_contains "**Path move:**" "$(cat "$REF" 2>/dev/null || true)" "REQ-001 AC-1: the file names the Path move cause"
-
-echo ""
-echo "=== REQ-001 AC-2: the cause names the greps and the state files ==="
-assert_contains '$ZERO_DIR/..' "$CAUSE" "REQ-001 AC-2: the cause names the ZERO_DIR lookup"
-assert_contains 'SCRIPT_DIR/../..' "$CAUSE" "REQ-001 AC-2: the cause names the SCRIPT_DIR lookup"
-assert_contains "plan/state/prose-baseline.json" "$CAUSE" "REQ-001 AC-2: the cause names the prose baseline"
-assert_contains "renames or moves a folder" "$CAUSE" "REQ-001 AC-2: the cause names its trigger"
+echo "=== REQ-001 AC-1 and AC-2: the cause names the greps and the state files ==="
+assert_rule piv-cause-path-move "**Path move:**" '$ZERO_DIR/..' 'SCRIPT_DIR/../..' "plan/state/prose-baseline.json" "renames or moves a folder"
 
 echo ""
 echo "=== REQ-001 AC-3 and NFR-001: the two trees match ==="

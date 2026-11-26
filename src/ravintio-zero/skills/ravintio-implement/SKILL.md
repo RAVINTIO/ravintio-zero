@@ -7,7 +7,7 @@ description: Implements requirements with tests and documentation landing togeth
 
 > You implement the system the plan describes. Code, tests, and documentation land together in this phase. You build against the contract, not beyond it.
 
-**Prefix.** Begin every reply with `P2 Implement:`, in the form `{prefix} {Status}: {one-liner}`, as in `P2 Implement: Starting: {one-liner}`.
+<!-- rule: orc-prefix-p2 --> **Prefix.** Begin every reply with `P2 Implement:`, in the form `{prefix} {Status}: {one-liner}`, as in `P2 Implement: Starting: {one-liner}`.
 
 **Times.** Read every time you log with `date -u +%Y-%m-%dT%H:%M:%SZ` and never type one. `build-log-check.mjs` fails a time later than its commit.
 
@@ -36,9 +36,9 @@ Check whether capability skills exist for the declared stack and load them along
 
 ## Build target
 
-When `plan/current/design.md` declares `Build target: docker`:
+<!-- rule: oa-impl-build-target --> When `plan/current/design.md` declares `Build target: docker`:
 
-- Never check host-installed runtimes or tools. Do not run `node`, `python`, `go`, `dotnet`, or equivalents on the host.
+- <!-- rule: oa-impl-build-target-rules --> Never check host-installed runtimes or tools. Do not run `node`, `python`, `go`, `dotnet`, or equivalents on the host.
 - Never fail or warn because a runtime is absent on the host. Expect it to be absent.
 - Scaffold Dockerfile-first. Generate the `Dockerfile` and `docker-compose.yml` before any source code.
 - All validation runs via `docker build` and `docker run`, never the host toolchain.
@@ -51,18 +51,19 @@ For each component at `src/{component-id}/`, build application code, shared type
 
 Build multiple components in dependency order: shared packages, then data owners, then consumers. Finish each component (code, tests, docs) before the next starts. Halt and escalate on a circular dependency.
 
-Before writing any dependency manifest, check `ravintio-overrides/library-standards/{language}/prefer-avoid.md`, then the pack's `ravintio-zero/standards/library-standards/` lists. Substitute preferred alternatives for avoided libraries. If an avoided library has no alternative, record the exception in `src/{component-id}/docs/quirks.md` and escalate. Skip the audit when the lists are stubs. Follow `ravintio-zero/standards/library-standards/_version-policy.md` for version pinning.
+<!-- rule: oa-impl-library-standards --> Before writing any dependency manifest, check `ravintio-overrides/library-standards/{language}/prefer-avoid.md`, then the pack's `ravintio-zero/standards/library-standards/` lists. Substitute preferred alternatives for avoided libraries. If an avoided library has no alternative, record the exception in `src/{component-id}/docs/quirks.md` and escalate. Skip the audit when the lists are stubs. Follow `ravintio-zero/standards/library-standards/_version-policy.md` for version pinning.
 
-Read any other standard or template through the resolver: `node ravintio-zero/scripts/resolve-override.mjs {standards|templates} {file}`. See `ravintio-zero/standards/archetype-standards.md`.
+<!-- rule: ob-implement-resolver --> Read any other standard or template through the resolver: `node ravintio-zero/scripts/resolve-override.mjs {standards|templates} {file}`. See `ravintio-zero/standards/archetype-standards.md`.
 
 Before adding any library or service, check that it is on the approved list. The list is the `Approved dependencies` field of `design.md` in a gated run and the `## Dependencies` table of `initiative.md` in an initiative step. If it is not on the list, take the dependency exception stop: `{prefix} Blocked: new dependency {name} is not on the approved list. Approve it or choose an approved alternative.` This applies in every run mode.
 
 ## TDD inner loop
 
-Run the suites that `## Test impact` names before the full suite. A failure there costs seconds, not a full run.
+<!-- rule: piv-implement-impact-suites-first --> Run the suites that `## Test impact` names before the full suite. A failure there costs seconds, not a full run.
 
 For each functional requirement, orchestrate three subagents in sequence. This is the mandatory implementation discipline.
 
+<!-- rule: piv-implement-tdd-loop-block -->
 ```
 for each requirement:
   attempt = 0
@@ -78,11 +79,11 @@ for each requirement:
       ESCALATE to the human. Do not proceed to the next requirement.
 ```
 
-Pass each dispatch the `model` from that skill's own `recommended_model` field. If a haiku unit fails twice, retry that unit on `sonnet`. The two haiku failures count toward the five attempts, and the five-attempt escalation stays the same.
+<!-- rule: piv-implement-model-tiers --> Pass each dispatch the `model` from that skill's own `recommended_model` field. If a haiku unit fails twice, retry that unit on `sonnet`. The two haiku failures count toward the five attempts, and the five-attempt escalation stays the same.
 
 After 5 failed attempts on one requirement, emit `P2 Implement: Blocked: {requirement} still fails after 5 attempts. Review the escalation and choose the next step.` and stop in both run modes. Then report the requirement ID, the test file, what each attempt tried, and why it stayed RED. Add your root-cause assessment and a recommended action. Wait for human direction.
 
-For each attempt on a requirement after the first, append `Rework: REQ-{nnn}: {reason} ({ISO-8601 timestamp})` to the build log. The marker forms are in `ravintio-zero/standards/workflow-governance-standards.md`.
+<!-- rule: orc-impl-rework --> For each attempt on a requirement after the first, append `Rework: REQ-{nnn}: {reason} ({ISO-8601 timestamp})` to the build log. The marker forms are in `ravintio-zero/standards/workflow-governance-standards.md`.
 
 Every requirement must have a mapped test whose name includes the requirement ID (for example `describe('req-001-auth: login flow', ...)`). Write E2E tests for critical user flows named in the acceptance criteria. Write to disk after each subagent, and mark each one per "Progress Markers and Interrupted Units" in `ravintio-zero/standards/agent-dispatch-standards.md`. Do not accumulate work in memory across requirements.
 
@@ -107,13 +108,13 @@ Every requirement must have a mapped test whose name includes the requirement ID
 
 ## Improvement loop
 
-After refactor confirms affected-tests GREEN, run up to 2 cycles per requirement, as `## Improvement loop` in `ravintio-zero/standards/agent-dispatch-standards.md` describes. Each cycle dispatches a fresh-context reviewer, then ravintio-refactor in improvement mode with its finding, and appends an `Improve:` marker. The loop stops early on `no change worth making`.
+<!-- rule: piv-implement-improvement-loop --> After refactor confirms affected-tests GREEN, run up to 2 cycles per requirement, as `## Improvement loop` in `ravintio-zero/standards/agent-dispatch-standards.md` describes. Each cycle dispatches a fresh-context reviewer, then ravintio-refactor in improvement mode with its finding, and appends an `Improve:` marker. The loop stops early on `no change worth making`.
 
 ## Rules
 
 - **One question at a time** when you need human input.
 - **Implement against the requirements.** The OpenAPI spec defines the contract. Do not add or remove endpoints. Follow the ADRs. Flag a wrong ADR rather than overriding it silently. Do not introduce technology the stack does not declare.
-- **Schema changes.** Write a migration proposal at `src/{component-id}/docs/migrations/proposed-{desc}.md` and STOP for human approval in both run modes, with `P2 Implement: Blocked: schema change proposed at {path}. Approve or reject the migration proposal.` (agreement follows rule `agree-explicit` in `ravintio-orchestrator/references/orchestrator-p0-coaching.md`). Never modify a schema directly. Destructive operations (drop, rename) always stop. This is a hard limit. In an initiative step, a chart-approved additive change does not stop (see `ravintio-zero/standards/roadmap-standards.md`).
+- <!-- rule: rm-impl-schema-changes --> **Schema changes.** Write a migration proposal at `src/{component-id}/docs/migrations/proposed-{desc}.md` and STOP for human approval in both run modes, with `P2 Implement: Blocked: schema change proposed at {path}. Approve or reject the migration proposal.` (agreement follows rule `agree-explicit` in `ravintio-orchestrator/references/orchestrator-p0-coaching.md`). Never modify a schema directly. Destructive operations (drop, rename) always stop. This is a hard limit. In an initiative step, a chart-approved additive change does not stop (see `ravintio-zero/standards/roadmap-standards.md`).
 - **Data ownership.** Never write to data owned by another component. Create a data contract before writing any schema code for a component that owns data.
 - **Rollbacks are human-initiated, never automatic.** No agent rolls back a deployment, migration, or artifact on its own.
 - **Deviation.** If implementation deviates from the spec, plan, or design, update the affected `plan/` or `docs/` artifacts in the same commit. Record the deviation in `docs/quirks.md` and the component manifest, or stop and ask when continuing would be wasteful.
@@ -153,7 +154,7 @@ Docs rules:
 - Account for every artifact. Produce what is missing, or note a legitimate absence explicitly (for example no data contract when `ownsData: false`).
 - Keep cross-references consistent: registry links to each purpose doc, and the dependency graph matches the per-component dependency files.
 - Check for drift between spec and implementation: endpoints, glossary terms, component boundaries, data ownership, ADR compliance, and dependency direction. Flag drift, do not silently fix it.
-- Write the change record at `plan/changelog/{feature-id}-{date}.md` from `ravintio-zero/templates/iteration-log.template.md`.
+- <!-- rule: oa-impl-iteration-log --> Write the change record at `plan/changelog/{feature-id}-{date}.md` from `ravintio-zero/templates/iteration-log.template.md`.
 - File each deferred item and tech debt row as its own `plan/backlog/{id}-{slug}/entry.md` per `ravintio-zero/templates/backlog-entry.template.md`.
 
 ## Parallel dispatch
@@ -161,7 +162,7 @@ Docs rules:
 Independent requirements MUST be dispatched in parallel per `ravintio-zero/standards/agent-dispatch-standards.md`. Before writing any code:
 
 1. List all requirements for the phase.
-2. Take the batches from the `## Concurrency plan` in `plan/current/execution-plan.md`. Do not map dependencies afresh.
+2. <!-- rule: piv-implement-parallel-batches --> Take the batches from the `## Concurrency plan` in `plan/current/execution-plan.md`. Do not map dependencies afresh.
 3. Dispatch each batch in a single parallel message, in batch order. Record a departure from the batches in the build log with its reason.
 4. Record the batch count in the build log. If nothing can be parallelised, state the dependency reason there.
 
@@ -171,7 +172,7 @@ Per-component docs for independent components also parallelise. The registry and
 
 When `plan/.run-speed` holds `fast`, dispatch these batches in order, each in one message. Within a batch, every unit writes its own files.
 
-1. One TDD track per leaf requirement whose files no other track writes. Each track runs test-writer, implementer, refactor, and the improvement loop in sequence.
+1. <!-- rule: piv-implement-fast-track --> One TDD track per leaf requirement whose files no other track writes. Each track runs test-writer, implementer, refactor, and the improvement loop in sequence.
 2. One TDD track per dependent requirement, after its dependencies finish.
 3. One unit per independent living doc and per-component doc set, before the full test suite starts.
 4. Inline: the registry and dependency graph, then the component manifest close-out.
@@ -182,10 +183,10 @@ At `standard`, the steps above apply. The five-attempt escalation stays the same
 
 Dispatched units share one working tree.
 
-- Never run `git stash`, `git checkout -- {path}`, `git reset`, or `git clean` while any subagent runs. Each one removes the uncommitted work of the running units.
+- <!-- rule: orc-impl-no-tree-git --> Never run `git stash`, `git checkout -- {path}`, `git reset`, or `git clean` while any subagent runs. Each one removes the uncommitted work of the running units.
 - To test a clean tree mid-phase, use a scratch clone in a scratch folder.
 - If a tree-wide git operation cannot wait, wait for the subagents first. Record in the build log that the step waits for its subagents before the operation.
 
 ## Commit cadence
 
-Commit after every requirement's completed TDD cycle at minimum, and after every meaningful artifact write. Never batch changes to the phase gate. Each commit carries the code and the docs that describe it together.
+<!-- rule: oa-impl-commit-cadence --> Commit after every requirement's completed TDD cycle at minimum, and after every meaningful artifact write. Never batch changes to the phase gate. Each commit carries the code and the docs that describe it together.

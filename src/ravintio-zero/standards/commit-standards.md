@@ -29,9 +29,9 @@ fix(auth-service): correct token expiry calculation
 
 ### 3. No AI attribution
 
-Commit messages and PR descriptions MUST NOT attribute authorship or co-development to any AI tool or LLM. Prohibited:
+<!-- rule: shp-commit-no-attribution --> Commit messages and PR descriptions MUST NOT attribute authorship or co-development to any AI tool or LLM. Prohibited:
 
-- `Co-Authored-By: Claude <...>`, or any `Co-Authored-By:` line that names an AI tool
+- <!-- rule: shp-commit-attribution-lines --> `Co-Authored-By: Claude <...>`, or any `Co-Authored-By:` line that names an AI tool
 - `Generated with [Claude Code]`, with or without a robot emoji
 - A `Claude-Session:` line or a claude.ai/code session link
 - `co-developed with Claude / Copilot / Cursor / Windsurf / Cline`

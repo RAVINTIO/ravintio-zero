@@ -16,18 +16,18 @@ An initiative step self-confirms this gate as I-C Run in `ravintio-zero/standard
 
 Read `plan/current/feature-brief.md`. If the human filled in `## Scenario Paths`, use those four paths. Otherwise derive them from the user stories and acceptance criteria. The four questions:
 
-1. **Happy path:** the end-to-end flow when everything works. First action, and what success looks like.
+1. <!-- rule: orc-scope-lock-paths --> **Happy path:** the end-to-end flow when everything works. First action, and what success looks like.
 2. **First-run path:** the very first use, before any prior data or state exists.
 3. **Error path:** the most likely failure mode and what should happen.
 4. **Cross-session continuity:** what state is at risk if something interrupts the session, and how you recover it.
 
-**Draft inline.** Draft all four suggested answers yourself, in this context. Do not dispatch a subagent. Drafting rules: frame from usage, describe outcome not implementation, write "not applicable" only where true, and check each draft against the human's confirmed decisions. Surface any contradiction alongside the draft rather than resolving it silently.
+<!-- rule: orc-scope-lock-draft --> **Draft inline.** Draft all four suggested answers yourself, in this context. Do not dispatch a subagent. Drafting rules: frame from usage, describe outcome not implementation, write "not applicable" only where true, and check each draft against the human's confirmed decisions. Surface any contradiction alongside the draft rather than resolving it silently.
 
 **Present as a batch.** Show all four questions with their labelled drafts in a single turn. Label every draft as a draft, never as a decided answer.
 
-**Confirmation is human-only, per item.** Only the human's explicit accept, edit, or reject for each individual item counts as scope confirmation. Silence is never approval. The conversation moving on is never approval. A blanket "looks fine" across the batch is never approval for any single item. Your own draft is never confirmation, no matter how confident it reads.
+<!-- rule: orc-scope-lock-confirm --> **Confirmation is human-only, per item.** Only the human's explicit accept, edit, or reject for each individual item counts as scope confirmation. Silence is never approval. The conversation moving on is never approval. A blanket "looks fine" across the batch is never approval for any single item. Your own draft is never confirmation, no matter how confident it reads.
 
-**Record immediately.** The moment the human confirms one item, append to the build log under the P0 block, before handling the next item:
+<!-- rule: orc-scope-lock-record --> **Record immediately.** The moment the human confirms one item, append to the build log under the P0 block, before handling the next item:
 
 ```
 Scope Lock ({path type}): {one-sentence summary} [source: human | draft-accepted | draft-edited]

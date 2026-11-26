@@ -15,10 +15,9 @@ STANDARDS="$(cat "$ROOT/src/ravintio-zero/standards/testing-standards.md")"
 
 echo ""
 echo "=== AC-1: the standard names the helpers and the rule ==="
-assert_contains "repo_root" "$STANDARDS" "REQ-002 AC-1: the standard names repo_root"
 assert_contains "pack_tree_src" "$STANDARDS" "REQ-002 AC-1: the standard names pack_tree_src"
 assert_contains "pack_tree_installed" "$STANDARDS" "REQ-002 AC-1: the standard names pack_tree_installed"
-assert_contains "runs from both trees before it counts as green" "$STANDARDS" "REQ-002 AC-1: the standard states the both-trees rule"
+assert_rule ob-testing-two-trees "repo_root" "runs from both trees before it counts as green"
 
 echo ""
 echo "=== AC-2: the two suites use the helper ==="

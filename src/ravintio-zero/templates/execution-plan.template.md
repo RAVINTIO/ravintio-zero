@@ -61,6 +61,7 @@ flowchart LR
 
 The plan skill's Test impact scan fills this table. Write `none found` in a row whose grep matched nothing.
 
+<!-- rule: piv-template-test-impact-table -->
 | Cause | Test | Unit |
 |-------|------|------|
 | {{skill count, skill-text budget, size cap, or backlog entry id}} | {{test file, or none found}} | {{unit-id that edits the file}} |

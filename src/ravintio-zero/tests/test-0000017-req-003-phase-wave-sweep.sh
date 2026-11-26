@@ -27,10 +27,8 @@ echo "=== req-003: corrected files use Wave, not Phase, in decomposition sense =
 
 assert_equals "yes" "$(grep_has '### Waves' "$TEMPLATES/feature-brief-guide.md")" \
   "req-003: feature-brief-guide.md section header is Waves"
-assert_equals "yes" "$(grep_has 'Wave 1 ships before Wave 2 begins' "$TEMPLATES/feature-brief-guide.md")" \
-  "req-003: feature-brief-guide.md body uses Wave ordering"
-assert_equals "yes" "$(grep_has 'deferred to Wave 2' "$TEMPLATES/scope-guide.md")" \
-  "req-003: scope-guide.md deferred example uses Wave"
+assert_rule orc-brief-wave-order "Wave 1 ships before Wave 2 begins"
+assert_rule orc-scope-deferred-wave "deferred to Wave 2"
 
 # no decomposition-sense stragglers anywhere in RAVINTIO Zero files
 STRAYS=$(grep -rl -i "if phased\|phase-{n}\|phase-2\.md\|phased feature" "$ZERO_DIR" --include="*.md" 2>/dev/null | grep -v external-skills || true)

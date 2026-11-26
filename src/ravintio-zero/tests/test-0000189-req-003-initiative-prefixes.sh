@@ -24,13 +24,13 @@ for f in "$ZERO_DIR/skills/ravintio-orchestrator/SKILL.md" "$ZERO_DIR/standards/
     assert_contains "roadmap-standards.md" "$(grep -F 'Initiative stages use the prefixes I-A to I-E' "$f")" "req-003 AC-1: $n points at the roadmap standards for I-A to I-E"
     t="$t"$'\n'"$(cat "$ZERO_DIR/standards/roadmap-standards.md")";;
   esac
-  for p in "I-A Chart" "I-B Activate" "I-C Run" "I-D Advance" "I-E Delivery"; do
-    assert_contains "$p" "$t" "req-003 AC-1: $n lists $p"
-  done
+  # The standards list the prefixes in the stage table, and the skill points to it.
   has=no
   printf '%s\n' "$t" | grep -qE '(^|[^A-Za-z0-9])R-[A-E]([^A-Za-z0-9]|$)' && has=yes
   assert_equals "no" "$has" "req-003 AC-1: $n has no R-A to R-E prefix"
 done
+
+assert_rule rm-stages-table "I-A Chart" "I-B Activate" "I-C Run" "I-D Advance" "I-E Delivery"
 
 echo ""
 echo "=== req-003 AC-2: driver stop line ==="

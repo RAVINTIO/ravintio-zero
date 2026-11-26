@@ -1,0 +1,17 @@
+converted: test-0000006-build-assessment.sh
+converted: test-0000025-req-001-ship-agent-pr-footer.sh
+converted: test-0000025-req-002-ship-agent-p7-git-add.sh
+structure: test-0000037-req-005-override-phase-names.sh: pins an override file outside the pack, one code-block option
+converted: test-0000169-req-001-attribution-ban-text.sh
+converted: test-0000169-req-003-attribution-check-in-ship-and-ci.sh
+converted: test-0000173-req-004-ship-governance-report.sh
+structure: test-0000245-req-002-targeted-overrides.sh: runs setup.sh on fixtures, no pack prose pinned
+converted: test-0000248-req-002-build-log-wall-clock-check.sh
+structure: test-0000250-req-002-driver-restart-stop.sh: runs the driver against fixtures, no prose pinned
+structure: test-0000313-req-001-driver-setup-stop.sh: runs the driver against fixtures, no prose pinned
+converted: test-0000318-req-003-pr-number-before-squash.sh
+converted: test-0000327-req-003-ship-skill-rules.sh
+structure: test-0000377-req-003-setup-check-after-last-step.sh: runs the driver against fixtures, no prose pinned
+converted: test-0000384-skill-text.sh
+converted: test-0000472-req-002-ci-duration-standards.sh
+converted: test-0000519-req-001-ship-removal-command.sh

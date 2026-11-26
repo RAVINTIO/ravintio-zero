@@ -1,0 +1,34 @@
+converted: test-0000043-req-001-roadmap-drafts.sh
+converted: test-0000043-req-002-roadmap-chart.sh
+converted: test-0000043-req-003-roadmap-activate.sh
+converted: test-0000043-req-004-roadmap-step-discovery.sh
+converted: test-0000043-req-005-roadmap-advance.sh
+converted: test-0000043-req-008-roadmap-delivery.sh
+converted: test-0000043-req-009-roadmap-resume-and-prefixes.sh
+converted: test-0000043-req-010-merge-carve-out-governance.sh
+converted: test-0000043-req-011-chart-time-schema-approval.sh
+converted: test-0000151-req-002-ship-sentinels-before-pr.sh
+converted: test-0000151-req-006-roadmap-step-model-and-turn-cap.sh
+structure: test-0000151-req-011-orchestrator-references-split.sh: size caps, fixture line diff, headings, setup install
+converted: test-0000151-req-012-roadmap-step-logs.sh
+converted: test-0000151-req-013-roadmap-telemetry-labels.sh
+converted: test-0000169-req-006-release-tag-ci-and-ship-flow.sh
+structure: test-0000171-req-006-pack-path-check.sh: path checker script behaviour with fixtures
+structure: test-0000189-req-001-glossary.sh: glossary in project-operations.md, heading and link check
+converted: test-0000189-req-003-initiative-prefixes.sh
+converted: test-0000189-req-004-initiative-states.sh
+converted: test-0000199-req-001-003-reserve-ids-from-counter.sh
+converted: test-0000204-req-002-hooks-and-reads.sh
+structure: test-0000205-req-005-living-docs-and-counts.sh: doc table rows, skill counts, folder count
+converted: test-0000205-req-007-stage-ownership.sh
+converted: test-0000206-req-001-chart-rules.sh
+converted: test-0000206-req-002-step-application.sh
+converted: test-0000240-req-002-activity-lines.sh
+converted: test-0000248-req-001-plain-merge-command.sh
+converted: test-0000250-req-001-routing-and-restart-rules.sh
+converted: test-0000251-req-002-keep-attempt-logs.sh
+converted: test-0000252-req-001-guard-widening-rule.sh
+converted: test-0000252-req-002-step-confirmation-rule.sh
+converted: test-0000252-req-003-p1-skip-record.sh
+converted: test-0000313-req-003-standards-setup-stop.sh
+converted: test-0000314-req-002-driver-files-stay.sh

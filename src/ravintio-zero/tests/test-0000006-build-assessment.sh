@@ -28,9 +28,8 @@ assert_file_exists() {
 }
 
 ORCH=$(cat "$(orch_combined "$SKILLS/ravintio-orchestrator")")
-assert_contains "build-log.md"               "$ORCH" "req-001: orchestrator references build-log.md"
-assert_contains "build-log.template.md"      "$ORCH" "req-001: orchestrator references build-log template"
-assert_contains "append"                     "$ORCH" "req-001: orchestrator has append instruction for resume"
+assert_rule shp-orch-build-log-block "build-log.md"
+assert_rule p0-start-build-log "build-log.template.md" "append"
 
 # -----------------------------------------------------------------------
 
@@ -45,15 +44,9 @@ assert_file_exists "$SHIP_FILE"                                 "req-002: ship s
 
 SHIP=$(cat "$SHIP_FILE")
 assert_contains "### Step 5: Build assessment" "$SHIP" "req-002: Step 5 Build assessment present"
-assert_contains "model tiers"                "$SHIP" "req-002: covers agent counts and model tiers per phase"
-assert_contains "Parallelism used"           "$SHIP" "req-002: covers parallelism"
-assert_contains "Self-corrections"           "$SHIP" "req-002: covers self-corrections"
-assert_contains "avoidable"                  "$SHIP" "req-002: avoidability judged per self-correction"
-assert_contains "ran sequentially"           "$SHIP" "req-002: covers phases that ran sequentially"
-assert_contains "improvement suggestion"     "$SHIP" "req-002: one improvement suggestion per phase"
-assert_contains "build-report.md"            "$SHIP" "req-002: output path references build-report.md"
-assert_contains "build-log.md"               "$SHIP" "req-002: step reads build-log.md as input"
-assert_contains "Never infer or fabricate"   "$SHIP" "req-002: no-fabrication rule present"
+assert_rule shp-assessment-contents "model tiers" "Parallelism used" "Self-corrections" "avoidable" "ran sequentially" "improvement suggestion"
+assert_rule shp-assessment-input "build-report.md" "build-log.md"
+assert_rule shp-no-fabrication "Never infer or fabricate"
 
 # -----------------------------------------------------------------------
 
@@ -75,7 +68,7 @@ echo "=== req-004: model routing rules ==="
 echo "(0000022: Model Tier Decision Table relocated to standards/agent-dispatch-standards.md, ADR-001 - orchestrator now points to it)"
 
 DISPATCH_STD=$(cat "$ZERO_DIR/standards/agent-dispatch-standards.md")
-assert_contains "agent-dispatch-standards.md" "$ORCH" "req-004: orchestrator points to agent-dispatch-standards.md"
+assert_rule orc-orch-consult-dispatch "agent-dispatch-standards.md"
 assert_contains "Model Tier"                 "$DISPATCH_STD" "req-004: standards file has Model Tier section"
 assert_contains "Primary"                    "$DISPATCH_STD" "req-004: Primary tier defined"
 assert_contains "Cheaper"                    "$DISPATCH_STD" "req-004: Cheaper tier defined"
@@ -93,8 +86,7 @@ echo "=== req-005: parallelism directives in orchestrator ==="
 echo "(0000022: Parallelism Rules relocated to standards/agent-dispatch-standards.md, ADR-001 - orchestrator now points to it)"
 
 assert_contains "Parallelism Rules"          "$DISPATCH_STD" "req-005: Parallelism Rules section present"
-assert_contains "Default posture: parallel"  "$DISPATCH_STD" "req-005: default posture is parallel stated"
-assert_contains "Dependency test"            "$DISPATCH_STD" "req-005: dependency test present"
+assert_rule shp-dispatch-default-parallel "Default posture: parallel" "Dependency test"
 assert_contains "MUST parallelise"           "$DISPATCH_STD" "req-005: MUST parallelise table present"
 assert_contains "Cannot parallelise"         "$DISPATCH_STD" "req-005: Cannot parallelise table present"
 

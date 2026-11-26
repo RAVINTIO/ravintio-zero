@@ -10,18 +10,15 @@ source "$SCRIPT_DIR/helpers/assert.sh"
 ZERO_DIR="$SCRIPT_DIR/.."
 PLAN="$ZERO_DIR/skills/ravintio-plan/SKILL.md"
 REF="$ZERO_DIR/skills/ravintio-plan/references/test-impact-causes.md"
-CAUSE=$(grep -F '**Pack content:**' "$REF" 2>/dev/null || true)
 
 echo ""
 echo "=== REQ-001 AC-1: the cause names the wording test and lists it ==="
-assert_contains "test-0000042-req-010" "$CAUSE" "REQ-001 AC-1: the cause names the wording allowlist test"
-assert_contains "ravintio-zero/" "$CAUSE" "REQ-001 AC-1: the cause names the pack folder"
-assert_contains "execution plan" "$CAUSE" "REQ-001 AC-1: the cause lists the tests in the execution plan"
+assert_rule piv-cause-pack-content "test-0000042-req-010" "ravintio-zero/" "execution plan"
 
 echo ""
 echo "=== REQ-001 AC-2: the scan names the cause and stays small ==="
 SCAN=$(awk '/^## Test impact scan/{f=1;next} /^## /{f=0} f' "$PLAN"; cat "$REF")
-assert_contains "Pack content" "$SCAN" "REQ-001 AC-2: the scan text names the cause"
+assert_rule piv-cause-pack-content "Pack content"
 LINES=$(printf '%s\n' "$SCAN" | grep -c . || true)
 assert_equals "yes" "$([ "$LINES" -le 21 ] && echo yes || echo no)" "REQ-001 AC-2: the scan holds $LINES lines (cap 21)"
 

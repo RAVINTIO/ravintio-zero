@@ -18,9 +18,14 @@ INDEX=$(awk '/^## Pack Index/{f=1;next} /^## /{f=0} f' "$PLAN")
 echo ""
 echo "=== REQ-001 AC-1: the reference file holds the earlier causes ==="
 TEXT=$(cat "$REF" 2>/dev/null || true)
-for cause in "Skill count" "Skill-text budget" "Size cap" "Backlog entry id" "Workflow job or step edit" "Reference file edit" "New test file" "Non-suite file" "Fixture-pinned line"; do
-  assert_contains "$cause" "$TEXT" "REQ-001 AC-1: the reference file names $cause"
-done
+assert_rule piv-cause-skill-count "Skill count"
+assert_rule piv-cause-skill-text-budget "Skill-text budget"
+assert_rule piv-cause-size-cap "Size cap"
+assert_rule piv-cause-backlog-id "Backlog entry id"
+assert_rule piv-cause-workflow-job "Workflow job or step edit"
+assert_rule piv-cause-reference-edit "Reference file edit"
+assert_rule piv-cause-new-test-file "New test file" "Non-suite file"
+assert_rule piv-cause-fixture-pinned "Fixture-pinned line"
 
 echo ""
 echo "=== REQ-001 AC-2: the scan section and the Pack Index name the file ==="
@@ -30,20 +35,15 @@ assert_not_contains "**Skill count:**" "$SCAN" "REQ-001 AC-2: the causes left th
 
 echo ""
 echo "=== REQ-002 AC-1: the Pack file edit cause names the handoff suite ==="
-assert_contains "**Pack file edit:**" "$TEXT" "REQ-002 AC-1: the file names the Pack file edit cause"
-assert_contains "test-0000493-req-004-handoff-text.sh" "$TEXT" "REQ-002 AC-1: the cause names the handoff suite"
+assert_rule orc-cause-pack-file-edit "**Pack file edit:**" "test-0000493-req-004-handoff-text.sh"
 
 echo ""
 echo "=== REQ-002 AC-2: the cause names both trees ==="
-CAUSE=$(grep -F '**Pack file edit:**' "$REF" 2>/dev/null || true)
-assert_contains "src/ravintio-zero/" "$CAUSE" "REQ-002 AC-2: the cause names the source tree"
-assert_contains "ravintio-zero/" "$CAUSE" "REQ-002 AC-2: the cause names the installed tree"
+assert_rule orc-cause-pack-file-edit "src/ravintio-zero/" "ravintio-zero/"
 
 echo ""
 echo "=== REQ-003 AC-1: P0 lists the source tree in Component Paths ==="
-RULE=$(grep -F 'pack file' "$GATE" 2>/dev/null || true)
-assert_contains "Component Paths" "$RULE" "REQ-003 AC-1: the P0 gate rule names Component Paths"
-assert_contains "src/ravintio-zero/" "$RULE" "REQ-003 AC-1: the rule names the source tree"
+assert_rule p0-gate-pack-paths "Component Paths" "src/ravintio-zero/"
 
 echo ""
 echo "=== NFR-002: the two trees match ==="

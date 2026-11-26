@@ -20,11 +20,9 @@ has() { printf '%s\n' "$2" | grep -qF -- "$1" && echo yes || echo no; }
 echo ""
 echo "=== req-003 AC-1: ship orders the PR number before the squash ==="
 
+assert_rule shp-initiative-pr-number 'sets `**PR:**` to the PR number' 'commits' 'pushes it before it waits on CI' 'before the squash' 'never commits after the squash'
+# The merge line sits in a code block, so it has no rule anchor.
 INIT="$(section '## Initiative steps' "$SHIP")"
-assert_equals "yes" "$(has 'sets `**PR:**` to the PR number, commits, and pushes it before it waits on CI and before the squash' "$INIT")" \
-  "AC-1: initiative steps commit and push the PR number before CI and the squash"
-assert_equals "yes" "$(has 'never commits after the squash' "$INIT")" \
-  "AC-1: the agent never commits after the squash"
 assert_equals "yes" "$(has 'merge --squash --delete-branch {n}' "$INIT")" \
   "AC-1: the merge line stays"
 

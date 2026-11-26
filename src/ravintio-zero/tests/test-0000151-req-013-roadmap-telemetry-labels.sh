@@ -11,7 +11,6 @@ source "$SCRIPT_DIR/helpers/assert.sh"
 
 DRIVER="$SCRIPT_DIR/../scripts/initiative-run.mjs"
 LABELS="$SCRIPT_DIR/../scripts/initiative-labels.mjs"
-STANDARDS="$SCRIPT_DIR/../standards/roadmap-standards.md"
 WORK="$(mktemp -d)"
 trap 'rm -rf "$WORK"' EXIT
 
@@ -86,7 +85,8 @@ assert_equals "0" "$(grep -cE 'process\.env(\.[A-Z_]+|\[[^]]+\])? *=[^=]' "$DRIV
 echo ""
 echo "=== req-013 (c): documentation ==="
 HEAD_TXT="$(sed -n '1,70p' "$DRIVER")"
-for f in "$HEAD_TXT" "$(cat "$STANDARDS")"; do
+STD_DOC="$(rule_text rm-driver-telemetry)"
+for f in "$HEAD_TXT" "$STD_DOC"; do
   assert_contains "work.kind=initiative" "$f" "req-013: names work.kind"
   assert_contains "ravintio.initiative=" "$f" "req-013: names ravintio.initiative"
   assert_contains "ravintio.step=" "$f" "req-013: names ravintio.step"

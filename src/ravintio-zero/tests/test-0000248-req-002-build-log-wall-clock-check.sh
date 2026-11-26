@@ -105,11 +105,11 @@ assert_equals "1" "$CODE" "req-002 AC-2: an unreadable file fails"
 
 echo ""
 echo "=== req-002 AC-3: ship runs the check before Archive ==="
-STEP3=$(awk '/^### Step 3/{f=1;next} /^### /{f=0} f' "$SHIP")
-assert_contains "node ravintio-zero/scripts/build-log-check.mjs plan/current/build-log.md" "$STEP3" "req-002 AC-3: Step 3 runs the script"
-assert_contains "Skipped: P" "$STEP3" "req-002 AC-3: Step 3 names the skipped-phase line"
-assert_contains "before Step 4" "$STEP3" "req-002 AC-3: Step 3 runs the check before Archive"
-assert_contains "Stop" "$STEP3" "req-002 AC-3: Step 3 stops on a failure"
+# The command sits in a code block, so it has no rule anchor.
+assert_contains "node ravintio-zero/scripts/build-log-check.mjs plan/current/build-log.md" "$(cat "$SHIP")" "req-002 AC-3: Step 3 runs the script"
+assert_rule shp-build-log-check-stop "Skipped: P" "Stop"
+assert_rule shp-build-log-check-run "before Step 4"
+# The template line sits inside an HTML comment, so it has no rule anchor.
 assert_contains "Skipped: P" "$(cat "$TEMPLATE")" "req-002 AC-3: the template names the skipped-phase line"
 
 print_summary
