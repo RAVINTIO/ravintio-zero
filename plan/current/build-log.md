@@ -27,7 +27,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 |-------|-------|
 | Start | `2026-11-26T07:05:40Z` |
 | End | `2026-11-26T07:06:17Z` |
-| Wall clock | `2` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | `0` |
@@ -69,3 +69,38 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Skipped: ADRs (no decision meets an ADR criterion)
 
 - Complete: P1 (2026-11-26T07:07:38Z)
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-26T07:07:38Z` |
+| End | `2026-11-26T07:09:17Z` |
+| Wall clock | `2` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | none |
+
+- In progress: U1 repo-root helpers (2026-11-26T07:09:17Z)
+- RED: U1 repo-root helpers (test-0000572-req-001: 7 of 9 checks failed, 2026-11-26T07:09:17Z)
+- GREEN: U1 repo-root helpers (test-0000572-req-001: 9 passed, 2026-11-26T07:09:17Z)
+- Done: U1 repo-root helpers (content, primary, none, 2026-11-26T07:09:17Z)
+- In progress: U2 standard and adoption (2026-11-26T07:09:17Z)
+- RED: U2 standard and adoption (test-0000572-req-002: 10 of 14 checks failed, 2026-11-26T07:09:17Z)
+- GREEN: U2 standard and adoption (test-0000572-req-002: 14 passed from both trees, 2026-11-26T07:09:17Z)
+- Done: U2 standard and adoption (content, primary, none, 2026-11-26T07:09:17Z)
+- In progress: U3 sync both trees (2026-11-26T07:09:17Z)
+- RED: U3 sync both trees (no executable check beyond U2 AC-3, 0000410) (2026-11-26T07:09:17Z)
+- GREEN: U3 sync both trees (no executable check, 0000410, passed: sync-installed.mjs --check exit 0) (2026-11-26T07:09:17Z)
+- Done: U3 sync both trees (content, primary, none, 2026-11-26T07:09:17Z)
+- In progress: U4 docs (2026-11-26T07:09:17Z)
+- RED: U4 docs (no executable check, 0000410) (2026-11-26T07:09:17Z)
+- GREEN: U4 docs (no executable check, 0000410, passed: prose check on commit) (2026-11-26T07:09:17Z)
+- Done: U4 docs (content, primary, none, 2026-11-26T07:09:17Z)
+- Planned edit: test-0000534 and test-0000493 now call repo_root, as REQ-002 AC-2 states. No pin broke, so no rework.
+- Tests run: new and impacted suites passed from both trees (2026-11-26T07:09:17Z)
+
+- Complete: P2 (2026-11-26T07:09:17Z)
