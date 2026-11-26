@@ -7,32 +7,25 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
 ZERO_DIR="${ZERO_DIR:-$SCRIPT_DIR/..}"
-SKILL="$(cat "$ZERO_DIR/skills/ravintio-initiative/SKILL.md")"
-STD="$(cat "$ZERO_DIR/standards/roadmap-standards.md")"
 
 echo "=== req-003: restate, default, confirm ==="
-assert_contains "Restate the human's words as one concrete plan" "$SKILL" "AC-1: skill names the restate step"
-assert_contains "name the default" "$SKILL" "AC-1: skill names the default"
-assert_contains '"Go?"' "$SKILL" "AC-1: skill names the confirm"
-assert_contains "Offer other options only for a real fork" "$SKILL" "AC-2: other options only for a real fork"
+assert_rule rm-ini-questions "Restate the human's words as one concrete plan" "name the default" '"Go?"' "Offer other options only for a real fork"
 
 echo "=== req-004: one question per reply ==="
-assert_contains "Ask at most one question per reply" "$SKILL" "AC-1: at most one question"
-assert_contains "Never ask about what the human already said" "$SKILL" "AC-2: never re-ask"
+assert_rule rm-ini-questions "Ask at most one question per reply" "Never ask about what the human already said"
 
 echo "=== the standards hold the rules and commands ==="
-for r in coord-question-form coord-one-question coord-activate-command coord-add-step coord-plan-only-pr coord-startup-skill; do
-  assert_contains "rule: $r" "$STD" "standards anchor $r"
-done
-assert_contains "initiative-activate.mjs" "$SKILL" "skill names the activate command"
-assert_contains "initiative-add-step.mjs" "$SKILL" "skill names add-step"
-assert_contains "coordinator-pr-check.mjs" "$SKILL" "skill names the plan-only check"
+assert_rule coord-question-form 'Go?'
+assert_rule coord-one-question 'One question per reply'
+assert_rule coord-activate-command 'initiative-activate.mjs'
+assert_rule coord-add-step 'initiative-add-step.mjs'
+assert_rule coord-plan-only-pr 'coordinator-pr-check.mjs'
+assert_rule coord-startup-skill 'initiative skill'
+assert_rule rm-ini-questions "initiative-activate.mjs" "initiative-add-step.mjs" "coordinator-pr-check.mjs"
 
 echo "=== 0000554: a defined stage starts without a question ==="
-assert_contains "rule: coord-defined-stage" "$STD" "AC-1: standards anchor coord-defined-stage"
-assert_contains "starts it and reports the start as a status" "$STD" "AC-1: the coordinator starts the stage and reports a status"
-assert_contains "asks only at a real fork or before a human-only action" "$STD" "AC-1: asks only at a fork or a human-only action"
-assert_contains "Start I-E Delivery with no question after the driver's clean end" "$SKILL" "AC-2: the skill starts delivery without a question"
+assert_rule coord-defined-stage "starts it and reports the start as a status" "asks only at a real fork or before a human-only action"
+assert_rule rm-ini-session-delivery "Start I-E Delivery with no question after the driver's clean end"
 
 echo "=== the skill stays under 120 lines ==="
 LINES="$(wc -l < "$ZERO_DIR/skills/ravintio-initiative/SKILL.md" | tr -d ' ')"

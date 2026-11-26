@@ -7,7 +7,7 @@ description: Coordinates an initiative from chart to delivery in the human's ses
 
 > You coordinate an initiative the way the orchestrator coordinates a feature. You talk to the human. Step sessions run with no human present, and you never run one.
 
-**Prefix.** Begin every reply with the stage prefix: `I-A Chart:`, `I-B Activate:`, `I-C Run:` while steps run, or `I-E Delivery:` for delivery and the final report. Use the form `hh:mm {prefix} {Status}: {one-liner}`, with the time from the latest clock hook value or `date +%H:%M`, read before each reply. Never estimate a time. **Pack files.** Read `ravintio-zero/standards/roadmap-standards.md` first. Read `ravintio-zero/templates/initiative.template.md` before you write a plan.
+<!-- rule: rm-ini-prefix --> **Prefix.** Begin every reply with the stage prefix: `I-A Chart:`, `I-B Activate:`, `I-C Run:` while steps run, or `I-E Delivery:` for delivery and the final report. Use the form `hh:mm {prefix} {Status}: {one-liner}`, with the time from the latest clock hook value or `date +%H:%M`, read before each reply. Never estimate a time. **Pack files.** Read `ravintio-zero/standards/roadmap-standards.md` first. Read `ravintio-zero/templates/initiative.template.md` before you write a plan.
 
 ## The three parts
 
@@ -31,7 +31,7 @@ description: Coordinates an initiative from chart to delivery in the human's ses
 3. Read `plan/current-initiative/initiative.md`. If no `initiative active` finding is present, offer I-A Chart and say whether an earlier initiative exists.
 4. If the findings hold `initiative active` and `driver lock held`, report and start the monitor. Do not start a second driver.
 5. If they hold `initiative active` and `driver lock free`, report the `initiative position` and offer to restart the driver.
-6. If `position` is past the last step and `initiative.md` remains, run I-E Delivery. Start I-E Delivery with no question after the driver's clean end, and report the start as a status.
+6. <!-- rule: rm-ini-session-delivery --> If `position` is past the last step and `initiative.md` remains, run I-E Delivery. Start I-E Delivery with no question after the driver's clean end, and report the start as a status.
 
 ## I-A Chart and I-B Activate
 
@@ -39,10 +39,10 @@ description: Coordinates an initiative from chart to delivery in the human's ses
 
 - <!-- rule: rm-ini-guard --> **Guard.** Run a guard check on each entry. Check whether it widens a guard, such as `merge-guard`, `gate-write`, `ratchet-check`, or another fail-closed hook. Name the guard and the new forms it would allow. Ask for a separate approval for each widening, apart from the chart confirmation.
 - **Lanes.** Coach a `Lane` and an `After` list for each step, and the `**Concurrency:**` field (default 3). Steps that edit the same files share a lane. A step that changes most files lists every earlier step in `After`, and every later step lists it. See Chart-time lanes.
-- **Migrations.** List every pending migration from resume detection and take the human's answer for each, per `Chart-time migrations`. Chart starts no step before then.
+- <!-- rule: rm-ini-chart-migrations --> **Migrations.** List every pending migration from resume detection and take the human's answer for each, per `Chart-time migrations`. Chart starts no step before then.
 - <!-- rule: rm-ini-confirmation --> **Confirmation.** Plan each step confirmation, per rule `agree-explicit` in `orchestrator-p0-coaching.md`. List each one that a step's skills ask for. Record the exact command as a `Confirmation:` row in `## Decisions`, or plan a human stop for that step.
 
-**Questions.** Restate the human's words as one concrete plan, name the default, and ask "Go?". Offer other options only for a real fork. Ask at most one question per reply. Never ask about what the human already said. **Activate.** Run `node ravintio-zero/scripts/initiative-activate.mjs --yes` after one "Go?". Add a step with `node ravintio-zero/scripts/initiative-add-step.mjs`. For a coordinator PR, run `node ravintio-zero/scripts/coordinator-pr-check.mjs {base}`. If it prints `plan-only`, skip the full suite. See Coordinator questions and commands in the roadmap standards.
+<!-- rule: rm-ini-questions --> **Questions.** Restate the human's words as one concrete plan, name the default, and ask "Go?". Offer other options only for a real fork. Ask at most one question per reply. Never ask about what the human already said. **Activate.** Run `node ravintio-zero/scripts/initiative-activate.mjs --yes` after one "Go?". Add a step with `node ravintio-zero/scripts/initiative-add-step.mjs`. For a coordinator PR, run `node ravintio-zero/scripts/coordinator-pr-check.mjs {base}`. If it prints `plan-only`, skip the full suite. See Coordinator questions and commands in the roadmap standards.
 
 Concurrent steps are the normal flow. The driver starts each ready step in its own worktree, up to `**Concurrency:**` at once, and runs the merge queue for each ready PR. At Activate, start two background tasks:
 
@@ -68,12 +68,12 @@ A progress report, on request and at each phase end, has two parts:
 
 End each report with two parts:
 
-- **Decisions for the human:** each open question or stop that needs the human, with the options. Include each `Migration pending:` line from a step build log. Show its findings and take the human's answer for each one. Write `none` if there is none.
+- <!-- rule: rm-ini-report-parts --> **Decisions for the human:** each open question or stop that needs the human, with the options. Include each `Migration pending:` line from a step build log. Show its findings and take the human's answer for each one. Write `none` if there is none.
 - **Routine fixes made:** each pre-approved fix the coordinator applied, such as a conflict, a CI rerun, or a setup rerun. Write `none` if there is none.
 
 ## Stops
 
-If the driver prints `Blocked:` or exits with a code other than 0 or 75, report the stop line and the step log path `plan/.initiative-logs/step-{n}.log`. Relay each `I-C Run: Step {n}: {state}` line too, which names every step's state. Never resume the step. Ask the human how to proceed. After the human acts, offer to restart the driver. To pause, run `node ravintio-zero/scripts/initiative-pause.mjs request`. The driver writes the records and exits. On resume, read `plan/current-initiative/pause.md` first.
+<!-- rule: rm-ini-stops --> If the driver prints `Blocked:` or exits with a code other than 0 or 75, report the stop line and the step log path `plan/.initiative-logs/step-{n}.log`. Relay each `I-C Run: Step {n}: {state}` line too, which names every step's state. Never resume the step. Ask the human how to proceed. After the human acts, offer to restart the driver. To pause, run `node ravintio-zero/scripts/initiative-pause.mjs request`. The driver writes the records and exits. On resume, read `plan/current-initiative/pause.md` first.
 
 <!-- rule: rm-ini-restart-stop --> A `Restart:` line is not a failure, and the driver exits 75 after it. Exit 75 is a planned stop. It means a merged step changed the driver, the watcher, or this skill, and the running code is old. Report the line. Then start a new driver and a new watcher without asking. Read this skill again first if the line names it. If the line ends `A new driver took over new starts.`, the old driver hands over and a new driver already runs, so start a new watcher only.
 
@@ -106,7 +106,7 @@ If the driver prints `Blocked:` or exits with a code other than 0 or 75, report 
 
 ## I-E Delivery
 
-After the driver exits, follow the I-E Delivery section of the roadmap standards. It reshapes the branch with `reshape-initiative.mjs` in merge order and names each admin fold in the PR body. It also moves the step tags, runs the history check, and sets the merge commit title. Raise the PR from `initiative/{id}-{slug}-reshaped`. After the human merges it, delete the old branch. Then give the final report:
+<!-- rule: rm-ini-delivery --> After the driver exits, follow the I-E Delivery section of the roadmap standards. It reshapes the branch with `reshape-initiative.mjs` in merge order and names each admin fold in the PR body. It also moves the step tags, runs the history check, and sets the merge commit title. Raise the PR from `initiative/{id}-{slug}-reshaped`. After the human merges it, delete the old branch. Then give the final report:
 
 1. The initiative PR URL.
 2. Each step with its version and tag.

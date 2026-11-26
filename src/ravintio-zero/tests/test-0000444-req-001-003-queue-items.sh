@@ -128,14 +128,7 @@ assert_contains "initiative-queue.mjs" "$(cat "$DRIVER")" "req-002 AC-2: the dri
 
 echo ""
 echo "=== req-003: standards text ==="
-STD="$SCRIPT_DIR/../standards/roadmap-standards.md"
-RULE="$(grep 'rule: icrun-queue' "$STD")"
-assert_contains "initiative-queue.mjs list" "$RULE" "req-003 AC-1: icrun-queue names the list command"
-assert_contains "item.md" "$RULE" "req-003 AC-1: icrun-queue names item.md"
-ADV="$(sed -n '/^### I-D Advance/,/^### I-E Delivery/p' "$STD")"
-assert_contains "initiative-queue.mjs check" "$ADV" "req-003 AC-2: I-D Advance runs the check"
-assert_contains "Queue item {name}:" "$ADV" "req-003 AC-2: I-D Advance names the report line"
-PICK="$(cat "$SCRIPT_DIR/../skills/ravintio-orchestrator/references/orchestrator-p0-start-actions.md")"
-assert_contains "initiative-queue.mjs" "$PICK" "req-003 AC-3: the pickup step names the helper"
-
+assert_rule icrun-queue "initiative-queue.mjs list" "item.md"
+assert_rule rm-advance-queue-items "initiative-queue.mjs check" "Queue item {name}:"
+assert_rule p0-start-backlog-pickup "initiative-queue.mjs"
 print_summary

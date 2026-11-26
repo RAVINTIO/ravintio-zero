@@ -53,8 +53,8 @@ Messages are objective and scope-focused. Prohibited:
 
 A squash commit on an initiative branch uses one of two forms:
 
-- A step commit: `{feature-id}: {Feature title} (#{n})`, with the 7-digit feature id and the `Title` column of the step.
-- The one chore commit: `{initiative-id}: Initiative admin (#{n})`.
+- <!-- rule: rm-commit-step-form --> A step commit: `{feature-id}: {Feature title} (#{n})`, with the 7-digit feature id and the `Title` column of the step.
+- <!-- rule: rm-commit-chore-form --> The one chore commit: `{initiative-id}: Initiative admin (#{n})`.
 
 The other rules in this file apply to every commit that is not an initiative squash.
 

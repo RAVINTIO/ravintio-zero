@@ -25,8 +25,7 @@ ORCH="$ZERO_DIR/skills/ravintio-orchestrator/SKILL.md"
 assert_contains "$RULE" "$(cat "$ORCH")" "req-001 AC-2: the orchestrator names actors by role"
 assert_contains "$BAR" "$(cat "$ORCH")" "req-001 AC-2: the orchestrator bars I and you"
 STANDARDS="$(cat "$ZERO_DIR/standards/roadmap-standards.md")"
-assert_contains "$RULE" "$STANDARDS" "req-001 AC-2: the roadmap standards name actors by role"
-assert_contains "$BAR" "$STANDARDS" "req-001 AC-2: the roadmap standards bar I and you"
+assert_rule reply-actor-names "$RULE" "$BAR"
 
 echo ""
 echo "=== req-001 AC-3: the orchestrator skill stays under its cap ==="
@@ -36,9 +35,9 @@ assert_equals "yes" "$([ "$BYTES" -le 9000 ] && echo yes || echo no)" "req-001 A
 echo ""
 echo "=== req-003 AC-1: the report heading follows the rule ==="
 SKILL="$(cat "$ZERO_DIR/skills/ravintio-initiative/SKILL.md")"
-assert_contains "Decisions for the human" "$SKILL" "req-003 AC-1: the skill uses the new heading"
+assert_rule rm-ini-report-parts "Decisions for the human"
 assert_not_contains "Decisions for you" "$SKILL" "req-003 AC-1: the skill drops the old heading"
-assert_contains "Decisions for the human" "$STANDARDS" "req-003 AC-1: the standards use the new heading"
+assert_rule rm-status-report "Decisions for the human"
 assert_not_contains "Decisions for you" "$STANDARDS" "req-003 AC-1: the standards drop the old heading"
 
 print_summary
