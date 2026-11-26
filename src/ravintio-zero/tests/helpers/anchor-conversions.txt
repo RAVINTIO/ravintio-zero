@@ -1,0 +1,209 @@
+# Anchor conversions (0000579). One line per suite the conversion step judged.
+# converted: {suite}                 reads its rules through a rule anchor
+# structure: {suite}: {reason}       checks structure or behaviour, so it keeps its checks
+converted: test-0000005-pack-governance.sh
+converted: test-0000006-build-assessment.sh
+converted: test-0000007-agent-optimisation.sh
+converted: test-0000009-rail-tightening.sh
+converted: test-0000010-pack-quality-improvements.sh
+converted: test-0000016-pipeline-governance.sh
+converted: test-0000017-req-003-phase-wave-sweep.sh
+converted: test-0000018-req-007-discovery-md-hard-limit.sh
+structure: test-0000019-req-005-self-description-check.sh: script exit codes and scratch fixtures only
+converted: test-0000020-req-001-010-refresh-setup-skill.sh
+converted: test-0000023-req-002-marker-commit-lifecycle.sh
+converted: test-0000025-req-001-ship-agent-pr-footer.sh
+converted: test-0000025-req-002-ship-agent-p7-git-add.sh
+converted: test-0000025-req-003-subagent-parallelism-expansion.sh
+converted: test-0000025-req-005-backlog-unification.sh
+converted: test-0000025-req-007-scope-lock-default-batch.sh
+converted: test-0000027-req-003-005-007-008-governance-docs.sh
+structure: test-0000028-req-006-em-dash-guard.sh: hook behaviour with fixtures only
+structure: test-0000029-req-001-003-boot-file-regeneration.sh: setup runs, absence greps, override file outside tree
+structure: test-0000031-req-002-single-route.sh: file counts and absence greps only
+structure: test-0000031-req-003-five-phases.sh: skill folder list, pipeline-reference, line cap
+structure: test-0000031-req-004-setup-execution.sh: setup.sh execution and install tree checks
+converted: test-0000032-req-004-refresh-setup-reads-record-first.sh
+converted: test-0000034-req-005-006-housekeeping.sh
+structure: test-0000037-req-005-override-phase-names.sh: pins an override file outside the pack, one code-block option
+structure: test-0000041-req-004-park-commit-failure.sh: script behaviour with git fixtures, no skill prose
+converted: test-0000042-req-001-run-mode-question.sh
+converted: test-0000042-req-002-gate-and-exception-stops.sh
+converted: test-0000042-req-004-phase-numbers-p0-to-p4.sh
+converted: test-0000042-req-005-message-prefixes.sh
+structure: test-0000042-req-006-phase-guard-and-stale-cites.sh: stale-cite scan with fixtures
+structure: test-0000042-req-008-pack-prose.sh: wording ban scan across files, no rule text
+converted: test-0000042-req-009-pack-identifiers.sh
+structure: test-0000042-req-010-pack-wording-allowlist.sh: wording allowlist scan
+converted: test-0000042-req-011-exception-stop-records-and-redaction.sh
+converted: test-0000043-req-001-roadmap-drafts.sh
+converted: test-0000043-req-002-roadmap-chart.sh
+converted: test-0000043-req-003-roadmap-activate.sh
+converted: test-0000043-req-004-roadmap-step-discovery.sh
+converted: test-0000043-req-005-roadmap-advance.sh
+structure: test-0000043-req-007-roadmap-driver.sh: driver script behaviour, template only a fixture
+converted: test-0000043-req-008-roadmap-delivery.sh
+converted: test-0000043-req-009-roadmap-resume-and-prefixes.sh
+converted: test-0000043-req-010-merge-carve-out-governance.sh
+converted: test-0000043-req-011-chart-time-schema-approval.sh
+structure: test-0000151-req-001-park-symlink-containment.sh: script behaviour with git fixtures, no skill prose
+converted: test-0000151-req-002-ship-sentinels-before-pr.sh
+converted: test-0000151-req-006-roadmap-step-model-and-turn-cap.sh
+converted: test-0000151-req-007-dispatch-model-tiers.sh
+converted: test-0000151-req-010-webfetch-via-subagent.sh
+structure: test-0000151-req-011-orchestrator-references-split.sh: size caps, fixture line diff, headings, setup install
+converted: test-0000151-req-012-roadmap-step-logs.sh
+converted: test-0000151-req-013-roadmap-telemetry-labels.sh
+structure: test-0000160-req-001-pack-identifiers.sh: names, manifest paths, history folders
+structure: test-0000160-req-002-runtime-names.sh: hook and setup behaviour with fixtures
+structure: test-0000160-req-005-consumer-migration.sh: migration script behaviour with fixtures
+converted: test-0000164-req-005-file-backlog-skill.sh
+structure: test-0000164-req-007-gate-write-doc-correction.sh: pins docs outside anchorable tree, stripped-copy fixture
+converted: test-0000169-req-001-attribution-ban-text.sh
+converted: test-0000169-req-003-attribution-check-in-ship-and-ci.sh
+converted: test-0000169-req-006-release-tag-ci-and-ship-flow.sh
+converted: test-0000170-req-001-story-map-pass.sh
+converted: test-0000170-req-002-gherkin-criteria.sh
+structure: test-0000171-req-004-no-skill-bundling.sh: setup install and prune behaviour
+structure: test-0000171-req-006-pack-path-check.sh: path checker script behaviour with fixtures
+converted: test-0000173-req-002-thresholds-gate.sh
+converted: test-0000173-req-003-metric-markers.sh
+converted: test-0000173-req-004-ship-governance-report.sh
+structure: test-0000189-req-001-glossary.sh: glossary in project-operations.md, heading and link check
+converted: test-0000189-req-003-initiative-prefixes.sh
+converted: test-0000189-req-004-initiative-states.sh
+structure: test-0000189-req-007-old-name-guard.sh: repo-wide old-name grep guard
+converted: test-0000196-req-003-refresh-names-retired-flag.sh
+converted: test-0000199-req-001-003-reserve-ids-from-counter.sh
+converted: test-0000200-req-001-002-reply-conventions.sh
+structure: test-0000200-req-004-setup-wires-the-stop-hook.sh: hook wiring and docs name listings
+converted: test-0000201-req-001-concurrency-section.sh
+converted: test-0000201-req-002-concurrent-by-default.sh
+converted: test-0000202-req-001-improvement-loop.sh
+converted: test-0000202-req-002-improve-marker.sh
+converted: test-0000203-req-001-postmortem-skill.sh
+converted: test-0000204-req-001-retrospective-skill.sh
+converted: test-0000204-req-002-hooks-and-reads.sh
+structure: test-0000204-req-003-living-docs.sh: reads component.yml, pipeline-reference.md, docs only, plus folder count
+structure: test-0000205-req-005-living-docs-and-counts.sh: doc table rows, skill counts, folder count
+converted: test-0000205-req-007-stage-ownership.sh
+converted: test-0000206-req-001-chart-rules.sh
+converted: test-0000206-req-002-step-application.sh
+converted: test-0000207-req-001-003-codex-setup.sh
+converted: test-0000207-req-004-codex-ci-check.sh
+structure: test-0000239-req-002-stale-install-skip.sh: runs script fixtures, checks another suite's text
+converted: test-0000240-req-002-activity-lines.sh
+structure: test-0000243-req-005-short-rule.sh: byte cap, Pack Index row, and frozen-line comparison already strip anchors
+converted: test-0000245-req-001-hook-enforcement-reference.sh
+structure: test-0000245-req-002-targeted-overrides.sh: runs setup.sh on fixtures, no pack prose pinned
+converted: test-0000246-req-001-test-impact-scan.sh
+converted: test-0000247-req-001-stage-by-path.sh
+converted: test-0000247-req-002-commit-id-reservations.sh
+converted: test-0000247-req-003-no-stash-in-batch.sh
+converted: test-0000248-req-001-plain-merge-command.sh
+converted: test-0000248-req-002-build-log-wall-clock-check.sh
+converted: test-0000249-req-001-path-check-and-docs-only-status.sh
+converted: test-0000250-req-001-routing-and-restart-rules.sh
+structure: test-0000250-req-002-driver-restart-stop.sh: runs the driver against fixtures, no prose pinned
+converted: test-0000251-req-002-keep-attempt-logs.sh
+converted: test-0000252-req-001-guard-widening-rule.sh
+converted: test-0000252-req-002-step-confirmation-rule.sh
+converted: test-0000252-req-003-p1-skip-record.sh
+structure: test-0000313-req-001-driver-setup-stop.sh: runs the driver against fixtures, no prose pinned
+converted: test-0000313-req-002-initiative-skill-setup-stop.sh
+converted: test-0000313-req-003-standards-setup-stop.sh
+converted: test-0000314-req-002-driver-files-stay.sh
+converted: test-0000317-req-001-003-004-rules-ignores-checks.sh
+converted: test-0000318-req-001-002-coordinator-prs.sh
+converted: test-0000318-req-003-pr-number-before-squash.sh
+converted: test-0000319-req-003-delivery-check.sh
+converted: test-0000320-req-003-migration-ledger.sh
+converted: test-0000321-req-001-priority-theme-fields.sh
+converted: test-0000321-req-004-pickup-text.sh
+converted: test-0000327-req-003-ship-skill-rules.sh
+converted: test-0000327-req-004-005-prefixes-and-hotfix.sh
+converted: test-0000351-req-001-004-title-rules.sh
+converted: test-0000351-req-002-005-template-and-plan.sh
+converted: test-0000352-req-002-004-standards-rules.sh
+converted: test-0000352-req-003-005-skill-rules.sh
+converted: test-0000353-req-005-006-delivery-and-ship.sh
+converted: test-0000354-req-002-006-text-rules.sh
+converted: test-0000355-req-002-p3-escaping.sh
+converted: test-0000355-req-003-workflow-marker.sh
+converted: test-0000357-req-003-forced-add-in-codex.sh
+converted: test-0000358-req-001-question-status.sh
+converted: test-0000359-req-001-no-tree-git-under-subagents.sh
+converted: test-0000359-req-002-own-path-commits.sh
+converted: test-0000377-req-001-context-hygiene-reference.sh
+structure: test-0000377-req-003-setup-check-after-last-step.sh: runs the driver against fixtures, no prose pinned
+structure: test-0000379-req-001-chart-columns.sh: chart parser behaviour, template table header and field
+structure: test-0000379-req-007-worktree-rule.sh: boot templates render into installs, so they carry no anchors
+converted: test-0000380-req-003-timeout-helper.sh
+structure: test-0000381-req-001-manifest-confinement.sh: setup script behaviour and run-tests text only
+structure: test-0000382-req-001-update-and-doctor.sh: runs setup.sh lifecycle flags in temp workspaces, no prose pins
+structure: test-0000382-req-003-uninstall.sh: runs setup.sh lifecycle flags in temp workspaces, no prose pins
+structure: test-0000382-req-005-clear-first-run.sh: setup help, hooks, getting-started, pipeline-reference only
+converted: test-0000383-req-001-005-test-impact-causes.sh
+converted: test-0000384-req-002-003-templates.sh
+converted: test-0000384-skill-text.sh
+converted: test-0000389-req-001-002-standard.sh
+converted: test-0000389-req-006-briefs.sh
+structure: test-0000391-req-001-002-resolver.sh: resolver script behaviour on fixtures, no pack prose pinned
+structure: test-0000391-req-003-004-command.sh: archetype.mjs script behaviour with fixtures
+structure: test-0000391-req-005-archetypes.sh: manifests, archetype files, parity of pinned lines
+structure: test-0000391-req-007-writing-outputs.sh: writing-style.mjs output with override fixtures
+converted: test-0000391-req-008-standard-text.sh
+structure: test-0000392-req-002-capa-record-check.sh: script behaviour, template pins sit in blockquote and table
+converted: test-0000393-req-003-pack-version-record.sh
+converted: test-0000393-req-004-filing-wording.sh
+structure: test-0000397-req-005-guards-cover-both.sh: hook and script behaviour, driver watch list code
+structure: test-0000399-req-002-add-step.sh: script behaviour, template only a fixture
+converted: test-0000399-req-003-004-question-rule.sh
+converted: test-0000444-req-001-003-queue-items.sh
+converted: test-0000446-req-002-drain-rule-in-standards.sh
+structure: test-0000448-req-002-driver-runs-setup-command.sh: driver script output with fixtures
+converted: test-0000448-req-003-standards-and-skill-text.sh
+converted: test-0000450-req-004-report-format.sh
+converted: test-0000452-req-001-archive-after-ci.sh
+converted: test-0000452-req-002-ready-needs-green.sh
+converted: test-0000468-req-002-read-the-clock-rule.sh
+converted: test-0000472-req-002-ci-duration-standards.sh
+converted: test-0000474-req-001-004-shell-section-and-guards.sh
+converted: test-0000483-req-002-step-reads-mergeability.sh
+converted: test-0000487-req-003-p0-text.sh
+converted: test-0000489-req-001-question-wording.sh
+converted: test-0000491-req-001-chain-ranking.sh
+structure: test-0000493-req-001-003-handoff.sh: driver script output with fixtures
+converted: test-0000493-req-004-handoff-text.sh
+converted: test-0000495-req-001-002-dead-lock.sh
+converted: test-0000497-req-001-002-keep-entries.sh
+converted: test-0000499-req-002-clock-rule-text.sh
+converted: test-0000501-req-001-004-sweep.sh
+converted: test-0000503-req-001-003-restart-exit.sh
+structure: test-0000507-req-003-driver-hook-check.sh: driver script output with fixtures
+converted: test-0000509-req-001-003-clear-ready.sh
+converted: test-0000511-req-001-003-stop-summary.sh
+converted: test-0000519-req-001-ship-removal-command.sh
+converted: test-0000519-req-002-p2-docs-timing.sh
+converted: test-0000521-req-001-003-actor-names.sh
+converted: test-0000534-req-001-003-step-clock.sh
+converted: test-0000536-req-001-003-pending-migrations.sh
+converted: test-0000553-req-001-002-oversight.sh
+converted: test-0000555-req-003-resume-finding.sh
+converted: test-0000556-req-001-unfinished-step-finding.sh
+converted: test-0000557-req-001-safe-suite-wait.sh
+converted: test-0000559-req-001-baseline-first.sh
+converted: test-0000562-req-001-003-pack-file-edit-cause.sh
+converted: test-0000563-req-001-output-order-cause.sh
+converted: test-0000564-req-001-hook-change-cause.sh
+converted: test-0000565-req-001-path-move-cause.sh
+converted: test-0000566-req-001-history-move-cause.sh
+converted: test-0000567-req-001-002-size-cap-frozen-lines.sh
+converted: test-0000568-req-001-prose-rewrite-cause.sh
+converted: test-0000569-req-001-pack-content-cause.sh
+converted: test-0000570-req-001-sibling-copy-line.sh
+converted: test-0000571-req-001-skill-wide-grep-pin.sh
+converted: test-0000572-req-002-standard-and-adoption.sh
+converted: test-0000574-req-001-rule-6-order.sh
+converted: test-0000577-req-001-diff-reader-cause.sh
+converted: test-0000578-req-001-pass-signal-paths.sh
