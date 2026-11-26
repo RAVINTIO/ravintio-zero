@@ -6,7 +6,7 @@ converted: test-0000006-build-assessment.sh
 converted: test-0000007-agent-optimisation.sh
 converted: test-0000009-rail-tightening.sh
 converted: test-0000010-pack-quality-improvements.sh
-converted: test-0000016-pipeline-governance.sh
+structure: test-0000016-pipeline-governance.sh: the ratchet compares its assertion count with the regression copy
 converted: test-0000017-req-003-phase-wave-sweep.sh
 converted: test-0000018-req-007-discovery-md-hard-limit.sh
 structure: test-0000019-req-005-self-description-check.sh: script exit codes and scratch fixtures only

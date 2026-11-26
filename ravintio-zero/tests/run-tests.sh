@@ -112,6 +112,7 @@ KNOWN_NON_SUITES=(
   "regression/regression-manifest.json"    # the promoted-suite list
   "regression/.gitkeep"                    # keeps the folder in git
   "brand-guard-allowlist.txt"              # the brand guard allowlist, read by pre-push and the CI brand test (0000394)
+  "helpers/anchor-conversions.txt"         # the ledger of suites that read rules by anchor, read by the 0000579 guard suite
   "helpers/assert.sh"                      # Bash assert helpers
   "helpers/git-isolation.sh"               # isolate_git_env, the runner's git config isolation (0000462)
   "helpers/timeout.sh"                    # with_timeout, the portable time limit (0000380)

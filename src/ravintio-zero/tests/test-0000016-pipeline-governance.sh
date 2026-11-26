@@ -322,37 +322,46 @@ for s in ravintio-loop-runner; do
 done
 
 # The plan skill inherited the mechanical consistency gate from the retired critic.
-assert_rule oa-plan-consistency-check "consistency-check.mjs"
+PLAN_SKILL=$(cat "$SKILLS/ravintio-plan/SKILL.md" 2>/dev/null || echo "")
+assert_contains "consistency-check.mjs" "$PLAN_SKILL" "req-013: plan skill runs the consistency script"
 
-assert_rule oa-runner-stop-rules "no-progress"
-assert_rule oa-runner-budget "loop-state"
-assert_rule oa-runner-toggles "loop-toggles"
+RUNNER=$(cat "$SKILLS/ravintio-loop-runner/SKILL.md" 2>/dev/null || echo "")
+assert_contains "no-progress" "$RUNNER" "req-009: loop-runner defines no-progress stop rule"
+assert_contains "loop-state" "$RUNNER" "req-009: loop-runner references loop-state file"
+assert_contains "loop-toggles" "$RUNNER" "req-009/011: loop-runner reads toggles"
 
-assert_rule oa-validate-not-verifiable "not-verifiable"
+VBE=$(cat "$SKILLS/ravintio-validate-and-accept/SKILL.md" 2>/dev/null || echo "")
+assert_contains "not-verifiable" "$VBE" "req-020: validate-and-accept keeps the not-verifiable outcome"
 
 # -----------------------------------------------------------------------
 echo ""
 echo "=== skill text: edited skills carry the new directives ==="
 # -----------------------------------------------------------------------
 
-assert_rule p0-start-backlog-pickup "plan/backlog/"
-assert_rule p0-start-product-id "product.yml"
-assert_rule oa-orch-commit-cadence "every meaningful artifact write"
-assert_rule phase-push-cadence "push the feature branch"
+ORCH=$(cat "$(orch_combined "$SKILLS/ravintio-orchestrator")" 2>/dev/null || echo "")
+assert_contains "plan/backlog/" "$ORCH" "req-001/002: orchestrator documents backlog convention + pickup"
+assert_contains "product.yml" "$ORCH" "req-005: orchestrator reads product.yml at discovery"
+assert_contains "every meaningful artifact write" "$ORCH" "req-007: Hard Limit 7 strengthened"
+assert_contains "push the feature branch" "$ORCH" "req-008: push cadence documented"
 
-assert_rule oa-orch-waves "group them into waves"
+WAVE_ORCH=$(printf '%s' "$ORCH" | grep -ci 'group them into waves' || true)
+assert_equals "1" "$WAVE_ORCH" "req-006: orchestrator Decomposition uses Waves"
 
 BRIEF_T=$(cat "$TEMPLATES/feature-brief.template.md" 2>/dev/null || echo "")
 assert_contains "| Wave |" "$BRIEF_T" "req-006: brief template Features table uses Wave column"
 assert_contains "## Waves" "$BRIEF_T" "req-006: brief template Waves section"
 
-assert_rule oa-ship-initiative-version "product.yml"
-assert_rule oa-ship-product-version "product-version.mjs"
+SHIP=$(cat "$SKILLS/ravintio-ship/SKILL.md" 2>/dev/null || echo "")
+assert_contains "product.yml" "$SHIP" "req-004: ship skill reads product.yml"
+assert_contains "product-version.mjs" "$SHIP" "req-004: ship skill uses derivation script"
 
-assert_rule p3-docs-edit-pass "ravintio-loop-runner"
-assert_rule oa-validate-verify-run "verify"
+VAL=$(cat "$SKILLS/ravintio-validate-and-accept/SKILL.md" 2>/dev/null || echo "")
+assert_contains "ravintio-loop-runner" "$VAL" "req-009: validate-and-accept references loop-runner"
+assert_contains "verify" "$VAL" "req-020: validate-and-accept verifies by execution"
 
-assert_rule oa-plan-commit-cadence "meaningful artifact write"
-assert_rule oa-impl-commit-cadence "meaningful artifact write"
+for s in ravintio-plan ravintio-implement; do
+  SKILL_CONTENT=$(cat "$SKILLS/$s/SKILL.md")
+  assert_contains "meaningful artifact write" "$SKILL_CONTENT" "req-007: $s carries commit directive"
+done
 
 print_summary
