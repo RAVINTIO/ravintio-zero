@@ -77,7 +77,8 @@ Run mode: autonomous (2026-11-26T10:01:40Z, initiative step 37)
 | MCP calls | `0` |
 | Parallel task batches | `0` |
 | Notes | none |
-- RED: U-001 (2026-11-26T10:07:07Z)
+- RED: U-001 (2026-11-26T10:06:12Z)
 - GREEN: U-001 (2026-11-26T10:07:07Z)
 - Done: U-001 (code, primary, medium, 2026-11-26T10:07:07Z)
 - Tests run: REQ-001 to REQ-004: test-0000581-req-001-004-cleanup-script.sh (2026-11-26T10:07:07Z)
+- RED: U-002 (2026-11-26T10:07:33Z)

@@ -106,12 +106,13 @@ End each report with two parts:
 
 ## I-E Delivery
 
-<!-- rule: rm-ini-delivery --> After the driver exits, follow the I-E Delivery section of the roadmap standards. It reshapes the branch with `reshape-initiative.mjs` in merge order and names each admin fold in the PR body. It also moves the step tags, runs the history check, and sets the merge commit title. Raise the PR from `initiative/{id}-{slug}-reshaped`. After the human merges it, delete the old branch. Then give the final report:
+<!-- rule: rm-ini-delivery --> After the driver exits, follow the I-E Delivery section of the roadmap standards. It reshapes the branch with `reshape-initiative.mjs` in merge order and names each admin fold in the PR body. It also moves the step tags, runs the history check, and sets the merge commit title. Raise the PR from `initiative/{id}-{slug}-reshaped`. After the human merges it, delete the old branch. Then run `initiative-cleanup.mjs` as the roadmap standards describe. Give the final report:
 
 1. The initiative PR URL.
 2. Each step with its version and tag.
 3. The retrospective record path.
 4. The stops that occurred and how each ended.
 5. The backlog entries queued and where they now live.
+6. The cleanup result: the archive folder, the worktrees removed, and each queue item left.
 
 Ask the human to merge the PR with a merge commit. Do not merge it yourself.
