@@ -129,6 +129,9 @@ Complete: P2 (2026-11-26T07:33:02Z)
 Complete: P3 (2026-11-26T08:00:07Z)
 - Postmortem: plan/postmortems/2026-11-26-driver-flags-pinned-by-suites.md (2026-11-26T08:00:58Z)
 
+- Postmortem: plan/postmortems/2026-11-26-runner-temp-folder-inside-repo.md (2026-11-26T08:20:32Z)
+- Tests run: shard 1 of 4 with TMPDIR unset, 123 feature suites and 5 regression suites passed (2026-11-26T08:20:32Z)
+
 ### P4: Ship
 
 | Field | Value |
