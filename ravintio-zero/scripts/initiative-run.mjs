@@ -646,6 +646,28 @@ function queueSentence(queueRoot, position) {
   }
 }
 
+// Gives a step session a private temp folder, {cwd}/.t, so its scratch stays inside the worktree
+// (0000583 ADR-0352). Stops when the path leaves no room for a Unix socket name under the macOS
+// 104-character limit. Returns the folder and the environment that points the session and its suites at it.
+const SOCKET_LIMIT = 104;
+const SOCKET_ROOM = 20;
+function privateTemp(cwd) {
+  const dir = join(resolve(cwd), '.t');
+  if (Buffer.byteLength(dir) + SOCKET_ROOM >= SOCKET_LIMIT) {
+    throw new Stop(`I-C Run: Blocked: the temp folder path ${dir} is too long for a Unix socket. Use a shorter repo path. It must stay under ${SOCKET_LIMIT - SOCKET_ROOM} characters`.slice(0, MAX_LINE));
+  }
+  mkdirSync(dir, { recursive: true, mode: 0o700 });
+  return { dir, env: { TMPDIR: dir, GIT_CEILING_DIRECTORIES: dir } };
+}
+
+// Builds the --settings JSON that runs the session in the Claude Code sandbox. Writes go to the step
+// worktree, the git folder it commits to, and the control folder. The shared /tmp and the user temp folder stay closed.
+function sandboxSettings(cwd, extra = []) {
+  const common = gitIn(cwd, ['rev-parse', '--path-format=absolute', '--git-common-dir']);
+  const dirs = [resolve(cwd), ...(ran0(common) ? [common.stdout.trim()] : []), ...extra];
+  return JSON.stringify({ sandbox: { enabled: true, allowUnsandboxedCommands: false, filesystem: { allowWrite: [...new Set(dirs)] } } });
+}
+
 // Runs one claude -p session for the step. With a session id it adds --resume and the continue
 // prompt. Returns the exit status and the last session_id the child printed, or '' if none.
 // The concurrent driver passes opts.cwd, the step worktree, and opts.env, the extra variables.
@@ -653,13 +675,15 @@ function runStep(root, position, cfg, fd, labels, resumeId, opts = {}) {
   return new Promise((resolveStep) => {
     const bin = process.env.CLAUDE_BIN || 'claude';
     const args = ['-p', '--output-format', 'stream-json', '--verbose', '--include-hook-events', '--permission-mode', 'auto', '--append-system-prompt', WRITING_LINE, '--model', cfg.model];
+    const priv = privateTemp(opts.cwd ?? root);
+    args.push('--settings', sandboxSettings(opts.cwd ?? root, opts.writeDirs));
     if (cfg.turns) args.push('--max-turns', cfg.turns);
     const queue = queueSentence(opts.queueRoot ?? root, position);
     if (resumeId) args.push('--resume', resumeId, CONTINUE_PROMPT(position, logLine(opts.cwd ?? root, opts.featureId), queue));
     else args.push(queue ? `Run initiative step ${position}.${queue}` : `Run initiative step ${position}`);
     const child = spawn(bin, args, {
       cwd: opts.cwd ?? root,
-      env: { ...process.env, CLAUDE_CODE_PRINT_BG_WAIT_CEILING_MS: process.env.CLAUDE_CODE_PRINT_BG_WAIT_CEILING_MS ?? '0', RAVINTIO_INITIATIVE_STEP: '1', OTEL_RESOURCE_ATTRIBUTES: withInitiativeLabels(process.env.OTEL_RESOURCE_ATTRIBUTES, labels.id, labels.slug, position), ...(opts.env ?? {}) },
+      env: { ...process.env, CLAUDE_CODE_PRINT_BG_WAIT_CEILING_MS: process.env.CLAUDE_CODE_PRINT_BG_WAIT_CEILING_MS ?? '0', RAVINTIO_INITIATIVE_STEP: '1', OTEL_RESOURCE_ATTRIBUTES: withInitiativeLabels(process.env.OTEL_RESOURCE_ATTRIBUTES, labels.id, labels.slug, position), ...priv.env, ...(opts.env ?? {}) },
       stdio: ['ignore', 'pipe', 'pipe'],
     });
     activeChild = child;
@@ -1223,6 +1247,21 @@ function appendLog(root, position) {
   }
 }
 
+// Removes the merged step's worktree if it is still there, which removes its .t folder, then prunes.
+// A failure prints a Kept line and never stops the run. It deletes nothing outside the repo (0000583 ADR-0352).
+function removeMergedWorktree(root, n) {
+  try {
+    const wt = areaPath(root, WORKTREES, `step-${n}`, worktreeRefusal);
+    if (present(wt)) {
+      const r = gitIn(root, ['worktree', 'remove', '--force', wt]);
+      if (!ran0(r)) out(`I-C Run: Kept: step ${n} worktree could not be removed: ${lastLine(r.stderr)}`.slice(0, MAX_LINE));
+    }
+    gitIn(root, ['worktree', 'prune']);
+  } catch (e) {
+    out(`I-C Run: Kept: step ${n} worktree could not be removed: ${e instanceof Stop ? e.message : e.code || e.name}`.slice(0, MAX_LINE));
+  }
+}
+
 // Runs the merge queue for one PR in the queue worktree. Streams its output into the step log and
 // copies its stderr to the driver's stderr. Returns the exit status and the last output line.
 function runQueue(n, pr, queueDir, fd) {
@@ -1475,6 +1514,7 @@ async function runScheduledStep(root, rec, cfg, rm) {
       cwd: wt,
       queueRoot: root,
       featureId: rec.featureId,
+      writeDirs: [ctl],
       env: { RAVINTIO_INITIATIVE_QUEUE: '1', RAVINTIO_INITIATIVE_ROOT: root, RAVINTIO_INITIATIVE_CONTROL: ctl },
       onChild: (c) => {
         rec.child = c;
@@ -1761,6 +1801,7 @@ async function schedule(root, cfg, rm, handoff = 0) {
       mergeOrder.push(n);
       out(`I-D Advance: Complete: step ${n} merged`);
       removeControl(root, n);
+      removeMergedWorktree(root, n);
       refresh();
       const after = refHead(root, initiativeRef(root, branch));
       lastMerge = { rec, before, after };

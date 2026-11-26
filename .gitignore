@@ -46,3 +46,6 @@ plan/.orchestrator-loaded
 # fresh clone lacks, so CI sees it only here.
 plan/.prefix-misses.log
 plan/.suite-running
+
+# Private step temp folder (0000583)
+.t/

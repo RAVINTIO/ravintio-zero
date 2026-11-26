@@ -43,6 +43,9 @@ ls "$d/live" | wc -l | tr -d ' ' >> "$d/live.counts"
   echo "QUEUE=${RAVINTIO_INITIATIVE_QUEUE:-}"
   echo "ROOT=${RAVINTIO_INITIATIVE_ROOT:-}"
   echo "CONTROL=${RAVINTIO_INITIATIVE_CONTROL:-}"
+  echo "TMPDIR=${TMPDIR:-}"
+  echo "CEILING=${GIT_CEILING_DIRECTORIES:-}"
+  echo "SETTINGS=$(printf '%s\n' "$@" | sed -n '/^--settings$/{n;p;}')"
   echo "claude_dir=$([ -f .claude/settings.json ] && echo yes || echo no)"
   echo "claude_md=$([ -f CLAUDE.md ] && echo yes || echo no)"
   echo "queued_before=$(cut -d' ' -f1 "$d/queue.log" 2>/dev/null | tr '\n' ',')"
@@ -138,7 +141,7 @@ make_repo() {
   git -C "$r" config user.name Test
   git -C "$r" config commit.gpgsign false
   mkdir -p "$r/plan/current-initiative" "$r/plan/current" "$r/.claude"
-  printf '/.claude/\n/CLAUDE.md\n' > "$r/.gitignore"
+  printf '/.claude/\n/CLAUDE.md\n/.t/\n' > "$r/.gitignore"
   printf '{}\n' > "$r/.claude/settings.json"
   printf '# boot\n' > "$r/CLAUDE.md"
   : > "$r/plan/current/build-log.md"
