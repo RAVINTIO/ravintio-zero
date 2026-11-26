@@ -50,6 +50,11 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Adoption mode: standard-iterative (signal: `plan/_archive/` holds prior runs, source in `src/`)
 - Version: last known 0.150.0, step bump minor
 - Queue: no item names step 36
+- Scope Lock (happy path): The agent logs both markers with class docs and a Done line. The check and report accept them [source: draft-accepted (initiative)]
+- Scope Lock (first-run path): A log with no docs unit shows no docs row and the check behaves as before [source: draft-accepted (initiative)]
+- Scope Lock (error path): A docs Done line with no marker fails check 7 and exits 1 [source: draft-accepted (initiative)]
+- Scope Lock (cross-session continuity): An interrupted unit resumes through the In progress line, with no new state [source: draft-accepted (initiative)]
+- Backlog pickup: 0000410 pulled in from the step row, folder deleted in the same commit
 
 ---
 
