@@ -73,3 +73,17 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 
 - Skipped: ADRs (no decision meets an ADR criterion)
 - Complete: P1 (2026-11-26T08:19:52Z)
+
+### P2: Implement
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-26T08:20:28Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-implement |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | fast batch: seven conversion agents in batch 1, then U2, U8, U9, U10 |
