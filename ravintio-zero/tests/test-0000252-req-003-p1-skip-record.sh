@@ -30,25 +30,17 @@ assert_equals "| Step | Feature id | Title | Backlog entries | Bump | Version | 
 
 echo ""
 echo "=== req-003 AC-2: the standard states which steps are skippable and the stop ==="
-CHART=$(awk '/^### I-A Chart/{f=1} /^### I-B Activate/{f=0} f' "$STANDARDS")
-assert_contains "## P1 skips" "$CHART" "req-003 AC-2: Chart names the P1 skips table"
-assert_contains "chore with exact tasks" "$CHART" "req-003 AC-2: a chore with exact tasks may be yes"
-assert_contains "change with no code" "$CHART" "req-003 AC-2: a change with no code may be yes"
-RUN=$(awk '/^### I-C Run/{f=1;next} /^### /{f=0} f' "$STANDARDS")
-assert_contains "I-C Run: Blocked:" "$RUN" "req-003 AC-2: I-C Run holds the Blocked stop"
-assert_contains "no \`yes\` row" "$RUN" "req-003 AC-2: the stop names a step with no yes row"
+assert_rule rm-p1-skips-intro "## P1 skips"
+assert_rule rm-p1-skips-bullets "chore with exact tasks" "change with no code"
+assert_rule icrun-p1-skip "I-C Run: Blocked:" "no \`yes\` row"
 
 echo ""
 echo "=== req-003 AC-3: the build log names the chart row ==="
-assert_contains "Skipped: P1" "$RUN" "req-003 AC-3: I-C Run holds the Skipped: P1 line"
-assert_contains "chart row" "$RUN" "req-003 AC-3: the line names the chart row"
-SKIPTXT=$(cat "$SKIPREF")
-assert_contains "no \`yes\` row" "$SKIPTXT" "req-003 AC-3: the Phase Skip Protocol names the stop"
-assert_contains "chart row" "$SKIPTXT" "req-003 AC-3: the Phase Skip Protocol names the chart row"
+assert_rule icrun-p1-skipped-log "Skipped: P1" "chart row"
+assert_rule rm-skip-protocol-initiative "no \`yes\` row" "chart row"
 
 echo ""
 echo "=== req-003: the initiative skill names the table ==="
-SKILL_CHART=$(awk '/^## I-A Chart and I-B Activate/{f=1;next} /^## /{f=0} f' "$SKILL")
-assert_contains "## P1 skips" "$SKILL_CHART" "req-003: the skill names the P1 skips table"
+assert_rule rm-ini-chart-intro "## P1 skips"
 
 print_summary

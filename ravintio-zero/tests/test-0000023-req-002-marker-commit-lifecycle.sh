@@ -24,49 +24,22 @@ for f in "$ORCHESTRATOR" "$SHIP"; do
   fi
 done
 
-ORCH_CONTENT=$(cat "$ORCHESTRATOR" "$(dirname "$ORCHESTRATOR")/references/orchestrator-resume-detection.md")
-SHIP_CONTENT=$(cat "$SHIP")
-
 echo ""
 echo "=== req-002: creation-side commit instructions (orchestrator discovery) ==="
 
-assert_contains "Write the sentinel" "$ORCH_CONTENT" \
-  "req-002: the write-the-sentinel start action is present"
-assert_contains "Include in the discovery commit." "$ORCH_CONTENT" \
-  "req-002: .orchestrator-active is committed at the point it is written"
-
-assert_contains "Strict-mode ack" "$ORCH_CONTENT" \
-  "req-002: the strict-mode ack start action is present"
-assert_contains "include it in the discovery commit" "$ORCH_CONTENT" \
-  "req-002: .orchestrator-ack is committed at the point it is written"
-
-assert_contains 'write `plan/.run-mode`' "$ORCH_CONTENT" \
-  "req-002: the run-mode marker is written at design confirmation"
-assert_contains "Include it in the discovery commit." "$ORCH_CONTENT" \
-  "req-002: .run-mode is committed at the point it is written"
-assert_contains '`gated` or `autonomous`' "$ORCH_CONTENT" \
-  "req-002: the run-mode marker holds gated or autonomous"
+assert_rule p0-start-sentinel "Write the sentinel" "Include in the discovery commit."
+assert_rule p0-start-strict-ack "Strict-mode ack" "include it in the discovery commit"
+assert_rule orc-run-mode-write 'write `plan/.run-mode`' "Include it in the discovery commit." '`gated` or `autonomous`'
 
 echo ""
 echo "=== req-002: deletion-side clearing (ship phase) ==="
 
-SENTINEL_STEP=$(printf '%s\n' "$SHIP_CONTENT" | sed -n '/^### Step 8: Clear sentinels/,/^### Step 9/p')
-
-assert_contains 'Delete `plan/.orchestrator-active`, `plan/.orchestrator-ack`, and `plan/.run-mode`' \
-  "$SENTINEL_STEP" "req-002: ship clears all three markers"
-assert_contains "Stage the deletions and commit." "$SENTINEL_STEP" \
-  "req-002: ship stages and commits the marker deletions"
-
-echo ""
-echo "=== req-002: tracked-marker backstop check ==="
-
-assert_contains 'git ls-files' "$SENTINEL_STEP" \
-  "req-002: ship confirms with git ls-files that no marker remains tracked"
+assert_rule orc-ship-clear-markers 'Delete `plan/.orchestrator-active`, `plan/.orchestrator-ack`, and `plan/.run-mode`' \
+  "Stage the deletions and commit." 'git ls-files'
 
 echo ""
 echo "=== req-002: interrupted-ship recovery ==="
 
-assert_contains "Interrupted-ship cleanup" "$ORCH_CONTENT" \
-  "req-002: the orchestrator detects a ship interrupted between archive and sentinel cleanup"
+assert_rule resume-interrupted-ship "Interrupted-ship cleanup"
 
 print_summary

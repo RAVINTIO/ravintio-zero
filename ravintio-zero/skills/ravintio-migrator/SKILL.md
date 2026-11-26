@@ -12,7 +12,7 @@ description: Executes a pending RAVINTIO Zero migration interactively. Reads a m
 1. Never modify files in `src/`: migrations apply to `plan/` and `docs/` only.
 2. Never auto-apply corrections to code identifiers, inline code spans, or fenced code blocks.
 3. Never proceed past a human "none" or explicit skip. Record the migration (Step 5) and stop.
-4. The migrator edits nothing in `ravintio-zero/` and does not move files into `_done/`.
+4. <!-- rule: ob-migrator-no-pack-edit --> The migrator edits nothing in `ravintio-zero/` and does not move files into `_done/`.
 5. Credentials are never in your context.
 
 ## Process
@@ -31,7 +31,7 @@ Scan the declared scope directories for matches as described in the migration fi
 
 If no findings: report `No non-compliant instances found. Migration complete.` Then record it (Step 5).
 
-If findings exist, present them in batches of up to 20:
+<!-- rule: oa-migrator-batch --> If findings exist, present them in batches of up to 20:
 
 ```
 Migration: {migration filename}
@@ -44,7 +44,7 @@ Batch 1 of {total_batches}:
 Apply all in this batch? (all / none / pick, enter numbers to apply selectively, e.g. "1 3 5")
 ```
 
-In an initiative step, a `Migration:` row in `## Decisions` gives the answer. It lists the approved findings as `{file}:{line}`, or holds `none`. Apply only the listed findings and ask no question. A row never approves `all`. If the scan returns a finding the row does not list, leave it and write `Migration pending: {id}` in the build log.
+<!-- rule: rm-migrator-chart-row --> In an initiative step, a `Migration:` row in `## Decisions` gives the answer. It lists the approved findings as `{file}:{line}`, or holds `none`. Apply only the listed findings and ask no question. A row never approves `all`. If the scan returns a finding the row does not list, leave it and write `Migration pending: {id}` in the build log.
 
 ### Step 4: Apply confirmed changes
 
@@ -52,13 +52,13 @@ For each confirmed correction, apply the change using the Edit tool. Do not appl
 
 ### Step 5: Record in the ledger
 
-Append one row to `plan/state/migrations.md`, creating the file and `plan/state/` if they are missing. Use the migration's four-digit id, or its file name without `.md` if it has none. Skip the append if the id already has a row.
+<!-- rule: ob-migrator-ledger-append --> Append one row to `plan/state/migrations.md`, creating the file and `plan/state/` if they are missing. Use the migration's four-digit id, or its file name without `.md` if it has none. Skip the append if the id already has a row.
 
 ```
 | {id} | done | {pack version} |
 ```
 
-Write `done` when the migration ran. Write `not applicable` when Step 1 found the condition false. Take the pack version from `ravintio-zero/component.yml`. Leave the migration file where it is. Then report:
+<!-- rule: ob-migrator-ledger-result --> Write `done` when the migration ran. Write `not applicable` when Step 1 found the condition false. Take the pack version from `ravintio-zero/component.yml`. Leave the migration file where it is. Then report:
 
 ```
 Migration {filename} complete.

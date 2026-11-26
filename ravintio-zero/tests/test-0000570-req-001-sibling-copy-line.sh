@@ -14,9 +14,7 @@ SECTION=$(awk '/^## Test impact scan/{f=1;next} /^## /{f=0} f' "$PLAN")
 
 echo ""
 echo "=== REQ-001 AC-1: the scan holds the sibling-copy line ==="
-assert_contains "tests/regression/" "$SECTION" "REQ-001 AC-1: the scan names the regression folder"
-assert_contains "same name" "$SECTION" "REQ-001 AC-1: the scan says to grep for the same file name"
-assert_contains "list the match" "$SECTION" "REQ-001 AC-1: the scan says to list the match"
+assert_rule piv-plan-impact-scan "tests/regression/" "same name" "list the match"
 
 echo ""
 echo "=== REQ-001 AC-2: the scan stays small ==="

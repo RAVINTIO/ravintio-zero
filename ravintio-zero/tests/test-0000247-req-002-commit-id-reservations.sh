@@ -59,8 +59,8 @@ assert_equals "0000401" "$(tr -d '\n' < "$F/plan/backlog/.next-id")" "req-002 AC
 
 echo ""
 echo "=== req-002 AC-3: three skills carry the rule ==="
-for s in initiative retrospective postmortem; do
-  assert_contains "reserve-id.mjs --commit" "$(cat "$ZERO_DIR/skills/ravintio-$s/SKILL.md")" "req-002 AC-3: the $s skill names reserve-id.mjs --commit"
-done
+assert_rule ob-reserve-commit-initiative "reserve-id.mjs --commit"
+assert_rule oa-retro-source-named "reserve-id.mjs --commit"
+assert_rule ob-reserve-commit-postmortem "reserve-id.mjs --commit"
 
 print_summary

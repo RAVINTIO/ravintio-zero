@@ -4,11 +4,11 @@
 
 ## 1. Date Format
 
-Body text and filenames use different formats. The prose rules are in [writing standards](writing-standards.md).
+<!-- rule: ob-formatting-writing-pointer --> Body text and filenames use different formats. The prose rules are in [writing standards](writing-standards.md).
 
 ### Body text: ISO or long form
 
-Human-readable dates in document body text, changelogs, ADRs, plans, comments, and templates use **2026-08-18** or **"August 18, 2026"**. Pick one form for a document and keep it.
+<!-- rule: ob-formatting-dates --> Human-readable dates in document body text, changelogs, ADRs, plans, comments, and templates use **2026-08-18** or **"August 18, 2026"**. Pick one form for a document and keep it.
 
 | Correct | Incorrect |
 |---------|-----------|
@@ -36,7 +36,7 @@ Frontmatter `date:` fields and JSON date values use **YYYY-MM-DD**.
 
 ## 2. Locale: British English
 
-All RAVINTIO prose, labels, comments, template text, and documentation use **British English** spellings.
+<!-- rule: oa-fmt-british --> All RAVINTIO prose, labels, comments, template text, and documentation use **British English** spellings.
 
 > **Exceptions:** `artifact`, `initialize`, `serialize`, `disk`, and `program` use American spelling in all contexts. See `ravintio-zero/standards/language-quirks-en-gb.md` for the full exception list.
 

@@ -14,7 +14,6 @@ source "$SCRIPT_DIR/helpers/assert.sh"
 
 DRIVER="$SCRIPT_DIR/../scripts/initiative-run.mjs"
 CHECK="$SCRIPT_DIR/../scripts/step-clock-check.mjs"
-STANDARDS="$SCRIPT_DIR/../standards/roadmap-standards.md"
 # The tests run from src/ravintio-zero/tests and from the installed ravintio-zero/tests.
 REPO="$(repo_root)"
 WORK="$(mktemp -d)"
@@ -104,8 +103,8 @@ assert_equals "$BEFORE" "$AFTER" "req-002 NFR-001: the check writes no file"
 
 echo ""
 echo "=== req-003: the docs state the flag and the check ==="
-assert_contains "--include-hook-events" "$(cat "$STANDARDS")" "req-003 AC-1: roadmap-standards names the flag"
-assert_contains "step-clock-check.mjs" "$(cat "$STANDARDS")" "req-003 AC-1: roadmap-standards names the check"
+assert_rule rm-steplog-path "--include-hook-events"
+assert_rule step-clock-check "step-clock-check.mjs"
 assert_contains "--include-hook-events" "$(sed -n 1,120p "$DRIVER")" "req-003 AC-1: the driver header names the flag"
 assert_contains "0342" "$(cat "$REPO/docs/decisions-index.md")" "req-003 AC-2: the index lists ADR-0342"
 

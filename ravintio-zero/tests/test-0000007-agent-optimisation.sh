@@ -55,16 +55,13 @@ echo ""
 echo "=== req-002: build target agent guidance ==="
 
 CODEGEN=$(cat "$SKILLS/ravintio-implement/SKILL.md")
-assert_contains "Build target: docker"        "$CODEGEN" "req-002: implement skill has Build target: docker section"
-assert_contains "check host-installed runtimes" "$CODEGEN" "req-002: implement instructs never check host runtimes"
-assert_contains "docker build"                "$CODEGEN" "req-002: implement skill references docker build"
+assert_rule oa-impl-build-target "Build target: docker"
+assert_rule oa-impl-build-target-rules "check host-installed runtimes" "docker build"
 # 0000171 ADR-004: skills no longer bundle pack files, so no bundle field remains.
 assert_not_contains "bundle_standards"        "$CODEGEN" "req-002: implement skill holds no bundle_standards (0000171 ADR-004)"
 
 VALIDATE=$(cat "$SKILLS/ravintio-validate-and-accept/SKILL.md")
-assert_contains "Build target: docker"        "$VALIDATE" "req-002: validate-agent has Build target: docker section"
-assert_contains "host toolchain"              "$VALIDATE" "req-002: validate-agent instructs never run host toolchain"
-assert_contains "docker build"                "$VALIDATE" "req-002: validate-agent references docker build"
+assert_rule oa-validate-build-target "Build target: docker" "host toolchain" "docker build"
 assert_not_contains "bundle_standards"        "$VALIDATE" "req-002: validate-agent holds no bundle_standards (0000171 ADR-004)"
 
 assert_file_exists "$STANDARDS/build-target-standards.md" "req-002: build-target-standards.md exists"
@@ -87,19 +84,14 @@ assert_equals "ravintio-optimise-agent" "$FRONTMATTER_NAME" "req-003: frontmatte
 
 assert_not_contains "bundle_standards"        "$OPTIMISE" "req-003: frontmatter holds no bundle_standards (0000171 ADR-004)"
 assert_contains "description:"                "$OPTIMISE" "req-003: frontmatter has description"
-assert_contains "ravintio-zero/skills/" "$OPTIMISE" "req-003: skill targets ravintio-zero/skills/"
-assert_contains "Do NOT review"              "$OPTIMISE" "req-003: skill explicitly excludes out-of-scope directories"
+assert_rule oa-optimise-scope "ravintio-zero/skills/" "Do NOT review"
 
-assert_contains "Implicit model knowledge"    "$OPTIMISE" "req-003: category 1 — implicit model knowledge"
-assert_contains "Hook-enforced duplication"   "$OPTIMISE" "req-003: category 2 — hook-enforced duplication"
-assert_contains "Cross-file boilerplate"      "$OPTIMISE" "req-003: category 3 — cross-file boilerplate"
-assert_contains "Stale reference"             "$OPTIMISE" "req-003: category 4 — stale references"
+assert_rule oa-optimise-categories "Implicit model knowledge" "Hook-enforced duplication" "Cross-file boilerplate" "Stale reference"
 
-assert_contains "one suggestion at a time"    "$OPTIMISE" "req-003: presents one suggestion at a time"
-assert_contains "confirm"                     "$OPTIMISE" "req-003: waits for confirm/reject"
-assert_contains "Confirmed so far"            "$OPTIMISE" "req-003: accumulates confirmed list"
-assert_contains "Review complete"             "$OPTIMISE" "req-003: produces end-of-review summary"
-assert_contains "Never write"                 "$OPTIMISE" "req-003: hard limit — never modifies files"
+assert_contains "one suggestion at a time"    "$(grep '^description:' "$OPTIMISE_FILE")" "req-003: presents one suggestion at a time"
+assert_rule oa-optimise-never-write "Never write" "confirm"
+assert_rule oa-optimise-accumulate "Confirmed so far"
+assert_rule oa-optimise-summary "Review complete"
 
 # -----------------------------------------------------------------------
 
@@ -166,7 +158,7 @@ for skill in ravintio-orchestrator ravintio-ship; do
 done
 
 VALIDATE=$(cat "$SKILLS/ravintio-validate-and-accept/SKILL.md")
-assert_contains "build-log.md" "$VALIDATE" "req-006: validate-agent references build-log.md (correct path)"
+assert_rule oa-validate-build-log-track "build-log.md"
 
 # -----------------------------------------------------------------------
 
@@ -186,7 +178,7 @@ assert_contains "design.template.md" "$ORCH" "req-007: orchestrator JIT Loading 
 assert_not_contains "## Design - {feature-id}" "$ORCH" "req-007: orchestrator has no inline design template block"
 
 DOCS=$(cat "$SKILLS/ravintio-implement/SKILL.md")
-assert_contains "iteration-log.template.md" "$DOCS" "req-007: implement references iteration-log.template.md"
+assert_rule oa-impl-iteration-log "iteration-log.template.md"
 assert_not_contains "# Iteration Log" "$DOCS" "req-007: implement has no inline iteration log template block"
 
 SETUP_SH=$(cat "$ZERO_DIR/setup.sh")

@@ -28,49 +28,30 @@ grep_has() { grep -q "$1" "$2" 2>/dev/null && echo "yes" || echo "no"; }
 echo ""
 echo "=== req-003: agent-dispatch-standards.md gains new-test-file pattern ==="
 
-assert_equals "yes" "$(grep_has 'Independent new test files closing a coverage gap' "$STANDARDS")" \
-  "req-003: MUST-parallelise table names independent new-test-file authoring"
-assert_equals "yes" "$(grep_has 'non-cross-referencing sections' "$STANDARDS")" \
-  "req-003: new-test-file row cites the independent, non-cross-referencing pattern"
+assert_rule piv-dispatch-must-parallel "Independent new test files closing a coverage gap" "non-cross-referencing sections"
 
 echo ""
 echo "=== req-003: agent-dispatch-standards.md gains living-doc-edit pattern ==="
 
-assert_equals "yes" "$(grep_has 'Independent living-doc edits' "$STANDARDS")" \
-  "req-003: MUST-parallelise table names independent living-doc edits"
-assert_equals "yes" "$(grep_has 'no shared content' "$STANDARDS")" \
-  "req-003: living-doc row cites the no-shared-content pattern"
+assert_rule piv-dispatch-must-parallel "Independent living-doc edits" "no shared content"
 
 echo ""
 echo "=== req-003: agent-dispatch-standards.md retains existing MUST/Cannot rows ==="
 
-assert_equals "yes" "$(grep_has 'Multiple independent codebase searches' "$STANDARDS")" \
-  "req-003: pre-existing MUST-parallelise row (codebase searches) still present"
-assert_equals "yes" "$(grep_has 'Independent requirement files (no cross-references)' "$STANDARDS")" \
-  "req-003: pre-existing MUST-parallelise row (requirement files) still present"
-assert_equals "yes" "$(grep_has 'Phase N work before Phase N-1 artifacts exist' "$STANDARDS")" \
-  "req-003: pre-existing Cannot-parallelise row (phase sequencing) still present"
-assert_equals "yes" "$(grep_has 'ADR writing before requirements are complete' "$STANDARDS")" \
-  "req-003: pre-existing Cannot-parallelise row (ADR sequencing) still present"
+assert_rule piv-dispatch-must-parallel "Multiple independent codebase searches" "Independent requirement files (no cross-references)"
+assert_rule piv-dispatch-cannot-parallel "Phase N work before Phase N-1 artifacts exist" "ADR writing before requirements are complete"
 
 echo ""
 echo "=== req-003: validate-and-accept keeps its own parallelism guidance ==="
 
 assert_equals "yes" "$(grep_has '## Parallelism' "$VALIDATE_SKILL")" \
   "req-003: validate-and-accept has a Parallelism section"
-assert_equals "yes" "$(grep_has 'Batch 1 (parallel): lint + typecheck' "$VALIDATE_SKILL")" \
-  "req-003: lint and typecheck run as a parallel batch"
-assert_equals "yes" "$(grep_has 'library audit + semantic check' "$VALIDATE_SKILL")" \
-  "req-003: library audit and semantic check run as a parallel batch"
+assert_rule piv-p3-parallelism "Batch 1 (parallel): lint + typecheck" "library audit + semantic check"
 
 echo ""
 echo "=== req-003: hard sequencing unchanged ==="
 
-assert_equals "yes" "$(grep_has 'Never run tests before typecheck passes' "$VALIDATE_SKILL")" \
-  "req-003: tests never run before typecheck passes"
-assert_equals "yes" "$(grep_has 'cycle N+1 before N' "$VALIDATE_SKILL")" \
-  "req-003: self-correct cycle ordering is sequential"
-assert_equals "yes" "$(grep_has 'File out-of-scope discoveries to .plan/backlog/. per .ravintio-zero/standards/agent-dispatch-standards.md.' "$VALIDATE_SKILL")" \
-  "req-003: out-of-scope discoveries route to the backlog per the dispatch standards"
+assert_rule piv-p3-parallelism "Never run tests before typecheck passes" "cycle N+1 before N" \
+  "File out-of-scope discoveries to \`plan/backlog/\` per \`ravintio-zero/standards/agent-dispatch-standards.md\`"
 
 print_summary

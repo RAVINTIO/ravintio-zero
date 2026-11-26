@@ -17,8 +17,11 @@ echo "=== REQ-007 AC-1: boot templates scope the worktree rule ==="
 for name in standard-boot codex-boot; do
   TEXT="$(cat "$ZERO_DIR/templates/$name.md")"
   assert_contains "## Worktrees" "$TEXT" "REQ-007 AC-1: $name has a Worktrees section"
-  assert_contains "main working tree" "$TEXT" "REQ-007 AC-1: $name says a human session works in the main tree"
-  assert_contains "plan/.initiative-worktrees/" "$TEXT" "REQ-007 AC-1: $name lets the driver use worktrees"
+done
+for name in standard-boot codex-boot; do
+  TEXT="$(cat "$ZERO_DIR/templates/$name.md")"
+  assert_contains "main working tree" "$TEXT" "REQ-007 AC-1: $name scopes the rule to the main working tree"
+  assert_contains "plan/.initiative-worktrees/" "$TEXT" "REQ-007 AC-1: $name names the driver worktree folder"
 done
 
 echo ""

@@ -14,17 +14,15 @@ MANIFEST="$ZERO_DIR/component.yml"
 ARCH="$REPO_ROOT/docs/architecture-overview.md"
 PIPE="$ZERO_DIR/pipeline-reference.md"
 
-MARKERS=$(awk '/^## Marker lines/{f=1;next} /^## /{f=0} f' "$STD")
 
 echo ""
 echo "=== req-002 AC-1: the standard lists both marker forms ==="
-assert_contains "Improve: REQ-{nnn}: cycle {n}: {finding}: {change}: suite {pass | fail, reverted}" "$MARKERS" "req-002 AC-1: the change form is listed"
-assert_contains "Improve: REQ-{nnn}: cycle {n}: no change worth making" "$MARKERS" "req-002 AC-1: the early stop form is listed"
+assert_rule oa-improve-marker-change "Improve: REQ-{nnn}: cycle {n}: {finding}: {change}: suite {pass | fail, reverted}"
+assert_rule oa-improve-marker-early "Improve: REQ-{nnn}: cycle {n}: no change worth making"
 
 echo ""
 echo "=== req-002 AC-2: the standard says the script ignores the marker ==="
-assert_contains "does not count" "$(cat "$STD")" "req-002 AC-2: the standard says the script does not count the marker"
-assert_contains '`workflow-metrics.mjs` does not count' "$(tr '\n' ' ' < "$STD")" "req-002 AC-2: the note names the script"
+assert_rule oa-improve-script-ignores "does not count" '`workflow-metrics.mjs` does not count'
 
 echo ""
 echo "=== req-002 AC-3: the living docs name the loop ==="

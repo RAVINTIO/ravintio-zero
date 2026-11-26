@@ -12,9 +12,7 @@ RUN="$SCRIPT_DIR/../scripts/initiative-run.mjs"
 
 echo ""
 echo "=== REQ-002 AC-1: the drain rule is in the roadmap standards ==="
-assert_contains "the queue still merges every other ready step, also after a queue failure" "$(cat "$STD")" "REQ-002 AC-1: the standards state the drain"
-assert_contains "A failed step gets one attempt in a driver run, keeps its \`ready\` file, and reads \`stopped\` in the report." "$(cat "$STD")" "REQ-002 AC-1: the standards state the failed step"
-assert_contains "A new driver queues it again." "$(cat "$STD")" "REQ-002 AC-1: the standards state the restart"
+assert_rule rm-driver-drain "the queue still merges every other ready step, also after a queue failure" "A failed step gets one attempt in a driver run, keeps its \`ready\` file, and reads \`stopped\` in the report." "A new driver queues it again."
 
 echo ""
 echo "=== REQ-002: the old hold is gone ==="

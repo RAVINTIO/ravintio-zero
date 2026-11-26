@@ -74,23 +74,18 @@ assert_equals "yes" "$(printf '%s' "$SEED" | grep -qE '^[0-9]{7}$' && [ "$((10#$
 
 echo "=== req-003: docs call the counter ==="
 SKILL="$ZERO_DIR/skills/ravintio-file-backlog/SKILL.md"
-TEMPLATE="$ZERO_DIR/templates/backlog-entry.template.md"
-ITEMPLATE="$ZERO_DIR/templates/initiative.template.md"
-ROADMAP="$ZERO_DIR/standards/roadmap-standards.md"
-DISPATCH="$ZERO_DIR/standards/agent-dispatch-standards.md"
-ORCH="$(orch_combined "$ZERO_DIR/skills/ravintio-orchestrator")"
-assert_contains "reserve-id.mjs" "$(cat "$SKILL")" "AC-1: the skill names the script"
-assert_contains ".next-id" "$(cat "$SKILL")" "AC-1: the skill names the counter"
+assert_rule orc-fb-reserve "reserve-id.mjs" ".next-id"
 assert_equals "no" "$(grep -q 'plan/_archive/' "$SKILL" && echo yes || echo no)" "AC-1: the skill no longer scans plan/_archive/"
-assert_contains "source id" "$(cat "$SKILL")" "AC-2: the skill names the source id rule"
-assert_contains "source id" "$(cat "$TEMPLATE")" "AC-2: the template names the source id rule"
-for f in "$SKILL" "$TEMPLATE" "$ITEMPLATE" "$ROADMAP" "$DISPATCH" "$ORCH"; do
+assert_rule rm-fb-source-id "source id"
+assert_rule rm-tpl-backlog-id "source id"
+for f in "$SKILL" "$ZERO_DIR/templates/backlog-entry.template.md" "$ZERO_DIR/templates/initiative.template.md" \
+  "$ZERO_DIR/standards/roadmap-standards.md" "$ZERO_DIR/standards/agent-dispatch-standards.md" \
+  "$(orch_combined "$ZERO_DIR/skills/ravintio-orchestrator")"; do
   assert_equals "no" "$(grep -qi 'highest ever allocated\|highest id ever' "$f" && echo yes || echo no)" "AC-3: no scan rule in $(basename "$f")"
 done
-for f in "$TEMPLATE" "$ITEMPLATE" "$ROADMAP" "$DISPATCH" "$ORCH"; do
-  assert_contains ".next-id" "$(cat "$f")" "AC-3: $(basename "$f") names the counter"
-done
-assert_contains "Keep the higher value" "$(cat "$ROADMAP")" "AC-3: roadmap-standards states the conflict answer"
-assert_contains "renumber" "$(cat "$ROADMAP")" "AC-3: roadmap-standards says to renumber the later branch"
-
+assert_rule rm-tpl-backlog-id ".next-id"
+assert_rule rm-tpl-initiative-id ".next-id"
+assert_rule rm-filing-draft ".next-id" "Keep the higher value" "renumber"
+assert_rule orc-dispatch-backlog-id ".next-id"
+assert_rule p0-start-backlog-pickup ".next-id"
 print_summary
