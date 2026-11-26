@@ -123,3 +123,35 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Skipped: docs edit pass (one changed doc sentence, prose-check exit 0)
 
 - Complete: P3 (2026-11-26T07:54:01Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-26T07:54:01Z` |
+| End | `2026-11-26T07:54:06Z` |
+| Wall clock | `0` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | none |
+
+- Complete: P4 (2026-11-26T07:54:06Z)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `50` |
+| Total agents spawned | `0` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `0` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `0` |
+| Phases skipped | `none` |
