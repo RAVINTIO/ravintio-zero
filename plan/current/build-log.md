@@ -132,6 +132,8 @@ Complete: P3 (2026-11-26T08:00:07Z)
 - Postmortem: plan/postmortems/2026-11-26-runner-temp-folder-inside-repo.md (2026-11-26T08:20:32Z)
 - Tests run: shard 1 of 4 with TMPDIR unset, 123 feature suites and 5 regression suites passed (2026-11-26T08:20:32Z)
 
+- Deviation: CI shard 2 failed `test-0000583-req-002` on Linux. Four suites made workspaces inside command substitutions, so their cleanup lists stayed empty. Each of the four now makes one private `mktemp -d` folder, sets `TMPDIR` to it, and removes it on `EXIT`. The suites passed on macOS before the change, so the local runs never showed the leak. (2026-11-26T08:35:46Z)
+
 ### P4: Ship
 
 | Field | Value |

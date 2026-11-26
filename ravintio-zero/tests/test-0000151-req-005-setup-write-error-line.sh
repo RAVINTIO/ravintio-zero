@@ -4,6 +4,10 @@
 # the relative path, exit 1, and no absolute path, error code, or stack frame.
 
 set -uo pipefail
+# Every temp folder of this suite sits under one private folder, which the EXIT trap removes. A workspace made
+# inside a command substitution never reaches a cleanup list, so the folder is the only reliable record (0000583).
+SUITE_TMP="$(mktemp -d)"
+export TMPDIR="$SUITE_TMP"
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
@@ -31,7 +35,7 @@ cleanup() {
     rm -rf "$ws"
   done
 }
-trap cleanup EXIT
+trap 'cleanup; rm -rf "$SUITE_TMP"' EXIT
 trap 'exit 143' TERM
 trap 'exit 130' INT HUP
 
