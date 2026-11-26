@@ -83,13 +83,10 @@ fi
 remove_suite_marker() { [ -z "$SUITE_MARKER" ] || rm -f "$SUITE_MARKER"; }
 
 # Private temp folder (0000583 ADR-0352): every suite gets TMPDIR set to a folder that only this run
-# owns. It sits under the caller's TMPDIR, or under the repo's ignored .t folder. The runner removes
-# only the folder it made, and never a path by name in a shared folder.
-RUN_TMP=""
-if [ -n "${TMPDIR:-}" ] && [ -d "$TMPDIR" ]; then RUN_TMP_BASE="$TMPDIR"; elif [ -n "$SUITE_TOP" ]; then RUN_TMP_BASE="$SUITE_TOP/.t"; else RUN_TMP_BASE=""; fi
-if [ -n "$RUN_TMP_BASE" ] && mkdir -p "$RUN_TMP_BASE" 2>/dev/null; then
-  RUN_TMP="$(mktemp -d "${RUN_TMP_BASE%/}/ravintio_run_XXXXXX" 2>/dev/null)" || RUN_TMP=""
-fi
+# owns. It sits under the caller's TMPDIR, or under the system default when none is set. It never sits
+# inside the repo, because a suite that expects a folder outside a git repository would then fail.
+# The runner removes only the folder it made, and never a path by name in a shared folder.
+RUN_TMP="$(mktemp -d -t ravintio_run_XXXXXX 2>/dev/null)" || RUN_TMP=""
 [ -z "$RUN_TMP" ] || export TMPDIR="$RUN_TMP"
 remove_run_tmp() { [ -z "$RUN_TMP" ] || rm -rf "$RUN_TMP"; }
 trap 'remove_suite_marker; remove_run_tmp; remove_git_isolation' EXIT
