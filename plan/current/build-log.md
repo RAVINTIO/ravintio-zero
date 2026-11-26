@@ -42,6 +42,7 @@ Run mode: autonomous (2026-11-18T08:53:47Z, initiative step 38)
 - Decision applied (initiative chart): Pack edits
 - Decision applied (initiative chart): Known baseline failures
 - Decision applied (initiative chart): A docs unit has no failing test, so build-log-check.mjs finds no RED: or GREEN: for it (0000410)
+- Decision applied (initiative chart): A docs unit has no failing test, so `build-log-check.mjs` finds no `RED:` or `GREEN:` for it (0000410)
 - Decision applied (initiative chart): Fast batches
 - Decision not applicable (initiative chart): The step PR fails CI or conflicts after ship archived the run: applies only after ship
 - Decision applied (initiative chart): When to write ready
@@ -80,7 +81,7 @@ Complete: P1 (2026-11-18T08:56:50Z)
 |-------|-------|
 | Start | `2026-11-18T08:56:50Z` |
 | End | `2026-11-26T07:33:02Z` |
-| Wall clock | `35` |
+| Wall clock | `11436` |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | `0` |
@@ -126,3 +127,35 @@ Complete: P2 (2026-11-26T07:33:02Z)
 - Skipped: docs edit pass subagent. The agent ran prose-check.mjs on the four changed docs and it exited 0. No fresh-context review ran. (2026-11-26T08:00:07Z)
 - Checks: lint, typecheck, and build do not apply to this pack. Security review found no critical or high finding. (2026-11-26T08:00:07Z)
 Complete: P3 (2026-11-26T08:00:07Z)
+- Postmortem: plan/postmortems/2026-11-26-driver-flags-pinned-by-suites.md (2026-11-26T08:00:58Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-26T08:00:58Z` |
+| End | `2026-11-26T08:01:06Z` |
+| Wall clock | `1` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | none |
+Complete: P4 (2026-11-26T08:01:06Z)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `11467` |
+| Total agents spawned | `0` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `0` |
+| Primary tier agent calls | `0` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `4` |
+| Phases skipped | `none` |
