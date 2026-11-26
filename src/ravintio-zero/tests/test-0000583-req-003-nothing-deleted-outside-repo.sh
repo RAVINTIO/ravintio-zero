@@ -8,9 +8,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
 DRIVER="$SCRIPT_DIR/../scripts/initiative-run.mjs"
-# The driver needs a short root path (a Unix socket name must fit under 104 characters), so this suite
-# makes its own short folder and removes only that folder.
-WORK="$(mktemp -d /tmp/rz5833.XXXXXX)"
+WORK="$(mktemp -d -t ravintio_0000583_req003_XXXXXX)"
 trap 'chmod -R u+w "$WORK" 2>/dev/null; rm -rf "$WORK"' EXIT
 trap 'exit 143' TERM
 trap 'exit 130' INT HUP

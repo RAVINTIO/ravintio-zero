@@ -149,7 +149,7 @@
 //     GIT_CEILING_DIRECTORIES to that folder, and runs the session in the Claude Code sandbox with
 //     --settings. Sandbox writes reach the worktree, its git folder, and its control folder. If the folder
 //     path leaves under 20 characters below the 104-character Unix socket limit, the driver stops with
-//     "I-C Run: Blocked:". After the queue merges a step, the driver removes its worktree, which removes
+//     "I-C Run: Blocked:". RAVINTIO_TEMP_PATH_LIMIT replaces the limit. After the queue merges a step, the driver removes its worktree, which removes
 //     the .t folder, and runs "git worktree prune". It deletes nothing outside the repo (0000583, ADR-0352).
 //   - The queue takes one ready step at a time, in ready order. It removes the step worktree and
 //     runs "node {merge-queue.mjs} run --step {n} --pr {k} --root {queue worktree}". MERGE_QUEUE_BIN
@@ -655,7 +655,8 @@ function queueSentence(queueRoot, position) {
 // Gives a step session a private temp folder, {cwd}/.t, so its scratch stays inside the worktree
 // (0000583 ADR-0352). Stops when the path leaves no room for a Unix socket name under the macOS
 // 104-character limit. Returns the folder and the environment that points the session and its suites at it.
-const SOCKET_LIMIT = 104;
+// RAVINTIO_TEMP_PATH_LIMIT replaces the limit, so a test in a long folder can run the driver.
+const SOCKET_LIMIT = Number(process.env.RAVINTIO_TEMP_PATH_LIMIT) || 104;
 const SOCKET_ROOM = 20;
 function privateTemp(cwd) {
   const dir = join(resolve(cwd), '.t');

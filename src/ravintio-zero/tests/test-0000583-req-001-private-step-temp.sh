@@ -11,9 +11,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
 DRIVER="$SCRIPT_DIR/../scripts/initiative-run.mjs"
-# The driver needs a short root path (a Unix socket name must fit under 104 characters), so this suite
-# makes its own short folder and removes only that folder.
-WORK="$(mktemp -d /tmp/rz5831.XXXXXX)"
+WORK="$(mktemp -d -t ravintio_0000583_req001_XXXXXX)"
 trap 'chmod -R u+w "$WORK" 2>/dev/null; rm -rf "$WORK"' EXIT
 trap 'exit 143' TERM
 trap 'exit 130' INT HUP
@@ -55,7 +53,7 @@ echo ""
 echo "=== REQ-001 AC-5: a path with no room for a socket name stops the driver ==="
 LONG="long$(printf 'x%.0s' $(seq 90))"
 R="$(make_repo "$LONG" 1 '1||' '2||1')"
-run_sched "$R"
+RAVINTIO_TEMP_PATH_LIMIT=104 run_sched "$R"
 [ "$CODE" != "0" ] && echo "PASS: REQ-001 AC-5: driver stops" || assert_equals "nonzero" "$CODE" "REQ-001 AC-5: driver stops"
 assert_contains "too long for a Unix socket" "$OUT$(cat "$(dirname "$R")/err.txt")" "REQ-001 AC-5: the message names the cause"
 assert_equals "pending" "$(origin_status "$R" 1)" "REQ-001 AC-5: step 1 did not run"

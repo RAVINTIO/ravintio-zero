@@ -171,7 +171,7 @@ run_sched() {
   local r="$1" base
   base="$(dirname "$r")"
   : > "$base/out.txt"
-  (cd "$r" && PATH="$WORK/bin:$PATH" STUB_DIR="$base/stub" STUB_ROOT="$r" DRIVER_OUT="$base/out.txt" \
+  (cd "$r" && PATH="$WORK/bin:$PATH" RAVINTIO_TEMP_PATH_LIMIT="${RAVINTIO_TEMP_PATH_LIMIT:-4096}" STUB_DIR="$base/stub" STUB_ROOT="$r" DRIVER_OUT="$base/out.txt" \
     MERGE_QUEUE_BIN="$WORK/bin/queue.mjs" node "$DRIVER" --root "$r" > "$base/out.txt" 2>"$base/err.txt")
   CODE=$?
   OUT="$(cat "$base/out.txt")"

@@ -14,7 +14,8 @@
 # The runner removes every RAVINTIO_ variable from the environment of each suite (0000315), so a
 # suite gives the same result in any session. The initiative driver sets RAVINTIO_INITIATIVE_STEP
 # in every step session, and the hooks read it. A suite that needs a variable sets it for its own
-# call. Three variables pass through: RAVINTIO_PWSH, RAVINTIO_TIMING_FILE, and RAVINTIO_TEST_QUIET. The
+# call. The runner sets RAVINTIO_TEMP_PATH_LIMIT=4096 for each suite, because fixture repos sit in a long
+# temp path (0000583). Three variables pass through: RAVINTIO_PWSH, RAVINTIO_TIMING_FILE, and RAVINTIO_TEST_QUIET. The
 # last one only changes how much a suite prints, and assert.sh reads it. A suite that starts a
 # nested runner unsets it first.
 #
@@ -242,8 +243,8 @@ run_one() {
 
 run_suite_body() {
   case "$1" in
-    *.ps1) env ${CLEAR_ARGS[@]+"${CLEAR_ARGS[@]}"} "$PWSH" -NoProfile -File "$1" ;;
-    *) env ${CLEAR_ARGS[@]+"${CLEAR_ARGS[@]}"} bash "$1" ;;
+    *.ps1) env ${CLEAR_ARGS[@]+"${CLEAR_ARGS[@]}"} RAVINTIO_TEMP_PATH_LIMIT=4096 "$PWSH" -NoProfile -File "$1" ;;
+    *) env ${CLEAR_ARGS[@]+"${CLEAR_ARGS[@]}"} RAVINTIO_TEMP_PATH_LIMIT=4096 bash "$1" ;;
   esac
 }
 
