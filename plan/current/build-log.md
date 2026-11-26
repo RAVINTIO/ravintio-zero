@@ -26,8 +26,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-26T08:15:30Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-26T08:18:44Z` |
+| Wall clock | `3` |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | `0` |
@@ -49,3 +49,10 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Adoption mode: standard-iterative (signal: archive beside source in `plan/_archive/`)
 - Run mode: autonomous (initiative step)
 - Run speed: fast (2026-11-26T08:17:48Z)
+
+- Scope Lock (happy path): A suite reads its rule by anchor. A reword that keeps the key terms passes. [source: draft-accepted (initiative)]
+- Scope Lock (first-run path): A skill with no anchors gets them in the same unit as its suite conversion. [source: draft-accepted (initiative)]
+- Scope Lock (error path): A suite with a whole-sentence pin fails the guard. A key term that spans a reworded phrase fails the probe. [source: draft-accepted (initiative)]
+- Scope Lock (cross-session continuity): The ledger file and one commit per batch record converted suites, so a resumed step skips them. [source: draft-accepted (initiative)]
+- Scope Lock complete. All four scenario paths captured.
+- Complete: P0 (2026-11-26T08:18:44Z)
