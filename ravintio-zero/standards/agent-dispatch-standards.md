@@ -46,11 +46,12 @@ This table applies to implementation units. The task-type table above covers eve
 Give each unit one class.
 
 <!-- rule: dispatch-unit-classes -->
-A unit has one of four classes:
+A unit has one of five classes:
 - `content`: prose, docs, templates, and agreed text.
 - `code`: application and script code.
 - `test`: test files and fixtures.
 - `config`: manifests, workflow files, and settings.
+- `docs`: living documents under `docs/` and change records. The unit has no executable check.
 
 Score the unit from 0 to 3.
 
@@ -67,6 +68,7 @@ Look up the unit's class and score.
 | config | cheaper, low | cheaper, medium | primary, high | primary, high |
 | test | cheaper, medium | cheaper, high | primary, high | primary, high |
 | code | primary, medium | primary, high | primary, high | primary, high |
+| docs | cheaper, low | cheaper, medium | primary, high | primary, high |
 
 <!-- rule: dispatch-unit-tier-replaces -->
 The table's tier replaces the skill's `recommended_model` for that dispatch. The Agent call passes `model` from the tier and, on Claude Code, `effort`. The retry on the primary tier after two cheaper-tier failures stays.
@@ -75,6 +77,9 @@ A human does not override a tier. Effort maps to the Agent tool `effort` value o
 
 <!-- rule: dispatch-done-line -->
 The unit's `Done:` line takes the form `- Done: {unit} ({class}, {tier}, {effort}, {ISO-8601 timestamp})`. An inline unit logs tier `inline` and effort `none`. `ravintio-zero/scripts/build-log-mark.mjs` appends the line with a clock-read time.
+
+<!-- rule: dispatch-docs-markers -->
+A `docs` unit has no failing test, but it still logs a `RED:` and a `GREEN:` line. Run `node ravintio-zero/scripts/build-log-mark.mjs RED {unit} --class docs`, then the same command with `GREEN`. Each line carries the class, and the script reads the clock. The `GREEN:` line follows a check that passed, such as the prose check. Then log `Done` with class `docs`. `build-log-check.mjs` requires both markers for a `docs` `Done:` line. Backlog entry 0000410 filed the rule.
 
 ### Unit report
 

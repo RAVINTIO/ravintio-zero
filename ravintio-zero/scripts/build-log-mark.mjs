@@ -2,9 +2,10 @@
 // Appends a RED, GREEN, or Done marker line to the build log (0000575 ADR-0348).
 //
 // Usage: node build-log-mark.mjs <RED|GREEN|Done> <unit> [--class C --tier T --effort E] [--log path]
+// RED and GREEN take an optional --class. A unit with no executable check logs class docs (0000580).
 //
 // The script reads the clock and writes the time itself, so no session types one.
-//   RED, GREEN   - {KIND}: {unit} ({time})
+//   RED, GREEN   - {KIND}: {unit} ({time}), or {KIND}: {unit} ({class}, {time}) with --class
 //   Done         - Done: {unit} ({class}, {tier}, {effort}, {time}). The three flags are required.
 // The kind is not case sensitive. The default log is plan/current/build-log.md.
 // The line goes before a "## Summary" heading when the log has one, else at the end.
@@ -43,14 +44,16 @@ if (/[\r\n]/.test(unit)) refuse('the unit holds a line break');
 
 const time = new Date().toISOString().replace(/\.\d{3}Z$/, 'Z');
 let line;
+for (const name of ['class', 'tier', 'effort']) {
+  if (flags[name] !== undefined && /[\r\n,()]/.test(flags[name])) refuse(`--${name} holds a character that breaks the line`);
+}
 if (kind === 'Done') {
   for (const need of ['class', 'tier', 'effort']) {
     if (!flags[need]) refuse(`Done needs --${need}`);
-    if (/[\r\n,()]/.test(flags[need])) refuse(`--${need} holds a character that breaks the line`);
   }
   line = `- Done: ${unit} (${flags.class}, ${flags.tier}, ${flags.effort}, ${time})`;
 } else {
-  line = `- ${kind}: ${unit} (${time})`;
+  line = `- ${kind}: ${unit} (${flags.class ? `${flags.class}, ` : ''}${time})`;
 }
 
 const log = flags.log ?? 'plan/current/build-log.md';

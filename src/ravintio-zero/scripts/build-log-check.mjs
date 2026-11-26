@@ -18,7 +18,7 @@
  *      is compared with the current clock (0000358).
  *
  *   7. Every "GREEN: {unit}" line has an earlier "RED: {unit}" line, and every
- *      "Done: {unit} (..., inline, ...)" line has both markers (0000386).
+ *      "Done: {unit} (..., inline, ...)" line has both markers (0000386). A "Done:" line of class docs needs both markers too (0000580).
  *      A unit name is the text between the marker and " (".
  *
  *   8. Each "Resolved:" line, and each "Rework:" line, has a "Postmortem:" line
@@ -179,7 +179,8 @@ function commitTimes(path) {
       continue;
     }
     const d = /^\s*(?:[-*]\s*)?Done:\s*(.+?)\s+\(([^)]*)\)/.exec(row);
-    if (d && d[2].split(",").map((x) => x.trim())[1] === "inline") {
+    const fields = d ? d[2].split(",").map((x) => x.trim()) : [];
+    if (d && (fields[1] === "inline" || fields[0] === "docs")) {
       if (!red.has(d[1])) flag(`Unit ${d[1]}: inline "Done:" line has no "RED: ${d[1]}" line`);
       if (!green.has(d[1])) flag(`Unit ${d[1]}: inline "Done:" line has no "GREEN: ${d[1]}" line`);
     }
