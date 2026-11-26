@@ -8,7 +8,7 @@ source "$SCRIPT_DIR/helpers/assert.sh"
 SKILL="$ZERO_DIR/skills/ravintio-initiative/SKILL.md"
 
 echo "=== req-005 AC-1: the standard names the cleanup ==="
-assert_rule rm-delivery-cleanup 'initiative-cleanup.mjs' 'plan/.initiative-runner.lock' '.git/ravintio-archive/' 'plan/.initiative-queue/' 'after the human merges'
+assert_rule rm-delivery-cleanup 'initiative-cleanup.mjs' 'plan/.initiative-runner.lock' '.git/ravintio-archive/' 'plan/.initiative-queue/' 'the human merges the PR'
 
 echo "=== req-005 AC-2: the skill names the cleanup and stays short ==="
 assert_rule rm-ini-delivery 'initiative-cleanup.mjs'
