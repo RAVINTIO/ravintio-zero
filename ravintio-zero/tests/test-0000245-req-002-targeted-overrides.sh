@@ -8,6 +8,10 @@
 set -uo pipefail
 # Every temp folder of this suite sits under one private folder, which the EXIT trap removes. A workspace made
 # inside a command substitution never reaches a cleanup list, so the folder is the only reliable record (0000583).
+SUITE_TMP=""
+trap 'rm -rf "${SUITE_TMP:-}"' EXIT
+trap 'exit 143' TERM
+trap 'exit 130' INT HUP
 SUITE_TMP="$(mktemp -d)"
 export TMPDIR="$SUITE_TMP"
 unset RAVINTIO_INITIATIVE_STEP

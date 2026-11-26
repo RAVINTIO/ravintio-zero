@@ -136,6 +136,8 @@ Complete: P3 (2026-11-26T08:00:07Z)
 
 - Deviation: CI shard 2 failed again on the TERM case for `test-0000029`. The suite set its `EXIT` trap after it made its workspace and wrote logs to `/tmp`. It now makes one private folder first and sets the trap at once. The REQ-002 test lists every entry in its scratch folder, because a private folder has no `ravintio_` prefix. (2026-11-26T08:53:23Z)
 
+- Deviation: CI shard 2 failed a third time on the TERM cases. The REQ-002 test now sees a scratch folder at once and sends TERM before the suite sets its trap. Each of the five suites now sets its signal and EXIT traps before it makes the scratch folder. (2026-11-26T09:02:15Z)
+
 ### P4: Ship
 
 | Field | Value |

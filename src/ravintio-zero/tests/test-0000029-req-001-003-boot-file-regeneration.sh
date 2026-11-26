@@ -14,11 +14,12 @@
 set -uo pipefail
 # Every temp folder and log of this suite sits under one private folder, which the EXIT trap removes. The trap
 # is set first, so a stop signal at any point leaves nothing behind (0000583).
-SUITE_TMP="$(mktemp -d)"
-export TMPDIR="$SUITE_TMP"
-trap 'cd /; rm -rf "$SUITE_TMP"' EXIT
+SUITE_TMP=""
+trap 'cd /; rm -rf "${SUITE_TMP:-}"' EXIT
 trap 'exit 143' TERM
 trap 'exit 130' INT HUP
+SUITE_TMP="$(mktemp -d)"
+export TMPDIR="$SUITE_TMP"
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
