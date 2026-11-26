@@ -36,6 +36,7 @@ Run mode: autonomous (2026-11-26T10:01:40Z, initiative step 37)
 | MCP calls | `0` |
 | Parallel task batches | `0` |
 | Notes | step 37 of initiative 0000544, backlog entry 0000582 |
+Complete: P0 (2026-11-26T10:03:37Z)
 
 - Baseline run started (2026-11-26T10:01:40Z), output /tmp/claude-501/s37/baseline.out. The sandbox blocks `mktemp` in `/var/folders` and writes to `/`, so suites that cite "Operation not permitted" fail for that reason.
 - Decision applied (initiative chart): A docs unit has no failing test, so `build-log-check.mjs` finds no `RED:` or `GREEN:` for it (0000410)
@@ -58,6 +59,7 @@ Run mode: autonomous (2026-11-26T10:01:40Z, initiative step 37)
 | MCP calls | `0` |
 | Parallel task batches | `0` |
 | Notes | none |
+Complete: P1 (2026-11-26T10:05:41Z)
 
 - Audit: not applicable, no requirement targets advisories
 - Plan gate: autonomous run, no human gate (2026-11-26T10:05:41Z)
@@ -77,6 +79,7 @@ Run mode: autonomous (2026-11-26T10:01:40Z, initiative step 37)
 | MCP calls | `0` |
 | Parallel task batches | `0` |
 | Notes | none |
+Complete: P2 (2026-11-26T11:10:46Z)
 - RED: U-001 (2026-11-26T10:06:12Z)
 - GREEN: U-001 (2026-11-26T10:07:07Z)
 - Done: U-001 (code, primary, medium, 2026-11-26T10:07:07Z)
@@ -100,13 +103,47 @@ Run mode: autonomous (2026-11-26T10:01:40Z, initiative step 37)
 |-------|-------|
 | Start | `2026-11-26T11:10:46Z` |
 | End | `2026-11-26T11:11:26Z` |
-| Wall clock | `2` |
+| Wall clock | `1` |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | `1` |
 | MCP calls | `0` |
 | Parallel task batches | `0` |
 | Notes | none |
+Complete: P3 (2026-11-26T11:11:26Z)
 
 - Docs edit pass: 3 docs changed, 1 cycle, prose-check exit 0 (2026-11-26T11:11:26Z)
 - Acceptance: autonomous run, evidence in plan/current/acceptance-evidence.md (2026-11-26T11:11:26Z)
+
+---
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-26T11:11:47Z` |
+| End | `2026-11-26T11:11:47Z` |
+| Wall clock | `1` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | none |
+Complete: P4 (2026-11-26T11:11:47Z)
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `71` |
+| Total agents spawned | `1` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `1` |
+| Primary tier agent calls | `1` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `0` |
+| Phases skipped | `none` |
