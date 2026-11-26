@@ -1,7 +1,7 @@
 ---
 title: "ADR 0352: Step sessions use a private temp folder"
 summary: "Each step session gets a temp folder in its worktree and runs in the sandbox. The driver deletes nothing outside the repo."
-status: "proposed"
+status: "accepted"
 component: "ravintio-zero"
 version: "0.1.1"
 feature: "0000583-step-temp-cleanup-after-merge"
