@@ -35,6 +35,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Parallel task batches | 0 |
 | Notes | initiative 0000544 step 36, backlog entry 0000410 |
 
+Complete: P0 (2026-11-26T10:03:40Z)
+
 - Run mode: autonomous (2026-11-26T10:02:15Z)
 - Run speed: fast (2026-11-26T10:02:15Z)
 - Baseline: clean-clone full suite started 2026-11-26T10:01:50Z, output in the session temp folder `s36/baseline.txt`
@@ -72,6 +74,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Parallel task batches | 0 |
 | Notes | Artifacts written inline. The fast batch gave no gain for six small files. |
 
+Complete: P1 (2026-11-26T10:05:13Z)
+
 - Plan: consistency-check clean, human-settings-check none
 - Plan: git fetch failed in the sandbox (github.com:22 denied), so branch-point reads use the local tracking ref
 
@@ -90,6 +94,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | MCP calls | 0 |
 | Parallel task batches | 0 |
 | Notes | Units run inline in one tree. Each unit is one small file change, so a subagent costs more than it saves. |
+
+Complete: P2 (2026-11-26T11:07:40Z)
 
 - In progress: U-001 (2026-11-26T10:05:46Z)
 - In progress: U-002 (2026-11-26T10:05:46Z)
@@ -115,6 +121,28 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 
 - Tests run: impact suites 0000580, 0000386, 0000575, 0000358, 0000173, 0000043 req-012, 0000493 req-004, 0000164 req-008: all passed (2026-11-26T11:07:40Z)
 - Tests run: full suite: not completed locally. The run passed the 10-minute background limit. Shard 1 of 4 ended with 17 failed suites and 3 failed regression suites. None covers a file this step changes. Four sampled failures (0000248 req-001, 0000248 req-002, 0000019 req-005, 0000388 req-001) fail the same way on the base commit in this sandbox. Causes are EPERM writes, a blocked network, and mktemp. Shard 2 stopped at the limit. CI runs the full suite at P4 (2026-11-26T11:07:40Z)
+
+---
+
+### P3: Validate and Accept
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-26T11:07:54Z` |
+| End | `2026-11-26T11:08:55Z` |
+| Wall clock | 1 |
+| Model tier | primary |
+| Skills loaded | ravintio-validate-and-accept |
+| Agents spawned | 1 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Docs edit pass ran on one sonnet subagent. It made no change and used one tool call. |
+
+Complete: P3 (2026-11-26T11:08:55Z)
+
+- Docs edit pass: 1 cycle, no change, prose-check exit 0 (run by the agent, 4 files)
+- Baseline: the clean-clone baseline run did not finish in the sandbox. baseline-failures.md lists the three chart-named suites.
+- Acceptance evidence written to plan/current/acceptance-evidence.md
 
 ---
 
