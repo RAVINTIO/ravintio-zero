@@ -82,13 +82,13 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-26T10:05:46Z` |
-| End | |
-| Wall clock | |
+| End | `2026-11-26T11:07:40Z` |
+| Wall clock | 61 |
 | Model tier | primary |
 | Skills loaded | ravintio-implement |
 | Agents spawned | 0 |
 | MCP calls | 0 |
-| Parallel task batches | 0 |
+| Parallel task batches | 1 |
 | Notes | Units run inline in one tree. Each unit is one small file change, so a subagent costs more than it saves. |
 
 - In progress: U-001 (2026-11-26T10:05:46Z)
@@ -112,6 +112,11 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - RED: U-005 living docs (docs, no executable check, 0000410, 2026-11-26T10:07:12Z)
 - GREEN: U-005 living docs (docs, no executable check, 0000410, prose check passed at commit, 2026-11-26T10:07:26Z)
 - Done: U-005 living docs (docs, inline, none, 2026-11-26T10:07:26Z)
+
+- Tests run: impact suites 0000580, 0000386, 0000575, 0000358, 0000173, 0000043 req-012, 0000493 req-004, 0000164 req-008: all passed (2026-11-26T11:07:40Z)
+- Tests run: full suite: not completed locally. The run passed the 10-minute background limit. Shard 1 of 4 ended with 17 failed suites and 3 failed regression suites. None covers a file this step changes. Four sampled failures (0000248 req-001, 0000248 req-002, 0000019 req-005, 0000388 req-001) fail the same way on the base commit in this sandbox. Causes are EPERM writes, a blocked network, and mktemp. Shard 2 stopped at the limit. CI runs the full suite at P4 (2026-11-26T11:07:40Z)
+
+---
 
 ## Summary (filled at ship, P4)
 
