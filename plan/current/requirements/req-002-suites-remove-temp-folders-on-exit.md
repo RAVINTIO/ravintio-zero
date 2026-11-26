@@ -2,7 +2,7 @@
 title: "Requirement: REQ-002 - Suites remove their temp folders on every exit"
 summary: "Each named suite and the git-isolation helper remove their temp paths on exit and on a stop signal."
 status: "active"
-version: "0.1.0"
+version: "0.1.1"
 ---
 # Requirement: REQ-002 - Suites remove their temp folders on every exit
 
@@ -20,6 +20,7 @@ As a suite, I remove my temp folders on every exit including a stop signal, so t
 - Each suite traps `TERM`, `INT`, and `HUP` and exits, so the `EXIT` trap runs.
 - `0000171-req-004` also removes its `ravintio_0000171_req004_out_` folder.
 - `helpers/git-isolation.sh` gives a function that installs the same signal traps for its config file.
+- `run-tests.sh` sets `TMPDIR` to a private folder for every suite and removes that folder on exit.
 
 ## Acceptance Criteria
 - [ ] AC-1: Normal exit leaves nothing

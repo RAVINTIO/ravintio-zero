@@ -8,28 +8,28 @@
 
 ## Product Layer
 - User stories:
-  - US-001: As the driver, I remove a merged step's `/tmp/step{n}*` paths and extra worktrees and prune, so that a merged step leaves nothing behind.
+  - US-001: As the driver, I give each step session a private temp folder in its worktree. I remove the worktree after the merge, so a merged step leaves nothing behind.
   - US-002: As a suite, I remove my temp folders on every exit including a stop signal, so that no `ravintio_*` entry outlives the run.
-- Acceptance criteria confirmed: 4
-- Constraints: Node only, no new dependency. Cleanup never stops the run and never follows a symlink.
+- Acceptance criteria confirmed: 4 (revised 2026-11-26 after the scope change)
+- Constraints: Node only, no new dependency. The driver deletes nothing outside the repo and a failed removal never stops the run.
 - Integrations: none
 
 ## Architecture Layer
 - Latency target: deferred - recorded in scope
 - Availability target: deferred - recorded in scope
 - Scalability target: deferred - recorded in scope
-- Security: removal uses `rmSync` on paths from `readdirSync` of the temp folder, matched by an anchored pattern. The removal never follows a symlink. Git runs with no shell.
+- Security: the session runs in the Claude Code sandbox with writes limited to the worktree, its git folder, and its control folder. `TMPDIR` and `GIT_CEILING_DIRECTORIES` point at `{worktree}/.t`. Git runs with no shell. No pack script removes a path in a shared temp folder.
 - Data privacy: no regulated data
-- Observability: a `Kept:` line for each path left behind
+- Observability: a `Kept:` line for each worktree left behind, and a `Blocked:` line when the temp path is too long
 - Cost boundary: not constrained
 
 ## Engineering Layer
 - Stack: Node script, bash tests
-- Components: `ravintio-zero` pack. `initiative-run.mjs` gains `cleanStepTemp`. Five suites and `helpers/git-isolation.sh` gain signal-safe traps.
-- Data ownership: the driver owns `plan/.initiative-worktrees/` and the step's temp paths. Each suite owns the folders it makes.
+- Components: `ravintio-zero` pack. `initiative-run.mjs` gains `privateTemp`, `sandboxSettings`, and `removeMergedWorktree`. `run-tests.sh` sets a private `TMPDIR`. Five suites and `helpers/git-isolation.sh` gain signal-safe traps.
+- Data ownership: the driver owns `plan/.initiative-worktrees/` and each worktree's `.t` folder. Each suite owns the folders it makes.
 - Deployment: pack files in `src/ravintio-zero/`, mirrored to `ravintio-zero/`
 - API versioning: not applicable
-- Method: after `removeControl` the driver calls `cleanStepTemp(root, n)`. The call lists `git worktree list --porcelain` and removes each worktree outside `plan/.initiative-worktrees/` whose basename matches `^step{n}(?![0-9])`. It then runs `git worktree prune`. Last, it removes each entry of `os.tmpdir()` and `/tmp` that matches the same pattern. The start sweep calls it for each merged step. Each suite adds `trap 'exit 143' TERM` and `trap 'exit 130' INT HUP` next to its `EXIT` trap so the cleanup runs.
+- Method: `runStep` calls `privateTemp(cwd)`, which creates `{cwd}/.t` and stops when the path leaves under 20 characters below the 104-character socket limit. It passes `TMPDIR` and `GIT_CEILING_DIRECTORIES` in the child environment and `--settings` with the sandbox JSON. After a merge, `removeMergedWorktree` removes the worktree and runs `git worktree prune`. `run-tests.sh` makes a private folder for each run and removes it on exit. Each suite keeps its `EXIT` trap and exits on `TERM`, `INT`, and `HUP`.
 
 ## Component Paths
 - src/ravintio-zero/
@@ -38,16 +38,16 @@
 - plan/
 
 ## Scope
-- In: `cleanStepTemp` in the driver, signal-safe traps in the four named suites, `0000029` and the git-isolation helper, tests, roadmap standards line
+- In: private temp folder, sandbox, and worktree removal in the driver. A private `TMPDIR` in the runner. Signal-safe traps in the named suites and the git-isolation helper. Scratch rules, tests, and a roadmap standards line.
 - Out: removing leaked entries from earlier runs, PowerShell suites
 - Deferred: none
 
 ## Assumptions
-- Step temp paths start `step{n}` in the temp folder - impact if wrong: the driver leaves a differently named path behind.
+- The sandbox settings keys `enabled` and `filesystem.allowWrite` work in the installed Claude Code - impact if wrong: the session runs without the sandbox.
 
 ## Risks
 - A suite pins the driver header or the standards text (likelihood medium, impact low). P1 runs the test impact scan.
-- A pattern matching another step's path (likelihood low, impact high). The lookahead and a test cover it.
+- A script deleting a path outside the repo (likelihood low, impact high). The driver has no name-based removal, and a test scans the pack scripts.
 
 ## Dependencies
 - Upstream: none
@@ -60,11 +60,13 @@ None
 ## Skill Map
 | Requirement | Best-fit Skill | Rationale |
 |-------------|----------------|-----------|
-| REQ-001 - driver cleanup | ravintio-implement | Node change with a test |
+| REQ-001 - private temp folder | ravintio-implement | Node change with a test |
 | REQ-002 - suite traps | ravintio-implement | bash change with a test |
+| REQ-003 - nothing deleted outside the repo | ravintio-implement | Node and bash test |
+| REQ-004 - scratch under TMPDIR | ravintio-implement | Pack text with a rule test |
 
 ## Repo Instructions
 None
 
 ## Confirmation
-Human confirmed this design before proceeding: draft-accepted (initiative) // Date and Time confirmed: 18 Nov 2026 @ 08:54 a.m. GMT
+Human confirmed this design before proceeding: draft-accepted (initiative) // Date and Time confirmed: 18 Nov 2026 @ 08:54 a.m. GMT. Revised after the human changed the scope on 26 Nov 2026.

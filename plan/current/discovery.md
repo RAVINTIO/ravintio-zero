@@ -22,7 +22,7 @@ summary: "Raw discovery-pass findings: what the orchestrator knew before coachin
 - Prior features: `0000576-phase-start-time-at-phase-start` (2026-11-18), `0000501-remove-merged-worktrees` (driver sweep at start).
 - Constraining ADRs: `0326-driver-sweeps-merged-worktrees` (never stop the run on a kept worktree).
 - Component map: one component, `ravintio-zero`. The pack lives in `src/ravintio-zero/` and mirrors to `ravintio-zero/`.
-- Source: `ravintio-zero/scripts/initiative-run.mjs` removes the step worktree before the queue runs (`removeWorktree`) and the control folder after the merge (`removeControl`). It never removes `/tmp/step{n}*` paths or extra worktrees.
+- Source: `ravintio-zero/scripts/initiative-run.mjs` removes the step worktree before the queue runs (`removeWorktree`) and the control folder after the merge (`removeControl`). It never removes `/tmp/step{n}*` paths or extra worktrees. The first design added `cleanStepTemp` for that. The human removed it on 2026-11-26 (see the build log).
 - Leaks: suites `0000169-req-004`, `0000245-req-002`, `0000151-req-005`, `0000171-req-004` already hold an `EXIT` trap. A stopped suite (SIGTERM, SIGINT) skips it. `0000029-req-001-003` has no trap. `helpers/git-isolation.sh` leaves `ravintio-gitconfig.*` when a caller never runs `remove_git_isolation`.
 - Backlog entry: `0000584`, folded into the brief and deleted with the index regenerated.
 - Queue: no `plan/.initiative-queue/` items name step 38.

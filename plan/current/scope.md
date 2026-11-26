@@ -12,14 +12,17 @@ version: "0.1.0"
 
 ## In Scope
 
-- `cleanStepTemp` in `initiative-run.mjs`, called after each merge and in the start sweep.
-- Signal-safe traps in five suites and the git-isolation helper.
-- Two new tests, one for each requirement.
+- A private `{worktree}/.t` temp folder, `TMPDIR`, `GIT_CEILING_DIRECTORIES`, and the sandbox in `initiative-run.mjs`.
+- Worktree removal and `git worktree prune` after each merge.
+- A private `TMPDIR` in `run-tests.sh` and signal-safe traps in five suites and the git-isolation helper.
+- Scratch rules in the implement skill and `testing-standards.md`.
+- Four tests, one for each requirement.
 - A rule line in `roadmap-standards.md` and an entry in the living docs.
 
 ## Out of Scope
 
 - Removing entries that earlier runs leaked.
+- Deleting any path by name in a shared temp folder.
 - PowerShell suites.
 
 ## Deferred

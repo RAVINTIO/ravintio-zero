@@ -14,6 +14,6 @@ version: "0.1.0"
 
 | Term | Definition | Aliases | Used In |
 |------|-----------|---------|---------|
-| step temp path | A file or folder in a temp folder whose name starts with `step{n}` for step number n, and that is not a prefix of a longer step number | step temp file | ravintio-zero |
-| extra worktree | A git worktree of the repo that sits outside `plan/.initiative-worktrees/` and has a step temp path as its folder | none | ravintio-zero |
+| private temp folder | The folder `{worktree}/.t` that the driver sets as `TMPDIR` for one step session | step scratch | ravintio-zero |
+| sandbox | The Claude Code sandbox that the driver turns on for a step session with `--settings` | none | ravintio-zero |
 | leaked entry | A `ravintio_*` or `ravintio-gitconfig*` entry that a suite left in the user temp folder | none | ravintio-zero |

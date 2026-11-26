@@ -15,7 +15,7 @@ version: "0.1.0"
 
 | ID | Category | Description | Likelihood | Impact | Mitigation | Status |
 |----|----------|------------|------------|--------|-----------|--------|
-| R-001 | operational | The pattern `step{n}` removes a path of another step or of a person | low | high | The lookahead `(?![0-9])` and a test for `step20`. The test sets `RAVINTIO_STEP_TEMP_DIRS` so it never touches the real temp folder. | open |
+| R-001 | operational | A suite or script deletes a path outside the repo | low | high | The driver has no name-based removal. A test plants files outside the repo and scans the pack scripts. | open |
 | R-002 | technical | A suite pins the driver header or the standards text that this step edits | medium | low | The test impact scan lists each pin. The unit updates it and logs a `Rework:` line. | open |
 | R-003 | technical | A signal trap changes a suite's exit code | low | medium | The trap exits with 143 or 130 only on a signal. A normal exit keeps its code. | open |
 
@@ -23,4 +23,4 @@ version: "0.1.0"
 
 | ID | Assumption | Impact if Wrong | Status |
 |----|-----------|----------------|--------|
-| A-001 | Step temp paths start with `step{n}` in the temp folder | The driver leaves a differently named path behind | open |
+| A-001 | The sandbox settings keys `enabled` and `filesystem.allowWrite` work in the installed Claude Code | The step session runs without the sandbox | open |

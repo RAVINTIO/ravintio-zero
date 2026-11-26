@@ -145,6 +145,12 @@
 //     "I-C Run: Cleared: step {n} ready file of a merged step" for each. It keeps the file while a live
 //     pid sits in the step's running file, or when the removal fails, and prints "I-C Run: Kept: step
 //     {n} {reason}". It removes no other control file (0000509, ADR-0340).
+//   - The driver gives each step session a private temp folder, {worktree}/.t. It sets TMPDIR and
+//     GIT_CEILING_DIRECTORIES to that folder, and runs the session in the Claude Code sandbox with
+//     --settings. Sandbox writes reach the worktree, its git folder, and its control folder. If the folder
+//     path leaves under 20 characters below the 104-character Unix socket limit, the driver stops with
+//     "I-C Run: Blocked:". After the queue merges a step, the driver removes its worktree, which removes
+//     the .t folder, and runs "git worktree prune". It deletes nothing outside the repo (0000583, ADR-0352).
 //   - The queue takes one ready step at a time, in ready order. It removes the step worktree and
 //     runs "node {merge-queue.mjs} run --step {n} --pr {k} --root {queue worktree}". MERGE_QUEUE_BIN
 //     overrides the script. The queue worktree is plan/.initiative-worktrees/queue, detached at the

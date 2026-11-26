@@ -1,6 +1,6 @@
 ---
-title: "Feature Brief - Clean up step temp files after each merge"
-summary: "The driver removes a merged step's temp paths, and suites remove their temp folders on every exit."
+title: "Feature Brief - Give each step session a private temp folder"
+summary: "Each step session keeps its scratch in its worktree, and suites remove their temp folders on every exit."
 status: "approved"
 version: "0.1.0"
 ---
@@ -10,13 +10,13 @@ version: "0.1.0"
 
 ## Business Goal
 
-Step sessions and suites leave temp files behind after a step merges. On 2026-11-14 they filled the disk with 10,528 entries (26.1 GiB) and the driver stopped with `ENOSPC`. Each step's temp files go away once its feature branch merges into the initiative branch.
+Step sessions and suites leave temp files behind after a step merges. On 2026-11-14 they filled the disk with 10,528 entries (26.1 GiB) and the driver stopped with `ENOSPC`. The human changed the scope on 2026-11-26. The first design deleted `/tmp/step{n}*` by name, and on 2026-11-18 the driver suites ran it against the real `/tmp` and deleted another project's files. Each step session now keeps its scratch inside its own worktree, and nothing in the pack deletes by name in a shared folder.
 
 ## Features
 
 | Feature | User Stories | Priority | Wave |
 |---------|-------------|----------|------|
-| Driver cleanup | As the driver, I remove a merged step's `/tmp/step{n}*` paths and extra worktrees, then run `git worktree prune`, so that a merged step leaves nothing behind. | must-have | 1 |
+| Private temp folder | As the driver, I give each step session a private temp folder at `{worktree}/.t` in the sandbox and remove the worktree after the merge, so that a merged step leaves nothing behind. | must-have | 1 |
 | Suite cleanup | As a suite, I remove my temp folders on every exit, including a stop signal, so that no `ravintio_*` entry outlives the run. | must-have | 1 |
 
 ## Waves
@@ -53,7 +53,10 @@ None.
 ## Scope Boundaries
 
 ### In Scope
-- Driver cleanup after the queue merges a step.
+- A private `.t` temp folder, the sandbox, and worktree removal in the driver.
+- A rule that the driver deletes nothing outside the repo, with a test.
+- Scratch rules in the implement skill and the testing standards.
+- A private `TMPDIR` in the test runner.
 - Exit traps in the four named suites, `0000029`, and the git-isolation helper.
 - Tests for both.
 

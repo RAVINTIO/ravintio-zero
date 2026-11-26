@@ -1,4 +1,4 @@
-# Execution Plan - Clean up step temp files after each merge
+# Execution Plan - Give each step session a private temp folder
 
 > Every requirement traces to a user story in the brief.
 
@@ -17,16 +17,18 @@
 
 | File | Requirement |
 |------|------------|
-| [req-001-driver-removes-merged-step-temp.md](requirements/req-001-driver-removes-merged-step-temp.md) | The driver removes a merged step's temp paths and extra worktrees. |
-| [req-002-suites-remove-temp-folders-on-exit.md](requirements/req-002-suites-remove-temp-folders-on-exit.md) | Five suites and the git-isolation helper remove temp folders on every exit. |
+| [req-001-private-step-temp-folder.md](requirements/req-001-private-step-temp-folder.md) | Each step session gets a private temp folder, the sandbox, and a worktree removal after the merge. |
+| [req-002-suites-remove-temp-folders-on-exit.md](requirements/req-002-suites-remove-temp-folders-on-exit.md) | Five suites, the git-isolation helper, and the runner remove temp folders on every exit. |
+| [req-003-nothing-deleted-outside-repo.md](requirements/req-003-nothing-deleted-outside-repo.md) | The driver deletes nothing outside the repo. |
+| [req-004-scratch-under-tmpdir.md](requirements/req-004-scratch-under-tmpdir.md) | Scratch goes under `$TMPDIR`. |
 
 ## Non-Functional Requirements
 
 | ID | Category | Requirement | Target | Measurement |
 |----|----------|------------|--------|-------------|
-| NFR-001 | Safety | Cleanup never matches another step | `step2` keeps `step20` and `step1` | test for REQ-001 AC-2 |
-| NFR-002 | Reliability | A failed removal never stops the run | 0 stops on a failed removal | test for REQ-001 AC-3 |
-| NFR-003 | Security | The removal never follows a symlink | 0 targets outside the temp folder removed | test for REQ-001 |
+| NFR-001 | Safety | The driver deletes nothing outside the repo | 0 paths removed outside the repo | test for REQ-003 AC-1 |
+| NFR-002 | Reliability | A failed worktree removal never stops the run | 0 stops on a failed removal | `Kept:` line in `removeMergedWorktree` |
+| NFR-003 | Security | The session writes only to three folders | sandbox `allowWrite` holds 3 paths | test for REQ-001 AC-2 |
 
 ## API Summary
 
@@ -40,9 +42,10 @@ No data model change.
 
 ```mermaid
 flowchart LR
-    Q[merge queue] -->|merged| D[driver cleanStepTemp]
+    D[driver] -->|TMPDIR, sandbox| S[step session]
+    S -->|scratch| T[worktree .t]
+    Q[merge queue] -->|merged| D
     D -->|git worktree remove, prune| G[git]
-    D -->|rmSync| T[temp folder]
 ```
 
 ## Test impact
@@ -68,7 +71,7 @@ Base: `origin/initiative/0000544-priority-backlog`.
 | File | Commit read | Unit |
 |------|-------------|------|
 | src/ravintio-zero/scripts/initiative-run.mjs | a256a338 | U-001 |
-| src/ravintio-zero/tests/test-0000583-req-001-driver-removes-step-temp.sh | new | U-001 |
+| src/ravintio-zero/tests/test-0000583-req-001-private-step-temp.sh | new | U-001 |
 | src/ravintio-zero/tests/test-0000169-req-004-setup-attribution-setting.sh | c269f565 | U-002 |
 | src/ravintio-zero/tests/test-0000245-req-002-targeted-overrides.sh | c269f565 | U-002 |
 | src/ravintio-zero/tests/test-0000151-req-005-setup-write-error-line.sh | c269f565 | U-002 |
@@ -84,9 +87,9 @@ Base: `origin/initiative/0000544-priority-backlog`.
 
 | Unit | Depends on | Writes | Batch | Sequential reason | Shared resources |
 |------|-----------|--------|-------|-------------------|------------------|
-| U-001 | none | src/ravintio-zero/scripts/initiative-run.mjs, tests/test-0000583-req-001 | 1 | none | none |
-| U-002 | none | five suites, helpers/git-isolation.sh, tests/test-0000583-req-002 | 1 | none | none |
-| U-003 | U-001, U-002 | roadmap-standards.md, component.yml, docs/architecture-overview.md | 2 | The docs name what U-001 and U-002 built | none |
+| U-001 | none | src/ravintio-zero/scripts/initiative-run.mjs, tests/test-0000583-req-001, req-003, helpers/scheduler-fixture.sh, .gitignore | 1 | none | none |
+| U-002 | none | run-tests.sh, five suites, helpers/git-isolation.sh, tests/test-0000583-req-002 | 1 | none | none |
+| U-003 | U-001, U-002 | roadmap-standards.md, testing-standards.md, ravintio-implement SKILL.md, component.yml, ADR-0352, docs/architecture-overview.md, tests/test-0000583-req-004 | 2 | The docs name what U-001 and U-002 built | none |
 
 Each unit edits `src/ravintio-zero/` and mirrors the change to `ravintio-zero/`.
 
@@ -94,7 +97,7 @@ Each unit edits `src/ravintio-zero/` and mirrors the change to `ravintio-zero/`.
 
 | ID | Assumption | Impact if Wrong |
 |----|-----------|----------------|
-| A-001 | Step temp paths start with `step{n}` in the temp folder | The driver leaves a differently named path behind |
+| A-001 | The sandbox keys `enabled` and `filesystem.allowWrite` work in the installed Claude Code | The session runs without the sandbox |
 
 ## Open Questions
 
