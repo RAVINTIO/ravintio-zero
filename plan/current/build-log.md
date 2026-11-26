@@ -85,3 +85,6 @@ Run mode: autonomous (2026-11-26T10:01:40Z, initiative step 37)
 - GREEN: U-002 (2026-11-26T10:08:17Z)
 - Done: U-002 (content, inline, none, 2026-11-26T10:08:17Z)
 - Tests run: REQ-005: test-0000581-req-005-delivery-text.sh, test-0000205-req-004, test-0000314-req-002, test-0000313-req-002, test-0000318-req-001-002, test-0000319-req-003, test-0000353-req-005-006, test-0000043-req-008 (2026-11-26T10:08:17Z)
+- RED: U-003 (2026-11-26T10:08:48Z), the docs unit has no executable check, per 0000410
+- GREEN: U-003 (2026-11-26T10:08:48Z), the prose check passed at commit, per 0000410
+- Done: U-003 (content, inline, none, 2026-11-26T10:08:48Z)
