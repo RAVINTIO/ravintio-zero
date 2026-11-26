@@ -2,7 +2,7 @@
 
 **Feature:** Convert remaining suites to rule anchors
 **Version:** set by the merge queue at merge
-**PR:** pending
+**PR:** 253
 
 ## What changed
 
