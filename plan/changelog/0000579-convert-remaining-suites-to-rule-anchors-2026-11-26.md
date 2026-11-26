@@ -20,7 +20,7 @@ A reword of a rule broke every suite that pinned its sentence. Step 4 anchored t
 
 ## Validation results
 
-See the build report.
+The full suite passes apart from the three inherited suites `test-0000037-req-004-remove-old-folder.sh`, `test-0000318-req-004-merge-guard-pinned.sh`, and `test-0000450-req-004-report-format.sh`. This step folds in backlog entry 0000401.
 
 ## Skipped phases
 

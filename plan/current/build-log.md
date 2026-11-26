@@ -121,9 +121,9 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Tests run: REQ-002: test-0000579-req-001-anchor-conversion-guard.sh, 9 passed (2026-11-26T08:45:49Z)
 - Full suite: clean-clone run started at 2026-11-26T08:45:25Z, output in /tmp/ravintio-s35-private/full.out
 - Tests run: full suite: 3 inherited failures plus 3 new (0000017-req-001, 0000036-req-001-003, and the PowerShell cap suite 0000151-req-011), all fixed after the run (2026-11-26T09:10:08Z)
-- Rework: 0000016 reverted to its original text because the ratchet compares its assertion count with the regression copy (2026-11-26T09:10:08Z)
-- Rework: boot templates carry no anchors because setup copies them into installs (2026-11-26T09:10:08Z)
-- Rework: byte caps on the orchestrator SKILL.md count its text without anchors (2026-11-26T09:10:08Z)
+- Rework: REQ-001: 0000016 reverted to its original text because the ratchet compares its assertion count with the regression copy (2026-11-26T09:10:08Z)
+- Rework: REQ-001: boot templates carry no anchors because setup copies them into installs (2026-11-26T09:10:08Z)
+- Rework: REQ-001: byte caps on the orchestrator SKILL.md count its text without anchors (2026-11-26T09:10:08Z)
 - Complete: P2 (2026-11-26T09:10:08Z)
 
 ### P3: Validate and Accept
@@ -132,7 +132,7 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 |-------|-------|
 | Start | `2026-11-26T09:10:16Z` |
 | End | `2026-11-26T09:34:05Z` |
-| Wall clock | `31` |
+| Wall clock | `24` |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | `0` |
@@ -143,4 +143,35 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Tests run: full suite started at 2026-11-26T09:10:16Z in a clean clone of HEAD
 - Tests run: full suite: 489 passed, 3 failed (inherited) (2026-11-26T09:34:05Z)
 - Skipped: docs edit pass subagent (prose-check.mjs check exits 0 on the 3 changed docs)
+- Postmortem: plan/postmortems/2026-11-26-anchor-edits-broke-cap-and-copy-consumers.md REQ-001 (2026-11-26T09:35:08Z)
 - Complete: P3 (2026-11-26T09:34:05Z)
+
+### P4: Ship
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-26T09:34:25Z` |
+| End | `` |
+| Wall clock | `` |
+| Model tier | primary |
+| Skills loaded | ravintio-ship |
+| Agents spawned | `0` |
+| MCP calls | `0` |
+| Parallel task batches | `0` |
+| Notes | none |
+
+---
+
+## Summary (filled at ship, P4)
+
+| Metric | Value |
+|--------|-------|
+| Total phases completed | `5` |
+| Total wall clock | `` |
+| Total agents spawned | `8` |
+| Total MCP calls | `0` |
+| Phases using parallelism | `1` |
+| Primary tier agent calls | `8` |
+| Cheaper tier agent calls | `0` |
+| Self-corrections | `7` |
+| Phases skipped | `none` |
