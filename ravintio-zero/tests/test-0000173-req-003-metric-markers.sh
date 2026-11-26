@@ -23,22 +23,17 @@ check() {
 holds() { grep -qF -- "$1" "$2"; }
 
 # AC-1: implement and validate write Rework and name the standard
-ok=1
-if holds 'Rework: REQ-{nnn}:' "$IMPL" && holds "$STD_NAME" "$IMPL" \
-  && holds 'Rework: REQ-{nnn}:' "$VAL" && holds "$STD_NAME" "$VAL"; then ok=0; fi
-check "req-003 AC-1: implement and validate hold the Rework marker and name the standard" "$ok"
+assert_rule orc-impl-rework 'Rework: REQ-{nnn}:' "$STD_NAME"
+assert_rule orc-p3-self-correct 'Rework: REQ-{nnn}:' "$STD_NAME"
 
 # AC-2: reference holds Requirement change, orchestrator holds Gate revised
-ok=1
-if holds 'Requirement change: {cosmetic | additive | contradictory}:' "$MID" \
-  && holds "$STD_NAME" "$MID" \
-  && holds 'Gate revised: P{N}' "$ORCH"; then ok=0; fi
-check "req-003 AC-2: mid-pipeline reference and orchestrator hold their markers" "$ok"
+assert_rule orc-mid-requirement-change 'Requirement change: {cosmetic | additive | contradictory}:' "$STD_NAME"
+assert_rule orc-gate-revised 'Gate revised: P{N}'
 
 # AC-3: the standard lists every marker
-ok=1
-if [ -f "$STD" ] && holds 'Rework:' "$STD" && holds 'Blocked:' "$STD" \
-  && holds 'Requirement change:' "$STD" && holds 'Gate revised:' "$STD"; then ok=0; fi
-check "req-003 AC-3: standard lists Rework, Blocked, Requirement change, Gate revised" "$ok"
+assert_rule orc-gov-markers 'Rework:'
+assert_rule oa-gov-marker-blocked 'Blocked:'
+assert_rule oa-gov-marker-req-change 'Requirement change:'
+assert_rule oa-gov-marker-gate-revised 'Gate revised:'
 
 print_summary

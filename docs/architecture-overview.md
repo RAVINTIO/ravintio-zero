@@ -1,6 +1,6 @@
 # Architecture Overview
 
-Last updated: 0000583-step-temp-cleanup-after-merge
+Last updated: 0000579-convert-remaining-suites-to-rule-anchors
 
 ## What this repo is
 
@@ -298,6 +298,8 @@ A wording test greps every tracked file outside history for the retired word tha
 Set `RAVINTIO_TEST_QUIET=1` to hide PASS lines and banners. The runner then keeps every FAIL line with its detail, the failing suite name, the summary, and the exit codes. A quiet full run prints about 3 KB. Skills that run the full suite set it.
 
 `helpers/assert.sh` fails a Bash suite that calls an undefined `assert_*` function, and it offers `assert_not_contains`. It also offers `repo_root`, `pack_tree_src`, and `pack_tree_installed`, which return the repo top and the two pack trees from either tree (0000572). The installed-copies check in `test-0000151-req-014` skips while an initiative is active and `.claude/skills/.ravintio-manifest` is older than the newest pack skill.
+
+A suite that checks what a skill, standard, or template says reads the rule by its anchor. It calls `assert_rule` or `rule_text` with key terms, so a reword that keeps the anchor and the terms breaks no suite. `helpers/anchor-conversions.txt` lists each suite the pack has converted and each suite that checks structure with its reason. `test-0000579-req-001-anchor-conversion-guard.sh` reads that list and fails a converted suite that calls no helper. It also copies the pack and adds a word before each sentence end in every anchored rule. It then reruns a sample of the converted suites from the copy (0000579). The boot templates carry no anchors, because setup copies them into installed files. The byte caps on the orchestrator `SKILL.md` count its text without anchors.
 
 The PowerShell suites run `setup.ps1` in temporary projects. Both runners read `RAVINTIO_SHARD=i/n` and run only shard i of n (0000409). In CI, the `windows-powershell-shard` job runs the `.ps1` suites under Windows PowerShell 5.1 in 4 parallel shards, and no shard cancels another. Helpers print per-case timing. `run-tests.ps1` also prints `[timing] setup.ps1 total: {ms} ms over {n} cases` before its summary. Suites append each setup time to the file that `RAVINTIO_TIMING_FILE` names, and the runner deletes it at the end. The `bash-suites-shard` job runs `run-tests.sh` on `ubuntu-latest` in 4 shards with `RAVINTIO_REQUIRE_PWSH=1`. So it runs every Bash suite, runs the `.ps1` suites under `pwsh`, and fails if `pwsh` is missing. The `bash-suites` and `windows-powershell (powershell)` summary jobs carry the required check names and pass only when every shard passed.
 

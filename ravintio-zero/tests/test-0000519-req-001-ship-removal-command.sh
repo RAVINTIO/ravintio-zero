@@ -9,12 +9,10 @@ source "$SCRIPT_DIR/helpers/assert.sh"
 
 ZERO_DIR="$SCRIPT_DIR/.."
 SHIP="$ZERO_DIR/skills/ravintio-ship/SKILL.md"
-STEP4=$(sed -n '/^### Step 4: Archive/,/^### Step 5/p' "$SHIP")
 
 echo ""
 echo "=== req-001 AC-1: Step 4 names the git command ==="
-assert_contains 'git rm -r -q plan/current' "$STEP4" "req-001 AC-1: Step 4 runs git rm -r -q plan/current"
-assert_contains 'Copy all of `plan/current/` to the archive path, then' "$STEP4" "req-001 AC-1: the copy comes first"
+assert_rule shp-archive-copy 'git rm -r -q plan/current' 'Copy all of `plan/current/` to the archive path, then'
 
 echo ""
 echo "=== req-001 AC-2: no plain rm -r of plan/current ==="

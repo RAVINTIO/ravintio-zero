@@ -12,14 +12,10 @@ ZERO_DIR="$SCRIPT_DIR/.."
 STD="$ZERO_DIR/standards/roadmap-standards.md"
 SKILL="$ZERO_DIR/skills/ravintio-initiative/SKILL.md"
 
-STD_TEXT="$(cat "$STD")"
-SKILL_TEXT="$(cat "$SKILL")"
-CPR="$(awk '$0 == "## Coordinator PRs" {on=1; next} on && /^## / {exit} on {print}' "$STD")"
-CARVE="$(awk '$0 == "## Merge carve-out" {on=1; next} on && /^## / {exit} on {print}' "$STD")"
-ADVANCE="$(awk '$0 == "### I-D Advance" {on=1; next} on && /^### / {exit} on {print}' "$STD")"
+ADVANCE="$(orch_section "### I-D Advance")"
 
 echo "=== req-001 AC-1: the rule is stated ==="
-assert_contains 'Nothing commits directly on `initiative/*`' "$STD_TEXT" "req-001 AC-1: standards state no direct commits"
+assert_rule rm-coord-no-direct 'Nothing commits directly on `initiative/*`'
 
 echo ""
 echo "=== req-001 AC-2: the old wording is gone ==="
@@ -36,24 +32,19 @@ assert_equals "ok" "$R" "req-001: initiative skill stays under 120 lines"
 
 echo ""
 echo "=== req-002 AC-1: the section exists ==="
-assert_contains '{id}-{slug}: {summary} (#{n})' "$CPR" "req-002 AC-1: names the title form"
-assert_contains 'local suite' "$CPR" "req-002 AC-1: names the local suite"
-assert_contains 'green' "$CPR" "req-002 AC-1: names green CI"
-assert_contains 'gh pr merge --squash' "$CPR" "req-002 AC-1: names the squash"
-assert_contains 'driver has stopped' "$CPR" "req-002 AC-1: raised only while the driver is stopped"
-assert_contains 'plan/.initiative-queue/' "$CPR" "req-002 AC-1: queue while a step runs"
+assert_rule rm-coord-title '{id}-{slug}: {summary} (#{n})'
+assert_rule rm-coord-local-suite 'local suite'
+assert_rule rm-coord-ci 'green' 'gh pr merge --squash'
+assert_rule rm-coord-timing 'driver has stopped' 'plan/.initiative-queue/'
 
 echo ""
 echo "=== req-002 AC-2: the carve-out names coordinator PRs ==="
-assert_contains 'coordinator PR' "$CARVE" "req-002 AC-2: carve-out names coordinator PRs"
-assert_contains 'own feature branch' "$CARVE" "req-002 AC-2: carve-out keeps own feature branch"
-assert_contains 'clean P3' "$CARVE" "req-002 AC-2: carve-out keeps clean P3"
-assert_contains 'green CI' "$CARVE" "req-002 AC-2: carve-out keeps green CI"
+assert_rule carveout-clean-p3 'coordinator PR' 'clean P3' 'green CI'
+assert_rule carveout-own-branch 'own feature branch'
 
 echo ""
 echo "=== req-002 AC-3: the skill points to the section ==="
-assert_contains 'Coordinator PRs' "$SKILL_TEXT" "req-002 AC-3: skill names the section"
-assert_contains 'driver has stopped' "$SKILL_TEXT" "req-002 AC-3: skill names the stopped driver"
+assert_rule orc-init-squash-delete 'Coordinator PRs' 'driver has stopped'
 
 echo ""
 echo "=== req-003 AC-2: PR number commit comes before the squash ==="
@@ -66,6 +57,6 @@ else
   R="create=$POS_CREATE num=$POS_NUM squash=$POS_SQUASH"
 fi
 assert_equals "ordered" "$R" "req-003 AC-2: PR field set after create and before squash"
-assert_contains 'Never commit after the squash' "$ADVANCE" "req-003 AC-2: no commit after the squash"
+assert_rule rm-advance-pr-number 'Never commit after the squash'
 
 print_summary

@@ -11,9 +11,7 @@ STD="$SCRIPT_DIR/../standards/agent-dispatch-standards.md"
 
 echo ""
 echo "=== req-003 AC-1: the rule and its reason ==="
-BATCH=$(awk '/^## Fast batches/{f=1;next} /^## /{f=0} f' "$STD")
-assert_contains "Never run \`git stash\`" "$BATCH" "req-003 AC-1: the batch rules forbid git stash"
-assert_contains "uncommitted work of every other subagent" "$BATCH" "req-003 AC-1: the rule gives the reason"
+assert_rule ob-batch-no-stash "Never run \`git stash\`" "uncommitted work of every other subagent"
 
 echo ""
 echo "=== req-003 AC-2: each skeleton prompt forbids git stash ==="
@@ -25,7 +23,6 @@ assert_equals "2" "$FORBID" "req-003 AC-2: both prompts forbid git stash"
 
 echo ""
 echo "=== req-003 AC-3: the parent resume stash stays ==="
-RESUME=$(awk '/^### Resuming an interrupted unit/{f=1;next} /^## |^### /{f=0} f' "$STD")
-assert_contains "git stash push --include-untracked" "$RESUME" "req-003 AC-3: the resume section still stashes"
+assert_rule ob-resume-stash "stash"
 
 print_summary

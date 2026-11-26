@@ -11,7 +11,6 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
 DRIVER="$SCRIPT_DIR/../scripts/initiative-run.mjs"
-STANDARDS="$SCRIPT_DIR/../standards/roadmap-standards.md"
 ADR="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)/docs/adr/0326-driver-sweeps-merged-worktrees.md"
 WORK="$(mktemp -d)"
 LIVE_PID=""
@@ -114,8 +113,7 @@ echo ""
 echo "=== REQ-004 AC-1, AC-2: the driver header, the standards, and the ADR state the sweep ==="
 assert_contains "merged step" "$(sed -n 1,170p "$DRIVER")" "REQ-004 AC-1: the driver header states the sweep"
 assert_contains "I-C Run: Kept:" "$(sed -n 1,170p "$DRIVER")" "REQ-004 AC-1: the driver header names the Kept line"
-assert_contains "sweep" "$(cat "$STANDARDS")" "REQ-004 AC-2: roadmap-standards.md states the sweep"
-assert_contains "I-C Run: Kept:" "$(cat "$STANDARDS")" "REQ-004 AC-2: roadmap-standards.md names the Kept line"
+assert_rule driver-sweep-merged-worktrees "sweep" "I-C Run: Kept:"
 assert_contains "I-C Run: Kept:" "$(cat "$ADR")" "REQ-004: the ADR names the Kept line"
 
 print_summary

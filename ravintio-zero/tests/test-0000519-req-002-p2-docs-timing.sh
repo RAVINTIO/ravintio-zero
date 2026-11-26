@@ -9,15 +9,10 @@ source "$SCRIPT_DIR/helpers/assert.sh"
 
 ZERO_DIR="$SCRIPT_DIR/.."
 IMPL="$ZERO_DIR/skills/ravintio-implement/SKILL.md"
-RULE=$(grep -A1 'rule: implement-full-suite-once' "$IMPL" | tail -1)
 
 echo ""
 echo "=== req-002 AC-1: the rule orders docs and suite ==="
-assert_contains "one full suite run" "$RULE" "req-002 AC-1: the rule keeps its opening"
-assert_contains "before P2 completes" "$RULE" "req-002 AC-1: the rule keeps its deadline"
-assert_contains "background" "$RULE" "req-002 AC-1: the rule keeps the background run"
-assert_contains "write docs before" "$RULE" "req-002 AC-1: docs come before the suite"
-assert_contains "change no file until" "$RULE" "req-002 AC-1: no file changes during the run"
+assert_rule implement-full-suite-once "one full suite run" "before P2 completes" "background" "write docs before" "change no file until"
 
 echo ""
 echo "=== req-002 AC-2: no text says to write docs while the suite runs ==="

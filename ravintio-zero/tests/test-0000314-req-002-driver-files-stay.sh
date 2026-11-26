@@ -8,9 +8,9 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
 ZERO_DIR="$SCRIPT_DIR/.."
-ORCH="$(cat "$ZERO_DIR/skills/ravintio-orchestrator/SKILL.md")"
-INIT="$(cat "$ZERO_DIR/skills/ravintio-initiative/SKILL.md")"
-STD="$(awk '$0 == "#### Sessions and ack files" {on=1; next} on && /^#{1,4} / {exit} on {print}' "$ZERO_DIR/standards/roadmap-standards.md")"
+ORCH="$(rule_text rm-orch-driver-files)"
+INIT="$(rule_text rm-ini-driver-files)"
+STD="$(rule_text rm-driver-files-stay)"
 
 echo "=== req-002 AC-1: both skills name the driver files ==="
 for f in 'plan/.initiative-logs/' 'plan/.initiative-runner.lock' 'plan/.initiative-queue/'; do

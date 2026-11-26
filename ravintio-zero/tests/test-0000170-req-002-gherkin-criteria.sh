@@ -18,23 +18,10 @@ check() {
 }
 
 # AC-1: template criteria use AC-{n} with Given, When, Then bullets
-sec="$(awk '/^## Acceptance Criteria/{f=1;next} /^## /{f=0} f' "$TPL")"
-ok=1
-if printf '%s\n' "$sec" | grep -qF -- '- [ ] AC-{n}:' \
-  && printf '%s\n' "$sec" | grep -q '^  - Given ' \
-  && printf '%s\n' "$sec" | grep -q '^  - When ' \
-  && printf '%s\n' "$sec" | grep -q '^  - Then '; then ok=0; fi
-check "req-002 AC-1: template shows AC-{n} with Given, When, Then bullets" "$ok"
+assert_rule piv-template-ac-lines '- [ ] AC-{n}:' '  - Given ' '  - When ' '  - Then '
 
 # AC-2: skill requirements rules state the format and the limit
-rules="$(awk '/^## Requirements rules/{f=1;next} /^## /{f=0} f' "$SKILL")"
-ok=1
-if printf '%s\n' "$rules" | grep -qF 'AC-{n}' \
-  && printf '%s\n' "$rules" | grep -qF 'And' \
-  && printf '%s\n' "$rules" | grep -qF 'But' \
-  && printf '%s\n' "$rules" | grep -qi 'checkbox lines' \
-  && printf '%s\n' "$rules" | grep -qi 'not steps'; then ok=0; fi
-check "req-002 AC-2: skill states AC-{n}, And/But, and the checkbox-line limit" "$ok"
+assert_rule piv-plan-ac-format 'AC-{n}' 'And' 'But' 'checkbox lines' 'not steps'
 
 # AC-3: required headings stay and the 0000010 structure test passes
 ok=1

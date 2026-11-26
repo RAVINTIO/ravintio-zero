@@ -30,7 +30,7 @@ assert_rule light-switch "full track" "Track switched: light to full ({reason})"
 
 echo "=== Pack Index ==="
 assert_contains "references/orchestrator-light-discovery.md" "$(cat "$SKILL")" "Pack Index points to the reference"
-SIZE="$(wc -c < "$SKILL" | tr -d ' ')"
+SIZE="$(strip_rule_anchors < "$SKILL" | wc -c | tr -d ' ')"
 if [ "$SIZE" -le 9000 ]; then _pass_line "SKILL.md is $SIZE bytes"; ((PASS++)) || true
 else _fail_line "SKILL.md is $SIZE bytes, over 9000"; ((FAIL++)) || true; fi
 assert_contains "grouping rule" "$(cat "$SKILL")" "SKILL.md names the records reference"

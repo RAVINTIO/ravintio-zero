@@ -29,9 +29,9 @@ fix(auth-service): correct token expiry calculation
 
 ### 3. No AI attribution
 
-Commit messages and PR descriptions MUST NOT attribute authorship or co-development to any AI tool or LLM. Prohibited:
+<!-- rule: shp-commit-no-attribution --> Commit messages and PR descriptions MUST NOT attribute authorship or co-development to any AI tool or LLM. Prohibited:
 
-- `Co-Authored-By: Claude <...>`, or any `Co-Authored-By:` line that names an AI tool
+- <!-- rule: shp-commit-attribution-lines --> `Co-Authored-By: Claude <...>`, or any `Co-Authored-By:` line that names an AI tool
 - `Generated with [Claude Code]`, with or without a robot emoji
 - A `Claude-Session:` line or a claude.ai/code session link
 - `co-developed with Claude / Copilot / Cursor / Windsurf / Cline`
@@ -53,8 +53,8 @@ Messages are objective and scope-focused. Prohibited:
 
 A squash commit on an initiative branch uses one of two forms:
 
-- A step commit: `{feature-id}: {Feature title} (#{n})`, with the 7-digit feature id and the `Title` column of the step.
-- The one chore commit: `{initiative-id}: Initiative admin (#{n})`.
+- <!-- rule: rm-commit-step-form --> A step commit: `{feature-id}: {Feature title} (#{n})`, with the 7-digit feature id and the `Title` column of the step.
+- <!-- rule: rm-commit-chore-form --> The one chore commit: `{initiative-id}: Initiative admin (#{n})`.
 
 The other rules in this file apply to every commit that is not an initiative squash.
 

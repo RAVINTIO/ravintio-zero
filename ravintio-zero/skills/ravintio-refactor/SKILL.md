@@ -27,7 +27,7 @@ model: haiku
 
 ## What You Produce
 
-Improved implementation code. No new files unless splitting an existing file. In improvement mode, ravintio-implement passes one reviewer finding. Apply only the change the finding names, with the Hard Limits in force, run the affected tests, and report the change in one line. If any test fails, this mode reverts the change and reports `suite fail, reverted`.
+<!-- rule: piv-refactor-improvement-mode --> Improved implementation code. No new files unless splitting an existing file. In improvement mode, ravintio-implement passes one reviewer finding. Apply only the change the finding names, with the Hard Limits in force, run the affected tests, and report the change in one line. If any test fails, this mode reverts the change and reports `suite fail, reverted`.
 
 Quality improvements in scope: standard refactoring moves (extract repeated logic, split large functions, remove unnecessary complexity, correct inconsistent formatting). Renaming identifiers to match the domain glossary is also in scope.
 

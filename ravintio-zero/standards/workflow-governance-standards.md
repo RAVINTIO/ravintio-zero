@@ -20,19 +20,19 @@ Read this file when you write a marker line or read a workflow governance sectio
 
 ## Marker lines
 
-- `Rework: REQ-{nnn}: {reason} ({ISO-8601 timestamp})`
-- `Blocked: {exception} ({ISO-8601 timestamp})`
-- `Requirement change: {cosmetic | additive | contradictory}: {what changed} ({ISO-8601 timestamp})`
-- `Gate revised: P{N} ({ISO-8601 timestamp}, {what changed})`
-- `CI duration: {seconds}s (run {run-id}, {ISO-8601 timestamp})`
-- `Improve: REQ-{nnn}: cycle {n}: {finding}: {change}: suite {pass | fail, reverted} ({ISO-8601 timestamp})`
-- `Improve: REQ-{nnn}: cycle {n}: no change worth making ({ISO-8601 timestamp})`
+- <!-- rule: orc-gov-markers --> `Rework: REQ-{nnn}: {reason} ({ISO-8601 timestamp})`
+- <!-- rule: oa-gov-marker-blocked --> `Blocked: {exception} ({ISO-8601 timestamp})`
+- <!-- rule: oa-gov-marker-req-change --> `Requirement change: {cosmetic | additive | contradictory}: {what changed} ({ISO-8601 timestamp})`
+- <!-- rule: oa-gov-marker-gate-revised --> `Gate revised: P{N} ({ISO-8601 timestamp}, {what changed})`
+- <!-- rule: shp-gov-ci-marker --> `CI duration: {seconds}s (run {run-id}, {ISO-8601 timestamp})`
+- <!-- rule: oa-improve-marker-change --> `Improve: REQ-{nnn}: cycle {n}: {finding}: {change}: suite {pass | fail, reverted} ({ISO-8601 timestamp})`
+- <!-- rule: oa-improve-marker-early --> `Improve: REQ-{nnn}: cycle {n}: no change worth making ({ISO-8601 timestamp})`
 - `RED: {unit} ({ISO-8601 timestamp})`
 - `GREEN: {unit} ({ISO-8601 timestamp})`
 
 The implement skill writes the `RED:` and `GREEN:` markers for an inline unit. It runs `ravintio-zero/scripts/build-log-mark.mjs`, which reads the clock and appends the line. `workflow-metrics.mjs` does not count them. `build-log-check.mjs` checks that each `GREEN:` follows a `RED:` for the same unit.
 
-The implement skill writes the `Improve:` markers, one per improvement cycle. `workflow-metrics.mjs` does not count them, and no threshold applies. They record the gain for a human to read.
+<!-- rule: oa-improve-script-ignores --> The implement skill writes the `Improve:` markers, one per improvement cycle. `workflow-metrics.mjs` does not count them, and no threshold applies. They record the gain for a human to read.
 
 Write each marker line to `build-log.md`. A loop may also write markers to its `loop-state-*.md` file.
 
@@ -52,8 +52,9 @@ For rework, the script counts markers per requirement id. The report shows the h
 
 ## Thresholds
 
-A metric breaches when its value is greater than its threshold. The script reads the table by the `Key` column. Each threshold must be a whole number.
+<!-- rule: oa-gov-breach-rule --> A metric breaches when its value is greater than its threshold. The script reads the table by the `Key` column. Each threshold must be a whole number.
 
+<!-- rule: oa-gov-thresholds-table -->
 | Metric | Key | Threshold |
 |--------|-----|-----------|
 | Rework loops per requirement (highest) | rework-per-requirement | 2 |
@@ -64,10 +65,10 @@ A metric breaches when its value is greater than its threshold. The script reads
 
 ## Report-only gate
 
-The gate reports a breach and never blocks. The script exits 0 whenever it reads the build log and this table. It exits 1 if the build log is missing or a threshold key is missing or invalid. It exits 2 on a usage error.
+<!-- rule: oa-gov-never-blocks --> The gate reports a breach and never blocks. The script exits 0 whenever it reads the build log and this table. It exits 1 if the build log is missing or a threshold key is missing or invalid. It exits 2 on a usage error.
 
 ## How ship uses the section
 
 1. Step 5 runs the script on the run folder and adds the output to the build report.
 2. Step 9 adds the same section to the PR body.
-3. If the script fails, write `Workflow governance: not measured ({reason})` in both places. A script failure does not stop ship.
+3. <!-- rule: oa-gov-not-measured --> If the script fails, write `Workflow governance: not measured ({reason})` in both places. A script failure does not stop ship.

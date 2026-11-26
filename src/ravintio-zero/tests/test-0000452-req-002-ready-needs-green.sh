@@ -8,18 +8,12 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
 ZERO_DIR="$SCRIPT_DIR/.."
-SHIP="$ZERO_DIR/skills/ravintio-ship/SKILL.md"
-STD="$ZERO_DIR/standards/roadmap-standards.md"
-
-adv="$(awk '/^### I-D Advance/ {on=1; next} on && /^### / {exit} on {print}' "$STD")"
-init="$(awk '/^## Initiative steps/ {on=1; next} on && /^## / {exit} on {print}' "$SHIP")"
+adv="$(orch_section "### I-D Advance")"
 
 echo ""
 echo "=== req-002 AC-1: no ready on a pending or failed check ==="
-assert_contains 'exits 0' "$adv" "req-002 AC-1: ready needs gh pr checks to exit 0"
-assert_contains 'pending' "$adv" "req-002 AC-1: a pending check is named"
-assert_contains 'Never write `ready`' "$adv" "req-002 AC-1: the text forbids ready on a pending or failed check"
-assert_contains 'I-D Advance: Blocked: CI failed on PR #{n}' "$adv" "req-002 AC-1: a failed check prints the Blocked line"
+assert_rule rm-advance-ready 'exits 0' 'pending' 'Never write `ready`'
+assert_rule rm-advance-ci-failed 'I-D Advance: Blocked: CI failed on PR #{n}'
 
 echo ""
 echo "=== req-002 AC-2: a second wait follows the closing push ==="
@@ -32,6 +26,6 @@ assert_equals "yes" "$([ -n "$push" ] && [ -n "$w2" ] && [ -n "$rdy" ] && [ "$pu
 
 echo ""
 echo "=== req-002 AC-3: the ship skill states the rule ==="
-assert_contains 'only after every check' "$init" "req-002 AC-3: ship writes ready only after every check passed"
+assert_rule rm-ship-initiative-ready 'only after every check'
 
 print_summary

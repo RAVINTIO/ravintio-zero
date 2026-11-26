@@ -37,24 +37,20 @@ assert_equals "no" "$(has_re '\bP5\b' "$BUILD_LOG")" \
 echo ""
 echo "=== req-004 (a): orchestrator Hard Limit 10 ==="
 
-HL10="$(grep -E '^10\. ' "$ORCH")"
-assert_contains '`### P<n>: {Phase Name}` with n from 0 to 4' "$HL10" \
-  "req-004 (a): Hard Limit 10 uses the heading form with n from 0 to 4"
-assert_contains "P0 to P4" "$HL10" \
-  "req-004 (a): Hard Limit 10 names P0 to P4"
-assert_equals "yes" "$(lacks "hook parses" "$HL10")" \
+assert_rule orc-hard-limit-phases '`### P<n>: {Phase Name}` with n from 0 to 4' "P0 to P4"
+assert_equals "yes" "$(lacks "hook parses" "$(rule_text orc-hard-limit-phases)")" \
   "req-004 (a): Hard Limit 10 makes no claim that a hook parses the heading"
 
 echo ""
 echo "=== req-004 (a): orchestrator phase table and pipeline line ==="
 
-assert_equals "yes" "$(has '| P0 | Discovery |' "$ORCH")" "req-004 (a): table row P0 Discovery"
-assert_equals "yes" "$(has '| P1 | Plan |' "$ORCH")" "req-004 (a): table row P1 Plan"
-assert_equals "yes" "$(has '| P2 | Implement |' "$ORCH")" "req-004 (a): table row P2 Implement"
-assert_equals "yes" "$(has '| P3 | Validate and Accept |' "$ORCH")" "req-004 (a): table row P3 Validate and Accept"
-assert_equals "yes" "$(has '| P4 | Ship |' "$ORCH")" "req-004 (a): table row P4 Ship"
-assert_equals "yes" "$(has 'P0 Discovery -> P1 Plan -> P2 Implement -> P3 Validate and Accept -> P4 Ship' "$ORCH")" \
-  "req-004 (a): pipeline line runs P0 to P4"
+PHASES="$(orch_section "## Phases and Response Prefixes")"
+assert_contains '| P0 | Discovery |' "$PHASES" "req-004 (a): table row P0 Discovery"
+assert_contains '| P1 | Plan |' "$PHASES" "req-004 (a): table row P1 Plan"
+assert_contains '| P2 | Implement |' "$PHASES" "req-004 (a): table row P2 Implement"
+assert_contains '| P3 | Validate and Accept |' "$PHASES" "req-004 (a): table row P3 Validate and Accept"
+assert_contains '| P4 | Ship |' "$PHASES" "req-004 (a): table row P4 Ship"
+assert_rule orc-pipeline-line 'P0 Discovery -> P1 Plan -> P2 Implement -> P3 Validate and Accept -> P4 Ship'
 assert_equals "yes" "$(has '## P0: Discovery' "$ORCH")" \
   "req-004 (a): orchestrator discovery heading is P0"
 assert_equals "no" "$(has_re '\bP5\b' "$ORCH")" \

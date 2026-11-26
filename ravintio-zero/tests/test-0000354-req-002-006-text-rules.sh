@@ -10,7 +10,6 @@ source "$SCRIPT_DIR/helpers/assert.sh"
 ZERO_DIR="$SCRIPT_DIR/.."
 ORCH="$(cat "$ZERO_DIR/skills/ravintio-orchestrator/SKILL.md")"
 TPL="$(cat "$ZERO_DIR/templates/initiative.template.md")"
-STD="$(cat "$ZERO_DIR/standards/roadmap-standards.md")"
 
 echo ""
 echo "=== req-002 AC-1: the orchestrator names the early-end rule ==="
@@ -37,11 +36,8 @@ assert_contains 'stop' "$FIELD" "AC-1: the field names stop"
 
 echo ""
 echo "=== req-006 AC-2: the standards state the rule ==="
-STEP4="$(printf '%s\n' "$STD" | grep -F 'Step CI fixes')"
-assert_contains 'Step CI fixes' "$STD" "AC-2: the standards name the field"
-assert_contains 'allowed' "$STEP4" "AC-2: the standards name allowed"
-assert_contains 'the default is `stop`' "$STEP4" "AC-2: the standards name the default"
-assert_contains 'resume' "$(printf '%s\n' "$STD" | grep -i 'resum')" "AC-2: the standards describe the driver resume"
-assert_contains 'waiting for the build log' "$STD" "AC-2: the standards describe the watcher wait"
+assert_rule rm-advance-watch 'Step CI fixes' 'allowed' 'the default is `stop`'
+assert_rule rm-driver-resume 'resume'
+assert_rule rm-steplog-waiting 'waiting for the build log'
 
 print_summary

@@ -9,17 +9,10 @@ source "$SCRIPT_DIR/helpers/assert.sh"
 
 ZERO_DIR="$SCRIPT_DIR/.."
 REF="$ZERO_DIR/skills/ravintio-plan/references/test-impact-causes.md"
-CAUSE=$(grep -F '**Output order:**' "$REF" 2>/dev/null || true)
 
 echo ""
-echo "=== REQ-001 AC-1: the reference file names the cause ==="
-assert_contains "**Output order:**" "$(cat "$REF" 2>/dev/null || true)" "REQ-001 AC-1: the file names the Output order cause"
-
-echo ""
-echo "=== REQ-001 AC-2: the cause names both readers ==="
-assert_contains "last line" "$CAUSE" "REQ-001 AC-2: the cause names suites that read the last line"
-assert_contains "line text" "$CAUSE" "REQ-001 AC-2: the cause names suites that match the line text"
-assert_contains "tests" "$CAUSE" "REQ-001 AC-2: the cause names the tests folder search"
+echo "=== REQ-001 AC-1 and AC-2: the cause names both readers ==="
+assert_rule piv-cause-output-order "**Output order:**" "last line" "line text" "tests"
 
 echo ""
 echo "=== REQ-001 AC-3 and NFR-001: the two trees match ==="

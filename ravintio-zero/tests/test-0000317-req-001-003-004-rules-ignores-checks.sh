@@ -13,9 +13,7 @@ ORCH="$(cat "$ZERO_DIR/skills/ravintio-orchestrator/SKILL.md")"
 SHIP="$(cat "$ZERO_DIR/skills/ravintio-ship/SKILL.md")"
 
 echo "=== req-001 AC-1: the rule is in the orchestrator skill ==="
-assert_contains "git add -f" "$ORCH" "req-001 AC-1: names git add -f"
-assert_contains "git add --force" "$ORCH" "req-001 AC-1: names git add --force"
-assert_contains "negation rule to \`.gitignore\`" "$ORCH" "req-001 AC-1: names the fix"
+assert_rule rm-orch-driver-files "git add -f" "git add --force" "negation rule to \`.gitignore\`"
 
 echo ""
 echo "=== req-003 AC-1: the tracked .gitignore lists the driver paths ==="
@@ -39,7 +37,7 @@ assert_equals "plan/.initiative-logs/step-1.log" "$FOUND" "req-004 AC-1: the che
 
 echo ""
 echo "=== req-004 AC-3: ship and both workflows carry the check ==="
-assert_contains "ls-files -ci --exclude-standard" "$SHIP" "req-004 AC-3: the ship skill runs the check"
+assert_rule orc-ship-clear-markers "ls-files -ci --exclude-standard"
 assert_contains "ls-files -ci --exclude-standard" "$(cat "$ZERO_DIR/hooks/ravintio.yml")" "req-004 AC-3: the pack workflow runs the check"
 assert_contains "ls-files -ci --exclude-standard" "$(cat "$ROOT/.github/workflows/ravintio.yml")" "req-004 AC-3: the tracked workflow runs the check"
 (cd "$ROOT" && git ls-files -ci --exclude-standard) > "$TMP/repo.txt"

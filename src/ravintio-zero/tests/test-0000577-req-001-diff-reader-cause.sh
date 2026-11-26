@@ -10,15 +10,10 @@ source "$SCRIPT_DIR/helpers/assert.sh"
 ZERO_DIR="$SCRIPT_DIR/.."
 PLAN="$ZERO_DIR/skills/ravintio-plan/SKILL.md"
 REF="$ZERO_DIR/skills/ravintio-plan/references/test-impact-causes.md"
-CAUSE=$(grep -F '**Diff reader:**' "$REF" || true)
 
 echo ""
 echo "=== REQ-001 AC-1: the cause holds the change shape wording ==="
-assert_contains "git diff" "$CAUSE" "REQ-001 AC-1: the cause names a git diff"
-assert_contains "file list" "$CAUSE" "REQ-001 AC-1: the cause names a file list"
-assert_contains "test world" "$CAUSE" "REQ-001 AC-1: the cause names a test world"
-assert_contains "add, rename, and delete" "$CAUSE" "REQ-001 AC-1: the cause names the three change shapes"
-assert_contains "lists a rename apart from an add" "$CAUSE" "REQ-001 AC-1: the cause says why a rename needs its own world"
+assert_rule piv-cause-diff-reader "git diff" "file list" "test world" "add, rename, and delete" "lists a rename apart from an add"
 
 echo ""
 echo "=== REQ-001 AC-2: the scan stays small and both earlier causes remain ==="
@@ -26,8 +21,7 @@ SECTION=$(awk '/^## Test impact scan/{f=1;next} /^## /{f=0} f' "$PLAN")
 SCAN=$(printf '%s\n' "$SECTION"; cat "$REF")
 LINES=$(printf '%s\n' "$SCAN" | grep -c . || true)
 assert_equals "yes" "$([ "$LINES" -le 21 ] && echo yes || echo no)" "REQ-001 AC-2: the scan holds $LINES lines (cap 21)"
-assert_contains "**New test file:**" "$SCAN" "REQ-001 AC-2: the scan still names New test file"
-assert_contains "**Non-suite file:**" "$SCAN" "REQ-001 AC-2: the scan still names Non-suite file"
+assert_rule piv-cause-new-test-file "**New test file:**" "**Non-suite file:**"
 
 echo ""
 echo "=== REQ-001 AC-3: the two trees match ==="

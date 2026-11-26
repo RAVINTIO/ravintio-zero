@@ -9,10 +9,7 @@ source "$SCRIPT_DIR/helpers/assert.sh"
 
 ZERO_DIR="$SCRIPT_DIR/.."
 SHIP="$ZERO_DIR/skills/ravintio-ship/SKILL.md"
-STD="$ZERO_DIR/standards/roadmap-standards.md"
-
-adv="$(awk '/^### I-D Advance/ {on=1; next} on && /^### / {exit} on {print}' "$STD")"
-init="$(awk '/^## Initiative steps/ {on=1; next} on && /^## / {exit} on {print}' "$SHIP")"
+adv="$(orch_section "### I-D Advance")"
 ln() { printf '%s\n' "$2" | grep -nF -- "$1" | head -1 | cut -d: -f1; }
 before() { [ -n "$1" ] && [ -n "$2" ] && [ "$1" -lt "$2" ] && echo yes || echo no; }
 
@@ -23,15 +20,14 @@ wait1="$(ln 'gh pr checks {n} --watch --fail-fast' "$adv")"
 arch="$(ln 'Step 4' "$adv")"
 assert_equals "yes" "$(before "$create" "$wait1")" "req-001 AC-1: I-D Advance raises the PR before the CI wait"
 assert_equals "yes" "$(before "$wait1" "$arch")" "req-001 AC-1: I-D Advance waits for CI before Step 4"
-assert_contains 'Step 4, Step 5, and Step 8 in order' "$adv" "req-001 AC-1: I-D Advance archives before it clears the sentinels"
-assert_contains 'last push before `ready`' "$adv" "req-001 AC-1: the archive is the last push before ready"
-assert_contains 'before Step 4' "$init" "req-001 AC-1: ship initiative section puts the PR and CI before Step 4"
+assert_rule rm-advance-archive 'Step 4, Step 5, and Step 8 in order' 'last push before `ready`'
+assert_rule rm-ship-initiative-order 'before Step 4'
 
 echo ""
 echo "=== req-001 AC-2: a failing check is fixable while the run is open ==="
-assert_contains 'plan/current/' "$adv" "req-001 AC-2: the run stays open during the CI wait"
-assert_contains 'Step CI fixes' "$adv" "req-001 AC-2: the chart field governs the fix"
-assert_contains 'cannot edit code' "$adv" "req-001 AC-2: a failure after the archive stops the step"
+assert_rule rm-advance-queue-items 'plan/current/'
+assert_rule rm-advance-watch 'Step CI fixes'
+assert_rule rm-advance-archive 'cannot edit code'
 
 echo ""
 echo "=== req-001 AC-3: a normal run keeps its order ==="
@@ -41,6 +37,6 @@ l9="$(grep -n '^### Step 9' "$SHIP" | cut -d: -f1)"
 assert_equals "10" "$(grep -c '^### Step ' "$SHIP")" "req-001 AC-3: ten step headings"
 assert_equals "yes" "$(before "$l4" "$l8")" "req-001 AC-3: Step 4 precedes Step 8"
 assert_equals "yes" "$(before "$l8" "$l9")" "req-001 AC-3: Step 8 precedes Step 9"
-assert_contains 'Outside an initiative' "$(cat "$SHIP")" "req-001 AC-3: the order change applies only in an initiative"
+assert_rule rm-ship-initiative-intro 'Outside an initiative'
 
 print_summary

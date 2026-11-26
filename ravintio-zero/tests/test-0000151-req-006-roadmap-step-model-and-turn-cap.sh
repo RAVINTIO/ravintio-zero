@@ -11,7 +11,6 @@ source "$SCRIPT_DIR/helpers/assert.sh"
 source "$SCRIPT_DIR/helpers/driver-args.sh"
 
 DRIVER="$SCRIPT_DIR/../scripts/initiative-run.mjs"
-STANDARDS="$SCRIPT_DIR/../standards/roadmap-standards.md"
 WORK="$(mktemp -d)"
 trap 'rm -rf "$WORK"' EXIT
 
@@ -110,7 +109,7 @@ assert_not_contains "RAVINTIO_INITIATIVE_MAX_TURNS" "$OUT" "req-006 (b): no cap 
 echo ""
 echo "=== req-006 (c): documentation ==="
 HEAD_TXT="$(sed -n '1,60p' "$DRIVER")"
-for f in "$HEAD_TXT" "$(cat "$STANDARDS")"; do
+for f in "$HEAD_TXT" "$(rule_text rm-driver-env-vars)"; do
   assert_contains "RAVINTIO_INITIATIVE_MODEL" "$f" "req-006 (c): names the model variable"
   assert_contains "RAVINTIO_INITIATIVE_MAX_TURNS" "$f" "req-006 (c): names the cap variable"
   assert_contains "sonnet" "$f" "req-006 (c): names the sonnet default"

@@ -48,25 +48,12 @@ assert_equals "yes" "$(grep_has 'counter file' "$TEMPLATE")" \
 echo ""
 echo "=== req-005: backlog mechanics live in the orchestrator's discovery text ==="
 
-assert_equals "yes" "$(grep_has 'Backlog pickup' "$ORCHESTRATOR")" \
-  "req-005: discovery has a backlog pickup start action"
-assert_equals "yes" "$(grep_has 'pull-in / leave / discard' "$ORCHESTRATOR")" \
-  "req-005: pickup offers pull-in / leave / discard per entry"
-assert_equals "yes" "$(grep_has 'counter file' "$ORCHESTRATOR")" \
-  "req-005: backlog ids come from the counter file"
-assert_equals "yes" "$(grep_has 'spent ids never return' "$ORCHESTRATOR")" \
-  "req-005: spent ids never return"
+assert_rule p0-start-backlog-pickup "Backlog pickup" "pull-in / leave / discard" "counter file" "spent ids never return"
 
 echo ""
 echo "=== req-005: subagent filing routes through the dispatch standards ==="
 
-assert_equals "yes" "$(grep_has 'plan/backlog/{id}-{slug}/entry.md' "$DISPATCH")" \
-  "req-005: dispatch standards name the plan/backlog/{id}-{slug}/entry.md target path"
-assert_equals "yes" "$(grep_has 'Deferral source: discovered mid-flight' "$DISPATCH")" \
-  "req-005: mid-flight discoveries are tagged discovered mid-flight"
-assert_equals "yes" "$(grep_has 'backlog-entry.template.md' "$DISPATCH")" \
-  "req-005: filings follow the backlog entry template"
-assert_equals "yes" "$(grep_has 'pre-computes the next available backlog ID' "$DISPATCH")" \
-  "req-005: the dispatching agent pre-computes the backlog id"
+assert_rule orc-dispatch-backlog-filing 'plan/backlog/{id}-{slug}/entry.md' "Deferral source: discovered mid-flight" "backlog-entry.template.md"
+assert_rule orc-dispatch-backlog-id "pre-computes the next available backlog ID"
 
 print_summary

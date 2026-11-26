@@ -42,8 +42,7 @@ node "$CHECK" >/dev/null 2>&1; RC=$?
 assert_equals "2" "$RC" "req-004: no arguments exits 2"
 
 echo "=== req-004 AC-3: the skill runs the check before the report step ==="
-BODY="$(cat "$SKILL" 2>/dev/null)"
-assert_contains "check-entry-wording.mjs" "$BODY" "req-004: skill names the script"
+assert_rule ob-filing-wording-check "check-entry-wording.mjs"
 S6="$(grep -n "^## Step 6" "$SKILL" | cut -d: -f1)"
 S7="$(grep -n "^## Step 7" "$SKILL" | cut -d: -f1)"
 RUN="$(grep -n "check-entry-wording.mjs" "$SKILL" | head -1 | cut -d: -f1)"

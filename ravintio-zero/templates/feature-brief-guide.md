@@ -47,7 +47,7 @@ The Priority column uses MoSCoW: must-have, should-have, could-have. The orchest
 ### Waves
 
 Only needed if you have more than 5-6 features. Waves are sequential pipeline runs:
-- Wave 1 ships before Wave 2 begins
+- <!-- rule: orc-brief-wave-order --> Wave 1 ships before Wave 2 begins
 - Wave 2's agent reads Wave 1's component manifests for context
 - This is how RAVINTIO manages context at scale
 

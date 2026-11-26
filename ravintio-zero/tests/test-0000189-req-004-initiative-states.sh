@@ -8,7 +8,6 @@ ZERO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
 TPL="$ZERO_DIR/templates/initiative.template.md"
-STD="$ZERO_DIR/standards/roadmap-standards.md"
 
 echo ""
 echo "=== 0000189 req-004 initiative-states ==="
@@ -26,7 +25,7 @@ check "req-004 AC-1: template status field reads proposed | charted | active | d
 ok=0
 for pair in 'proposed:Drafting' 'charted:I-A Chart' 'active:I-B Activate' 'delivered:I-E Delivery' 'blocked:exception stop'; do
   st="${pair%%:*}"; sg="${pair#*:}"
-  grep -F -- "\`$st\`" "$STD" | grep -qF -- "$sg" || ok=1
+  rule_text rm-initiative-states | grep -F -- "\`$st\`" | grep -qF -- "$sg" || ok=1
 done
 check "req-004 AC-2: roadmap-standards.md names each state with the stage that sets it" "$ok"
 

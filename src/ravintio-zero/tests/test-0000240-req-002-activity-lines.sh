@@ -92,9 +92,8 @@ assert_equals "2" "$(printf '%s\n' "$ACT" | grep -c .)" "req-003 AC-2: a multi-l
 
 echo ""
 echo "=== req-005: skill and standards ==="
-assert_contains "I-C Run: activity:" "$(cat "$SKILL")" "req-005 AC-1: the skill names the activity line"
-assert_contains "Do not relay them" "$(grep "activity" "$SKILL")" "req-005 AC-1: the skill tells the session not to relay activity lines (0000553)"
-assert_contains "stream-json" "$(cat "$STANDARDS")" "req-005 AC-2: the standards name stream-json"
-assert_contains "I-C Run: activity:" "$(cat "$STANDARDS")" "req-005 AC-2: the standards name the activity line"
+assert_rule ini-relay-events "I-C Run: activity:" "Do not relay them"
+assert_rule rm-steplog-path "stream-json"
+assert_rule rm-steplog-watch "I-C Run: activity:"
 
 print_summary

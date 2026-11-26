@@ -14,28 +14,23 @@ REFS="$ZERO_DIR/skills/ravintio-orchestrator/references"
 
 echo ""
 echo "=== req-001 AC-1: every status list names Question and Blocked ==="
-for f in \
-  "$ORCH" \
-  "$ZERO_DIR/pipeline-reference.md" \
-  "$ZERO_DIR/templates/standard-boot.md" \
-  "$ZERO_DIR/templates/codex-boot.md"; do
-  LINE="$(grep -E 'The status is ' "$f" | head -1)"
-  name="${f#"$REPO_ROOT"/}"
-  assert_contains "Question" "$LINE" "req-001 AC-1: $name lists Question"
-  assert_contains "Blocked" "$LINE" "req-001 AC-1: $name still lists Blocked"
+assert_rule orc-orch-status-form "Question" "Blocked"
+# The boot templates render into installed files, so they carry no anchors.
+for boot in standard-boot codex-boot; do
+  boot_status="$(grep -E "The status is " "$ZERO_DIR/templates/$boot.md" | head -1)"
+  assert_contains "Question" "$boot_status" "req-001 AC-1: $boot lists Question"
+  assert_contains "Blocked" "$boot_status" "req-001 AC-1: $boot lists Blocked"
 done
+assert_contains "Question" "$(grep -E 'The status is ' "$ZERO_DIR/pipeline-reference.md" | head -1)" "req-001 AC-1: pipeline-reference.md lists Question"
+assert_contains "Blocked" "$(grep -E 'The status is ' "$ZERO_DIR/pipeline-reference.md" | head -1)" "req-001 AC-1: pipeline-reference.md still lists Blocked"
 assert_contains "Question" "$(sed -n '1,40p' "$ZERO_DIR/hooks/enforcement/check-reply-prefix.mjs")" \
   "req-001 AC-1: the hook comment lists the status set with Question"
 
 echo ""
 echo "=== req-001 AC-2: Blocked is reserved for exception stops ==="
-ORCH_TEXT="$(cat "$ORCH")"
-assert_contains '`Question:`' "$ORCH_TEXT" "req-001 AC-2: the orchestrator skill explains Question:"
-assert_contains "exception stop" "$(grep -F '`Question:`' "$ORCH" | head -1)" \
-  "req-001 AC-2: the Question line names the exception stop split"
-assert_contains "P0 Discovery: Question: No declared product id" "$(cat "$REFS/orchestrator-p0-start-actions.md")" \
-  "req-001 AC-2: the product id check asks with Question:"
-assert_not_contains "P0 Discovery: Blocked: No declared product id" "$(cat "$REFS/orchestrator-p0-start-actions.md")" \
+assert_rule orc-orch-question-status '`Question:`' "exception stop"
+assert_rule p0-start-product-id "P0 Discovery: Question: No declared product id"
+assert_equals "no" "$(rule_text p0-start-product-id | grep -qF 'P0 Discovery: Blocked: No declared product id' && echo yes || echo no)" \
   "req-001 AC-2: the product id check no longer uses Blocked:"
 
 echo ""

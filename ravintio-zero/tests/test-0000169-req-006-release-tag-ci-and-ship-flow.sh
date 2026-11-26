@@ -8,7 +8,6 @@ ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
 SHIP="$ZERO_DIR/skills/ravintio-ship/SKILL.md"
-STD="$ZERO_DIR/standards/roadmap-standards.md"
 REF="$ZERO_DIR/pipeline-reference.md"
 OPS="$ZERO_DIR/project-operations.md"
 C004="$ROOT/ravintio-overrides/instructions/custom-004-ship-push-and-raise-pr.md"
@@ -57,20 +56,18 @@ else
   echo "  NOTE: ruby not found, skipping YAML parse assertions"
 fi
 
-S7="$(section '### Step 7: Release tag' "$SHIP")"
-S9="$(section '### Step 9: PR' "$SHIP")"
+# The Step 10 summary is a code block that holds blank lines, so no anchor covers its Tag: line.
 S10="$(section '### Step 10: Final gate' "$SHIP")"
-assert_equals "no" "$(has 'git tag' "$S7")" "Step 7 holds no git tag command"
-assert_equals "yes" "$(has 'CI' "$S7")" "Step 7 says CI tags"
-assert_equals "yes" "$(has 'CI tags' "$S9")" "Step 9 names CI tagging on main"
-assert_equals "yes" "$(has 'git tag v{version} -m "{feature-id}" {merge-commit}' "$S9")" "Step 9 prints the local-git-only tag command"
-assert_equals "no" "$(has 'git push origin v{version}' "$(printf '%s\n' "$S9" | sed -n '/option \[1\], push/,/^```$/p' | sed -n '1,8p')")" "Step 9 option [1] pushes no tag"
+assert_equals "no" "$(has 'git tag' "$(rule_text rm-ship-no-tag)")" "Step 7 holds no git tag command"
+assert_rule rm-ship-no-tag 'CI'
+assert_rule rm-ship-option2 'CI tags'
+assert_rule rm-ship-local-tag-command 'git tag v{version} -m "{feature-id}" {merge-commit}'
+assert_equals "no" "$(has 'git push origin v{version}' "$(rule_text rm-ship-option1-commands)")" "Step 9 option [1] pushes no tag"
 assert_equals "yes" "$(has 'main' "$(printf '%s\n' "$S10" | grep 'Tag:')")" "Step 10 summary names the tag landing on main"
-assert_equals "yes" "$(has 'I-D Advance' "$(section '## Initiative steps' "$SHIP")")" "Initiative steps still points at I-D Advance"
+assert_rule rm-ship-initiative-intro 'I-D Advance'
 
-SS="$(section '## Ship stages' "$STD")"
-assert_equals "no" "$(has 'tag at Step 7' "$SS")" "roadmap-standards no longer says Step 7 tags"
-assert_equals "yes" "$(has 'tags the merge commit `v{version}`' "$(section '### I-D Advance' "$STD")")" "I-D Advance: the merge queue still tags the squash commit (0000379)"
+assert_equals "no" "$(has 'tag at Step 7' "$(orch_section '## Ship stages')")" "roadmap-standards no longer says Step 7 tags"
+assert_rule rm-advance-queue-merge 'tags the merge commit `v{version}`'
 assert_equals "yes" "$(has 'release-tag' "$(cat "$REF")")" "pipeline-reference names the release-tag job"
 assert_equals "yes" "$(has 'release-tag' "$(cat "$OPS")")" "project-operations names the release-tag job"
 assert_equals "no" "$(has 'and the release tag' "$(cat "$C004")")" "custom-004 drops the release tag push"

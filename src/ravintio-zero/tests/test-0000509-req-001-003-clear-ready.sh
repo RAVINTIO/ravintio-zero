@@ -11,7 +11,6 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
 DRIVER="$SCRIPT_DIR/../scripts/initiative-run.mjs"
-STANDARDS="$SCRIPT_DIR/../standards/roadmap-standards.md"
 ADR="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)/docs/adr/0340-driver-clears-merged-ready-files.md"
 WORK="$(mktemp -d)"
 LIVE_PID=""
@@ -109,8 +108,7 @@ echo ""
 echo "=== REQ-003 AC-1, AC-2: the driver header, the standards, and the ADR state the clearing ==="
 assert_contains "I-C Run: Cleared:" "$(sed -n 1,175p "$DRIVER")" "REQ-003 AC-1: the driver header names the Cleared line"
 assert_contains "ready file of each merged step" "$(sed -n 1,175p "$DRIVER")" "REQ-003 AC-1: the driver header states the clearing"
-assert_contains "I-C Run: Cleared:" "$(cat "$STANDARDS")" "REQ-003 AC-2: roadmap-standards.md names the Cleared line"
-assert_contains "file of each merged step" "$(cat "$STANDARDS")" "REQ-003 AC-2: roadmap-standards.md states the clearing"
+assert_rule driver-clear-merged-ready "I-C Run: Cleared:" "file of each merged step"
 assert_contains "I-C Run: Cleared:" "$(cat "$ADR")" "REQ-003: the ADR names the Cleared line"
 
 print_summary

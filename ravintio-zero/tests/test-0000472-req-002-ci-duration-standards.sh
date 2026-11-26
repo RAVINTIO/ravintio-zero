@@ -7,19 +7,16 @@ source "$SCRIPT_DIR/helpers/assert.sh"
 
 ZERO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 GOV=$(cat "$ZERO_DIR/standards/workflow-governance-standards.md")
-TESTING=$(cat "$ZERO_DIR/standards/testing-standards.md")
-SHIP=$(cat "$ZERO_DIR/skills/ravintio-ship/SKILL.md")
 
 echo "=== AC-1: governance standard ==="
-assert_contains "CI duration: {seconds}s (run {run-id}, {ISO-8601 timestamp})" "$GOV" "AC-1: marker is defined"
+assert_rule shp-gov-ci-marker "CI duration: {seconds}s (run {run-id}, {ISO-8601 timestamp})"
+# The threshold row sits in a table, so it has no rule anchor.
 assert_contains "| ci-duration-seconds | 420 |" "$GOV" "AC-1: threshold row is 420"
 
 echo "=== AC-2: CI target ==="
-assert_contains "CI duration target" "$TESTING" "AC-2: testing standard names the target"
-assert_contains "420 seconds" "$TESTING" "AC-2: target is 420 seconds"
+assert_rule shp-ci-duration-target "CI duration target" "420 seconds"
 
 echo "=== AC-3: ship marker ==="
-assert_contains "gh run view" "$SHIP" "AC-3: ship reads the run with gh run view"
-assert_contains "CI duration:" "$SHIP" "AC-3: ship writes the marker"
+assert_rule shp-ci-duration-marker "gh run view" "CI duration:"
 
 print_summary

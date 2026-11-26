@@ -10,7 +10,6 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
 DRIVER="$SCRIPT_DIR/../scripts/initiative-run.mjs"
-STANDARDS="$SCRIPT_DIR/../standards/roadmap-standards.md"
 WORK="$(mktemp -d)"
 trap 'rm -rf "$WORK"' EXIT
 
@@ -113,6 +112,6 @@ assert_equals "yes" "$([ -L "$R/plan/.initiative-runner.lock" ] && echo yes || e
 echo ""
 echo "=== REQ-003 AC-1: the driver header and the standards state the rule ==="
 assert_contains "no longer runs" "$(sed -n 1,60p "$DRIVER")" "REQ-003 AC-1: the driver header states the rule"
-assert_contains "no longer runs" "$(cat "$STANDARDS")" "REQ-003 AC-1: roadmap-standards.md states the rule"
+assert_rule driver-dead-lock "no longer runs"
 
 print_summary

@@ -40,8 +40,8 @@ How should the agent run P1 to P4?
   [2] Autonomous: the agent runs to a raised PR and stops only for escalations
 ```
 
-Record the answer and write `plan/.run-mode` (`gated` or `autonomous`). No other value is valid. Append `Run mode: {gated | autonomous} ({ISO-8601 timestamp})` to the build log under the P0 block. Include it in the discovery commit. Only this skill writes `plan/.run-mode`. Phase skills read it and never write it. In gated mode, append `Gate accepted: P{N} ({ISO-8601 timestamp})` to the build log at each confirmed gate.
-On a gate change, append `Gate revised: P{N}`.
+<!-- rule: orc-run-mode-write --> Record the answer and write `plan/.run-mode` (`gated` or `autonomous`). No other value is valid. Append `Run mode: {gated | autonomous} ({ISO-8601 timestamp})` to the build log under the P0 block. Include it in the discovery commit. Only this skill writes `plan/.run-mode`. Phase skills read it and never write it. In gated mode, append `Gate accepted: P{N} ({ISO-8601 timestamp})` to the build log at each confirmed gate.
+<!-- rule: orc-gate-revised --> On a gate change, append `Gate revised: P{N}`.
 
 Then ask the run-speed question and write `plan/.run-speed`.
 

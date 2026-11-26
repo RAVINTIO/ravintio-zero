@@ -7,7 +7,6 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
 TOOL="$SCRIPT_DIR/../scripts/initiative-chart.mjs"
-STANDARDS="$SCRIPT_DIR/../standards/roadmap-standards.md"
 
 # Run a node snippet against the module. $1 is JS using `c`.
 run_js() {
@@ -47,8 +46,6 @@ OUT="$(run_js 'const steps = Array.from({length: 60}, (_, i) => mk(i + 1, "pendi
 assert_equals "fast" "$OUT" "NFR-001: ranking 60 steps takes under 100 ms"
 
 # REQ-002: the standards state the order.
-TEXT="$(cat "$STANDARDS")"
-assert_contains "longest chain" "$TEXT" "REQ-002 AC-1: the standards name the longest chain first order"
-assert_contains "Chart order breaks ties" "$TEXT" "REQ-002 AC-1: the standards state the tie rule"
+assert_rule rm-driver-start-order "longest chain" "Chart order breaks ties"
 
 print_summary

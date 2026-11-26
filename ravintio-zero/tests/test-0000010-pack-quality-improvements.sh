@@ -5,18 +5,19 @@
 
 set -euo pipefail
 
-PASS=0
-FAIL=0
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+source "$SCRIPT_DIR/helpers/assert.sh"
+ZERO_DIR="$SCRIPT_DIR/.."
 
 pass() { echo "  PASS: $1"; PASS=$((PASS+1)); }
 fail() { echo "  FAIL: $1"; FAIL=$((FAIL+1)); }
 
-TEMPLATE="ravintio-zero/templates/requirement.template.md"
-ORCH="ravintio-zero/skills/ravintio-orchestrator/SKILL.md"
-CODEGEN="ravintio-zero/skills/ravintio-implement/SKILL.md"
-VALIDATE="ravintio-zero/skills/ravintio-validate-and-accept/SKILL.md"
-SETUP_SH="ravintio-zero/setup.sh"
-SETUP_PS1="ravintio-zero/setup.ps1"
+TEMPLATE="$ZERO_DIR/templates/requirement.template.md"
+ORCH="$ZERO_DIR/skills/ravintio-orchestrator/SKILL.md"
+CODEGEN="$ZERO_DIR/skills/ravintio-implement/SKILL.md"
+VALIDATE="$ZERO_DIR/skills/ravintio-validate-and-accept/SKILL.md"
+SETUP_SH="$ZERO_DIR/setup.sh"
+SETUP_PS1="$ZERO_DIR/setup.ps1"
 
 echo ""
 echo "=== REQ-001: Input Validation section in requirement.template.md ==="
@@ -81,31 +82,15 @@ fi
 
 echo ""
 echo "=== REQ-002: Agent dispatch template in orchestrator SKILL.md ==="
-DISPATCH_STD="ravintio-zero/standards/agent-dispatch-standards.md"
+assert_rule orc-dispatch-self-contained "Self-contained prompt rule" "requirement file path"
+assert_rule orc-dispatch-level-two "level-2 parallelism" "level-1" "native tool calls"
+assert_rule orc-orch-consult-dispatch "agent-dispatch-standards"
+
+DISPATCH_STD="$ZERO_DIR/standards/agent-dispatch-standards.md"
 if grep -q "Agent Dispatch Template\|## Agent Dispatch" "$DISPATCH_STD"; then
   pass "REQ-002: dispatch standards hold the Agent Dispatch Template section"
 else
   fail "REQ-002: dispatch standards missing Agent Dispatch Template section"
-fi
-
-if grep -q "self-contained\|self.contained" "$DISPATCH_STD"; then
-  pass "REQ-002: dispatch template includes the self-contained prompt rule"
-else
-  fail "REQ-002: dispatch standards missing self-contained prompt rule"
-fi
-
-if grep -q "agent-dispatch-standards" "$ORCH"; then
-  pass "REQ-002: orchestrator points at the dispatch standards"
-else
-  fail "REQ-002: orchestrator does not point at the dispatch standards"
-fi
-
-# 0000022: relocated to standards/agent-dispatch-standards.md (ADR-001) - orchestrator points to it
-DISPATCH_STD_FILE="ravintio-zero/standards/agent-dispatch-standards.md"
-if [ -f "$DISPATCH_STD_FILE" ] && grep -q "native tool\|two levels\|parallel native" "$DISPATCH_STD_FILE"; then
-  pass "REQ-002: agent-dispatch-standards.md clarifies two levels of parallelism"
-else
-  fail "REQ-002: agent-dispatch-standards.md missing two-levels-of-parallelism note"
 fi
 
 echo ""

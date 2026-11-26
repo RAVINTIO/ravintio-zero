@@ -67,9 +67,6 @@ assert_not_contains "step branch commits" "$OUT" "AC-2: a folder with no git rep
 
 echo ""
 echo "=== req-001 AC-3: the reference maps the lines ==="
-REF="$(cat "$ZERO_DIR/skills/ravintio-orchestrator/references/orchestrator-resume-detection.md")"
-assert_contains "$FINDING" "$REF" "AC-3: the reference holds the unfinished-step line"
-assert_contains "step branch commits" "$REF" "AC-3: the reference holds the count line"
-assert_contains "start P0" "$REF" "AC-3: the reference says to start P0"
+assert_rule resume-initiative "$FINDING" "step branch commits" "start P0"
 
 print_summary

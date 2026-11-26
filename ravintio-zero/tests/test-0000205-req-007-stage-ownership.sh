@@ -14,10 +14,10 @@ ORCH=$(cat "$ZERO_DIR/skills/ravintio-orchestrator/SKILL.md")
 echo ""
 echo "=== req-007 AC-1: each stage has one owner ==="
 for row in "I-A Chart:\` | \`ravintio-initiative\`" "I-B Activate:\` | \`ravintio-initiative\`" "I-E Delivery:\` | \`ravintio-initiative\`" "I-C Run:\` | \`ravintio-orchestrator\`" "I-D Advance:\` | \`ravintio-ship\`"; do
-  assert_contains "$row" "$STD" "req-007 AC-1: stage row has its owner ($row)"
+  assert_rule rm-stages-table "$row"
 done
 assert_contains "### The three parts" "$STD" "req-007 AC-1: the standards hold the three-part section"
-assert_contains "7. **I-E Delivery.**" "$STD" "req-007 AC-1: the standards hold the run sequence"
+assert_rule rm-run-sequence "7. **I-E Delivery.**"
 assert_equals "no" "$(printf '%s\n' "$ORCH" | grep -qF "Chart runs on" && echo yes || echo no)" "req-007 AC-1: the orchestrator holds no I-A procedure"
 assert_equals "no" "$(printf '%s\n' "$ORCH" | grep -qF "Activate turns a charted" && echo yes || echo no)" "req-007 AC-1: the orchestrator holds no I-B procedure"
 assert_equals "no" "$(printf '%s\n' "$ORCH" | grep -qF "Archive the initiative" && echo yes || echo no)" "req-007 AC-1: the orchestrator holds no I-E procedure"

@@ -22,6 +22,8 @@ foreach ($f in $refFiles) {
 # A Windows checkout may convert line endings to CRLF, so count the bytes
 # with LF endings, as the repository stores them.
 $skillText = [IO.File]::ReadAllText((Join-Path $skillDir 'SKILL.md')) -replace "`r`n", "`n"
+# Rule anchors are comments, so the cap counts the text without them.
+$skillText = $skillText -replace '<!-- rule: [a-z0-9-]+ --> ?', ''
 Assert-True ([Text.Encoding]::UTF8.GetByteCount($skillText) -le 9000) "req-011 (a): SKILL.md is 9000 bytes or fewer"
 
 Write-Host ""

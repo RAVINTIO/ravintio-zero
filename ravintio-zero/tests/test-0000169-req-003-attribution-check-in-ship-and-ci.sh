@@ -23,8 +23,8 @@ echo ""
 echo "=== 0000169 req-003 attribution-check-in-ship-and-ci ==="
 
 S9="$(section '### Step 9: PR' "$SHIP")"
-assert_equals "yes" "$(has 'check-attribution.mjs' "$S9")" "Step 9 runs check-attribution.mjs"
-assert_equals "yes" "$(has 'temporary file' "$S9")" "Step 9 writes the body to a temporary file"
+assert_rule shp-pr-attribution-check 'check-attribution.mjs' 'temporary file'
+# The stop message and the ordering checks read the Step 9 code blocks, so they keep the section cut.
 assert_equals "yes" "$(has 'P4 Ship: Blocked: attribution line in the PR body.' "$S9")" "Step 9 holds the stop message"
 lc="$(line 'check-attribution.mjs' "$S9")"
 ls_="$(line 'P4 Ship: Blocked: attribution line in the PR body.' "$S9")"

@@ -16,25 +16,10 @@ check() {
   if [ "$2" = "0" ]; then _pass_line "$1"; PASS=$((PASS+1)); else _fail_line "$1"; FAIL=$((FAIL+1)); fi
 }
 
-s5="$(awk '/^### Step 5/{f=1;next} /^### /{f=0} f' "$SHIP")"
-s9="$(awk '/^### Step 9/{f=1;next} /^### /{f=0} f' "$SHIP")"
-has5() { printf '%s\n' "$s5" | grep -qF -- "$1"; }
-has9() { printf '%s\n' "$s9" | grep -qF -- "$1"; }
-
-ok=1
-if [ -n "$s5" ] && has5 'workflow-metrics.mjs' && has5 'build-report.md'; then ok=0; fi
-check "req-004 AC-1: Step 5 names workflow-metrics.mjs and build-report.md" "$ok"
-
-ok=1
-if [ -n "$s9" ] && has9 '## Workflow governance'; then ok=0; fi
-check "req-004 AC-2: Step 9 names the Workflow governance section" "$ok"
-
-ok=1
-if has5 'not measured' && has9 'not measured' \
-  && printf '%s\n' "$s5" | grep -qi 'breach' \
-  && printf '%s\n' "$s5" | grep -qi 'does not stop ship' \
-  && printf '%s\n' "$s9" | grep -qi 'breach' \
-  && printf '%s\n' "$s9" | grep -qi 'does not stop ship'; then ok=0; fi
-check "req-004 AC-3: Steps 5 and 9 hold not measured and say a breach does not stop ship" "$ok"
+# Step 5 holds the metrics rule. Step 9 holds the PR body rule.
+assert_rule shp-governance-metrics 'workflow-metrics.mjs' 'build-report.md'
+assert_rule shp-pr-title-body '## Workflow governance'
+assert_rule shp-governance-metrics 'not measured' 'breach' 'does not stop ship'
+assert_rule shp-pr-title-body 'not measured' 'breach' 'does not stop ship'
 
 print_summary

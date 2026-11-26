@@ -13,15 +13,14 @@ source "$SCRIPT_DIR/helpers/assert.sh"
 ZERO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 REPO_ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
 OVR="$REPO_ROOT/ravintio-overrides/instructions"
-STD="$ZERO_DIR/standards/roadmap-standards.md"
-ORCH="$(orch_combined "$ZERO_DIR/skills/ravintio-orchestrator")"
-SHIP="$ZERO_DIR/skills/ravintio-ship/SKILL.md"
 
-ORULE="$(grep -F '**Merge is human-only.**' "$ORCH")"
-SRULE="$(grep -E '^5\. ' "$SHIP")"
+ORULE="$(rule_text phase-merge-human-only)"
+SRULE="$(rule_text shp-hard-limit-merge)"
 C1="$(cat "$OVR/custom-001-local-git-only.md" 2>/dev/null)"
 C4="$(cat "$OVR/custom-004-ship-push-and-raise-pr.md" 2>/dev/null)"
-SECT="$(awk '$0 == "## Merge carve-out" {on=1; next} on && /^#/ {exit} on {print}' "$STD")"
+# The standard keeps one anchor for each carve-out rule. The section text is their join.
+SECT="$(for id in carveout-main-human-only carveout-squash-conditions carveout-base carveout-own-branch \
+  carveout-step-queue-only carveout-clean-p3 carveout-initiative-pr; do rule_text "$id"; done)"
 
 assert_not_contains() {
   case "$2" in *"$1"*) assert_equals "absent" "present" "$3" ;; *) assert_equals "absent" "absent" "$3" ;; esac

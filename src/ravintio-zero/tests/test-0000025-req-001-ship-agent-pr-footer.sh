@@ -16,24 +16,21 @@ SHIP_SKILL="$ZERO_DIR/skills/ravintio-ship/SKILL.md"
 
 SHIP_CONTENT=$(cat "$SHIP_SKILL")
 
-# Isolate the PR step (from its heading to the next "### " heading).
-PR_STEP=$(printf '%s\n' "$SHIP_CONTENT" | sed -n '/^### Step 9: PR/,/^### Step 10/p')
 
 echo ""
 echo "=== req-001: the PR step exists and offers both delivery paths ==="
 
-assert_equals "yes" "$([ -n "$PR_STEP" ] && echo yes || echo no)" \
+assert_equals "yes" "$(grep -q '^### Step 9: PR' "$SHIP_SKILL" && echo yes || echo no)" \
   "req-001: ravintio-ship documents a PR step"
-assert_contains "gh pr create" "$PR_STEP" \
-  "req-001: agent-pushes path uses gh pr create"
-assert_contains "give me the PR title and description" "$PR_STEP" \
+assert_rule shp-pr-title-body "gh pr create"
+# The option text sits in a code block, so it has no rule anchor.
+assert_contains "give me the PR title and description" "$SHIP_CONTENT" \
   "req-001: human-pushes path hands over title and description"
 
 echo ""
 echo "=== req-001: no AI attribution in PR bodies ==="
 
-assert_contains "PR bodies carry no AI attribution" "$PR_STEP" \
-  "req-001: the no-attribution rule is stated in the PR step"
+assert_rule shp-pr-title-body "PR bodies carry no AI attribution"
 
 # 0000169 req-001: the skill names the banned line in prose, so only a line
 # that starts with the footer counts as a template.
@@ -48,9 +45,6 @@ fi
 echo ""
 echo "=== req-001: local-git-only override scan is still present ==="
 
-assert_contains "ravintio-overrides/instructions/" "$PR_STEP" \
-  "req-001: the PR step checks ravintio-overrides/instructions/ for a local-git-only override"
-assert_contains "local-git-only" "$PR_STEP" \
-  "req-001: the local-git-only override skips the push question"
+assert_rule shp-pr-local-git-only "ravintio-overrides/instructions/" "local-git-only"
 
 print_summary

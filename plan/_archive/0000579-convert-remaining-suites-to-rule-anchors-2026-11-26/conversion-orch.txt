@@ -1,0 +1,34 @@
+converted: test-0000009-rail-tightening.sh
+converted: test-0000010-pack-quality-improvements.sh
+converted: test-0000017-req-003-phase-wave-sweep.sh
+converted: test-0000018-req-007-discovery-md-hard-limit.sh
+converted: test-0000023-req-002-marker-commit-lifecycle.sh
+converted: test-0000025-req-005-backlog-unification.sh
+converted: test-0000025-req-007-scope-lock-default-batch.sh
+converted: test-0000027-req-003-005-007-008-governance-docs.sh
+structure: test-0000041-req-004-park-commit-failure.sh: script behaviour with git fixtures, no skill prose
+converted: test-0000042-req-001-run-mode-question.sh
+converted: test-0000042-req-002-gate-and-exception-stops.sh
+converted: test-0000042-req-004-phase-numbers-p0-to-p4.sh
+converted: test-0000042-req-005-message-prefixes.sh
+structure: test-0000042-req-008-pack-prose.sh: wording ban scan across files, no rule text
+converted: test-0000042-req-009-pack-identifiers.sh
+converted: test-0000042-req-011-exception-stop-records-and-redaction.sh
+structure: test-0000151-req-001-park-symlink-containment.sh: script behaviour with git fixtures, no skill prose
+converted: test-0000164-req-005-file-backlog-skill.sh
+converted: test-0000173-req-003-metric-markers.sh
+converted: test-0000200-req-001-002-reply-conventions.sh
+converted: test-0000201-req-001-concurrency-section.sh
+converted: test-0000207-req-001-003-codex-setup.sh
+structure: test-0000243-req-005-short-rule.sh: byte cap, Pack Index row, and frozen-line comparison already strip anchors
+converted: test-0000247-req-001-stage-by-path.sh
+converted: test-0000317-req-001-003-004-rules-ignores-checks.sh
+converted: test-0000321-req-004-pickup-text.sh
+converted: test-0000352-req-003-005-skill-rules.sh
+converted: test-0000358-req-001-question-status.sh
+converted: test-0000359-req-001-no-tree-git-under-subagents.sh
+converted: test-0000377-req-001-context-hygiene-reference.sh
+converted: test-0000393-req-003-pack-version-record.sh
+converted: test-0000556-req-001-unfinished-step-finding.sh
+converted: test-0000557-req-001-safe-suite-wait.sh
+converted: test-0000562-req-001-003-pack-file-edit-cause.sh

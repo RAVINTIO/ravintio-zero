@@ -9,6 +9,7 @@ status: "proposed"  # proposed | charted | active | delivered | blocked
 > zero-padded seven-digit number and `{slug}` is kebab-case. An active initiative lives at
 > `plan/current-initiative/initiative.md`.
 >
+<!-- rule: rm-tpl-initiative-id -->
 > **`{id}` shares the backlog's sequence.** Reserve each `{id}` from `plan/backlog/.next-id`
 > with `node ravintio-zero/scripts/reserve-id.mjs [qty]`. Reserve one block for the
 > initiative and its step feature ids.

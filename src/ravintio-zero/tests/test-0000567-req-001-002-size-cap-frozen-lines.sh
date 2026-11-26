@@ -9,25 +9,14 @@ source "$SCRIPT_DIR/helpers/assert.sh"
 
 ZERO_DIR="$SCRIPT_DIR/.."
 REF="$ZERO_DIR/skills/ravintio-plan/references/test-impact-causes.md"
-SIZE=$(grep -F '**Size cap:**' "$REF" 2>/dev/null || true)
-REFEDIT=$(grep -F '**Reference file edit:**' "$REF" 2>/dev/null || true)
 
 echo ""
-echo "=== REQ-001 AC-1: the Size cap cause lists every cap ==="
-assert_contains "List every test that measures the skill" "$SIZE" "REQ-001 AC-1: the cause asks for every test"
-assert_contains "each cap value" "$SIZE" "REQ-001 AC-1: the cause asks for each cap value"
-assert_contains "not the first match" "$SIZE" "REQ-001 AC-1: the cause rejects the first match"
-
-echo ""
-echo "=== REQ-001 AC-2: the cause plans against the lowest cap ==="
-assert_contains "lowest cap" "$SIZE" "REQ-001 AC-2: the cause names the lowest cap"
+echo "=== REQ-001 AC-1 and AC-2: the Size cap cause lists every cap and plans against the lowest ==="
+assert_rule piv-cause-size-cap "List every test that measures the skill" "each cap value" "not the first match" "lowest cap"
 
 echo ""
 echo "=== REQ-002 AC-1 and AC-2: the Reference file edit cause names the frozen-line check ==="
-assert_contains "test-0000151-req-011-orchestrator-references-split.sh" "$REFEDIT" "REQ-002 AC-1: the cause names the suite"
-assert_contains "every base line" "$REFEDIT" "REQ-002 AC-2: the cause names the frozen base lines"
-assert_contains "boot template" "$REFEDIT" "REQ-002 AC-2: the cause names the boot template cap"
-assert_contains "read the cap from the suite" "$REFEDIT" "REQ-002 AC-2: the cause sends the reader to the suite for the number"
+assert_rule piv-cause-reference-edit "test-0000151-req-011-orchestrator-references-split.sh" "every base line" "boot template" "read the cap from the suite"
 
 echo ""
 echo "=== REQ-002 AC-3: the scan stays within 21 lines ==="

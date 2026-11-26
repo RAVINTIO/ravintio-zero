@@ -1,0 +1,7 @@
+structure: test-0000043-req-007-roadmap-driver.sh: driver script behaviour, template only a fixture
+converted: test-0000313-req-002-initiative-skill-setup-stop.sh
+converted: test-0000351-req-002-005-template-and-plan.sh
+structure: test-0000379-req-001-chart-columns.sh: chart parser behaviour, template table header and field
+structure: test-0000397-req-005-guards-cover-both.sh: hook and script behaviour, driver watch list code
+structure: test-0000399-req-002-add-step.sh: script behaviour, template only a fixture
+converted: test-0000553-req-001-002-oversight.sh
