@@ -26,8 +26,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-26T10:02:15Z` |
-| End | |
-| Wall clock | |
+| End | `2026-11-26T10:03:40Z` |
+| Wall clock | 2 |
 | Model tier | primary |
 | Skills loaded | ravintio-orchestrator |
 | Agents spawned | 0 |
@@ -55,6 +55,25 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Scope Lock (error path): A docs Done line with no marker fails check 7 and exits 1 [source: draft-accepted (initiative)]
 - Scope Lock (cross-session continuity): An interrupted unit resumes through the In progress line, with no new state [source: draft-accepted (initiative)]
 - Backlog pickup: 0000410 pulled in from the step row, folder deleted in the same commit
+
+---
+
+### P1: Plan
+
+| Field | Value |
+|-------|-------|
+| Start | `2026-11-26T10:03:57Z` |
+| End | `2026-11-26T10:05:13Z` |
+| Wall clock | 2 |
+| Model tier | primary |
+| Skills loaded | ravintio-plan |
+| Agents spawned | 0 |
+| MCP calls | 0 |
+| Parallel task batches | 0 |
+| Notes | Artifacts written inline. The fast batch gave no gain for six small files. |
+
+- Plan: consistency-check clean, human-settings-check none
+- Plan: git fetch failed in the sandbox (github.com:22 denied), so branch-point reads use the local tracking ref
 
 ---
 
