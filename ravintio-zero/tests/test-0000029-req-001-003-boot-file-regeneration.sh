@@ -12,6 +12,13 @@
 #          creation and names commits-to-main and PR-merge as human-only.
 
 set -uo pipefail
+# Every temp folder and log of this suite sits under one private folder, which the EXIT trap removes. The trap
+# is set first, so a stop signal at any point leaves nothing behind (0000583).
+SUITE_TMP="$(mktemp -d)"
+export TMPDIR="$SUITE_TMP"
+trap 'cd /; rm -rf "$SUITE_TMP"' EXIT
+trap 'exit 143' TERM
+trap 'exit 130' INT HUP
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
@@ -43,10 +50,7 @@ echo ""
 echo "=== (a) req-001: setup.sh claude-code creates CLAUDE.md on fresh workspace ==="
 
 WS=$(make_workspace); cd "$WS"
-trap 'cd /; rm -rf "$WS"' EXIT
-trap 'exit 143' TERM
-trap 'exit 130' INT HUP
-bash ravintio-zero/setup.sh claude-code >/tmp/ravintio_0000029_a.log 2>&1
+bash ravintio-zero/setup.sh claude-code >$SUITE_TMP/ravintio_0000029_a.log 2>&1
 assert_exit_zero "$?" "(a): setup.sh claude-code exits 0 on fresh workspace"
 assert_equals "yes" "$(file_exists "CLAUDE.md")" "(a): CLAUDE.md created"
 
@@ -56,7 +60,7 @@ echo ""
 echo "=== (b) req-001: rerun overwrites an existing CLAUDE.md (no skip-if-exists) ==="
 
 echo "SENTINEL-HAND-EDIT-0000029" >> CLAUDE.md
-bash ravintio-zero/setup.sh claude-code >/tmp/ravintio_0000029_b.log 2>&1
+bash ravintio-zero/setup.sh claude-code >$SUITE_TMP/ravintio_0000029_b.log 2>&1
 assert_exit_zero "$?" "(b): rerun exits 0"
 assert_equals "no" "$(grep_has "SENTINEL-HAND-EDIT-0000029" "CLAUDE.md")" \
   "(b): hand-edited sentinel is gone after rerun (file regenerated)"
@@ -69,7 +73,7 @@ echo "=== (c) req-001: ravintio-overrides/instructions/ content present after re
 mkdir -p ravintio-overrides/instructions
 printf '### Test Override\nOVERRIDE-MARKER-0000029\n' > ravintio-overrides/instructions/custom-900-test.md
 commit_workspace_pack "$PWD"
-bash ravintio-zero/setup.sh claude-code >/tmp/ravintio_0000029_c.log 2>&1
+bash ravintio-zero/setup.sh claude-code >$SUITE_TMP/ravintio_0000029_c.log 2>&1
 assert_exit_zero "$?" "(c): rerun with overrides exits 0"
 assert_equals "yes" "$(grep_has "OVERRIDE-MARKER-0000029" "CLAUDE.md")" \
   "(c): override content re-applied into regenerated CLAUDE.md"

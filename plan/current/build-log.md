@@ -134,6 +134,8 @@ Complete: P3 (2026-11-26T08:00:07Z)
 
 - Deviation: CI shard 2 failed `test-0000583-req-002` on Linux. Four suites made workspaces inside command substitutions, so their cleanup lists stayed empty. Each of the four now makes one private `mktemp -d` folder, sets `TMPDIR` to it, and removes it on `EXIT`. The suites passed on macOS before the change, so the local runs never showed the leak. (2026-11-26T08:35:46Z)
 
+- Deviation: CI shard 2 failed again on the TERM case for `test-0000029`. The suite set its `EXIT` trap after it made its workspace and wrote logs to `/tmp`. It now makes one private folder first and sets the trap at once. The REQ-002 test lists every entry in its scratch folder, because a private folder has no `ravintio_` prefix. (2026-11-26T08:53:23Z)
+
 ### P4: Ship
 
 | Field | Value |

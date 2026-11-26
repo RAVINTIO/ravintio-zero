@@ -23,8 +23,9 @@ SUITES=(
   test-0000029-req-001-003-boot-file-regeneration.sh
 )
 
-# Prints the ravintio entries in a folder, one per line.
-leftovers() { ls -A "$1" 2>/dev/null | grep -E '^ravintio[_-]' || true; }
+# Prints every entry in a folder, one per line, except the marker file that case AC-3 writes. A suite that
+# keeps its scratch in one private folder leaves that folder here under a name that has no ravintio prefix.
+leftovers() { ls -A "$1" 2>/dev/null | grep -v '^ready$' || true; }
 
 echo ""
 echo "=== REQ-002 AC-1: a normal exit leaves nothing ==="
