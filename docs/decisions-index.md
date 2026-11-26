@@ -3,7 +3,7 @@
 > Change record. Index of all ADRs across all features. Updated after every pipeline run.
 > Do not archive this file. Update it in place.
 
-Last updated: 0000583-step-temp-cleanup-after-merge
+Last updated: 0000580-log-non-tdd-units
 
 ---
 
@@ -371,3 +371,4 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 | [ADR-0349](adr/0349-cancel-superseded-pull-request-runs.md) | Cancel superseded pull request runs | accepted | The repo workflow cancels an older run on a newer push to the same pull request. A push run never shares a group, so a newer push cancels no push run. Every push still runs every suite. | 0000558-plan-only-push-short-ci |
 | [ADR-0351](adr/0351-check-phase-start-against-first-commit.md) | Check each phase Start against its first artifact commit | accepted | Check 10 of build-log-check.mjs fails a phase block whose Start is later than the first commit of that phase's artifacts. | 0000576-phase-start-time-at-phase-start |
 | [ADR-0352](adr/0352-step-sessions-use-a-private-temp-folder.md) | Step sessions use a private temp folder | accepted | Each step session gets a temp folder in its worktree and runs in the sandbox. The driver deletes nothing outside the repo. | 0000583-step-temp-cleanup-after-merge |
+| [ADR-0353](adr/0353-docs-class-for-units-with-no-test.md) | Docs class for units with no test | proposed | A unit with no executable check logs class docs. It still logs RED and GREEN lines that carry the class. | 0000580-log-non-tdd-units |

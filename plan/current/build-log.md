@@ -109,6 +109,9 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - Done: U-002 (code, inline, none, 2026-11-26T10:07:08Z)
 - Done: U-003 (code, inline, none, 2026-11-26T10:07:08Z)
 - Done: U-004 (code, inline, none, 2026-11-26T10:07:08Z)
+- RED: U-005 living docs (docs, no executable check, 0000410, 2026-11-26T10:07:12Z)
+- GREEN: U-005 living docs (docs, 2026-11-26T10:07:26Z)
+- Done: U-005 living docs (docs, inline, none, 2026-11-26T10:07:26Z)
 
 ## Summary (filled at ship, P4)
 
