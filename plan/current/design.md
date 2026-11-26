@@ -36,6 +36,7 @@
 - ravintio-zero/
 - docs/
 - plan/
+- .t/
 
 ## Scope
 - In: private temp folder, sandbox, and worktree removal in the driver. A private `TMPDIR` in the runner. Signal-safe traps in the named suites and the git-isolation helper. Scratch rules, tests, and a roadmap standards line.
