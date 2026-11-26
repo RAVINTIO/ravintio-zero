@@ -99,6 +99,11 @@ A test that asserts what a skill, standard, or template says reads the text thro
 | `rule_text <id>` | Get the text of the rule that carries `<!-- rule: <id> -->`. |
 | `assert_rule <id> <term>...` | Check that the anchor exists once and its text holds every key term. |
 | `with_timeout <seconds> <command>...` | Cap a command. It exits 124 on expiry. |
+| `repo_root [dir]` | Get the repo top, which is the first folder at or above `dir` that holds `product.yml`. Without `dir` it starts at the calling script. |
+| `pack_tree_src [dir]` | Get the source tree, `src/ravintio-zero`. |
+| `pack_tree_installed [dir]` | Get the installed tree, `ravintio-zero`. |
+
+The pack keeps two identical trees, and the clean-clone run executes each suite from both. A path built with `../..` is right in one tree and wrong in the other. Call `repo_root` or a tree helper and never build a root from the depth of the suite. A new suite runs from both trees before it counts as green. Run it from `src/ravintio-zero/tests/` and from `ravintio-zero/tests/`.
 
 `with_timeout` lives in `helpers/timeout.sh`, so source that file first. It works on macOS, which has no `timeout` command. It runs external commands only.
 

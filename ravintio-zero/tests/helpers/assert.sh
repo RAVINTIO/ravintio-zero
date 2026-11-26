@@ -307,6 +307,38 @@ commit_workspace_pack() {
   return 0
 }
 
+# repo_root [dir] prints the repo top: the first folder at or above dir that holds
+# product.yml. Without dir it starts at the folder of the calling script. The pack
+# runs each suite from src/ravintio-zero/tests/ and from ravintio-zero/tests/, so a
+# path built with ../.. is right in one tree and wrong in the other (0000572).
+# It prints nothing and returns 1 when no folder holds product.yml.
+repo_root() {
+  local dir="${1:-$(dirname "${BASH_SOURCE[1]:-$0}")}"
+  dir="$(cd "$dir" 2>/dev/null && pwd)" || return 1
+  while [ "$dir" != "/" ]; do
+    if [ -f "$dir/product.yml" ]; then
+      printf '%s\n' "$dir"
+      return 0
+    fi
+    dir="$(dirname "$dir")"
+  done
+  return 1
+}
+
+# pack_tree_src [dir] prints the source tree, and pack_tree_installed [dir] prints the
+# installed tree. Both start from repo_root.
+pack_tree_src() {
+  local root
+  root="$(repo_root "${1:-$(dirname "${BASH_SOURCE[1]:-$0}")}")" || return 1
+  printf '%s\n' "$root/src/ravintio-zero"
+}
+
+pack_tree_installed() {
+  local root
+  root="$(repo_root "${1:-$(dirname "${BASH_SOURCE[1]:-$0}")}")" || return 1
+  printf '%s\n' "$root/ravintio-zero"
+}
+
 print_summary() {
   FAIL=$((FAIL + $(_count_undefined_asserts)))
   echo ""

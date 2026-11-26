@@ -104,6 +104,16 @@ List every file a unit edits. Run `git fetch origin`, then read each file from t
 - If `origin` has no such branch, read the local base branch and write `local` after the commit.
 - If `origin/{base}` moves before the plan gate, repeat the reread and update the rows.
 
+## Pass signal paths
+
+Run this step when a requirement judges another component by its exit code or another pass signal. Skip it otherwise.
+
+<!-- rule: plan-pass-signal-paths -->
+1. Name the pass signal, such as exit 0 or exit 2.
+2. List each path that produces it. Include the failure paths of any launcher between the check and the component. An example is a launcher that exits with the pass code when it cannot run the component.
+3. Write one acceptance criterion for each path. A path that is a failure must fail the check.
+4. Write the list under `## Pass signal paths` in the execution plan.
+
 ## Requirements rules
 
 - Derive requirements directly from user stories in the brief. Do not invent requirements not stated or implied.

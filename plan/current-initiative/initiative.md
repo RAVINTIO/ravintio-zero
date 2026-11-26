@@ -11,7 +11,7 @@ status: "active"  # proposed | charted | active | delivered | blocked
 
 **Status:** active
 
-**Position:** 17
+**Position:** 35
 
 **Speed:** fast
 
@@ -174,7 +174,7 @@ The human confirmed the chart on 2026-11-14 with "build the initiative as fast a
 | 14 | 0000558-plan-only-push-short-ci | CI avoids extra runs on a plan-only push | 0000476-plan-only-push-short-ci | minor | 0.139.0 | merged | ci | |
 | 15 | 0000559-start-baseline-first | Start the baseline run before the P0 artifacts | 0000478 | minor | 0.141.0 | merged | baseline | |
 | 16 | 0000560-step-sessions-and-pending-migrations | Step sessions meet pending migrations | 0000403 | minor | 0.142.0 | merged | resume | |
-| 17 | 0000561-old-name-guard-fails-in-full-suite | Old-name guard fails in the full suite | 0000527 | minor | | pending | tests |  |
+| 17 | 0000561-old-name-guard-fails-in-full-suite | Old-name guard fails in the full suite | 0000527 | minor | 0.146.0 | merged | tests | |
 | 18 | 0000562-test-impact-scan-lists-the-mirrored-pack-tree | Test impact scan lists the mirrored pack tree | 0000540 | minor | 0.119.0 | merged | plan | |
 | 19 | 0000563-test-impact-misses-output-readers | Plan test impact misses suites that read driver output order | 0000533 | minor | 0.121.0 | merged | plan | |
 | 20 | 0000564-test-impact-hook-pins | Test impact scan names hook pins | 0000523 | minor | 0.122.0 | merged | plan | |
@@ -185,13 +185,13 @@ The human confirmed the chart on 2026-11-14 with "build the initiative as fast a
 | 25 | 0000569-scan-new-pack-files-for-wording-allowlist | Scan new pack files for the wording allowlist | 0000415 | minor | 0.131.0 | merged | plan | |
 | 26 | 0000570-sibling-test-copies-in-impact-scan | List sibling copies of a pinned test in the impact scan | 0000407 | minor | 0.133.0 | merged | plan | |
 | 27 | 0000571-scan-cause-skill-wide-grep-pins | Test impact scan covers skill-wide grep pins | 0000404 | minor | 0.136.0 | merged | plan | |
-| 28 | 0000572-tests-share-a-repo-root-helper | Tests share a repo-root helper for both pack trees | 0000528, 0000539 | minor | | pending | tests |  |
+| 28 | 0000572-tests-share-a-repo-root-helper | Tests share a repo-root helper for both pack trees | 0000528, 0000539 | minor | 0.148.0 | merged | tests | |
 | 29 | 0000573-require-unit-reports | Require unit reports | 0000417 | minor | 0.125.0 | merged | dispatch | |
 | 30 | 0000574-delivery-pr-lists-steps-in-version-order | Delivery PR lists steps in version order | 0000543 | minor | 0.144.0 | merged | coord | |
 | 31 | 0000575-build-log-marker-helper | Build log marker helper | 0000524 | minor | 0.135.0 | merged | dispatch | |
 | 32 | 0000576-phase-start-time-at-phase-start | Record each phase start time when the phase begins | 0000402 | minor | 0.145.0 | merged | dispatch | |
 | 33 | 0000577-plan-lists-change-shapes | Plan lists the change shapes a diff reader must handle | 0000516 | minor | 0.138.0 | merged | plan | |
-| 34 | 0000578-plan-lists-pass-signals | Plan lists every way a check can pass | 0000529 | minor | | pending | plan |  |
+| 34 | 0000578-plan-lists-pass-signals | Plan lists every way a check can pass | 0000529 | minor | 0.147.0 | merged | plan | |
 | 35 | 0000579-convert-remaining-suites-to-rule-anchors | Convert remaining suites to rule anchors | 0000401 | minor | | pending | anchors | 1-34 |
 | 36 | 0000580-log-non-tdd-units | Log a non-TDD unit with a class | 0000410 | minor | | pending | anchors | 35 |
 | 37 | 0000581-delivery-cleans-up-driver-state | Delivery cleans up driver state | 0000582 | minor |  | pending | coord | 35 |
@@ -234,3 +234,6 @@ The merge queue adds one row for each step it merges. See the merge queue sectio
 | 6 | #228 | tag v0.143.0 | 0.143.0 | 2026-11-18T07:35:26Z |
 | 30 | #245 | tag v0.144.0 | 0.144.0 | 2026-11-18T07:54:17Z |
 | 32 | #246 | tag v0.145.0 | 0.145.0 | 2026-11-18T08:32:39Z |
+| 17 | #247 | tag v0.146.0 | 0.146.0 | 2026-11-18T08:52:59Z |
+| 34 | #248 | tag v0.147.0 | 0.147.0 | 2026-11-26T07:04:41Z |
+| 28 | #251 | tag v0.148.0 | 0.148.0 | 2026-11-26T08:10:19Z |

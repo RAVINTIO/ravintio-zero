@@ -7,7 +7,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
 PACK="$SCRIPT_DIR/.."
-REPO="$(cd "$SCRIPT_DIR" && git rev-parse --show-toplevel)"
+REPO="$(repo_root)"
 STANDARDS="$PACK/standards/roadmap-standards.md"
 SKILL="$PACK/skills/ravintio-initiative/SKILL.md"
 
