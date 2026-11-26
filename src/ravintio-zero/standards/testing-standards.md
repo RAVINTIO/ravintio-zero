@@ -107,7 +107,7 @@ A test that asserts what a skill, standard, or template says reads the text thro
 
 <!-- rule: ob-testing-with-timeout --> `with_timeout` lives in `helpers/timeout.sh`, so source that file first. It works on macOS, which has no `timeout` command. It runs external commands only.
 
-To anchor a rule, put `<!-- rule: <id> -->` at the start of its line or item. Use lowercase letters, digits, and hyphens, and keep each id unique across `skills/`, `standards/`, and `templates/`. The rule is the anchor line and the lines after it, up to a blank line, a heading, or the next anchor. Tests assert key terms, not whole sentences. If you delete an anchor, the test that reads it fails and names the id.
+To anchor a rule, put `<!-- rule: <id> -->` at the start of its line or item. Use lowercase letters, digits, and hyphens, and keep each id unique across `skills/`, `standards/`, and `templates/`. The rule is the anchor line and the lines after it, up to a blank line, a heading, or the next anchor. Tests assert key terms, not whole sentences. If you delete an anchor, the test that reads it fails and names the id. Add a new suite that reads a rule through a helper to `tests/helpers/anchor-conversions.txt`. The boot templates `standard-boot.md` and `codex-boot.md` carry no anchors, because setup copies them into installs.
 
 ## 9. Test scope per phase
 
