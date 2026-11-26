@@ -27,11 +27,11 @@ As the coordinator, I run one script after the initiative PR merges, so that the
   - Given a root with the two folders and no lock
   - When the script runs with an id
   - Then both folders sit under `.git/ravintio-archive/{id}-{slug}/` and leave `plan/`
-- [ ] AC-2: An existing target is kept
+- [ ] AC-2: An existing target stays
   - Given an archive folder with the same name
   - When the script runs
-  - Then the new folders land in a suffixed folder and the old one is unchanged
-- [ ] AC-3: A symlink is refused
+  - Then the new folders land in a suffixed folder and the old one stays as it was
+- [ ] AC-3: The script refuses a symlink
   - Given `plan/.initiative-logs` is a symlink
   - When the script runs
   - Then it exits 1 and moves nothing
