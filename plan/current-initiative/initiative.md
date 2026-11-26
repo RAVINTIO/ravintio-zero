@@ -195,7 +195,7 @@ The human confirmed the chart on 2026-11-14 with "build the initiative as fast a
 | 35 | 0000579-convert-remaining-suites-to-rule-anchors | Convert remaining suites to rule anchors | 0000401 | minor | | pending | anchors | 1-34 |
 | 36 | 0000580-log-non-tdd-units | Log a non-TDD unit with a class | 0000410 | minor | | pending | anchors | 35 |
 | 37 | 0000581-delivery-cleans-up-driver-state | Delivery cleans up driver state | 0000582 | minor |  | pending | coord | 35 |
-| 38 | 0000583-step-temp-cleanup-after-merge | Clean up step temp files after each merge | 0000584 | minor |  | pending | cleanup |  |
+| 38 | 0000583-step-temp-cleanup-after-merge | Clean up step temp files after each merge | 0000584 | minor | 0.149.0 | merged | cleanup | |
 
 ## Merges
 
@@ -237,3 +237,4 @@ The merge queue adds one row for each step it merges. See the merge queue sectio
 | 17 | #247 | tag v0.146.0 | 0.146.0 | 2026-11-18T08:52:59Z |
 | 34 | #248 | tag v0.147.0 | 0.147.0 | 2026-11-26T07:04:41Z |
 | 28 | #251 | tag v0.148.0 | 0.148.0 | 2026-11-26T08:10:19Z |
+| 38 | #252 | tag v0.149.0 | 0.149.0 | 2026-11-26T09:19:47Z |
