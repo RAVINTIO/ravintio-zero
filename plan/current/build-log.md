@@ -131,8 +131,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Field | Value |
 |-------|-------|
 | Start | `2026-11-26T09:10:16Z` |
-| End | `` |
-| Wall clock | `` |
+| End | `2026-11-26T09:34:05Z` |
+| Wall clock | `31` |
 | Model tier | primary |
 | Skills loaded | ravintio-validate-and-accept |
 | Agents spawned | `0` |
@@ -141,3 +141,6 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 | Notes | full suite in a clean clone, output in /tmp/ravintio-s35-private/full2.out |
 
 - Tests run: full suite started at 2026-11-26T09:10:16Z in a clean clone of HEAD
+- Tests run: full suite: 489 passed, 3 failed (inherited) (2026-11-26T09:34:05Z)
+- Skipped: docs edit pass subagent (prose-check.mjs check exits 0 on the 3 changed docs)
+- Complete: P3 (2026-11-26T09:34:05Z)
