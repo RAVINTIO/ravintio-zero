@@ -63,3 +63,5 @@ Breaches: 1. The gate reports and does not block. Counts come from marker lines 
 | test | inline | 1 | 0 |
 | test | primary | 7 | 0 |
 | unclassified | unclassified | 0 | 3 |
+
+Retrospective: plan/retrospectives/0000579-convert-remaining-suites-to-rule-anchors-2026-11-26.md
