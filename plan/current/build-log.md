@@ -160,6 +160,8 @@ Complete: P3 (2026-11-26T11:08:55Z)
 | Parallel task batches | 0 |
 | Notes | Initiative step: PR and CI wait come before the archive. |
 
+Blocked: git push origin feat/0000580-log-non-tdd-units failed with `git@github.com: Permission denied (publickey).` The sandbox denies github.com:22 and holds no key. The PR body is ready at the session temp folder `s36/pr-body.md`. (11:09)
+
 ---
 
 ## Summary (filled at ship, P4)
