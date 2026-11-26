@@ -11,7 +11,7 @@ status: "active"  # proposed | charted | active | delivered | blocked
 
 **Status:** active
 
-**Position:** 28
+**Position:** 35
 
 **Speed:** fast
 
@@ -185,7 +185,7 @@ The human confirmed the chart on 2026-11-14 with "build the initiative as fast a
 | 25 | 0000569-scan-new-pack-files-for-wording-allowlist | Scan new pack files for the wording allowlist | 0000415 | minor | 0.131.0 | merged | plan | |
 | 26 | 0000570-sibling-test-copies-in-impact-scan | List sibling copies of a pinned test in the impact scan | 0000407 | minor | 0.133.0 | merged | plan | |
 | 27 | 0000571-scan-cause-skill-wide-grep-pins | Test impact scan covers skill-wide grep pins | 0000404 | minor | 0.136.0 | merged | plan | |
-| 28 | 0000572-tests-share-a-repo-root-helper | Tests share a repo-root helper for both pack trees | 0000528, 0000539 | minor | | pending | tests |  |
+| 28 | 0000572-tests-share-a-repo-root-helper | Tests share a repo-root helper for both pack trees | 0000528, 0000539 | minor | 0.148.0 | merged | tests | |
 | 29 | 0000573-require-unit-reports | Require unit reports | 0000417 | minor | 0.125.0 | merged | dispatch | |
 | 30 | 0000574-delivery-pr-lists-steps-in-version-order | Delivery PR lists steps in version order | 0000543 | minor | 0.144.0 | merged | coord | |
 | 31 | 0000575-build-log-marker-helper | Build log marker helper | 0000524 | minor | 0.135.0 | merged | dispatch | |
@@ -236,3 +236,4 @@ The merge queue adds one row for each step it merges. See the merge queue sectio
 | 32 | #246 | tag v0.145.0 | 0.145.0 | 2026-11-18T08:32:39Z |
 | 17 | #247 | tag v0.146.0 | 0.146.0 | 2026-11-18T08:52:59Z |
 | 34 | #248 | tag v0.147.0 | 0.147.0 | 2026-11-26T07:04:41Z |
+| 28 | #251 | tag v0.148.0 | 0.148.0 | 2026-11-26T08:10:19Z |
