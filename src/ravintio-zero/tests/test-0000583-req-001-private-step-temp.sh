@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Tests for feature 0000583-step-temp-cleanup-after-merge, REQ-001: the driver gives each step
-# session a private temp folder inside its worktree and runs the session in the sandbox.
+# session a private temp folder inside its worktree. It passes no sandbox settings.
 #
 # Each case builds a real git repo with a bare origin, a stub claude, and a stub merge queue (see
 # helpers/scheduler-fixture.sh). The stub claude records its environment and arguments.
@@ -20,7 +20,7 @@ source "$SCRIPT_DIR/helpers/scheduler-fixture.sh"
 yes_no() { if [ -e "$1" ] || [ -L "$1" ]; then echo yes; else echo no; fi; }
 
 echo ""
-echo "=== REQ-001 AC-1, AC-2: the session gets a private TMPDIR and runs in the sandbox ==="
+echo "=== REQ-001 AC-1, AC-2: the session gets a private TMPDIR and no sandbox settings ==="
 R="$(make_repo private 1 '1||' '2||1')"
 run_sched "$R"
 WT="$R/plan/.initiative-worktrees/step-2"
@@ -31,9 +31,7 @@ assert_equals "$(norm "$(cd "$R" && pwd -P)")/plan/.initiative-worktrees/step-2"
 assert_equals "$(norm "$CWD_SEEN")/.t" "$(norm "$(stub_env "$R" 2 TMPDIR)")" "REQ-001 AC-1: TMPDIR is {worktree}/.t"
 assert_equals "$(norm "$CWD_SEEN")/.t" "$(norm "$(stub_env "$R" 2 CEILING)")" "REQ-001 AC-1: GIT_CEILING_DIRECTORIES is {worktree}/.t"
 SETTINGS="$(stub_env "$R" 2 SETTINGS)"
-assert_contains '"enabled":true' "$SETTINGS" "REQ-001 AC-2: the sandbox is enabled"
-assert_contains "$(norm "$CWD_SEEN")" "$(norm "$SETTINGS")" "REQ-001 AC-2: the worktree is writable"
-assert_not_contains '"/tmp"' "$SETTINGS" "REQ-001 AC-2: the shared /tmp is not writable"
+assert_equals "" "$SETTINGS" "REQ-001 AC-2: the driver passes no --settings, so the session runs without the sandbox"
 
 echo ""
 echo "=== REQ-001 AC-3: a merged step leaves no worktree and no .t folder ==="
