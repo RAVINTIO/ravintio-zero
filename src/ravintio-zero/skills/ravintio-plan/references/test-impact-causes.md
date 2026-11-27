@@ -12,3 +12,4 @@
 - **Non-suite file:** the run adds a file under `ravintio-zero/tests/` that is not a `test-*.sh` suite. List `run-tests.sh` and `run-tests.ps1`.
 - **Fixture-pinned line:** the run edits an existing pack line. Grep `ravintio-zero/tests/fixtures/` for the line.
 - **Pack file edit:** the run edits a pack file under `src/ravintio-zero/` or `ravintio-zero/`. List `test-0000493-req-004-handoff-text.sh`. The same unit edits both trees, and P0 lists `src/ravintio-zero/` in `## Component Paths`.
+- **Output order:** the run adds, removes, or moves a line that a script prints. Search the tests folder for suites that match the line text of each changed line. Also search for suites that read the last line of the output, such as `tail -1`. List each match.

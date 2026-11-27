@@ -2,7 +2,7 @@
 id: "ravintio-zero"
 name: "RAVINTIO Zero"
 feature: "0000397-pack-source-in-src"
-version: "0.120.0"
+version: "0.121.0"
 status: "active"
 type: "component-pack"
 domain: "developer-tooling"
@@ -86,7 +86,7 @@ responsibilities:
   - "Check the gates of each installed archetype at P3 with scripts/archetype-gates.mjs, and exit 1 on a failed gate"
   - "Keep the pack source in src/ravintio-zero/ and a plain installed copy in ravintio-zero/, which hooks, the driver, and skills run, while consumer installs keep ravintio-zero/"
   - "Refresh the installed copy from the source with scripts/sync-installed.mjs, and check byte parity with its --check flag"
-  - "Hold the plan Test impact scan causes in skills/ravintio-plan/references/test-impact-causes.md, with a Pack file edit cause that lists the handoff suite, and tell P0 to list src/ravintio-zero/ in Component Paths for a pack file edit"
+  - "Hold the plan Test impact scan causes in skills/ravintio-plan/references/test-impact-causes.md, with a Pack file edit cause that lists the handoff suite, tell P0 to list src/ravintio-zero/ in Component Paths for a pack file edit, and add an Output order cause for suites that read changed lines or the last line"
 
 exceptions:
   - "Does not generate application code. That is the implement phase's job in consumer projects."
