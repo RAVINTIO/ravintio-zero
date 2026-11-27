@@ -1,0 +1,27 @@
+structure: test-0000204-req-003-living-docs.sh: reads component.yml, pipeline-reference.md, docs only, plus folder count
+converted: test-0000207-req-004-codex-ci-check.sh
+structure: test-0000239-req-002-stale-install-skip.sh: runs script fixtures, checks another suite's text
+converted: test-0000245-req-001-hook-enforcement-reference.sh
+converted: test-0000247-req-002-commit-id-reservations.sh
+converted: test-0000247-req-003-no-stash-in-batch.sh
+converted: test-0000320-req-003-migration-ledger.sh
+converted: test-0000321-req-001-priority-theme-fields.sh
+converted: test-0000357-req-003-forced-add-in-codex.sh
+converted: test-0000359-req-002-own-path-commits.sh
+converted: test-0000379-req-007-worktree-rule.sh
+converted: test-0000380-req-003-timeout-helper.sh
+structure: test-0000381-req-001-manifest-confinement.sh: setup script behaviour and run-tests text only
+structure: test-0000382-req-005-clear-first-run.sh: setup help, hooks, getting-started, pipeline-reference only
+converted: test-0000384-req-002-003-templates.sh
+converted: test-0000389-req-001-002-standard.sh
+converted: test-0000389-req-006-briefs.sh
+structure: test-0000391-req-003-004-command.sh: archetype.mjs script behaviour with fixtures
+structure: test-0000391-req-005-archetypes.sh: manifests, archetype files, parity of pinned lines
+converted: test-0000391-req-008-standard-text.sh
+structure: test-0000391-req-007-writing-outputs.sh: writing-style.mjs output with override fixtures
+structure: test-0000392-req-002-capa-record-check.sh: script behaviour, template pins sit in blockquote and table
+converted: test-0000393-req-004-filing-wording.sh
+structure: test-0000448-req-002-driver-runs-setup-command.sh: driver script output with fixtures
+structure: test-0000493-req-001-003-handoff.sh: driver script output with fixtures
+structure: test-0000507-req-003-driver-hook-check.sh: driver script output with fixtures
+converted: test-0000572-req-002-standard-and-adoption.sh

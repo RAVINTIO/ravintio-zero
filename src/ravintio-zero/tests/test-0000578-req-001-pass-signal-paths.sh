@@ -9,20 +9,15 @@ source "$SCRIPT_DIR/helpers/assert.sh"
 
 ZERO_DIR="$SCRIPT_DIR/.."
 PLAN="$ZERO_DIR/skills/ravintio-plan/SKILL.md"
-SECTION=$(awk '/^## Pass signal paths/{f=1;next} /^## /{f=0} f' "$PLAN")
 
 echo ""
 echo "=== REQ-001 AC-1: the section holds the pass signal wording ==="
-assert_contains "exit code" "$SECTION" "REQ-001 AC-1: the section names an exit code"
-assert_contains "pass signal" "$SECTION" "REQ-001 AC-1: the section names the pass signal"
-assert_contains "each path" "$SECTION" "REQ-001 AC-1: the section lists each path"
-assert_contains "launcher" "$SECTION" "REQ-001 AC-1: the section names a launcher"
-assert_contains "acceptance criterion" "$SECTION" "REQ-001 AC-1: each path gets an acceptance criterion"
+assert_rule piv-plan-pass-signal-when "exit code" "pass signal"
+assert_rule plan-pass-signal-paths "pass signal" "each path" "launcher" "acceptance criterion"
 
 echo ""
 echo "=== REQ-001 AC-2: a launcher failure must fail the check ==="
-assert_contains "cannot run" "$SECTION" "REQ-001 AC-2: the section names a launcher that cannot run the component"
-assert_contains "must fail the check" "$SECTION" "REQ-001 AC-2: the section says a failure path must fail the check"
+assert_rule plan-pass-signal-paths "cannot run" "must fail the check"
 
 echo ""
 echo "=== REQ-001 AC-3: the skill stays within its caps and both trees match ==="

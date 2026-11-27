@@ -12,15 +12,7 @@ source "$SCRIPT_DIR/helpers/assert.sh"
 
 ZERO_DIR="$SCRIPT_DIR/.."
 SHIP="$ZERO_DIR/skills/ravintio-ship/SKILL.md"
-STD="$ZERO_DIR/standards/roadmap-standards.md"
 
-# Lines from a heading to the next heading of the same or higher level.
-section() {
-  awk -v h="$1" '
-    $0 == h { on = 1; lvl = index(h, " "); next }
-    on && /^#+ / { if (index($0, " ") <= lvl) exit }
-    on { print }' "$2"
-}
 has() { printf '%s\n' "$2" | grep -qF -- "$1" && echo yes || echo no; }
 line() { grep -n -F -- "$1" "$2" | head -1 | cut -d: -f1; }
 
@@ -38,22 +30,15 @@ assert_equals "yes" "$ordered" "req-002 (a): headings rise Step 7, 8, 9, 10"
 assert_equals "10" "$(grep -c '^### Step ' "$SHIP")" \
   "req-002 (a): ten step headings, none renumbered below Step 7"
 
-S7="$(section '### Step 7: Release tag' "$SHIP")"
-S8="$(section '### Step 8: Clear sentinels' "$SHIP")"
-S9="$(section '### Step 9: PR' "$SHIP")"
-S10="$(section '### Step 10: Final gate' "$SHIP")"
+assert_rule rm-ship-option1-capture 'option [1]'
+assert_rule rm-ship-option1-commands 'git push origin {branch}'
+assert_equals "no" "$(has 'git push origin v{version}' "$(rule_text rm-ship-option1-commands)")" "req-002 (a): Step 9 option [1] pushes no tag (0000169 req-006)"
+assert_rule rm-ship-no-tag 'Create no tag.'
+assert_rule orc-ship-clear-markers 'plan/.orchestrator-active' 'plan/.orchestrator-ack' 'plan/.run-mode' 'git ls-files'
+assert_rule rm-ship-gate-run-mode 'Step 8 deletes'
+assert_rule rm-ship-hard-limit-mode 'Read `plan/.run-mode` before Step 8'
 
-assert_equals "yes" "$(has 'option [1]' "$S9")" "req-002 (a): Step 9 covers option [1]"
-assert_equals "no" "$(has 'git push origin v{version}' "$(printf '%s\n' "$S9" | sed -n '/option \[1\], push/,/^```$/p')")" "req-002 (a): Step 9 option [1] pushes no tag (0000169 req-006)"
-assert_equals "yes" "$(has 'Create no tag.' "$S7")" "req-002 (a): Step 7 creates no tag (0000169 req-006)"
-assert_equals "yes" "$(has 'plan/.orchestrator-active' "$S8")" "req-002 (a): Step 8 names the active sentinel"
-assert_equals "yes" "$(has 'plan/.orchestrator-ack' "$S8")" "req-002 (a): Step 8 names the ack sentinel"
-assert_equals "yes" "$(has 'plan/.run-mode' "$S8")" "req-002 (a): Step 8 names the run-mode sentinel"
-assert_equals "yes" "$(has 'git ls-files' "$S8")" "req-002 (a): Step 8 checks git ls-files"
-assert_equals "yes" "$(has 'Step 8 deletes' "$S10")" "req-002 (a): Step 10 cites Step 8 for the deletion"
-assert_equals "yes" "$(has 'Read `plan/.run-mode` before Step 8' "$(cat "$SHIP")")" "req-002 (a): hard limit reads the mode before Step 8"
-
-RD="$(section '### I-D Advance' "$STD")"
+RD="$(orch_section '### I-D Advance')"
 r_clear="$(printf '%s\n' "$RD" | grep -n 'Step 8' | head -1 | cut -d: -f1)"
 r_ready="$(printf '%s\n' "$RD" | grep -n 'Write `ready` only' | head -1 | cut -d: -f1)"
 r_pr="$(printf '%s\n' "$RD" | grep -n 'gh pr create' | head -1 | cut -d: -f1)"

@@ -11,7 +11,6 @@ source "$SCRIPT_DIR/helpers/assert.sh"
 
 TEMPLATE="$ROOT/templates/design.template.md"
 GATE="$ROOT/hooks/enforcement/gate-write.mjs"
-STD="$ROOT/standards/agent-dispatch-standards.md"
 ADR="$ROOT/templates/adr.template.md"
 
 echo ""
@@ -41,15 +40,13 @@ assert_equals "2" "$(run_gate elsewhere/y.sh)" "req-002 AC-2: unlisted path exit
 
 echo ""
 echo "=== req-003 AC-1: the dispatch template states the limit ==="
-DISPATCH=$(awk '/^## Agent Dispatch Template/{f=1;next} /^## /{f=0} f' "$STD")
-assert_contains "72" "$DISPATCH" "req-003 AC-1: 72-character limit in the dispatch template"
+assert_rule ob-dispatch-commit-limit "72"
 
 echo ""
 echo "=== req-005: the ADR template carries the new fields ==="
 ADR_TEXT=$(cat "$ADR")
 assert_contains "component:" "$ADR_TEXT" "req-005: component front matter field"
-assert_contains "docs/adr/{NNNN}-{slug}.md" "$ADR_TEXT" "req-005: file location"
-assert_contains "reserve-id.mjs --file docs/adr/.next-id" "$ADR_TEXT" "req-005: reserve command"
-assert_contains "Superseded by {number}" "$ADR_TEXT" "req-005: superseded wording"
+assert_rule ob-adr-file-location "docs/adr/{NNNN}-{slug}.md" "reserve-id.mjs --file docs/adr/.next-id"
+assert_rule ob-adr-superseded "Superseded by {number}"
 
 print_summary

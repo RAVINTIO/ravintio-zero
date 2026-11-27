@@ -11,8 +11,6 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
 DRIVER="$SCRIPT_DIR/../scripts/initiative-run.mjs"
-STANDARDS="$SCRIPT_DIR/../standards/roadmap-standards.md"
-SHIP="$SCRIPT_DIR/../skills/ravintio-ship/SKILL.md"
 WORK="$(mktemp -d)"
 trap 'rm -rf "$WORK"' EXIT
 source "$SCRIPT_DIR/helpers/scheduler-fixture.sh"
@@ -63,8 +61,8 @@ assert_contains "could not list untracked backlog entries" "$OUT" "REQ-002 AC-3:
 
 echo ""
 echo "=== REQ-003 AC-1, AC-2: the ship skill, the driver header, and the standards state the rule ==="
-assert_contains "git status --porcelain plan/backlog" "$(cat "$SHIP")" "REQ-003 AC-1: ship lists untracked entries"
+assert_rule rm-ship-untracked-backlog "git status --porcelain plan/backlog"
 assert_contains "untracked backlog entries" "$(sed -n 1,160p "$DRIVER")" "REQ-003 AC-2: the driver header states the rule"
-assert_contains "untracked backlog entries" "$(cat "$STANDARDS")" "REQ-003 AC-2: roadmap-standards.md states the rule"
+assert_rule rm-driver-queue-untracked "untracked backlog entries"
 
 print_summary

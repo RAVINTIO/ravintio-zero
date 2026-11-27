@@ -29,6 +29,6 @@ echo "=== req-004 AC-3: the docs and the refresh skill name codex ==="
 
 assert_contains "setup.sh codex" "$(cat "$ZERO_DIR/getting-started.md")" "req-004: getting-started names the codex command"
 assert_contains "AGENTS.md" "$(cat "$REPO_DIR/README.md")" "req-004: README names AGENTS.md"
-assert_contains "\`codex\`" "$(cat "$ZERO_DIR/skills/ravintio-refresh-setup/SKILL.md")" "req-001 AC-3: the refresh skill names codex"
+assert_rule ob-refresh-supported-tools "\`codex\`"
 
 print_summary

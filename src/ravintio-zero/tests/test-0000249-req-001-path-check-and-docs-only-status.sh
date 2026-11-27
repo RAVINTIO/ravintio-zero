@@ -13,24 +13,15 @@ ALL=$(cat "$SKILL")
 
 echo ""
 echo "=== req-001 AC-1: the skill holds the PATH search rule ==="
-VERIFY=$(awk '/^## Verify by execution/{f=1;next} /^## /{f=0} f' "$SKILL")
-assert_contains 'command -v {program}' "$VERIFY" "req-001 AC-1: the rule runs command -v"
-assert_contains 'before a report says a program is missing' "$VERIFY" "req-001 AC-1: the rule applies before a missing-program report"
-assert_contains '/opt/homebrew/bin' "$VERIFY" "req-001 AC-1: the rule names /opt/homebrew/bin"
-assert_contains '/usr/local/bin' "$VERIFY" "req-001 AC-1: the rule names /usr/local/bin"
-assert_contains '~/.local/bin' "$VERIFY" "req-001 AC-1: the rule names ~/.local/bin"
+assert_rule piv-p3-missing-programs 'command -v {program}' 'before a report says a program is missing' '/opt/homebrew/bin' '/usr/local/bin' '~/.local/bin'
 
 echo ""
 echo "=== req-001 AC-2: the skill defines the docs-only status ==="
-assert_contains '`unverified (docs only)`' "$VERIFY" "req-001 AC-2: the outcomes list defines the status"
-assert_contains 'never counts as `verified`' "$VERIFY" "req-001 AC-2: the status never counts as verified"
-assert_contains 'documentation alone' "$VERIFY" "req-001 AC-2: the status covers a claim that documentation alone backs"
+assert_rule piv-p3-unverified-status '`unverified (docs only)`' 'never counts as `verified`' 'documentation alone'
 
 echo ""
 echo "=== req-001 AC-3: the evidence rules ask for the search and the list ==="
-GATE=$(awk '/^## Acceptance gate/{f=1;next} /^## /{f=0} f' "$SKILL")
-assert_contains 'the `PATH` check commands' "$GATE" "req-001 AC-3: the gate asks for the PATH check commands"
-assert_contains 'each unverified claim by name' "$GATE" "req-001 AC-3: the gate asks for the unverified claims by name"
-assert_contains 'never raw command output' "$GATE" "req-001 AC-3: the evidence keeps raw output out"
+assert_rule piv-p3-gate-search-evidence 'the `PATH` check commands' 'each unverified claim by name'
+assert_rule piv-p3-autonomous-evidence 'never raw command output'
 
 print_summary

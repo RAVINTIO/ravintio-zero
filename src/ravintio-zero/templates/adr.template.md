@@ -10,7 +10,7 @@ version: "0.1.0"
 **Skill:** [plan](../skills/ravintio-plan/SKILL.md)
 **Feature:** {{feature-id}}
 **Component:** {{component-id}} (if scoped to one)
-**File:** `docs/adr/{NNNN}-{slug}.md`. The number is repo-wide, four digits, reserved with `node ravintio-zero/scripts/reserve-id.mjs --file docs/adr/.next-id`.
+<!-- rule: ob-adr-file-location --> **File:** `docs/adr/{NNNN}-{slug}.md`. The number is repo-wide, four digits, reserved with `node ravintio-zero/scripts/reserve-id.mjs --file docs/adr/.next-id`.
 **Date:** {{ISO-8601}}
 
 ## Context
@@ -54,5 +54,5 @@ version: "0.1.0"
 
 ## Superseded By
 
-- Superseded by {number}
+- <!-- rule: ob-adr-superseded --> Superseded by {number}
 

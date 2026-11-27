@@ -16,8 +16,7 @@ trap 'rm -rf "$WORK"' EXIT
 echo "=== req-006 AC-1: dispatch template names the standard ==="
 SKEL="$(grep -n 'prompt: "Requirement:' "$DISPATCH")"
 assert_equals "2" "$(printf '%s\n' "$SKEL" | grep -c "$STD")" "req-006 AC-1: both skeleton prompts name the standard"
-RULE="$(grep '^\*\*Self-contained prompt rule' "$DISPATCH")"
-assert_contains "$STD" "$RULE" "req-006 AC-1: the prompt rule names the standard"
+assert_rule orc-dispatch-self-contained "$STD"
 
 echo ""
 echo "=== req-006 AC-2: driver names the standard ==="
@@ -63,7 +62,7 @@ assert_contains "Run initiative step 1" "$ARGS" "req-006 AC-2: the step prompt i
 echo ""
 echo "=== req-005 AC-2: refresh keeps the flag ==="
 SKILL="$(cat "$REFRESH")"
-assert_contains "--strict-orchestrator\` and \`--no-writing-style" "$SKILL" "req-005 AC-2: allowed set holds --no-writing-style"
+assert_rule oa-refresh-allowed-flags "--strict-orchestrator" "--no-writing-style"
 assert_contains "lists \`--no-writing-style\`" "$SKILL" "req-005 AC-2: a signal row maps the flag"
 
 print_summary

@@ -91,8 +91,7 @@ echo "=== req-009 (a): new names are in use ==="
 
 has() { grep -qF -- "$1" "$2" && echo yes || echo no; }
 
-assert_equals "yes" "$(has 'standards/pack-update-policy.md' <(cat "$ZERO_DIR/skills/ravintio-orchestrator/SKILL.md" "$ZERO_DIR/skills/ravintio-orchestrator/references/orchestrator-resume-detection.md"))" \
-  "req-009 (a): orchestrator links pack-update-policy.md"
+assert_rule resume-pack-update "standards/pack-update-policy.md"
 assert_equals "yes" "$(has '## Updating the pack' "$ZERO_DIR/pipeline-reference.md")" \
   "req-009 (a): pipeline-reference.md has the Updating the pack heading"
 assert_equals "yes" "$(has '## Updating the pack' "$ZERO_DIR/project-operations.md")" \

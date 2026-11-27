@@ -30,11 +30,12 @@ Canonical home for model tier selection and parallelism/dispatch mechanics, shar
 
 **Tier-to-model mapping by tool** (the Agent tool's `model` values are aliases, so they track new releases):
 
+<!-- rule: piv-dispatch-tier-map -->
 | Tool | Primary tier | Cheaper tier |
 |------|-------------|-------------|
 | Claude Code | `sonnet` | `haiku` |
 
-**How to apply:** Before calling `Agent(...)`, look up the task in the table. Pass `model: {resolved model name}` as a parameter. An Agent call without `model` inherits the parent's model, so a cheaper-tier task would run on the parent's tier. Every Agent call passes `model` explicitly. Record the tier in the build log for the ship phase's build assessment.
+<!-- rule: piv-dispatch-how-to-apply --> **How to apply:** Before calling `Agent(...)`, look up the task in the table. Pass `model: {resolved model name}` as a parameter. An Agent call without `model` inherits the parent's model, so a cheaper-tier task would run on the parent's tier. Every Agent call passes `model` explicitly. Record the tier in the build log for the ship phase's build assessment.
 
 ---
 
@@ -86,9 +87,9 @@ The orchestrator logs the unit from the report alone. It never reads the commit 
 
 ## WebFetch of a reference page
 
-Run a `WebFetch` of a full reference page in a subagent on `sonnet` or `haiku`. The page then stays out of the main session, so later turns do not re-read it.
+<!-- rule: oa-webfetch-subagent --> Run a `WebFetch` of a full reference page in a subagent on `sonnet` or `haiku`. The page then stays out of the main session, so later turns do not re-read it.
 
-1. Name the extract the parent needs in the dispatch prompt.
+1. <!-- rule: oa-webfetch-extract --> Name the extract the parent needs in the dispatch prompt.
 2. The dispatch passes `model` explicitly, as the tier table requires.
 3. The subagent returns only that extract, not the page.
 
@@ -98,10 +99,11 @@ A small page that the parent needs in full may run in the main session.
 
 ## Parallelism Rules
 
-**Default posture: parallel.** Sequential dispatch requires an explicit dependency justification. **Dependency test:** can task B start before task A's output is available? If you cannot state why it must wait, dispatch both in parallel (single message, multiple Agent tool calls).
+<!-- rule: shp-dispatch-default-parallel --> **Default posture: parallel.** Sequential dispatch requires an explicit dependency justification. **Dependency test:** can task B start before task A's output is available? If you cannot state why it must wait, dispatch both in parallel (single message, multiple Agent tool calls).
 
 ### MUST parallelise
 
+<!-- rule: piv-dispatch-must-parallel -->
 | Pattern | Example |
 |---------|---------|
 | Multiple independent codebase searches | Grepping for hook files + scanning skill dirs simultaneously |
@@ -115,6 +117,7 @@ A small page that the parent needs in full may run in the main session.
 
 ### Cannot parallelise
 
+<!-- rule: piv-dispatch-cannot-parallel -->
 | Pattern | Reason |
 |---------|--------|
 | Phase N work before Phase N-1 artifacts exist | Hard phase dependency |
@@ -131,9 +134,9 @@ A small page that the parent needs in full may run in the main session.
 
 Dispatch follows the batches in the `## Concurrency plan` of `plan/current/execution-plan.md`.
 
-- Two units with no dependency and no shared write target share a batch.
-- A unit alone in its batch gives its reason in the `Sequential reason` column.
-- Record any departure from the plan's batches in the build log with its reason.
+- <!-- rule: piv-dispatch-concurrency-batch --> Two units with no dependency and no shared write target share a batch.
+- <!-- rule: piv-dispatch-concurrency-sequential --> A unit alone in its batch gives its reason in the `Sequential reason` column.
+- <!-- rule: piv-dispatch-concurrency-departure --> Record any departure from the plan's batches in the build log with its reason.
 - Check 8 of `consistency-check.mjs` validates the table.
 
 ---
@@ -142,14 +145,14 @@ Dispatch follows the batches in the `## Concurrency plan` of `plan/current/execu
 
 After ravintio-refactor confirms all-suite GREEN, ravintio-implement runs up to 2 cycles per requirement. Each cycle asks whether a simpler or cleaner solution meets the same tests.
 
-1. Dispatch a reviewer in a fresh context on the primary tier. Pass it the requirement, the test file, and the implementation files. Do not pass the transcript of earlier dispatches. The reviewer edits nothing.
-2. The reviewer returns one finding worth making, or the text `no change worth making`. It reports only a change that simplifies the code, removes duplication, or picks a cleaner design. It skips style preferences and any change that alters behaviour.
-3. If the reviewer returns `no change worth making`, append the early stop marker. The loop stops early for that requirement.
+1. <!-- rule: piv-dispatch-improve-reviewer --> Dispatch a reviewer in a fresh context on the primary tier. Pass it the requirement, the test file, and the implementation files. Do not pass the transcript of earlier dispatches. The reviewer edits nothing.
+2. <!-- rule: piv-dispatch-improve-finding --> The reviewer returns one finding worth making, or the text `no change worth making`. It reports only a change that simplifies the code, removes duplication, or picks a cleaner design. It skips style preferences and any change that alters behaviour.
+3. <!-- rule: piv-dispatch-improve-early-stop --> If the reviewer returns `no change worth making`, append the early stop marker. The loop stops early for that requirement.
 4. If the reviewer returns a finding, dispatch ravintio-refactor in improvement mode with that finding, then run the full suite.
-5. If the suite fails, ravintio-refactor reverts the change. The requirement stays GREEN, and the cycle records `suite fail, reverted`.
+5. <!-- rule: piv-dispatch-improve-revert --> If the suite fails, ravintio-refactor reverts the change. The requirement stays GREEN, and the cycle records `suite fail, reverted`.
 6. Append the cycle marker to the build log before the next dispatch.
 
-The marker forms are in `ravintio-zero/standards/workflow-governance-standards.md`. On resume, count the `Improve:` markers for the requirement in the build log and run only the cycles that remain.
+<!-- rule: piv-dispatch-improve-resume --> The marker forms are in `ravintio-zero/standards/workflow-governance-standards.md`. On resume, count the `Improve:` markers for the requirement in the build log and run only the cycles that remain.
 
 ---
 
@@ -160,10 +163,10 @@ The run speed is in `plan/.run-speed`. It holds `fast` or `standard`. A missing 
 At `fast`, a phase dispatches every unit of its fast batch in one message. It makes one `Agent` call per unit and passes `model` on each.
 
 - Units in one batch write disjoint files. A dependency manifest or lock file counts as shared, so at most one unit in a batch may add a dependency.
-- Units share one working tree, so they commit one at a time. Each unit stages its own files by path, never with `git add -A` or `git add .`. If a commit meets `.git/index.lock`, wait and retry it.
-- Each unit commits with `git commit -m "{message}" -- {paths}`, so the commit takes only its own paths and not files another unit has staged.
-- Never run `git commit --amend` in a batch. A unit that needs to fix an earlier commit makes a new commit.
-- Never run `git stash`, `git checkout`, or `git reset` in a subagent during a batch. A stash takes the uncommitted work of every other subagent in the tree.
+- <!-- rule: ob-batch-stage-by-path --> Units share one working tree, so they commit one at a time. Each unit stages its own files by path, never with `git add -A` or `git add .`. If a commit meets `.git/index.lock`, wait and retry it.
+- <!-- rule: ob-batch-commit-paths --> Each unit commits with `git commit -m "{message}" -- {paths}`, so the commit takes only its own paths and not files another unit has staged.
+- <!-- rule: ob-batch-no-amend --> Never run `git commit --amend` in a batch. A unit that needs to fix an earlier commit makes a new commit.
+- <!-- rule: ob-batch-no-stash --> Never run `git stash`, `git checkout`, or `git reset` in a subagent during a batch. A stash takes the uncommitted work of every other subagent in the tree.
 - The Cannot parallelise table still applies.
 - Phases run in order. No unit of phase N+1 starts before phase N ends.
 - Gates, exception stops, and progress markers stay as they are. Write one `In progress:` line per unit in a single commit before the batch.
@@ -176,10 +179,11 @@ At `standard`, each phase keeps the parallelism rules above. Each phase skill li
 
 ## Agent Dispatch Template
 
-Agent spawning is level-2 parallelism. It uses the Agent tool for independent sub-tasks that each need their own tool access and context. The Parallelism Rules above cover level-1 (multiple native tool calls in one message). Spawn when the task is self-contained enough to brief to a colleague in one paragraph. Stay inline when the task needs ongoing dialogue or shared mutable state, or when it is too small to justify the overhead.
+<!-- rule: orc-dispatch-level-two --> Agent spawning is level-2 parallelism. It uses the Agent tool for independent sub-tasks that each need their own tool access and context. The Parallelism Rules above cover level-1 (multiple native tool calls in one message). Spawn when the task is self-contained enough to brief to a colleague in one paragraph. Stay inline when the task needs ongoing dialogue or shared mutable state, or when it is too small to justify the overhead.
 
 **Concrete parallel dispatch skeleton** (send both `Agent()` calls in a single message so they execute concurrently):
 
+<!-- rule: piv-dispatch-skeleton -->
 ```
 Agent({ description: "Implement REQ-001: {one-liner}", subagent_type: "general-purpose", model: "haiku",
   prompt: "Requirement: plan/current/requirements/req-001-{slug}.md. ADR: docs/adr/{NNNN}-{slug}.md. Stack: {constraint}. Task: {what to build}. If you discover an out-of-scope bug/gap, file it at plan/backlog/{backlog-id-1}-{slug}/entry.md per templates/backlog-entry.template.md; do not report it back for me to relay. Write all prose to ravintio-zero/standards/writing-standards.md. Never run git stash, git checkout, or git reset: a stash takes the uncommitted work of every other subagent. Confirm: files modified, what changed." })
@@ -188,15 +192,15 @@ Agent({ description: "Implement REQ-002: {one-liner}", subagent_type: "general-p
   prompt: "Requirement: plan/current/requirements/req-002-{slug}.md. ADR: docs/adr/{NNNN}-{slug}.md. Stack: {constraint}. Task: {what to build}. If you discover an out-of-scope bug/gap, file it at plan/backlog/{backlog-id-2}-{slug}/entry.md per templates/backlog-entry.template.md; do not report it back for me to relay. Write all prose to ravintio-zero/standards/writing-standards.md. Never run git stash, git checkout, or git reset: a stash takes the uncommitted work of every other subagent. Confirm: files modified, what changed." })
 ```
 
-**Commit subject limit:** a commit subject has at most 72 characters. The commit-msg hook rejects longer ones, so state the limit in every prompt that commits.
+<!-- rule: ob-dispatch-commit-limit --> **Commit subject limit:** a commit subject has at most 72 characters. The commit-msg hook rejects longer ones, so state the limit in every prompt that commits.
 
-**Self-contained prompt rule:** include the requirement file path and the relevant ADR paths. Add the stack declaration or relevant constraint and the backlog ID to use if filing an out-of-scope discovery. Add a line that names `ravintio-zero/standards/writing-standards.md` for prose. Add what "done" looks like. Do NOT rely on shared conversation history. The spawned agent has no memory of this session.
+<!-- rule: orc-dispatch-self-contained --> **Self-contained prompt rule:** include the requirement file path and the relevant ADR paths. Add the stack declaration or relevant constraint and the backlog ID to use if filing an out-of-scope discovery. Add a line that names `ravintio-zero/standards/writing-standards.md` for prose. Add what "done" looks like. Do NOT rely on shared conversation history. The spawned agent has no memory of this session.
 
 **Model tier for spawned agents:** see the Model Tier Decision Table above.
 
-**Out-of-scope discovery filing:** if a dispatched subagent discovers an out-of-scope bug or gap, it MUST file `plan/backlog/{id}-{slug}/entry.md` directly, per `templates/backlog-entry.template.md`. The entry has `Deferral source: discovered mid-flight`, `Source feature` set to the active feature ID, and `Source phase` set to the phase active at discovery. It must NOT report the discovery back for the dispatching agent to relay through a host-tool side channel (for example a task-spawning tool). It must NOT silently drop the discovery.
+<!-- rule: orc-dispatch-backlog-filing --> **Out-of-scope discovery filing:** if a dispatched subagent discovers an out-of-scope bug or gap, it MUST file `plan/backlog/{id}-{slug}/entry.md` directly, per `templates/backlog-entry.template.md`. The entry has `Deferral source: discovered mid-flight`, `Source feature` set to the active feature ID, and `Source phase` set to the phase active at discovery. It must NOT report the discovery back for the dispatching agent to relay through a host-tool side channel (for example a task-spawning tool). It must NOT silently drop the discovery.
 
-The **dispatching agent** (orchestrator or phase skill placing the `Agent()` call) pre-computes the next available backlog ID before dispatch. It reserves the ID with `node ravintio-zero/scripts/reserve-id.mjs`, which reads the counter file `plan/backlog/.next-id`. It passes the ID explicitly in the subagent's prompt for use if a discovery needs filing. Subagent self-lookup of `plan/backlog/` at file-time is unsafe, so the pipeline rejects it. The pipeline deletes picked-up entries from `plan/backlog/` once it folds them into a design. A subagent scanning only that directory would undercount the true high-water mark and risk reusing a retired ID.
+<!-- rule: orc-dispatch-backlog-id --> The **dispatching agent** (orchestrator or phase skill placing the `Agent()` call) pre-computes the next available backlog ID before dispatch. It reserves the ID with `node ravintio-zero/scripts/reserve-id.mjs`, which reads the counter file `plan/backlog/.next-id`. It passes the ID explicitly in the subagent's prompt for use if a discovery needs filing. Subagent self-lookup of `plan/backlog/` at file-time is unsafe, so the pipeline rejects it. The pipeline deletes picked-up entries from `plan/backlog/` once it folds them into a design. A subagent scanning only that directory would undercount the true high-water mark and risk reusing a retired ID.
 
 When dispatching multiple subagents in a single parallel batch, each MUST receive a distinct pre-assigned backlog ID (or a reserved contiguous block, one per subagent). No two subagents may independently file under the same ID.
 
@@ -230,7 +234,7 @@ In a parallel batch, write one `In progress:` line per unit in a single commit b
 
 On resume, read the build log. An `In progress:` line with no later matching `Done:` line marks an interrupted unit. For each one:
 
-1. If the working tree has uncommitted changes, stash them. Never discard them.
+1. <!-- rule: ob-resume-stash --> If the working tree has uncommitted changes, stash them. Never discard them.
 
    ```bash
    git stash push --include-untracked -m "interrupted {unit}"

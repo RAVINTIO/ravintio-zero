@@ -13,32 +13,27 @@ SCAN=$(awk '/^## Test impact scan/{f=1;next} /^## /{f=0} f' "$PLAN"; cat "$(dirn
 
 echo ""
 echo "=== req-001 AC-1: reference file edits ==="
-assert_contains "references/" "$SCAN" "req-001 AC-1: the scan names the references folder"
-assert_contains "frozen-line" "$SCAN" "req-001 AC-1: the scan names the frozen-line tests"
+assert_rule piv-cause-reference-edit "references/" "frozen-line"
 
 echo ""
 echo "=== req-002 AC-1: a new test file ==="
-assert_contains "test-0000164-req-008" "$SCAN" "req-002 AC-1: the scan names the style test"
+assert_rule piv-cause-new-test-file "test-0000164-req-008"
 
 echo ""
 echo "=== req-003 AC-1: the runner allowlist ==="
-assert_contains "run-tests.sh" "$SCAN" "req-003 AC-1: the scan names run-tests.sh"
-assert_contains "run-tests.ps1" "$SCAN" "req-003 AC-1: the scan names run-tests.ps1"
+assert_rule piv-cause-new-test-file "run-tests.sh" "run-tests.ps1"
 
 echo ""
 echo "=== req-004: fixture pins ==="
-assert_contains "tests/fixtures/" "$SCAN" "req-004 AC-1: the scan names the fixtures folder"
-IMPL=$(cat "$ZERO_DIR/skills/ravintio-implement/SKILL.md")
-assert_contains "before the full suite" "$IMPL" "req-004 AC-2: P2 runs the named suites before the full suite"
+assert_rule piv-cause-fixture-pinned "tests/fixtures/"
+assert_rule piv-implement-impact-suites-first "before the full suite"
 
 echo ""
 echo "=== req-005: the repo's own tests ==="
-assert_contains "__tests__/" "$SCAN" "req-005 AC-1: the scan names the common folder names"
-assert_contains "stack" "$SCAN" "req-005 AC-1: the scan reads the stack declaration"
-assert_contains "ravintio-zero/tests/" "$SCAN" "req-005 AC-2: the scan still names the pack tests"
-for S in ravintio-test-writer ravintio-refactor ravintio-validate-and-accept; do
-  assert_contains "repo's own test" "$(cat "$ZERO_DIR/skills/$S/SKILL.md")" "req-005 AC-3: $S names the repo's own tests"
-done
+assert_rule piv-plan-impact-scan "__tests__/" "stack" "ravintio-zero/tests/"
+assert_rule piv-testwriter-test-dir "repo's own test"
+assert_rule refactor-affected-tests "repo's own test"
+assert_rule piv-p3-test-step "repo's own test"
 
 echo ""
 echo "=== NFR: scan size and skill text ==="

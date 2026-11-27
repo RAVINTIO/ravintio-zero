@@ -31,9 +31,7 @@ grep_str()    { grep "$1" "$2" 2>/dev/null || true; }
 echo ""
 echo "=== REQ-001: .skips path corrected to plan/current/.skips ==="
 
-assert_contains "plan/current/.skips" \
-  "$(grep_str "\.skips" "$ORCHESTRATOR")$(grep_str "\.skips" "$ORCH_RESUME_REF")" \
-  "REQ-001: orchestrator references plan/current/.skips"
+assert_rule resume-skips "plan/current/.skips"
 
 # ── REQ-002: auto-trigger-orchestrator hook ───────────────────────────────────
 
@@ -69,11 +67,8 @@ echo "=== REQ-003: Skill Map in design.template.md ==="
 assert_equals "yes" "$(grep_has "## Skill Map" "$DESIGN_TPL")" \
   "REQ-003b: design.template.md has Skill Map section"
 
-assert_equals "yes" "$(grep_has "Skill Map" "$ORCHESTRATOR")" \
-  "REQ-003b: orchestrator produces Skill Map in P0"
-
-assert_equals "yes" "$(grep_has "subagent decomposition" "$ORCHESTRATOR")" \
-  "REQ-003a: orchestrator directs subagent decomposition"
+assert_rule phase-before-p2 "Skill Map"
+assert_rule phase-before-p2 "subagent decomposition"
 
 # ── REQ-004: open-source skill library ───────────────────────────────────────
 
@@ -86,7 +81,7 @@ assert_equals "yes" "$(file_exists "$PAUSE_TPL")" \
 assert_equals "yes" "$(grep_has "active_task" "$PAUSE_TPL")" \
   "REQ-005: pause template has active_task field"
 
-assert_equals "yes" "$(grep_has "Pause Command" "$ORCHESTRATOR")" \
+assert_contains "Pause Command" "$(orch_section "## Pause Command")" \
   "REQ-005: orchestrator has Pause Command section"
 
 assert_equals "yes" "$(grep_has "pause\.md" "$GATE_WRITE")" \
@@ -193,11 +188,8 @@ assert_equals "yes" "$(grep_has "strict-orchestrator\|StrictOrchestrator" "$SETU
 assert_equals "yes" "$(grep_has "orchestrator-strict" "$SETUP_PS1")" \
   "REQ-008p: setup.ps1 writes plan/.orchestrator-strict sentinel"
 
-assert_equals "yes" "$(grep_has "orchestrator-ack" "$ORCHESTRATOR")" \
-  "REQ-008p: orchestrator SKILL.md writes .orchestrator-ack on P0 start"
-
-assert_equals "yes" "$(grep_has "orchestrator-ack" "$SHIP_AGENT")" \
-  "REQ-008p: ship skill deletes .orchestrator-ack at close-out"
+assert_rule p0-start-strict-ack "orchestrator-ack"
+assert_rule orc-ship-clear-markers "orchestrator-ack"
 
 # getting-started.md is the entry-point file (deliberately terse, per the
 # 0000012 three-file docs architecture, ADR-001); presence-check/strict-mode

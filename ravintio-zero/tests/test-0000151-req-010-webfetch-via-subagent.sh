@@ -11,14 +11,8 @@ ROOT_DIR="$(cd "$ZERO_DIR/.." && pwd)"
 STD="$ZERO_DIR/standards/agent-dispatch-standards.md"
 
 echo "=== (a) WebFetch rule ==="
-SECTION=$(sed -n '/^## WebFetch of a reference page/,/^---/p' "$STD")
-assert_equals "yes" "$([ -n "$SECTION" ] && echo yes || echo no)" "WebFetch section exists"
-assert_contains 'WebFetch' "$SECTION" "section names WebFetch"
-assert_contains 'subagent' "$SECTION" "section names a subagent"
-assert_contains 'sonnet' "$SECTION" "section names sonnet"
-assert_contains 'haiku' "$SECTION" "section names haiku"
-assert_contains 'extract' "$SECTION" "section names the returned extract"
-assert_contains 'passes `model`' "$SECTION" "section states the dispatch passes model"
+assert_rule oa-webfetch-subagent 'WebFetch' 'subagent' 'sonnet' 'haiku'
+assert_rule oa-webfetch-extract 'extract' 'passes `model`'
 
 echo "=== (b) installed copies ==="
 DIFFS=0

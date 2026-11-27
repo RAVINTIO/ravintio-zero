@@ -12,26 +12,18 @@ SHIP="$(cat "$ZERO_DIR/skills/ravintio-ship/SKILL.md")"
 
 echo ""
 echo "=== plan skill ==="
-assert_contains 'Oldest shell: {shell and version}' "$PLAN" "plan names the oldest shell line"
-assert_contains 'Check 9 enforces it' "$PLAN" "plan ties the line to check 9"
-assert_contains 'docs/adr/{NNNN}-{slug}.md' "$PLAN" "plan writes ADRs to docs/adr"
-assert_contains 'status `proposed`' "$PLAN" "plan sets status proposed"
-assert_contains 'reserve-id.mjs --file docs/adr/.next-id' "$PLAN" "plan reserves ADR numbers"
-assert_contains 'Commit the counter on its own' "$PLAN" "plan commits the counter alone"
-assert_contains 'Superseded by {number}' "$PLAN" "plan marks superseded ADRs"
-assert_contains 'Nobody deletes an ADR' "$PLAN" "plan bans ADR deletion"
-assert_contains '`Shared resources` column' "$PLAN" "plan has the Shared resources rule"
-assert_contains 'living docs unit' "$PLAN" "plan has the living docs unit"
-assert_contains 'Check 10 requires it' "$PLAN" "plan ties the unit to check 10"
-assert_contains 'human-settings-check.mjs' "$PLAN" "plan runs the human settings check"
-assert_contains 'stop before P2' "$PLAN" "plan stops before P2 on exit 1"
+assert_rule shp-plan-oldest-shell 'Oldest shell: {shell and version}' 'Check 9 enforces it'
+assert_rule shp-plan-adr-write 'docs/adr/{NNNN}-{slug}.md' 'status `proposed`'
+assert_rule shp-plan-adr-reserve 'reserve-id.mjs --file docs/adr/.next-id' 'Commit the counter on its own'
+assert_rule shp-plan-adr-superseded 'Superseded by {number}' 'Nobody deletes an ADR'
+assert_rule shp-plan-shared-resources '`Shared resources` column'
+assert_rule shp-plan-living-docs-unit 'living docs unit' 'Check 10 requires it'
+assert_rule shp-plan-human-settings-check 'human-settings-check.mjs' 'stop before P2'
 assert_not_contains 'plan/current/adr/ADR-' "$PLAN" "plan drops the old ADR path"
 
 echo ""
 echo "=== ship skill ==="
-assert_contains 'status `accepted`' "$SHIP" "ship accepts ADRs"
-assert_contains 'docs/decisions-index.md' "$SHIP" "ship adds index rows"
-assert_contains 'links to `docs/adr/` and holds no copy' "$SHIP" "archive links to docs/adr"
+assert_rule shp-archive-adrs 'status `accepted`' 'docs/decisions-index.md' 'links to `docs/adr/` and holds no copy'
 
 echo ""
 echo "=== size ==="

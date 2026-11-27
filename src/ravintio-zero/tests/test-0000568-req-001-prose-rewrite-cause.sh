@@ -10,21 +10,15 @@ source "$SCRIPT_DIR/helpers/assert.sh"
 ZERO_DIR="$SCRIPT_DIR/.."
 PLAN="$ZERO_DIR/skills/ravintio-plan/SKILL.md"
 REF="$ZERO_DIR/skills/ravintio-plan/references/test-impact-causes.md"
-CAUSE=$(grep -F '**Prose rewrite:**' "$REF" 2>/dev/null || true)
 
 echo ""
-echo "=== REQ-001 AC-1: the cause greps the tests for each changed sentence ==="
-assert_contains "ravintio-zero/tests/" "$CAUSE" "REQ-001 AC-1: the cause names the tests folder"
-assert_contains "each changed sentence" "$CAUSE" "REQ-001 AC-1: the cause greps each changed sentence"
-
-echo ""
-echo "=== REQ-001 AC-2: the cause asks for a list of matches ==="
-assert_contains "execution plan" "$CAUSE" "REQ-001 AC-2: the cause lists the matches in the execution plan"
+echo "=== REQ-001 AC-1 and AC-2: the cause greps the tests for each changed sentence and lists matches ==="
+assert_rule piv-cause-prose-rewrite "ravintio-zero/tests/" "each changed sentence" "execution plan"
 
 echo ""
 echo "=== REQ-001 AC-3: the scan names the cause ==="
 SCAN=$(awk '/^## Test impact scan/{f=1;next} /^## /{f=0} f' "$PLAN"; cat "$REF")
-assert_contains "Prose rewrite" "$SCAN" "REQ-001 AC-3: the scan text names the cause"
+assert_rule piv-cause-prose-rewrite "Prose rewrite"
 
 echo ""
 echo "=== REQ-001 AC-4: the scan stays within 21 lines ==="

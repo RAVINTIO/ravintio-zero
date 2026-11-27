@@ -10,14 +10,10 @@ source "$SCRIPT_DIR/helpers/assert.sh"
 ZERO_DIR="$SCRIPT_DIR/.."
 PLAN="$ZERO_DIR/skills/ravintio-plan/SKILL.md"
 REF="$ZERO_DIR/skills/ravintio-plan/references/test-impact-causes.md"
-CAUSE=$(grep -F '**Skill-text budget:**' "$REF" || true)
 
 echo ""
 echo "=== REQ-001 AC-1: the cause holds the skill-wide pin sentence ==="
-assert_contains "every skill" "$CAUSE" "REQ-001 AC-1: the cause names the loop over every skill"
-assert_contains "file name, command, or flag" "$CAUSE" "REQ-001 AC-1: the cause names the added term"
-assert_contains "List each match" "$CAUSE" "REQ-001 AC-1: the cause says to list each match"
-assert_contains "test-0000151-req-008-quiet-test-output.sh" "$CAUSE" "REQ-001 AC-1: the cause names the example suite"
+assert_rule piv-cause-skill-text-budget "every skill" "file name, command, or flag" "List each match" "test-0000151-req-008-quiet-test-output.sh"
 
 echo ""
 echo "=== REQ-001 AC-2: the scan stays small ==="

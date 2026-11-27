@@ -30,16 +30,11 @@ assert_equals "yes" "$([ -n "$INIT_LINE" ] && [ -n "$STEP_LINE" ] && [ "$INIT_LI
 
 echo ""
 echo "=== req-003 AC-2: the rules ==="
-STD="$(cat "$ZERO_DIR/standards/roadmap-standards.md")"
-SKILL="$(cat "$ZERO_DIR/skills/ravintio-initiative/SKILL.md")"
-REF="$(cat "$ZERO_DIR/skills/ravintio-orchestrator/references/orchestrator-resume-detection.md")"
-assert_contains "rule: icpause-request" "$STD" "AC-2: the standards hold rule icpause-request"
-assert_contains "rule: icpause-records" "$STD" "AC-2: the standards hold rule icpause-records"
-assert_contains "rule: icpause-resume" "$STD" "AC-2: the standards hold rule icpause-resume"
-assert_contains "initiative-pause.mjs request" "$STD" "AC-2: the standards name the request command"
-assert_contains "initiative-pause.mjs request" "$SKILL" "AC-2: the skill names the request command"
-assert_contains "plan/current-initiative/pause.md" "$SKILL" "AC-2: the skill names the initiative record"
-assert_contains "initiative pause record present" "$REF" "AC-2: the reference maps the finding"
+assert_rule icpause-request "initiative-pause.mjs request"
+assert_rule icpause-records "pause.md"
+assert_rule icpause-resume "initiative pause record present"
+assert_rule rm-ini-stops "initiative-pause.mjs request" "plan/current-initiative/pause.md"
+assert_rule resume-initiative "initiative pause record present"
 assert_equals "yes" "$([ "$(wc -l < "$ZERO_DIR/skills/ravintio-initiative/SKILL.md" | tr -d ' ')" -lt 120 ] && echo yes || echo no)" "AC-2: the skill stays under 120 lines"
 
 print_summary

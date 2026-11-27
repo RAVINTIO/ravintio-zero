@@ -10,4 +10,4 @@ version: "1.0.0"
 
 ## Context Hygiene
 
-Clear context at two bookends: discovery start (fresh runs only) and after ship completes. Issue `/clear` or the host tool's equivalent. If the tool has none, ask the human to clear manually and confirm before continuing. Mid-run, if context accumulates material that no longer serves the active phase, offer compaction. Advisory only: never block on it.
+<!-- rule: orc-context-bookends --> Clear context at two bookends: discovery start (fresh runs only) and after ship completes. Issue `/clear` or the host tool's equivalent. If the tool has none, ask the human to clear manually and confirm before continuing. Mid-run, if context accumulates material that no longer serves the active phase, offer compaction. Advisory only: never block on it.

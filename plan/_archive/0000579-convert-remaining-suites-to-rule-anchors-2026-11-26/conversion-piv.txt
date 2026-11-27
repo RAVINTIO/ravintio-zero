@@ -1,0 +1,25 @@
+converted: test-0000025-req-003-subagent-parallelism-expansion.sh
+converted: test-0000151-req-007-dispatch-model-tiers.sh
+converted: test-0000170-req-001-story-map-pass.sh
+converted: test-0000170-req-002-gherkin-criteria.sh
+converted: test-0000201-req-002-concurrent-by-default.sh
+converted: test-0000202-req-001-improvement-loop.sh
+converted: test-0000246-req-001-test-impact-scan.sh
+converted: test-0000249-req-001-path-check-and-docs-only-status.sh
+converted: test-0000355-req-002-p3-escaping.sh
+converted: test-0000355-req-003-workflow-marker.sh
+structure: test-0000382-req-001-update-and-doctor.sh: runs setup.sh lifecycle flags in temp workspaces, no prose pins
+structure: test-0000382-req-003-uninstall.sh: runs setup.sh lifecycle flags in temp workspaces, no prose pins
+converted: test-0000383-req-001-005-test-impact-causes.sh
+converted: test-0000519-req-002-p2-docs-timing.sh
+converted: test-0000563-req-001-output-order-cause.sh
+converted: test-0000564-req-001-hook-change-cause.sh
+converted: test-0000565-req-001-path-move-cause.sh
+converted: test-0000566-req-001-history-move-cause.sh
+converted: test-0000567-req-001-002-size-cap-frozen-lines.sh
+converted: test-0000568-req-001-prose-rewrite-cause.sh
+converted: test-0000569-req-001-pack-content-cause.sh
+converted: test-0000570-req-001-sibling-copy-line.sh
+converted: test-0000571-req-001-skill-wide-grep-pin.sh
+converted: test-0000577-req-001-diff-reader-cause.sh
+converted: test-0000578-req-001-pass-signal-paths.sh

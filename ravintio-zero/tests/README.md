@@ -26,6 +26,8 @@ a helper in `helpers/assert.sh`. See section 8 of `standards/testing-standards.m
 - `rule_text <id>` and `assert_rule <id> <term>...` read a rule by its
   `<!-- rule: <id> -->` anchor.
 - `strip_rule_anchors` removes anchors before a line-by-line comparison.
+- `helpers/anchor-conversions.txt` lists the suites that read rules by anchor and the suites that check structure.
+  `test-0000579-req-001-anchor-conversion-guard.sh` reads it.
 - `with_timeout <seconds> <command>...` caps a command. Source
   `helpers/timeout.sh` first.
 

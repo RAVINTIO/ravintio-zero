@@ -56,5 +56,5 @@ Perform in order, before coaching begins:
 
 16. <!-- rule: p0-start-skills-inbox --> **Check the skills inbox**: process any `SKILL.md` in `ravintio-zero/skills-inbox/` per Capability Skills below. Repeat this check at every phase transition.
 
-Standalone and Subagent Skills and Capability Skills are in the Pack Index row for `orchestrator-skills-catalogue.md`. Read it for the capability skill intake that Discovery Start Actions step 16 cites.
+<!-- rule: rm-p0-catalogue-pointer --> Standalone and Subagent Skills and Capability Skills are in the Pack Index row for `orchestrator-skills-catalogue.md`. Read it for the capability skill intake that Discovery Start Actions step 16 cites.
 

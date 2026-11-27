@@ -54,6 +54,7 @@ assert_contains "report the exact error and stop" "$BODY" \
 echo ""
 echo "=== req-005 (d): option [1] still matches the ship skill ==="
 
+# The option text sits in a code block, so it has no rule anchor.
 assert_contains "[1] Agent pushes + creates PR" "$(cat "$SHIP_SKILL")" \
   "req-005 (d): ship skill option [1] is still the push and PR choice"
 
