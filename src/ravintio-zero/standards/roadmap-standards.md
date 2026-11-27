@@ -727,6 +727,8 @@ The `merge-guard` hook stays as it was. It already allows a squash into `initiat
 6. <!-- rule: rm-delivery-pr-body --> Make the first line of the body say to merge with a merge commit, not a squash, so each step tag stays reachable from `main`. Then add the step table that `reshape-initiative.mjs` prints. It lists each step with its version and tag in ascending `Version` order, which is merge order. Name the retrospective record. Scan the body for credential patterns before you raise the PR, as in Step 9.
 7. <!-- rule: rm-delivery-report --> Report the PR URL and end the run. After the human merges the PR, delete the old branch, `initiative/{id}-{slug}`, locally and on `origin`.
 
+8. <!-- rule: rm-delivery-cleanup --> After the human merges the PR, run `node ravintio-zero/scripts/initiative-cleanup.mjs --id {id}-{slug}` from the main working tree. The script refuses while a driver holds `plan/.initiative-runner.lock`. It moves `plan/.initiative-logs/` and `plan/.initiative-control/` to `.git/ravintio-archive/{id}-{slug}/`, so the logs stay readable as stop evidence. It removes each worktree under `plan/.initiative-worktrees/` and runs `git worktree prune`. It leaves `plan/.initiative-queue/` in place and prints one `Kept:` line for each item. A new chart then starts with `merged 0, ready 0, running 0` in `initiative-status.mjs`. Add the cleanup result to the final report (0000581 ADR-0354).
+
 The `main` ruleset allows only the merge commit method. See `ravintio-zero/docs/main-ruleset.md`.
 
 <!-- rule: rm-delivery-never-merge --> The agent never merges the initiative PR and never commits to `main`. The human reviews and merges it.
