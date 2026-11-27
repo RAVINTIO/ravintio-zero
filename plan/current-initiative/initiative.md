@@ -178,7 +178,7 @@ The human confirmed the chart on 2026-11-14 with "build the initiative as fast a
 | 20 | 0000564-test-impact-hook-pins | Test impact scan names hook pins | 0000523 | minor | 0.122.0 | merged | plan | |
 | 21 | 0000565-layout-move-test-impact | Test impact scan for layout moves | 0000419 | minor | 0.123.0 | merged | plan | |
 | 22 | 0000566-test-impact-for-history-moves | Test impact scan misses suites that scan live files | 0000405 | minor | 0.124.0 | merged | plan | |
-| 23 | 0000567-test-impact-size-caps-and-frozen-lines | Test impact scan covers size caps and frozen lines | 0000406, 0000526 | minor | | pending | plan |  |
+| 23 | 0000567-test-impact-size-caps-and-frozen-lines | Test impact scan covers size caps and frozen lines | 0000406, 0000526 | minor | 0.126.0 | merged | plan | |
 | 24 | 0000568-wording-pin-scan | Scan for wording pins before a prose rewrite | 0000418 | minor | | pending | plan |  |
 | 25 | 0000569-scan-new-pack-files-for-wording-allowlist | Scan new pack files for the wording allowlist | 0000415 | minor | | pending | plan |  |
 | 26 | 0000570-sibling-test-copies-in-impact-scan | List sibling copies of a pinned test in the impact scan | 0000407 | minor | | pending | plan |  |
@@ -212,3 +212,4 @@ The merge queue adds one row for each step it merges. See the merge queue sectio
 | 21 | #224 | tag v0.123.0 | 0.123.0 | 2026-11-15T16:59:56Z |
 | 22 | #226 | tag v0.124.0 | 0.124.0 | 2026-11-15T18:22:23Z |
 | 29 | #225 | tag v0.125.0 | 0.125.0 | 2026-11-15T18:35:08Z |
+| 23 | #227 | tag v0.126.0 | 0.126.0 | 2026-11-15T19:10:38Z |
