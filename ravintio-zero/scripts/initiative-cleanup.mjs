@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// initiative-cleanup.mjs - I-E Delivery cleanup of the driver state (0000581 ADR-0353).
+// initiative-cleanup.mjs - I-E Delivery cleanup of the driver state (0000581 ADR-0354).
 //
 // Usage, run from the repository root after the human merges the initiative PR:
 //

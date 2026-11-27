@@ -81,7 +81,7 @@ Base: `origin/initiative/0000544-priority-backlog`, at `1b8907e7`.
 | src/ravintio-zero/tests/test-0000581-req-005-delivery-text.sh | new | U-002 |
 | src/ravintio-zero/component.yml | 1b8907e7 | U-003 |
 | docs/architecture-overview.md | 1b8907e7 | U-003 |
-| docs/adr/0353-delivery-archives-driver-state-in-the-git-folder.md | new | U-003 |
+| docs/adr/0354-delivery-archives-driver-state-in-the-git-folder.md | new | U-003 |
 
 ## Concurrency plan
 

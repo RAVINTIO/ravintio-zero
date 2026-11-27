@@ -6,12 +6,12 @@ component: "ravintio-zero"
 version: "0.1.0"
 feature: "0000581-delivery-cleans-up-driver-state"
 ---
-# ADR-0353 - Delivery archives driver state in the git folder
+# ADR-0354 - Delivery archives driver state in the git folder
 
 **Skill:** [plan](../skills/ravintio-plan/SKILL.md)
 **Feature:** 0000581-delivery-cleans-up-driver-state
 **Component:** ravintio-zero
-**File:** `docs/adr/0353-delivery-archives-driver-state-in-the-git-folder.md`
+**File:** `docs/adr/0354-delivery-archives-driver-state-in-the-git-folder.md`
 **Date:** 2026-11-26T10:05:04Z
 
 ## Context
