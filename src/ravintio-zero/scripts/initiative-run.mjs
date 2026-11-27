@@ -146,9 +146,8 @@
 //     pid sits in the step's running file, or when the removal fails, and prints "I-C Run: Kept: step
 //     {n} {reason}". It removes no other control file (0000509, ADR-0340).
 //   - The driver gives each step session a private temp folder, {worktree}/.t. It sets TMPDIR and
-//     GIT_CEILING_DIRECTORIES to that folder, and runs the session in the Claude Code sandbox with
-//     --settings. Sandbox writes reach the worktree, its git folder, and its control folder. If the folder
-//     path leaves under 20 characters below the 104-character Unix socket limit, the driver stops with
+//     GIT_CEILING_DIRECTORIES to that folder. It passes no sandbox settings, because the sandbox blocked
+//     git push over SSH and mktemp in every step session. If the folder path leaves under 20 characters below the 104-character Unix socket limit, the driver stops with
 //     "I-C Run: Blocked:". RAVINTIO_TEMP_PATH_LIMIT replaces the limit. After the queue merges a step, the driver removes its worktree, which removes
 //     the .t folder, and runs "git worktree prune". It deletes nothing outside the repo (0000583, ADR-0352).
 //   - The queue takes one ready step at a time, in ready order. It removes the step worktree and
@@ -667,14 +666,6 @@ function privateTemp(cwd) {
   return { dir, env: { TMPDIR: dir, GIT_CEILING_DIRECTORIES: dir } };
 }
 
-// Builds the --settings JSON that runs the session in the Claude Code sandbox. Writes go to the step
-// worktree, the git folder it commits to, and the control folder. The shared /tmp and the user temp folder stay closed.
-function sandboxSettings(cwd, extra = []) {
-  const common = gitIn(cwd, ['rev-parse', '--path-format=absolute', '--git-common-dir']);
-  const dirs = [resolve(cwd), ...(ran0(common) ? [common.stdout.trim()] : []), ...extra];
-  return JSON.stringify({ sandbox: { enabled: true, allowUnsandboxedCommands: false, filesystem: { allowWrite: [...new Set(dirs)] } } });
-}
-
 // Runs one claude -p session for the step. With a session id it adds --resume and the continue
 // prompt. Returns the exit status and the last session_id the child printed, or '' if none.
 // The concurrent driver passes opts.cwd, the step worktree, and opts.env, the extra variables.
@@ -683,7 +674,6 @@ function runStep(root, position, cfg, fd, labels, resumeId, opts = {}) {
     const bin = process.env.CLAUDE_BIN || 'claude';
     const args = ['-p', '--output-format', 'stream-json', '--verbose', '--include-hook-events', '--permission-mode', 'auto', '--append-system-prompt', WRITING_LINE, '--model', cfg.model];
     const priv = privateTemp(opts.cwd ?? root);
-    args.push('--settings', sandboxSettings(opts.cwd ?? root, opts.writeDirs));
     if (cfg.turns) args.push('--max-turns', cfg.turns);
     const queue = queueSentence(opts.queueRoot ?? root, position);
     if (resumeId) args.push('--resume', resumeId, CONTINUE_PROMPT(position, logLine(opts.cwd ?? root, opts.featureId), queue));
@@ -1521,7 +1511,6 @@ async function runScheduledStep(root, rec, cfg, rm) {
       cwd: wt,
       queueRoot: root,
       featureId: rec.featureId,
-      writeDirs: [ctl],
       env: { RAVINTIO_INITIATIVE_QUEUE: '1', RAVINTIO_INITIATIVE_ROOT: root, RAVINTIO_INITIATIVE_CONTROL: ctl },
       onChild: (c) => {
         rec.child = c;
