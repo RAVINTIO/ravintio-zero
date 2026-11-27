@@ -25,6 +25,8 @@ The allowlist names exact file paths. Three folders are the only entries that co
 
 Amended after P4: ship archived `plan/current/`, so the guard no longer needs it. The allowlist now holds two folders, `plan/_archive/` and `plan/changelog/`. A future run's plan files get the same check as the rest of the repo.
 
+Amended by 0000561: the guard matches the allowlist in Bash, with no pipe to `grep -q`. Under `pipefail`, an early grep exit made an allowlisted file a hit in some full-suite runs.
+
 ## Alternatives Considered
 
 | Alternative | Pros | Cons | Why Rejected |
