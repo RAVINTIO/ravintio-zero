@@ -1,6 +1,6 @@
 # Architecture Overview
 
-Last updated: 0000557-self-matching-pgrep-wait
+Last updated: 0000551-refuse-symlink-style-outputs
 
 ## What this repo is
 
@@ -164,7 +164,7 @@ Boot files are disposable build outputs. Every run regenerates `CLAUDE.md` from 
 
 ## Writing standard
 
-`ravintio-zero/standards/writing-standards.md` holds the pack's prose rules in two marked regions. `scripts/writing-style.mjs` prints each tool's output from those regions. For Claude Code, `setup.sh` and `setup.ps1` write `.claude/output-styles/ravintio-writing.md` and set `outputStyle` to `ravintio-writing` when the key is absent. They leave any other value. For Codex, they keep one writing block in `AGENTS.md`. `--no-writing-style` skips both outputs, and the setup record and `ravintio-refresh-setup` carry the flag. An output style reaches only the main session. The Agent Dispatch Template and the driver's `--append-system-prompt` name the standard for subagents and step sessions (0000389).
+`ravintio-zero/standards/writing-standards.md` holds the pack's prose rules in two marked regions. `scripts/writing-style.mjs` prints each tool's output from those regions. For Claude Code, `setup.sh` and `setup.ps1` write `.claude/output-styles/ravintio-writing.md` and set `outputStyle` to `ravintio-writing` when the key is absent. They leave any other value. For Codex, they keep one writing block in `AGENTS.md`. Setup refuses a link at the style file, its `output-styles` folder, or `AGENTS.md`. It prints a fixed `! Refused:` line, skips that write, and exits 0 (0000551). `--no-writing-style` skips both outputs, and the setup record and `ravintio-refresh-setup` carry the flag. An output style reaches only the main session. The Agent Dispatch Template and the driver's `--append-system-prompt` name the standard for subagents and step sessions (0000389).
 
 ## Archetypes and overrides
 
