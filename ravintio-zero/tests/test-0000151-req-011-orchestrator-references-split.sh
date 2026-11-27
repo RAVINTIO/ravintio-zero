@@ -57,7 +57,13 @@ sed -e 's|The status is Starting, Resuming, Complete, Blocked, or Skipped\.|The 
   "$BASE_RENAMED.tmp5" > "$BASE_RENAMED.tmp6"
 # 0000393 added the pack version record to check 2 of Resume Detection.
 sed -e 's|Record the outcome in the build log\. If rejected,|Record the outcome in the build log. `plan/state/pack-version.md` holds the last confirmed pack version. When the human confirms a pack update, write that record with the current pack version and the time. An absent record raises no finding. If rejected,|' \
-  "$BASE_RENAMED.tmp6" > "$BASE_RENAMED"
+  "$BASE_RENAMED.tmp6" > "$BASE_RENAMED.tmp7"
+# 0000559 put the decision rows and the baseline run after the pre-flight. Base steps 3 to 14 now
+# sit two places later, as steps 5 to 16.
+awk '/^#+ /{ sec = ($0 == "### Discovery Start Actions") }
+  { if (sec && match($0, /^[0-9]+\. /)) { n = substr($0, 1, RLENGTH - 2) + 0; if (n >= 3 && n <= 14) $0 = (n + 2) ". " substr($0, RLENGTH + 1) }
+    sub(/findings from steps 2 to 10 plus/, "findings from steps 2 to 12 plus"); print }' \
+  "$BASE_RENAMED.tmp7" > "$BASE_RENAMED"
 
 # Print every non-blank, non-heading line of $1 that no later file holds as a
 # whole line. Usage: missing_lines base file...
