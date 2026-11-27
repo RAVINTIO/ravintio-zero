@@ -185,7 +185,7 @@ The human confirmed the chart on 2026-11-14 with "build the initiative as fast a
 | 27 | 0000571-scan-cause-skill-wide-grep-pins | Test impact scan covers skill-wide grep pins | 0000404 | minor | 0.136.0 | merged | plan | |
 | 28 | 0000572-tests-share-a-repo-root-helper | Tests share a repo-root helper for both pack trees | 0000528, 0000539 | minor | | pending | tests |  |
 | 29 | 0000573-require-unit-reports | Require unit reports | 0000417 | minor | 0.125.0 | merged | dispatch | |
-| 30 | 0000574-delivery-pr-lists-steps-in-version-order | Delivery PR lists steps in version order | 0000543 | minor | | pending | coord |  |
+| 30 | 0000574-delivery-pr-lists-steps-in-version-order | Delivery PR lists steps in version order | 0000543 | minor | 0.144.0 | merged | coord | |
 | 31 | 0000575-build-log-marker-helper | Build log marker helper | 0000524 | minor | 0.135.0 | merged | dispatch | |
 | 32 | 0000576-phase-start-time-at-phase-start | Record each phase start time when the phase begins | 0000402 | minor | | pending | dispatch |  |
 | 33 | 0000577-plan-lists-change-shapes | Plan lists the change shapes a diff reader must handle | 0000516 | minor | 0.138.0 | merged | plan | |
@@ -230,3 +230,4 @@ The merge queue adds one row for each step it merges. See the merge queue sectio
 | 15 | #243 | tag v0.141.0 | 0.141.0 | 2026-11-16T06:33:24Z |
 | 16 | #244 | tag v0.142.0 | 0.142.0 | 2026-11-16T06:56:06Z |
 | 6 | #228 | tag v0.143.0 | 0.143.0 | 2026-11-18T07:35:26Z |
+| 30 | #245 | tag v0.144.0 | 0.144.0 | 2026-11-18T07:54:17Z |
