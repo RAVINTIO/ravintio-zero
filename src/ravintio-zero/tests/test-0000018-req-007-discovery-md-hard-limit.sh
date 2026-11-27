@@ -16,31 +16,24 @@ grep_has() { grep -q "$1" "$2" 2>/dev/null && echo "yes" || echo "no"; }
 echo ""
 echo "=== req-007: discovery.md Hard Limit entry ==="
 
-HL=$(sed -n '/^## Hard Limits/,/^---/p' "$ORCHESTRATOR")
+HL="$(orch_section "## Hard Limits")"
 assert_contains "12." "$HL" \
   "req-007: Hard Limits list has the discovery.md entry"
-assert_contains "discovery.md" "$HL" \
-  "req-007: the Hard Limit names discovery.md"
-assert_contains "pipeline error" "$HL" \
-  "req-007: the Hard Limit uses 'pipeline error' teeth"
-assert_contains "stop and write it" "$HL" \
-  "req-007: the Hard Limit carries the stop-and-write instruction"
+assert_rule orc-hard-limit-discovery-md "discovery.md" "pipeline error" "stop and write it"
 
 # ── AC-2: step 3d cross-references the new Hard Limit ────────────────────────
 
 echo ""
 echo "=== req-007: step 3d cross-reference ==="
 
-WRITE_STEP=$(grep "Write .discovery.md." "$ORCHESTRATOR")
-assert_contains "Hard Limit 12" "$WRITE_STEP" \
-  "req-007: the discovery start action cross-references Hard Limit 12 by number"
+assert_rule p0-start-discovery-md "Hard Limit 12"
 
 # ── AC-3: Gate Checklist has a discovery.md item ─────────────────────────────
 
 echo ""
 echo "=== req-007: Gate Checklist item ==="
 
-GATE=$(sed -n '/### Discovery Gate Checklist/,/^## /p' "$ORCHESTRATOR")
+GATE="$(orch_section "### Discovery Gate Checklist")"
 assert_contains "discovery.md" "$GATE" \
   "req-007: Gate Checklist has a discovery.md item"
 assert_contains "Hard Limit 12" "$GATE" \

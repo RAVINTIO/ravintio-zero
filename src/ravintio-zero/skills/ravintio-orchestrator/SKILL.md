@@ -20,16 +20,16 @@ Non-negotiable. They apply in every session, every phase.
 5. **One component owns each piece of data.** Never write to data another component owns.
 6. **Credentials are never in your context.** If one appears in a prompt, file, or environment, do not use it. Flag it. If it is in a file the run will commit, it is an exception stop in both run modes.
 7. **Update documentation after any deviation.** If implementation deviates from the spec, plan, or design, update the affected artifacts so documentation matches reality.
-8. **Commit after every meaningful artifact write.** Never batch work waiting for a phase gate. Each artifact is a commit on its own.
+8. <!-- rule: oa-orch-commit-cadence --> **Commit after every meaningful artifact write.** Never batch work waiting for a phase gate. Each artifact is a commit on its own.
    Records that share a topic group into one commit. See the grouping rule in `references/orchestrator-discovery-records.md`.
-9. **Write a build-log phase block before any phase work.** Create `plan/current/build-log.md` at discovery if absent. A missing block is a pipeline error: stop and fix it before proceeding.
-10. **The pipeline has exactly five phases, P0 to P4.** Build-log phase headings MUST use the form `### P<n>: {Phase Name}` with n from 0 to 4. Never cite a phase number outside P0 to P4.
+9. <!-- rule: shp-orch-build-log-block --> **Write a build-log phase block before any phase work.** Create `plan/current/build-log.md` at discovery if absent. A missing block is a pipeline error: stop and fix it before proceeding.
+10. <!-- rule: orc-hard-limit-phases --> **The pipeline has exactly five phases, P0 to P4.** Build-log phase headings MUST use the form `### P<n>: {Phase Name}` with n from 0 to 4. Never cite a phase number outside P0 to P4.
 11. **Every run archives `plan/current/`.** The ship phase moves it to `plan/_archive/{feature-id}-{date}/` and updates incoming links. Never leave a permanent working folder behind.
-12. **`discovery.md` exists and is complete before the first coaching question.** A missing or incomplete `plan/current/discovery.md` at that point is a pipeline error: stop and write it.
+12. <!-- rule: orc-hard-limit-discovery-md --> **`discovery.md` exists and is complete before the first coaching question.** A missing or incomplete `plan/current/discovery.md` at that point is a pipeline error: stop and write it.
 
 Read every time you log with `date -u +%Y-%m-%dT%H:%M:%SZ` and never type one.
 
-In an active initiative, stage by explicit path and never stage a `plan/backlog/` entry the step did not write. Never run `git add -f` or `git add --force`. If git ignores a file on purpose, leave it out. If it must be tracked, add a negation rule to `.gitignore`. A step session never moves, renames, or deletes `plan/.initiative-logs/`, `plan/.initiative-runner.lock`, or `plan/.initiative-queue/`. The driver and the watcher own them.
+<!-- rule: rm-orch-driver-files --> In an active initiative, stage by explicit path and never stage a `plan/backlog/` entry the step did not write. Never run `git add -f` or `git add --force`. If git ignores a file on purpose, leave it out. If it must be tracked, add a negation rule to `.gitignore`. A step session never moves, renames, or deletes `plan/.initiative-logs/`, `plan/.initiative-runner.lock`, or `plan/.initiative-queue/`. The driver and the watcher own them.
 
 ---
 
@@ -45,20 +45,20 @@ Every request is a feature change. It runs one route: the five-phase pipeline. E
 | P3 | Validate and Accept | `P3 Validate:` | ravintio-validate-and-accept |
 | P4 | Ship | `P4 Ship:` | ravintio-ship |
 
-Status messages use one form: `{prefix} {Status}: {one-liner}`. The status is Starting, Resuming, Complete, Question, Blocked, or Skipped.
+<!-- rule: orc-orch-status-form --> Status messages use one form: `{prefix} {Status}: {one-liner}`. The status is Starting, Resuming, Complete, Question, Blocked, or Skipped.
 Start with the time from `date +%H:%M`, read before each reply: `hh:mm {prefix} {Status}: {one-liner}`.
 - Entering a phase: `P0 Discovery: Starting: {one-liner}`
 - Resuming: `P2 Implement: Resuming: {what was in progress, what is next}`
 - Completing: `P1 Plan: Complete: {summary}`
-- Asking: `P0 Discovery: Question: {routine question}`. `Question:` asks the human a question. `Blocked:` marks an exception stop only.
+- <!-- rule: orc-orch-question-status --> Asking: `P0 Discovery: Question: {routine question}`. `Question:` asks the human a question. `Blocked:` marks an exception stop only.
 - Blocking: `P0 Discovery: Blocked: {specific gap}`
 - Skipping: `P3 Validate: Skipped: {reason}`
 
 Initiative stages use the prefixes I-A to I-E. Read `ravintio-zero/standards/roadmap-standards.md` for the list and examples.
 
-Out-of-phase work uses `Supervise:` with the same form, as in `Supervise: {Status}: {one-liner}`.
+<!-- rule: orc-orch-supervise --> Out-of-phase work uses `Supervise:` with the same form, as in `Supervise: {Status}: {one-liner}`.
 
-**Reporting rule.** A reply reports results, deviations, failures, and decisions the human must make. A reply never states that the agent followed a standing rule. The exception is a rule that blocked an action or a rule the agent departed from.
+<!-- rule: orc-orch-reporting-rule --> **Reporting rule.** A reply reports results, deviations, failures, and decisions the human must make. A reply never states that the agent followed a standing rule. The exception is a rule that blocked an action or a rule the agent departed from.
 
 **Actor names.** A reply names each actor by role and never uses "I" or "you".
 
@@ -110,12 +110,12 @@ Phase Skip Protocol, Pause Command, and Park Command are in the Pack Index row f
 
 ## P0: Discovery
 
-The Pack Index lists files for Opening Briefing, Decomposition, Adoption Modes, Scope Lock Challenge, Discovery Audit Trail, and Skill Map. Step 7 uses the Adoption Modes table. Read each file before you act on its topic.
+The Pack Index lists files for Opening Briefing, Decomposition, Adoption Modes, Scope Lock Challenge, Discovery Audit Trail, and Skill Map. Step 9 uses the Adoption Modes table. Read each file before you act on its topic.
 
 Mid-Pipeline Requirement Changes is in the Pack Index row for `orchestrator-mid-pipeline-changes.md`.
 
 ## Subagent Dispatch
 
-Consult `ravintio-zero/standards/agent-dispatch-standards.md` before spawning every subagent. It holds the model tier table, the parallelism rules, and the dispatch template. Prefer parallel decomposition over sequential inline work. Resolve the tier to a concrete model name, pass it explicitly, and record the tier in the build log.
+<!-- rule: orc-orch-consult-dispatch --> Consult `ravintio-zero/standards/agent-dispatch-standards.md` before spawning every subagent. It holds the model tier table, the parallelism rules, and the dispatch template. Prefer parallel decomposition over sequential inline work. Resolve the tier to a concrete model name, pass it explicitly, and record the tier in the build log.
 
-Never run `git stash`, `git checkout -- {path}`, `git reset`, or `git clean` while any subagent runs.
+<!-- rule: orc-orch-no-tree-git --> Never run `git stash`, `git checkout -- {path}`, `git reset`, or `git clean` while any subagent runs.

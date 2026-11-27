@@ -20,7 +20,7 @@ mkdir -p "$WORK/bin"
 cat > "$WORK/bin/claude" <<'STUB'
 #!/usr/bin/env bash
 # Stub claude. STUB_MODE: ok (default), block, stall, fail.
-printf '%s\n' "$*" >> "$STUB_LOG"
+printf '%s\n' "$*" | sed 's/ --settings {[^ ]*}//' >> "$STUB_LOG"
 RM=plan/current-initiative/initiative.md
 POSRE='^((\*\*)?[Pp]osition:?(\*\*)? *:? *)'
 pos="$(sed -nE "s/${POSRE}//p" "$RM")"

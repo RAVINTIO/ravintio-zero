@@ -17,13 +17,13 @@ if [ -f "$STD" ]; then assert_contains ok ok "standard exists"; else assert_cont
 TEXT="$(cat "$STD" 2>/dev/null)"
 assert_contains 'title:' "$TEXT" "frontmatter title"
 assert_contains 'status:' "$TEXT" "frontmatter status"
-assert_contains 'resolve-override.mjs' "$TEXT" "names the resolver"
-assert_contains 'protected.json' "$TEXT" "names protected.json"
-assert_contains '`alternative`' "$TEXT" "names alternative kind"
-assert_contains '`constraint`' "$TEXT" "names constraint kind"
-assert_contains 'archetype use' "$TEXT" "names archetype use"
-assert_contains 'archetype-gates.mjs' "$TEXT" "names the gate script"
-assert_contains 'never loosens a gate' "$TEXT" "states the no-loosen rule"
+assert_rule ob-arch-related-resolver 'resolve-override.mjs'
+assert_rule ob-arch-protected 'protected.json'
+assert_rule ob-arch-kind-alternative '`alternative`'
+assert_rule ob-arch-kind-constraint '`constraint`'
+assert_rule ob-arch-install 'archetype use'
+assert_rule ob-arch-gates 'archetype-gates.mjs'
+assert_rule ob-arch-no-loosen 'never loosens a gate'
 LINES=$(wc -l < "$STD" 2>/dev/null | tr -d ' ')
 if [ "${LINES:-999}" -lt 70 ]; then assert_contains ok ok "standard $LINES lines"; else assert_contains ok "$LINES" "standard under 70 lines"; fi
 
@@ -37,14 +37,13 @@ if [ "$VL" -le 200 ]; then assert_contains ok ok "validate $VL <= 200"; else ass
 TOTAL=$(cat "$SK"/*/SKILL.md | wc -l | tr -d ' ')
 if [ "$TOTAL" -le 1720 ]; then assert_contains ok ok "total $TOTAL <= 1720"; else assert_contains ok "$TOTAL" "total <= 1720"; fi
 
-OB=$(wc -c < "$SK/ravintio-orchestrator/SKILL.md" | tr -d ' ')
+OB=$(strip_rule_anchors < "$SK/ravintio-orchestrator/SKILL.md" | wc -c | tr -d ' ')
 if [ "$OB" -le 9000 ]; then assert_contains ok ok "orchestrator $OB <= 9000 bytes"; else assert_contains ok "$OB" "orchestrator <= 9000 bytes"; fi
 if grep -qi 'archetype' "$SK/ravintio-orchestrator/SKILL.md"; then assert_contains ok found "orchestrator holds no archetype text"; else assert_contains ok ok "orchestrator holds no archetype text"; fi
 
 for s in ravintio-implement ravintio-plan; do
   F="$SK/$s/SKILL.md"
-  assert_contains "$POINTER" "$(cat "$F")" "$s points at the standard"
-  assert_contains 'resolve-override.mjs' "$(cat "$F")" "$s names the resolver"
+  assert_rule "ob-${s#ravintio-}-resolver" "$POINTER" 'resolve-override.mjs'
   PL=$(grep -c "archetype-standards.md" "$F")
   if [ "$PL" -le 1 ]; then assert_contains ok ok "$s names the standard $PL time"; else assert_contains ok "$PL" "$s names the standard once"; fi
 done

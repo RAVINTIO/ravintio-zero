@@ -6,13 +6,23 @@
 # Also: traversal rejection, stale-block cleanup, capability-skill targets.
 
 set -uo pipefail
+# Every temp folder of this suite sits under one private folder, which the EXIT trap removes. A workspace made
+# inside a command substitution never reaches a cleanup list, so the folder is the only reliable record (0000583).
+SUITE_TMP=""
+trap 'rm -rf "${SUITE_TMP:-}"' EXIT
+trap 'exit 143' TERM
+trap 'exit 130' INT HUP
+SUITE_TMP="$(mktemp -d)"
+export TMPDIR="$SUITE_TMP"
 unset RAVINTIO_INITIATIVE_STEP
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 ZERO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 TMPS=("")
-trap 'for d in "${TMPS[@]}"; do rm -rf "$d"; done' EXIT
+trap 'for d in "${TMPS[@]}"; do rm -rf "$d"; done; rm -rf "$SUITE_TMP"' EXIT
+trap 'exit 143' TERM
+trap 'exit 130' INT HUP
 
 make_workspace() {
   local dir

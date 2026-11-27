@@ -52,6 +52,9 @@ describe("req-001-auth: user login flow", () => {
 
 Always test the happy path for every acceptance criterion, error cases, boundary conditions, and state transitions. Never test framework internals, private implementation details, or third-party library behaviour.
 
+<!-- rule: tests-no-head-diff -->
+A test never compares the working tree with `HEAD` or another moving ref. After someone commits the work, the diff is empty and the test passes with no check. Diff against a fixed base commit, or plant a fixture in a scratch repo and diff that. `test-0000550-req-002-no-head-diffs.sh` fails any suite that runs `git diff` against `HEAD`, `HEAD~n`, `HEAD^`, `@`, `ORIG_HEAD`, or `FETCH_HEAD`.
+
 ---
 
 ## 4. Test Data
@@ -96,10 +99,15 @@ A test that asserts what a skill, standard, or template says reads the text thro
 | `rule_text <id>` | Get the text of the rule that carries `<!-- rule: <id> -->`. |
 | `assert_rule <id> <term>...` | Check that the anchor exists once and its text holds every key term. |
 | `with_timeout <seconds> <command>...` | Cap a command. It exits 124 on expiry. |
+| `repo_root [dir]` | Get the repo top, which is the first folder at or above `dir` that holds `product.yml`. Without `dir` it starts at the calling script. |
+| `pack_tree_src [dir]` | Get the source tree, `src/ravintio-zero`. |
+| `pack_tree_installed [dir]` | Get the installed tree, `ravintio-zero`. |
 
-`with_timeout` lives in `helpers/timeout.sh`, so source that file first. It works on macOS, which has no `timeout` command. It runs external commands only.
+<!-- rule: ob-testing-two-trees --> The pack keeps two identical trees, and the clean-clone run executes each suite from both. A path built with `../..` is right in one tree and wrong in the other. Call `repo_root` or a tree helper and never build a root from the depth of the suite. A new suite runs from both trees before it counts as green. Run it from `src/ravintio-zero/tests/` and from `ravintio-zero/tests/`.
 
-To anchor a rule, put `<!-- rule: <id> -->` at the start of its line or item. Use lowercase letters, digits, and hyphens, and keep each id unique across `skills/`, `standards/`, and `templates/`. The rule is the anchor line and the lines after it, up to a blank line, a heading, or the next anchor. Tests assert key terms, not whole sentences. If you delete an anchor, the test that reads it fails and names the id.
+<!-- rule: ob-testing-with-timeout --> `with_timeout` lives in `helpers/timeout.sh`, so source that file first. It works on macOS, which has no `timeout` command. It runs external commands only.
+
+To anchor a rule, put `<!-- rule: <id> -->` at the start of its line or item. Use lowercase letters, digits, and hyphens, and keep each id unique across `skills/`, `standards/`, and `templates/`. The rule is the anchor line and the lines after it, up to a blank line, a heading, or the next anchor. Tests assert key terms, not whole sentences. If you delete an anchor, the test that reads it fails and names the id. Add a new suite that reads a rule through a helper to `tests/helpers/anchor-conversions.txt`. The boot templates `standard-boot.md` and `codex-boot.md` carry no anchors, because setup copies them into installs.
 
 ## 9. Test scope per phase
 
@@ -107,6 +115,10 @@ A TDD cycle runs the new test and the tests that cover the files the unit change
 
 At P0, the run records the suites that fail on the base commit in `plan/current/baseline-failures.md`, with `scripts/baseline-failures.mjs record`. At P3, `scripts/baseline-failures.mjs check` prints each failed suite as `inherited:` or `new:` and exits 1 on a new one. P3 stops only on a new suite and lists the inherited ones in the build report.
 
-The CI duration target is 420 seconds per run. Ship records each run as a `CI duration:` marker, and the governance report shows the longest one. A run above the target is a breach in the report. It never fails the gate.
+<!-- rule: shp-ci-duration-target --> The CI duration target is 420 seconds per run. Ship records each run as a `CI duration:` marker, and the governance report shows the longest one. A run above the target is a breach in the report. It never fails the gate.
 
 P3 runs the suite in a clean clone of `HEAD` with `scripts/clean-clone-test.mjs`. Untracked files, ignored caches, and local state then cannot change the result. The script prints an `OS gap:` line when the local OS is not among the `runs-on` values of the CI workflow. After a fix, P3 reruns the failed suites first and then runs the full suite once before acceptance.
+
+## 10. Scratch files
+
+<!-- rule: scratch-under-tmpdir --> A test or agent writes scratch files under `$TMPDIR` and never to a hard-coded `/tmp` path. In a step session, `$TMPDIR` is `{worktree}/.t`. The test runner sets `$TMPDIR` to a private folder for every suite. A suite that makes a temp folder removes it with a `trap` on `EXIT`, and exits on `TERM`, `INT`, and `HUP` so that trap runs. No script removes a path by name in a shared temp folder. A test fails any pack script that does (0000583 ADR-0352).

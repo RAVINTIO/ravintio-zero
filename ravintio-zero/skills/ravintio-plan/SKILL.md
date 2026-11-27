@@ -7,7 +7,7 @@ description: Produces the plan-phase artifact set (requirements, ADRs, scope, ri
 
 > You produce the full requirements-and-decisions artifact set for a feature behind one human gate. You work from a confirmed design and feature brief. You derive requirements. You never invent them.
 
-**Prefix.** Begin every reply with `P1 Plan:`, in the form `{prefix} {Status}: {one-liner}`, as in `P1 Plan: Starting: {one-liner}`.
+<!-- rule: orc-prefix-p1 --> **Prefix.** Begin every reply with `P1 Plan:`, in the form `{prefix} {Status}: {one-liner}`, as in `P1 Plan: Starting: {one-liner}`.
 
 **Times.** Read every time you log with `date -u +%Y-%m-%dT%H:%M:%SZ` and never type one. `build-log-check.mjs` fails a time later than its commit.
 
@@ -23,7 +23,7 @@ description: Produces the plan-phase artifact set (requirements, ADRs, scope, ri
 - `ravintio-zero/templates/data-contract-guide.md`
 - `ravintio-zero/standards/formatting-standards.md`
 
-Read each standard or template through the resolver: `node ravintio-zero/scripts/resolve-override.mjs {standards|templates} {file}`. See `ravintio-zero/standards/archetype-standards.md`.
+<!-- rule: ob-plan-resolver --> Read each standard or template through the resolver: `node ravintio-zero/scripts/resolve-override.mjs {standards|templates} {file}`. See `ravintio-zero/standards/archetype-standards.md`.
 
 **One question at a time.** When you need human input, ask one question and wait.
 
@@ -51,7 +51,7 @@ Write each artifact to disk as you complete it. Do not accumulate artifacts in m
 | Domain glossary | `plan/current/domain-glossary.md` |
 | ADRs | `docs/adr/{NNNN}-{slug}.md` - one per significant decision, status `proposed` |
 
-**Conditional set - produced only when its trigger holds.** The feature brief declares a trigger, or you infer one from a stated property of the confirmed design, never from feature size or story count. Absent a trigger, omit the artifact entirely. No empty or N/A placeholder files.
+<!-- rule: orc-plan-conditional-set --> **Conditional set - produced only when its trigger holds.** The feature brief declares a trigger, or you infer one from a stated property of the confirmed design, never from feature size or story count. Absent a trigger, omit the artifact entirely. No empty or N/A placeholder files.
 
 | Artifact | Path | Trigger |
 |---|---|---|
@@ -64,7 +64,7 @@ Write each artifact to disk as you complete it. Do not accumulate artifacts in m
 
 ## Story mapping pass
 
-Run this pass before you write any requirement file. Write `plan/current/story-map.md` from `ravintio-zero/templates/story-map.template.md`.
+<!-- rule: piv-story-map-order --> Run this pass before you write any requirement file. Write `plan/current/story-map.md` from `ravintio-zero/templates/story-map.template.md`.
 
 1. List the activities a user performs in the feature, then the steps under each.
 2. Match each step to a user story in the brief. Put `REQ-nnn` in its Requirement cell.
@@ -72,26 +72,26 @@ Run this pass before you write any requirement file. Write `plan/current/story-m
 
 Resolve each gap by this rule:
 
-- If the brief states or implies the step, add a new story and a new requirement. Write `gap: added as US-nnn`.
-- Otherwise add the step to the out-of-scope list in `scope.md`. Write `gap: out of scope`.
+- <!-- rule: piv-story-map-gap-added --> If the brief states or implies the step, add a new story and a new requirement. Write `gap: added as US-nnn`.
+- <!-- rule: piv-story-map-gap-out-of-scope --> Otherwise add the step to the out-of-scope list in `scope.md`. Write `gap: out of scope`.
 
-In a gated run, ask the human about a gap of the second kind. Ask one question at a time.
+<!-- rule: piv-story-map-gap-question --> In a gated run, ask the human about a gap of the second kind. Ask one question at a time.
+
+## Pack Index
+
+Read this file before you act on its topic.
+
+| Before you act on… | Read first |
+|--------------------|------------|
+| The Test impact scan | `references/test-impact-causes.md` |
 
 ## Test impact scan
 
-Run this scan before you write the execution plan. For each cause below that the run triggers, grep `ravintio-zero/tests/` and the repo's own test folders. Take those folders from the stack declaration, or use `tests/`, `test/`, and `__tests__/`. List every match under `## Test impact` in the execution plan, in the unit that edits the file.
+<!-- rule: piv-plan-impact-scan --> Run this scan before you write the execution plan. For each cause in the reference file that the run triggers, grep `ravintio-zero/tests/` and the repo's own test folders. Take those folders from the stack declaration, or use `tests/`, `test/`, and `__tests__/`. List every match under `## Test impact` in the execution plan, in the unit that edits the file. For each test you list, grep `ravintio-zero/tests/regression/` for a file with the same name, and list the match.
 
-- **Skill count:** the run adds or removes a skill. Grep for `skills/` with `wc -l`.
-- **Skill-text budget:** the run edits any `SKILL.md`. Grep for the line cap.
-- **Size cap:** the run edits a skill that a cap test measures, such as the orchestrator. Grep for the skill name and `-le`.
-- **Backlog entry id:** the run pulls in an entry. Grep for the entry id.
-- **Workflow job or step edit:** the run adds or edits a job or step in a workflow file. Grep for `ravintio.yml`.
-- **Reference file edit:** the run edits a file in a skill's `references/` folder. Grep for the file name to find frozen-line tests.
-- **New test file:** the run adds a test file. List the repo-wide style tests, such as `test-0000164-req-008`.
-- **Non-suite file:** the run adds a file under `ravintio-zero/tests/` that is not a `test-*.sh` suite. List `run-tests.sh` and `run-tests.ps1`.
-- **Fixture-pinned line:** the run edits an existing pack line. Grep `ravintio-zero/tests/fixtures/` for the line.
+Read `references/test-impact-causes.md` for the causes and what to grep for each.
 
-If a grep matches nothing, write `none found` in the row.
+<!-- rule: piv-plan-impact-none-found --> If a grep matches nothing, write `none found` in the row.
 
 ## Branch-point reread
 
@@ -104,11 +104,21 @@ List every file a unit edits. Run `git fetch origin`, then read each file from t
 - If `origin` has no such branch, read the local base branch and write `local` after the commit.
 - If `origin/{base}` moves before the plan gate, repeat the reread and update the rows.
 
+## Pass signal paths
+
+<!-- rule: piv-plan-pass-signal-when --> Run this step when a requirement judges another component by its exit code or another pass signal. Skip it otherwise.
+
+<!-- rule: plan-pass-signal-paths -->
+1. Name the pass signal, such as exit 0 or exit 2.
+2. List each path that produces it. Include the failure paths of any launcher between the check and the component. An example is a launcher that exits with the pass code when it cannot run the component.
+3. Write one acceptance criterion for each path. A path that is a failure must fail the check.
+4. Write the list under `## Pass signal paths` in the execution plan.
+
 ## Requirements rules
 
 - Derive requirements directly from user stories in the brief. Do not invent requirements not stated or implied.
 - One file per story at `plan/current/requirements/{req-id}-{slug}.md`, from `ravintio-zero/templates/requirement.template.md`. No monolithic list in the execution plan.
-- Write each acceptance criterion as a checkbox line `- [ ] AC-{n}: {short name}` with indented `Given`, `When`, and `Then` bullets. `And` and `But` continue the step above. The limit of three criteria counts checkbox lines, not steps.
+- <!-- rule: piv-plan-ac-format --> Write each acceptance criterion as a checkbox line `- [ ] AC-{n}: {short name}` with indented `Given`, `When`, and `Then` bullets. `And` and `But` continue the step above. The limit of three criteria counts checkbox lines, not steps.
 - Non-functional requirements state specific, measurable targets. No vague qualifiers. If the design defers an NFR, note it in scope and do not fabricate a target.
 - The OpenAPI spec covers every endpoint implied by the requirements. No more, no less. Use OpenAPI 3.1 with JSON Schema bodies. Produce it early, since everything downstream implements against it.
 - Never invent domain language. If a concept has no clear name, flag it for the human. In a retrofit, include terms the codebase already uses.
@@ -130,19 +140,19 @@ A decision needs an ADR when it meets any of these criteria:
 No ADR for decisions already mandated by the requirements, direct consequences of the stack declaration, or single-component implementation details. Write one ADR recording the stack choice itself, referencing the design.
 
 - Follow `ravintio-zero/templates/adr.template.md`. Be specific. Vague ADRs are useless.
-- Reserve each number with `node ravintio-zero/scripts/reserve-id.mjs --file docs/adr/.next-id`. Commit the counter on its own, before the ADR.
-- Write the ADR to `docs/adr/{NNNN}-{slug}.md` with status `proposed`. Ship sets it to `accepted`. Name its component in the `Component` field.
-- If an ADR picks a shell feature, add a line `Oldest shell: {shell and version}` and check that the feature exists there. Check 9 enforces it.
+- <!-- rule: shp-plan-adr-reserve --> Reserve each number with `node ravintio-zero/scripts/reserve-id.mjs --file docs/adr/.next-id`. Commit the counter on its own, before the ADR.
+- <!-- rule: shp-plan-adr-write --> Write the ADR to `docs/adr/{NNNN}-{slug}.md` with status `proposed`. Ship sets it to `accepted`. Name its component in the `Component` field.
+- <!-- rule: shp-plan-oldest-shell --> If an ADR picks a shell feature, add a line `Oldest shell: {shell and version}` and check that the feature exists there. Check 9 enforces it.
 - Consequences include at least one positive and one negative.
-- If a decision supersedes a prior ADR, the new ADR names the one it replaces. Mark the prior one `Superseded by {number}`. Nobody deletes an ADR.
+- <!-- rule: shp-plan-adr-superseded --> If a decision supersedes a prior ADR, the new ADR names the one it replaces. Mark the prior one `Superseded by {number}`. Nobody deletes an ADR.
 
 ## Gate
 
 The plan phase ends at one human gate. Before presenting the gate summary:
 
-1. Run `node ravintio-zero/scripts/consistency-check.mjs` over the artifact set.
+1. <!-- rule: oa-plan-consistency-check --> Run `node ravintio-zero/scripts/consistency-check.mjs` over the artifact set.
 2. Fix what it flags and re-run until clean. This mechanical check is mandatory.
-3. If `plan/current-initiative/initiative.md` exists, run `node ravintio-zero/scripts/human-settings-check.mjs`. On exit 1, print its `Blocked` line and stop before P2.
+3. <!-- rule: shp-plan-human-settings-check --> If `plan/current-initiative/initiative.md` exists, run `node ravintio-zero/scripts/human-settings-check.mjs`. On exit 1, print its `Blocked` line and stop before P2.
 
 <!-- rule: plan-audit-refresh -->
 4. If a requirement targets advisories or dependency versions, re-run the dependency audit before the plan gate. Use the repo's own audit command from the stack declaration. Log `Audit: re-run at P1 ({result})` in the build log. If the fix needs a library outside the `Approved dependencies` list, stop at the plan gate with the dependency exception stop: `{prefix} Blocked: new dependency {name} is not on the approved list. Approve it or choose an approved alternative.`
@@ -151,15 +161,15 @@ Then present the artifact set summary and stop for human confirmation. Agreement
 
 ## Concurrency plan
 
-Write a `## Concurrency plan` section in each execution plan, per `ravintio-zero/templates/execution-plan.template.md`. Rewrite it in any re-plan after a reopened phase.
+<!-- rule: orc-plan-concurrency --> Write a `## Concurrency plan` section in each execution plan, per `ravintio-zero/templates/execution-plan.template.md`. Rewrite it in any re-plan after a reopened phase.
 
-- Place two units with no dependency and no shared write target in one batch.
-- Fill the `Shared resources` column with build output, ports, and lock files. Two units in one batch may not share one.
-- Add a living docs unit that writes the files under `docs/` that the run changes. Check 10 requires it.
-- Give a `Sequential reason` for each unit that runs alone in its batch.
+- <!-- rule: orc-plan-batch-independent --> Place two units with no dependency and no shared write target in one batch.
+- <!-- rule: shp-plan-shared-resources --> Fill the `Shared resources` column with build output, ports, and lock files. Two units in one batch may not share one.
+- <!-- rule: shp-plan-living-docs-unit --> Add a living docs unit that writes the files under `docs/` that the run changes. Check 10 requires it.
+- <!-- rule: orc-plan-sequential-reason --> Give a `Sequential reason` for each unit that runs alone in its batch.
 - Name only units from earlier batches in `Depends on`.
 
-The consistency check validates the section (check 8).
+<!-- rule: orc-plan-concurrency-check --> The consistency check validates the section (check 8).
 
 ## Parallelism
 
@@ -194,10 +204,10 @@ When the confirmed design groups features into waves:
 
 ## Chart formats
 
-If a step changes a chart format, update `plan/current-initiative/initiative.md` in the same step. A new table or column is an example.
+<!-- rule: ini-chart-format-update -->If a step changes a chart format, update `plan/current-initiative/initiative.md` in the same step. A new table or column is an example.
 
-If the step can't convert a record, file a backlog entry for it and name the record in its PR.
+<!-- rule: ini-chart-format-unconvertible -->If the step can't convert a record, file a backlog entry for it and name the record in its PR.
 
 ## Commit cadence
 
-Commit after every meaningful artifact write. Do not batch commits to the phase gate.
+<!-- rule: oa-plan-commit-cadence --> Commit after every meaningful artifact write. Do not batch commits to the phase gate.

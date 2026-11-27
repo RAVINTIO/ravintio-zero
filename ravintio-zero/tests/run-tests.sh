@@ -14,7 +14,8 @@
 # The runner removes every RAVINTIO_ variable from the environment of each suite (0000315), so a
 # suite gives the same result in any session. The initiative driver sets RAVINTIO_INITIATIVE_STEP
 # in every step session, and the hooks read it. A suite that needs a variable sets it for its own
-# call. Three variables pass through: RAVINTIO_PWSH, RAVINTIO_TIMING_FILE, and RAVINTIO_TEST_QUIET. The
+# call. The runner sets RAVINTIO_TEMP_PATH_LIMIT=4096 for each suite, because fixture repos sit in a long
+# temp path (0000583). Three variables pass through: RAVINTIO_PWSH, RAVINTIO_TIMING_FILE, and RAVINTIO_TEST_QUIET. The
 # last one only changes how much a suite prints, and assert.sh reads it. A suite that starts a
 # nested runner unsets it first.
 #
@@ -42,6 +43,7 @@ done <<< "$(compgen -e | grep '^RAVINTIO_' || true)"
 # identity, so a commit with no identity fails here as it does on a CI runner.
 source "$SCRIPT_DIR/helpers/git-isolation.sh"
 isolate_git_env
+exit_on_signal
 trap remove_git_isolation EXIT
 
 # Prints one "path<TAB>hash" line per modified, deleted, or untracked file. Fails outside a git repository.
@@ -65,6 +67,29 @@ skills_listing() {
   [ -d "$top/.claude/skills" ] || return 0
   (cd "$top" && find .claude/skills -mindepth 1 -print 2>/dev/null | LC_ALL=C sort)
 }
+
+# Marks a live run (0000548 ADR-0344). The strict hook stays quiet for a step session while the
+# marker names a live process, so an ack prompt cannot change a tracked file mid-run. The runner
+# writes it before the first snapshot and removes it on exit. The marker is git-ignored.
+SUITE_MARKER=""
+SUITE_TOP="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel 2>/dev/null)" || SUITE_TOP=""
+# A live marker of another runner stays as it is, and this runner then removes nothing.
+if [ -n "$SUITE_TOP" ] && [ -d "$SUITE_TOP/plan" ] && [ ! -L "$SUITE_TOP/plan" ] && [ ! -L "$SUITE_TOP/plan/.suite-running" ] \
+  && ! kill -0 "$(cat "$SUITE_TOP/plan/.suite-running" 2>/dev/null)" 2>/dev/null; then
+  if printf '%s\n' "$$" > "$SUITE_TOP/plan/.suite-running" 2>/dev/null; then
+    SUITE_MARKER="$SUITE_TOP/plan/.suite-running"
+  fi
+fi
+remove_suite_marker() { [ -z "$SUITE_MARKER" ] || rm -f "$SUITE_MARKER"; }
+
+# Private temp folder (0000583 ADR-0352): every suite gets TMPDIR set to a folder that only this run
+# owns. It sits under the caller's TMPDIR, or under the system default when none is set. It never sits
+# inside the repo, because a suite that expects a folder outside a git repository would then fail.
+# The runner removes only the folder it made, and never a path by name in a shared folder.
+RUN_TMP="$(mktemp -d -t ravintio_run_XXXXXX 2>/dev/null)" || RUN_TMP=""
+[ -z "$RUN_TMP" ] || export TMPDIR="$RUN_TMP"
+remove_run_tmp() { [ -z "$RUN_TMP" ] || rm -rf "$RUN_TMP"; }
+trap 'remove_suite_marker; remove_run_tmp; remove_git_isolation' EXIT
 
 SKILLS_BEFORE="$(skills_listing)"
 TREE_BEFORE=""
@@ -97,6 +122,7 @@ KNOWN_NON_SUITES=(
   "regression/regression-manifest.json"    # the promoted-suite list
   "regression/.gitkeep"                    # keeps the folder in git
   "brand-guard-allowlist.txt"              # the brand guard allowlist, read by pre-push and the CI brand test (0000394)
+  "helpers/anchor-conversions.txt"         # the ledger of suites that read rules by anchor, read by the 0000579 guard suite
   "helpers/assert.sh"                      # Bash assert helpers
   "helpers/git-isolation.sh"               # isolate_git_env, the runner's git config isolation (0000462)
   "helpers/timeout.sh"                    # with_timeout, the portable time limit (0000380)
@@ -215,8 +241,8 @@ run_one() {
 
 run_suite_body() {
   case "$1" in
-    *.ps1) env ${CLEAR_ARGS[@]+"${CLEAR_ARGS[@]}"} "$PWSH" -NoProfile -File "$1" ;;
-    *) env ${CLEAR_ARGS[@]+"${CLEAR_ARGS[@]}"} bash "$1" ;;
+    *.ps1) env ${CLEAR_ARGS[@]+"${CLEAR_ARGS[@]}"} RAVINTIO_TEMP_PATH_LIMIT=4096 "$PWSH" -NoProfile -File "$1" ;;
+    *) env ${CLEAR_ARGS[@]+"${CLEAR_ARGS[@]}"} RAVINTIO_TEMP_PATH_LIMIT=4096 bash "$1" ;;
   esac
 }
 

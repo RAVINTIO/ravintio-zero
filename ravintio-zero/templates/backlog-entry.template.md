@@ -9,6 +9,7 @@ theme: "unsorted"  # kebab-case group name
 
 > Path: `plan/backlog/{id}-{slug}/entry.md`: one folder per entry, `{id}` zero-padded sequence, `{slug}` kebab-case.
 >
+<!-- rule: rm-tpl-backlog-id -->
 > **`{id}` comes from the counter file.** Reserve it with
 > `node ravintio-zero/scripts/reserve-id.mjs` before you write the entry. The script
 > reads `plan/backlog/.next-id` under a lock and never hands out an id twice, so
@@ -29,6 +30,7 @@ theme: "unsorted"  # kebab-case group name
 > `deliberate scope decision` or `tech debt` respectively. Entries filed live
 > during a run use `discovered mid-flight`.
 >
+<!-- rule: oa-backlog-human-request-use -->
 > Use `human request` when the human asks for the entry directly, rather than
 > a run finding it. If no run is active, write `none (human request)` for the
 > source feature and source phase.
@@ -43,11 +45,11 @@ theme: "unsorted"  # kebab-case group name
 > `unsorted`. Generate the index with `node ravintio-zero/scripts/backlog-index.mjs`.
 > Regenerate it in the same commit as any entry change.
 
-**Source feature:** {{feature-id that discovered this | none (human request)}}
+<!-- rule: oa-backlog-source-feature --> **Source feature:** {{feature-id that discovered this | none (human request)}}
 
-**Source phase:** {{P0–P4 phase active when discovered | none (human request)}}
+<!-- rule: oa-backlog-source-phase --> **Source phase:** {{P0–P4 phase active when discovered | none (human request)}}
 
-**Deferral source:** {{discovered mid-flight | deliberate scope decision | tech debt | human request}}
+<!-- rule: oa-backlog-deferral-source --> **Deferral source:** {{discovered mid-flight | deliberate scope decision | tech debt | human request}}
 
 **Date filed:** {{ISO-8601 date}}
 

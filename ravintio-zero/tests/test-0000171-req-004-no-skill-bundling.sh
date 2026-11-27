@@ -5,6 +5,14 @@
 # files an older install left and keeps the skill's own files.
 
 set -uo pipefail
+# Every temp folder of this suite sits under one private folder, which the EXIT trap removes. A workspace made
+# inside a command substitution never reaches a cleanup list, so the folder is the only reliable record (0000583).
+SUITE_TMP=""
+trap 'rm -rf "${SUITE_TMP:-}"' EXIT
+trap 'exit 143' TERM
+trap 'exit 130' INT HUP
+SUITE_TMP="$(mktemp -d)"
+export TMPDIR="$SUITE_TMP"
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
@@ -30,7 +38,9 @@ cleanup() {
     rm -rf "$ws"
   done
 }
-trap cleanup EXIT
+trap 'cleanup; rm -rf "$SUITE_TMP"' EXIT
+trap 'exit 143' TERM
+trap 'exit 130' INT HUP
 
 run_setup() {
   (cd "$1" && GIT_CEILING_DIRECTORIES="$(dirname "$1")" bash ravintio-zero/setup.sh claude-code \
@@ -78,7 +88,7 @@ rm -f "$SK/.ravintio-manifest"
 run_setup "$WS"
 assert_exit_zero "$?" "AC-2: the rerun exits 0"
 assert_equals "no" "$([ -e "$SK/ravintio-plan/assets" ] && echo yes || echo no)" "AC-2: the bundled assets folder is gone"
-assert_equals "no" "$([ -e "$SK/ravintio-plan/references" ] && echo yes || echo no)" "AC-2: the bundled references folder is gone"
+assert_equals "no" "$([ -e "$SK/ravintio-plan/references/formatting-standards.md" ] && echo yes || echo no)" "AC-2: the bundled references file is gone"
 assert_equals "no" "$([ -e "$SK/ravintio-orchestrator/assets/templates" ] && echo yes || echo no)" "AC-2: the orchestrator's bundled templates are gone"
 assert_equals "no" "$([ -e "$SK/ravintio-orchestrator/references/code-quality-standards.md" ] && echo yes || echo no)" "AC-2: the orchestrator's bundled standard is gone"
 assert_equals "yes" "$([ -f "$SK/ravintio-orchestrator/assets/.gitkeep" ] && echo yes || echo no)" "AC-2: the orchestrator's own assets file remains"

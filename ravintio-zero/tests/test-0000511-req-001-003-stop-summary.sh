@@ -11,7 +11,6 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
 DRIVER="$SCRIPT_DIR/../scripts/initiative-run.mjs"
-STANDARDS="$SCRIPT_DIR/../standards/roadmap-standards.md"
 ADR="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)/docs/adr/0341-driver-stop-summary.md"
 WORK="$(mktemp -d)"
 trap 'rm -rf "$WORK"' EXIT
@@ -34,7 +33,7 @@ echo ""
 echo "=== REQ-002 AC-1: a clean end names its action and the final line stays last ==="
 assert_contains "I-C Run: Summary: action for the human: " "$(action_line "$OUT")" "REQ-002 AC-1: prints the action line"
 assert_contains "I-E Delivery: Pending:" "$(last_line "$OUT")" "REQ-002 AC-1: the final line stays the Pending line"
-assert_contains "run initiative delivery from the initiative skill" "$(action_line "$OUT")" "REQ-002 AC-1: delivery is pending, so the action says so"
+assert_contains "none, the coordinator runs I-E Delivery" "$(action_line "$OUT")" "REQ-002 AC-1: delivery is pending, so the action says so"
 
 echo ""
 echo "=== REQ-001 AC-3: a run that merges nothing says none ==="
@@ -85,7 +84,7 @@ assert_contains "action for the human: run the setup command in the stop line, t
 echo ""
 echo "=== REQ-003: the driver header, the standards, and the ADR state the summary ==="
 assert_contains "I-C Run: Summary:" "$(sed -n 1,200p "$DRIVER")" "REQ-003 AC-1: the driver header names the Summary lines"
-assert_contains "I-C Run: Summary:" "$(cat "$STANDARDS")" "REQ-003 AC-2: roadmap-standards.md names the Summary lines"
+assert_rule driver-stop-summary "I-C Run: Summary:"
 assert_contains "I-C Run: Summary:" "$(cat "$ADR")" "REQ-003 AC-3: the ADR names the Summary lines"
 
 print_summary

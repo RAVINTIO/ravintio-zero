@@ -12,25 +12,18 @@ ZERO_DIR="$SCRIPT_DIR/.."
 STD="$ZERO_DIR/standards/roadmap-standards.md"
 SKILL="$ZERO_DIR/skills/ravintio-initiative/SKILL.md"
 
-DELIVERY="$(awk '$0 == "### I-E Delivery" {on=1; next} on && /^###? / {exit} on {print}' "$STD")"
-SKILL_TEXT="$(cat "$SKILL")"
-SKILL_DELIVERY="$(awk '$0 == "## I-E Delivery" {on=1; next} on && /^## / {exit} on {print}' "$SKILL")"
 
 echo "=== req-003 AC-1: the delivery step ==="
-assert_contains 'node ravintio-zero/scripts/check-initiative-history.mjs' "$DELIVERY" "req-003 AC-1: names the script"
-assert_contains 'failing commit' "$DELIVERY" "req-003 AC-1: names the failing commits"
-assert_contains 'PR body' "$DELIVERY" "req-003 AC-1: lists them in the PR body"
-assert_contains 'stop' "$DELIVERY" "req-003 AC-1: names the stop"
+assert_rule rm-delivery-history-check 'node ravintio-zero/scripts/check-initiative-history.mjs' 'failing commit' 'PR body' 'stop'
 
 echo ""
 echo "=== req-003 AC-2: the title and body ==="
-assert_contains 'PR title' "$DELIVERY" "req-003 AC-2: names the PR title"
-assert_contains 'first line of the body' "$DELIVERY" "req-003 AC-2: names the first body line"
-assert_contains 'merge commit' "$DELIVERY" "req-003 AC-2: names the merge commit instruction"
+assert_rule rm-delivery-pr-title 'PR title' 'merge commit'
+assert_rule rm-delivery-pr-body 'first line of the body' 'merge commit'
 
 echo ""
 echo "=== req-003: the skill points to the standards ==="
-assert_contains 'history' "$SKILL_DELIVERY" "req-003: skill delivery section names the history check"
+assert_rule rm-ini-delivery 'history'
 SKILL_LINES="$(wc -l < "$SKILL" | tr -d ' ')"
 [ "$SKILL_LINES" -lt 120 ] && R=ok || R=long
 assert_equals "ok" "$R" "req-003: initiative skill stays under 120 lines"

@@ -7,32 +7,25 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
 ZERO_DIR="$SCRIPT_DIR/.."
-ORCH="$(orch_combined "$ZERO_DIR/skills/ravintio-orchestrator")"
 REF="$ZERO_DIR/pipeline-reference.md"
-TPL="$ZERO_DIR/templates/initiative.template.md"
-STD="$ZERO_DIR/standards/roadmap-standards.md"
 
 # The section from a heading to the next "---" rule.
 section() { awk -v h="$1" '$0 == h {on=1; next} on && /^---$/ {exit} on {print}' "$2"; }
-RES="$(section '## Resume Detection' "$ORCH")"$'\n'"$(cat "$ZERO_DIR/skills/ravintio-orchestrator/references/orchestrator-resume-detection.md")"
-ORCH_SEC="$(section '## Phases and Response Prefixes' "$ORCH")"
+ORCH_SEC="$(orch_section '## Phases and Response Prefixes')"
 REF_SEC="$(section '## Phase Indicators' "$REF")"
 
 echo "=== req-009 (a): resume detection ==="
-assert_contains 'plan/current-initiative/' "$RES" "req-009 (a): names plan/current-initiative/"
-IDX_R="$(printf '%s\n' "$RES" | grep -n 'plan/current-initiative/' | head -1 | cut -d: -f1)"
-IDX_C="$(printf '%s\n' "$RES" | grep -n 'Scan `plan/current/`\|plan/current/` for existing' | head -1 | cut -d: -f1)"
-assert_equals "yes" "$([ -n "$IDX_R" ] && [ -n "$IDX_C" ] && [ "$IDX_R" -le "$IDX_C" ] && echo yes || echo no)" \
-  "req-009 (a): initiative is checked before plan/current/"
-assert_contains 'With `plan/current/` artifacts, resume that step' "$RES" "req-009 (a): artifacts resume that step"
-assert_contains 'with `plan/current/` empty starts the step at `position`' "$RES" "req-009 (a): empty starts at position"
-assert_contains 'load `ravintio-initiative` and stop' "$RES" "req-009 (a): a non-step session loads the initiative skill"
+assert_rule resume-initiative 'plan/current-initiative/' 'Check `plan/current-initiative/` first' \
+  'With `plan/current/` artifacts, resume that step' \
+  'with `plan/current/` empty starts the step at `position`' \
+  'load `ravintio-initiative` and stop'
 
 echo ""
 echo "=== req-009 (b): prefix tables ==="
+# 0000244 moved the I-A to I-E prefix block from the orchestrator to the roadmap standards.
+STD_PREFIX="$(rule_text rm-stages-table)"$'\n'"$(rule_text rm-stage-prefix-form)"$'\n'"$(rule_text rm-prefix-examples)"
 for label in orchestrator pipeline-reference; do
-  # 0000244 moved the I-A to I-E prefix block from the orchestrator to the roadmap standards.
-  if [ "$label" = orchestrator ]; then SEC="$ORCH_SEC"$'\n'"$(cat "$STD")"; else SEC="$REF_SEC"; fi
+  if [ "$label" = orchestrator ]; then SEC="$ORCH_SEC"$'\n'"$STD_PREFIX"; else SEC="$REF_SEC"; fi
   for p in 'I-A Chart:' 'I-B Activate:' 'I-C Run:' 'I-D Advance:' 'I-E Delivery:'; do
     assert_contains "\`$p\`" "$SEC" "req-009 (b): $label lists \`$p\`"
   done
@@ -43,7 +36,7 @@ done
 
 echo ""
 echo "=== req-009 (c): Hard Limit 10 unchanged ==="
-assert_contains 'The pipeline has exactly five phases, P0 to P4.' "$(cat "$ORCH")" "req-009 (c): Hard Limit 10 text"
+assert_rule orc-hard-limit-phases 'The pipeline has exactly five phases, P0 to P4.'
 for t in test-0000042-req-004-phase-numbers-p0-to-p4.sh test-0000042-req-005-message-prefixes.sh test-0000042-req-006-phase-guard-and-stale-cites.sh; do
   bash "$SCRIPT_DIR/$t" >/dev/null 2>&1
   assert_equals "0" "$?" "req-009 (c): $t passes"

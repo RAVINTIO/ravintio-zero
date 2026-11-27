@@ -14,27 +14,15 @@ IMPL="$ZERO_DIR/skills/ravintio-implement/SKILL.md"
 
 echo ""
 echo "=== req-001 AC-1: the orchestrator names the commands ==="
-O=$(cat "$ORCH")
-assert_contains "while any subagent" "$O" "req-001 AC-1: the rule names a running subagent"
-assert_contains "\`git stash\`" "$O" "req-001 AC-1: git stash"
-assert_contains "\`git checkout -- {path}\`" "$O" "req-001 AC-1: git checkout -- {path}"
-assert_contains "\`git reset\`" "$O" "req-001 AC-1: git reset"
-assert_contains "\`git clean\`" "$O" "req-001 AC-1: git clean"
+assert_rule orc-orch-no-tree-git "while any subagent" "\`git stash\`" "\`git checkout -- {path}\`" "\`git reset\`" "\`git clean\`"
 
 echo ""
 echo "=== req-001 AC-2: the implement skill names the clone and the log note ==="
-I=$(cat "$IMPL")
-assert_contains "while any subagent" "$I" "req-001 AC-2: the rule names a running subagent"
-assert_contains "\`git stash\`" "$I" "req-001 AC-2: git stash"
-assert_contains "\`git checkout -- {path}\`" "$I" "req-001 AC-2: git checkout -- {path}"
-assert_contains "\`git reset\`" "$I" "req-001 AC-2: git reset"
-assert_contains "\`git clean\`" "$I" "req-001 AC-2: git clean"
-assert_contains "scratch clone" "$I" "req-001 AC-2: the scratch clone"
-assert_contains "waits for its subagents" "$I" "req-001 AC-2: the build log note"
+assert_rule orc-impl-no-tree-git "while any subagent" "\`git stash\`" "\`git checkout -- {path}\`" "\`git reset\`" "\`git clean\`" "scratch clone" "waits for its subagents"
 
 echo ""
 echo "=== req-001 AC-3: the caps hold ==="
-BYTES=$(wc -c < "$ORCH" | tr -d ' ')
+BYTES=$(strip_rule_anchors < "$ORCH" | wc -c | tr -d ' ')
 assert_equals "yes" "$([ "$BYTES" -le 9000 ] && echo yes || echo no)" "req-001 AC-3: orchestrator holds $BYTES bytes (cap 9000)"
 TOTAL=$(cat "$ZERO_DIR"/skills/*/SKILL.md | wc -l | tr -d ' ')
 assert_equals "yes" "$([ "$TOTAL" -le 1720 ] && echo yes || echo no)" "req-001 AC-3: skill text $TOTAL lines (cap 1720)"

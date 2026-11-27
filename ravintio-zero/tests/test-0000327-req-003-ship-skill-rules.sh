@@ -18,30 +18,22 @@ section() {
 }
 has() { printf '%s\n' "$2" | grep -qF -- "$1" && echo yes || echo no; }
 
-SEC="$(section '## PRs into main' "$SHIP")"
-
 echo ""
 echo "=== req-003 AC-1: force-push limit ==="
-assert_equals "yes" "$([ -n "$SEC" ] && echo yes || echo no)" "AC-1: section '## PRs into main' exists"
+assert_equals "yes" "$(grep -q '^## PRs into main' "$SHIP" && echo yes || echo no)" "AC-1: section '## PRs into main' exists"
+SEC="$(for id in shp-main-single-commit shp-main-commit-title shp-main-replacement-pr shp-main-no-force-push shp-main-wait-ci; do rule_text "$id"; done)"
 assert_equals "no" "$(has '--force-with-lease' "$SEC")" "AC-1: no --force-with-lease"
-assert_equals "yes" "$(has 'replacement PR' "$SEC")" "AC-1: names the replacement PR"
-assert_equals "yes" "$(printf '%s\n' "$SEC" | grep -F 'replacement PR' | grep -qF 'hotfix/*' && echo yes || echo no)" "AC-1: replacement PR is for hotfix/*"
-assert_equals "yes" "$(printf '%s\n' "$SEC" | grep -F 'replacement PR' | grep -qF 'chore/*' && echo yes || echo no)" "AC-1: replacement PR is for chore/*"
-nf="$(printf '%s\n' "$SEC" | grep -F 'never force-push')"
-for b in 'main' 'initiative/*' 'feat/*' 'hotfix/*' 'chore/*'; do
-  assert_equals "yes" "$(has "$b" "$nf")" "AC-1: never force-push names $b"
-done
+assert_rule shp-main-replacement-pr 'replacement PR' 'hotfix/*' 'chore/*'
+assert_rule shp-main-no-force-push 'never force-push' 'main' 'initiative/*' 'feat/*' 'hotfix/*' 'chore/*'
 
 echo ""
 echo "=== req-003 AC-2: squash and wait ==="
-assert_equals "yes" "$(has 'one commit on `origin/main`' "$SEC")" "AC-2: one commit on origin/main"
-assert_equals "yes" "$(has 'commit-standards.md' "$SEC")" "AC-2: title follows commit-standards.md"
-assert_equals "yes" "$(has 'PR number' "$SEC")" "AC-2: title names the PR number"
-assert_equals "yes" "$(has 'squashed' "$SEC")" "AC-2: body lists the squashed titles"
-assert_equals "yes" "$(has 'green CI' "$SEC")" "AC-2: waits for green CI"
-assert_equals "yes" "$(has 'before you ask' "$SEC")" "AC-2: CI wait comes before the merge request"
+assert_rule shp-main-single-commit 'one commit on `origin/main`'
+assert_rule shp-main-commit-title 'commit-standards.md' 'PR number' 'squashed'
+assert_rule shp-main-wait-ci 'green CI' 'before you ask'
+assert_rule shp-hard-limit-merge '## PRs into main'
 HL="$(grep -E '^5\. ' "$SHIP")"
-assert_equals "yes" "$(has '## PRs into main' "$HL")" "AC-2: Hard Limit 5 points to the section"
+assert_equals "yes" "$(has '## PRs into main' "$HL")" "AC-2: Hard Limit 5 still opens with its number"
 
 echo ""
 echo "=== req-003 AC-3: size ==="

@@ -54,9 +54,7 @@ other" "$(bash "$HELPER" "$TMP/unmarked.yml")" "REQ-003 AC-2: a blank line break
 
 echo ""
 echo "=== REQ-003 AC-3: the plan scan names the workflow cause ==="
-SCAN=$(awk '/^## Test impact scan/{f=1;next} /^## /{f=0} f' "$PLAN")
-assert_contains "Workflow job or step" "$SCAN" "REQ-003 AC-3: the scan names the workflow cause"
-assert_contains "ravintio.yml" "$SCAN" "REQ-003 AC-3: the scan greps for ravintio.yml"
+assert_rule piv-cause-workflow-job "Workflow job or step" "ravintio.yml"
 
 echo ""
 echo "=== REQ-003: the shape test holds no fixed job list ==="

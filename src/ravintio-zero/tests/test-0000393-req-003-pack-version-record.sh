@@ -62,10 +62,10 @@ ws="$(mk_ws)"; record "$ws" "0.37.0"; printf -- '---\nversion: "latest"\n---\n' 
 assert_equals "no resume signals" "$(detect "$ws")" "about.md unreadable, record matches"
 
 echo "=== req-003 AC-3 docs state the split ==="
-assert_contains "holds the product version only" "$(cat "$POLICY")" "policy states the split"
-assert_contains "plan/state/pack-version.md" "$(cat "$POLICY")" "policy names the record"
+assert_rule orc-policy-version-mismatch "holds the product version only" "plan/state/pack-version.md"
 assert_contains "docs/about.md holds the product version only" "$(cat "$TEMPLATE")" "template states the split"
-assert_contains "$DIFFERS" "$(cat "$REF")" "reference lists the new finding"
-assert_not_contains "differs from docs/about.md" "$(cat "$REF")" "reference drops the old finding"
+FINDINGS="$(orch_section "## Findings and checks")"
+assert_contains "$DIFFERS" "$FINDINGS" "reference lists the new finding"
+assert_not_contains "differs from docs/about.md" "$FINDINGS" "reference drops the old finding"
 
 print_summary

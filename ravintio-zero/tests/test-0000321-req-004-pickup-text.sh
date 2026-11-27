@@ -11,15 +11,8 @@ REF="$ZERO_DIR/skills/ravintio-orchestrator/references/orchestrator-p0-start-act
 TEMPLATE="$ZERO_DIR/templates/product.template.yml"
 PRODUCT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)/product.yml"
 
-STEP=$(grep -A6 -E "^10\. " "$REF")
-
-echo "=== AC-3: step 10 pickup text ==="
-assert_contains 'backlog-index.mjs --review' "$STEP" "step 10 names the review mode"
-assert_contains 'plan/backlog/index.md' "$STEP" "step 10 names the index"
-assert_contains 'priority' "$STEP" "step 10 names priority order"
-assert_contains 'theme' "$STEP" "step 10 names theme order"
-assert_contains 'node ravintio-zero/scripts/backlog-index.mjs`' "$STEP" "step 10 names the regenerate command"
-assert_contains 'same commit' "$STEP" "step 10 regenerates the index in the same commit"
+echo "=== AC-3: the pickup text ==="
+assert_rule p0-start-backlog-pickup 'backlog-index.mjs --review' 'plan/backlog/index.md' 'priority' 'theme' 'node ravintio-zero/scripts/backlog-index.mjs`' 'same commit'
 
 echo "=== backlogReviewDays setting ==="
 assert_contains 'backlogReviewDays' "$(cat "$TEMPLATE")" "template documents backlogReviewDays"

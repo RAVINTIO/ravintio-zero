@@ -19,42 +19,23 @@ SHIP="$ZERO_DIR/skills/ravintio-ship/SKILL.md"
 REF="$ZERO_DIR/pipeline-reference.md"
 FLOW="$ZERO_DIR/workflows/feature-pipeline.md"
 
-# Lines from a heading to the next heading of the same or higher level.
-section() {
-  awk -v h="$1" '
-    $0 == h { on = 1; lvl = index(h, " "); next }
-    on && /^#+ / { if (index($0, " ") <= lvl) exit }
-    on { print }' "$2"
-}
-
-STOPS="$(section '## Exception Stops' "$ORCH")"
-RESUME="$(section '## Resume Detection' "$ORCH")"$'\n'"$(cat "$ZERO_DIR/skills/ravintio-orchestrator/references/orchestrator-resume-detection.md")"
-GATE="$(section '## Acceptance gate' "$VAL")"
-PR_STEP="$(section '### Step 9: PR' "$SHIP")"
+STOPS="$(orch_section '## Exception Stops')"
+SHIP_CONTENT="$(cat "$SHIP")"
 CRED_MSG='Blocked: possible credential in {path}. Remove it or confirm it is not a secret.'
 
 echo ""
 echo "=== req-011 (a): exception stops leave a build-log record ==="
 
-assert_contains 'Append `Blocked: {exception} ({ISO-8601 timestamp})` to the build log' "$STOPS" \
-  "req-011 (a): each stop appends a Blocked: line to the build log"
-assert_contains 'append `Resolved: {exception} ({ISO-8601 timestamp}, {decision})`' "$STOPS" \
-  "req-011 (a): the human's answer appends a Resolved: line"
-assert_contains 'with no later `Resolved:` line' "$RESUME" \
-  "req-011 (a): resume checks for an unresolved Blocked: line"
-assert_contains 'Do not move on in either mode.' "$RESUME" \
-  "req-011 (a): resume does not pass an unresolved stop"
+assert_rule stops-log-blocked 'Append `Blocked: {exception} ({ISO-8601 timestamp})` to the build log'
+assert_rule stops-log-resolved 'append `Resolved: {exception} ({ISO-8601 timestamp}, {decision})`'
+assert_rule resume-run-mode 'with no later `Resolved:` line' 'Do not move on in either mode.'
 
 echo ""
 echo "=== req-011 (b): evidence carries no raw output, and ship scans the PR body ==="
 
-assert_contains 'never raw command output, environment values, or file contents' "$GATE" \
-  "req-011 (b): acceptance evidence forbids raw output"
-assert_contains '`file:line` cites' "$GATE" \
-  "req-011 (b): acceptance evidence uses file:line cites"
-assert_contains 'scan the PR body for credential patterns' "$PR_STEP" \
-  "req-011 (b): ship scans the PR body before gh pr create"
-assert_contains "P4 Ship: $CRED_MSG" "$PR_STEP" \
+assert_rule piv-p3-autonomous-evidence 'never raw command output, environment values, or file contents' '`file:line` cites'
+assert_rule orc-ship-pr-credential-scan 'scan the PR body for credential patterns'
+assert_contains "P4 Ship: $CRED_MSG" "$SHIP_CONTENT" \
   "req-011 (b): a match in the PR body is a credential stop"
 
 echo ""

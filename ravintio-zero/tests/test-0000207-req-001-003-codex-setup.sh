@@ -64,11 +64,11 @@ assert_contains "merge-guard" "$OUT" "req-003 AC-2: merge-guard is active"
 assert_contains "Fallback hooks" "$OUT" "req-003 AC-2: the report has a fallback list"
 assert_contains "gate-write" "$OUT" "req-003 AC-2: gate-write is a fallback"
 assert_contains "/hooks" "$OUT" "req-003 AC-2: the report names the /hooks review"
-assert_contains "gate-write" "$(cat ravintio-zero/standards/hook-enforcement.md)" "req-003: the hook reference states the gate-write fallback"
+assert_rule orc-codex-fallback-gate-write "gate-write"
 # 0000217: real Codex 0.163.0 skips project hooks until a person trusts them, so
 # the report and AGENTS.md must not call merge-guard active before that.
 assert_contains "Until you trust it, Codex skips merge-guard" "$OUT" "0000217: the report says merge-guard is off until trusted"
-assert_contains "nothing blocks a merge" "$(cat ravintio-zero/standards/hook-enforcement.md)" "0000217: the hook reference says nothing blocks a merge until the hook is trusted"
+assert_rule orc-codex-trust "nothing blocks a merge" "/hooks"
 
 echo ""
 echo "=== req-003 AC-1: a rerun keeps one entry and other entries ==="

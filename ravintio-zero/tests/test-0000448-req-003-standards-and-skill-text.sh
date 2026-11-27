@@ -10,22 +10,13 @@ set -uo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
-STANDARDS="$SCRIPT_DIR/../standards/roadmap-standards.md"
-SKILL="$SCRIPT_DIR/../skills/ravintio-initiative/SKILL.md"
 
 echo ""
 echo "=== req-003 AC-1: the Setup stop section ==="
-SETUP=$(awk '/^#### Setup stop/{f=1;next} /^#{1,4} /{f=0} f' "$STANDARDS")
-assert_contains "setup-command.mjs" "$SETUP" "req-003 AC-1: names the helper"
-assert_contains "Confirmation:" "$SETUP" "req-003 AC-1: names the Confirmation row"
-assert_contains "ran the approved setup command" "$SETUP" "req-003 AC-1: names the ran line"
-assert_contains "no shell" "$SETUP" "req-003 AC-1: says the driver uses no shell"
-assert_contains "The approved setup command failed" "$SETUP" "req-003 AC-1: names the failure sentence"
+assert_rule rm-setup-stop-bullets "setup-command.mjs" "Confirmation:" "ran the approved setup command" "no shell" "The approved setup command failed"
 
 echo ""
 echo "=== req-003 AC-2: the Stops section of the skill ==="
-STOPS=$(awk '/^## Stops/{f=1;next} /^## /{f=0} f' "$SKILL")
-assert_contains "runs the approved setup command" "$STOPS" "req-003 AC-2: the driver runs the command"
-assert_contains "did not run" "$STOPS" "req-003 AC-2: a Setup: line means it did not run"
+assert_rule ini-setup-stop "runs the approved setup command" "did not run"
 
 print_summary

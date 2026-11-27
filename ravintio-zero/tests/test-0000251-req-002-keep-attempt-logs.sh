@@ -11,7 +11,6 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
 DRIVER="$SCRIPT_DIR/../scripts/initiative-run.mjs"
-STANDARDS="$SCRIPT_DIR/../standards/roadmap-standards.md"
 WORK="$(mktemp -d)"
 trap 'rm -rf "$WORK"' EXIT
 
@@ -110,7 +109,8 @@ assert_equals "no" "$([ -e "$R/plan/.initiative-runner.lock" ] && echo yes || ec
 echo ""
 echo "=== req-002 (g): documentation ==="
 HEAD_TXT="$(sed -n '1,60p' "$DRIVER")"
-for f in "$HEAD_TXT" "$(cat "$STANDARDS")"; do
+STD_DOC="$(rule_text rm-steplog-attempt)"$'\n'"$(rule_text rm-steplog-stop-line)"
+for f in "$HEAD_TXT" "$STD_DOC"; do
   assert_contains "attempt-" "$f" "req-002 (g): names the attempt log"
   assert_contains "Earlier:" "$f" "req-002 (g): names the Earlier field"
 done

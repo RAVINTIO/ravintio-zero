@@ -20,13 +20,16 @@ trap 'rm -rf "$TMP_ROOT"' EXIT
 echo ""
 echo "=== AC-1: reference file holds the rules ==="
 ref_text="$(cat "$REF" 2>/dev/null || true)"
-for hook in gate-write auto-trigger-orchestrator check-design check-reply-prefix commit-msg ratchet-check; do
-  assert_contains "$hook" "$ref_text" "AC-1: reference names $hook"
-done
-for hook in merge-guard em-dash-guard check-orchestrator-presence; do
-  assert_contains "$hook" "$ref_text" "AC-1: reference names Codex entry $hook"
-done
-assert_contains "Enforcement failures exit 2" "$ref_text" "AC-1: reference holds the exit-code paragraph"
+assert_rule ob-hook-gate-write "gate-write"
+assert_rule ob-hook-auto-trigger "auto-trigger-orchestrator"
+assert_rule ob-hook-check-design "check-design"
+assert_rule ob-hook-check-reply-prefix "check-reply-prefix"
+assert_rule ob-hook-commit-msg "commit-msg"
+assert_rule ob-hook-ratchet-check "ratchet-check"
+assert_rule ob-codex-active-merge-guard "merge-guard"
+assert_rule ob-codex-fallback-em-dash-guard "em-dash-guard"
+assert_rule ob-codex-fallback-orchestrator-presence "check-orchestrator-presence"
+assert_rule ob-hook-exit-codes "Enforcement failures exit 2"
 assert_contains "## Codex" "$ref_text" "AC-1: reference holds a Codex heading"
 
 echo ""
@@ -34,12 +37,14 @@ echo "=== AC-2: boot files point to it ==="
 for f in "$STD_BOOT" "$CODEX_BOOT"; do
   name="$(basename "$f")"
   text="$(cat "$f")"
-  assert_contains "$REF_PATH" "$text" "AC-2: $name holds the path"
   assert_not_contains "**check-design**" "$text" "AC-2: $name holds no old hook list"
   assert_not_contains "**ratchet-check**" "$text" "AC-2: $name holds no ratchet-check entry"
 done
+# The boot templates render into installed files, so they carry no anchors.
+assert_contains "$REF_PATH" "$(cat "$STD_BOOT")" "AC-2: standard boot points to the hook enforcement standard"
+assert_contains "$REF_PATH" "$(cat "$CODEX_BOOT")" "AC-2: codex boot points to the hook enforcement standard"
 assert_contains "commit-msg" "$(cat "$STD_BOOT")" "AC-2: standard boot keeps the commit-msg rule"
-assert_contains "Never run a pull request merge command against" "$(cat "$CODEX_BOOT")" "AC-2: codex boot keeps the merge safety line"
+assert_contains "Never run a pull request merge command against" "$(cat "$CODEX_BOOT")" "AC-2: codex boot keeps the merge safety rule"
 
 echo ""
 echo "=== AC-3: block messages name the file, exit codes unchanged ==="

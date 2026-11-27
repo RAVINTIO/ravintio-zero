@@ -4,6 +4,9 @@
 # The ship skill has a "Initiative steps" section for I-D Advance. It applies
 # when plan/current-initiative/initiative.md has status active. A normal run keeps
 # the tag-before-PR order and the no-merge rule.
+#
+# Prose checks read the anchored rules (see standards/testing-standards.md section 8).
+# Order checks read the I-D Advance section through orch_section.
 
 set -uo pipefail
 
@@ -13,46 +16,36 @@ source "$SCRIPT_DIR/helpers/assert.sh"
 ZERO_DIR="$SCRIPT_DIR/.."
 SHIP="$ZERO_DIR/skills/ravintio-ship/SKILL.md"
 REF="$ZERO_DIR/pipeline-reference.md"
-STD="$ZERO_DIR/standards/roadmap-standards.md"
 
 # The section from a heading to the next heading of the same or higher level.
 section() { awk -v h="$1" '$0 == h {on=1; next} on && /^##? / {exit} on {print}' "$2"; }
 
-ALL="$(cat "$SHIP")"
-SEC="$(section '## Ship stages' "$STD")"
-ADV="$(printf '%s\n' "$SEC" | awk '/^### I-D Advance/ {on=1; next} on && /^### / {exit} on {print}')"
+ADV="$(orch_section '### I-D Advance')"
 
 echo ""
 echo "=== req-005 (a): initiative-step PR command and initiative.md update ==="
-assert_contains 'plan/current-initiative/initiative.md' "$SEC" "req-005 (a): section names the initiative file"
-assert_contains '`status: active`' "$SEC" "req-005 (a): section applies on status active"
-assert_contains 'I-D Advance:' "$SEC" "req-005 (a): section uses the I-D Advance prefix"
-assert_contains '--base initiative/{id}-{slug}' "$ADV" "req-005 (a): PR targets the initiative branch"
-assert_contains '`merged`' "$ADV" "req-005 (a): same PR sets the step to merged"
-assert_contains 'Version' "$ADV" "req-005 (a): same PR fills Version"
-assert_contains '`position`' "$ADV" "req-005 (a): same PR moves position"
-assert_contains 'same PR' "$ADV" "req-005 (a): initiative update rides in the same PR"
+assert_rule rm-ship-stages-scope 'plan/current-initiative/initiative.md' '`status: active`'
+assert_rule rm-advance-intro 'I-D Advance:'
+assert_rule rm-advance-pr-command '--base initiative/{id}-{slug}'
+assert_rule rm-advance-initiative-file '`merged`' 'Version' '`position`' 'same PR'
 
 echo ""
 echo "=== req-005 (b): green CI, then the merge queue merges and tags (0000379) ==="
-assert_contains 'gh pr checks' "$ADV" "req-005 (b): waits with gh pr checks"
-assert_contains 'gh pr merge --squash' "$ADV" "req-005 (b): squash merges"
-assert_contains 'Blocked:' "$ADV" "req-005 (b): red or pending CI is a Blocked stop"
-assert_contains 'pending' "$ADV" "req-005 (b): pending CI is named"
-assert_contains 'merge-queue.mjs run --step {step} --pr {k}' "$ADV" "req-005 (b): a step outside the concurrent driver runs the queue"
-assert_contains '$RAVINTIO_INITIATIVE_CONTROL/ready' "$ADV" "req-005 (b): a step under the concurrent driver writes ready"
-assert_contains 'I-D Advance: Ready: PR #{n}' "$ADV" "req-005 (b): a ready step prints the Ready line"
-assert_contains 'tags the merge commit `v{version}`' "$ADV" "req-005 (b): the queue tags the squash commit"
+assert_rule rm-advance-poll 'gh pr checks' 'pending'
+assert_rule rm-advance-queue-merge 'gh pr merge --squash' 'tags the merge commit `v{version}`'
+assert_rule rm-advance-ci-failed 'Blocked:'
+assert_rule rm-advance-queue-run 'merge-queue.mjs run --step {step} --pr {k}'
+assert_rule rm-advance-ready '$RAVINTIO_INITIATIVE_CONTROL/ready'
+assert_rule rm-advance-ready-line 'I-D Advance: Ready: PR #{n}'
 order="$(printf '%s\n' "$ADV" | grep -nE 'gh pr checks|merge-queue.mjs run|gh pr merge --squash|tags the merge commit' | cut -d: -f1 | tr '\n' ' ')"
 sorted="$(printf '%s\n' $order | sort -n | tr '\n' ' ')"
 assert_equals "$sorted" "$order" "req-005 (b): checks, queue run, merge, and tag appear in order"
 
 echo ""
 echo "=== req-005 (c): normal run creates no tag and keeps no merge ==="
-assert_contains 'Create no tag.' "$ALL" "req-005 (c): Step 7 creates no tag (0000169 req-006)"
-assert_contains 'tags the squash commit' "$ALL" "req-005 (c): Step 7 leaves initiative tagging to I-D Advance"
-assert_contains 'Merging into `main` stays human-only in every run mode' "$ALL" "req-005 (c): Hard Limit 5 keeps main human-only"
-assert_contains 'Outside an initiative' "$SEC" "req-005 (c): section says a normal run is unchanged"
+assert_rule rm-ship-no-tag 'Create no tag.' 'tags the squash commit'
+assert_rule shp-hard-limit-merge 'Merging into `main` stays human-only in every run mode'
+assert_rule rm-ship-stages-scope 'Outside an initiative'
 s7="$(grep -n '^### Step 7' "$SHIP" | cut -d: -f1)"
 s8="$(grep -n '^### Step 9' "$SHIP" | cut -d: -f1)"
 rs="$(grep -n '^## Initiative steps' "$SHIP" | cut -d: -f1)"
@@ -61,22 +54,17 @@ assert_equals "yes" "$([ -n "$rs" ] && [ -n "$s8" ] && [ "$rs" -gt "$s8" ] && ec
 
 echo ""
 echo "=== req-005 (d): CI wait polls, then watches ==="
-assert_contains 'lists at least one check' "$ADV" "req-005 (d): polls until a check is listed"
-assert_contains '2 minutes' "$ADV" "req-005 (d): poll limit is 2 minutes"
-assert_contains 'no CI ran on PR #{n}' "$ADV" "req-005 (d): no-CI stop line"
-assert_contains "pull requests to \`initiative/**\`" "$SEC" "req-005 (d): CI must trigger on PRs to initiative/**"
-assert_contains 'gh pr checks {n} --watch --fail-fast' "$ADV" "req-005 (d): watches with fail-fast"
-assert_contains 'longest Bash timeout' "$ADV" "req-005 (d): Claude session uses the longest Bash timeout"
-assert_contains 'background task' "$ADV" "req-005 (d): background task for CI over 10 minutes"
-assert_contains 'Blocked: CI failed on PR #{n}' "$ADV" "req-005 (d): Blocked only on a failed check"
+assert_rule rm-advance-poll 'lists at least one check' '2 minutes'
+assert_rule rm-advance-no-ci 'no CI ran on PR #{n}'
+assert_rule rm-ship-ci-trigger "pull requests to \`initiative/**\`"
+assert_rule rm-advance-watch 'gh pr checks {n} --watch --fail-fast' 'longest Bash timeout' 'background task'
+assert_rule rm-advance-ci-failed 'Blocked: CI failed on PR #{n}'
 assert_equals "0" "$(printf '%s\n' "$ADV" | grep -c 'CI is {red|pending}')" "req-005 (d): pending is no longer a stop"
 
 echo ""
 echo "=== req-005 (e): Step 8 runs in the closing push (0000452) ==="
-assert_contains 'Step 8' "$SEC" "req-005 (e): section names Step 8"
-assert_contains '.run-mode' "$SEC" "req-005 (e): section names the sentinels"
-assert_contains 'closing push' "$SEC" "req-005 (e): Step 8 runs in the closing push"
-assert_contains 'stale feature id' "$SEC" "req-005 (e): states the stale id risk"
+assert_rule rm-ship-stages-step 'Step 8' 'stale feature id'
+assert_rule rm-advance-archive-after-ci 'Step 8' '.run-mode' 'closing push'
 step9="$(printf '%s\n' "$ADV" | grep -n 'Step 8' | head -1 | cut -d: -f1)"
 ready="$(printf '%s\n' "$ADV" | grep -n 'Write `ready` only' | head -1 | cut -d: -f1)"
 pr="$(printf '%s\n' "$ADV" | grep -n 'gh pr create' | head -1 | cut -d: -f1)"
@@ -84,14 +72,11 @@ assert_equals "yes" "$([ -n "$step9" ] && [ -n "$pr" ] && [ "$pr" -lt "$step9" ]
 
 echo ""
 echo "=== req-005 (f): hand-off after the queue merges ==="
-assert_contains 'git pull --ff-only origin initiative/{id}-{slug}' "$ADV" "req-005 (f): fast-forwards the initiative branch"
-assert_contains 'git branch -D' "$ADV" "req-005 (f): deletes the local feature branch"
-assert_contains 'gh pr merge --squash --delete-branch {n}' "$ADV" "req-005 (f): the merge deletes the remote feature branch"
-assert_contains 'If the local feature branch still exists' "$ADV" "req-005 (f): local delete tolerates a branch gh already removed"
-assert_contains 'I-D Advance: Complete:' "$ADV" "req-005 (f): ends with a Complete line"
-assert_contains 'step {next} of {n} next' "$ADV" "req-005 (f): Complete line names the next step"
-assert_contains 'one past the last step number' "$SEC" "req-005 (f): defines position after the last step"
-assert_contains 'driver then prints `I-E Delivery: Pending:`' "$ADV" "req-005 (f): last step ends and the driver reports delivery pending"
+assert_rule rm-advance-handoff 'git pull --ff-only origin initiative/{id}-{slug}' 'git branch -D' 'If the local feature branch still exists'
+assert_rule rm-advance-queue-merge 'gh pr merge --squash --delete-branch {n}'
+assert_rule rm-advance-complete-line 'I-D Advance: Complete:' 'step {next} of {n} next'
+assert_rule rm-advance-position 'one past the last step number'
+assert_rule rm-advance-last-step 'driver then prints `I-E Delivery: Pending:`'
 push_ln="$(printf '%s\n' "$ADV" | grep -n 'merge-queue.mjs run' | head -1 | cut -d: -f1)"
 pull_ln="$(printf '%s\n' "$ADV" | grep -n 'git pull --ff-only' | head -1 | cut -d: -f1)"
 assert_equals "yes" "$([ -n "$push_ln" ] && [ -n "$pull_ln" ] && [ "$push_ln" -lt "$pull_ln" ] && echo yes || echo no)" "req-005 (f): pull follows the queue run"

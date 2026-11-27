@@ -15,7 +15,7 @@ On a fresh start (no resume detected), open with:
 ```
 P0 Discovery: Starting
 
-Pipeline: P0 Discovery -> P1 Plan -> P2 Implement -> P3 Validate and Accept -> P4 Ship
+<!-- rule: orc-pipeline-line --> Pipeline: P0 Discovery -> P1 Plan -> P2 Implement -> P3 Validate and Accept -> P4 Ship
 
 Tool detected: {tool name or "unknown"}
 Hooks status:
@@ -51,11 +51,11 @@ Estimate a size class for each candidate requirement from the files it is likely
 
 Recommend a fill from the backlog up to the budget. The human confirms the fill. If the candidates exceed the budget, recommend a split. If `releaseSize` holds an unknown value, note it in `discovery.md`, use the `medium` budget, and ask the human to fix the field.
 
-With more than 5 or 6 features, group them into waves. Each wave is a separate pipeline run that reads the prior wave's manifests rather than its code. For multi-component work in one repository, follow `ravintio-zero/standards/monorepo-standards.md`. When two components need the same data, one owns it and the other consumes it through a defined interface. Shared writes are a Hard Limit violation: coach a redesign.
+<!-- rule: oa-orch-waves --> With more than 5 or 6 features, group them into waves. Each wave is a separate pipeline run that reads the prior wave's manifests rather than its code. For multi-component work in one repository, follow `ravintio-zero/standards/monorepo-standards.md`. When two components need the same data, one owns it and the other consumes it through a defined interface. Shared writes are a Hard Limit violation: coach a redesign.
 
 ### Past retrospectives
 
-When you write `discovery.md`, add the newest three records in `plan/retrospectives/`, with the open changes they filed. If the folder is empty, write "none". Coach the first question from what those records say to keep and to change.
+<!-- rule: rm-p0-retro-read --> When you write `discovery.md`, add the newest three records in `plan/retrospectives/`, with the open changes they filed. If the folder is empty, write "none". Coach the first question from what those records say to keep and to change.
 
 ### Question form
 

@@ -69,6 +69,8 @@ summary: "Working record of the pipeline run, maintained by the orchestrator."
 - In progress: {unit} ({ISO-8601 timestamp})
 - RED: {unit} ({ISO-8601 timestamp})
 - GREEN: {unit} ({ISO-8601 timestamp})
+- RED: {unit} ({class}, {ISO-8601 timestamp}), a unit with no executable check logs class docs
+- GREEN: {unit} ({class}, {ISO-8601 timestamp})
 - Done: {unit} ({class}, {tier}, {effort}, {ISO-8601 timestamp})
 - Resumed after interruption: {unit} rerun, {stash note}
 - Tests run: REQ-{nnn}: {test files} ({ISO-8601 timestamp})

@@ -3,7 +3,7 @@
 > Change record. Index of all ADRs across all features. Updated after every pipeline run.
 > Do not archive this file. Update it in place.
 
-Last updated: 0000536-pending-migrations-reach-the-human-early
+Last updated: 0000581-delivery-cleans-up-driver-state
 
 ---
 
@@ -362,3 +362,14 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 | [ADR-0341](adr/0341-driver-stop-summary.md) | Driver prints a stop summary | accepted | The driver ends every run with a summary block of merged steps, its own fixes, and the one action left for the human. | 0000511-driver-stop-summary |
 | [ADR-0342](adr/0342-step-sessions-receive-the-clock.md) | Step sessions receive the clock | accepted | The driver records hook events in each step log, and a check fails a log that shows no clock. | 0000534-step-sessions-receive-clock |
 | [ADR-0343](adr/0343-steps-never-stop-on-pending-migrations.md) | Steps never stop on pending migrations | accepted | Chart collects the human's answer for each pending migration. A step runs a migration that has a row and logs the rest. | 0000536-pending-migrations-reach-the-human-early |
+| [ADR-0344](adr/0344-suite-marker-silences-strict-hook.md) | Suite marker silences the strict hook for a step session | accepted | The runners write plan/.suite-running, and the strict hook stays quiet for a step session while it names a live pid. | 0000548-ack-write-mid-suite-fails-run |
+| [ADR-0345](adr/0345-ship-deletes-the-feature-id-file.md) | Ship deletes the feature id file | accepted | Ship Step 8 deletes plan/.feature-id and the queue resolves it as a shared file. | 0000545-clear-feature-id-at-ship |
+| [ADR-0346](adr/0346-unit-report-fields.md) | Unit report fields | accepted | A unit report holds a RED line, a GREEN line, a commit hash, and any deviation. The orchestrator rejects a report without one and resumes the unit once. | 0000573-require-unit-reports |
+| [ADR-0347](adr/0347-queue-restores-the-files-it-wrote.md) | The queue restores the files it wrote when a run fails | accepted | A failed run restores the chart and the version files to HEAD before the commit lands, and touches no other path. | 0000546-queue-failure-leaves-dirty-files |
+| [ADR-0348](adr/0348-build-log-marker-script.md) | Build log marker script | accepted | A script reads the clock and appends a RED, GREEN, or Done line to the build log. | 0000575-build-log-marker-helper |
+| [ADR-0350](adr/0350-duplicate-id-check-in-check-mode.md) | Duplicate id check in check mode only | accepted | `backlog-index.mjs --check` exits 1 on a duplicate id. The generate mode ignores it so the merge queue can renumber. | 0000552-duplicate-backlog-ids |
+| [ADR-0349](adr/0349-cancel-superseded-pull-request-runs.md) | Cancel superseded pull request runs | accepted | The repo workflow cancels an older run on a newer push to the same pull request. A push run never shares a group, so a newer push cancels no push run. Every push still runs every suite. | 0000558-plan-only-push-short-ci |
+| [ADR-0351](adr/0351-check-phase-start-against-first-commit.md) | Check each phase Start against its first artifact commit | accepted | Check 10 of build-log-check.mjs fails a phase block whose Start is later than the first commit of that phase's artifacts. | 0000576-phase-start-time-at-phase-start |
+| [ADR-0352](adr/0352-step-sessions-use-a-private-temp-folder.md) | Step sessions use a private temp folder | accepted | Each step session gets a temp folder in its worktree and runs in the sandbox. The driver deletes nothing outside the repo. | 0000583-step-temp-cleanup-after-merge |
+| [ADR-0354](adr/0354-delivery-archives-driver-state-in-the-git-folder.md) | Delivery archives driver state in the git folder | proposed | I-E Delivery moves the driver logs and control files to `.git/ravintio-archive/` and removes the step worktrees. | 0000581-delivery-cleans-up-driver-state |
+| [ADR-0353](adr/0353-docs-class-for-units-with-no-test.md) | Docs class for units with no test | proposed | A unit with no executable check logs class docs. It still logs RED and GREEN lines that carry the class. | 0000580-log-non-tdd-units |

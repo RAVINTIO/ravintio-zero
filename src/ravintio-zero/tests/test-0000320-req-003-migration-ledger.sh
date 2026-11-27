@@ -80,11 +80,9 @@ assert_contains "**Detect:** exists ravintio-zero/migrations/_done" "$(cat "$ZER
 
 echo "=== AC-2: migrator skill text ==="
 MIG=$(cat "$SKILL")
-assert_contains "plan/state/migrations.md" "$MIG" "skill names the ledger"
-assert_contains "not applicable" "$MIG" "skill records not applicable"
-assert_contains "pack version" "$MIG" "skill records the pack version"
-assert_contains "edits nothing in \`ravintio-zero/\`" "$MIG" "skill edits nothing in the pack"
-assert_contains "does not move files into \`_done/\`" "$MIG" "skill no longer archives into _done/"
+assert_rule ob-migrator-ledger-append "plan/state/migrations.md"
+assert_rule ob-migrator-ledger-result "not applicable" "pack version"
+assert_rule ob-migrator-no-pack-edit "edits nothing in \`ravintio-zero/\`" "does not move files into \`_done/\`"
 assert_not_contains "Move the migration file" "$MIG" "skill has no move step"
 
 echo "=== AC-1: a done row keeps resume-detect quiet ==="

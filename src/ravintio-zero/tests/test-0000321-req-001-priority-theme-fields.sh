@@ -19,9 +19,6 @@ assert_contains 'theme: "unsorted"  # kebab-case' "$FM" "frontmatter holds theme
 assert_contains "backlog-index.mjs" "$(cat "$TEMPLATE")" "template names the index script"
 
 echo "=== AC-2: filing skill sets both fields ==="
-SK=$(cat "$SKILL")
-assert_contains "priority" "$SK" "skill names priority"
-assert_contains "theme" "$SK" "skill names theme"
-assert_contains "backlog-index.mjs" "$SK" "skill names backlog-index.mjs"
+assert_rule ob-filing-priority-theme "priority" "theme" "backlog-index.mjs"
 
 print_summary

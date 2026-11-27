@@ -69,9 +69,7 @@ echo "=== req-004: implement-phase library-standards wiring ==="
 IMPLEMENT=$(cat "$SKILLS/ravintio-implement/SKILL.md")
 PLAN=$(cat "$SKILLS/ravintio-plan/SKILL.md")
 assert_equals "" "$(printf "%s\n" "$PLAN" | grep -E "^bundle_(templates|standards):")" "req-004: ravintio-plan holds no bundle field (0000171 ADR-004)"
-assert_contains "ravintio-zero/standards/library-standards/_version-policy.md" "$IMPLEMENT" "req-004: ravintio-implement names _version-policy.md by full path"
-assert_contains "prefer-avoid.md"                "$IMPLEMENT" "req-004: library audit references prefer-avoid.md"
-assert_contains "ravintio-overrides/library-standards" "$IMPLEMENT" "req-004: references ravintio-overrides path"
+assert_rule oa-impl-library-standards "ravintio-zero/standards/library-standards/_version-policy.md" "prefer-avoid.md" "ravintio-overrides/library-standards"
 
 # -----------------------------------------------------------------------
 
@@ -83,9 +81,8 @@ echo "=== req-005: validate-and-accept library audit wiring ==="
 # names _version-policy.md by its full path (0000171 ADR-004).
 VALIDATE=$(cat "$SKILLS/ravintio-validate-and-accept/SKILL.md")
 assert_equals "" "$(printf "%s\n" "$VALIDATE" | grep -E "^bundle_(templates|standards):")" "req-005: ravintio-validate-and-accept holds no bundle field (0000171 ADR-004)"
-assert_contains "ravintio-zero/standards/library-standards/_version-policy.md" "$IMPLEMENT" "req-005: ravintio-implement names _version-policy.md by full path"
-assert_contains "Library audit"                 "$VALIDATE" "req-005: Library audit step present"
-assert_contains "avoided library"               "$VALIDATE" "req-005: avoided library check present"
+assert_rule oa-impl-library-standards "ravintio-zero/standards/library-standards/_version-policy.md"
+assert_rule oa-validate-library-audit "Library audit" "avoided library"
 
 # -----------------------------------------------------------------------
 
@@ -96,9 +93,8 @@ echo "=== req-006: pipeline standards wiring ==="
 # underlying rule, that both standards are wired into the pipeline,
 # now lives in the phase skills. 0000171 ADR-004 drops the bundle fields.
 # ravintio-implement names library-standards/_version-policy.md by full path.
-ORCH=$(cat "$(orch_combined "$SKILLS/ravintio-orchestrator")")
 assert_equals "" "$(printf "%s\n" "$PLAN" | grep -E "^bundle_(templates|standards):")" "req-006: ravintio-plan holds no bundle field (0000171 ADR-004)"
-assert_contains "ravintio-zero/standards/library-standards/_version-policy.md" "$IMPLEMENT" "req-006: ravintio-implement names _version-policy.md by full path"
+assert_rule oa-impl-library-standards "ravintio-zero/standards/library-standards/_version-policy.md"
 
 # -----------------------------------------------------------------------
 
@@ -126,8 +122,8 @@ assert_contains "additionalContext"             "$CHECK" "req-008: additionalCon
 echo ""
 echo "=== req-010: capability skill intake ==="
 
-assert_contains "skills-inbox"                  "$ORCH" "req-010: skills-inbox referenced in orchestrator"
-assert_contains "capability-skills"             "$ORCH" "req-010: capability-skills referenced"
+assert_rule p0-start-skills-inbox "skills-inbox"
+assert_rule orc-skills-intake "capability-skills"
 assert_file_exists "$ZERO_DIR/skills-inbox/.gitkeep" "req-010: skills-inbox directory exists"
 
 # -----------------------------------------------------------------------
@@ -154,9 +150,9 @@ echo "=== req-013: formatting standards ==="
 
 assert_file_exists "$STANDARDS/formatting-standards.md"      "req-013: formatting-standards.md exists"
 FMT=$(cat "$STANDARDS/formatting-standards.md")
-assert_contains "2026-08-18"                    "$FMT" "req-013: ISO body text date format"
-assert_contains "British English"               "$FMT" "req-013: British English locale"
-assert_contains "Verbosity"                     "$FMT" "req-013: verbosity standard"
+assert_rule ob-formatting-dates "2026-08-18"
+assert_rule oa-fmt-british "British English"
+assert_contains "Verbosity"                     "$FMT" "req-013: verbosity standard (heading)"
 
 # -----------------------------------------------------------------------
 
@@ -167,9 +163,8 @@ assert_file_exists "$MIGRATIONS/_done/0001-date-format.md"   "req-014: 0001-date
 assert_file_exists "$MIGRATIONS/_done/0002-british-english.md" "req-014: 0002-british-english.md"
 assert_file_exists "$MIGRATIONS/_done/.gitkeep"              "req-014: _done/ archive dir"
 assert_file_exists "$SKILLS/ravintio-migrator/SKILL.md"     "req-014: ravintio-migrator skill"
-MIGRATOR=$(cat "$SKILLS/ravintio-migrator/SKILL.md")
-assert_contains "batch"                         "$MIGRATOR" "req-014: migrator uses batched presentation"
-assert_contains "plan/state/migrations.md"        "$MIGRATOR" "req-014: migrator records in the ledger"
+assert_rule oa-migrator-batch "batch"
+assert_rule ob-migrator-ledger-append "plan/state/migrations.md"
 
 # -----------------------------------------------------------------------
 

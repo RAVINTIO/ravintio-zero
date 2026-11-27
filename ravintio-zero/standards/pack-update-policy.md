@@ -22,7 +22,7 @@ At the orchestrator's Resume Detection step (`ravintio-orchestrator/SKILL.md`), 
 
 The pipeline detects a candidate `ravintio-zero/` dependency update when either of the following is true:
 
-1. **Version mismatch**: the version declared in the installed `ravintio-zero/component.yml` differs from the version in `plan/state/pack-version.md`. That file holds a fenced `json` block such as `{"packVersion": "0.37.0", "confirmedAt": "2026-11-09T10:00:00Z"}`. If the record is absent, resume detection raises no finding. `docs/about.md` holds the product version only and is never a pack version source.
+1. <!-- rule: orc-policy-version-mismatch --> **Version mismatch**: the version declared in the installed `ravintio-zero/component.yml` differs from the version in `plan/state/pack-version.md`. That file holds a fenced `json` block such as `{"packVersion": "0.37.0", "confirmedAt": "2026-11-09T10:00:00Z"}`. If the record is absent, resume detection raises no finding. `docs/about.md` holds the product version only and is never a pack version source.
 2. **Newer pack files present**: files under `ravintio-zero/` declare a version newer than the version this repo last ran a pipeline against.
 
 Detection keys on new or changed files under `ravintio-zero/` since the last recorded pipeline run, not solely the version string in isolation. A repo that manually edited `component.yml`'s version field without an actual pack update is a known false-positive risk (ADR-002, Risks). File-level change detection avoids it.

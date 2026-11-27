@@ -11,12 +11,12 @@ description: Canonical loop mechanics for every pipeline loop: state file conven
 
 1. **Every loop has an armed stop rule before its first iteration.** No cap, no loop.
 2. **Agents write `plan/current/.ratchet-approve` only on explicit human instruction, never on their own initiative.** The human must state the path, the reason, and the go-ahead in the same turn. The line format is `path | reason | timestamp` with the human's exact reason text transcribed verbatim. A reason containing a `|` character invalidates the line (strict 3-field parse, fails closed). Commit the write immediately, in its own dedicated commit, before any further work proceeds. The hook's same-uncommitted-changeset backstop blocks the guarded edit if you skip this step. Writing the marker without that explicit in-the-moment instruction is a violation, not a workaround.
-3. **Budget counters are never reset by an agent.** They live in the loop-state file, are git-tracked, and survive interrupt/resume.
+3. <!-- rule: oa-runner-budget --> **Budget counters are never reset by an agent.** They live in the loop-state file, are git-tracked, and survive interrupt/resume.
 4. **Run-log records are append-only.** Never rewrite a prior iteration's record.
 
 ## Toggle Protocol
 
-Before arming any loop, read `ravintio-overrides/loop-toggles.yml` (see `ravintio-zero/templates/loop-toggles.template.yml`):
+<!-- rule: oa-runner-toggles --> Before arming any loop, read `ravintio-overrides/loop-toggles.yml` (see `ravintio-zero/templates/loop-toggles.template.yml`):
 
 - Absent file, absent key, or unreadable/invalid value → the loop is **off**. Emit a one-line warning only for an invalid value on a known key.
 - `report-only` → run the loop, write findings/verdicts, block nothing, mutate nothing.
@@ -46,6 +46,7 @@ One iteration = one record. Doing three passes and logging one record is a defec
 
 Armed on every loop, checked at every DECIDE:
 
+<!-- rule: oa-runner-stop-rules -->
 | Rule | Trigger | Action |
 |------|---------|--------|
 | Pass | The owning skill's pass condition is met | `done`: set state, disarm |

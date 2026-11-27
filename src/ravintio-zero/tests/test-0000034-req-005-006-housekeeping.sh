@@ -27,11 +27,9 @@ assert_equals "" "$REFS" "req-005: no live file refers to a root-level .feature-
 echo ""
 echo "=== req-006: the backlog template allows human request ==="
 
-assert_contains '| human request' "$(grep -n 'Deferral source:\*\*' "$TEMPLATE")" \
-  "req-006: the deferral source field lists human request"
-assert_contains 'none (human request)' "$(cat "$TEMPLATE")" \
-  "req-006: the template allows none (human request) for source feature and phase"
-assert_contains 'Use `human request` when' "$(cat "$TEMPLATE")" \
-  "req-006: the guidance says when to use human request"
+assert_rule oa-backlog-deferral-source '| human request'
+assert_rule oa-backlog-source-feature 'none (human request)'
+assert_rule oa-backlog-source-phase 'none (human request)'
+assert_rule oa-backlog-human-request-use 'Use `human request` when'
 
 print_summary

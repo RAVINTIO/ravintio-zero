@@ -19,6 +19,7 @@
 #   entry       leaves an untracked backlog entry in the worktree, then writes ready
 #   notes       leaves an untracked file outside plan/backlog/ in the worktree, then writes ready
 #   breakgit    points the worktree .git file at a missing folder, then writes ready
+#   longrun     starts phase P2 in the build log, then waits up to 15 s for the driver to stop it
 # It records its cwd, branch, and environment in $STUB_DIR/step-{n}.env.
 
 BRANCH_NAME="initiative/0000050-demo"
@@ -42,6 +43,9 @@ ls "$d/live" | wc -l | tr -d ' ' >> "$d/live.counts"
   echo "QUEUE=${RAVINTIO_INITIATIVE_QUEUE:-}"
   echo "ROOT=${RAVINTIO_INITIATIVE_ROOT:-}"
   echo "CONTROL=${RAVINTIO_INITIATIVE_CONTROL:-}"
+  echo "TMPDIR=${TMPDIR:-}"
+  echo "CEILING=${GIT_CEILING_DIRECTORIES:-}"
+  echo "SETTINGS=$(printf '%s\n' "$@" | sed -n '/^--settings$/{n;p;}')"
   echo "claude_dir=$([ -f .claude/settings.json ] && echo yes || echo no)"
   echo "claude_md=$([ -f CLAUDE.md ] && echo yes || echo no)"
   echo "queued_before=$(cut -d' ' -f1 "$d/queue.log" 2>/dev/null | tr '\n' ',')"
@@ -76,6 +80,7 @@ case "$mode" in
   entry) mkdir -p plan/backlog/0000900-lost-entry; printf 'entry\n' > plan/backlog/0000900-lost-entry/entry.md; ready ;;
   notes) printf 'notes\n' > notes.txt; ready ;;
   breakgit) printf 'gitdir: /nonexistent/worktree\n' > .git; ready ;;
+  longrun) printf '### P2: Implement\n' >> plan/current/build-log.md; for i in $(seq 150); do sleep 0.1; done; ready ;;
 esac
 STUB
   chmod +x "$WORK/bin/claude"
@@ -136,7 +141,7 @@ make_repo() {
   git -C "$r" config user.name Test
   git -C "$r" config commit.gpgsign false
   mkdir -p "$r/plan/current-initiative" "$r/plan/current" "$r/.claude"
-  printf '/.claude/\n/CLAUDE.md\n' > "$r/.gitignore"
+  printf '/.claude/\n/CLAUDE.md\n/.t/\n' > "$r/.gitignore"
   printf '{}\n' > "$r/.claude/settings.json"
   printf '# boot\n' > "$r/CLAUDE.md"
   : > "$r/plan/current/build-log.md"
@@ -166,7 +171,7 @@ run_sched() {
   local r="$1" base
   base="$(dirname "$r")"
   : > "$base/out.txt"
-  (cd "$r" && PATH="$WORK/bin:$PATH" STUB_DIR="$base/stub" STUB_ROOT="$r" DRIVER_OUT="$base/out.txt" \
+  (cd "$r" && PATH="$WORK/bin:$PATH" RAVINTIO_TEMP_PATH_LIMIT="${RAVINTIO_TEMP_PATH_LIMIT:-4096}" STUB_DIR="$base/stub" STUB_ROOT="$r" DRIVER_OUT="$base/out.txt" \
     MERGE_QUEUE_BIN="$WORK/bin/queue.mjs" node "$DRIVER" --root "$r" > "$base/out.txt" 2>"$base/err.txt")
   CODE=$?
   OUT="$(cat "$base/out.txt")"

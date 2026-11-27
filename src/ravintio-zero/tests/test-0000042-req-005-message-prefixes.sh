@@ -21,7 +21,7 @@ REF="$ZERO_DIR/pipeline-reference.md"
 section() { awk -v h="$1" '$0 == h {on=1; next} on && /^---$/ {exit} on {print}' "$2"; }
 lacks_re() { printf '%s\n' "$2" | grep -qE -- "$1" && echo no || echo yes; }
 
-ORCH_SEC="$(section '## Phases and Response Prefixes' "$ORCH")"
+ORCH_SEC="$(orch_section '## Phases and Response Prefixes')"
 REF_SEC="$(section '## Phase Indicators' "$REF")"
 
 PREFIXES=('P0 Discovery:' 'P1 Plan:' 'P2 Implement:' 'P3 Validate:' 'P4 Ship:')

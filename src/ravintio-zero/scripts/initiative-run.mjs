@@ -145,6 +145,11 @@
 //     "I-C Run: Cleared: step {n} ready file of a merged step" for each. It keeps the file while a live
 //     pid sits in the step's running file, or when the removal fails, and prints "I-C Run: Kept: step
 //     {n} {reason}". It removes no other control file (0000509, ADR-0340).
+//   - The driver gives each step session a private temp folder, {worktree}/.t. It sets TMPDIR and
+//     GIT_CEILING_DIRECTORIES to that folder. It passes no sandbox settings, because the sandbox blocked
+//     git push over SSH and mktemp in every step session. If the folder path leaves under 20 characters below the 104-character Unix socket limit, the driver stops with
+//     "I-C Run: Blocked:". RAVINTIO_TEMP_PATH_LIMIT replaces the limit. After the queue merges a step, the driver removes its worktree, which removes
+//     the .t folder, and runs "git worktree prune". It deletes nothing outside the repo (0000583, ADR-0352).
 //   - The queue takes one ready step at a time, in ready order. It removes the step worktree and
 //     runs "node {merge-queue.mjs} run --step {n} --pr {k} --root {queue worktree}". MERGE_QUEUE_BIN
 //     overrides the script. The queue worktree is plan/.initiative-worktrees/queue, detached at the
@@ -190,8 +195,8 @@
 // Summary: every run prints a block before its final line (0000511, ADR-0341). The stop line or the I-E Delivery: line stays last. Each line starts
 // with "I-C Run: Summary:". "merged this run:" lists the steps the run merged, in merge order, or none.
 // "driver fixes:" counts the repairs the driver made by itself, then one "fix:" line repeats each of the
-// first 10. "action for the human:" ends the block. It reads none after a clean end, "run initiative
-// delivery from the initiative skill" while delivery is pending, "start a new driver" after a Restart:
+// first 10. "action for the human:" ends the block. It reads none after a clean end, "none, the
+// coordinator runs I-E Delivery" while delivery is pending, "start a new driver" after a Restart:
 // stop, "run the setup command in the stop line, then start a new driver" after a Setup: stop, and
 // "read the stop line and the step log, then start a new driver" after any other stop. The block
 // changes no exit code.
@@ -204,6 +209,18 @@
 // The lock is released on every exit path, including SIGINT and SIGTERM.
 // The driver never edits the working tree. The steps it launches do that.
 // It has no dependencies beyond Node.
+//
+// Pause (0000555):
+// "node initiative-pause.mjs request" writes plan/.initiative-control/pause. While
+// it exists the driver starts no step and queues no ready PR. It prints "I-C Run: Pausing:", stops
+// each running session when that step's build log gains a "- Complete: P{n}" line after the
+// request, and keeps the worktree and the running file. When no session runs, it runs
+// "initiative-pause.mjs write", which writes plan/current/pause.md in each stopped step worktree
+// and plan/current-initiative/pause.md in the root. It prints "I-C Run: Paused: {n} steps merged,
+// {k} steps hold a pause record", releases the lock, and exits 0. A new driver that finds the
+// initiative record prints "I-C Run: Resuming: initiative pause record read", removes the record
+// and the request, and restarts each step in its worktree. A block or a failure during a pause
+// reports the stop and writes no record. An adopted step reaches ready or a stop first.
 
 import { spawn, spawnSync } from 'node:child_process';
 import { appendFileSync, chmodSync, closeSync, constants as fsConstants, cpSync, existsSync, lstatSync, mkdirSync, openSync, readFileSync, readdirSync, realpathSync, renameSync, rmSync, unlinkSync, writeFileSync, writeSync } from 'node:fs';
@@ -219,6 +236,8 @@ const LOCK = 'plan/.initiative-runner.lock';
 const LOGS = 'plan/.initiative-logs';
 const QUEUE = 'plan/.initiative-queue/';
 const BUILD_LOG = 'plan/current/build-log.md';
+const INITIATIVE_PAUSE = 'plan/current-initiative/pause.md';
+const PAUSE_SCRIPT = join(dirname(fileURLToPath(import.meta.url)), 'initiative-pause.mjs');
 const ARCHIVE = 'plan/_archive';
 // Files whose change leaves the running driver, or the session that relays its output, on old code.
 const WATCHED = [
@@ -280,7 +299,7 @@ const clock = () => {
 };
 // The run record. out() notes each merge line, each line that names a driver fix, and a pending
 // delivery, so the summary block at the end of the run needs no new state (0000511 ADR-0341).
-const record = { merged: [], fixes: [], pending: false };
+const record = { merged: [], fixes: [], pending: false, paused: false };
 const MERGE_LINE = /^I-D Advance: Complete: step (\d+) merged$/;
 const FIX_LINE = /^(I-C Run: Cleared: |I-D Advance: Ready: step \d+ recovered |I-D Advance: Setup: step \d+ ran the approved |I-C Run: Starting: lock named process )/;
 const out = (line) => {
@@ -288,12 +307,14 @@ const out = (line) => {
   if (merge) record.merged.push(merge[1]);
   else if (FIX_LINE.test(line)) record.fixes.push(line);
   else if (line.startsWith('I-E Delivery: Pending:')) record.pending = true;
+  else if (line.startsWith('I-C Run: Paused:')) record.paused = true;
   writeSync(1, `${clock()} ${line}\n`);
 };
 
 // The one action the human takes after a run ends. stopMsg is the stop line, or '' for a run with no stop.
 function humanAction(stopMsg) {
-  if (!stopMsg) return record.pending ? 'run initiative delivery from the initiative skill' : 'none';
+  if (!stopMsg && record.paused) return 'read plan/current-initiative/pause.md, answer each open question, then start a new driver';
+  if (!stopMsg) return record.pending ? 'none, the coordinator runs I-E Delivery' : 'none';
   if (stopMsg.startsWith('I-D Advance: Restart:')) return 'start a new driver';
   if (stopMsg.startsWith('I-D Advance: Setup:')) return 'run the setup command in the stop line, then start a new driver';
   return 'read the stop line and the step log, then start a new driver';
@@ -630,6 +651,21 @@ function queueSentence(queueRoot, position) {
   }
 }
 
+// Gives a step session a private temp folder, {cwd}/.t, so its scratch stays inside the worktree
+// (0000583 ADR-0352). Stops when the path leaves no room for a Unix socket name under the macOS
+// 104-character limit. Returns the folder and the environment that points the session and its suites at it.
+// RAVINTIO_TEMP_PATH_LIMIT replaces the limit, so a test in a long folder can run the driver.
+const SOCKET_LIMIT = Number(process.env.RAVINTIO_TEMP_PATH_LIMIT) || 104;
+const SOCKET_ROOM = 20;
+function privateTemp(cwd) {
+  const dir = join(resolve(cwd), '.t');
+  if (Buffer.byteLength(dir) + SOCKET_ROOM >= SOCKET_LIMIT) {
+    throw new Stop(`I-C Run: Blocked: the temp folder path ${dir} is too long for a Unix socket. Use a shorter repo path. It must stay under ${SOCKET_LIMIT - SOCKET_ROOM} characters`.slice(0, MAX_LINE));
+  }
+  mkdirSync(dir, { recursive: true, mode: 0o700 });
+  return { dir, env: { TMPDIR: dir, GIT_CEILING_DIRECTORIES: dir } };
+}
+
 // Runs one claude -p session for the step. With a session id it adds --resume and the continue
 // prompt. Returns the exit status and the last session_id the child printed, or '' if none.
 // The concurrent driver passes opts.cwd, the step worktree, and opts.env, the extra variables.
@@ -637,17 +673,19 @@ function runStep(root, position, cfg, fd, labels, resumeId, opts = {}) {
   return new Promise((resolveStep) => {
     const bin = process.env.CLAUDE_BIN || 'claude';
     const args = ['-p', '--output-format', 'stream-json', '--verbose', '--include-hook-events', '--permission-mode', 'auto', '--append-system-prompt', WRITING_LINE, '--model', cfg.model];
+    const priv = privateTemp(opts.cwd ?? root);
     if (cfg.turns) args.push('--max-turns', cfg.turns);
     const queue = queueSentence(opts.queueRoot ?? root, position);
     if (resumeId) args.push('--resume', resumeId, CONTINUE_PROMPT(position, logLine(opts.cwd ?? root, opts.featureId), queue));
     else args.push(queue ? `Run initiative step ${position}.${queue}` : `Run initiative step ${position}`);
     const child = spawn(bin, args, {
       cwd: opts.cwd ?? root,
-      env: { ...process.env, CLAUDE_CODE_PRINT_BG_WAIT_CEILING_MS: process.env.CLAUDE_CODE_PRINT_BG_WAIT_CEILING_MS ?? '0', RAVINTIO_INITIATIVE_STEP: '1', OTEL_RESOURCE_ATTRIBUTES: withInitiativeLabels(process.env.OTEL_RESOURCE_ATTRIBUTES, labels.id, labels.slug, position), ...(opts.env ?? {}) },
+      env: { ...process.env, CLAUDE_CODE_PRINT_BG_WAIT_CEILING_MS: process.env.CLAUDE_CODE_PRINT_BG_WAIT_CEILING_MS ?? '0', RAVINTIO_INITIATIVE_STEP: '1', OTEL_RESOURCE_ATTRIBUTES: withInitiativeLabels(process.env.OTEL_RESOURCE_ATTRIBUTES, labels.id, labels.slug, position), ...priv.env, ...(opts.env ?? {}) },
       stdio: ['ignore', 'pipe', 'pipe'],
     });
     activeChild = child;
     track(child);
+    if (opts.onChild) opts.onChild(child);
     let session = '';
     let rest = '';
     let reply = '';
@@ -780,7 +818,7 @@ async function main() {
 
   const concurrent = usesScheduler(root, rm);
   const lock = join(root, LOCK);
-  excludeLock(root, concurrent ? [`${WORKTREES}/`, `${CONTROL}/`] : []);
+  excludeLock(root, concurrent ? [`${WORKTREES}/`, `${CONTROL}/`, INITIATIVE_PAUSE] : []);
   if (handoff) {
     // The old driver wrote this process id into the lock and gave up the lock (0000493).
     if (!concurrent) throw new Stop('I-C Run: Blocked: --handoff needs a chart with **Concurrency:**');
@@ -1206,6 +1244,21 @@ function appendLog(root, position) {
   }
 }
 
+// Removes the merged step's worktree if it is still there, which removes its .t folder, then prunes.
+// A failure prints a Kept line and never stops the run. It deletes nothing outside the repo (0000583 ADR-0352).
+function removeMergedWorktree(root, n) {
+  try {
+    const wt = areaPath(root, WORKTREES, `step-${n}`, worktreeRefusal);
+    if (present(wt)) {
+      const r = gitIn(root, ['worktree', 'remove', '--force', wt]);
+      if (!ran0(r)) out(`I-C Run: Kept: step ${n} worktree could not be removed: ${lastLine(r.stderr)}`.slice(0, MAX_LINE));
+    }
+    gitIn(root, ['worktree', 'prune']);
+  } catch (e) {
+    out(`I-C Run: Kept: step ${n} worktree could not be removed: ${e instanceof Stop ? e.message : e.code || e.name}`.slice(0, MAX_LINE));
+  }
+}
+
 // Runs the merge queue for one PR in the queue worktree. Streams its output into the step log and
 // copies its stderr to the driver's stderr. Returns the exit status and the last output line.
 function runQueue(n, pr, queueDir, fd) {
@@ -1405,6 +1458,38 @@ function restartLine(root, n, before, after, branch) {
   return { line: '', files: '', handoff: false };
 }
 
+// The pause request is the file plan/.initiative-control/pause (0000555). initiative-pause.mjs
+// writes it. While it exists, the driver starts no step and stops each session at a phase end.
+function pauseRequested(root) {
+  try {
+    const p = join(ensureArea(root, CONTROL, controlRefusal), 'pause');
+    return !isLink(p) && existsSync(p);
+  } catch {
+    return false;
+  }
+}
+
+// Reads the initiative pause record that an earlier pause wrote, then removes it and the request.
+function resumeFromPause(root) {
+  const rec = join(root, INITIATIVE_PAUSE);
+  if (isLink(rec) || !existsSync(rec)) return;
+  out('I-C Run: Resuming: initiative pause record read');
+  rmSync(rec, { force: true });
+  const req = join(ensureArea(root, CONTROL, controlRefusal), 'pause');
+  if (!isLink(req)) rmSync(req, { force: true });
+}
+
+// Counts the phase ends in the build log of a step worktree.
+function phaseEnds(root, n) {
+  try {
+    const wt = areaPath(root, WORKTREES, `step-${n}`, worktreeRefusal);
+    const text = readFileSync(join(wt, BUILD_LOG), 'utf8');
+    return text.split(/\r?\n/).filter((l) => /^- Complete: P[0-4]\b/.test(l)).length;
+  } catch {
+    return 0;
+  }
+}
+
 // Runs one step session in its worktree until the step writes ready. Applies the resume rule.
 // Returns the PR number from the ready file.
 async function runScheduledStep(root, rec, cfg, rm) {
@@ -1427,12 +1512,18 @@ async function runScheduledStep(root, rec, cfg, rm) {
       queueRoot: root,
       featureId: rec.featureId,
       env: { RAVINTIO_INITIATIVE_QUEUE: '1', RAVINTIO_INITIATIVE_ROOT: root, RAVINTIO_INITIATIVE_CONTROL: ctl },
+      onChild: (c) => {
+        rec.child = c;
+      },
     };
     const started = Date.now();
     let session = '';
     let resumes = 0;
     for (;;) {
       const res = await runStep(wt, position, cfg, log.fd, { id: rm.id, slug: rm.slug }, resumes > 0 ? session : '', opts);
+      rec.child = null;
+      // A pause stopped the session at a phase end. The step keeps its worktree and running file.
+      if (rec.paused) return null;
       if (res.error) throw new Stop(`I-C Run: Blocked: could not start claude (${res.error})`);
       if (res.code !== 0) {
         const cap = cfg.turns ? `. The step may have reached RAVINTIO_INITIATIVE_MAX_TURNS=${cfg.turns}` : '';
@@ -1474,6 +1565,7 @@ async function schedule(root, cfg, rm, handoff = 0) {
   if (chart.steps.length === 0) throw new Stop('I-C Run: Blocked: the chart has no steps');
   ensureArea(root, WORKTREES, worktreeRefusal);
   ensureArea(root, CONTROL, controlRefusal);
+  if (!handoff) resumeFromPause(root);
 
   // One record per chart step. Driver restart: a ready file queues the step, and a running file
   // without ready restarts its session in the existing worktree.
@@ -1509,7 +1601,9 @@ async function schedule(root, cfg, rm, handoff = 0) {
     if (!handoff) clearStopped(root, s.step);
   }
   // A driver that did not take over from another sweeps the worktrees of merged steps (0000501).
-  if (!handoff) sweepMergedWorktrees(root, chart.steps, merged);
+  if (!handoff) {
+    sweepMergedWorktrees(root, chart.steps, merged);
+  }
   // It also clears the ready files that merged steps left behind (0000509).
   if (!handoff) clearMergedReadyFiles(root, chart.steps, merged);
 
@@ -1581,11 +1675,33 @@ async function schedule(root, cfg, rm, handoff = 0) {
   };
   const adopted = () => [...recs.values()].some((r) => r.adopted && r.state === 'running');
 
+  // A pause request stops new starts. Each running session stops when its build log gains a
+  // Complete: P{n} line after the request. The step keeps its worktree and its running file.
+  let pausing = false;
+  const pauseTick = () => {
+    if (!pausing) {
+      if (!pauseRequested(root)) return;
+      pausing = true;
+      out('I-C Run: Pausing: no new step starts, running steps stop at a phase end');
+    }
+    for (const rec of recs.values()) {
+      if (rec.state !== 'running' || !rec.child || rec.paused) continue;
+      const ends = phaseEnds(root, rec.n);
+      if (rec.base === undefined) rec.base = ends;
+      if (ends <= rec.base) continue;
+      rec.paused = true;
+      out(`I-C Run: Pausing: step ${rec.n} stopped at a phase end`);
+      const child = rec.child;
+      child.kill('SIGTERM');
+      setTimeout(() => child.kill('SIGKILL'), 10000).unref();
+    }
+  };
+
   const allMerged = () => chart.steps.every((s) => merged.has(s.step));
   const running = () => [...recs.values()].filter((r) => r.state === 'running').length;
 
   const startable = () => {
-    if (stop.msg || handedOff) return [];
+    if (stop.msg || handedOff || pausing) return [];
     const free = chart.concurrency - running();
     if (free <= 0) return [];
     const states = new Map();
@@ -1604,7 +1720,12 @@ async function schedule(root, cfg, rm, handoff = 0) {
     rec.state = 'running';
     rec.resume = false;
     try {
-      rec.pr = await runScheduledStep(root, rec, cfg, rm);
+      const pr = await runScheduledStep(root, rec, cfg, rm);
+      if (pr === null) {
+        rec.state = 'paused';
+        return;
+      }
+      rec.pr = pr;
       rec.state = 'ready';
       // After a handoff the successor reads the ready file and runs the queue.
       if (!handedOff) {
@@ -1676,6 +1797,7 @@ async function schedule(root, cfg, rm, handoff = 0) {
       mergeOrder.push(n);
       out(`I-D Advance: Complete: step ${n} merged`);
       removeControl(root, n);
+      removeMergedWorktree(root, n);
       refresh();
       const after = refHead(root, initiativeRef(root, branch));
       lastMerge = { rec, before, after };
@@ -1718,10 +1840,22 @@ async function schedule(root, cfg, rm, handoff = 0) {
 
   for (;;) {
     if (handoff) pollAdopted();
+    pauseTick();
     for (const rec of startable()) stepTask(rec);
-    if (!queueBusy && !handedOff && readyOrder.length > 0) queueTask(recs.get(readyOrder.shift()));
-    if (running() === 0 && !queueBusy && readyOrder.length === 0) break;
-    await wait(adopted() ? 1000 : 0);
+    if (!queueBusy && !handedOff && !pausing && readyOrder.length > 0) queueTask(recs.get(readyOrder.shift()));
+    if (running() === 0 && !queueBusy && (pausing || readyOrder.length === 0)) break;
+    // A running step needs a poll, so a pause request reaches the loop while no task ends.
+    await wait(pausing || adopted() ? 1000 : running() > 0 ? 2000 : 0);
+  }
+
+  if (pausing && !stop.msg && !handedOff) {
+    // Every session has stopped. Write the step records and the initiative record, then end.
+    const done = spawnSync(process.execPath, [PAUSE_SCRIPT, 'write', '--root', root, '--merged', [...merged].join(',')], { encoding: 'utf8' });
+    if (done.status !== 0) {
+      throw new Stop(`I-C Run: Blocked: the pause records failed. ${(done.stderr || '').split(/\r?\n/)[0].slice(0, MAX_LINE)}`);
+    }
+    out(done.stdout.trim().split(/\r?\n/)[0].slice(0, MAX_LINE));
+    return;
   }
 
   if (handedOff) {

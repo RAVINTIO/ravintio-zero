@@ -41,7 +41,7 @@ Good "Out of Scope" items are things someone might reasonably expect to be inclu
 
 What might be delivered later but not now. The critical addition: note what each deferred item **blocks** until you resolve it.
 
-- "Database migration tooling - deferred to Wave 2. Blocked: no automated rollback until this ships."
+- <!-- rule: orc-scope-deferred-wave --> "Database migration tooling - deferred to Wave 2. Blocked: no automated rollback until this ships."
 - "Rate limiting - deferred. Blocked: the API has no protection against abuse until this ships."
 
 This turns deferred items into tracked risks.

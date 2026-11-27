@@ -30,18 +30,16 @@ echo ""
 echo "=== req-001 AC-2: the plan skill requires the section ==="
 PLAN_TEXT=$(cat "$PLAN")
 assert_contains "## Concurrency plan" "$PLAN_TEXT" "req-001 AC-2: the plan skill has a Concurrency plan section"
-PSEC=$(awk '/^## Concurrency plan/{f=1;next} /^## /{f=0} f' "$PLAN")
-assert_contains "each execution plan" "$PSEC" "req-001 AC-2: the skill requires the section in each plan"
-assert_contains "re-plan after a reopened phase" "$PSEC" "req-001 AC-2: the skill requires a rewrite in a re-plan"
+assert_rule orc-plan-concurrency "each execution plan" "re-plan after a reopened phase"
 
 echo ""
 echo "=== req-002 plan line: independent units share a batch ==="
-assert_contains "no dependency and no shared write target" "$PSEC" "req-002: the skill batches independent units together"
-assert_contains "Sequential reason" "$PSEC" "req-002: the skill requires a reason for a unit alone in its batch"
-assert_contains "check 8" "$PSEC" "req-001: the skill names consistency check 8"
+assert_rule orc-plan-batch-independent "no dependency and no shared write target"
+assert_rule orc-plan-sequential-reason "Sequential reason"
+assert_rule orc-plan-concurrency-check "check 8"
 
 echo ""
 echo "=== req-001 AC-3: the re-run reference points to the rule ==="
-assert_contains "P1 re-run rewrites the concurrency plan" "$(cat "$MID")" "req-001 AC-3: the reference states a P1 re-run rewrites the concurrency plan"
+assert_rule orc-mid-p1-rerun "P1 re-run rewrites the concurrency plan"
 
 print_summary

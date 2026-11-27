@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Test: 0000385 req-002 baseline-failures
+# Test: 0000385 req-002 baseline-failures (0000549 REQ-001 and REQ-002)
 # baseline-failures.mjs records the failed suites on the base commit. P3 stops only
 # on a failed suite that the baseline does not list.
 
@@ -34,10 +34,11 @@ assert_equals "1" "$RC" "check exits 1 when a suite is new"
 assert_contains "new: test-b.sh" "$OUT" "check names the new suite"
 assert_contains "inherited: test-a.sh" "$OUT" "check still lists the inherited suite"
 
-echo "=== AC-3: no baseline file means an empty baseline ==="
-OUT="$(node "$SCRIPT" check "$WORK/now.txt" --file "$WORK/none.md")"; RC=$?
+echo "=== AC-3 (0000549 REQ-002): no baseline file is an error ==="
+OUT="$(node "$SCRIPT" check "$WORK/now.txt" --file "$WORK/none.md" 2>"$WORK/err.txt")"; RC=$?
 assert_equals "1" "$RC" "check exits 1 with no baseline file"
-assert_contains "new: test-a.sh" "$OUT" "every failure is new"
+assert_contains "no baseline recorded" "$(cat "$WORK/err.txt")" "check says no baseline recorded"
+assert_equals "" "$OUT" "check prints no suite line without a baseline"
 
 echo "=== a green run records an empty baseline ==="
 printf 'Feature suites:    9 passed, 0 failed.\n' > "$WORK/green.txt"
@@ -47,6 +48,15 @@ assert_equals "0" "$RC" "a green run passes against an empty baseline"
 assert_equals "" "$OUT" "a green run prints nothing"
 node "$SCRIPT" check "$WORK/missing.txt" --file "$BASE" >/dev/null 2>&1; RC=$?
 assert_equals "2" "$RC" "an unreadable runner output exits 2"
+
+echo "=== REQ-001 (0000549): record needs a finished run ==="
+printf 'running suite test-a.sh\n' > "$WORK/partial.txt"
+rm -f "$WORK/partial-baseline.md"
+ERR="$(node "$SCRIPT" record "$WORK/partial.txt" --file "$WORK/partial-baseline.md" 2>&1 >/dev/null)"; RC=$?
+assert_equals "2" "$RC" "record exits 2 when the output has no totals line"
+assert_contains "Feature suites:" "$ERR" "the error line names the missing totals line"
+assert_equals "1" "$(printf '%s\n' "$ERR" | wc -l | tr -d ' ')" "the error is one line"
+assert_equals "no" "$([ -e "$WORK/partial-baseline.md" ] && echo yes || echo no)" "record writes no file for partial output"
 
 echo "=== skill text ==="
 assert_rule p0-start-baseline "baseline-failures.mjs" "baseline-failures.md" "base commit"

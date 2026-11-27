@@ -36,7 +36,7 @@ assert_equals "0" "$(grep -v '^[[:space:]]*#' "$SCRIPT_DIR/helpers/timeout.sh" |
 echo "=== adoption ==="
 assert_equals "0" "$(grep -c 'alarm' "$SCRIPT_DIR/test-0000321-req-005-default-migration.sh")" "the 0000321 suite holds no inline perl alarm"
 assert_contains "with_timeout" "$(cat "$SCRIPT_DIR/test-0000321-req-005-default-migration.sh")" "the 0000321 suite uses with_timeout"
-assert_contains "with_timeout" "$(cat "$ZERO_DIR/standards/testing-standards.md")" "testing-standards.md names the helper"
+assert_rule ob-testing-with-timeout "with_timeout"
 assert_contains "helpers/timeout.sh" "$(cat "$SCRIPT_DIR/run-tests.sh")" "run-tests.sh lists the helper as a known non-suite"
 
 print_summary

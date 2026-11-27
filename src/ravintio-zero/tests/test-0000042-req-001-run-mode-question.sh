@@ -13,8 +13,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/helpers/assert.sh"
 
 ZERO_DIR="$SCRIPT_DIR/.."
-ORCH="$(orch_combined "$ZERO_DIR/skills/ravintio-orchestrator")"
-ORCH_CONTENT="$(cat "$ORCH")"
+ORCH_CONTENT="$(orch_section "### Design Confirmation")"
 
 QUESTION='How should the agent run P1 to P4?
 
@@ -23,7 +22,7 @@ QUESTION='How should the agent run P1 to P4?
 
 # The fenced block that follows the run-mode question lead-in.
 QBLOCK="$(awk '/^Before asking for confirmation, ask the run-mode question/ {on=1; next}
-  on && /^```/ {n++; if (n == 2) exit; next} on && n == 1 {print}' "$ORCH")"
+  on && /^```/ {n++; if (n == 2) exit; next} on && n == 1 {print}' <<<"$ORCH_CONTENT")"
 
 echo ""
 echo "=== req-001 (a): the orchestrator asks the run-mode question verbatim ==="
@@ -36,12 +35,8 @@ assert_equals "2" "$(printf '%s\n' "$QBLOCK" | grep -cE '^ *\[[0-9]+\]')" \
 echo ""
 echo "=== req-001 (a): the answer is written and logged ==="
 
-assert_contains 'write `plan/.run-mode` (`gated` or `autonomous`)' "$ORCH_CONTENT" \
-  "req-001 (a): the orchestrator writes gated or autonomous to plan/.run-mode"
-assert_contains 'No other value is valid.' "$ORCH_CONTENT" \
-  "req-001 (a): the orchestrator rejects any other value"
-assert_contains 'Run mode: {gated | autonomous}' "$ORCH_CONTENT" \
-  "req-001 (a): the orchestrator logs the choice in the build log"
+assert_rule orc-run-mode-write 'write `plan/.run-mode` (`gated` or `autonomous`)' 'No other value is valid.' 'Run mode: {gated | autonomous}'
+
 
 echo ""
 echo "=== req-001 (b): retired run-mode values are gone from the files in reach ==="

@@ -23,6 +23,10 @@
  *   plan/roadmap/*\/initiative.md (0000399). The hook still acts only while
  *   plan/.orchestrator-active exists.
  *
+ * A step session gets no strict banner while plan/.suite-running names a live
+ * process, because a runner is mid-run and an ack write would fail its tree check
+ * (0000548 ADR-0344).
+ *
  * The skill that owns the session decides the banner. The driver lock plays no
  * part, because it is free between steps and after the driver exits.
  *
@@ -108,6 +112,25 @@ function recordLoaded(cwd, sessionId) {
   } catch { /* a failed record only means the next prompt emits again */ }
 }
 
+// True while a test runner of this repository is live (0000548 ADR-0344). The runners
+// write their pid to plan/.suite-running before the tree snapshot and remove it on exit.
+// A step session gets no ack prompt then, because the ack write would change a tracked
+// file and fail the run. A marker that holds anything but 1 to 10 digits, or a pid that
+// no longer runs, counts as no marker.
+function suiteRunning(cwd) {
+  if (process.env.RAVINTIO_INITIATIVE_STEP !== "1") return false;
+  try {
+    const text = readFileSync(join(cwd, "plan", ".suite-running"), "utf-8").trim();
+    if (!/^[0-9]{1,10}$/.test(text)) return false;
+    const pid = Number(text);
+    if (pid < 1) return false;
+    process.kill(pid, 0);
+    return true;
+  } catch (error) {
+    return error?.code === "EPERM";
+  }
+}
+
 try {
   const raw = await readStdin();
   const input = JSON.parse(raw);
@@ -155,6 +178,9 @@ try {
     );
     process.exit(0);
   }
+
+  // Strict mode: a live suite run silences the hook for a step session (0000548).
+  if (suiteRunning(cwd)) process.exit(0);
 
   // Strict mode: check session ack. Either ack file silences the hook.
   const sessionId = (input?.session_id ?? "").trim();

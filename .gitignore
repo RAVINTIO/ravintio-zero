@@ -45,3 +45,7 @@ plan/.orchestrator-loaded
 # Local to each machine. Setup also adds it to .git/info/exclude, which a
 # fresh clone lacks, so CI sees it only here.
 plan/.prefix-misses.log
+plan/.suite-running
+
+# Private step temp folder (0000583)
+.t/
