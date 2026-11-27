@@ -11,7 +11,7 @@ status: "active"  # proposed | charted | active | delivered | blocked
 
 **Status:** active
 
-**Position:** 36
+**Position:** 37
 
 **Speed:** fast
 
@@ -191,7 +191,7 @@ The human confirmed the chart on 2026-11-14 with "build the initiative as fast a
 | 33 | 0000577-plan-lists-change-shapes | Plan lists the change shapes a diff reader must handle | 0000516 | minor | 0.138.0 | merged | plan | |
 | 34 | 0000578-plan-lists-pass-signals | Plan lists every way a check can pass | 0000529 | minor | 0.147.0 | merged | plan | |
 | 35 | 0000579-convert-remaining-suites-to-rule-anchors | Convert remaining suites to rule anchors | 0000401 | minor | 0.150.0 | merged | anchors | 1-34 |
-| 36 | 0000580-log-non-tdd-units | Log a non-TDD unit with a class | 0000410 | minor | | pending | anchors | 35 |
+| 36 | 0000580-log-non-tdd-units | Log a non-TDD unit with a class | 0000410 | minor | 0.151.0 | merged | anchors | 35 |
 | 37 | 0000581-delivery-cleans-up-driver-state | Delivery cleans up driver state | 0000582 | minor |  | pending | coord | 35 |
 | 38 | 0000583-step-temp-cleanup-after-merge | Clean up step temp files after each merge | 0000584 | minor | 0.149.0 | merged | cleanup | |
 
@@ -237,3 +237,4 @@ The merge queue adds one row for each step it merges. See the merge queue sectio
 | 28 | #251 | tag v0.148.0 | 0.148.0 | 2026-11-26T08:10:19Z |
 | 38 | #252 | tag v0.149.0 | 0.149.0 | 2026-11-26T09:19:47Z |
 | 35 | #253 | tag v0.150.0 | 0.150.0 | 2026-11-26T09:51:57Z |
+| 36 | #254 | tag v0.151.0 | 0.151.0 | 2026-11-27T00:17:57Z |
