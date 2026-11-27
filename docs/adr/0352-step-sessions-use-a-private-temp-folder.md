@@ -28,7 +28,6 @@ Each step session keeps its scratch inside its own worktree. Nothing in the pack
 - The driver creates `{worktree}/.t` and sets `TMPDIR` and `GIT_CEILING_DIRECTORIES` to it for the session and its suites.
 - `.gitignore` lists `.t/`.
 - The driver stops with `I-C Run: Blocked:` if the folder path leaves less than 20 characters below the macOS 104-character Unix socket limit.
-- The driver runs the session in the Claude Code sandbox with `--settings`. Writes reach the worktree, its git folder, and its control folder.
 - After the queue merges a step, the driver removes the worktree and runs `git worktree prune`. That removes the scratch.
 - The test runner sets `TMPDIR` to a private folder for every suite. Each suite that makes a temp folder removes it with a trap on `EXIT` and exits on `TERM`, `INT`, and `HUP`.
 - The implement skill and the testing standards tell the agent to put scratch under `$TMPDIR`.
@@ -45,7 +44,7 @@ Each step session keeps its scratch inside its own worktree. Nothing in the pack
 
 | Component | Impact |
 |-----------|--------|
-| ravintio-zero | Driver temp folder, sandbox, and worktree removal. Runner `TMPDIR`. Traps in five suites. Standards and skill text. |
+| ravintio-zero | Driver temp folder and worktree removal. Runner `TMPDIR`. Traps in five suites. Standards and skill text. |
 
 ## Consequences
 
@@ -54,11 +53,10 @@ Each step session keeps its scratch inside its own worktree. Nothing in the pack
 - The driver and its suites cannot delete a path outside the repo.
 
 **Negative:**
-- The sandbox limits step writes to three folders. A step that needs another folder stops and asks.
 - A repo path longer than 83 characters stops the driver.
 
 **Risks:**
-- The sandbox settings keys change in a Claude Code release. The driver test checks the `--settings` value it passes.
+- The Claude Code Bash tool sets `TMPDIR` to `/tmp/claude-{uid}` in every command. Session scratch can land there, outside the worktree.
 - Scratch from earlier runs stays where it is. This ADR does not remove it.
 
 ## Related ADRs
@@ -72,3 +70,7 @@ Each step session keeps its scratch inside its own worktree. Nothing in the pack
 ## Superseded By
 
 - None.
+
+## Revision
+
+**2026-11-26 (coordinator fix, classification: subtractive).** The driver no longer passes sandbox settings. In steps 36 and 37 the sandbox blocked `git push` over SSH and `mktemp`. Neither step could ship. A probe with Claude Code 2.1.332 showed that the Bash tool sets `TMPDIR` to `/tmp/claude-{uid}` whatever the driver passes. Suites that a session runs through Bash can still write scratch outside `.t`. The driver still deletes nothing outside the repo.
