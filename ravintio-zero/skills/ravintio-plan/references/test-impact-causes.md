@@ -3,7 +3,7 @@
 > Read this file when you run the Test impact scan. The plan `SKILL.md` points here from its Pack Index. Each cause below tells you what to grep for when the run triggers it.
 
 - **Skill count:** the run adds or removes a skill. Grep for `skills/` with `wc -l`.
-- **Skill-text budget:** the run edits any `SKILL.md`. Grep for the line cap.
+- **Skill-text budget:** the run edits any `SKILL.md`. Grep for the line cap. If the run adds a file name, command, or flag, also grep for suites that loop over every skill and match that term. List each match. `test-0000151-req-008-quiet-test-output.sh` is one, because it requires `RAVINTIO_TEST_QUIET=1` on every `run-tests` command.
 - **Size cap:** the run edits a skill that a cap test measures, such as the orchestrator. Grep for the skill name and `-le`. List every test that measures the skill with each cap value, not the first match. Plan the unit's growth against the lowest cap.
 - **Backlog entry id:** the run pulls in an entry. Grep for the entry id.
 - **Workflow job or step edit:** the run adds or edits a job or step in a workflow file. Grep for `ravintio.yml`.
