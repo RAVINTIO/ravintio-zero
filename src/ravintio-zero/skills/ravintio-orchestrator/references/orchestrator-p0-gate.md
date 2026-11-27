@@ -28,6 +28,9 @@ Coach the human on any unchecked item before proceeding. Completeness loop (togg
 
 Read `ravintio-zero/templates/design.template.md`, then write `plan/current/design.md`. After human confirmation the design is immutable for the run: changes go through the mid-pipeline change protocol.
 
+<!-- rule: p0-gate-pack-paths -->
+If the run edits a pack file, list `src/ravintio-zero/` and `ravintio-zero/` in `## Component Paths`. The two trees hold the same files, and `gate-write` blocks a write to a folder the list omits.
+
 Before asking for confirmation, ask the run-mode question:
 
 ```

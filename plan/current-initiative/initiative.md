@@ -173,7 +173,7 @@ The human confirmed the chart on 2026-11-14 with "build the initiative as fast a
 | 15 | 0000559-start-baseline-first | Start the baseline run before the P0 artifacts | 0000478 | minor | | pending | baseline |  |
 | 16 | 0000560-step-sessions-and-pending-migrations | Step sessions meet pending migrations | 0000403 | minor | | pending | resume |  |
 | 17 | 0000561-old-name-guard-fails-in-full-suite | Old-name guard fails in the full suite | 0000527 | minor | | pending | tests |  |
-| 18 | 0000562-test-impact-scan-lists-the-mirrored-pack-tree | Test impact scan lists the mirrored pack tree | 0000540 | minor | | pending | plan |  |
+| 18 | 0000562-test-impact-scan-lists-the-mirrored-pack-tree | Test impact scan lists the mirrored pack tree | 0000540 | minor | 0.119.0 | merged | plan | |
 | 19 | 0000563-test-impact-misses-output-readers | Plan test impact misses suites that read driver output order | 0000533 | minor | | pending | plan |  |
 | 20 | 0000564-test-impact-hook-pins | Test impact scan names hook pins | 0000523 | minor | | pending | plan |  |
 | 21 | 0000565-layout-move-test-impact | Test impact scan for layout moves | 0000419 | minor | | pending | plan |  |
@@ -205,3 +205,4 @@ The merge queue adds one row for each step it merges. See the merge queue sectio
 | 4 | #215 | tag v0.116.0 | 0.116.0 | 2026-11-15T07:31:42Z |
 | 1 | #217 | tag v0.117.0 | 0.117.0 | 2026-11-15T12:24:18Z |
 | 5 | #218 | tag v0.118.0 | 0.118.0 | 2026-11-15T12:44:44Z |
+| 18 | #219 | tag v0.119.0 | 0.119.0 | 2026-11-15T13:18:06Z |
