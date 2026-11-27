@@ -89,7 +89,7 @@ Every requirement must have a mapped test whose name includes the requirement ID
 ## Inline units
 
 <!-- rule: implement-inline-unit -->
-- **An inline unit runs the TDD loop in your own context.** It is a unit of class `content` that applies agreed text or changes one file. Write its failing test, append `- RED: {unit} ({ISO-8601 timestamp})`, make the change, run the test, and append `- GREEN: {unit} ({ISO-8601 timestamp})`. Then append the `Done:` line with tier `inline` and effort `none`. It dispatches no subagent and skips the refactor step and the improvement loop.
+- **An inline unit runs the TDD loop in your own context.** It is a unit of class `content` that applies agreed text or changes one file. Write its failing test, then run `node ravintio-zero/scripts/build-log-mark.mjs RED {unit}`. Make the change, run the test, then run the script with `GREEN {unit}`. Then run it with `Done {unit} --class content --tier inline --effort none`. The script reads the clock and appends the `RED:`, `GREEN:`, and `Done:` lines, so never type a time. It dispatches no subagent and skips the refactor step and the improvement loop.
 
 <!-- rule: implement-non-inline-subagents -->
 - **A unit that is not inline still runs the test-writer, implementer, and refactor subagents.** The loop above applies to it unchanged.
