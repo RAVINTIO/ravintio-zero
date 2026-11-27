@@ -8,8 +8,7 @@
 - **Backlog entry id:** the run pulls in an entry. Grep for the entry id.
 - **Workflow job or step edit:** the run adds or edits a job or step in a workflow file. Grep for `ravintio.yml`.
 - **Reference file edit:** the run edits a file in a skill's `references/` folder. Grep for the file name to find frozen-line tests. For an orchestrator reference, also list `test-0000151-req-011-orchestrator-references-split.sh`. It freezes every base line of the skill and caps the boot template, so read the cap from the suite.
-- **New test file:** the run adds a test file. List the repo-wide style tests, such as `test-0000164-req-008`.
-- **Non-suite file:** the run adds a file under `ravintio-zero/tests/` that is not a `test-*.sh` suite. List `run-tests.sh` and `run-tests.ps1`.
+- **New test file:** the run adds a test file. List the repo-wide style tests, such as `test-0000164-req-008`. **Non-suite file:** the file is not a `test-*.sh` suite under `ravintio-zero/tests/`. List `run-tests.sh` and `run-tests.ps1`.
 - **Fixture-pinned line:** the run edits an existing pack line. Grep `ravintio-zero/tests/fixtures/` for the line.
 - **Pack file edit:** the run edits a pack file under `src/ravintio-zero/` or `ravintio-zero/`. List `test-0000493-req-004-handoff-text.sh`. The same unit edits both trees, and P0 lists `src/ravintio-zero/` in `## Component Paths`.
 - **Output order:** the run adds, removes, or moves a line that a script prints. Search the tests folder for suites that match the line text of each changed line. Also search for suites that read the last line of the output, such as `tail -1`. List each match.
@@ -18,3 +17,4 @@
 - **History move:** the run moves or copies archived content into a live folder. Search `ravintio-zero/tests/` for `plan/_archive/`, which finds the suites that skip the archive as history. List each match.
 - **Prose rewrite:** the run changes sentences in pack files, as a wording pass does. Grep `ravintio-zero/tests/` and `ravintio-zero/tests/fixtures/` for each changed sentence. List the matches in the execution plan, in the unit that edits the sentence.
 - **Pack content:** the run adds a content file under `ravintio-zero/`, such as a standard, a template, or a skill. List `test-0000042-req-010-pack-wording-allowlist.sh`, which bans a word in new pack text, and the other repo-wide wording tests. Record them in the execution plan, in the unit that adds the file.
+- **Diff reader:** the run adds a unit that reads a git diff or a file list. Name a test world for each of add, rename, and delete. Git lists a rename apart from an add, so a world that adds every file as new misses it. List the three worlds in the unit's tests.
