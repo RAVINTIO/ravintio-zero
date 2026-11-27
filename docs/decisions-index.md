@@ -3,7 +3,7 @@
 > Change record. Index of all ADRs across all features. Updated after every pipeline run.
 > Do not archive this file. Update it in place.
 
-Last updated: 0000548-ack-write-mid-suite-fails-run
+Last updated: 0000545-clear-feature-id-at-ship
 
 ---
 
@@ -363,3 +363,4 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 | [ADR-0342](adr/0342-step-sessions-receive-the-clock.md) | Step sessions receive the clock | accepted | The driver records hook events in each step log, and a check fails a log that shows no clock. | 0000534-step-sessions-receive-clock |
 | [ADR-0343](adr/0343-steps-never-stop-on-pending-migrations.md) | Steps never stop on pending migrations | accepted | Chart collects the human's answer for each pending migration. A step runs a migration that has a row and logs the rest. | 0000536-pending-migrations-reach-the-human-early |
 | [ADR-0344](adr/0344-suite-marker-silences-strict-hook.md) | Suite marker silences the strict hook for a step session | accepted | The runners write plan/.suite-running, and the strict hook stays quiet for a step session while it names a live pid. | 0000548-ack-write-mid-suite-fails-run |
+| [ADR-0345](adr/0345-ship-deletes-the-feature-id-file.md) | Ship deletes the feature id file | accepted | Ship Step 8 deletes plan/.feature-id and the queue resolves it as a shared file. | 0000545-clear-feature-id-at-ship |

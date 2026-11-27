@@ -27,7 +27,8 @@ const HERE = path.dirname(fileURLToPath(import.meta.url));
 export const COUNTERS = ['plan/backlog/.next-id', 'docs/adr/.next-id'];
 export const BACKLOG_INDEX = 'plan/backlog/index.md';
 export const LIVING_DOCS = ['docs/decisions-index.md', 'docs/architecture-overview.md'];
-export const ALLOWLIST = [...COUNTERS, BACKLOG_INDEX, ...LIVING_DOCS];
+export const FEATURE_ID = 'plan/.feature-id';
+export const ALLOWLIST = [...COUNTERS, BACKLOG_INDEX, ...LIVING_DOCS, FEATURE_ID];
 
 /** True when the queue resolves this repo-relative path itself. */
 export function isShared(file) {
@@ -63,6 +64,18 @@ function resolveCounter(root, file) {
   if (!/^\d+$/.test(ours) || !/^\d+$/.test(theirs)) throw new Error(`${file}: a counter is not a whole number`);
   const higher = Number(theirs) > Number(ours) ? theirs : ours;
   fs.writeFileSync(path.join(root, file), `${higher}\n`);
+}
+
+/** The PR branch decides: a deleted file stays deleted, a held file keeps the PR branch text. */
+function resolveFeatureId(root, file) {
+  const ours = stageText(root, 2, file);
+  if (ours === '') {
+    fs.rmSync(path.join(root, file), { force: true });
+    gitOut(root, ['rm', '--quiet', '--cached', '--ignore-unmatch', '--', file]);
+    return false;
+  }
+  fs.writeFileSync(path.join(root, file), ours);
+  return true;
 }
 
 function resolveBacklogIndex(root) {
@@ -127,6 +140,11 @@ export function resolveSharedConflicts({ root = process.cwd() } = {}) {
   const resolved = [];
   for (const file of conflicted) {
     if (file === BACKLOG_INDEX) continue;
+    if (file === FEATURE_ID) {
+      if (resolveFeatureId(root, file)) gitOut(root, ['add', '--', file]);
+      resolved.push(file);
+      continue;
+    }
     if (COUNTERS.includes(file)) resolveCounter(root, file);
     else resolveLivingDoc(root, file);
     gitOut(root, ['add', '--', file]);

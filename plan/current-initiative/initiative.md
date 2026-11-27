@@ -11,7 +11,7 @@ status: "active"  # proposed | charted | active | delivered | blocked
 
 **Status:** active
 
-**Position:** 1
+**Position:** 2
 
 **Speed:** fast
 
@@ -156,7 +156,7 @@ The human confirmed the chart on 2026-11-14 with "build the initiative as fast a
 
 | Step | Feature id | Title | Backlog entries | Bump | Version | Status | Lane | After |
 |------|------------|-------|-----------------|------|---------|--------|------|-------|
-| 1 | 0000545-clear-feature-id-at-ship | Ship leaves plan/.feature-id behind | 0000514 | minor | | pending | queue |  |
+| 1 | 0000545-clear-feature-id-at-ship | Ship leaves plan/.feature-id behind | 0000514 | minor | 0.117.0 | merged | queue | |
 | 2 | 0000546-queue-failure-leaves-dirty-files | A failed queue run can leave written files in the queue worktree | 0000477 | minor | | pending | queue |  |
 | 3 | 0000547-step-merge-regenerates-index | Step base merge regenerates the backlog index | 0000517 | minor | 0.115.0 | merged | coord | |
 | 4 | 0000548-ack-write-mid-suite-fails-run | Strict-mode ack write mid-suite fails the suite run | 0000476-ack-write-mid-suite-fails-run | minor | 0.116.0 | merged | tests | |
@@ -203,3 +203,4 @@ The merge queue adds one row for each step it merges. See the merge queue sectio
 |------|----|--------------|---------|-----------|
 | 3 | #214 | tag v0.115.0 | 0.115.0 | 2026-11-14T17:36:45Z |
 | 4 | #215 | tag v0.116.0 | 0.116.0 | 2026-11-15T07:31:42Z |
+| 1 | #217 | tag v0.117.0 | 0.117.0 | 2026-11-15T12:24:18Z |
