@@ -118,3 +118,7 @@ At P0, the run records the suites that fail on the base commit in `plan/current/
 The CI duration target is 420 seconds per run. Ship records each run as a `CI duration:` marker, and the governance report shows the longest one. A run above the target is a breach in the report. It never fails the gate.
 
 P3 runs the suite in a clean clone of `HEAD` with `scripts/clean-clone-test.mjs`. Untracked files, ignored caches, and local state then cannot change the result. The script prints an `OS gap:` line when the local OS is not among the `runs-on` values of the CI workflow. After a fix, P3 reruns the failed suites first and then runs the full suite once before acceptance.
+
+## 10. Scratch files
+
+<!-- rule: scratch-under-tmpdir --> A test or agent writes scratch files under `$TMPDIR` and never to a hard-coded `/tmp` path. In a step session, `$TMPDIR` is `{worktree}/.t`. The test runner sets `$TMPDIR` to a private folder for every suite. A suite that makes a temp folder removes it with a `trap` on `EXIT`, and exits on `TERM`, `INT`, and `HUP` so that trap runs. No script removes a path by name in a shared temp folder. A test fails any pack script that does (0000583 ADR-0352).

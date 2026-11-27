@@ -19,7 +19,7 @@ mkdir -p "$WORK/bin"
 cat > "$WORK/bin/claude" <<'STUB'
 #!/usr/bin/env bash
 # Stub claude. STUB_MODE: ok (default), fail.
-printf '%s\n' "$*" >> "$STUB_LOG"
+printf '%s\n' "$*" | sed 's/ --settings {[^ ]*}//' >> "$STUB_LOG"
 RM=plan/current-initiative/initiative.md
 [ "${STUB_MODE:-ok}" = fail ] && exit 3
 mkdir -p plan/_archive

@@ -41,7 +41,7 @@ assert_equals "" "$LEFT" "req-003 (a): no PLANIFEST_ string outside the allowed 
 mkdir -p "$WORK/bin"
 cat > "$WORK/bin/claude" <<'STUB'
 #!/usr/bin/env bash
-printf '%s\n' "$*" >> "$STUB_LOG"
+printf '%s\n' "$*" | sed 's/ --settings {[^ ]*}//' >> "$STUB_LOG"
 printf 'OTEL=%s\n' "$OTEL_RESOURCE_ATTRIBUTES" >> "$STUB_LOG"
 mkdir -p plan/_archive
 mv plan/current-initiative "plan/_archive/0000050-demo-roadmap-2026-10-24"

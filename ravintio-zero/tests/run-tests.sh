@@ -14,7 +14,8 @@
 # The runner removes every RAVINTIO_ variable from the environment of each suite (0000315), so a
 # suite gives the same result in any session. The initiative driver sets RAVINTIO_INITIATIVE_STEP
 # in every step session, and the hooks read it. A suite that needs a variable sets it for its own
-# call. Three variables pass through: RAVINTIO_PWSH, RAVINTIO_TIMING_FILE, and RAVINTIO_TEST_QUIET. The
+# call. The runner sets RAVINTIO_TEMP_PATH_LIMIT=4096 for each suite, because fixture repos sit in a long
+# temp path (0000583). Three variables pass through: RAVINTIO_PWSH, RAVINTIO_TIMING_FILE, and RAVINTIO_TEST_QUIET. The
 # last one only changes how much a suite prints, and assert.sh reads it. A suite that starts a
 # nested runner unsets it first.
 #
@@ -42,6 +43,7 @@ done <<< "$(compgen -e | grep '^RAVINTIO_' || true)"
 # identity, so a commit with no identity fails here as it does on a CI runner.
 source "$SCRIPT_DIR/helpers/git-isolation.sh"
 isolate_git_env
+exit_on_signal
 trap remove_git_isolation EXIT
 
 # Prints one "path<TAB>hash" line per modified, deleted, or untracked file. Fails outside a git repository.
@@ -79,7 +81,15 @@ if [ -n "$SUITE_TOP" ] && [ -d "$SUITE_TOP/plan" ] && [ ! -L "$SUITE_TOP/plan" ]
   fi
 fi
 remove_suite_marker() { [ -z "$SUITE_MARKER" ] || rm -f "$SUITE_MARKER"; }
-trap 'remove_suite_marker; remove_git_isolation' EXIT
+
+# Private temp folder (0000583 ADR-0352): every suite gets TMPDIR set to a folder that only this run
+# owns. It sits under the caller's TMPDIR, or under the system default when none is set. It never sits
+# inside the repo, because a suite that expects a folder outside a git repository would then fail.
+# The runner removes only the folder it made, and never a path by name in a shared folder.
+RUN_TMP="$(mktemp -d -t ravintio_run_XXXXXX 2>/dev/null)" || RUN_TMP=""
+[ -z "$RUN_TMP" ] || export TMPDIR="$RUN_TMP"
+remove_run_tmp() { [ -z "$RUN_TMP" ] || rm -rf "$RUN_TMP"; }
+trap 'remove_suite_marker; remove_run_tmp; remove_git_isolation' EXIT
 
 SKILLS_BEFORE="$(skills_listing)"
 TREE_BEFORE=""
@@ -230,8 +240,8 @@ run_one() {
 
 run_suite_body() {
   case "$1" in
-    *.ps1) env ${CLEAR_ARGS[@]+"${CLEAR_ARGS[@]}"} "$PWSH" -NoProfile -File "$1" ;;
-    *) env ${CLEAR_ARGS[@]+"${CLEAR_ARGS[@]}"} bash "$1" ;;
+    *.ps1) env ${CLEAR_ARGS[@]+"${CLEAR_ARGS[@]}"} RAVINTIO_TEMP_PATH_LIMIT=4096 "$PWSH" -NoProfile -File "$1" ;;
+    *) env ${CLEAR_ARGS[@]+"${CLEAR_ARGS[@]}"} RAVINTIO_TEMP_PATH_LIMIT=4096 bash "$1" ;;
   esac
 }
 
