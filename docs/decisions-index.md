@@ -3,7 +3,7 @@
 > Change record. Index of all ADRs across all features. Updated after every pipeline run.
 > Do not archive this file. Update it in place.
 
-Last updated: 0000575-build-log-marker-helper
+Last updated: 0000558-plan-only-push-short-ci
 
 ---
 
@@ -367,3 +367,4 @@ Rows for features before 0000160 use the product name and paths of their time. 0
 | [ADR-0346](adr/0346-unit-report-fields.md) | Unit report fields | accepted | A unit report holds a RED line, a GREEN line, a commit hash, and any deviation. The orchestrator rejects a report without one and resumes the unit once. | 0000573-require-unit-reports |
 | [ADR-0347](adr/0347-queue-restores-the-files-it-wrote.md) | The queue restores the files it wrote when a run fails | accepted | A failed run restores the chart and the version files to HEAD before the commit lands, and touches no other path. | 0000546-queue-failure-leaves-dirty-files |
 | [ADR-0348](adr/0348-build-log-marker-script.md) | Build log marker script | accepted | A script reads the clock and appends a RED, GREEN, or Done line to the build log. | 0000575-build-log-marker-helper |
+| [ADR-0349](adr/0349-cancel-superseded-pull-request-runs.md) | Cancel superseded pull request runs | accepted | The repo workflow cancels an older run on a newer push to the same pull request. A push run never shares a group, so a newer push cancels no push run. Every push still runs every suite. | 0000558-plan-only-push-short-ci |

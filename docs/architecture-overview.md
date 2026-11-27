@@ -1,6 +1,6 @@
 # Architecture Overview
 
-Last updated: 0000551-refuse-symlink-style-outputs
+Last updated: 0000558-plan-only-push-short-ci
 
 ## What this repo is
 
@@ -107,6 +107,10 @@ Discovery sizes each release against a budget. The optional `releaseSize` field 
 Setup copies only committed files in `ravintio-zero/` and `ravintio-overrides/`, and fails outside a git repository (0000382 ADR-002). Strict mode stays on across re-runs and goes off only with `--no-strict-orchestrator`. `scripts/pack-facts.mjs` writes `ravintio-zero/pack-facts.json`, the single list of flags, hooks, skills, and phases, and CI fails when the file is stale.
 
 **Park.** When the human says "park", the orchestrator shelves the feature on its branch. It writes `plan/current/park.md`, pushes the branch, and raises a `chore/park-{feature-id}` PR. That PR files a backlog entry with status `parked`. The working tree then returns to `main`. The git and `gh` steps live in the orchestrator's `scripts/park.mjs`. If a local add or commit fails on the chore branch, park unstages and deletes the entry, then returns to the feature branch. Park refuses an `--entry` that is the target path, so that cleanup never deletes the only copy. Park also refuses any symlink in the entry path. It checks each part with `lstat` and the real path against the real `plan/backlog/`, before it creates, writes, or removes anything. At a later discovery, backlog pickup offers resume or discard for a parked entry. Park and pickup never merge a PR, never commit to `main`, and never force-push.
+
+### CI concurrency
+
+The repo workflow `.github/workflows/ravintio.yml` holds a top-level `concurrency` block (0000558 ADR-0349). A newer push to a pull request cancels the older run of that pull request. A push run keys on its commit, so no newer push cancels it. A `closed` event has a group of its own. Every push still runs every suite.
 
 ### Workflow governance
 

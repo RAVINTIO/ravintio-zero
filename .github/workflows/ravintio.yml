@@ -7,6 +7,14 @@ on:
   push:
     branches: [ main, master, 'initiative/**' ]
 
+# A newer push to a pull request cancels the older run of that pull request
+# (0000558 ADR-0349). A push run keys on its commit, so no push run shares a
+# group and none is cancelled. The closed event has a group of its own, so it
+# never cancels a validation run. Every push still runs every suite.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}-${{ github.event.action == 'closed' }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 # Every job reads the repo and nothing more, except release-tag and
 # cleanup-branch (0000036 S-006, 0000355 ADR-003).
 permissions:
