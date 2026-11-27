@@ -81,7 +81,7 @@ const LIST_PREFIX = /^\s*(?:(?:[-*]|\d+\.)\s+)?/;
 const FENCE = /^\s*(```|~~~)/;
 
 const CLASSIFIED_DONE =
-  /^Done: (.+?) \((content|code|test|config), (cheaper|primary|inline), (?:low|medium|high|none), [^)]*\)\s*$/;
+  /^Done: (.+?) \((content|code|test|config|docs), (cheaper|primary|inline), (?:low|medium|high|none), [^)]*\)\s*$/;
 const UNCLASSIFIED = "unclassified\tunclassified";
 
 function bump(map, key, field) {
