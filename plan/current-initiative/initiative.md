@@ -187,7 +187,7 @@ The human confirmed the chart on 2026-11-14 with "build the initiative as fast a
 | 29 | 0000573-require-unit-reports | Require unit reports | 0000417 | minor | 0.125.0 | merged | dispatch | |
 | 30 | 0000574-delivery-pr-lists-steps-in-version-order | Delivery PR lists steps in version order | 0000543 | minor | 0.144.0 | merged | coord | |
 | 31 | 0000575-build-log-marker-helper | Build log marker helper | 0000524 | minor | 0.135.0 | merged | dispatch | |
-| 32 | 0000576-phase-start-time-at-phase-start | Record each phase start time when the phase begins | 0000402 | minor | | pending | dispatch |  |
+| 32 | 0000576-phase-start-time-at-phase-start | Record each phase start time when the phase begins | 0000402 | minor | 0.145.0 | merged | dispatch | |
 | 33 | 0000577-plan-lists-change-shapes | Plan lists the change shapes a diff reader must handle | 0000516 | minor | 0.138.0 | merged | plan | |
 | 34 | 0000578-plan-lists-pass-signals | Plan lists every way a check can pass | 0000529 | minor | | pending | plan |  |
 | 35 | 0000579-convert-remaining-suites-to-rule-anchors | Convert remaining suites to rule anchors | 0000401 | minor | | pending | anchors | 1-34 |
@@ -231,3 +231,4 @@ The merge queue adds one row for each step it merges. See the merge queue sectio
 | 16 | #244 | tag v0.142.0 | 0.142.0 | 2026-11-16T06:56:06Z |
 | 6 | #228 | tag v0.143.0 | 0.143.0 | 2026-11-18T07:35:26Z |
 | 30 | #245 | tag v0.144.0 | 0.144.0 | 2026-11-18T07:54:17Z |
+| 32 | #246 | tag v0.145.0 | 0.145.0 | 2026-11-18T08:32:39Z |
