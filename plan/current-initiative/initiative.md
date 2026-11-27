@@ -167,7 +167,7 @@ The human confirmed the chart on 2026-11-14 with "build the initiative as fast a
 | 9 | 0000553-coordinator-oversight-not-micromanagement | Initiative skills do not micromanage | 0000530 | minor | 0.120.0 | merged | coord | |
 | 10 | 0000554-coordinator-starts-defined-stages | Coordinator starts a defined stage without asking | 0000541 | minor | 0.127.0 | merged | coord | |
 | 11 | 0000555-initiative-pause-reaches-every-step | Initiative pause reaches every step | 0000538 | minor | 0.130.0 | merged | coord | |
-| 12 | 0000556-step-session-finds-unfinished-step | A step session finds an unfinished step | 0000531 | minor | | pending | resume |  |
+| 12 | 0000556-step-session-finds-unfinished-step | A step session finds an unfinished step | 0000531 | minor | 0.132.0 | merged | resume | |
 | 13 | 0000557-self-matching-pgrep-wait | Step sessions wait on a suite without matching their own shell | 0000532 | minor | | pending | baseline |  |
 | 14 | 0000558-plan-only-push-short-ci | CI avoids extra runs on a plan-only push | 0000476-plan-only-push-short-ci | minor | | pending | ci |  |
 | 15 | 0000559-start-baseline-first | Start the baseline run before the P0 artifacts | 0000478 | minor | | pending | baseline |  |
@@ -218,3 +218,4 @@ The merge queue adds one row for each step it merges. See the merge queue sectio
 | 24 | #231 | tag v0.129.0 | 0.129.0 | 2026-11-15T21:28:08Z |
 | 11 | #232 | tag v0.130.0 | 0.130.0 | 2026-11-15T21:45:40Z |
 | 25 | #233 | tag v0.131.0 | 0.131.0 | 2026-11-15T22:42:24Z |
+| 12 | #234 | tag v0.132.0 | 0.132.0 | 2026-11-15T23:03:46Z |
