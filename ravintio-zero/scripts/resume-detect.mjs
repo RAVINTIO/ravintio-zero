@@ -151,6 +151,7 @@ try {
     out.push(existsSync(p("plan", ".initiative-runner.lock")) ? "driver lock held" : "driver lock free");
     const pos = /^\*\*Position:\*\*[ \t]*(\S*)[ \t]*$/m.exec(init);
     out.push(`initiative position: ${pos && /^\d{1,4}$/.test(pos[1]) ? pos[1] : "unreadable"}`);
+    if (existsSync(p("plan", "current-initiative", "pause.md"))) out.push("initiative pause record present");
   }
   if (artifacts) out.push("plan/current has artifacts");
 

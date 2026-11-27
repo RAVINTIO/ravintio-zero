@@ -204,6 +204,18 @@
 // The lock is released on every exit path, including SIGINT and SIGTERM.
 // The driver never edits the working tree. The steps it launches do that.
 // It has no dependencies beyond Node.
+//
+// Pause (0000555):
+// "node initiative-pause.mjs request" writes plan/.initiative-control/pause. While
+// it exists the driver starts no step and queues no ready PR. It prints "I-C Run: Pausing:", stops
+// each running session when that step's build log gains a "- Complete: P{n}" line after the
+// request, and keeps the worktree and the running file. When no session runs, it runs
+// "initiative-pause.mjs write", which writes plan/current/pause.md in each stopped step worktree
+// and plan/current-initiative/pause.md in the root. It prints "I-C Run: Paused: {n} steps merged,
+// {k} steps hold a pause record", releases the lock, and exits 0. A new driver that finds the
+// initiative record prints "I-C Run: Resuming: initiative pause record read", removes the record
+// and the request, and restarts each step in its worktree. A block or a failure during a pause
+// reports the stop and writes no record. An adopted step reaches ready or a stop first.
 
 import { spawn, spawnSync } from 'node:child_process';
 import { appendFileSync, chmodSync, closeSync, constants as fsConstants, cpSync, existsSync, lstatSync, mkdirSync, openSync, readFileSync, readdirSync, realpathSync, renameSync, rmSync, unlinkSync, writeFileSync, writeSync } from 'node:fs';
@@ -219,6 +231,8 @@ const LOCK = 'plan/.initiative-runner.lock';
 const LOGS = 'plan/.initiative-logs';
 const QUEUE = 'plan/.initiative-queue/';
 const BUILD_LOG = 'plan/current/build-log.md';
+const INITIATIVE_PAUSE = 'plan/current-initiative/pause.md';
+const PAUSE_SCRIPT = join(dirname(fileURLToPath(import.meta.url)), 'initiative-pause.mjs');
 const ARCHIVE = 'plan/_archive';
 // Files whose change leaves the running driver, or the session that relays its output, on old code.
 const WATCHED = [
@@ -280,7 +294,7 @@ const clock = () => {
 };
 // The run record. out() notes each merge line, each line that names a driver fix, and a pending
 // delivery, so the summary block at the end of the run needs no new state (0000511 ADR-0341).
-const record = { merged: [], fixes: [], pending: false };
+const record = { merged: [], fixes: [], pending: false, paused: false };
 const MERGE_LINE = /^I-D Advance: Complete: step (\d+) merged$/;
 const FIX_LINE = /^(I-C Run: Cleared: |I-D Advance: Ready: step \d+ recovered |I-D Advance: Setup: step \d+ ran the approved |I-C Run: Starting: lock named process )/;
 const out = (line) => {
@@ -288,11 +302,13 @@ const out = (line) => {
   if (merge) record.merged.push(merge[1]);
   else if (FIX_LINE.test(line)) record.fixes.push(line);
   else if (line.startsWith('I-E Delivery: Pending:')) record.pending = true;
+  else if (line.startsWith('I-C Run: Paused:')) record.paused = true;
   writeSync(1, `${clock()} ${line}\n`);
 };
 
 // The one action the human takes after a run ends. stopMsg is the stop line, or '' for a run with no stop.
 function humanAction(stopMsg) {
+  if (!stopMsg && record.paused) return 'read plan/current-initiative/pause.md, answer each open question, then start a new driver';
   if (!stopMsg) return record.pending ? 'none, the coordinator runs I-E Delivery' : 'none';
   if (stopMsg.startsWith('I-D Advance: Restart:')) return 'start a new driver';
   if (stopMsg.startsWith('I-D Advance: Setup:')) return 'run the setup command in the stop line, then start a new driver';
@@ -648,6 +664,7 @@ function runStep(root, position, cfg, fd, labels, resumeId, opts = {}) {
     });
     activeChild = child;
     track(child);
+    if (opts.onChild) opts.onChild(child);
     let session = '';
     let rest = '';
     let reply = '';
@@ -780,7 +797,7 @@ async function main() {
 
   const concurrent = usesScheduler(root, rm);
   const lock = join(root, LOCK);
-  excludeLock(root, concurrent ? [`${WORKTREES}/`, `${CONTROL}/`] : []);
+  excludeLock(root, concurrent ? [`${WORKTREES}/`, `${CONTROL}/`, INITIATIVE_PAUSE] : []);
   if (handoff) {
     // The old driver wrote this process id into the lock and gave up the lock (0000493).
     if (!concurrent) throw new Stop('I-C Run: Blocked: --handoff needs a chart with **Concurrency:**');
@@ -1405,6 +1422,38 @@ function restartLine(root, n, before, after, branch) {
   return { line: '', files: '', handoff: false };
 }
 
+// The pause request is the file plan/.initiative-control/pause (0000555). initiative-pause.mjs
+// writes it. While it exists, the driver starts no step and stops each session at a phase end.
+function pauseRequested(root) {
+  try {
+    const p = join(ensureArea(root, CONTROL, controlRefusal), 'pause');
+    return !isLink(p) && existsSync(p);
+  } catch {
+    return false;
+  }
+}
+
+// Reads the initiative pause record that an earlier pause wrote, then removes it and the request.
+function resumeFromPause(root) {
+  const rec = join(root, INITIATIVE_PAUSE);
+  if (isLink(rec) || !existsSync(rec)) return;
+  out('I-C Run: Resuming: initiative pause record read');
+  rmSync(rec, { force: true });
+  const req = join(ensureArea(root, CONTROL, controlRefusal), 'pause');
+  if (!isLink(req)) rmSync(req, { force: true });
+}
+
+// Counts the phase ends in the build log of a step worktree.
+function phaseEnds(root, n) {
+  try {
+    const wt = areaPath(root, WORKTREES, `step-${n}`, worktreeRefusal);
+    const text = readFileSync(join(wt, BUILD_LOG), 'utf8');
+    return text.split(/\r?\n/).filter((l) => /^- Complete: P[0-4]\b/.test(l)).length;
+  } catch {
+    return 0;
+  }
+}
+
 // Runs one step session in its worktree until the step writes ready. Applies the resume rule.
 // Returns the PR number from the ready file.
 async function runScheduledStep(root, rec, cfg, rm) {
@@ -1427,12 +1476,18 @@ async function runScheduledStep(root, rec, cfg, rm) {
       queueRoot: root,
       featureId: rec.featureId,
       env: { RAVINTIO_INITIATIVE_QUEUE: '1', RAVINTIO_INITIATIVE_ROOT: root, RAVINTIO_INITIATIVE_CONTROL: ctl },
+      onChild: (c) => {
+        rec.child = c;
+      },
     };
     const started = Date.now();
     let session = '';
     let resumes = 0;
     for (;;) {
       const res = await runStep(wt, position, cfg, log.fd, { id: rm.id, slug: rm.slug }, resumes > 0 ? session : '', opts);
+      rec.child = null;
+      // A pause stopped the session at a phase end. The step keeps its worktree and running file.
+      if (rec.paused) return null;
       if (res.error) throw new Stop(`I-C Run: Blocked: could not start claude (${res.error})`);
       if (res.code !== 0) {
         const cap = cfg.turns ? `. The step may have reached RAVINTIO_INITIATIVE_MAX_TURNS=${cfg.turns}` : '';
@@ -1474,6 +1529,7 @@ async function schedule(root, cfg, rm, handoff = 0) {
   if (chart.steps.length === 0) throw new Stop('I-C Run: Blocked: the chart has no steps');
   ensureArea(root, WORKTREES, worktreeRefusal);
   ensureArea(root, CONTROL, controlRefusal);
+  if (!handoff) resumeFromPause(root);
 
   // One record per chart step. Driver restart: a ready file queues the step, and a running file
   // without ready restarts its session in the existing worktree.
@@ -1581,11 +1637,33 @@ async function schedule(root, cfg, rm, handoff = 0) {
   };
   const adopted = () => [...recs.values()].some((r) => r.adopted && r.state === 'running');
 
+  // A pause request stops new starts. Each running session stops when its build log gains a
+  // Complete: P{n} line after the request. The step keeps its worktree and its running file.
+  let pausing = false;
+  const pauseTick = () => {
+    if (!pausing) {
+      if (!pauseRequested(root)) return;
+      pausing = true;
+      out('I-C Run: Pausing: no new step starts, running steps stop at a phase end');
+    }
+    for (const rec of recs.values()) {
+      if (rec.state !== 'running' || !rec.child || rec.paused) continue;
+      const ends = phaseEnds(root, rec.n);
+      if (rec.base === undefined) rec.base = ends;
+      if (ends <= rec.base) continue;
+      rec.paused = true;
+      out(`I-C Run: Pausing: step ${rec.n} stopped at a phase end`);
+      const child = rec.child;
+      child.kill('SIGTERM');
+      setTimeout(() => child.kill('SIGKILL'), 10000).unref();
+    }
+  };
+
   const allMerged = () => chart.steps.every((s) => merged.has(s.step));
   const running = () => [...recs.values()].filter((r) => r.state === 'running').length;
 
   const startable = () => {
-    if (stop.msg || handedOff) return [];
+    if (stop.msg || handedOff || pausing) return [];
     const free = chart.concurrency - running();
     if (free <= 0) return [];
     const states = new Map();
@@ -1604,7 +1682,12 @@ async function schedule(root, cfg, rm, handoff = 0) {
     rec.state = 'running';
     rec.resume = false;
     try {
-      rec.pr = await runScheduledStep(root, rec, cfg, rm);
+      const pr = await runScheduledStep(root, rec, cfg, rm);
+      if (pr === null) {
+        rec.state = 'paused';
+        return;
+      }
+      rec.pr = pr;
       rec.state = 'ready';
       // After a handoff the successor reads the ready file and runs the queue.
       if (!handedOff) {
@@ -1718,10 +1801,22 @@ async function schedule(root, cfg, rm, handoff = 0) {
 
   for (;;) {
     if (handoff) pollAdopted();
+    pauseTick();
     for (const rec of startable()) stepTask(rec);
-    if (!queueBusy && !handedOff && readyOrder.length > 0) queueTask(recs.get(readyOrder.shift()));
-    if (running() === 0 && !queueBusy && readyOrder.length === 0) break;
-    await wait(adopted() ? 1000 : 0);
+    if (!queueBusy && !handedOff && !pausing && readyOrder.length > 0) queueTask(recs.get(readyOrder.shift()));
+    if (running() === 0 && !queueBusy && (pausing || readyOrder.length === 0)) break;
+    // A running step needs a poll, so a pause request reaches the loop while no task ends.
+    await wait(pausing || adopted() ? 1000 : running() > 0 ? 2000 : 0);
+  }
+
+  if (pausing && !stop.msg && !handedOff) {
+    // Every session has stopped. Write the step records and the initiative record, then end.
+    const done = spawnSync(process.execPath, [PAUSE_SCRIPT, 'write', '--root', root, '--merged', [...merged].join(',')], { encoding: 'utf8' });
+    if (done.status !== 0) {
+      throw new Stop(`I-C Run: Blocked: the pause records failed. ${(done.stderr || '').split(/\r?\n/)[0].slice(0, MAX_LINE)}`);
+    }
+    out(done.stdout.trim().split(/\r?\n/)[0].slice(0, MAX_LINE));
+    return;
   }
 
   if (handedOff) {
