@@ -190,8 +190,8 @@
 // Summary: every run prints a block before its final line (0000511, ADR-0341). The stop line or the I-E Delivery: line stays last. Each line starts
 // with "I-C Run: Summary:". "merged this run:" lists the steps the run merged, in merge order, or none.
 // "driver fixes:" counts the repairs the driver made by itself, then one "fix:" line repeats each of the
-// first 10. "action for the human:" ends the block. It reads none after a clean end, "run initiative
-// delivery from the initiative skill" while delivery is pending, "start a new driver" after a Restart:
+// first 10. "action for the human:" ends the block. It reads none after a clean end, "none, the
+// coordinator runs I-E Delivery" while delivery is pending, "start a new driver" after a Restart:
 // stop, "run the setup command in the stop line, then start a new driver" after a Setup: stop, and
 // "read the stop line and the step log, then start a new driver" after any other stop. The block
 // changes no exit code.
@@ -293,7 +293,7 @@ const out = (line) => {
 
 // The one action the human takes after a run ends. stopMsg is the stop line, or '' for a run with no stop.
 function humanAction(stopMsg) {
-  if (!stopMsg) return record.pending ? 'run initiative delivery from the initiative skill' : 'none';
+  if (!stopMsg) return record.pending ? 'none, the coordinator runs I-E Delivery' : 'none';
   if (stopMsg.startsWith('I-D Advance: Restart:')) return 'start a new driver';
   if (stopMsg.startsWith('I-D Advance: Setup:')) return 'run the setup command in the stop line, then start a new driver';
   return 'read the stop line and the step log, then start a new driver';
