@@ -184,7 +184,7 @@ The human confirmed the chart on 2026-11-14 with "build the initiative as fast a
 | 26 | 0000570-sibling-test-copies-in-impact-scan | List sibling copies of a pinned test in the impact scan | 0000407 | minor | | pending | plan |  |
 | 27 | 0000571-scan-cause-skill-wide-grep-pins | Test impact scan covers skill-wide grep pins | 0000404 | minor | | pending | plan |  |
 | 28 | 0000572-tests-share-a-repo-root-helper | Tests share a repo-root helper for both pack trees | 0000528, 0000539 | minor | | pending | tests |  |
-| 29 | 0000573-require-unit-reports | Require unit reports | 0000417 | minor | | pending | dispatch |  |
+| 29 | 0000573-require-unit-reports | Require unit reports | 0000417 | minor | 0.125.0 | merged | dispatch | |
 | 30 | 0000574-delivery-pr-lists-steps-in-version-order | Delivery PR lists steps in version order | 0000543 | minor | | pending | coord |  |
 | 31 | 0000575-build-log-marker-helper | Build log marker helper | 0000524 | minor | | pending | dispatch |  |
 | 32 | 0000576-phase-start-time-at-phase-start | Record each phase start time when the phase begins | 0000402 | minor | | pending | dispatch |  |
@@ -211,3 +211,4 @@ The merge queue adds one row for each step it merges. See the merge queue sectio
 | 20 | #223 | tag v0.122.0 | 0.122.0 | 2026-11-15T15:54:43Z |
 | 21 | #224 | tag v0.123.0 | 0.123.0 | 2026-11-15T16:59:56Z |
 | 22 | #226 | tag v0.124.0 | 0.124.0 | 2026-11-15T18:22:23Z |
+| 29 | #225 | tag v0.125.0 | 0.125.0 | 2026-11-15T18:35:08Z |
