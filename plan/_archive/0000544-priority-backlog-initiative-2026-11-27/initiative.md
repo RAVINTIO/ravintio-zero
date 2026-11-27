@@ -1,7 +1,7 @@
 ---
 title: "Initiative: 0000544 - priority backlog"
 summary: "Builds 39 open backlog entries in 36 steps, in the priority order the human set on 2026-11-14, four at a time."
-status: "active"  # proposed | charted | active | delivered | blocked
+status: "delivered"  # proposed | charted | active | delivered | blocked
 ---
 # Initiative: 0000544 - priority backlog
 
@@ -9,7 +9,7 @@ status: "active"  # proposed | charted | active | delivered | blocked
 
 **Branch:** initiative/0000544-priority-backlog
 
-**Status:** active
+**Status:** delivered
 
 **Position:** 39
 
@@ -17,7 +17,7 @@ status: "active"  # proposed | charted | active | delivered | blocked
 
 **Step CI fixes:** allowed
 
-**Concurrency:** 4
+**Concurrency:** 2
 
 The human chose on 2026-11-14 to leave out 0000174, 0000220, 0000221, and 0000254. Each needs a paid service, an account, or a human partway through a step.
 
@@ -30,6 +30,7 @@ The human confirmed the chart on 2026-11-14 with "build the initiative as fast a
 - "As fast as possible" sets `**Speed:** fast` and `**Concurrency:** 4`. Lanes keep steps that share files in order.
 - On 2026-11-14 the human raised `**Concurrency:**` from 4 to 6 to run as many steps as practical.
 - At 6, parallel suite runs passed the 10-minute tool limit and steps reran them. The human returned `**Concurrency:**` to 4 on 2026-11-14.
+- On 2026-11-15 the human lowered `**Concurrency:**` from 4 to 2. At 4, local suites passed the 2-hour background limit, and steps 1, 5, and 18 stopped in P3.
 
 | Entry | Wanted outcome and check |
 |-------|--------------------------|
@@ -87,6 +88,7 @@ The human confirmed the chart on 2026-11-14 with "build the initiative as fast a
 | 14 | Guard cut-back: CI on a plan-only push (0000476) | Every push still runs every suite. The step may cancel a superseded run on the same PR and may avoid an extra push, but skips no suite. | none |
 | 17 | Guard cut-back: the old-name guard (0000527) | Keep the allowlist as it is. Make the guard read a stable copy of the tree, or fix the earlier suite that changes it. | none |
 | 36 | Guard cut-back: `build-log-check.mjs` (0000410) | Every unit still logs `RED:` and `GREEN:`. The step records the class next to the markers and relaxes no check. | none |
+| 1-38 | A docs unit has no failing test, so `build-log-check.mjs` finds no `RED:` or `GREEN:` for it (0000410) | Log a `RED:` and a `GREEN:` line for the unit at the real time. Each line says the unit has no executable check and names 0000410. The `GREEN:` line names the check that passed, such as the prose check. Never state a test run that did not happen. | none |
 | 35 | Rule anchors touch most tests (0000401) | Step 35 runs after steps 1 to 34, and step 36 runs after it | none |
 | 1-36 | Fast batches | `**Speed:** fast`. Each phase dispatches its listed fast batch. Every gate and exception stop stays. | none |
 | 37 | none | none | none |
