@@ -618,6 +618,9 @@ Every message in this stage begins with `I-D Advance:` after the `P4 Ship:` pref
    I-D Advance: Blocked: PR #{n} conflicts with the initiative branch.
    ```
 
+   <!-- rule: advance-index-rebuild -->
+   After every manual merge of the base branch, run `node ravintio-zero/scripts/backlog-index.mjs` and commit the result before the push. The queue does this after its own base merges, but a manual merge gets no such help. If the index is stale, the `Check the backlog index` step of the `validate-branch` job fails.
+
    1. Poll `gh pr checks {n}` until it lists at least one check, for up to 2 minutes. Checks are always pending straight after `gh pr create`, so pending is not a stop. If none appears, push the branch, print the line below, and exit:
 
       ```

@@ -1,7 +1,7 @@
 ---
 title: "Initiative: 0000544 - priority backlog"
 summary: "Builds 39 open backlog entries in 36 steps, in the priority order the human set on 2026-11-14, four at a time."
-status: "charted"  # proposed | charted | active | delivered | blocked
+status: "active"  # proposed | charted | active | delivered | blocked
 ---
 # Initiative: 0000544 - priority backlog
 
@@ -9,7 +9,7 @@ status: "charted"  # proposed | charted | active | delivered | blocked
 
 **Branch:** initiative/0000544-priority-backlog
 
-**Status:** charted
+**Status:** active
 
 **Position:** 1
 
@@ -28,6 +28,8 @@ The human confirmed the chart on 2026-11-14 with "build the initiative as fast a
 - The confirmation approves the sharpened outcomes below. Each one is now the `## Wanted outcome` section of its entry. The coordinator closed entry 0000513, because 0000536 covers it.
 - The confirmation approves no guard widening. The coordinator cut back each possible widening to a fix that widens nothing, in `## Decisions`.
 - "As fast as possible" sets `**Speed:** fast` and `**Concurrency:** 4`. Lanes keep steps that share files in order.
+- On 2026-11-14 the human raised `**Concurrency:**` from 4 to 6 to run as many steps as practical.
+- At 6, parallel suite runs passed the 10-minute tool limit and steps reran them. The human returned `**Concurrency:**` to 4 on 2026-11-14.
 
 | Entry | Wanted outcome and check |
 |-------|--------------------------|
@@ -56,12 +58,16 @@ The human confirmed the chart on 2026-11-14 with "build the initiative as fast a
 | Step | Component | Change | Kind |
 |------|-----------|--------|------|
 | 1-36 | none | none | none |
+| 37 | none | none | none |
+| 38 | none | none | none |
 
 ## Dependencies
 
 | Step | Name | Kind | Purpose |
 |------|------|------|---------|
 | 1-36 | none | none | none |
+| 37 | none | none | none |
+| 38 | none | none | none |
 
 ## Decisions
 
@@ -83,12 +89,16 @@ The human confirmed the chart on 2026-11-14 with "build the initiative as fast a
 | 36 | Guard cut-back: `build-log-check.mjs` (0000410) | Every unit still logs `RED:` and `GREEN:`. The step records the class next to the markers and relaxes no check. | none |
 | 35 | Rule anchors touch most tests (0000401) | Step 35 runs after steps 1 to 34, and step 36 runs after it | none |
 | 1-36 | Fast batches | `**Speed:** fast`. Each phase dispatches its listed fast batch. Every gate and exception stop stays. | none |
+| 37 | none | none | none |
+| 38 | none | none | none |
 
 ## Baselines
 
 | Step | Target | Baseline | Source |
 |------|--------|----------|--------|
 | 1-36 | none | none | none |
+| 37 | none | none | none |
+| 38 | none | none | none |
 
 ## Criteria
 
@@ -96,6 +106,8 @@ The human confirmed the chart on 2026-11-14 with "build the initiative as fast a
 |------|-----------|------------------|------------|
 | 14 | A plan-only push runs fewer suites | Count of jobs, no noise | CI |
 | 1-36 | The full suite passes apart from the known baseline failures | Known flaky: `test-0000169-req-003` and `test-0000040-req-002-003` under parallel shards | local |
+| 37 | none | none | none |
+| 38 | none | none | none |
 
 ## P1 skips
 
@@ -137,6 +149,8 @@ The human confirmed the chart on 2026-11-14 with "build the initiative as fast a
 | 34 | no | The step changes a script, a skill with a test, or a test |
 | 35 | no | The step changes a script, a skill with a test, or a test |
 | 36 | no | The step changes a script, a skill with a test, or a test |
+| 37 | no | Added after the chart. The human sets this at P1. |
+| 38 | no | Added after the chart. The human sets this at P1. |
 
 ## Steps
 
@@ -144,7 +158,7 @@ The human confirmed the chart on 2026-11-14 with "build the initiative as fast a
 |------|------------|-------|-----------------|------|---------|--------|------|-------|
 | 1 | 0000545-clear-feature-id-at-ship | Ship leaves plan/.feature-id behind | 0000514 | minor | | pending | queue |  |
 | 2 | 0000546-queue-failure-leaves-dirty-files | A failed queue run can leave written files in the queue worktree | 0000477 | minor | | pending | queue |  |
-| 3 | 0000547-step-merge-regenerates-index | Step base merge regenerates the backlog index | 0000517 | minor | | pending | coord |  |
+| 3 | 0000547-step-merge-regenerates-index | Step base merge regenerates the backlog index | 0000517 | minor | 0.115.0 | merged | coord | |
 | 4 | 0000548-ack-write-mid-suite-fails-run | Strict-mode ack write mid-suite fails the suite run | 0000476-ack-write-mid-suite-fails-run | minor | | pending | tests |  |
 | 5 | 0000549-baseline-record-checks | Baseline record checks its input and its file | 0000525, 0000515 | minor | | pending | baseline |  |
 | 6 | 0000550-no-head-diffs-in-tests | No HEAD diffs in tests | 0000416 | minor | | pending | tests |  |
@@ -178,6 +192,8 @@ The human confirmed the chart on 2026-11-14 with "build the initiative as fast a
 | 34 | 0000578-plan-lists-pass-signals | Plan lists every way a check can pass | 0000529 | minor | | pending | plan |  |
 | 35 | 0000579-convert-remaining-suites-to-rule-anchors | Convert remaining suites to rule anchors | 0000401 | minor | | pending | anchors | 1-34 |
 | 36 | 0000580-log-non-tdd-units | Log a non-TDD unit with a class | 0000410 | minor | | pending | anchors | 35 |
+| 37 | 0000581-delivery-cleans-up-driver-state | Delivery cleans up driver state | 0000582 | minor |  | pending | coord | 35 |
+| 38 | 0000583-step-temp-cleanup-after-merge | Clean up step temp files after each merge | 0000584 | minor |  | pending | cleanup |  |
 
 ## Merges
 
@@ -185,3 +201,4 @@ The merge queue adds one row for each step it merges. See the merge queue sectio
 
 | Step | PR | Merge commit | Version | Merged at |
 |------|----|--------------|---------|-----------|
+| 3 | #214 | tag v0.115.0 | 0.115.0 | 2026-11-14T17:36:45Z |

@@ -3,7 +3,7 @@
 > Change record. Index of all ADRs across all features. Updated after every pipeline run.
 > Do not archive this file. Update it in place.
 
-Last updated: 0000536-pending-migrations-reach-the-human-early
+Last updated: 0000547-step-merge-regenerates-index
 
 ---
 
