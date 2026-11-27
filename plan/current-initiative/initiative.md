@@ -11,7 +11,7 @@ status: "active"  # proposed | charted | active | delivered | blocked
 
 **Status:** active
 
-**Position:** 6
+**Position:** 17
 
 **Speed:** fast
 
@@ -161,7 +161,7 @@ The human confirmed the chart on 2026-11-14 with "build the initiative as fast a
 | 3 | 0000547-step-merge-regenerates-index | Step base merge regenerates the backlog index | 0000517 | minor | 0.115.0 | merged | coord | |
 | 4 | 0000548-ack-write-mid-suite-fails-run | Strict-mode ack write mid-suite fails the suite run | 0000476-ack-write-mid-suite-fails-run | minor | 0.116.0 | merged | tests | |
 | 5 | 0000549-baseline-record-checks | Baseline record checks its input and its file | 0000525, 0000515 | minor | 0.118.0 | merged | baseline | |
-| 6 | 0000550-no-head-diffs-in-tests | No HEAD diffs in tests | 0000416 | minor | | pending | tests |  |
+| 6 | 0000550-no-head-diffs-in-tests | No HEAD diffs in tests | 0000416 | minor | 0.143.0 | merged | tests | |
 | 7 | 0000551-refuse-symlink-style-outputs | Refuse a symlink at the writing style output paths | 0000408 | minor | 0.137.0 | merged | setup | |
 | 8 | 0000552-duplicate-backlog-ids | Two open entries share one backlog id | 0000542 | minor | 0.140.0 | merged | queue | |
 | 9 | 0000553-coordinator-oversight-not-micromanagement | Initiative skills do not micromanage | 0000530 | minor | 0.120.0 | merged | coord | |
@@ -229,3 +229,4 @@ The merge queue adds one row for each step it merges. See the merge queue sectio
 | 8 | #242 | tag v0.140.0 | 0.140.0 | 2026-11-16T05:26:36Z |
 | 15 | #243 | tag v0.141.0 | 0.141.0 | 2026-11-16T06:33:24Z |
 | 16 | #244 | tag v0.142.0 | 0.142.0 | 2026-11-16T06:56:06Z |
+| 6 | #228 | tag v0.143.0 | 0.143.0 | 2026-11-18T07:35:26Z |
