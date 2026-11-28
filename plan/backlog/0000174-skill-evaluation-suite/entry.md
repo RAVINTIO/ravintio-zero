@@ -22,6 +22,12 @@ Backlog entry 0000100 asked for an evaluation suite that runs the skills against
 
 Write a small set of fixed briefs and a runner that drives each through the pipeline. Score each run with the workflow metrics that 0000100 adds. Decide where the runner runs, and who pays for the model calls.
 
+## Wanted outcome
+
+The runner runs locally on request, never in CI, on the maintainer's Claude account. One command runs at least 3 fixed briefs and prints a score per brief.
+
+The human approved this outcome at the chart of initiative 0000613 on 2026-11-28.
+
 ## Why Deferred
 
 The human confirmed the split at the roadmap 0000168 chart. The suite needs approval for a new service and its own cost decision.
